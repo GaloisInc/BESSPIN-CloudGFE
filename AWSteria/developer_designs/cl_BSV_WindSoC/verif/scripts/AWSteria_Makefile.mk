@@ -8,4 +8,4 @@ prep:
 .PHONY: test
 test:
 	make  C_TEST=test_dram_dma_hwsw_cosim  AXI_MEMORY_MODEL=1  clean
-	mylogsave log_make.txt  make  C_TEST=test_dram_dma_hwsw_cosim  AXI_MEMORY_MODEL=1 
+	make  C_TEST=test_dram_dma_hwsw_cosim  AXI_MEMORY_MODEL=1 
