@@ -1,0 +1,682 @@
+#-----------------------------------------------------------
+# xsim v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:47:09 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Fri May  1 22:38:12 2020
+# Process ID: 8771
+# Current directory: /home/nikhil/git_clones/AWS/BESSPIN-CloudGFE/AWSteria/developer_designs/cl_BSV_WindSoC/verif/sim/vivado/test_dram_dma_hwsw_cosim_c
+# Command line: xsim -log test_dram_dma_hwsw_cosim.log -mode tcl -source {xsim.dir/tb/xsim_script.tcl}
+# Log file: /home/nikhil/git_clones/AWS/BESSPIN-CloudGFE/AWSteria/developer_designs/cl_BSV_WindSoC/verif/sim/vivado/test_dram_dma_hwsw_cosim_c/test_dram_dma_hwsw_cosim.log
+# Journal file: /home/nikhil/git_clones/AWS/BESSPIN-CloudGFE/AWSteria/developer_designs/cl_BSV_WindSoC/verif/sim/vivado/test_dram_dma_hwsw_cosim_c/xsim.jou
+#-----------------------------------------------------------
+source xsim.dir/tb/xsim_script.tcl
+# xsim {tb} -autoloadwcfg -tclbatch {/home/nikhil/git_clones/AWS/BESSPIN-CloudGFE/AWSteria/developer_designs/cl_BSV_WindSoC/verif/scripts/waves.tcl} -runall
+Vivado Simulator 2019.1
+Time resolution is 1 ps
+WARNING: [Simtcl 6-25] Warning: Both '-runall' and '-tclbatch' were specified. The '-runall' was ignored
+source /home/nikhil/git_clones/AWS/BESSPIN-CloudGFE/AWSteria/developer_designs/cl_BSV_WindSoC/verif/scripts/waves.tcl
+## set curr_wave [current_wave_config]
+## if { [string length $curr_wave] == 0 } {
+##   if { [llength [get_objects]] > 0} {
+##     add_wave /
+##     set_property needs_save false [current_wave_config]
+##   } else {
+##      send_msg_id Add_Wave-1 WARNING "No top level signals found. Simulator will start without a wave window. If you want to open a wave window go to 'File->New Waveform Configuration' or type 'create_wave_config' in the TCL console."
+##   }
+## }
+WARNING: Simulation object /tb/sv_host_memory was not traceable in the design for the following reason:
+Vivado Simulator does not support tracing of System Verilog Dynamic Type object.
+## run 200 us 
+WARNING: Behavioral models for independent clock FIFO configurations do not model synchronization delays. The behavioral models are functionally correct, and will represent the behavior of the configured FIFO. See the FIFO Generator User Guide for more information.
+WARNING: Behavioral models for independent clock FIFO configurations do not model synchronization delays. The behavioral models are functionally correct, and will represent the behavior of the configured FIFO. See the FIFO Generator User Guide for more information.
+WARNING: Behavioral models for independent clock FIFO configurations do not model synchronization delays. The behavioral models are functionally correct, and will represent the behavior of the configured FIFO. See the FIFO Generator User Guide for more information.
+WARNING: Behavioral models for independent clock FIFO configurations do not model synchronization delays. The behavioral models are functionally correct, and will represent the behavior of the configured FIFO. See the FIFO Generator User Guide for more information.
+WARNING: Behavioral models for independent clock FIFO configurations do not model synchronization delays. The behavioral models are functionally correct, and will represent the behavior of the configured FIFO. See the FIFO Generator User Guide for more information.
+WARNING: Behavioral models for independent clock FIFO configurations do not model synchronization delays. The behavioral models are functionally correct, and will represent the behavior of the configured FIFO. See the FIFO Generator User Guide for more information.
+WARNING: Behavioral models for independent clock FIFO configurations do not model synchronization delays. The behavioral models are functionally correct, and will represent the behavior of the configured FIFO. See the FIFO Generator User Guide for more information.
+WARNING: Behavioral models for independent clock FIFO configurations do not model synchronization delays. The behavioral models are functionally correct, and will represent the behavior of the configured FIFO. See the FIFO Generator User Guide for more information.
+WARNING: Behavioral models for independent clock FIFO configurations do not model synchronization delays. The behavioral models are functionally correct, and will represent the behavior of the configured FIFO. See the FIFO Generator User Guide for more information.
+WARNING: Behavioral models for independent clock FIFO configurations do not model synchronization delays. The behavioral models are functionally correct, and will represent the behavior of the configured FIFO. See the FIFO Generator User Guide for more information.
+WARNING: Behavioral models for independent clock FIFO configurations do not model synchronization delays. The behavioral models are functionally correct, and will represent the behavior of the configured FIFO. See the FIFO Generator User Guide for more information.
+WARNING: Behavioral models for independent clock FIFO configurations do not model synchronization delays. The behavioral models are functionally correct, and will represent the behavior of the configured FIFO. See the FIFO Generator User Guide for more information.
+WARNING: Behavioral models for independent clock FIFO configurations do not model synchronization delays. The behavioral models are functionally correct, and will represent the behavior of the configured FIFO. See the FIFO Generator User Guide for more information.
+WARNING: Behavioral models for independent clock FIFO configurations do not model synchronization delays. The behavioral models are functionally correct, and will represent the behavior of the configured FIFO. See the FIFO Generator User Guide for more information.
+WARNING: Behavioral models for independent clock FIFO configurations do not model synchronization delays. The behavioral models are functionally correct, and will represent the behavior of the configured FIFO. See the FIFO Generator User Guide for more information.
+Memory has been allocated, initializing DMA and filling the buffer...
+Starting DDR init...
+507000: tb.card.fpga.CL.aws_BSV_top.soc_top.boot_rom_axi4_deburster::AXI4_Deburster.rl_reset
+507000: tb.card.fpga.CL.aws_BSV_top.soc_top.mem0_controller_axi4_deburster::AXI4_Deburster.rl_reset
+507400: AWS_SoC_Top.rl_reset_start_initial ...
+507800: Core.rl_cpu_hart0_reset_from_soc_start
+================================================================
+CPU: Bluespec  RISC-V  Flute  v3.0 (RV64)
+Copyright (c) 2016-2020 Bluespec, Inc. All Rights Reserved.
+================================================================
+1009400: tb.card.fpga.CL.aws_BSV_top.soc_top.boot_rom_axi4_deburster::AXI4_Deburster.rl_reset
+1009400: tb.card.fpga.CL.aws_BSV_top.soc_top.mem0_controller_axi4_deburster::AXI4_Deburster.rl_reset
+1009800: AWS_SoC_Top.rl_reset_start_initial ...
+1010200: Core.rl_cpu_hart0_reset_from_soc_start
+================================================================
+CPU: Bluespec  RISC-V  Flute  v3.0 (RV64)
+Copyright (c) 2016-2020 Bluespec, Inc. All Rights Reserved.
+================================================================
+1011400: D_MMU_Cache: cache size 8 KB, associativity 2, line size 64 bytes (= 8 XLEN words)
+1011400: I_MMU_Cache: cache size 8 KB, associativity 2, line size 64 bytes (= 8 XLEN words)
+512: tb.card.fpga.CL.aws_BSV_top.soc_top.core.cpu.rl_reset_complete: restart at PC = 0x1000
+1214600: Near_Mem_IO_AXI4.set_addr_map: addr_base 0x2000000 addr_lim 0x200c000
+1214600: Core.rl_cpu_hart0_reset_complete
+1215000: AWS_DDR4_Adapter.ma_set_addr_map: addr_base 80000000 lim 90000000
+1215000: AWS_SoC_Top.rl_reset_complete_initial
+Done DDR init...
+filling buffer with  random data...
+Write buffer contents:
+    00000000: 0374c615
+    00000004: eae4d47a
+    00000008: 685d9085
+    0000000c: aaadb8d2
+    00000010: 0f705ddd
+    00000014: 58cb1da6
+    00000018: f8b0ac4f
+    0000001c: 284639d7
+    00000020: fb54fff0
+    00000024: 7e6bfee3
+    00000028: ea526e9a
+    0000002c: f1afb3c1
+    00000030: 75b0534c
+    00000034: 133e2b14
+    00000038: 14ff7423
+    0000003c: a5674151
+    00000040: b2dcfbc5
+    00000044: 22df6c63
+    00000048: 41284701
+    0000004c: a51910a3
+    00000050: f98ea9d3
+    00000054: 33dfc4a0
+    00000058: 98e12684
+    0000005c: 286d2100
+    00000060: d37da2da
+    00000064: 8be75ba8
+    00000068: 1d8adf59
+    0000006c: 9e69ab1d
+    00000070: d45effba
+    00000074: 69a86b98
+    00000078: e8798f41
+    0000007c: 49b59882
+Now performing the DMA transactions...
+DIMM 0 passed!
+DIMM 1 passed!
+DIMM 2 passed!
+DIMM 3 passed!
+test_dram_dma_hwsw_cosim.c: Reading Mem Hex32 file into local buffer: /home/nikhil/git_clones/AWS/aws-fpga/hdk/cl/developer_designs/cl_BSV_WindSoC/verif/scripts/Mem.hex
+Mem_hex32 file read ok.
+    addr_base 0x80000000  addr_lim 0x80001048 (4168 bytes)
+test_dram_dma_hwsw_cosim.c: 4KB DMA buffer allocated at 0x7f585413e000
+Downloading to AWS DDR4
+test_dram_dma_hwsw_cosim.c: DMA 4096 bytes to addr 0x80000000
+test_dram_dma_hwsw_cosim.c: DMA 72 bytes to addr 0x80001000
+Reading back 128 bytes to spot-check the download
+Checking readback-data of 128 bytes ...
+    00000000: 04c0006f
+    00000004: 34202f73
+    00000008: 00800f93
+    0000000c: 03ff0a63
+    00000010: 00900f93
+    00000014: 03ff0663
+    00000018: 00b00f93
+    0000001c: 03ff0263
+    00000020: 80000f17
+    00000024: fe0f0f13
+    00000028: 000f0463
+    0000002c: 000f0067
+    00000030: 34202f73
+    00000034: 000f5463
+    00000038: 0040006f
+    0000003c: 5391e193
+    00000040: 00001f17
+    00000044: fc3f2023
+    00000048: ff9ff06f
+    0000004c: f1402573
+    00000050: 00051063
+    00000054: 00000297
+    00000058: 01028293
+    0000005c: 30529073
+    00000060: 18005073
+    00000064: 00000297
+    00000068: 02428293
+    0000006c: 30529073
+    00000070: 0010029b
+    00000074: 03529293
+    00000078: fff28293
+    0000007c: 3b029073
+Checking readback-data of 128 bytes: OK
+Host_side: verbosity = 1, logdelay = 0
+Host_side: watch_tohost = 1, tohost_addr = 0x80001000
+Host_side: Sending DDR4 Loaded message
+AWS_DDR4_Adapter.ma_set_watch_tohost: tohost_addr 80001000
+3915400: AWS_BSV_Top.rl_initialize: DDRs ready; start DUT
+instret:5  PC:0x80000000  instr:0x4c0006f  priv:3
+instret:6  PC:0x8000004c  instr:0xf1402573  priv:3
+instret:7  PC:0x80000050  instr:0x51063  priv:3
+instret:8  PC:0x80000054  instr:0x297  priv:3
+instret:9  PC:0x80000058  instr:0x1028293  priv:3
+instret:10  PC:0x8000005c  instr:0x30529073  priv:3
+instret:11  PC:0x80000060  instr:0x18005073  priv:3
+instret:12  PC:0x80000064  instr:0x297  priv:3
+instret:13  PC:0x80000068  instr:0x2428293  priv:3
+instret:14  PC:0x8000006c  instr:0x30529073  priv:3
+instret:15  PC:0x80000070  instr:0x10029b  priv:3
+instret:16  PC:0x80000074  instr:0x3529293  priv:3
+instret:17  PC:0x80000078  instr:0xfff28293  priv:3
+instret:18  PC:0x8000007c  instr:0x3b029073  priv:3
+    mcause:0x2  epc 0x8000007c  tval:0x3b029073  next_pc 0x80000088, new_priv 3 new_mstatus 0xa00003800
+instret:18  PC:0x80000088  instr:0x297  priv:3
+instret:19  PC:0x8000008c  instr:0x1828293  priv:3
+instret:20  PC:0x80000090  instr:0x30529073  priv:3
+instret:21  PC:0x80000094  instr:0x30205073  priv:3
+instret:22  PC:0x80000098  instr:0x30305073  priv:3
+instret:23  PC:0x8000009c  instr:0x30405073  priv:3
+instret:24  PC:0x800000a0  instr:0x193  priv:3
+instret:25  PC:0x800000a4  instr:0x297  priv:3
+instret:26  PC:0x800000a8  instr:0xf6028293  priv:3
+instret:27  PC:0x800000ac  instr:0x30529073  priv:3
+instret:28  PC:0x800000b0  instr:0x100513  priv:3
+instret:29  PC:0x800000b4  instr:0x1f51513  priv:3
+instret:30  PC:0x800000b8  instr:0x55863  priv:3
+instret:31  PC:0x800000c8  instr:0x80000297  priv:3
+instret:32  PC:0x800000cc  instr:0xf3828293  priv:3
+instret:33  PC:0x800000d0  instr:0x28e63  priv:3
+instret:34  PC:0x800000ec  instr:0x30005073  priv:3
+instret:35  PC:0x800000f0  instr:0x297  priv:3
+instret:36  PC:0x800000f4  instr:0x1428293  priv:3
+instret:37  PC:0x800000f8  instr:0x34129073  priv:3
+instret:38  PC:0x800000fc  instr:0xf1402573  priv:3
+instret:39  PC:0x80000100  instr:0x30200073  priv:3
+    xRET: next_pc:0x80000104  new mstatus:0xa00000080  new priv:0
+instret:40  PC:0x80000104  instr:0x93  priv:0
+instret:41  PC:0x80000108  instr:0x113  priv:0
+instret:42  PC:0x8000010c  instr:0x208f33  priv:0
+instret:43  PC:0x80000110  instr:0xe93  priv:0
+instret:44  PC:0x80000114  instr:0x200193  priv:0
+instret:45  PC:0x80000118  instr:0x4fdf1063  priv:0
+instret:46  PC:0x8000011c  instr:0x100093  priv:0
+instret:47  PC:0x80000120  instr:0x100113  priv:0
+instret:48  PC:0x80000124  instr:0x208f33  priv:0
+instret:49  PC:0x80000128  instr:0x200e93  priv:0
+instret:50  PC:0x8000012c  instr:0x300193  priv:0
+instret:51  PC:0x80000130  instr:0x4ddf1463  priv:0
+instret:52  PC:0x80000134  instr:0x300093  priv:0
+instret:53  PC:0x80000138  instr:0x700113  priv:0
+instret:54  PC:0x8000013c  instr:0x208f33  priv:0
+instret:55  PC:0x80000140  instr:0xa00e93  priv:0
+instret:56  PC:0x80000144  instr:0x400193  priv:0
+instret:57  PC:0x80000148  instr:0x4bdf1863  priv:0
+instret:58  PC:0x8000014c  instr:0x93  priv:0
+instret:59  PC:0x80000150  instr:0xffff8137  priv:0
+instret:60  PC:0x80000154  instr:0x208f33  priv:0
+instret:61  PC:0x80000158  instr:0xffff8eb7  priv:0
+instret:62  PC:0x8000015c  instr:0x500193  priv:0
+instret:63  PC:0x80000160  instr:0x49df1c63  priv:0
+instret:64  PC:0x80000164  instr:0x800000b7  priv:0
+instret:65  PC:0x80000168  instr:0x113  priv:0
+instret:66  PC:0x8000016c  instr:0x208f33  priv:0
+instret:67  PC:0x80000170  instr:0x80000eb7  priv:0
+instret:68  PC:0x80000174  instr:0x600193  priv:0
+instret:69  PC:0x80000178  instr:0x49df1063  priv:0
+instret:70  PC:0x8000017c  instr:0x800000b7  priv:0
+instret:71  PC:0x80000180  instr:0xffff8137  priv:0
+instret:72  PC:0x80000184  instr:0x208f33  priv:0
+instret:73  PC:0x80000188  instr:0xffff0eb7  priv:0
+instret:74  PC:0x8000018c  instr:0xfffe8e9b  priv:0
+instret:75  PC:0x80000190  instr:0xfe9e93  priv:0
+instret:76  PC:0x80000194  instr:0x700193  priv:0
+instret:77  PC:0x80000198  instr:0x47df1063  priv:0
+instret:78  PC:0x8000019c  instr:0x93  priv:0
+instret:79  PC:0x800001a0  instr:0x8137  priv:0
+instret:80  PC:0x800001a4  instr:0xfff1011b  priv:0
+instret:81  PC:0x800001a8  instr:0x208f33  priv:0
+instret:82  PC:0x800001ac  instr:0x8eb7  priv:0
+instret:83  PC:0x800001b0  instr:0xfffe8e9b  priv:0
+instret:84  PC:0x800001b4  instr:0x800193  priv:0
+instret:85  PC:0x800001b8  instr:0x45df1063  priv:0
+instret:86  PC:0x800001bc  instr:0x800000b7  priv:0
+instret:87  PC:0x800001c0  instr:0xfff0809b  priv:0
+instret:88  PC:0x800001c4  instr:0x113  priv:0
+instret:89  PC:0x800001c8  instr:0x208f33  priv:0
+instret:90  PC:0x800001cc  instr:0x80000eb7  priv:0
+instret:91  PC:0x800001d0  instr:0xfffe8e9b  priv:0
+instret:92  PC:0x800001d4  instr:0x900193  priv:0
+instret:93  PC:0x800001d8  instr:0x43df1063  priv:0
+instret:94  PC:0x800001dc  instr:0x800000b7  priv:0
+instret:95  PC:0x800001e0  instr:0xfff0809b  priv:0
+instret:96  PC:0x800001e4  instr:0x8137  priv:0
+instret:97  PC:0x800001e8  instr:0xfff1011b  priv:0
+instret:98  PC:0x800001ec  instr:0x208f33  priv:0
+instret:99  PC:0x800001f0  instr:0x10eb7  priv:0
+instret:100  PC:0x800001f4  instr:0x1e8e9b  priv:0
+instret:101  PC:0x800001f8  instr:0xfe9e93  priv:0
+instret:102  PC:0x800001fc  instr:0xffee8e93  priv:0
+instret:103  PC:0x80000200  instr:0xa00193  priv:0
+instret:104  PC:0x80000204  instr:0x3fdf1a63  priv:0
+instret:105  PC:0x80000208  instr:0x800000b7  priv:0
+instret:106  PC:0x8000020c  instr:0x8137  priv:0
+instret:107  PC:0x80000210  instr:0xfff1011b  priv:0
+instret:108  PC:0x80000214  instr:0x208f33  priv:0
+instret:109  PC:0x80000218  instr:0x80008eb7  priv:0
+instret:110  PC:0x8000021c  instr:0xfffe8e9b  priv:0
+instret:111  PC:0x80000220  instr:0xb00193  priv:0
+instret:112  PC:0x80000224  instr:0x3ddf1a63  priv:0
+instret:113  PC:0x80000228  instr:0x800000b7  priv:0
+instret:114  PC:0x8000022c  instr:0xfff0809b  priv:0
+instret:115  PC:0x80000230  instr:0xffff8137  priv:0
+instret:116  PC:0x80000234  instr:0x208f33  priv:0
+instret:117  PC:0x80000238  instr:0x7fff8eb7  priv:0
+instret:118  PC:0x8000023c  instr:0xfffe8e9b  priv:0
+instret:119  PC:0x80000240  instr:0xc00193  priv:0
+instret:120  PC:0x80000244  instr:0x3bdf1a63  priv:0
+instret:121  PC:0x80000248  instr:0x93  priv:0
+instret:122  PC:0x8000024c  instr:0xfff00113  priv:0
+instret:123  PC:0x80000250  instr:0x208f33  priv:0
+instret:124  PC:0x80000254  instr:0xfff00e93  priv:0
+instret:125  PC:0x80000258  instr:0xd00193  priv:0
+instret:126  PC:0x8000025c  instr:0x39df1e63  priv:0
+instret:127  PC:0x80000260  instr:0xfff00093  priv:0
+instret:128  PC:0x80000264  instr:0x100113  priv:0
+instret:129  PC:0x80000268  instr:0x208f33  priv:0
+instret:130  PC:0x8000026c  instr:0xe93  priv:0
+instret:131  PC:0x80000270  instr:0xe00193  priv:0
+instret:132  PC:0x80000274  instr:0x39df1263  priv:0
+instret:133  PC:0x80000278  instr:0xfff00093  priv:0
+instret:134  PC:0x8000027c  instr:0xfff00113  priv:0
+instret:135  PC:0x80000280  instr:0x208f33  priv:0
+instret:136  PC:0x80000284  instr:0xffe00e93  priv:0
+instret:137  PC:0x80000288  instr:0xf00193  priv:0
+instret:138  PC:0x8000028c  instr:0x37df1663  priv:0
+instret:139  PC:0x80000290  instr:0x100093  priv:0
+instret:140  PC:0x80000294  instr:0x80000137  priv:0
+instret:141  PC:0x80000298  instr:0xfff1011b  priv:0
+instret:142  PC:0x8000029c  instr:0x208f33  priv:0
+instret:143  PC:0x800002a0  instr:0x100e9b  priv:0
+instret:144  PC:0x800002a4  instr:0x1fe9e93  priv:0
+instret:145  PC:0x800002a8  instr:0x1000193  priv:0
+instret:146  PC:0x800002ac  instr:0x35df1663  priv:0
+instret:147  PC:0x800002b0  instr:0xd00093  priv:0
+instret:148  PC:0x800002b4  instr:0xb00113  priv:0
+instret:149  PC:0x800002b8  instr:0x2080b3  priv:0
+instret:150  PC:0x800002bc  instr:0x1800e93  priv:0
+instret:151  PC:0x800002c0  instr:0x1100193  priv:0
+instret:152  PC:0x800002c4  instr:0x33d09a63  priv:0
+instret:153  PC:0x800002c8  instr:0xe00093  priv:0
+instret:154  PC:0x800002cc  instr:0xb00113  priv:0
+instret:155  PC:0x800002d0  instr:0x208133  priv:0
+instret:156  PC:0x800002d4  instr:0x1900e93  priv:0
+instret:157  PC:0x800002d8  instr:0x1200193  priv:0
+instret:158  PC:0x800002dc  instr:0x31d11e63  priv:0
+instret:159  PC:0x800002e0  instr:0xd00093  priv:0
+instret:160  PC:0x800002e4  instr:0x1080b3  priv:0
+instret:161  PC:0x800002e8  instr:0x1a00e93  priv:0
+instret:162  PC:0x800002ec  instr:0x1300193  priv:0
+instret:163  PC:0x800002f0  instr:0x31d09463  priv:0
+instret:164  PC:0x800002f4  instr:0x213  priv:0
+instret:165  PC:0x800002f8  instr:0xd00093  priv:0
+instret:166  PC:0x800002fc  instr:0xb00113  priv:0
+instret:167  PC:0x80000300  instr:0x208f33  priv:0
+instret:168  PC:0x80000304  instr:0xf0313  priv:0
+instret:169  PC:0x80000308  instr:0x120213  priv:0
+instret:170  PC:0x8000030c  instr:0x200293  priv:0
+instret:171  PC:0x80000310  instr:0xfe5214e3  priv:0
+instret:172  PC:0x800002f8  instr:0xd00093  priv:0
+instret:173  PC:0x800002fc  instr:0xb00113  priv:0
+instret:174  PC:0x80000300  instr:0x208f33  priv:0
+instret:175  PC:0x80000304  instr:0xf0313  priv:0
+instret:176  PC:0x80000308  instr:0x120213  priv:0
+instret:177  PC:0x8000030c  instr:0x200293  priv:0
+instret:178  PC:0x80000310  instr:0xfe5214e3  priv:0
+instret:179  PC:0x80000314  instr:0x1800e93  priv:0
+instret:180  PC:0x80000318  instr:0x1400193  priv:0
+instret:181  PC:0x8000031c  instr:0x2dd31e63  priv:0
+instret:182  PC:0x80000320  instr:0x213  priv:0
+instret:183  PC:0x80000324  instr:0xe00093  priv:0
+instret:184  PC:0x80000328  instr:0xb00113  priv:0
+instret:185  PC:0x8000032c  instr:0x208f33  priv:0
+instret:186  PC:0x80000330  instr:0x13  priv:0
+instret:187  PC:0x80000334  instr:0xf0313  priv:0
+instret:188  PC:0x80000338  instr:0x120213  priv:0
+instret:189  PC:0x8000033c  instr:0x200293  priv:0
+instret:190  PC:0x80000340  instr:0xfe5212e3  priv:0
+instret:191  PC:0x80000324  instr:0xe00093  priv:0
+instret:192  PC:0x80000328  instr:0xb00113  priv:0
+instret:193  PC:0x8000032c  instr:0x208f33  priv:0
+instret:194  PC:0x80000330  instr:0x13  priv:0
+instret:195  PC:0x80000334  instr:0xf0313  priv:0
+instret:196  PC:0x80000338  instr:0x120213  priv:0
+instret:197  PC:0x8000033c  instr:0x200293  priv:0
+instret:198  PC:0x80000340  instr:0xfe5212e3  priv:0
+instret:199  PC:0x80000344  instr:0x1900e93  priv:0
+instret:200  PC:0x80000348  instr:0x1500193  priv:0
+instret:201  PC:0x8000034c  instr:0x2bd31663  priv:0
+instret:202  PC:0x80000350  instr:0x213  priv:0
+instret:203  PC:0x80000354  instr:0xf00093  priv:0
+instret:204  PC:0x80000358  instr:0xb00113  priv:0
+instret:205  PC:0x8000035c  instr:0x208f33  priv:0
+instret:206  PC:0x80000360  instr:0x13  priv:0
+instret:207  PC:0x80000364  instr:0x13  priv:0
+instret:208  PC:0x80000368  instr:0xf0313  priv:0
+instret:209  PC:0x8000036c  instr:0x120213  priv:0
+instret:210  PC:0x80000370  instr:0x200293  priv:0
+instret:211  PC:0x80000374  instr:0xfe5210e3  priv:0
+instret:212  PC:0x80000354  instr:0xf00093  priv:0
+instret:213  PC:0x80000358  instr:0xb00113  priv:0
+instret:214  PC:0x8000035c  instr:0x208f33  priv:0
+instret:215  PC:0x80000360  instr:0x13  priv:0
+instret:216  PC:0x80000364  instr:0x13  priv:0
+instret:217  PC:0x80000368  instr:0xf0313  priv:0
+instret:218  PC:0x8000036c  instr:0x120213  priv:0
+instret:219  PC:0x80000370  instr:0x200293  priv:0
+instret:220  PC:0x80000374  instr:0xfe5210e3  priv:0
+instret:221  PC:0x80000378  instr:0x1a00e93  priv:0
+instret:222  PC:0x8000037c  instr:0x1600193  priv:0
+instret:223  PC:0x80000380  instr:0x27d31c63  priv:0
+instret:224  PC:0x80000384  instr:0x213  priv:0
+instret:225  PC:0x80000388  instr:0xd00093  priv:0
+instret:226  PC:0x8000038c  instr:0xb00113  priv:0
+instret:227  PC:0x80000390  instr:0x208f33  priv:0
+instret:228  PC:0x80000394  instr:0x120213  priv:0
+instret:229  PC:0x80000398  instr:0x200293  priv:0
+instret:230  PC:0x8000039c  instr:0xfe5216e3  priv:0
+instret:231  PC:0x80000388  instr:0xd00093  priv:0
+instret:232  PC:0x8000038c  instr:0xb00113  priv:0
+instret:233  PC:0x80000390  instr:0x208f33  priv:0
+instret:234  PC:0x80000394  instr:0x120213  priv:0
+instret:235  PC:0x80000398  instr:0x200293  priv:0
+instret:236  PC:0x8000039c  instr:0xfe5216e3  priv:0
+instret:237  PC:0x800003a0  instr:0x1800e93  priv:0
+instret:238  PC:0x800003a4  instr:0x1700193  priv:0
+instret:239  PC:0x800003a8  instr:0x25df1863  priv:0
+instret:240  PC:0x800003ac  instr:0x213  priv:0
+instret:241  PC:0x800003b0  instr:0xe00093  priv:0
+instret:242  PC:0x800003b4  instr:0xb00113  priv:0
+instret:243  PC:0x800003b8  instr:0x13  priv:0
+instret:244  PC:0x800003bc  instr:0x208f33  priv:0
+instret:245  PC:0x800003c0  instr:0x120213  priv:0
+instret:246  PC:0x800003c4  instr:0x200293  priv:0
+instret:247  PC:0x800003c8  instr:0xfe5214e3  priv:0
+instret:248  PC:0x800003b0  instr:0xe00093  priv:0
+instret:249  PC:0x800003b4  instr:0xb00113  priv:0
+instret:250  PC:0x800003b8  instr:0x13  priv:0
+instret:251  PC:0x800003bc  instr:0x208f33  priv:0
+instret:252  PC:0x800003c0  instr:0x120213  priv:0
+instret:253  PC:0x800003c4  instr:0x200293  priv:0
+instret:254  PC:0x800003c8  instr:0xfe5214e3  priv:0
+instret:255  PC:0x800003cc  instr:0x1900e93  priv:0
+instret:256  PC:0x800003d0  instr:0x1800193  priv:0
+instret:257  PC:0x800003d4  instr:0x23df1263  priv:0
+instret:258  PC:0x800003d8  instr:0x213  priv:0
+instret:259  PC:0x800003dc  instr:0xf00093  priv:0
+instret:260  PC:0x800003e0  instr:0xb00113  priv:0
+instret:261  PC:0x800003e4  instr:0x13  priv:0
+instret:262  PC:0x800003e8  instr:0x13  priv:0
+instret:263  PC:0x800003ec  instr:0x208f33  priv:0
+instret:264  PC:0x800003f0  instr:0x120213  priv:0
+instret:265  PC:0x800003f4  instr:0x200293  priv:0
+instret:266  PC:0x800003f8  instr:0xfe5212e3  priv:0
+instret:267  PC:0x800003dc  instr:0xf00093  priv:0
+instret:268  PC:0x800003e0  instr:0xb00113  priv:0
+instret:269  PC:0x800003e4  instr:0x13  priv:0
+instret:270  PC:0x800003e8  instr:0x13  priv:0
+instret:271  PC:0x800003ec  instr:0x208f33  priv:0
+instret:272  PC:0x800003f0  instr:0x120213  priv:0
+instret:273  PC:0x800003f4  instr:0x200293  priv:0
+instret:274  PC:0x800003f8  instr:0xfe5212e3  priv:0
+instret:275  PC:0x800003fc  instr:0x1a00e93  priv:0
+instret:276  PC:0x80000400  instr:0x1900193  priv:0
+instret:277  PC:0x80000404  instr:0x1fdf1a63  priv:0
+instret:278  PC:0x80000408  instr:0x213  priv:0
+instret:279  PC:0x8000040c  instr:0xd00093  priv:0
+instret:280  PC:0x80000410  instr:0x13  priv:0
+instret:281  PC:0x80000414  instr:0xb00113  priv:0
+instret:282  PC:0x80000418  instr:0x208f33  priv:0
+instret:283  PC:0x8000041c  instr:0x120213  priv:0
+instret:284  PC:0x80000420  instr:0x200293  priv:0
+instret:285  PC:0x80000424  instr:0xfe5214e3  priv:0
+instret:286  PC:0x8000040c  instr:0xd00093  priv:0
+instret:287  PC:0x80000410  instr:0x13  priv:0
+instret:288  PC:0x80000414  instr:0xb00113  priv:0
+instret:289  PC:0x80000418  instr:0x208f33  priv:0
+instret:290  PC:0x8000041c  instr:0x120213  priv:0
+instret:291  PC:0x80000420  instr:0x200293  priv:0
+instret:292  PC:0x80000424  instr:0xfe5214e3  priv:0
+instret:293  PC:0x80000428  instr:0x1800e93  priv:0
+instret:294  PC:0x8000042c  instr:0x1a00193  priv:0
+instret:295  PC:0x80000430  instr:0x1ddf1463  priv:0
+instret:296  PC:0x80000434  instr:0x213  priv:0
+instret:297  PC:0x80000438  instr:0xe00093  priv:0
+instret:298  PC:0x8000043c  instr:0x13  priv:0
+instret:299  PC:0x80000440  instr:0xb00113  priv:0
+instret:300  PC:0x80000444  instr:0x13  priv:0
+instret:301  PC:0x80000448  instr:0x208f33  priv:0
+instret:302  PC:0x8000044c  instr:0x120213  priv:0
+instret:303  PC:0x80000450  instr:0x200293  priv:0
+instret:304  PC:0x80000454  instr:0xfe5212e3  priv:0
+instret:305  PC:0x80000438  instr:0xe00093  priv:0
+instret:306  PC:0x8000043c  instr:0x13  priv:0
+instret:307  PC:0x80000440  instr:0xb00113  priv:0
+instret:308  PC:0x80000444  instr:0x13  priv:0
+instret:309  PC:0x80000448  instr:0x208f33  priv:0
+instret:310  PC:0x8000044c  instr:0x120213  priv:0
+instret:311  PC:0x80000450  instr:0x200293  priv:0
+instret:312  PC:0x80000454  instr:0xfe5212e3  priv:0
+instret:313  PC:0x80000458  instr:0x1900e93  priv:0
+instret:314  PC:0x8000045c  instr:0x1b00193  priv:0
+instret:315  PC:0x80000460  instr:0x19df1c63  priv:0
+instret:316  PC:0x80000464  instr:0x213  priv:0
+instret:317  PC:0x80000468  instr:0xf00093  priv:0
+instret:318  PC:0x8000046c  instr:0x13  priv:0
+instret:319  PC:0x80000470  instr:0x13  priv:0
+instret:320  PC:0x80000474  instr:0xb00113  priv:0
+instret:321  PC:0x80000478  instr:0x208f33  priv:0
+instret:322  PC:0x8000047c  instr:0x120213  priv:0
+instret:323  PC:0x80000480  instr:0x200293  priv:0
+instret:324  PC:0x80000484  instr:0xfe5212e3  priv:0
+instret:325  PC:0x80000468  instr:0xf00093  priv:0
+instret:326  PC:0x8000046c  instr:0x13  priv:0
+instret:327  PC:0x80000470  instr:0x13  priv:0
+instret:328  PC:0x80000474  instr:0xb00113  priv:0
+instret:329  PC:0x80000478  instr:0x208f33  priv:0
+instret:330  PC:0x8000047c  instr:0x120213  priv:0
+instret:331  PC:0x80000480  instr:0x200293  priv:0
+instret:332  PC:0x80000484  instr:0xfe5212e3  priv:0
+instret:333  PC:0x80000488  instr:0x1a00e93  priv:0
+instret:334  PC:0x8000048c  instr:0x1c00193  priv:0
+instret:335  PC:0x80000490  instr:0x17df1463  priv:0
+instret:336  PC:0x80000494  instr:0x213  priv:0
+instret:337  PC:0x80000498  instr:0xb00113  priv:0
+instret:338  PC:0x8000049c  instr:0xd00093  priv:0
+instret:339  PC:0x800004a0  instr:0x208f33  priv:0
+instret:340  PC:0x800004a4  instr:0x120213  priv:0
+instret:341  PC:0x800004a8  instr:0x200293  priv:0
+instret:342  PC:0x800004ac  instr:0xfe5216e3  priv:0
+instret:343  PC:0x80000498  instr:0xb00113  priv:0
+instret:344  PC:0x8000049c  instr:0xd00093  priv:0
+instret:345  PC:0x800004a0  instr:0x208f33  priv:0
+instret:346  PC:0x800004a4  instr:0x120213  priv:0
+instret:347  PC:0x800004a8  instr:0x200293  priv:0
+instret:348  PC:0x800004ac  instr:0xfe5216e3  priv:0
+instret:349  PC:0x800004b0  instr:0x1800e93  priv:0
+instret:350  PC:0x800004b4  instr:0x1d00193  priv:0
+instret:351  PC:0x800004b8  instr:0x15df1063  priv:0
+instret:352  PC:0x800004bc  instr:0x213  priv:0
+instret:353  PC:0x800004c0  instr:0xb00113  priv:0
+instret:354  PC:0x800004c4  instr:0xe00093  priv:0
+instret:355  PC:0x800004c8  instr:0x13  priv:0
+instret:356  PC:0x800004cc  instr:0x208f33  priv:0
+instret:357  PC:0x800004d0  instr:0x120213  priv:0
+instret:358  PC:0x800004d4  instr:0x200293  priv:0
+instret:359  PC:0x800004d8  instr:0xfe5214e3  priv:0
+instret:360  PC:0x800004c0  instr:0xb00113  priv:0
+instret:361  PC:0x800004c4  instr:0xe00093  priv:0
+instret:362  PC:0x800004c8  instr:0x13  priv:0
+instret:363  PC:0x800004cc  instr:0x208f33  priv:0
+instret:364  PC:0x800004d0  instr:0x120213  priv:0
+instret:365  PC:0x800004d4  instr:0x200293  priv:0
+instret:366  PC:0x800004d8  instr:0xfe5214e3  priv:0
+instret:367  PC:0x800004dc  instr:0x1900e93  priv:0
+instret:368  PC:0x800004e0  instr:0x1e00193  priv:0
+instret:369  PC:0x800004e4  instr:0x11df1a63  priv:0
+instret:370  PC:0x800004e8  instr:0x213  priv:0
+instret:371  PC:0x800004ec  instr:0xb00113  priv:0
+instret:372  PC:0x800004f0  instr:0xf00093  priv:0
+instret:373  PC:0x800004f4  instr:0x13  priv:0
+instret:374  PC:0x800004f8  instr:0x13  priv:0
+instret:375  PC:0x800004fc  instr:0x208f33  priv:0
+instret:376  PC:0x80000500  instr:0x120213  priv:0
+instret:377  PC:0x80000504  instr:0x200293  priv:0
+instret:378  PC:0x80000508  instr:0xfe5212e3  priv:0
+instret:379  PC:0x800004ec  instr:0xb00113  priv:0
+instret:380  PC:0x800004f0  instr:0xf00093  priv:0
+instret:381  PC:0x800004f4  instr:0x13  priv:0
+instret:382  PC:0x800004f8  instr:0x13  priv:0
+instret:383  PC:0x800004fc  instr:0x208f33  priv:0
+instret:384  PC:0x80000500  instr:0x120213  priv:0
+instret:385  PC:0x80000504  instr:0x200293  priv:0
+instret:386  PC:0x80000508  instr:0xfe5212e3  priv:0
+instret:387  PC:0x8000050c  instr:0x1a00e93  priv:0
+instret:388  PC:0x80000510  instr:0x1f00193  priv:0
+instret:389  PC:0x80000514  instr:0xfdf1263  priv:0
+instret:390  PC:0x80000518  instr:0x213  priv:0
+instret:391  PC:0x8000051c  instr:0xb00113  priv:0
+instret:392  PC:0x80000520  instr:0x13  priv:0
+instret:393  PC:0x80000524  instr:0xd00093  priv:0
+instret:394  PC:0x80000528  instr:0x208f33  priv:0
+instret:395  PC:0x8000052c  instr:0x120213  priv:0
+instret:396  PC:0x80000530  instr:0x200293  priv:0
+instret:397  PC:0x80000534  instr:0xfe5214e3  priv:0
+instret:398  PC:0x8000051c  instr:0xb00113  priv:0
+instret:399  PC:0x80000520  instr:0x13  priv:0
+instret:400  PC:0x80000524  instr:0xd00093  priv:0
+instret:401  PC:0x80000528  instr:0x208f33  priv:0
+instret:402  PC:0x8000052c  instr:0x120213  priv:0
+instret:403  PC:0x80000530  instr:0x200293  priv:0
+instret:404  PC:0x80000534  instr:0xfe5214e3  priv:0
+instret:405  PC:0x80000538  instr:0x1800e93  priv:0
+instret:406  PC:0x8000053c  instr:0x2000193  priv:0
+instret:407  PC:0x80000540  instr:0xbdf1c63  priv:0
+instret:408  PC:0x80000544  instr:0x213  priv:0
+instret:409  PC:0x80000548  instr:0xb00113  priv:0
+instret:410  PC:0x8000054c  instr:0x13  priv:0
+instret:411  PC:0x80000550  instr:0xe00093  priv:0
+instret:412  PC:0x80000554  instr:0x13  priv:0
+instret:413  PC:0x80000558  instr:0x208f33  priv:0
+instret:414  PC:0x8000055c  instr:0x120213  priv:0
+instret:415  PC:0x80000560  instr:0x200293  priv:0
+instret:416  PC:0x80000564  instr:0xfe5212e3  priv:0
+instret:417  PC:0x80000548  instr:0xb00113  priv:0
+instret:418  PC:0x8000054c  instr:0x13  priv:0
+instret:419  PC:0x80000550  instr:0xe00093  priv:0
+instret:420  PC:0x80000554  instr:0x13  priv:0
+instret:421  PC:0x80000558  instr:0x208f33  priv:0
+instret:422  PC:0x8000055c  instr:0x120213  priv:0
+instret:423  PC:0x80000560  instr:0x200293  priv:0
+instret:424  PC:0x80000564  instr:0xfe5212e3  priv:0
+instret:425  PC:0x80000568  instr:0x1900e93  priv:0
+instret:426  PC:0x8000056c  instr:0x2100193  priv:0
+instret:427  PC:0x80000570  instr:0x9df1463  priv:0
+instret:428  PC:0x80000574  instr:0x213  priv:0
+instret:429  PC:0x80000578  instr:0xb00113  priv:0
+instret:430  PC:0x8000057c  instr:0x13  priv:0
+instret:431  PC:0x80000580  instr:0x13  priv:0
+instret:432  PC:0x80000584  instr:0xf00093  priv:0
+instret:433  PC:0x80000588  instr:0x208f33  priv:0
+instret:434  PC:0x8000058c  instr:0x120213  priv:0
+instret:435  PC:0x80000590  instr:0x200293  priv:0
+instret:436  PC:0x80000594  instr:0xfe5212e3  priv:0
+instret:437  PC:0x80000578  instr:0xb00113  priv:0
+instret:438  PC:0x8000057c  instr:0x13  priv:0
+instret:439  PC:0x80000580  instr:0x13  priv:0
+instret:440  PC:0x80000584  instr:0xf00093  priv:0
+instret:441  PC:0x80000588  instr:0x208f33  priv:0
+instret:442  PC:0x8000058c  instr:0x120213  priv:0
+instret:443  PC:0x80000590  instr:0x200293  priv:0
+instret:444  PC:0x80000594  instr:0xfe5212e3  priv:0
+instret:445  PC:0x80000598  instr:0x1a00e93  priv:0
+instret:446  PC:0x8000059c  instr:0x2200193  priv:0
+instret:447  PC:0x800005a0  instr:0x5df1c63  priv:0
+instret:448  PC:0x800005a4  instr:0xf00093  priv:0
+instret:449  PC:0x800005a8  instr:0x100133  priv:0
+instret:450  PC:0x800005ac  instr:0xf00e93  priv:0
+instret:451  PC:0x800005b0  instr:0x2300193  priv:0
+instret:452  PC:0x800005b4  instr:0x5d11263  priv:0
+instret:453  PC:0x800005b8  instr:0x2000093  priv:0
+instret:454  PC:0x800005bc  instr:0x8133  priv:0
+instret:455  PC:0x800005c0  instr:0x2000e93  priv:0
+instret:456  PC:0x800005c4  instr:0x2400193  priv:0
+instret:457  PC:0x800005c8  instr:0x3d11863  priv:0
+instret:458  PC:0x800005cc  instr:0xb3  priv:0
+instret:459  PC:0x800005d0  instr:0xe93  priv:0
+instret:460  PC:0x800005d4  instr:0x2500193  priv:0
+instret:461  PC:0x800005d8  instr:0x3d09063  priv:0
+instret:462  PC:0x800005dc  instr:0x1000093  priv:0
+instret:463  PC:0x800005e0  instr:0x1e00113  priv:0
+instret:464  PC:0x800005e4  instr:0x208033  priv:0
+instret:465  PC:0x800005e8  instr:0xe93  priv:0
+instret:466  PC:0x800005ec  instr:0x2600193  priv:0
+instret:467  PC:0x800005f0  instr:0x1d01463  priv:0
+instret:468  PC:0x800005f4  instr:0x301c63  priv:0
+instret:469  PC:0x8000060c  instr:0xff0000f  priv:0
+4459400: D_MMU_Cache: cache size 8 KB, associativity 2, line size 64 bytes (= 8 XLEN words)
+instret:470  PC:0x80000610  instr:0x100193  priv:0
+instret:471  PC:0x80000614  instr:0x73  priv:0
+    mcause:0x8  epc 0x80000614  tval:0x0  next_pc 0x80000004, new_priv 3 new_mstatus 0xa00000000
+instret:471  PC:0x80000004  instr:0x34202f73  priv:3
+instret:472  PC:0x80000008  instr:0x800f93  priv:3
+instret:473  PC:0x8000000c  instr:0x3ff0a63  priv:3
+instret:474  PC:0x80000040  instr:0x1f17  priv:3
+instret:475  PC:0x80000044  instr:0xfc3f2023  priv:3
+instret:476  PC:0x80000048  instr:0xff9ff06f  priv:3
+instret:477  PC:0x80000040  instr:0x1f17  priv:3
+instret:478  PC:0x80000044  instr:0xfc3f2023  priv:3
+instret:479  PC:0x80000048  instr:0xff9ff06f  priv:3
+instret:480  PC:0x80000040  instr:0x1f17  priv:3
+instret:481  PC:0x80000044  instr:0xfc3f2023  priv:3
+instret:482  PC:0x80000048  instr:0xff9ff06f  priv:3
+instret:483  PC:0x80000040  instr:0x1f17  priv:3
+instret:484  PC:0x80000044  instr:0xfc3f2023  priv:3
+instret:485  PC:0x80000048  instr:0xff9ff06f  priv:3
+instret:486  PC:0x80000040  instr:0x1f17  priv:3
+4502200: AWS_DDR4_Adapter.rl_process_wr_req: addr 0x80001000 (<tohost>) data 0x1
+PASS ISA Test
+instret:487  PC:0x80000044  instr:0xfc3f2023  priv:3
+instret:488  PC:0x80000048  instr:0xff9ff06f  priv:3
+instret:489  PC:0x80000040  instr:0x1f17  priv:3
+test_dram_dma_hwsw_cosim.c: Final HW status 0x1
+    (Non-zero write tohost)
+TEST PASSED 
+instret:490  PC:0x80000044  instr:0xfc3f2023  priv:3
+instret:491  PC:0x80000048  instr:0xff9ff06f  priv:3
+instret:492  PC:0x80000040  instr:0x1f17  priv:3
+instret:493  PC:0x80000044  instr:0xfc3f2023  priv:3
+instret:494  PC:0x80000048  instr:0xff9ff06f  priv:3
+instret:495  PC:0x80000040  instr:0x1f17  priv:3
+instret:496  PC:0x80000044  instr:0xfc3f2023  priv:3
+instret:497  PC:0x80000048  instr:0xff9ff06f  priv:3
+instret:498  PC:0x80000040  instr:0x1f17  priv:3
+instret:499  PC:0x80000044  instr:0xfc3f2023  priv:3
+instret:500  PC:0x80000048  instr:0xff9ff06f  priv:3
+instret:501  PC:0x80000040  instr:0x1f17  priv:3
+instret:502  PC:0x80000044  instr:0xfc3f2023  priv:3
+instret:503  PC:0x80000048  instr:0xff9ff06f  priv:3
+instret:504  PC:0x80000040  instr:0x1f17  priv:3
+instret:505  PC:0x80000044  instr:0xfc3f2023  priv:3
+instret:506  PC:0x80000048  instr:0xff9ff06f  priv:3
+instret:507  PC:0x80000040  instr:0x1f17  priv:3
+instret:508  PC:0x80000044  instr:0xfc3f2023  priv:3
+instret:509  PC:0x80000048  instr:0xff9ff06f  priv:3
+instret:510  PC:0x80000040  instr:0x1f17  priv:3
+instret:511  PC:0x80000044  instr:0xfc3f2023  priv:3
+instret:512  PC:0x80000048  instr:0xff9ff06f  priv:3
+instret:513  PC:0x80000040  instr:0x1f17  priv:3
+instret:514  PC:0x80000044  instr:0xfc3f2023  priv:3
+instret:515  PC:0x80000048  instr:0xff9ff06f  priv:3
+$finish called at time : 45192 ns : File "/home/nikhil/git_clones/AWS/BESSPIN-CloudGFE/AWSteria/developer_designs/cl_BSV_WindSoC/verif/tests/test_null.sv" Line 29
+run: Time (s): cpu = 00:00:00.07 ; elapsed = 00:00:20 . Memory (MB): peak = 1570.418 ; gain = 128.000 ; free physical = 1727 ; free virtual = 40598
+## quit
+INFO: [Common 17-206] Exiting xsim at Fri May  1 22:38:38 2020...

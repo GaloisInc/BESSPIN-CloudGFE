@@ -1,0 +1,19 @@
+#-----------------------------------------------------------
+# xsim v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:47:09 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Fri Apr 17 19:59:17 2020
+# Process ID: 9981
+# Current directory: /home/nikhil/git_clones/AWS/aws-fpga/hdk/cl/examples/cl_dram_dma/verif/sim/vivado/test_dram_dma_retention_c
+# Command line: xsim -log test_dram_dma_retention.log -mode tcl -source {xsim.dir/tb/xsim_script.tcl}
+# Log file: /home/nikhil/git_clones/AWS/aws-fpga/hdk/cl/examples/cl_dram_dma/verif/sim/vivado/test_dram_dma_retention_c/test_dram_dma_retention.log
+# Journal file: /home/nikhil/git_clones/AWS/aws-fpga/hdk/cl/examples/cl_dram_dma/verif/sim/vivado/test_dram_dma_retention_c/xsim.jou
+#-----------------------------------------------------------
+source xsim.dir/tb/xsim_script.tcl
+# xsim {tb} -autoloadwcfg -tclbatch {/home/nikhil/git_clones/AWS/aws-fpga/hdk/cl/examples/cl_dram_dma/verif/scripts/waves.tcl} -runall
+Vivado Simulator 2019.1
+xsim.dir/tb/xsimk: symbol lookup error: ./xsim.dir/work/xsc/dpi.so: undefined symbol: logger_stdout
+ERROR: [Simtcl 6-50] Simulation engine failed to start: Simulation exited with status code 127.
+Please see the Tcl Console or the Messages for details.
+quit
+INFO: [Common 17-206] Exiting xsim at Fri Apr 17 20:01:24 2020...

@@ -1,0 +1,13 @@
+#-----------------------------------------------------------
+# xsim v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:47:09 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Fri May  1 22:38:12 2020
+# Process ID: 8771
+# Current directory: /home/nikhil/git_clones/AWS/BESSPIN-CloudGFE/AWSteria/developer_designs/cl_BSV_WindSoC/verif/sim/vivado/test_dram_dma_hwsw_cosim_c
+# Command line: xsim -log test_dram_dma_hwsw_cosim.log -mode tcl -source {xsim.dir/tb/xsim_script.tcl}
+# Log file: /home/nikhil/git_clones/AWS/BESSPIN-CloudGFE/AWSteria/developer_designs/cl_BSV_WindSoC/verif/sim/vivado/test_dram_dma_hwsw_cosim_c/test_dram_dma_hwsw_cosim.log
+# Journal file: /home/nikhil/git_clones/AWS/BESSPIN-CloudGFE/AWSteria/developer_designs/cl_BSV_WindSoC/verif/sim/vivado/test_dram_dma_hwsw_cosim_c/xsim.jou
+#-----------------------------------------------------------
+source xsim.dir/tb/xsim_script.tcl
+source /home/nikhil/git_clones/AWS/BESSPIN-CloudGFE/AWSteria/developer_designs/cl_BSV_WindSoC/verif/scripts/waves.tcl
