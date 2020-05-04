@@ -129,8 +129,9 @@ int main(int argc, char **argv)
     // AWSteria code
 
     // TODO: get the filename from command-line args/config file/...
-    char memhex32_filename []
-	= "/home/nikhil/git_clones/AWS/aws-fpga/hdk/cl/developer_designs/cl_BSV_WindSoC/verif/scripts/Mem.hex";
+    char memhex32_filename[256];
+    strncpy(memhex32_filename, getenv("CL_DIR"), 255);
+    strncat(memhex32_filename, "/verif/scripts/Mem.hex", 255-strlen(memhex32_filename));
 
     rc = load_mem_hex32_using_DMA (slot_id, memhex32_filename);
     fail_on (rc, out, "Loading the mem hex32 file failed");
