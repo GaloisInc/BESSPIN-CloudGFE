@@ -437,12 +437,13 @@ uint32_t ocl_host_to_hw_chan_addr_base = 0x00001000;
 
 uint32_t host_to_hw_chan_control      = 0;
 uint32_t host_to_hw_chan_UART         = 1;
-uint32_t host_to_hw_chan_ipi          = 2;    // IPI=Inter-processor interrupt
+uint32_t host_to_hw_chan_mem_rsp      = 2;
 uint32_t host_to_hw_chan_debug_module = 3;
+uint32_t host_to_hw_chan_interrupt    = 4;
 
 uint32_t hw_to_host_chan_status       = 0;
 uint32_t hw_to_host_chan_UART         = 1;
-uint32_t hw_to_host_chan_ipi          = 2;    // IPI=Inter-processor interrupt
+uint32_t hw_to_host_chan_mem_req      = 2;
 uint32_t hw_to_host_chan_debug_module = 3;
 
 uint32_t mk_chan_status_addr (uint32_t addr_base, uint32_t chan)

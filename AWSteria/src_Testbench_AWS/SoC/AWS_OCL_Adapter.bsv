@@ -53,7 +53,7 @@ import AWS_BSV_Top_Defs :: *;
 // choose to interpret a pair as request/response).  The number of
 // channels in each direction need not be the same.
 
-typedef 4 Num_OCL_Host_to_HW_Channels;
+typedef 5 Num_OCL_Host_to_HW_Channels;
 typedef 4 Num_OCL_HW_to_Host_Channels;
 
 Integer num_ocl_host_to_hw_channels = valueOf (Num_OCL_Host_to_HW_Channels);

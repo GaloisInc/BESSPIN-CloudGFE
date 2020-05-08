@@ -47,12 +47,13 @@ export mkAWS_BSV_Top;
 
 Integer host_to_hw_chan_control      = 0;
 Integer host_to_hw_chan_UART         = 1;
-Integer host_to_hw_chan_ipi          = 2;
+Integer host_to_hw_chan_mem_rsp      = 2;
 Integer host_to_hw_chan_debug_module = 3;
+Integer host_to_hw_chan_interrupt    = 4;
 
 Integer hw_to_host_chan_status       = 0;
 Integer hw_to_host_chan_UART         = 1;
-Integer hw_to_host_chan_ipi          = 2;
+Integer hw_to_host_chan_mem_req      = 2;
 Integer hw_to_host_chan_debug_module = 3;
 
 // ================================================================
@@ -142,16 +143,24 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
    endrule
 
    // ================================================================
-   // Connect OCL Adapter and inter-processor interrupts to/from Core
+   // Connect OCL Adapter hw-to-host memory request and host-to-hw memory response
 
-   rule rl_host_to_hw_ipi;
-      Bit #(32) x <- pop_o (ocl_adapter.v_from_host [host_to_hw_chan_ipi]);
-      soc_top.host_to_hw_interrupt.put (x [0]);
+   rule rl_hw_to_aws_host_mem_req;
+      Bit #(32) x <- soc_top.to_aws_host.get;
+      ocl_adapter.v_to_host [hw_to_host_chan_mem_req].enq (x);
    endrule
 
-   rule rl_hw_to_host_ipi;
-      let x <- soc_top.hw_to_host_interrupt.get;
-      ocl_adapter.v_to_host [hw_to_host_chan_ipi].enq (zeroExtend (x));
+   rule rl_aws_host_to_hw_mem_rsp;
+      Bit #(32) x <- pop_o (ocl_adapter.v_from_host [host_to_hw_chan_mem_rsp]);
+      soc_top.from_aws_host.put (x);
+   endrule
+
+   // ================================================================
+   // Connect OCL Adapter host-to-hw interrupt line
+
+   rule rl_aws_host_to_hw_interrupt;
+      Bit #(32) x <- pop_o (ocl_adapter.v_from_host [host_to_hw_chan_interrupt]);
+      soc_top.ma_aws_host_to_hw_interrupt (x [0]);
    endrule
 
    // ================================================================

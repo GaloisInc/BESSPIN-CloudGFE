@@ -62,10 +62,10 @@ module mkAWS_SoC_Fabric (AWS_SoC_Fabric_IFC);
 	       && (addr < soc_map.m_uart0_addr_lim))
 	 return tuple2 (True, fromInteger (uart0_slave_num));
 
-      // IPI_Out
-      else if (   (soc_map.m_ipi_out_addr_base <= addr)
-	       && (addr < soc_map.m_ipi_out_addr_lim))
-	 return tuple2 (True, fromInteger (ipi_out_slave_num));
+      // AWS host mem access
+      else if (   (soc_map.m_aws_host_access_addr_base <= addr)
+	       && (addr < soc_map.m_aws_host_access_addr_lim))
+	 return tuple2 (True, fromInteger (aws_host_access_slave_num));
 
 `ifdef HTIF_MEMORY
       else if (   (soc_map.m_htif_addr_base <= addr)

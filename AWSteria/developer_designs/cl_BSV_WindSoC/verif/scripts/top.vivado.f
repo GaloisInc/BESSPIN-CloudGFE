@@ -100,6 +100,7 @@ ${CL_ROOT}/design/RegFile.v
 # (These will be appended from top.vivado.f_design_files)
 ${CL_ROOT}/design/mkAWS_BSV_Top.v
 ${CL_ROOT}/design/mkAWS_DDR4_Adapter.v
+${CL_ROOT}/design/mkAWS_Host_Access.v
 ${CL_ROOT}/design/mkAWS_IPI_Out.v
 ${CL_ROOT}/design/mkAWS_SoC_Fabric.v
 ${CL_ROOT}/design/mkAWS_SoC_Top.v

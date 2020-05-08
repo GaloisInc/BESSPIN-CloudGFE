@@ -35,13 +35,13 @@ export  Num_Slaves;
 export  boot_rom_slave_num;
 export  mem0_controller_slave_num;
 export  uart0_slave_num;
-export  ipi_out_slave_num;
+export  aws_host_access_slave_num;
 export  accel0_slave_num;
 
 export  N_External_Interrupt_Sources;
 export  n_external_interrupt_sources;
 export  irq_num_uart0;
-export  irq_num_host_to_hw_ipi;
+export  irq_num_aws_host_to_hw;
 export  irq_num_accel0;
 
 // ================================================================
@@ -70,9 +70,9 @@ interface SoC_Map_IFC;
    (* always_ready *)   method  Fabric_Addr  m_uart0_addr_size;
    (* always_ready *)   method  Fabric_Addr  m_uart0_addr_lim;
 
-   (* always_ready *)   method  Fabric_Addr  m_ipi_out_addr_base;
-   (* always_ready *)   method  Fabric_Addr  m_ipi_out_addr_size;
-   (* always_ready *)   method  Fabric_Addr  m_ipi_out_addr_lim;
+   (* always_ready *)   method  Fabric_Addr  m_aws_host_access_addr_base;
+   (* always_ready *)   method  Fabric_Addr  m_aws_host_access_addr_size;
+   (* always_ready *)   method  Fabric_Addr  m_aws_host_access_addr_lim;
 
 `ifdef INCLUDE_ACCEL0
    (* always_ready *)   method  Fabric_Addr  m_accel0_addr_base;
@@ -147,14 +147,14 @@ module mkSoC_Map (SoC_Map_IFC);
    endfunction
 
    // ----------------------------------------------------------------
-   // IPI_Out (Inter-processor-interrupt box)
+   // AWS host access
 
-   Fabric_Addr ipi_out_addr_base = 'hC000_1000;
-   Fabric_Addr ipi_out_addr_size = 'h0000_0080;    // 128
-   Fabric_Addr ipi_out_addr_lim  = ipi_out_addr_base + ipi_out_addr_size;
+   Fabric_Addr aws_host_access_addr_base = 'hC000_1000;
+   Fabric_Addr aws_host_access_addr_size = 'h0000_0080;    // 128
+   Fabric_Addr aws_host_access_addr_lim  = aws_host_access_addr_base + aws_host_access_addr_size;
 
-   function Bool fn_is_ipi_out_addr (Fabric_Addr addr);
-      return ((ipi_out_addr_base <= addr) && (addr < ipi_out_addr_lim));
+   function Bool fn_is_aws_host_access_addr (Fabric_Addr addr);
+      return ((aws_host_access_addr_base <= addr) && (addr < aws_host_access_addr_lim));
    endfunction
 
    // ----------------------------------------------------------------
@@ -235,7 +235,7 @@ module mkSoC_Map (SoC_Map_IFC);
       return (   fn_is_near_mem_io_addr (addr)
 	      || fn_is_plic_addr (addr)
 	      || fn_is_uart0_addr  (addr)
-	      || fn_is_ipi_out_addr  (addr)
+	      || fn_is_aws_host_access_addr  (addr)
 `ifdef INCLUDE_ACCEL0
 	      || fn_is_accel0_addr  (addr)
 `endif
@@ -266,9 +266,9 @@ module mkSoC_Map (SoC_Map_IFC);
    method  Fabric_Addr  m_uart0_addr_size = uart0_addr_size;
    method  Fabric_Addr  m_uart0_addr_lim  = uart0_addr_lim;
 
-   method  Fabric_Addr  m_ipi_out_addr_base = ipi_out_addr_base;
-   method  Fabric_Addr  m_ipi_out_addr_size = ipi_out_addr_size;
-   method  Fabric_Addr  m_ipi_out_addr_lim  = ipi_out_addr_lim;
+   method  Fabric_Addr  m_aws_host_access_addr_base = aws_host_access_addr_base;
+   method  Fabric_Addr  m_aws_host_access_addr_size = aws_host_access_addr_size;
+   method  Fabric_Addr  m_aws_host_access_addr_lim  = aws_host_access_addr_lim;
 
 `ifdef INCLUDE_ACCEL0
    method  Fabric_Addr  m_accel0_addr_base = accel0_addr_base;
@@ -335,7 +335,7 @@ typedef 4 Num_Slaves;
 Integer boot_rom_slave_num        = 0;
 Integer mem0_controller_slave_num = 1;
 Integer uart0_slave_num           = 2;
-Integer ipi_out_slave_num         = 3;
+Integer aws_host_access_slave_num = 3;
 Integer accel0_slave_num          = 4;
 
 // ================================================================
@@ -346,7 +346,7 @@ typedef  16  N_External_Interrupt_Sources;
 Integer  n_external_interrupt_sources = valueOf (N_External_Interrupt_Sources);
 
 Integer irq_num_uart0          = 0;
-Integer irq_num_host_to_hw_ipi = 1;
+Integer irq_num_aws_host_to_hw = 1;
 Integer irq_num_accel0         = 2;
 
 // ================================================================

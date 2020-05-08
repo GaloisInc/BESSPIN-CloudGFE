@@ -47,9 +47,9 @@ import Core     :: *;
 import PLIC     :: *;    // For interface to PLIC interrupt sources, in Core_IFC
 
 // IPs on the fabric (other than memory)
-import Boot_ROM    :: *;
-import UART_Model  :: *;
-import AWS_IPI_Out :: *;
+import Boot_ROM        :: *;
+import UART_Model      :: *;
+import AWS_Host_Access :: *;
 
 
 // IPs on the fabric (memory)
@@ -86,9 +86,16 @@ interface AWS_SoC_Top_IFC;
    interface Get #(Bit #(8)) get_to_console;
    interface Put #(Bit #(8)) put_from_console;
 
-   // Inter-processor interrupts
-   interface Put #(Bit #(1)) host_to_hw_interrupt;
-   interface Get #(Bit #(1)) hw_to_host_interrupt;
+   // AWS host memory access
+   // Stream of AXI4 WR_ADDR, WR_DATA and RD_ADDR requests,
+   //     serialized into 32-bit words.
+   interface Get #(Bit #(32)) to_aws_host;
+   // Stream of AXI4 WR_RESP and RD_DATA responses,
+   //     serialized into 32-bit words.
+   interface Put #(Bit #(32)) from_aws_host;
+
+   // Interrupt from AWS host to hardware
+   method Action ma_aws_host_to_hw_interrupt (Bit #(1) x);
 
 `ifdef INCLUDE_GDB_CONTROL
    // To external controller (E.g., GDB)
@@ -162,7 +169,7 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    // SoC IPs
    UART_IFC   uart0  <- mkUART;
 
-   AWS_IPI_Out_IFC  ipi_out <- mkAWS_IPI_Out;
+   AWS_Host_Access_IFC  aws_host_access <- mkAWS_Host_Access;
 
 `ifdef INCLUDE_ACCEL0
    // Accel0 master to fabric
@@ -199,8 +206,8 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    // Fabric to UART0
    mkConnection (fabric.v_to_slaves [uart0_slave_num],  uart0.slave);
 
-   // Fabric to IPI_out
-   mkConnection (fabric.v_to_slaves [ipi_out_slave_num], ipi_out.slave);
+   // Fabric to AWS Host Access
+   mkConnection (fabric.v_to_slaves [aws_host_access_slave_num], aws_host_access.slave);
 
 `ifdef INCLUDE_ACCEL0
    // Fabric to accel0
@@ -216,7 +223,7 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    // ----------------
    // Connect interrupt sources for CPU external interrupt request inputs.
 
-   Reg #(Bool) rg_host_to_hw_interrupt <- mkReg (False);
+   Reg #(Bool) rg_aws_host_to_hw_interrupt <- mkReg (False);
 
    (* fire_when_enabled, no_implicit_conditions *)
    rule rl_connect_external_interrupt_requests;
@@ -225,9 +232,9 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
       core.core_external_interrupt_sources [irq_num_uart0].m_interrupt_req (intr);
       Integer last_irq_num = irq_num_uart0;
 
-      // Host-to-HW inter-processor interrupt
-      core.core_external_interrupt_sources [irq_num_host_to_hw_ipi].m_interrupt_req (rg_host_to_hw_interrupt);
-      last_irq_num = irq_num_host_to_hw_ipi;
+      // AWS Host-to-HW interrupt
+      core.core_external_interrupt_sources [irq_num_aws_host_to_hw].m_interrupt_req (rg_aws_host_to_hw_interrupt);
+      last_irq_num = irq_num_aws_host_to_hw;
 
 `ifdef INCLUDE_ACCEL0
       Bool intr_accel0 = accel0.interrupt_req;
@@ -408,14 +415,18 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    interface get_to_console   = uart0.get_to_console;
    interface put_from_console = uart0.put_from_console;
 
-   // Inter-processor interrupts
-   interface Put host_to_hw_interrupt;
-      method Action put (Bit #(1) x);
-	 rg_host_to_hw_interrupt <= unpack (x);
-      endmethod
-   endinterface
+   // AWS host memory access
+   // Stream of 32-bit words: every 4 words encapsulates an AXI4
+   //     WR_ADDR, WR_DATA or RD_ADDR request.
+   interface Get to_aws_host   = aws_host_access.to_aws_host;
+   // Stream of 32-bit words: every 4 words encapsulates an AXI4
+   //     WR_RESP or RD_DATA response.
+   interface Put from_aws_host = aws_host_access.from_aws_host;
 
-   interface Get hw_to_host_interrupt = ipi_out.ipi_out_get;
+   method Action ma_aws_host_to_hw_interrupt (Bit #(1) x);
+      rg_aws_host_to_hw_interrupt <= unpack (x);
+   endmethod
+
 
    // To external controller (E.g., GDB)
 `ifdef INCLUDE_GDB_CONTROL
