@@ -365,6 +365,10 @@ INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/nikhil/git_clones/AWS/B
 INFO: [VRFC 10-311] analyzing module mkAWS_BSV_Top
 INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/nikhil/git_clones/AWS/BESSPIN-CloudGFE/AWSteria/developer_designs/cl_BSV_WindSoC/design/mkAWS_DDR4_Adapter.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module mkAWS_DDR4_Adapter
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/nikhil/git_clones/AWS/BESSPIN-CloudGFE/AWSteria/developer_designs/cl_BSV_WindSoC/design/mkAWS_IPI_Out.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mkAWS_IPI_Out
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/nikhil/git_clones/AWS/BESSPIN-CloudGFE/AWSteria/developer_designs/cl_BSV_WindSoC/design/mkAWS_SoC_Fabric.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mkAWS_SoC_Fabric
 INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/nikhil/git_clones/AWS/BESSPIN-CloudGFE/AWSteria/developer_designs/cl_BSV_WindSoC/design/mkAWS_SoC_Top.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module mkAWS_SoC_Top
 INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/nikhil/git_clones/AWS/BESSPIN-CloudGFE/AWSteria/developer_designs/cl_BSV_WindSoC/design/mkAXI4_16_64_512_0_Fabric_2_4.v" into library xil_defaultlib

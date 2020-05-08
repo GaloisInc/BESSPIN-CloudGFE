@@ -2,8 +2,8 @@
 # xsim v2019.1 (64-bit)
 # SW Build 2552052 on Fri May 24 14:47:09 MDT 2019
 # IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
-# Start of session at: Fri May  1 22:38:12 2020
-# Process ID: 8771
+# Start of session at: Thu May  7 20:13:49 2020
+# Process ID: 12958
 # Current directory: /home/nikhil/git_clones/AWS/BESSPIN-CloudGFE/AWSteria/developer_designs/cl_BSV_WindSoC/verif/sim/vivado/test_dram_dma_hwsw_cosim_c
 # Command line: xsim -log test_dram_dma_hwsw_cosim.log -mode tcl -source {xsim.dir/tb/xsim_script.tcl}
 # Log file: /home/nikhil/git_clones/AWS/BESSPIN-CloudGFE/AWSteria/developer_designs/cl_BSV_WindSoC/verif/sim/vivado/test_dram_dma_hwsw_cosim_c/test_dram_dma_hwsw_cosim.log
@@ -70,47 +70,47 @@ Copyright (c) 2016-2020 Bluespec, Inc. All Rights Reserved.
 Done DDR init...
 filling buffer with  random data...
 Write buffer contents:
-    00000000: 0374c615
-    00000004: eae4d47a
-    00000008: 685d9085
-    0000000c: aaadb8d2
-    00000010: 0f705ddd
-    00000014: 58cb1da6
-    00000018: f8b0ac4f
-    0000001c: 284639d7
-    00000020: fb54fff0
-    00000024: 7e6bfee3
-    00000028: ea526e9a
-    0000002c: f1afb3c1
-    00000030: 75b0534c
-    00000034: 133e2b14
-    00000038: 14ff7423
-    0000003c: a5674151
-    00000040: b2dcfbc5
-    00000044: 22df6c63
-    00000048: 41284701
-    0000004c: a51910a3
-    00000050: f98ea9d3
-    00000054: 33dfc4a0
-    00000058: 98e12684
-    0000005c: 286d2100
-    00000060: d37da2da
-    00000064: 8be75ba8
-    00000068: 1d8adf59
-    0000006c: 9e69ab1d
-    00000070: d45effba
-    00000074: 69a86b98
-    00000078: e8798f41
-    0000007c: 49b59882
+    00000000: 82d67cd8
+    00000004: 90e4a2b6
+    00000008: d0af28e6
+    0000000c: 87783e17
+    00000010: c2f08265
+    00000014: 205987b9
+    00000018: da1915fe
+    0000001c: 73fa3ca2
+    00000020: 83ec5165
+    00000024: bf913a44
+    00000028: 4b3ebc35
+    0000002c: a29a0dd4
+    00000030: 3c496eb3
+    00000034: afda7caf
+    00000038: 75b17150
+    0000003c: 92cf2935
+    00000040: d1ea1b43
+    00000044: e9d267ba
+    00000048: 1aa1e4c2
+    0000004c: cd5944f5
+    00000050: 1f40140c
+    00000054: 1ba7567c
+    00000058: 3171d647
+    0000005c: 9a6a471f
+    00000060: cafd6650
+    00000064: 51001e8d
+    00000068: 69fcfd45
+    0000006c: e9e1b7ca
+    00000070: d9b8afe0
+    00000074: 494f056b
+    00000078: 83265d11
+    0000007c: 20d09e9d
 Now performing the DMA transactions...
 DIMM 0 passed!
 DIMM 1 passed!
 DIMM 2 passed!
 DIMM 3 passed!
-test_dram_dma_hwsw_cosim.c: Reading Mem Hex32 file into local buffer: /home/nikhil/git_clones/AWS/aws-fpga/hdk/cl/developer_designs/cl_BSV_WindSoC/verif/scripts/Mem.hex
+test_dram_dma_hwsw_cosim.c: Reading Mem Hex32 file into local buffer: /home/nikhil/git_clones/AWS/BESSPIN-CloudGFE/AWSteria/developer_designs/cl_BSV_WindSoC/verif/scripts/Mem.hex
 Mem_hex32 file read ok.
     addr_base 0x80000000  addr_lim 0x80001048 (4168 bytes)
-test_dram_dma_hwsw_cosim.c: 4KB DMA buffer allocated at 0x7f585413e000
+test_dram_dma_hwsw_cosim.c: 4KB DMA buffer allocated at 0x7f896c13f000
 Downloading to AWS DDR4
 test_dram_dma_hwsw_cosim.c: DMA 4096 bytes to addr 0x80000000
 test_dram_dma_hwsw_cosim.c: DMA 72 bytes to addr 0x80001000
@@ -149,11 +149,13 @@ Checking readback-data of 128 bytes ...
     00000078: fff28293
     0000007c: 3b029073
 Checking readback-data of 128 bytes: OK
-Host_side: verbosity = 1, logdelay = 0
-Host_side: watch_tohost = 1, tohost_addr = 0x80001000
-Host_side: Sending DDR4 Loaded message
+Host_side: set verbosity = 1, logdelay = 0
+    Control: verbosity 1, logdelay 0
+Host_side: set watch_tohost = 1, tohost_addr = 0x80001000
 AWS_DDR4_Adapter.ma_set_watch_tohost: tohost_addr 80001000
-3915400: AWS_BSV_Top.rl_initialize: DDRs ready; start DUT
+Host_side: send 'DDR4 Loaded' message, allowing CPU to access DDR4
+AWS_DDR4_Adapater.ma_ddr4_ready; start serving requests.
+3921800: AWS_BSV_Top.rl_initialize: DDRs ready, DDRs loaded; start DUT
 instret:5  PC:0x80000000  instr:0x4c0006f  priv:3
 instret:6  PC:0x8000004c  instr:0xf1402573  priv:3
 instret:7  PC:0x80000050  instr:0x51063  priv:3
@@ -622,7 +624,7 @@ instret:466  PC:0x800005ec  instr:0x2600193  priv:0
 instret:467  PC:0x800005f0  instr:0x1d01463  priv:0
 instret:468  PC:0x800005f4  instr:0x301c63  priv:0
 instret:469  PC:0x8000060c  instr:0xff0000f  priv:0
-4459400: D_MMU_Cache: cache size 8 KB, associativity 2, line size 64 bytes (= 8 XLEN words)
+4465800: D_MMU_Cache: cache size 8 KB, associativity 2, line size 64 bytes (= 8 XLEN words)
 instret:470  PC:0x80000610  instr:0x100193  priv:0
 instret:471  PC:0x80000614  instr:0x73  priv:0
     mcause:0x8  epc 0x80000614  tval:0x0  next_pc 0x80000004, new_priv 3 new_mstatus 0xa00000000
@@ -642,14 +644,11 @@ instret:483  PC:0x80000040  instr:0x1f17  priv:3
 instret:484  PC:0x80000044  instr:0xfc3f2023  priv:3
 instret:485  PC:0x80000048  instr:0xff9ff06f  priv:3
 instret:486  PC:0x80000040  instr:0x1f17  priv:3
-4502200: AWS_DDR4_Adapter.rl_process_wr_req: addr 0x80001000 (<tohost>) data 0x1
+4508600: AWS_DDR4_Adapter.rl_process_wr_req: addr 0x80001000 (<tohost>) data 0x1
 PASS ISA Test
 instret:487  PC:0x80000044  instr:0xfc3f2023  priv:3
 instret:488  PC:0x80000048  instr:0xff9ff06f  priv:3
 instret:489  PC:0x80000040  instr:0x1f17  priv:3
-test_dram_dma_hwsw_cosim.c: Final HW status 0x1
-    (Non-zero write tohost)
-TEST PASSED 
 instret:490  PC:0x80000044  instr:0xfc3f2023  priv:3
 instret:491  PC:0x80000048  instr:0xff9ff06f  priv:3
 instret:492  PC:0x80000040  instr:0x1f17  priv:3
@@ -657,6 +656,9 @@ instret:493  PC:0x80000044  instr:0xfc3f2023  priv:3
 instret:494  PC:0x80000048  instr:0xff9ff06f  priv:3
 instret:495  PC:0x80000040  instr:0x1f17  priv:3
 instret:496  PC:0x80000044  instr:0xfc3f2023  priv:3
+test_dram_dma_hwsw_cosim.c: Final HW status 0x1
+    (Non-zero write tohost)
+TEST PASSED 
 instret:497  PC:0x80000048  instr:0xff9ff06f  priv:3
 instret:498  PC:0x80000040  instr:0x1f17  priv:3
 instret:499  PC:0x80000044  instr:0xfc3f2023  priv:3
@@ -676,7 +678,14 @@ instret:512  PC:0x80000048  instr:0xff9ff06f  priv:3
 instret:513  PC:0x80000040  instr:0x1f17  priv:3
 instret:514  PC:0x80000044  instr:0xfc3f2023  priv:3
 instret:515  PC:0x80000048  instr:0xff9ff06f  priv:3
-$finish called at time : 45192 ns : File "/home/nikhil/git_clones/AWS/BESSPIN-CloudGFE/AWSteria/developer_designs/cl_BSV_WindSoC/verif/tests/test_null.sv" Line 29
-run: Time (s): cpu = 00:00:00.07 ; elapsed = 00:00:20 . Memory (MB): peak = 1570.418 ; gain = 128.000 ; free physical = 1727 ; free virtual = 40598
+instret:516  PC:0x80000040  instr:0x1f17  priv:3
+instret:517  PC:0x80000044  instr:0xfc3f2023  priv:3
+instret:518  PC:0x80000048  instr:0xff9ff06f  priv:3
+instret:519  PC:0x80000040  instr:0x1f17  priv:3
+instret:520  PC:0x80000044  instr:0xfc3f2023  priv:3
+instret:521  PC:0x80000048  instr:0xff9ff06f  priv:3
+instret:522  PC:0x80000040  instr:0x1f17  priv:3
+$finish called at time : 45292 ns : File "/home/nikhil/git_clones/AWS/BESSPIN-CloudGFE/AWSteria/developer_designs/cl_BSV_WindSoC/verif/tests/test_null.sv" Line 29
+run: Time (s): cpu = 00:00:00.10 ; elapsed = 00:00:21 . Memory (MB): peak = 1570.418 ; gain = 128.000 ; free physical = 2189 ; free virtual = 43432
 ## quit
-INFO: [Common 17-206] Exiting xsim at Fri May  1 22:38:38 2020...
+INFO: [Common 17-206] Exiting xsim at Thu May  7 20:14:17 2020...

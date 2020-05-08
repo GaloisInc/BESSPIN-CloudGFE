@@ -36,9 +36,9 @@ import AXI4_Types     :: *;
 import AXI4_Fabric    :: *;
 import AXI4_Deburster :: *;
 
-import Fabric_Defs :: *;
-import SoC_Map     :: *;
-import SoC_Fabric  :: *;
+import Fabric_Defs    :: *;
+import SoC_Map        :: *;
+import AWS_SoC_Fabric :: *;
 
 // SoC components (CPU, mem, and IPs)
 
@@ -46,9 +46,13 @@ import Core_IFC :: *;
 import Core     :: *;
 import PLIC     :: *;    // For interface to PLIC interrupt sources, in Core_IFC
 
-import Boot_ROM       :: *;
-import UART_Model     :: *;
+// IPs on the fabric (other than memory)
+import Boot_ROM    :: *;
+import UART_Model  :: *;
+import AWS_IPI_Out :: *;
 
+
+// IPs on the fabric (memory)
 import AXI4_Types        :: *;
 import AWS_BSV_Top_Defs  :: *;    // For AXI4 bus widths (id, addr, data, user)
 import AWS_DDR4_Adapter  :: *;
@@ -75,8 +79,16 @@ import Debug_Module     :: *;
 // The outermost interface of the SoC
 
 interface AWS_SoC_Top_IFC;
-   // Set core's verbosity
-   method Action  set_verbosity (Bit #(4)  verbosity, Bit #(64)  logdelay);
+   // AXI4 interface facing DDR
+   interface AXI4_16_64_512_0_Master_IFC  to_ddr4;
+
+   // UART0 to external console
+   interface Get #(Bit #(8)) get_to_console;
+   interface Put #(Bit #(8)) put_from_console;
+
+   // Inter-processor interrupts
+   interface Put #(Bit #(1)) host_to_hw_interrupt;
+   interface Get #(Bit #(1)) hw_to_host_interrupt;
 
 `ifdef INCLUDE_GDB_CONTROL
    // To external controller (E.g., GDB)
@@ -88,19 +100,18 @@ interface AWS_SoC_Top_IFC;
    interface Get #(Info_CPU_to_Verifier) tv_verifier_info_get;
 `endif
 
-   // AXI4 interface facing DDR
-   interface AXI4_16_64_512_0_Master_IFC  to_ddr4;
+   // ----------------
+   // Misc. control
 
-   // UART0 to external console
-   interface Get #(Bit #(8)) get_to_console;
-   interface Put #(Bit #(8)) put_from_console;
+   method Action ma_set_verbosity (Bit #(4)   verbosity1, Bit #(64)  logdelay1);
 
-   // Catch-all status; return-value can identify the origin (0 = none)
+   method Action ma_set_watch_tohost (Bool  watch_tohost, Bit #(64)  tohost_addr);
+
+   method Action ma_ddr4_ready;
+
+   // Misc. status; 0 = running, no error
    (* always_ready *)
    method Bit #(8) mv_status;
-
-   // For ISA tests: watch memory writes to <tohost> addr
-   method Action set_watch_tohost (Bool  watch_tohost, Fabric_Addr  tohost_addr);
 endinterface
 
 // ================================================================
@@ -130,7 +141,7 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    Core_IFC #(N_External_Interrupt_Sources)  core <- mkCore;
 
    // SoC Fabric
-   Fabric_AXI4_IFC  fabric <- mkFabric_AXI4;
+   AWS_SoC_Fabric_IFC  fabric <- mkAWS_SoC_Fabric;
 
    // SoC Boot ROM
    Boot_ROM_IFC  boot_rom <- mkBoot_ROM;
@@ -150,6 +161,8 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
 
    // SoC IPs
    UART_IFC   uart0  <- mkUART;
+
+   AWS_IPI_Out_IFC  ipi_out <- mkAWS_IPI_Out;
 
 `ifdef INCLUDE_ACCEL0
    // Accel0 master to fabric
@@ -186,6 +199,9 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    // Fabric to UART0
    mkConnection (fabric.v_to_slaves [uart0_slave_num],  uart0.slave);
 
+   // Fabric to IPI_out
+   mkConnection (fabric.v_to_slaves [ipi_out_slave_num], ipi_out.slave);
+
 `ifdef INCLUDE_ACCEL0
    // Fabric to accel0
    mkConnection (fabric.v_to_slaves [accel0_slave_num], accel0.slave);
@@ -200,15 +216,18 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    // ----------------
    // Connect interrupt sources for CPU external interrupt request inputs.
 
-   // Reg #(Bool) rg_intr_prev <- mkReg (False);    // For debugging only
+   Reg #(Bool) rg_host_to_hw_interrupt <- mkReg (False);
 
    (* fire_when_enabled, no_implicit_conditions *)
    rule rl_connect_external_interrupt_requests;
-      Bool intr = uart0.intr;
-
       // UART
+      Bool intr = uart0.intr;
       core.core_external_interrupt_sources [irq_num_uart0].m_interrupt_req (intr);
       Integer last_irq_num = irq_num_uart0;
+
+      // Host-to-HW inter-processor interrupt
+      core.core_external_interrupt_sources [irq_num_host_to_hw_ipi].m_interrupt_req (rg_host_to_hw_interrupt);
+      last_irq_num = irq_num_host_to_hw_ipi;
 
 `ifdef INCLUDE_ACCEL0
       Bool intr_accel0 = accel0.interrupt_req;
@@ -382,9 +401,21 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    // ================================================================
    // INTERFACE
 
-   method Action  set_verbosity (Bit #(4)  verbosity1, Bit #(64)  logdelay);
-      core.set_verbosity (verbosity1, logdelay);
-   endmethod
+   // External real memory
+   interface to_ddr4 = mem0_controller.to_ddr4;
+
+   // UART to external console
+   interface get_to_console   = uart0.get_to_console;
+   interface put_from_console = uart0.put_from_console;
+
+   // Inter-processor interrupts
+   interface Put host_to_hw_interrupt;
+      method Action put (Bit #(1) x);
+	 rg_host_to_hw_interrupt <= unpack (x);
+      endmethod
+   endinterface
+
+   interface Get hw_to_host_interrupt = ipi_out.ipi_out_get;
 
    // To external controller (E.g., GDB)
 `ifdef INCLUDE_GDB_CONTROL
@@ -396,21 +427,25 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    interface tv_verifier_info_get = core.tv_verifier_info_get;
 `endif
 
-   // External real memory
-   interface to_ddr4 = mem0_controller.to_ddr4;
+   // ----------------
+   // Misc. control
 
-   // UART to external console
-   interface get_to_console   = uart0.get_to_console;
-   interface put_from_console = uart0.put_from_console;
-
-   // Catch-all status; return-value can identify the origin (0 = none)
-   method Bit #(8) mv_status;
-      return mem0_controller.mv_status;
+   method Action ma_set_verbosity (Bit #(4)   verbosity1, Bit #(64)  logdelay1);
+      core.set_verbosity (verbosity1, logdelay1);
    endmethod
 
-   // For ISA tests: watch memory writes to <tohost> addr
-   method Action set_watch_tohost (Bool  watch_tohost, Fabric_Addr  tohost_addr);
+   method Action ma_set_watch_tohost (Bool  watch_tohost, Bit #(64)  tohost_addr);
       mem0_controller.ma_set_watch_tohost (watch_tohost, tohost_addr);
+   endmethod
+
+   method Action ma_ddr4_ready;
+      mem0_controller.ma_ddr4_ready;
+   endmethod
+
+   // ----------------
+   // Misc. status; 0 = running, no error
+   method Bit #(8) mv_status;
+      return mem0_controller.mv_status;
    endmethod
 endmodule: mkAWS_SoC_Top
 
