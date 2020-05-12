@@ -129,8 +129,9 @@ int main(int argc, char **argv)
     // AWSteria code
 
     // TODO: get the filename from command-line args/config file/...
-    char memhex32_filename []
-	= "/home/nikhil/git_clones/AWS/aws-fpga/hdk/cl/developer_designs/cl_BSV_WindSoC/verif/scripts/Mem.hex";
+    char memhex32_filename[256];
+    strncpy(memhex32_filename, getenv("CL_DIR"), 255);
+    strncat(memhex32_filename, "/verif/scripts/Mem.hex", 255-strlen(memhex32_filename));
 
     rc = load_mem_hex32_using_DMA (slot_id, memhex32_filename);
     fail_on (rc, out, "Loading the mem hex32 file failed");
@@ -413,6 +414,202 @@ out:
 // ================================================================
 // Startup sequence over OCL
 
+// Address configurations for host-to-hw and hw-to-host channels.
+
+// Each channel is at an 8-byte-aligned address.
+// So, channel id = offset [31:3]
+// where offset   = addr - addr_base.
+
+// For channel addr A, we interpret addr A+1 as a 'status' address.
+// For hw-to-host channel addr A,
+//    reading A   => dequeued data (if available, else undefined value)
+//    reading A+4 => 'notEmpty' status    (dequeue will return data)
+// For host-to-hw channel addr A,
+//    reading A+4 => 'notFull'  status    (enq will succeed)
+//    writing A   => enq data
+
+// Channels in each direction are independent (an application may
+// choose to interpret a pair as request/response).  The number of
+// channels in each direction need not be the same.
+
+uint32_t ocl_hw_to_host_chan_addr_base = 0x00000000;
+uint32_t ocl_host_to_hw_chan_addr_base = 0x00001000;
+
+uint32_t host_to_hw_chan_control      = 0;
+uint32_t host_to_hw_chan_UART         = 1;
+uint32_t host_to_hw_chan_mem_rsp      = 2;
+uint32_t host_to_hw_chan_debug_module = 3;
+uint32_t host_to_hw_chan_interrupt    = 4;
+
+uint32_t hw_to_host_chan_status       = 0;
+uint32_t hw_to_host_chan_UART         = 1;
+uint32_t hw_to_host_chan_mem_req      = 2;
+uint32_t hw_to_host_chan_debug_module = 3;
+
+uint32_t mk_chan_status_addr (uint32_t addr_base, uint32_t chan)
+{
+    return (((addr_base & 0xFFFFFFFC) + (chan << 3)) | 0x4);
+}
+
+uint32_t mk_chan_data_addr (uint32_t addr_base, uint32_t chan)
+{
+    return (((addr_base & 0xFFFFFFFC) + (chan << 3)) | 0x0);
+}
+
+// ================
+// This function reads a channel's status in a loop, waiting for a 1 (notEmpty/notFull).
+// (times out after 1000 usecs).
+
+int wait_for_chan_avail (pci_bar_handle_t pci_bar_handle, uint32_t ocl_addr_base, uint32_t chan)
+{
+    int verbosity = 0;
+
+    uint32_t ocl_addr = mk_chan_status_addr (ocl_addr_base, chan);
+    uint32_t ocl_data_from_hw;
+    uint32_t usecs = 0;
+    int rc;
+
+    while (true) {
+	rc = fpga_pci_peek (pci_bar_handle, ocl_addr, & ocl_data_from_hw);
+	if (verbosity != 0)
+	    fprintf (stdout, "    wait_for_chan_avail: peek rc = %0d data = %08x\n", rc, ocl_data_from_hw);
+	fail_on (rc, out, "ERROR: %s: wait_for_chan_avail: OCL peek.\n", this_file_name);
+
+	if (ocl_data_from_hw == 1) break;
+
+	usleep (1);
+	usecs++;
+	if (usecs > 1000) {
+	    fprintf (stdout, "ERROR: %s: wait_for_chan_avail: timeout: waited 1000 usecs\n", this_file_name);
+	    rc = 1;
+	    goto out;
+	}
+    }
+    rc == 0;
+    if (verbosity != 0)
+	fprintf (stdout, "%s: wait_for_chan_avail: ok: waited %0d usecs\n", this_file_name, usecs);
+
+ out:
+    if (rc != 0) {
+	fprintf (stdout, "    addr_base %0x chan %0d\n", ocl_addr_base, chan);
+    }
+    return rc;
+}
+
+int start_hw (int slot_id, int pf_id, int bar_id)
+{
+    int rc, verbosity = 0;
+    uint32_t ocl_addr, ocl_data_to_hw, ocl_data_from_hw;
+
+    // pci_bar_handle_t is a handler for an address space exposed by
+    // one PCI BAR on one of the PCI PFs of the FPGA
+    pci_bar_handle_t pci_bar_handle = PCI_BAR_HANDLE_INIT;
+
+    // attach to the fpga, with a pci_bar_handle out param
+    // To attach to multiple slots or BARs, call this function multiple times,
+    // saving the pci_bar_handle to specify which address space to interact with in
+    // other API calls.
+    // This function accepts the slot_id, physical function, and bar number
+
+#ifndef SV_TEST
+    rc = fpga_pci_attach(slot_id, pf_id, bar_id, 0, & pci_bar_handle);
+    fail_on(rc, out, "Unable to attach to the AFI on slot id %d", slot_id);
+#endif
+
+    // ----------------
+    // Set up CPU verbosity and logdelay
+    uint32_t cpu_verbosity = 1;
+    uint32_t logdelay      = 0;    // # of instructions after which to set verbosity
+    fprintf (stdout, "Host_side: set verbosity = %0d, logdelay = %0d\n", cpu_verbosity, logdelay);
+
+    rc = wait_for_chan_avail (pci_bar_handle, ocl_host_to_hw_chan_addr_base, host_to_hw_chan_control);
+    if (rc != 0) goto out;
+
+    ocl_addr = mk_chan_data_addr (ocl_host_to_hw_chan_addr_base, host_to_hw_chan_control);
+    // { 24'h_log_delay, 6'h_verbosity, 2'b01 }
+    ocl_data_to_hw = ((logdelay << 24) | (cpu_verbosity << 2) | 0x1);
+    if (verbosity != 0)
+	fprintf (stdout, "    OCL write addr %08x data %08x\n", ocl_addr, ocl_data_to_hw);
+    rc = fpga_pci_poke (pci_bar_handle, ocl_addr, ocl_data_to_hw);
+    fail_on (rc, out, "ERROR: %s: Unable to write to OCL port.\n", this_file_name);
+
+    // ----------------
+    // Set up 'watch tohost' and 'tohost addr'
+    bool     watch_tohost = true;
+    uint32_t tohost_addr  = 0x80001000;    // Convention: misaligned if not watching tohost
+    fprintf (stdout, "Host_side: set watch_tohost = %0d, tohost_addr = 0x%0x\n",
+	     watch_tohost, tohost_addr);
+
+    rc = wait_for_chan_avail (pci_bar_handle, ocl_host_to_hw_chan_addr_base, host_to_hw_chan_control);
+    if (rc != 0) goto out;
+
+    ocl_addr = mk_chan_data_addr (ocl_host_to_hw_chan_addr_base, host_to_hw_chan_control);
+    // { 30'h_to_host_addr_W, 2'b11 }
+    ocl_data_to_hw = (tohost_addr | 0x3);
+    if (verbosity != 0)
+	fprintf (stdout, "    OCL write addr %08x data %08x\n", ocl_addr, ocl_data_to_hw);
+    rc = fpga_pci_poke (pci_bar_handle, ocl_addr, ocl_data_to_hw);
+    fail_on (rc, out, "ERROR: %s: Unable to write to OCL port.\n", this_file_name);
+
+    // ----------------
+    // Go! Inform hw that DDR4 is loaded, allow the CPU to access it
+
+    fprintf (stdout, "Host_side: send 'DDR4 Loaded' message, allowing CPU to access DDR4\n");
+
+    rc = wait_for_chan_avail (pci_bar_handle, ocl_host_to_hw_chan_addr_base, host_to_hw_chan_control);
+    if (rc != 0) goto out;
+
+    ocl_addr       = mk_chan_data_addr (ocl_host_to_hw_chan_addr_base, host_to_hw_chan_control);
+    ocl_data_to_hw = 0x0;
+    if (verbosity != 0)
+	fprintf (stdout, "    OCL write addr %08x data %08x\n", ocl_addr, ocl_data_to_hw);
+    rc = fpga_pci_poke (pci_bar_handle, ocl_addr, ocl_data_to_hw);
+    fail_on (rc, out, "ERROR: %s: Unable to write to OCL port.\n", this_file_name);
+
+    // ----------------
+    // Poll the HW status until non-zero (hw task completion)
+    // There's no timeout because HW may never stop (e.g., an executing CPU).
+
+    ocl_addr = mk_chan_data_addr (ocl_hw_to_host_chan_addr_base, hw_to_host_chan_status);
+
+    while (true) {
+	rc = wait_for_chan_avail (pci_bar_handle, ocl_hw_to_host_chan_addr_base, hw_to_host_chan_status);
+	if (rc != 0) goto out;
+
+	if (verbosity != 0)
+	    fprintf (stdout, "    OCL read addr %08x\n", ocl_addr);
+	rc = fpga_pci_peek (pci_bar_handle, ocl_addr, & ocl_data_from_hw);
+	fail_on(rc, out, "Unable to read read from the fpga !");
+
+	if (ocl_data_from_hw != 0) break;
+
+	usleep (10);
+    }
+    fprintf (stdout, "%s: Final HW status 0x%0x\n", this_file_name, ocl_data_from_hw);
+    if (ocl_data_from_hw == 1) {
+	fprintf (stdout, "    (Non-zero write tohost)\n");
+    }
+    else if (ocl_data_from_hw == 2) {
+	fprintf (stdout, "    (Memory system error)\n");
+    }
+
+out:
+    // clean up
+    if (pci_bar_handle >= 0) {
+        rc = fpga_pci_detach(pci_bar_handle);
+        if (rc) {
+            printf("Failure while detaching from the fpga.\n");
+        }
+    }
+
+    // if there is an error code, exit with status 1
+    return (rc != 0 ? 1 : 0);
+}
+
+// ================================================================
+// DELETE AFTER FIXUP
+
+/*
 uint32_t ocl_client_control  = 1;
 uint32_t ocl_client_UART     = 2;
 uint32_t ocl_client_debugger = 3;
@@ -504,5 +701,6 @@ out:
     // if there is an error code, exit with status 1
     return (rc != 0 ? 1 : 0);
 }
+*/
 
 // ================================================================

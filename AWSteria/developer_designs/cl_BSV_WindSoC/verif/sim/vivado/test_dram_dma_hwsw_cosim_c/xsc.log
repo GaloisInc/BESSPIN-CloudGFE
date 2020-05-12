@@ -1,0 +1,5 @@
+Multi-threading is on. Using 10 slave threads.
+Running compilation flow
+Done compilation
+Running command : /tools/Xilinx/Vivado/2019.1/lib/lnx64.o/../../tps/lnx64/gcc-6.2.0/bin/g++ -Wa,-W  -O -fPIC  -m64  -shared  -o "xsim.dir/work/xsc/dpi.so" "xsim.dir/work/xsc/Memhex32_read.lnx64.o" "xsim.dir/work/xsc/test_dram_dma_common.lnx64.o" "xsim.dir/work/xsc/test_dram_dma_hwsw_cosim.lnx64.o" "xsim.dir/work/xsc/fpga_pci_sv.lnx64.o" "xsim.dir/work/xsc/sh_dpi_tasks.lnx64.o"   -I/home/nikhil/git_clones/AWS/aws-fpga/sdk/userspace/include -I/home/nikhil/git_clones/AWS/aws-fpga/sdk/userspace/utils -I/home/nikhil/git_clones/AWS/aws-fpga/hdk/common/software/include -I/home/nikhil/git_clones/AWS/aws-fpga/hdk/common/software/src -I/home/nikhil/git_clones/AWS/BESSPIN-CloudGFE/AWSteria/developer_designs/cl_BSV_WindSoC/software/runtime -DVIVADO_SIM -DSV_TEST -DDMA_TEST   -L/tools/Xilinx/Vivado/2019.1/lib/lnx64.o -lrdi_simulator_kernel  -lrdi_xsim_systemc  -B/tools/Xilinx/Vivado/2019.1/lib/lnx64.o/../../tps/lnx64/gcc-6.2.0/bin/../../binutils-2.26/bin/  > /dev/null 2>&1
+Done linking: "xsim.dir/work/xsc/dpi.so"

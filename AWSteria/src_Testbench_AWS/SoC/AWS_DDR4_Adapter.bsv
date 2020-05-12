@@ -128,21 +128,37 @@ Integer aws_DDR4_adapter_status_error      = 2;
 // Interface
 
 interface AWS_DDR4_Adapter_IFC;
-   // set_addr_map should be called first, before any transactions
-   method Action ma_set_addr_map (Fabric_Addr addr_base, Fabric_Addr addr_lim);
-
    // AXI4 interface facing client app/fabric
    interface AXI4_Slave_IFC #(Wd_Id_4, Wd_Addr_Fabric, Wd_Data_Fabric, Wd_User_0) slave;
 
    // AXI4 interface facing DDR
    interface AXI4_16_64_512_0_Master_IFC  to_ddr4;
 
+   // ----------------
+   // Control methods; should be called at beginning (STATE_WAITING)
+   // 'ma_ddr4_is_loaded' should be called last.
+
+   // Range of legal addrs for this module
+   method Action ma_set_addr_map (Fabric_Addr addr_base, Fabric_Addr addr_lim);
+
+   // For RISC-V ISA tests only: watch memory writes to <tohost> addr
+   method Action ma_set_watch_tohost (Bool watch_tohost, Fabric_Addr tohost_addr);
+
+   // This method asserts that 'back-door' loading of DDR (if any) has
+   // finished, and it is now safe to use the 'to_ddr4' interface.
+   // Until this point, DDR4 Adapter stalls response of first request
+   // on 'slave' interface.
+   method Action ma_ddr4_ready;
+
+   // ----------------
+   // Status methods; can be called at any time.
+   // Normal response is 'aws_DDR4_adapter_status_ok'
+   // If tohost is watched, and has been written, transitions to 'aws_DDR4_adapter_status_terminated'
+   // If any memory error, transitions to 'aws_DDR4_adapter_status_error'
+
    // Status of module
    (* always_ready *)
    method Bit #(8) mv_status;
-
-   // For RISC-V ISA tests: watch memory writes to <tohost> addr
-   method Action ma_set_watch_tohost (Bool watch_tohost, Fabric_Addr tohost_addr);
 endinterface
 
 // ================================================================
@@ -657,8 +673,17 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
    // ================================================================
    // INTERFACE
 
-   // ma_set_addr_map should be called once, in the beginning
-   // Args watch_tohost and tohost_addr are used only for RISC-V ISA tests.
+   // AXI4 interface facing client
+   interface  slave = slave_xactor.axi_side;
+
+   // AXI4 interface facing DDR
+   interface  to_ddr4 = master_xactor.axi_side;
+
+   // ----------------
+   // Control methods; should be called at beginning (STATE_WAITING)
+   // 'ma_ddr4_is_loaded' should be called last.
+
+   // Range of legal addrs for this module
    method Action ma_set_addr_map (Fabric_Addr addr_base,
 				  Fabric_Addr addr_lim) if (rg_state == STATE_WAITING);
       rg_addr_base    <= addr_base;
@@ -667,28 +692,35 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
 		cur_cycle, addr_base, addr_lim);
    endmethod
 
-   // AXI4 interface facing client
-   interface  slave = slave_xactor.axi_side;
-
-   // AXI4 interface facing DDR
-   interface  to_ddr4 = master_xactor.axi_side;
-
-   // Status of module
-   method Bit #(8) mv_status;
-      return rg_status;
-   endmethod
-
-   // For RISC-V ISA tests: watch memory writes to <tohost> addr
+   // For RISC-V ISA tests only: watch memory writes to <tohost> addr
    method Action ma_set_watch_tohost (Bool watch_tohost,
 				      Fabric_Addr tohost_addr) if (rg_state == STATE_WAITING);
       // Start refilling local cache of single 512b word
       rg_watch_tohost <= watch_tohost;
       rg_tohost_addr  <= tohost_addr;
+      if (watch_tohost)
+	 $display ("AWS_DDR4_Adapter.ma_set_watch_tohost: tohost_addr %0h", tohost_addr);
+   endmethod
+
+   // This method asserts that 'back-door' loading of DDR (if any) has
+   // finished, and it is now safe to use the 'to_ddr4' interface.
+   // Until this point, DDR4 Adapter stalls response of first request
+   // on 'slave' interface.
+   method Action ma_ddr4_ready () if (rg_state == STATE_WAITING);
       rg_cached_addr  <= 0;
       fa_mem_req (False, 0, ?);
       rg_state <= STATE_REFILLING;
-      if (watch_tohost)
-	 $display ("AWS_DDR4_Adapter.ma_set_watch_tohost: tohost_addr %0h", tohost_addr);
+      $display ("AWS_DDR4_Adapater.ma_ddr4_ready; start serving requests.");
+   endmethod
+
+   // ----------------
+   // Status methods; can be called at any time.
+   // Normal response is OK.
+   // If tohost is watched, and has been written, transitions to TERMINATED
+   // If any memory error, goes to ERR.
+
+   method Bit #(8) mv_status;
+      return rg_status;
    endmethod
 endmodule
 
