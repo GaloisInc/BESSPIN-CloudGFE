@@ -73,7 +73,9 @@ have a full understanding of all the steps.
 
 2. Build and run the design on XSIM (Xilinx Verilog Simulator) using the AWS flow:
 
-    **One-time step:** Perform your standard mantra to setup Xilinx tools.
+    **One-time step:** Perform your standard mantra to setup Xilinx tools. This
+    should at least set the `XILINX_VIVADO` environment variable to point to
+    your Vivado install directory and add `$XILINX_VIVADO/bin/` to your `PATH`.
     It may look something like this:
 
             $ source  /tools/Xilinx/Vivado/2019.1/settings64.sh
@@ -105,7 +107,7 @@ have a full understanding of all the steps.
     then append it to `top.vivado.f_template` to create
     `top.vivado.f`.  This is a script file for XSIM.
 
-    **Run**: 
+    **Run**:
 
             $ cd  verif/scripts
             $ make -f AWSteria_Makefile.mk  test
@@ -119,7 +121,7 @@ have a full understanding of all the steps.
 
     The C program reads `Mem.hex`, a mem-hex32 file holding the code
     for the RISC-V ISA test `rv64ui-p-add`, DMAs it into AWS' DDR A
-    using the AWS `DMA_PCIS port, then communicates over the AWS OCL
+    using the AWS `DMA_PCIS` port, then communicates over the AWS OCL
     port with the SoC to allow the CPU (Flute) to access memory, so
     that it executes the test.  The file:
 
@@ -180,7 +182,7 @@ Piccolo/Flute/Toooba repositories, and is used:
       `DMI_PCIS` port.)
 
 Directory `developer_designs` is similar to the corresponding
-directories in the standard Amazon `aws-fpga repository:
+directories in the standard Amazon `aws-fpga` repository:
 
             asw-fpga/hdk/cl/examples/
             asw-fpga/hdk/cl/developer_designs/
