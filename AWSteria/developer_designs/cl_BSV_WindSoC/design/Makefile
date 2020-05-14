@@ -1,8 +1,9 @@
 # Copies design RTL from development dir and BLUESPECDIR to here
-# Also prepares 
+# Also prepares
 
 # This def points at the dir with the RTL generated from the BSV code
-RTL_DIR = ../../../builds/RV64ACDFIMSU_Flute_verilator_AWS/Verilog_RTL
+#RTL_DIR = ../../../builds/RV64ACDFIMSU_Flute_verilator_AWS/Verilog_RTL
+RTL_DIR = ../../../builds/RV64ACDFIMSUxCHERI_Flute_verilator_AWS/Verilog_RTL
 
 # BLUESPECDIR should point at the bsc installation library, from where
 # we copy certain RTL files
@@ -22,10 +23,13 @@ copy_RTL:
 copy_BSV_lib_RTL:
 	@echo "Copying from BLUESPECDIR = $(BLUESPECDIR)"
 	cp -p  $(BLUESPECDIR)/Verilog/BRAM2.v        .
+	cp -p  $(BLUESPECDIR)/Verilog/FIFO1.v        .
 	cp -p  $(BLUESPECDIR)/Verilog/FIFO2.v        .
 	cp -p  $(BLUESPECDIR)/Verilog/FIFO20.v       .
 	cp -p  $(BLUESPECDIR)/Verilog/FIFOL1.v       .
 	cp -p  $(BLUESPECDIR)/Verilog/RegFile.v      .
+	cp -p  $(BLUESPECDIR)/Verilog/RevertReg.v    .
+	cp -p  $(BLUESPECDIR)/Verilog/MakeReset0.v   .
 	cp -p  $(BLUESPECDIR)/Verilog/SizedFIFO.v    .
 
 clean:

@@ -5,7 +5,6 @@ package AWS_BSV_Top;
 
 // ================================================================
 // This package contains an example AWS_BSV_Top module for AWS.
-// It contains a AXI4 fabric (64b addrs, 512b data):
 //    Master 0: taken straight out as the DMA_PCIS interface
 //    Master 1: services memory-requests from DUT.
 //              (the other side of the DUT talks to other SH interfaces like OCL).
@@ -15,6 +14,7 @@ package AWS_BSV_Top;
 // BSV library imports
 
 import FIFOF       :: *;
+import Vector      :: *;
 import GetPut      :: *;
 import Connectable :: *;
 
@@ -28,14 +28,13 @@ import GetPut_Aux :: *;
 // ================================================================
 // Project imports
 
-import AXI4_Types      :: *;
-import AXI4_Fabric     :: *;
-import AXI4_Lite_Types :: *;
+import AXI4 :: *;
+import AXI4Lite :: *;
+import Routable :: *;
 
 import AWS_BSV_Top_Defs :: *;
 import AWS_SoC_Top      :: *;
 import AWS_DDR4_Adapter :: *;
-import AWS_AXI_Fabrics  :: *;
 import AWS_OCL_Adapter  :: *;
 
 // ================================================================
@@ -69,9 +68,6 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
 
    // Adapter towards OCL
    OCL_Adapter_IFC  ocl_adapter <- mkOCL_Adapter;
-
-   // AXI4 crossbar to connect to the four DDRs
-   AXI4_16_64_512_0_Fabric_2_4_IFC  fabric <- mkAXI4_16_64_512_0_Fabric_2_4;
 
    // AWS signal
    Reg #(Bit #(4)) rg_ddr4_ready     <- mkReg (0);
@@ -164,10 +160,39 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
    endrule
 
    // ================================================================
+   // connections
 
-   // Connect SoC DDR4 interface to crossbar [1]
-   mkConnection (soc_top.to_ddr4, fabric.v_from_masters [1]);
+   Vector#(2, AXI4_Master_Synth #(15, 64, 512, 0, 0, 0, 0, 0))
+     master_vector = newVector;
+   Vector#(4, AXI4_Slave_Synth #(16, 64, 512, 0, 0, 0, 0, 0))
+     slave_vector = newVector;
+   Vector#(4, Range#(64)) route_vector = newVector;
 
+   // shim helper
+   module mkShim(AXI4_Shim_Synth #(a, 64, 512, 0, 0, 0, 0, 0));
+     let tmp <- mkAXI4ShimFF;
+     let shim <- toAXI4_Shim_Synth(tmp);
+     return shim;
+   endmodule
+   // connect interface master shim
+   let inner_shim <- mkShim;
+   master_vector[0] = inner_shim.master;
+   // Connect SoC DDR4 interface
+   master_vector[1] = soc_top.to_ddr4;
+   // connect interface ddr4 slave shims
+   Vector#(4, AXI4_Shim_Synth #(16, 64, 512, 0, 0, 0, 0, 0))
+     outer_shim <- replicateM(mkShim);
+   slave_vector[0] = outer_shim[0].slave;
+   route_vector[0] = Range { base: 64'h0_0000_0000, size: 64'h4_0000_0000 };
+   slave_vector[1] = outer_shim[1].slave;
+   route_vector[1] = Range { base: 64'h4_0000_0000, size: 64'h4_0000_0000 };
+   slave_vector[2] = outer_shim[2].slave;
+   route_vector[2] = Range { base: 64'h8_0000_0000, size: 64'h4_0000_0000 };
+   slave_vector[3] = outer_shim[3].slave;
+   route_vector[3] = Range { base: 64'hC_0000_0000, size: 64'h4_0000_0000 };
+   // Fabric
+   mkAXI4Bus_Synth (routeFromMappingTable(route_vector),
+                    master_vector, slave_vector);
    // ================================================================
    // Connection OCL Adapter to Debug Module
    // First word [31:24] specifies rd or wr; lsbs specify DM address
@@ -236,14 +261,14 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
    // INTERFACE
 
    // Facing SH
-   interface AWS_AXI4_Slave_IFC       dma_pcis_slave = fabric.v_from_masters [0];
+   interface AWS_AXI4_Slave_IFC       dma_pcis_slave = inner_shim.slave;
    interface AWS_AXI4_Lite_Slave_IFC  ocl_slave      = ocl_adapter.ocl_slave;
 
    // Facing DDR4
-   interface AWS_AXI4_Master_IFC  ddr4_A_master = fabric.v_to_slaves [0];
-   interface AWS_AXI4_Master_IFC  ddr4_B_master = fabric.v_to_slaves [1];
-   interface AWS_AXI4_Master_IFC  ddr4_C_master = fabric.v_to_slaves [2];
-   interface AWS_AXI4_Master_IFC  ddr4_D_master = fabric.v_to_slaves [3];
+   interface AWS_AXI4_Master_IFC  ddr4_A_master = outer_shim[0].master;
+   interface AWS_AXI4_Master_IFC  ddr4_B_master = outer_shim[1].master;
+   interface AWS_AXI4_Master_IFC  ddr4_C_master = outer_shim[2].master;
+   interface AWS_AXI4_Master_IFC  ddr4_D_master = outer_shim[3].master;
 
    // DDR4 ready signals
    // The SystemVerilog top-level invokes this to signal readiness of AWS DDR4 A, B, C, D

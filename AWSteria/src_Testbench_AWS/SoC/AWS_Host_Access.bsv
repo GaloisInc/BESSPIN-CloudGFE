@@ -28,14 +28,17 @@ import Semi_FIFOF :: *;
 // ================================================================
 // Project imports
 
-import AXI4_Types  :: *;
+import AXI4        :: *;
+import SourceSink  :: *;
 import Fabric_Defs :: *;
+import SoC_Map     :: *; // for Wd_SId
 
 // ================================================================
 
 interface AWS_Host_Access_IFC;
    // Main Fabric Reqs/Rsps
-   interface AXI4_Slave_IFC #(Wd_Id, Wd_Addr, Wd_Data, Wd_User) slave;
+   interface AXI4_Slave_Synth#( Wd_SId, Wd_Addr, Wd_Data
+                              , Wd_AW_User, Wd_W_User, Wd_B_User, Wd_AR_User, Wd_R_User) slave;
 
    // Transport to/from host
    interface Get #(Bit #(32)) to_aws_host;
@@ -46,9 +49,9 @@ endinterface
 
 // From SoC_Fabric to AWS host
 typedef union tagged {
-   AXI4_Wr_Addr #(Wd_Id, Wd_Addr, Wd_User)  WAddr;
-   AXI4_Wr_Data #(Wd_Data, Wd_User)         WData;
-   AXI4_Rd_Addr #(Wd_Id, Wd_Addr, Wd_User)  RAddr;
+   AXI4_AWFlit#(Wd_SId, Wd_Addr, Wd_AW_User) WAddr;
+   AXI4_WFlit#(Wd_Data, Wd_W_User)           WData;
+   AXI4_ARFlit#(Wd_SId, Wd_Addr, Wd_AR_User) RAddr;
    } Tagged_AXI4_Req
 deriving (Bits, FShow);
 
@@ -60,8 +63,8 @@ typedef Vector #(VMax_Req, Bit #(32)) Req_Buf;
 
 // From AWS host to SoC_Fabric
 typedef union tagged {
-   AXI4_Wr_Resp #(Wd_Id, Wd_User)           WResp;
-   AXI4_Rd_Data #(Wd_Id, Wd_Data, Wd_User)  RData;
+   AXI4_BFlit#(Wd_SId, Wd_B_User)          WResp;
+   AXI4_RFlit#(Wd_SId, Wd_Data, Wd_R_User) RData;
    } Tagged_AXI4_Rsp
 deriving (Bits, FShow);
 
@@ -91,14 +94,16 @@ module mkAWS_Host_Access (AWS_Host_Access_IFC);
    // ----------------
    // Connector to AXI4 fabric
 
-   AXI4_Slave_Xactor_IFC #(Wd_Id, Wd_Addr, Wd_Data, Wd_User) slave_xactor <- mkAXI4_Slave_Xactor;
+   AXI4_Slave_Xactor#( Wd_SId, Wd_Addr, Wd_Data
+                     , Wd_AW_User, Wd_W_User, Wd_B_User, Wd_AR_User, Wd_R_User)
+     slave_xactor <- mkAXI4_Slave_Xactor;
 
    // ================================================================
    // BEHAVIOR
 
    // ---- RD_ADDR
    rule rl_forward_rd_addr;
-      let rda <- pop_o (slave_xactor.o_rd_addr);
+      let rda <- get(slave_xactor.master.ar);
       let tagged_req = tagged RAddr rda;
       Req_Buf  req_buf = unpack (zeroExtend (pack (tagged_req)));
       f_req_bufs_to_aws_host.enq (tuple2 (4, req_buf));
@@ -106,7 +111,7 @@ module mkAWS_Host_Access (AWS_Host_Access_IFC);
 
    // ---- WR_ADDR
    rule rl_forward_wr_addr;
-      let wra <- pop_o (slave_xactor.o_wr_addr);
+      let wra <- get(slave_xactor.master.aw);
       let tagged_req = tagged WAddr wra;
       Req_Buf  req_buf = unpack (zeroExtend (pack (tagged_req)));
       f_req_bufs_to_aws_host.enq (tuple2 (4, req_buf));
@@ -114,7 +119,7 @@ module mkAWS_Host_Access (AWS_Host_Access_IFC);
 
    // ---- WR_DATA
    rule rl_forward_wr_data;
-      let wrd <- pop_o (slave_xactor.o_wr_data);
+      let wrd <- get(slave_xactor.master.w);
       let tagged_req = tagged WData wrd;
       Req_Buf  req_buf = unpack (zeroExtend (pack (tagged_req)));
       f_req_bufs_to_aws_host.enq (tuple2 (4, req_buf));
@@ -161,8 +166,8 @@ module mkAWS_Host_Access (AWS_Host_Access_IFC);
       Rsp_Buf          rsp_buf   <- pop (f_rsp_bufs_from_aws_host);
       Tagged_AXI4_Rsp  tagged_rsp = unpack (truncate (pack (rsp_buf)));
       case (tagged_rsp) matches
-	 tagged WResp .wr: slave_xactor.i_wr_resp.enq (wr);
-	 tagged RData .rd: slave_xactor.i_rd_data.enq (rd);
+	 tagged WResp .wr: slave_xactor.master.b.put(wr);
+	 tagged RData .rd: slave_xactor.master.r.put(rd);
       endcase
    endrule
 
@@ -170,7 +175,7 @@ module mkAWS_Host_Access (AWS_Host_Access_IFC);
    // INTERFACE
 
    // Main Fabric Reqs/Rsps
-   interface  slave = slave_xactor.axi_side;
+   interface  slave = slave_xactor.slaveSynth;
 
    // Transport to/from host
    interface Get to_aws_host   = toGet (f_to_aws_host);

@@ -28,8 +28,9 @@ import Semi_FIFOF :: *;
 
 import TV_Info        :: *;
 
-import AXI4_Types      :: *;
-import AXI4_Lite_Types :: *;
+import AXI4     :: *;
+import AXI4Lite :: *;
+import SourceSink :: *;
 
 import AWS_BSV_Top_Defs :: *;
 import AWS_BSV_Top      :: *;
@@ -49,22 +50,22 @@ module mkTop_HW_Side (Empty) ;
    Integer verbosity = 0;
 
    // Transactor to talk to the AWS OCL ports
-   AXI4L_32_32_0_Master_Xactor_IFC     ocl_xactor      <- mkAXI4_Lite_Master_Xactor;
+   AXI4L_32_32_0_0_0_0_0_Master_Xactor ocl_xactor <- mkAXI4Lite_Master_Xactor;
 
    // Transactor to talk to the AWS DMA_PCIS port
-   AXI4_16_64_512_0_Master_Xactor_IFC  dma_pcis_xactor <- mkAXI4_Master_Xactor;
+   AXI4_15_64_512_0_0_0_0_0_Master_Xactor dma_pcis_xactor <- mkAXI4_Master_Xactor;
 
    // The top-level of the BSV code in the AWS CL
    AWS_BSV_Top_IFC  aws_BSV_top <- mkAWS_BSV_Top;
 
-   AXI4_16_64_512_0_Slave_IFC  ddr4_A <- mkMem_Model (0);
-   AXI4_16_64_512_0_Slave_IFC  ddr4_B <- mkMem_Model (1);
-   AXI4_16_64_512_0_Slave_IFC  ddr4_C <- mkMem_Model (2);
-   AXI4_16_64_512_0_Slave_IFC  ddr4_D <- mkMem_Model (3);
+   AXI4_16_64_512_0_0_0_0_0_Slave_Synth ddr4_A <- mkMem_Model (0);
+   AXI4_16_64_512_0_0_0_0_0_Slave_Synth ddr4_B <- mkMem_Model (1);
+   AXI4_16_64_512_0_0_0_0_0_Slave_Synth ddr4_C <- mkMem_Model (2);
+   AXI4_16_64_512_0_0_0_0_0_Slave_Synth ddr4_D <- mkMem_Model (3);
 
    // Connect OCL and DMA_PCIS transactors to AWS_BSV_Top
-   mkConnection (ocl_xactor.axi_side,      aws_BSV_top.ocl_slave);
-   mkConnection (dma_pcis_xactor.axi_side, aws_BSV_top.dma_pcis_slave);
+   mkConnection (ocl_xactor.masterSynth,      aws_BSV_top.ocl_slave);
+   mkConnection (dma_pcis_xactor.masterSynth, aws_BSV_top.dma_pcis_slave);
 
    // Connect memory models to AWS_BSV_Top
    mkConnection (aws_BSV_top.ddr4_A_master, ddr4_A);
@@ -128,10 +129,10 @@ module mkTop_HW_Side (Empty) ;
    function Action fa_ocl_control_write (Bit #(16) control_addr, Bit #(32) ocl_data);
       action
 	 Bit #(32) ocl_addr = { fromInteger (ocl_client_control), control_addr };
-	 let wra = AXI4_Lite_Wr_Addr {awaddr: ocl_addr, awprot: 0, awuser: ?};
-	 let wrd = AXI4_Lite_Wr_Data {wdata:  ocl_data,   wstrb: '1};
-	 ocl_xactor.i_wr_addr.enq (wra);
-	 ocl_xactor.i_wr_data.enq (wrd);
+	 let wra = AXI4Lite_AWFlit {awaddr: ocl_addr, awprot: 0, awuser: ?};
+	 let wrd = AXI4Lite_WFlit {wdata:  ocl_data,   wstrb: '1};
+	 ocl_xactor.slave.aw.put(wra);
+	 ocl_xactor.slave.w.put(wrd);
 
 	 if (verbosity != 0)
 	    $display ("Top_HW_Side.fa_ocl_write: addr %0h data %0h", ocl_addr, ocl_data);
@@ -141,8 +142,8 @@ module mkTop_HW_Side (Empty) ;
    function Action fa_ocl_control_read_req (Bit #(16) control_addr);
       action
 	 Bit #(32) ocl_addr = { fromInteger (ocl_client_control), control_addr };
-	 let rda = AXI4_Lite_Rd_Addr {araddr: ocl_addr, arprot: 0, aruser: ?};
-	 ocl_xactor.i_rd_addr.enq (rda);
+	 let rda = AXI4Lite_ARFlit {araddr: ocl_addr, arprot: 0, aruser: ?};
+	 ocl_xactor.slave.ar.put(rda);
 
 	 if (verbosity != 0)
 	    $display ("Top_HW_Side.fa_ocl_read_req: addr %0h", ocl_addr);
@@ -151,7 +152,7 @@ module mkTop_HW_Side (Empty) ;
 
    function ActionValue #(Bit #(32)) fav_ocl_control_read_rsp;
       actionvalue
-	 let rdr <- pop_o (ocl_xactor.o_rd_data);
+         let rdr <- get(ocl_xactor.slave.r);
 	 return rdr.rdata;
       endactionvalue
    endfunction
@@ -257,9 +258,9 @@ module mkTop_HW_Side (Empty) ;
    // Discard OCL write reponses, just checking for errors.
 
    rule rl_ocl_wr_response_drain;
-      let wrr <- pop_o (ocl_xactor.o_wr_resp);
+      let wrr <- get(ocl_xactor.slave.b);
 
-      if (wrr.bresp != AXI4_LITE_OKAY) begin
+      if (wrr.bresp != OKAY) begin
 	 $display ("Top_HW_Side: OCL response error: ", fshow (wrr.bresp));
 	 $finish (1);
       end
@@ -342,18 +343,18 @@ module mkTop_HW_Side (Empty) ;
 	    if (verbosity != 0)
 	       $display ("Top_HW_Side.rl_debugger_request: OCL READ dm_addr %0h (OCL addr %0h)",
 			 dm_addr, ocl_addr);
-	    let rda = AXI4_Lite_Rd_Addr {araddr: ocl_addr, arprot: 0, aruser: ?};
-	    ocl_xactor.i_rd_addr.enq (rda);
+	    let rda = AXI4Lite_ARFlit {araddr: ocl_addr, arprot: 0, aruser: ?};
+	    ocl_xactor.slave.ar.put(rda);
 	 end
 
 	 else if (op == dmi_op_write) begin
 	    if (verbosity != 0)
 	       $display ("Top_HW_Side.rl_debugger_request: OCL WRITE dm_addr %0h (OCL addr %0h) data %0h",
 			 dm_addr, ocl_addr, data);
-	    let wra = AXI4_Lite_Wr_Addr {awaddr: ocl_addr, awprot: 0, awuser: ?};
-	    let wrd = AXI4_Lite_Wr_Data {wdata:  data,   wstrb: '1};
-	    ocl_xactor.i_wr_addr.enq (wra);
-	    ocl_xactor.i_wr_data.enq (wrd);
+	    let wra = AXI4Lite_AWFlit {awaddr: ocl_addr, awprot: 0, awuser: ?};
+	    let wrd = AXI4Lite_WFlit {wdata:  data,   wstrb: '1};
+	    ocl_xactor.slave.aw.put(wra);
+	    ocl_xactor.slave.w.put(wrd);
 	 end
 
 	 else if (op == dmi_op_shutdown) begin
@@ -376,7 +377,7 @@ module mkTop_HW_Side (Empty) ;
    endrule
 
    rule rl_ocl_rd_response;
-      let rdr <- pop_o (ocl_xactor.o_rd_data);
+      let rdr <- get(ocl_xactor.slave,r);
       if (verbosity != 0)
 	 $display ("Top_HW_Side.rl_ocl_rd_response: ", fshow (rdr));
 
