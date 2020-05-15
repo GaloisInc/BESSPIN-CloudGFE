@@ -183,6 +183,7 @@ int dma_example_hwsw_cosim(int slot_id, size_t buffer_size)
         rc = -ENOMEM;
         goto out;
     }
+    fprintf (stdout, "Write- and read-buffer size: %0ld\n", buffer_size);
 
     printf("Memory has been allocated, initializing DMA and filling the buffer...\n");
 #if !defined(SV_TEST)
@@ -206,14 +207,15 @@ int dma_example_hwsw_cosim(int slot_id, size_t buffer_size)
     rc = fill_buffer_urandom(write_buffer, buffer_size);
     fail_on(rc, out, "unable to initialize buffer");
 
-    fprintf (stdout, "Write buffer contents:\n");
-    for (int j = 0; j < 128; j = j + 4) {
+    fprintf (stdout, "First 64 bytes of write-buffer contents:\n");
+    for (int j = 0; j < 64; j = j + 4) {
 	uint32_t *p = (uint32_t *) (write_buffer + j);
 	fprintf (stdout, "    %08x: %08x\n", j, *p);
     }
 
     printf("Now performing the DMA transactions...\n");
     for (dimm = 0; dimm < 4; dimm++) {
+        fprintf (stdout, "DMA'ing buffer of %0ld bytes to DIMM %0d\n", buffer_size, dimm);
         rc = do_dma_write(write_fd, write_buffer, buffer_size,
             dimm * MEM_16G, dimm, slot_id);
         fail_on(rc, out, "DMA write failed on DIMM: %d", dimm);
@@ -221,9 +223,11 @@ int dma_example_hwsw_cosim(int slot_id, size_t buffer_size)
 
     bool passed = true;
     for (dimm = 0; dimm < 4; dimm++) {
+        fprintf (stdout, "DMA'ing buffer of %0ld bytes from DIMM %0d\n", buffer_size, dimm);
         rc = do_dma_read(read_fd, read_buffer, buffer_size,
             dimm * MEM_16G, dimm, slot_id);
         fail_on(rc, out, "DMA read failed on DIMM: %d", dimm);
+        fprintf (stdout, "Comparing %0ld bytes buffers for DIMM %0d\n", buffer_size, dimm);
         uint64_t differ = buffer_compare(read_buffer, write_buffer, buffer_size);
         if (differ != 0) {
             log_error("DIMM %d failed with %lu bytes which differ", dimm, differ);
