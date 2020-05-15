@@ -291,7 +291,7 @@ int load_mem_hex32_using_DMA (int slot_id, char *filename)
     // Allocate a buffer to read memhex contents
     uint8_t *buf = (uint8_t *) malloc  (BUF_SIZE);
     if (buf == NULL) {
-	fprintf (stdout, "%s: ERROR allocating memhex buffer of size: %0ld (0x%0lx)\n",
+	fprintf (stdout, "%s: ERROR allocating memhex buffer of size: %0lld (0x%0llx)\n",
 		 this_file_name, BUF_SIZE, BUF_SIZE);
 	rc = 1;
 	goto out;
@@ -375,25 +375,25 @@ int load_mem_hex32_using_DMA (int slot_id, char *filename)
     // ================
     // Readback up to 128 bytes and cross-check
     size_t read_size = ((download_size <= 128) ? download_size : 128);
-    fprintf (stdout, "Reading back %0d bytes to spot-check the download\n", read_size);
+    fprintf (stdout, "Reading back %0ld bytes to spot-check the download\n", read_size);
     addr1 = ((addr_base >> 6) << 6);    // 64B aligned (required by AWS)
     rc = do_dma_read (read_fd, dma_buf, read_size, addr1, channel, slot_id);
     fail_on (rc, out, "DMA read failed on channel 0");
 
-    fprintf (stdout, "Checking readback-data of %0d bytes ...\n", read_size);
+    fprintf (stdout, "Checking readback-data of %0ld bytes ...\n", read_size);
     for (uint64_t j = 0; j < read_size; j += 4) {
 	uint32_t *p1 = (uint32_t *) (buf + addr1 + j);
 	uint32_t *p2 = (uint32_t *) (dma_buf + j);
 	if (*p1 != *p2) {
-	    fprintf (stdout, "%s: read-back of mem data differs at addr %0x\n", this_file_name, j);
+	    fprintf (stdout, "%s: read-back of mem data differs at addr %0lx\n", this_file_name, j);
 	    fprintf (stdout, "    Original  word: 0x%08x\n", *p1);
 	    fprintf (stdout, "    Read-back word: 0x%08x\n", *p2);
 	    rc = 1;
 	    goto out;
 	}
-	fprintf (stdout, "    %08lx: %08lx\n", j, *p1);
+	fprintf (stdout, "    %08lx: %08x\n", j, *p1);
     }
-    fprintf (stdout, "Checking readback-data of %0d bytes: OK\n", read_size);
+    fprintf (stdout, "Checking readback-data of %0ld bytes: OK\n", read_size);
 
 out:
     if (read_buffer != NULL) {
@@ -485,7 +485,7 @@ int wait_for_chan_avail (pci_bar_handle_t pci_bar_handle, uint32_t ocl_addr_base
 	    goto out;
 	}
     }
-    rc == 0;
+    rc = 0;
     if (verbosity != 0)
 	fprintf (stdout, "%s: wait_for_chan_avail: ok: waited %0d usecs\n", this_file_name, usecs);
 

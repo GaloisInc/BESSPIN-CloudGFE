@@ -24,7 +24,7 @@ int memhex32_read (char      *filename,
 	goto err_return;
     }
 
-    int       ch, n;
+    int       n;
     int       linenum = 1;
     uint64_t  x;
     uint64_t  addr_base, addr_lim, addr;
@@ -50,7 +50,7 @@ int memhex32_read (char      *filename,
 		    fprintf (stdout, "WARNING on line %0d\n", linenum);
 		    fprintf (stdout, "    Address 0x%0lx is < latest address 0x%0lx\n", x, addr);
 		}
-		else if (addr & 0x3 != 0) {
+		else if ((addr & 0x3) != 0) {
 		    fprintf (stdout, "WARNING on line %0d\n", linenum);
 		    fprintf (stdout, "    Address 0x%0lx is not 32-bit aligned\n", x);
 		}
