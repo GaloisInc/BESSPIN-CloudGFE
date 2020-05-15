@@ -35,24 +35,31 @@ if {[llength [glob -nocomplain -dir $TARGET_DIR *]] != 0} {
 
 ## Change file names and paths below to reflect your CL area.  DO NOT include AWS RTL files.
 file copy -force $CL_DIR/../common/design/cl_common_defines.vh     $TARGET_DIR
-file copy -force $CL_DIR/design/cl_dram_dma_defines.vh             $TARGET_DIR
-file copy -force $CL_DIR/design/cl_id_defines.vh                   $TARGET_DIR
-file copy -force $CL_DIR/design/cl_dram_dma_pkg.sv                 $TARGET_DIR
-file copy -force $CL_DIR/design/cl_dram_dma.sv                     $TARGET_DIR
-file copy -force $CL_DIR/design/cl_tst.sv                          $TARGET_DIR
-file copy -force $CL_DIR/design/cl_int_tst.sv                      $TARGET_DIR
-file copy -force $CL_DIR/design/mem_scrb.sv                        $TARGET_DIR
-file copy -force $CL_DIR/design/cl_tst_scrb.sv                     $TARGET_DIR
-file copy -force $CL_DIR/design/axil_slave.sv                      $TARGET_DIR
-file copy -force $CL_DIR/design/cl_int_slv.sv                      $TARGET_DIR
-file copy -force $CL_DIR/design/cl_pcim_mstr.sv                    $TARGET_DIR
-file copy -force $CL_DIR/design/cl_vio.sv                          $TARGET_DIR
-file copy -force $CL_DIR/design/cl_dma_pcis_slv.sv                 $TARGET_DIR
-file copy -force $CL_DIR/design/cl_ila.sv                          $TARGET_DIR
-file copy -force $CL_DIR/design/cl_ocl_slv.sv                      $TARGET_DIR
-file copy -force $CL_DIR/design/cl_sda_slv.sv                      $TARGET_DIR
-file copy -force $CL_DIR/design/cl_dram_dma_axi_mstr.sv            $TARGET_DIR
 file copy -force $UNUSED_TEMPLATES_DIR/unused_sh_bar1_template.inc $TARGET_DIR
+
+foreach {file} [glob -nocomplain -- $CL_DIR/design/*.v $CL_DIR/design/*.sv $CL_DIR/design/*.vh] {
+    file copy -force $file            $TARGET_DIR
+}
+
+# Original file contents
+# file copy -force $CL_DIR/design/cl_dram_dma_defines.vh             $TARGET_DIR
+# file copy -force $CL_DIR/design/cl_id_defines.vh                   $TARGET_DIR
+# file copy -force $CL_DIR/design/cl_dram_dma_pkg.sv                 $TARGET_DIR
+# file copy -force $CL_DIR/design/cl_dram_dma.sv                     $TARGET_DIR
+# file copy -force $CL_DIR/design/cl_tst.sv                          $TARGET_DIR
+# file copy -force $CL_DIR/design/cl_int_tst.sv                      $TARGET_DIR
+# file copy -force $CL_DIR/design/mem_scrb.sv                        $TARGET_DIR
+# file copy -force $CL_DIR/design/cl_tst_scrb.sv                     $TARGET_DIR
+# file copy -force $CL_DIR/design/axil_slave.sv                      $TARGET_DIR
+# file copy -force $CL_DIR/design/cl_int_slv.sv                      $TARGET_DIR
+# file copy -force $CL_DIR/design/cl_pcim_mstr.sv                    $TARGET_DIR
+# file copy -force $CL_DIR/design/cl_vio.sv                          $TARGET_DIR
+# file copy -force $CL_DIR/design/cl_dma_pcis_slv.sv                 $TARGET_DIR
+# file copy -force $CL_DIR/design/cl_ila.sv                          $TARGET_DIR
+# file copy -force $CL_DIR/design/cl_ocl_slv.sv                      $TARGET_DIR
+# file copy -force $CL_DIR/design/cl_sda_slv.sv                      $TARGET_DIR
+# file copy -force $CL_DIR/design/cl_dram_dma_axi_mstr.sv            $TARGET_DIR
+
 
 #---- End of section replaced by Developr ---
 
@@ -68,6 +75,6 @@ puts "AWS FPGA: VIVADO_TOOL_VERSION $TOOL_VERSION"
 puts "vivado_version $vivado_version"
 
 # encrypt .v/.sv/.vh/inc as verilog files
-encrypt -k $HDK_SHELL_DIR/build/scripts/vivado_keyfile_2017_4.txt -lang verilog  [glob -nocomplain -- $TARGET_DIR/*.{v,sv}] [glob -nocomplain -- $TARGET_DIR/*.vh] [glob -nocomplain -- $TARGET_DIR/*.inc]
+# encrypt -k $HDK_SHELL_DIR/build/scripts/vivado_keyfile_2017_4.txt -lang verilog  [glob -nocomplain -- $TARGET_DIR/*.{v,sv}] [glob -nocomplain -- $TARGET_DIR/*.vh] [glob -nocomplain -- $TARGET_DIR/*.inc]
 # encrypt *vhdl files
-encrypt -k $HDK_SHELL_DIR/build/scripts/vivado_vhdl_keyfile_2017_4.txt -lang vhdl -quiet [ glob -nocomplain -- $TARGET_DIR/*.vhd? ]
+# encrypt -k $HDK_SHELL_DIR/build/scripts/vivado_vhdl_keyfile_2017_4.txt -lang vhdl -quiet [ glob -nocomplain -- $TARGET_DIR/*.vhd? ]

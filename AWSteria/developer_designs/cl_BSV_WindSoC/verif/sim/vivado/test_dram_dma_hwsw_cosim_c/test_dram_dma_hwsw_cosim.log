@@ -2,8 +2,8 @@
 # xsim v2019.1 (64-bit)
 # SW Build 2552052 on Fri May 24 14:47:09 MDT 2019
 # IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
-# Start of session at: Fri May  8 12:33:13 2020
-# Process ID: 29916
+# Start of session at: Thu May 14 22:45:03 2020
+# Process ID: 3207
 # Current directory: /home/nikhil/git_clones/AWS/BESSPIN-CloudGFE/AWSteria/developer_designs/cl_BSV_WindSoC/verif/sim/vivado/test_dram_dma_hwsw_cosim_c
 # Command line: xsim -log test_dram_dma_hwsw_cosim.log -mode tcl -source {xsim.dir/tb/xsim_script.tcl}
 # Log file: /home/nikhil/git_clones/AWS/BESSPIN-CloudGFE/AWSteria/developer_designs/cl_BSV_WindSoC/verif/sim/vivado/test_dram_dma_hwsw_cosim_c/test_dram_dma_hwsw_cosim.log
@@ -70,38 +70,38 @@ Copyright (c) 2016-2020 Bluespec, Inc. All Rights Reserved.
 Done DDR init...
 filling buffer with  random data...
 Write buffer contents:
-    00000000: 99865485
-    00000004: bf365593
-    00000008: d59a9782
-    0000000c: cbbb6311
-    00000010: a109702e
-    00000014: 64dee3f1
-    00000018: 82519b32
-    0000001c: c6767387
-    00000020: 3c198a2c
-    00000024: fa878ee7
-    00000028: f905cbc2
-    0000002c: 3d733638
-    00000030: f22dd695
-    00000034: 60cdc5d0
-    00000038: 214e256c
-    0000003c: 99733447
-    00000040: c8029ee6
-    00000044: 91897188
-    00000048: 9fe680a0
-    0000004c: ee5238a7
-    00000050: cf3c0bef
-    00000054: 814bf911
-    00000058: 901ed34c
-    0000005c: 52eff8d7
-    00000060: 2786e814
-    00000064: e436ce4d
-    00000068: cbfcf0f5
-    0000006c: ab75cc5b
-    00000070: 3b8b2aa7
-    00000074: 06ff3e17
-    00000078: 48d0fb66
-    0000007c: 91a02529
+    00000000: 49961af9
+    00000004: 48e98fbc
+    00000008: 39931142
+    0000000c: c939fa47
+    00000010: 91ee3fe0
+    00000014: c83247f5
+    00000018: cf1f41d0
+    0000001c: c5e07e71
+    00000020: a0269dc2
+    00000024: 3d6831c9
+    00000028: 16418011
+    0000002c: 45f2de30
+    00000030: 4f6c4bb3
+    00000034: 1cc69b05
+    00000038: 59f3c115
+    0000003c: bead751a
+    00000040: 1c1c64d3
+    00000044: f7100a7f
+    00000048: a34dfed6
+    0000004c: b60f0c9b
+    00000050: bd52f1ca
+    00000054: cec8f8b5
+    00000058: 91b5d7a3
+    0000005c: ee4a91a8
+    00000060: ed84b759
+    00000064: 7c9e2e7c
+    00000068: a984ef59
+    0000006c: ef34690d
+    00000070: 31d829d6
+    00000074: c6312b4e
+    00000078: 7031e296
+    0000007c: 237d7a90
 Now performing the DMA transactions...
 DIMM 0 passed!
 DIMM 1 passed!
@@ -110,7 +110,7 @@ DIMM 3 passed!
 test_dram_dma_hwsw_cosim.c: Reading Mem Hex32 file into local buffer: /home/nikhil/git_clones/AWS/BESSPIN-CloudGFE/AWSteria/developer_designs/cl_BSV_WindSoC/verif/scripts/Mem.hex
 Mem_hex32 file read ok.
     addr_base 0x80000000  addr_lim 0x80001048 (4168 bytes)
-test_dram_dma_hwsw_cosim.c: 4KB DMA buffer allocated at 0x7f8d5413f000
+test_dram_dma_hwsw_cosim.c: 4KB DMA buffer allocated at 0x7f697813f000
 Downloading to AWS DDR4
 test_dram_dma_hwsw_cosim.c: DMA 4096 bytes to addr 0x80000000
 test_dram_dma_hwsw_cosim.c: DMA 72 bytes to addr 0x80001000
@@ -686,6 +686,6 @@ instret:520  PC:0x80000044  instr:0xfc3f2023  priv:3
 instret:521  PC:0x80000048  instr:0xff9ff06f  priv:3
 instret:522  PC:0x80000040  instr:0x1f17  priv:3
 $finish called at time : 45292 ns : File "/home/nikhil/git_clones/AWS/BESSPIN-CloudGFE/AWSteria/developer_designs/cl_BSV_WindSoC/verif/tests/test_null.sv" Line 29
-run: Time (s): cpu = 00:00:00.10 ; elapsed = 00:00:23 . Memory (MB): peak = 1570.418 ; gain = 128.000 ; free physical = 1803 ; free virtual = 42778
+run: Time (s): cpu = 00:00:00.08 ; elapsed = 00:00:22 . Memory (MB): peak = 1570.418 ; gain = 128.000 ; free physical = 2781 ; free virtual = 43104
 ## quit
-INFO: [Common 17-206] Exiting xsim at Fri May  8 12:33:43 2020...
+INFO: [Common 17-206] Exiting xsim at Thu May 14 22:45:32 2020...

@@ -348,7 +348,7 @@ INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/nikhil/git_clones/AWS/B
 INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/nikhil/git_clones/AWS/BESSPIN-CloudGFE/AWSteria/developer_designs/cl_BSV_WindSoC/design/cl_dram_dma_defines.vh" into library xil_defaultlib
 INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/nikhil/git_clones/AWS/BESSPIN-CloudGFE/AWSteria/developer_designs/cl_BSV_WindSoC/design/cl_dram_dma.sv" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module cl_dram_dma
-INFO: [VRFC 10-2458] undeclared symbol clk_main_0, assumed default net type wire [/home/nikhil/git_clones/AWS/BESSPIN-CloudGFE/AWSteria/developer_designs/cl_BSV_WindSoC/design/cl_dram_dma.sv:263]
+INFO: [VRFC 10-2458] undeclared symbol clk_main_0, assumed default net type wire [/home/nikhil/git_clones/AWS/BESSPIN-CloudGFE/AWSteria/developer_designs/cl_BSV_WindSoC/design/cl_dram_dma.sv:273]
 INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/nikhil/git_clones/AWS/BESSPIN-CloudGFE/AWSteria/developer_designs/cl_BSV_WindSoC/design/BRAM2.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module BRAM2
 INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/nikhil/git_clones/AWS/BESSPIN-CloudGFE/AWSteria/developer_designs/cl_BSV_WindSoC/design/FIFO2.v" into library xil_defaultlib

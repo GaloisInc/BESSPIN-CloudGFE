@@ -88,8 +88,18 @@ module cl_dram_dma #(parameter NUM_DDR=4)
    assign  cl_sh_dma_rd_full = 1'b0;
    assign  cl_sh_dma_wr_full = 1'b0;
 
+   // The functionality for these signals is TBD so they can can be tied-off.
    assign  cl_sh_status0 = 32'h0;
    assign  cl_sh_status1 = 32'h0;
+
+   // ****************************************************************
+   // ****************************************************************
+   // PCIe ID signals
+   // CL_SH_ID0:  31:16: PCIe Device ID     15: 0: PCIe Vendor ID
+   // CL_SH_ID1:  31:16: PCIe Subsystem ID  15: 0: PCIe Subsystem Vendor ID
+
+   assign cl_sh_id0 [31:0] = `CL_SH_ID0;
+   assign cl_sh_id1 [31:0] = `CL_SH_ID1;
 
    // ****************************************************************
    // ****************************************************************
