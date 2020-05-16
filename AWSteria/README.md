@@ -88,6 +88,7 @@ have a full understanding of all the steps.
     **One-time step:** set up `CL_DIR` to point at the top-level dir
     of the design:
 
+            $ cd  ... back to your main AWSteria directory ...
             $ cd  developer_designs/cl_BSV_WindSoC
             $ export CL_DIR=$(pwd)
 

@@ -1,3 +1,4 @@
 Verilog_RTL
 build_dir
 README.html
+*.o
