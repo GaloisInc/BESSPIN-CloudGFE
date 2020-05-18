@@ -93,28 +93,85 @@ Step_5c_load_AFI:
 	sudo fpga-describe-local-image -S 0 -R -H    # -R forces PCI to refresh AFI Vendor and Device ID
 
 # ================================================================
-# The HDK README says, the install of the XDMA driver (used by
+# ONE-TIME STEP PER AMI: Remove the XOCL driver, and install the XDMA
+# driver, if your software and AFI communicate via DMA over the
+# DMA_PCIS port.
+#
+# cf.   https://github.com/aws/aws-fpga/blob/master/sdk/linux_kernel_drivers/xdma/xdma_install.md
+#
+
+# CAVEAT: the following steps worked when attempted on the "FPGA
+# Developers AMI", which runs CentOS.  I recommend staying with this.
+
+# It did not work when I tried it on an Ubuntu 18.04 AMI.
+# The web page cited above says do the following instead of
+# Step_6a_1_yum_installs:
+#    $ sudo apt-get install make
+#    $ sudo apt-get install gcc
+# and proceeed, but there were complaints about a function 'mmiowb()'
+# (which has recently been removed from the Linux kernel), number of
+# arguments to some macro (which has recently changed in the Linux
+# kernel), etc..
+
+.PHONY: Step 6a_1_yum_installs
+Step 6a_1_yum_installs:
+	sudo yum groupinstall "Development tools"
+	sudo yum install kernel kernel-devel
+
+# Reboot the kernel, if necessary: The 'yum install kernel' above will
+# say, in its messages, which version of the kernel it
+# installed. Typing 'uname -a' will tell you which version of the
+# kernel you're running.  These two should be the same.  If not,
+# reboot your instance.  This will disconnect your ssh connection
+# (although your instance will continuously show as 'running' in the
+# AWS dashboard); reconnect after a minute or so, when it allows you.
+
+.PHONY: Step 6a_2_Reboot
+Step 6a_2_Reboot:
+	@echo "Rebooting! This may break your terminal connection; please reconnect!"
+	sudo shutdown -r now
+
+# Build the XDMA driver (see caveat above about FPGA Developers AMI/CentOS vs Ubuntu):
+.PHONY: Step 6a_3_Build_XDMA
+Step 6a_3_Build_XDMA:
+	@echo "If you have not yet dones Step_0c_Clone_aws-fpga please do so."
+	cd  $(AWS_FPGA_REPO_DIR)/sdk/linux_kernel_drivers/xdma
+	make
+
+# The HDK README says the install of the XDMA driver (used by
 # host-side software) may fail on Development AMI versions 1.5.x or
 # later, which come with a preinstalled Xilinx Runtime Environment
 # (XRT), which contains a pre-installed XOCL driver. This prevents
-# installation of the XDMA driver. Please remove the XOCL driver
+# installation of the XDMA driver. Please first remove the XOCL driver
 # module.
 
-.PHONY: Step_6a_remove_XOCL
-Step_6a_check_XOCL:
+.PHONY: Step_6b_1_remove_XOCL
+Step_6b_0_check_XOCL:
 	@echo "Checking if XOCL driver is running"
 	lsmod | grep xocl
+	@echo "If XOCL is present, it should in the listing"
 
-.PHONY: Step_6b_remove_XOCL
-Step_6b_remove_XOCL:
+.PHONY: Step_6b_2_remove_XOCL
+Step_6b_1_remove_XOCL:
 	@echo "Removing XOCL driver"
 	sudo rmmod xocl
+
+# Install the XDMA driver (will fail if XOCL driver is still in the kernel).
+
+.PHONY: Step_6c_Install_XDMA_driver
+Step_6c_Install_XDMA_driver:
+	@echo "Installing XDMA driver"
+	sudo make install
+	sudo modprobe xdma
+	@echo "Verify that xdma driver is present"
+	lsmod | grep xdma
+	@echo "You should see a line like:    xdma                   72503  0"
 
 # ================================================================
 # Build host-side software that interacts with the FPGA
 
-.PHONY: Step_6c_build_SW
-Step_6c_build_SW:
+.PHONY: Step_6d_build_SW
+Step_6d_build_SW:
 	@echo "Building host-side software"
 	cd  $(CL_DIR)/software/runtime/
 	make all
@@ -122,9 +179,10 @@ Step_6c_build_SW:
 # ================================================================
 # Run host-side software that interacts with the FPGA
 
-.PHONY: Step_6d_run_SW
-Step_6d_run_SW:
+.PHONY: Step_6e_run_SW
+Step_6e_run_SW:
 	@echo "Running host-side software, interacting with FPGA"
+	@echo "Make sure you have the XDMA driver installed in the kernel"
 	cd  $(CL_DIR)/software/runtime/
 	sudo ./$(SW_EXE)
 

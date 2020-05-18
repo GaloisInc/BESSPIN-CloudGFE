@@ -23,26 +23,32 @@
 # The following variables should be defined for your environment/
 # use-case.
 
-AWS_FPGA_REPO_DIR = $(HOME)/git_clones/AWS/aws-fpga
-EMAIL             = nikhil@acm.org
-CL_DIR            = $(AWS_FPGA_REPO_DIR)/hdk/cl/developer_designs/cl_BSV_WindSoC
-REGION            = us-west-2
+AWS_FPGA_REPO_DIR ?= $(HOME)/git_clones/AWS/aws-fpga
+EMAIL             ?= nikhil@acm.org
+CL_DIR            ?= $(AWS_FPGA_REPO_DIR)/hdk/cl/developer_designs/cl_BSV_WindSoC
+REGION            ?= us-west-2
 
 # Pick a name for a bucket to be created which will hold the DCP
-DCP_BUCKET        = rsnbucket1
+DCP_BUCKET        ?= rsnbucket1
 # Pick a sub-name inside the bucket to hold the DCP
-DCP_FOLDER        = AWSteria
-DCP_TARFILE       = 20_05_14-225622.Developer_CL.tar
+DCP_FOLDER        ?= example-cl-dram-dma
+
+# AWSteria
+# DCP_TARFILE       ?= 20_05_14-225622.Developer_CL.tar
+
+# standard test_dram_dma example
+DCP_TARFILE       ?= 20_05_16-210151.Developer_CL.tar
 
 # Pick a name for a bucket to be created which will hold the DCP
-LOGS_BUCKET       = $(DCP_BUCKET)
+LOGS_BUCKET       ?= $(DCP_BUCKET)
 # Pick a sub-name inside the bucket to hold AFI creation logs
-LOGS_FOLDER       = AWSteriaLogs
+LOGS_FOLDER       ?= $(DCP_FOLDER)-logs
 
 # Pick a name for the AFI Image to be produced
-AFI_NAME          = RSNAwsteriaTest
+# AFI_NAME          ?= RSNAwsteriaTest
+AFI_NAME          ?= RSN-example-cl-dram-dma
 # Write a description for the AFI Image to be produced
-AFI_DESCRIPTION   = "RSN AWSteria Test"
+AFI_DESCRIPTION   ?= "RSN-example-cl-dram-dma"
 
 # There are additional vars described below close to where they're
 # used, which you should edit for your use-case:
@@ -209,9 +215,12 @@ Step_2c_Def_DCP_tarfile:
 # Create an S3 bucket to contain what you submit for an AFI build
 # S3 is Amazon AWS' 'storage system'.
 # Buckets are Amazon AWS 'storage units' in the cloud; they have
-# globally unique names.  Further, bucket names must be URL-compliant:
-# start and end with letter or number, can contain dashes and dots
-# (but not underscores!)
+# globally unique names.
+# NOTE: Amazon's rules for bucket names:
+#    - 3 to 63 chars long
+#    - lowercase letters, digits, hyphens
+#          (in particular no underscores; dots allowed but nor recommended)
+#    - must start and end with a letter or digit, not hyphen
 
 .PHONY: Step_3a_Create_Buckets
 Step_3a_Create_Buckets:
@@ -278,13 +287,13 @@ Step_3d_Upload_DCP:
 
 .PHONY: Step_3e_Create_Folder_for_Logs
 Step_3e_Create_Folder_for_Logs:
-	aws s3 mb s3://$(DCP_BUCKET)/$(LOGS_FOLDER)/
 	touch LOGS_FILES_GO_HERE.txt
 	aws s3 cp LOGS_FILES_GO_HERE.txt s3://$(DCP_BUCKET)/$(LOGS_FOLDER)/
 
 # This example creates the LOGS_FOLDER 'inside' the DCP_BUCKET, but I
 # think that is not necessary; the 'create-fpga-image' step below
 # allows you to specify the bucket and folder for logs.
+# aws s3 mb s3://$(DCP_BUCKET)/$(LOGS_FOLDER)/
 
 # Note 3.3: As in Note 3.2, the first command (folder-creation) failed
 #     for me, in the same way ('BucketAlreadyOwnedByYou').
@@ -339,8 +348,13 @@ Step_3f_Start_AFI_Creation:
 
 # Please define these based on the output of the command
 
-AFI_ID  = "afi-0d31f0d4cb999bf13"
-AGFI_ID = "agfi-083e63670297bf487"
+# AWSteria
+# AFI_ID  = "afi-0d31f0d4cb999bf13"
+# AGFI_ID = "agfi-083e63670297bf487"
+
+# cl_test_dram_dma
+AFI_ID  = "afi-02231cb270e406e39"
+AFGI_ID = "agfi-043aaf12af3a36f89"
 
 # ================================================================
 # Wait for completion of AFI creation

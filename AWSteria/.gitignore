@@ -2,6 +2,7 @@ Verilog_RTL
 build_dir
 README.html
 *.o
+developer_designs/cl_BSV_WindSoC/verif/sim/vivado/test_dram_dma_hwsw_cosim_c/
 developer_designs/cl_BSV_WindSoC/build/checkpoints/
 developer_designs/cl_BSV_WindSoC/build/constraints/cl_clocks_aws.xdc
 developer_designs/cl_BSV_WindSoC/build/reports/
