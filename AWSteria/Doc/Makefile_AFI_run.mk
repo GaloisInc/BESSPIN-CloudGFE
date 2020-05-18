@@ -113,8 +113,8 @@ Step_5c_load_AFI:
 # arguments to some macro (which has recently changed in the Linux
 # kernel), etc..
 
-.PHONY: Step 6a_1_yum_installs
-Step 6a_1_yum_installs:
+.PHONY: Step_6a_1_yum_installs
+Step_6a_1_yum_installs:
 	sudo yum groupinstall "Development tools"
 	sudo yum install kernel kernel-devel
 
@@ -126,14 +126,14 @@ Step 6a_1_yum_installs:
 # (although your instance will continuously show as 'running' in the
 # AWS dashboard); reconnect after a minute or so, when it allows you.
 
-.PHONY: Step 6a_2_Reboot
-Step 6a_2_Reboot:
+.PHONY: Step_6a_2_Reboot
+Step_6a_2_Reboot:
 	@echo "Rebooting! This may break your terminal connection; please reconnect!"
 	sudo shutdown -r now
 
 # Build the XDMA driver (see caveat above about FPGA Developers AMI/CentOS vs Ubuntu):
-.PHONY: Step 6a_3_Build_XDMA
-Step 6a_3_Build_XDMA:
+.PHONY: Step_6a_3_Build_XDMA
+Step_6a_3_Build_XDMA:
 	@echo "If you have not yet dones Step_0c_Clone_aws-fpga please do so."
 	cd  $(AWS_FPGA_REPO_DIR)/sdk/linux_kernel_drivers/xdma
 	make
