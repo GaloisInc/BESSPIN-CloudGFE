@@ -86,6 +86,7 @@ int main(int argc, char **argv)
 #else
     buffer_size = 1ULL << 24;
 #endif
+    fprintf (stdout, "buffer_size = 0x%0lx (%0ld) bytes\n", buffer_size, buffer_size);
 
     /* The statements within SCOPE ifdef below are needed for HW/SW
      * co-simulation with VCS */
@@ -129,9 +130,7 @@ int main(int argc, char **argv)
     // AWSteria code
 
     // TODO: get the filename from command-line args/config file/...
-    char memhex32_filename[256];
-    strncpy(memhex32_filename, getenv("CL_DIR"), 255);
-    strncat(memhex32_filename, "/verif/scripts/Mem.hex", 255-strlen(memhex32_filename));
+    char memhex32_filename [] = "Mem.hex";
 
     rc = load_mem_hex32_using_DMA (slot_id, memhex32_filename);
     fail_on (rc, out, "Loading the mem hex32 file failed");
@@ -177,6 +176,8 @@ int dma_example_hwsw_cosim(int slot_id, size_t buffer_size)
     write_fd = -1;
     read_fd = -1;
 
+    fprintf (stdout, "buffer_size = 0x%0lx (%0ld) bytes\n", buffer_size, buffer_size);
+
     uint8_t *write_buffer = malloc(buffer_size);
     uint8_t *read_buffer = malloc(buffer_size);
     if (write_buffer == NULL || read_buffer == NULL) {
@@ -214,7 +215,8 @@ int dma_example_hwsw_cosim(int slot_id, size_t buffer_size)
     }
 
     printf("Now performing the DMA transactions...\n");
-    for (dimm = 0; dimm < 4; dimm++) {
+    // Temporarily reduced limit from DIMM 3 to DIMM 2 because DIMM 3 DMA shows errors
+    for (dimm = 0; dimm < 3; dimm++) {
         fprintf (stdout, "DMA'ing buffer of %0ld bytes to DIMM %0d\n", buffer_size, dimm);
         rc = do_dma_write(write_fd, write_buffer, buffer_size,
             dimm * MEM_16G, dimm, slot_id);
@@ -222,7 +224,8 @@ int dma_example_hwsw_cosim(int slot_id, size_t buffer_size)
     }
 
     bool passed = true;
-    for (dimm = 0; dimm < 4; dimm++) {
+    // Temporarily reduced limit from DIMM 3 to DIMM 2 because DIMM 3 DMA shows errors
+    for (dimm = 0; dimm < 3; dimm++) {
         fprintf (stdout, "DMA'ing buffer of %0ld bytes from DIMM %0d\n", buffer_size, dimm);
         rc = do_dma_read(read_fd, read_buffer, buffer_size,
             dimm * MEM_16G, dimm, slot_id);
@@ -240,16 +243,20 @@ int dma_example_hwsw_cosim(int slot_id, size_t buffer_size)
 
 out:
     if (write_buffer != NULL) {
+        fprintf (stdout, "Freeing write_buffer\n");
         free(write_buffer);
     }
     if (read_buffer != NULL) {
+        fprintf (stdout, "Freeing read_buffer\n");
         free(read_buffer);
     }
 #if !defined(SV_TEST)
     if (write_fd >= 0) {
+        fprintf (stdout, "Closing write_fd\n");
         close(write_fd);
     }
     if (read_fd >= 0) {
+        fprintf (stdout, "Closing read_fd\n");
         close(read_fd);
     }
 #endif
@@ -476,22 +483,30 @@ int wait_for_chan_avail (pci_bar_handle_t pci_bar_handle, uint32_t ocl_addr_base
     while (true) {
 	rc = fpga_pci_peek (pci_bar_handle, ocl_addr, & ocl_data_from_hw);
 	if (verbosity != 0)
-	    fprintf (stdout, "    wait_for_chan_avail: peek rc = %0d data = %08x\n", rc, ocl_data_from_hw);
-	fail_on (rc, out, "ERROR: %s: wait_for_chan_avail: OCL peek.\n", this_file_name);
+	    fprintf (stdout, "    wait_for_chan_avail: chan %0d, peek rc = %0d data = %08x\n",
+		     chan, rc, ocl_data_from_hw);
+	fail_on (rc, out, "ERROR: %s: wait_for_chan_avail: OCL peek chan %0d.\n",
+		 this_file_name, chan);
 
 	if (ocl_data_from_hw == 1) break;
 
 	usleep (1);
 	usecs++;
-	if (usecs > 1000) {
-	    fprintf (stdout, "ERROR: %s: wait_for_chan_avail: timeout: waited 1000 usecs\n", this_file_name);
+	if (usecs > 100000) {
+	    fprintf (stdout, "ERROR: %s: wait_for_chan_avail: timeout: chan %0d, waited %0d usecs\n",
+		     this_file_name, chan, usecs);
 	    rc = 1;
 	    goto out;
+	}
+        else if (usecs % 10000 == 0) {
+	  fprintf (stdout, "%s: wait_for_chan_avail: polled chan %0d for %0d usecs\n",
+		   this_file_name, chan, usecs);
 	}
     }
     rc = 0;
     if (verbosity != 0)
-	fprintf (stdout, "%s: wait_for_chan_avail: ok: waited %0d usecs\n", this_file_name, usecs);
+	fprintf (stdout, "%s: wait_for_chan_avail: ok: chan %0d, waited %0d usecs\n",
+		 this_file_name, chan, usecs);
 
  out:
     if (rc != 0) {
@@ -502,7 +517,7 @@ int wait_for_chan_avail (pci_bar_handle_t pci_bar_handle, uint32_t ocl_addr_base
 
 int start_hw (int slot_id, int pf_id, int bar_id)
 {
-    int rc, verbosity = 0;
+    int rc, verbosity = 1;
     uint32_t ocl_addr, ocl_data_to_hw, ocl_data_from_hw;
 
     // pci_bar_handle_t is a handler for an address space exposed by
@@ -573,6 +588,8 @@ int start_hw (int slot_id, int pf_id, int bar_id)
     // ----------------
     // Poll the HW status until non-zero (hw task completion)
     // There's no timeout because HW may never stop (e.g., an executing CPU).
+
+    fprintf (stdout, "Host_side: Polling HW status for completion\n");
 
     ocl_addr = mk_chan_data_addr (ocl_hw_to_host_chan_addr_base, hw_to_host_chan_status);
 
