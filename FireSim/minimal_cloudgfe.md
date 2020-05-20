@@ -1,6 +1,9 @@
 # Minimal CloudGFE Setup
 
-This readme will guide you through bringing up an F1 instance with a CloudGFE processor (Rocket P2) running Linux and FreeBSD.
+This readme will guide you through bringing up an F1 instance with a CloudGFE processor. Currently supported:
+* Rocket P1 running bare-metal tests (helloworld example provided)
+* Rocket P2 running Linux and FreeBSD.
+
 This assumes you are familiar with AWS.
 
 ## Start F1 Instance
@@ -33,10 +36,16 @@ cd ~/minimal_cloudgfe
 ./setup.sh
 ```
 
-## Boot Linux
+## P1 or P2
 
-The `./run_sim.sh` script will handle configuring networking, bringing up the switch software, programming the FPGA, and starting the simulation.
-It takes three arguments:
+There are two `sim` folders:
+* `sim_p1` - for P1 configurations
+* `sim` - for P2 configurations
+
+## `run_sim.sh` Script
+
+Both folders have a similar `./run_sim.sh` script that will handle configuring networking, bringing up the switch software, programming the FPGA, and starting the simulation.
+It expects three arguments:
 
 ```
 ./run_sim.sh <blockimage> <dwarf> <elf>
@@ -46,12 +55,6 @@ It takes three arguments:
 * `dwarf` - currently unknown purpose. Give it `elf-dwarf` as an argument for now
 * `elf` - ELF binary to be loaded into memory and executed
 
-To boot linux:
-```
-cd ~/minimal_cloudgfe/sim
-./run_sim.sh linux-uniform0-br-base.img linux-uniform0-br-base-bin-dwarf linux-uniform0-br-base-bin
-```
-
 The script launches 3 `screen` sessions:
 * `fsim0` - UART console and simulator output
 * `switch0` - Software switch log
@@ -59,6 +62,24 @@ The script launches 3 `screen` sessions:
 
 The `fsim0` screen will be attached automatically. You can exit it while keeping the sim running using `Ctrl-a` followed by `d`, or `C-a d` in screen terms.
 
+## `helloworld` on P1
+
+FreeRTOS drivers are still WIP. The P1 AFI is available for running bare metal tests.
+
+```
+cd ~/minimal_cloudgfe/sim_p1
+./run_sim.sh helloworld.img helloworld-dwarf helloworld
+```
+
+The program will print "Hello World!" and immediately exit. If it is too quick to see the output, check `uartlog`.
+
+## Boot Linux on P2
+
+To boot linux:
+```
+cd ~/minimal_cloudgfe/sim
+./run_sim.sh linux-uniform0-br-base.img linux-uniform0-br-base-bin-dwarf linux-uniform0-br-base-bin
+```
 Once Linux boots, the login is `root` and password `firesim`. You can also SSH into the target OS:
 ```
 TERM=Linux ssh root@172.16.0.2
@@ -66,9 +87,9 @@ TERM=Linux ssh root@172.16.0.2
 
 Running `poweroff -f` within the target OS will automatically stop the simulator cleanly. If it becomes stuck or unresponsive, you can also use the `./kill_sim.sh` script.
 
-## Boot FreeBSD
+## Boot FreeBSD on P2
 
-Read the Linux section above first - a lot of the same information applies. The current FreeBSD build does not include Ethernet or Block device drivers, so SSH will not work. `freebsd.img` is also just an empty file. The filesystem is stored within the ELF.
+The current FreeBSD build does not include Ethernet or Block device drivers, so SSH will not work. `freebsd.img` is also just an empty file. The filesystem is stored within the ELF.
 
 ```
 ./run_sim.sh freebsd.img freebsd-bin-dwarf freebsd-bin
