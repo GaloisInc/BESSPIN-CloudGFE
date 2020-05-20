@@ -83,14 +83,24 @@ Step_5b_clear_old_AFI:
 # ================================================================
 # Load new AFI.
 # Please define AGFI_ID for your desired AFI (given to you after Step_3f)
-# Note: optional flag '-a 87' or '-a 97' will run at 87 MHz or 97 MHz.
 
 .PHONY: Step_5c_load_AFI
 Step_5c_load_AFI:
 	@echo "Loading new AFI in Slot 0"
 	sudo fpga-load-local-image -S 0 -I $(AGFI_ID)    # Note: AGFI_ID, not AFI_ID
 	@echo "Verifying new AFI loaded in Slot 0"
-	sudo fpga-describe-local-image -S 0 -R -H    # -R forces PCI to refresh AFI Vendor and Device ID
+	sudo fpga-describe-local-image -S 0 -R -H -M   # -R forces PCI to refresh AFI Vendor and Device ID
+
+# Note: 'fpga-load-local-image' optionally takes a flag like '-a 87'
+# or '-a 97' to run it at 87 MHz or 97 MHz, respectively, which may be
+# different from the target MHz during synthesis (DCP build). The
+# following page has more information on setting runtime clock
+# frequency:
+#   https://github.com/aws/aws-fpga/blob/master/hdk/docs/dynamic_clock_config.md
+
+# Note: 'fpga-describe-local-image':
+#   -R forces PCI to refresh its Vendor and Device ID
+#   -M will describe clock speed setting
 
 # ================================================================
 # ONE-TIME STEP PER AMI: Remove the XOCL driver, and install the XDMA

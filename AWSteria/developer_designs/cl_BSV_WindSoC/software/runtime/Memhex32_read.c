@@ -20,7 +20,10 @@ int memhex32_read (char      *filename,
 {
     FILE *fd = fopen (filename, "r");
     if (fd == NULL) {
-	fprintf (stdout, "memhes32_read ERROR: unable to open file: %s\n", filename);
+	fprintf (stdout, "memhex32_read ERROR: unable to open file: %s\n", filename);
+	char *p = getenv ("PWD");
+	if (p != NULL)
+	    fprintf (stdout, "    PWD =  %s\n", p);
 	goto err_return;
     }
 

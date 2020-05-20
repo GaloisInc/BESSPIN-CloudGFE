@@ -130,7 +130,10 @@ int main(int argc, char **argv)
     // AWSteria code
 
     // TODO: get the filename from command-line args/config file/...
-    char memhex32_filename [] = "Mem.hex";
+    // char memhex32_filename [] = "Mem.hex";
+    char memhex32_filename[256];
+    strncpy(memhex32_filename, getenv("CL_DIR"), 255);
+    strncat(memhex32_filename, "/verif/scripts/Mem.hex", 255-strlen(memhex32_filename));
 
     rc = load_mem_hex32_using_DMA (slot_id, memhex32_filename);
     fail_on (rc, out, "Loading the mem hex32 file failed");
@@ -216,7 +219,7 @@ int dma_example_hwsw_cosim(int slot_id, size_t buffer_size)
 
     printf("Now performing the DMA transactions...\n");
     // Temporarily reduced limit from DIMM 3 to DIMM 2 because DIMM 3 DMA shows errors
-    for (dimm = 0; dimm < 3; dimm++) {
+    for (dimm = 0; dimm < 4; dimm++) {
         fprintf (stdout, "DMA'ing buffer of %0ld bytes to DIMM %0d\n", buffer_size, dimm);
         rc = do_dma_write(write_fd, write_buffer, buffer_size,
             dimm * MEM_16G, dimm, slot_id);
@@ -225,7 +228,7 @@ int dma_example_hwsw_cosim(int slot_id, size_t buffer_size)
 
     bool passed = true;
     // Temporarily reduced limit from DIMM 3 to DIMM 2 because DIMM 3 DMA shows errors
-    for (dimm = 0; dimm < 3; dimm++) {
+    for (dimm = 0; dimm < 4; dimm++) {
         fprintf (stdout, "DMA'ing buffer of %0ld bytes from DIMM %0d\n", buffer_size, dimm);
         rc = do_dma_read(read_fd, read_buffer, buffer_size,
             dimm * MEM_16G, dimm, slot_id);

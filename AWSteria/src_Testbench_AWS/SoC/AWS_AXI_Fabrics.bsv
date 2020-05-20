@@ -25,12 +25,14 @@ import AWS_BSV_Top_Defs :: *;
 //     DDR4 A addr (slave 0): base addr 0x_0_0000_0000
 //     DDR4 B addr (slave 1): base addr 0x_4_0000_0000
 //     DDR4 C addr (slave 2): base addr 0x_8_0000_0000
-//     DDR4 D addr (slave 3): base addr 0x_C_0000_0000
+//     DDR4 D addr (slave 3): base addr 0x_C_0000_0000    or higher
 
 function Tuple2 #(Bool, Bit #(2))  fn_addr_to_ddr4_num (Bit #(64) addr);
-   return ((addr [63:36] == 0)
-	   ? tuple2 (True, addr [35:34])
-	   : tuple2 (False, ?));
+   let      msbs      = addr [63:36];
+   Bit #(2) slave_num = addr [35:34];
+   Bool     valid     = (   ((msbs == 0) && (slave_num != 2'b11))
+			 || (slave_num == 2'b11));
+   return tuple2 (valid, slave_num);
 endfunction
 
 // ----------------
