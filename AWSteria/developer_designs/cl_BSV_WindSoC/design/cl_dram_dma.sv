@@ -270,7 +270,7 @@ module cl_dram_dma #(parameter NUM_DDR=4)
 
    // DDR D
    lib_pipe #(.WIDTH(1+1+8+32), .STAGES(NUM_CFG_STGS_CL_DDR_ATG))
-   PIPE_DDR_STAT2 (.clk(clk_main_0), .rst_n(sync_rst_n),
+   PIPE_DDR_STAT2 (.clk(clk_main_a0), .rst_n(sync_rst_n),
 		   .in_bus({sh_ddr_stat_wr2, sh_ddr_stat_rd2, sh_ddr_stat_addr2, sh_ddr_stat_wdata2}),
 		   .out_bus({v_ddr4_stats_wr_q[2], v_ddr4_stats_rd_q[2], v_ddr4_stats_addr_q[2], v_ddr4_stats_wdata_q[2]})
 		   );

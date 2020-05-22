@@ -31,7 +31,9 @@ REGION            ?= us-west-2
 # Pick a name for a bucket to be created which will hold the DCP
 DCP_BUCKET        ?= rsnbucket1
 # Pick a sub-name inside the bucket to hold the DCP
-DCP_FOLDER        ?= example-cl-dram-dma
+DCP_FOLDER        ?= AWSteria
+# DCP_FOLDER        ?= example-cl-dram-dma
+# DCP_FOLDER        ?= HelloWorld
 
 # AWSteria
 # DCP_TARFILE       ?= 20_05_14-225622.Developer_CL.tar
@@ -45,10 +47,12 @@ LOGS_BUCKET       ?= $(DCP_BUCKET)
 LOGS_FOLDER       ?= $(DCP_FOLDER)-logs
 
 # Pick a name for the AFI Image to be produced
-# AFI_NAME          ?= RSNAwsteriaTest
-AFI_NAME          ?= RSN-example-cl-dram-dma
+# AFI_NAME          ?= RSN-example-cl-dram-dma
+AFI_NAME          ?= RSNAwsteriaTest2
+
 # Write a description for the AFI Image to be produced
-AFI_DESCRIPTION   ?= "RSN-example-cl-dram-dma"
+# AFI_DESCRIPTION   ?= "RSN-example-cl-dram-dma"
+AFI_DESCRIPTION   ?= "AWSteria take 2"
 
 # There are additional vars described below close to where they're
 # used, which you should edit for your use-case:
@@ -348,13 +352,18 @@ Step_3f_Start_AFI_Creation:
 
 # Please define these based on the output of the command
 
+# cl_test_dram_dma
+# AFI_ID  = "afi-02231cb270e406e39"
+# AFGI_ID = "agfi-043aaf12af3a36f89"
+
 # AWSteria
 # AFI_ID  = "afi-0d31f0d4cb999bf13"
 # AGFI_ID = "agfi-083e63670297bf487"
 
-# cl_test_dram_dma
-AFI_ID  = "afi-02231cb270e406e39"
-AFGI_ID = "agfi-043aaf12af3a36f89"
+# AWSteria Take 2
+AFI_ID  = "afi-04ba5d8bc26c8815c"
+AFGI_ID = "agfi-0c9627f3ac5f90023"
+
 
 # ================================================================
 # Wait for completion of AFI creation
