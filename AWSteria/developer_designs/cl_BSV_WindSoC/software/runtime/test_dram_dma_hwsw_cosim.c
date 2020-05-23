@@ -75,7 +75,7 @@ int test_main(uint32_t *exit_code)
 #elif defined(SV_TEST)
 void test_main(uint32_t *exit_code)
 
-#else 
+#else
 int main(int argc, char **argv)
 
 #endif
@@ -130,10 +130,7 @@ int main(int argc, char **argv)
     // AWSteria code
 
     // TODO: get the filename from command-line args/config file/...
-    // char memhex32_filename [] = "Mem.hex";
-    char memhex32_filename[256];
-    strncpy(memhex32_filename, getenv("CL_DIR"), 255);
-    strncat(memhex32_filename, "/verif/scripts/Mem.hex", 255-strlen(memhex32_filename));
+    char memhex32_filename [] = "Mem.hex";
 
     rc = load_mem_hex32_using_DMA (slot_id, memhex32_filename);
     fail_on (rc, out, "Loading the mem hex32 file failed");
@@ -476,22 +473,28 @@ uint32_t mk_chan_data_addr (uint32_t addr_base, uint32_t chan)
 
 int wait_for_chan_avail (pci_bar_handle_t pci_bar_handle, uint32_t ocl_addr_base, uint32_t chan)
 {
-    int verbosity = 0;
+    int verbosity = 1;
 
     uint32_t ocl_addr = mk_chan_status_addr (ocl_addr_base, chan);
     uint32_t ocl_data_from_hw;
+    uint32_t status = 0xFFFFFFFF;
     uint32_t usecs = 0;
     int rc;
 
     while (true) {
 	rc = fpga_pci_peek (pci_bar_handle, ocl_addr, & ocl_data_from_hw);
-	if (verbosity != 0)
+	if (verbosity > 1)
 	    fprintf (stdout, "    wait_for_chan_avail: chan %0d, peek rc = %0d data = %08x\n",
 		     chan, rc, ocl_data_from_hw);
 	fail_on (rc, out, "ERROR: %s: wait_for_chan_avail: OCL peek chan %0d.\n",
 		 this_file_name, chan);
+	if (chan == hw_to_host_chan_status
+	    && (ocl_data_from_hw != status)) {
+	  status = ocl_data_from_hw;
+	  fprintf (stdout, "STATUS: %8x\n", status);
+	}
 
-	if (ocl_data_from_hw == 1) break;
+	if ((ocl_data_from_hw & 0xFF) == 1) break;
 
 	usleep (1);
 	usecs++;
@@ -592,7 +595,7 @@ int start_hw (int slot_id, int pf_id, int bar_id)
     // Poll the HW status until non-zero (hw task completion)
     // There's no timeout because HW may never stop (e.g., an executing CPU).
 
-    fprintf (stdout, "Host_side: Polling HW status for completion\n");
+    fprintf (stdout, "Host_side: Polling HW status for completion (let's hope)\n");
 
     ocl_addr = mk_chan_data_addr (ocl_hw_to_host_chan_addr_base, hw_to_host_chan_status);
 
@@ -600,21 +603,21 @@ int start_hw (int slot_id, int pf_id, int bar_id)
 	rc = wait_for_chan_avail (pci_bar_handle, ocl_hw_to_host_chan_addr_base, hw_to_host_chan_status);
 	if (rc != 0) goto out;
 
-	if (verbosity != 0)
-	    fprintf (stdout, "    OCL read addr %08x\n", ocl_addr);
 	rc = fpga_pci_peek (pci_bar_handle, ocl_addr, & ocl_data_from_hw);
 	fail_on(rc, out, "Unable to read read from the fpga !");
 
-	if (ocl_data_from_hw != 0) break;
+	if (verbosity != 0)
+	  fprintf (stdout, "    OCL read addr %08x, data %08x\n", ocl_addr, ocl_data_from_hw);
+	if ((ocl_data_from_hw & 0xFF) != 0) break;
 
 	usleep (10);
     }
     fprintf (stdout, "%s: Final HW status 0x%0x\n", this_file_name, ocl_data_from_hw);
-    if (ocl_data_from_hw == 1) {
-	fprintf (stdout, "    (Non-zero write tohost)\n");
+    if ((ocl_data_from_hw & 0xFF) == 1) {
+	fprintf (stdout, "    (Write of 1 to tohost: TEST PASSED)\n");
     }
-    else if (ocl_data_from_hw == 2) {
-	fprintf (stdout, "    (Memory system error)\n");
+    else if ((ocl_data_from_hw & 0xFF) != 0) {
+	fprintf (stdout, "    (Non-xero write, but not 1, to tohost: TEST FAILED)\n"); /*  */
     }
 
 out:
