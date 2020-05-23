@@ -228,7 +228,7 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
    // ================================================================
 
    rule rl_initialize ((! rg_initialized)
-		       && (rg_ddr4_ready[2:0] == 4'b1111)
+		       && (rg_ddr4_ready[3:0] == 4'b1111)
 		       && rg_ddr4_is_loaded);
       soc_top.ma_ddr4_ready;
       rg_initialized <= True;
