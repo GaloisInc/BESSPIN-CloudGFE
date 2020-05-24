@@ -1812,13 +1812,18 @@ module mkAWS_BSV_Top(CLK,
 
   // declarations used by system tasks
   // synopsys translate_off
-  reg [31 : 0] v__h4893;
-  reg [31 : 0] v__h4887;
+  reg [31 : 0] v__h4974;
+  reg [31 : 0] v__h4968;
   // synopsys translate_on
 
   // remaining internal signals
   wire [63 : 0] logdelay__h3386;
-  wire [31 : 0] x__h3555;
+  wire [31 : 0] _theResult____h3630,
+		status__h3818,
+		x__h3555,
+		x__h3814,
+		y__h3815;
+  wire [23 : 0] IF_rg_initialized_5_THEN_1_ELSE_0___d36;
   wire ocl_adapter_RDY_v_from_host_0_deq_AND_ocl_adap_ETC___d15;
 
   // action method dma_pcis_slave_m_awvalid
@@ -2738,18 +2743,16 @@ module mkAWS_BSV_Top(CLK,
 			.RDY_ma_ddr4_ready(soc_top$RDY_ma_ddr4_ready),
 			.mv_status(soc_top$mv_status));
 
+  // rule RL_rl_hw_to_host_status
+  assign CAN_FIRE_RL_rl_hw_to_host_status = ocl_adapter$RDY_v_to_host_0_enq ;
+  assign WILL_FIRE_RL_rl_hw_to_host_status = ocl_adapter$RDY_v_to_host_0_enq ;
+
   // rule RL_rl_host_to_hw_control
   assign CAN_FIRE_RL_rl_host_to_hw_control =
 	     ocl_adapter$RDY_v_from_host_0_first &&
 	     ocl_adapter_RDY_v_from_host_0_deq_AND_ocl_adap_ETC___d15 ;
   assign WILL_FIRE_RL_rl_host_to_hw_control =
 	     CAN_FIRE_RL_rl_host_to_hw_control ;
-
-  // rule RL_rl_hw_to_host_status
-  assign CAN_FIRE_RL_rl_hw_to_host_status =
-	     ocl_adapter$RDY_v_to_host_0_enq && soc_top$mv_status != 8'd0 ;
-  assign WILL_FIRE_RL_rl_hw_to_host_status =
-	     CAN_FIRE_RL_rl_hw_to_host_status ;
 
   // rule RL_rl_console_to_UART
   assign CAN_FIRE_RL_rl_console_to_UART =
@@ -2945,7 +2948,7 @@ module mkAWS_BSV_Top(CLK,
   assign ocl_adapter$ocl_slave_wdata = ocl_slave_wdata ;
   assign ocl_adapter$ocl_slave_wstrb = ocl_slave_wstrb ;
   assign ocl_adapter$ocl_slave_wvalid = ocl_slave_wvalid ;
-  assign ocl_adapter$v_to_host_0_enq_x = { 24'd0, soc_top$mv_status } ;
+  assign ocl_adapter$v_to_host_0_enq_x = x__h3814 | y__h3815 ;
   assign ocl_adapter$v_to_host_1_enq_x =
 	     { 24'd0, soc_top$get_to_console_get } ;
   assign ocl_adapter$v_to_host_2_enq_x = soc_top$to_aws_host_get ;
@@ -2958,7 +2961,7 @@ module mkAWS_BSV_Top(CLK,
   assign ocl_adapter$EN_v_from_host_3_deq = 1'b0 ;
   assign ocl_adapter$EN_v_from_host_4_deq =
 	     CAN_FIRE_RL_rl_aws_host_to_hw_interrupt ;
-  assign ocl_adapter$EN_v_to_host_0_enq = CAN_FIRE_RL_rl_hw_to_host_status ;
+  assign ocl_adapter$EN_v_to_host_0_enq = ocl_adapter$RDY_v_to_host_0_enq ;
   assign ocl_adapter$EN_v_to_host_1_enq = CAN_FIRE_RL_rl_UART_to_console ;
   assign ocl_adapter$EN_v_to_host_2_enq =
 	     CAN_FIRE_RL_rl_hw_to_aws_host_mem_req ;
@@ -3003,6 +3006,10 @@ module mkAWS_BSV_Top(CLK,
   assign soc_top$EN_ma_ddr4_ready = WILL_FIRE_RL_rl_initialize ;
 
   // remaining internal signals
+  assign IF_rg_initialized_5_THEN_1_ELSE_0___d36 =
+	     rg_initialized ? 24'd1 : 24'd0 ;
+  assign _theResult____h3630 =
+	     { IF_rg_initialized_5_THEN_1_ELSE_0___d36, soc_top$mv_status } ;
   assign logdelay__h3386 = { 40'd0, ocl_adapter$v_from_host_0_first[31:8] } ;
   assign ocl_adapter_RDY_v_from_host_0_deq_AND_ocl_adap_ETC___d15 =
 	     ocl_adapter$RDY_v_from_host_0_deq &&
@@ -3010,7 +3017,14 @@ module mkAWS_BSV_Top(CLK,
 		soc_top$RDY_ma_set_watch_tohost :
 		ocl_adapter$v_from_host_0_first[1:0] != 2'd3 ||
 		soc_top$RDY_ma_set_watch_tohost) ;
+  assign status__h3818 =
+	     { IF_rg_initialized_5_THEN_1_ELSE_0___d36[23:2],
+	       1'd1,
+	       IF_rg_initialized_5_THEN_1_ELSE_0___d36[0],
+	       soc_top$mv_status } ;
   assign x__h3555 = { ocl_adapter$v_from_host_0_first[31:2], 2'b0 } ;
+  assign x__h3814 = rg_ddr4_is_loaded ? status__h3818 : _theResult____h3630 ;
+  assign y__h3815 = { 16'd0, rg_ddr4_ready, 12'd0 } ;
 
   // handling of inlined registers
 
@@ -3061,14 +3075,14 @@ module mkAWS_BSV_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_initialize)
 	begin
-	  v__h4893 = $stime;
+	  v__h4974 = $stime;
 	  #0;
 	end
-    v__h4887 = v__h4893 / 32'd10;
+    v__h4968 = v__h4974 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_initialize)
 	$display("%0d: AWS_BSV_Top.rl_initialize: DDRs ready, DDRs loaded; start DUT",
-		 v__h4887);
+		 v__h4968);
   end
   // synopsys translate_on
 endmodule  // mkAWS_BSV_Top
