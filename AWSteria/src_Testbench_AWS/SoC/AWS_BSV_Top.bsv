@@ -124,9 +124,12 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
       end
    endrule
 
-   rule rl_hw_to_host_status (soc_top.mv_status != 0);
-      let status = soc_top.mv_status;
-      ocl_adapter.v_to_host [hw_to_host_chan_status].enq (zeroExtend (status));
+   rule rl_hw_to_host_status; // (soc_top.mv_status != 0);
+      Bit#(32) status = zeroExtend(soc_top.mv_status);
+      if (rg_initialized)    status = status | (1 << 8);
+      if (rg_ddr4_is_loaded) status = status | (1 << 9);
+      status = status | (zeroExtend(rg_ddr4_ready) << 12);
+      ocl_adapter.v_to_host [hw_to_host_chan_status].enq (status);
    endrule
 
    // ================================================================
@@ -225,7 +228,7 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
    // ================================================================
 
    rule rl_initialize ((! rg_initialized)
-		       && (rg_ddr4_ready == 4'b_1111)
+		       && (rg_ddr4_ready[3:0] == 4'b1111)
 		       && rg_ddr4_is_loaded);
       soc_top.ma_ddr4_ready;
       rg_initialized <= True;
