@@ -101,7 +101,6 @@ ${CL_ROOT}/design/RegFile.v
 ${CL_ROOT}/design/mkAWS_BSV_Top.v
 ${CL_ROOT}/design/mkAWS_DDR4_Adapter.v
 ${CL_ROOT}/design/mkAWS_Host_Access.v
-${CL_ROOT}/design/mkAWS_IPI_Out.v
 ${CL_ROOT}/design/mkAWS_SoC_Fabric.v
 ${CL_ROOT}/design/mkAWS_SoC_Top.v
 ${CL_ROOT}/design/mkAXI4_16_64_512_0_Fabric_2_4.v

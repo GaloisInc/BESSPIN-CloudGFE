@@ -273,25 +273,37 @@ module mkMem_Model(CLK,
        WILL_FIRE_m_rready,
        WILL_FIRE_m_wvalid;
 
+  // declarations used by system tasks
+  // synopsys translate_off
+  reg [31 : 0] v__h838;
+  reg [31 : 0] v__h928;
+  reg [31 : 0] v__h1268;
+  reg [31 : 0] v__h1336;
+  reg [31 : 0] v__h832;
+  reg [31 : 0] v__h922;
+  reg [31 : 0] v__h1262;
+  reg [31 : 0] v__h1330;
+  // synopsys translate_on
+
   // remaining internal signals
-  wire [511 : 0] mask__h1270,
-		 x1_avValue_rdata__h946,
-		 x__h1281,
-		 y__h1282,
-		 y__h1283,
-		 y_avValue_rdata__h958;
+  wire [511 : 0] mask__h1402,
+		 x1_avValue_rdata__h1008,
+		 x__h1413,
+		 y__h1414,
+		 y__h1415,
+		 y_avValue_rdata__h1020;
   wire [63 : 0] addr_base__h679,
 		addr_impl_last__h681,
 		addr_last__h680,
-		offset_b__h1153,
+		offset_b__h1215,
 		offset_b__h783;
-  wire [1 : 0] x1_avValue_rresp__h965;
-  wire NOT_axi4_xactor_f_rd_addr_first_BITS_92_TO_29__ETC___d17,
-       _0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d36,
+  wire [1 : 0] x1_avValue_rresp__h1027;
+  wire NOT_axi4_xactor_f_rd_addr_first_BITS_92_TO_29__ETC___d19,
+       _0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d40,
        _0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d7,
        axi4_xactor_f_rd_addr_first_BITS_92_TO_29_ULE__ETC___d10,
-       axi4_xactor_f_wr_addr_first__4_BITS_92_TO_29_5_ETC___d38,
-       axi4_xactor_f_wr_addr_first__4_BITS_92_TO_29_5_ETC___d43;
+       axi4_xactor_f_wr_addr_first__8_BITS_92_TO_29_9_ETC___d42,
+       axi4_xactor_f_wr_addr_first__8_BITS_92_TO_29_9_ETC___d52;
 
   // action method m_awvalid
   assign CAN_FIRE_m_awvalid = 1'd1 ;
@@ -450,8 +462,8 @@ module mkMem_Model(CLK,
   // submodule axi4_xactor_f_rd_data
   assign axi4_xactor_f_rd_data$D_IN =
 	     { axi4_xactor_f_rd_addr$D_OUT[108:93],
-	       x1_avValue_rdata__h946,
-	       x1_avValue_rresp__h965,
+	       x1_avValue_rdata__h1008,
+	       x1_avValue_rresp__h1027,
 	       1'd1 } ;
   assign axi4_xactor_f_rd_data$ENQ = CAN_FIRE_RL_rl_rd_req ;
   assign axi4_xactor_f_rd_data$DEQ = rready && axi4_xactor_f_rd_data$EMPTY_N ;
@@ -482,9 +494,9 @@ module mkMem_Model(CLK,
   // submodule axi4_xactor_f_wr_resp
   assign axi4_xactor_f_wr_resp$D_IN =
 	     { axi4_xactor_f_wr_addr$D_OUT[108:93],
-	       (!_0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d36 ||
-		!axi4_xactor_f_wr_addr_first__4_BITS_92_TO_29_5_ETC___d38 ||
-		!axi4_xactor_f_wr_addr_first__4_BITS_92_TO_29_5_ETC___d43) ?
+	       (!_0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d40 ||
+		!axi4_xactor_f_wr_addr_first__8_BITS_92_TO_29_9_ETC___d42 ||
+		!axi4_xactor_f_wr_addr_first__8_BITS_92_TO_29_9_ETC___d52) ?
 		 2'b10 :
 		 2'b0 } ;
   assign axi4_xactor_f_wr_resp$ENQ = CAN_FIRE_RL_rl_wr_req ;
@@ -492,23 +504,23 @@ module mkMem_Model(CLK,
   assign axi4_xactor_f_wr_resp$CLR = 1'b0 ;
 
   // submodule rf
-  assign rf$ADDR_1 = { 6'd0, offset_b__h1153[63:6] } ;
+  assign rf$ADDR_1 = { 6'd0, offset_b__h1215[63:6] } ;
   assign rf$ADDR_2 = { 6'd0, offset_b__h783[63:6] } ;
   assign rf$ADDR_3 = 64'h0 ;
   assign rf$ADDR_4 = 64'h0 ;
   assign rf$ADDR_5 = 64'h0 ;
-  assign rf$ADDR_IN = { 6'd0, offset_b__h1153[63:6] } ;
-  assign rf$D_IN = x__h1281 | y__h1282 ;
+  assign rf$ADDR_IN = { 6'd0, offset_b__h1215[63:6] } ;
+  assign rf$D_IN = x__h1413 | y__h1414 ;
   assign rf$WE =
 	     WILL_FIRE_RL_rl_wr_req &&
-	     _0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d36 &&
-	     axi4_xactor_f_wr_addr_first__4_BITS_92_TO_29_5_ETC___d38 &&
-	     axi4_xactor_f_wr_addr_first__4_BITS_92_TO_29_5_ETC___d43 ;
+	     _0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d40 &&
+	     axi4_xactor_f_wr_addr_first__8_BITS_92_TO_29_9_ETC___d42 &&
+	     axi4_xactor_f_wr_addr_first__8_BITS_92_TO_29_9_ETC___d52 ;
 
   // remaining internal signals
-  assign NOT_axi4_xactor_f_rd_addr_first_BITS_92_TO_29__ETC___d17 =
+  assign NOT_axi4_xactor_f_rd_addr_first_BITS_92_TO_29__ETC___d19 =
 	     offset_b__h783 > addr_impl_last__h681 ;
-  assign _0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d36 =
+  assign _0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d40 =
 	     addr_base__h679 <= axi4_xactor_f_wr_addr$D_OUT[92:29] ;
   assign _0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d7 =
 	     addr_base__h679 <= axi4_xactor_f_rd_addr$D_OUT[92:29] ;
@@ -517,11 +529,11 @@ module mkMem_Model(CLK,
   assign addr_last__h680 = { 28'b0, ddr4_num, 34'h3FFFFFFFF } ;
   assign axi4_xactor_f_rd_addr_first_BITS_92_TO_29_ULE__ETC___d10 =
 	     axi4_xactor_f_rd_addr$D_OUT[92:29] <= addr_last__h680 ;
-  assign axi4_xactor_f_wr_addr_first__4_BITS_92_TO_29_5_ETC___d38 =
+  assign axi4_xactor_f_wr_addr_first__8_BITS_92_TO_29_9_ETC___d42 =
 	     axi4_xactor_f_wr_addr$D_OUT[92:29] <= addr_last__h680 ;
-  assign axi4_xactor_f_wr_addr_first__4_BITS_92_TO_29_5_ETC___d43 =
-	     offset_b__h1153 <= addr_impl_last__h681 ;
-  assign mask__h1270 =
+  assign axi4_xactor_f_wr_addr_first__8_BITS_92_TO_29_9_ETC___d52 =
+	     offset_b__h1215 <= addr_impl_last__h681 ;
+  assign mask__h1402 =
 	     { axi4_xactor_f_wr_data$D_OUT[64] ? 8'hFF : 8'h0,
 	       axi4_xactor_f_wr_data$D_OUT[63] ? 8'hFF : 8'h0,
 	       axi4_xactor_f_wr_data$D_OUT[62] ? 8'hFF : 8'h0,
@@ -586,25 +598,25 @@ module mkMem_Model(CLK,
 	       axi4_xactor_f_wr_data$D_OUT[3] ? 8'hFF : 8'h0,
 	       axi4_xactor_f_wr_data$D_OUT[2] ? 8'hFF : 8'h0,
 	       axi4_xactor_f_wr_data$D_OUT[1] ? 8'hFF : 8'h0 } ;
-  assign offset_b__h1153 =
+  assign offset_b__h1215 =
 	     axi4_xactor_f_wr_addr$D_OUT[92:29] - addr_base__h679 ;
   assign offset_b__h783 =
 	     axi4_xactor_f_rd_addr$D_OUT[92:29] - addr_base__h679 ;
-  assign x1_avValue_rdata__h946 =
+  assign x1_avValue_rdata__h1008 =
 	     (!_0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d7 ||
 	      !axi4_xactor_f_rd_addr_first_BITS_92_TO_29_ULE__ETC___d10 ||
-	      NOT_axi4_xactor_f_rd_addr_first_BITS_92_TO_29__ETC___d17) ?
-	       y_avValue_rdata__h958 :
+	      NOT_axi4_xactor_f_rd_addr_first_BITS_92_TO_29__ETC___d19) ?
+	       y_avValue_rdata__h1020 :
 	       rf$D_OUT_2 ;
-  assign x1_avValue_rresp__h965 =
+  assign x1_avValue_rresp__h1027 =
 	     (!_0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d7 ||
 	      !axi4_xactor_f_rd_addr_first_BITS_92_TO_29_ULE__ETC___d10 ||
-	      NOT_axi4_xactor_f_rd_addr_first_BITS_92_TO_29__ETC___d17) ?
+	      NOT_axi4_xactor_f_rd_addr_first_BITS_92_TO_29__ETC___d19) ?
 	       2'b10 :
 	       2'b0 ;
-  assign x__h1281 = rf$D_OUT_1 & y__h1283 ;
-  assign y__h1282 = axi4_xactor_f_wr_data$D_OUT[576:65] & mask__h1270 ;
-  assign y__h1283 =
+  assign x__h1413 = rf$D_OUT_1 & y__h1415 ;
+  assign y__h1414 = axi4_xactor_f_wr_data$D_OUT[576:65] & mask__h1402 ;
+  assign y__h1415 =
 	     { axi4_xactor_f_wr_data$D_OUT[64] ? 8'd0 : 8'd255,
 	       axi4_xactor_f_wr_data$D_OUT[63] ? 8'd0 : 8'd255,
 	       axi4_xactor_f_wr_data$D_OUT[62] ? 8'd0 : 8'd255,
@@ -669,7 +681,7 @@ module mkMem_Model(CLK,
 	       axi4_xactor_f_wr_data$D_OUT[3] ? 8'd0 : 8'd255,
 	       axi4_xactor_f_wr_data$D_OUT[2] ? 8'd0 : 8'd255,
 	       axi4_xactor_f_wr_data$D_OUT[1] ? 8'd0 : 8'd255 } ;
-  assign y_avValue_rdata__h958 =
+  assign y_avValue_rdata__h1020 =
 	     { 448'd0, axi4_xactor_f_rd_addr$D_OUT[92:29] } ;
 
   // handling of system tasks
@@ -682,24 +694,78 @@ module mkMem_Model(CLK,
       if (WILL_FIRE_RL_rl_rd_req &&
 	  (!_0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d7 ||
 	   !axi4_xactor_f_rd_addr_first_BITS_92_TO_29_ULE__ETC___d10))
-	$display("%0d: Mem_Model [%0d]: rl_rd_req: @ %0h -> OUT OF BOUNDS");
+	begin
+	  v__h838 = $stime;
+	  #0;
+	end
+    v__h832 = v__h838 / 32'd10;
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_rl_rd_req &&
+	  (!_0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d7 ||
+	   !axi4_xactor_f_rd_addr_first_BITS_92_TO_29_ULE__ETC___d10))
+	$display("%0d: Mem_Model [%0d]: rl_rd_req: @ %0h -> OUT OF BOUNDS",
+		 v__h832,
+		 ddr4_num,
+		 axi4_xactor_f_rd_addr$D_OUT[92:29]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_rd_req &&
 	  _0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d7 &&
 	  axi4_xactor_f_rd_addr_first_BITS_92_TO_29_ULE__ETC___d10 &&
-	  NOT_axi4_xactor_f_rd_addr_first_BITS_92_TO_29__ETC___d17)
-	$display("%0d: Mem_Model [%0d]: rl_rd_req: @ %0h -> OUT OF IMPLEMENTED BOUNDS");
+	  NOT_axi4_xactor_f_rd_addr_first_BITS_92_TO_29__ETC___d19)
+	begin
+	  v__h928 = $stime;
+	  #0;
+	end
+    v__h922 = v__h928 / 32'd10;
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_rl_rd_req &&
+	  _0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d7 &&
+	  axi4_xactor_f_rd_addr_first_BITS_92_TO_29_ULE__ETC___d10 &&
+	  NOT_axi4_xactor_f_rd_addr_first_BITS_92_TO_29__ETC___d19)
+	$display("%0d: Mem_Model [%0d]: rl_rd_req: @ %0h -> OUT OF IMPLEMENTED BOUNDS",
+		 v__h922,
+		 ddr4_num,
+		 axi4_xactor_f_rd_addr$D_OUT[92:29]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_wr_req &&
-	  (!_0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d36 ||
-	   !axi4_xactor_f_wr_addr_first__4_BITS_92_TO_29_5_ETC___d38))
-	$display("%0d: Mem_Model [%0d]: rl_wr_req: @ %0h <= %0h strb %0h: OUT OF BOUNDS");
+	  (!_0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d40 ||
+	   !axi4_xactor_f_wr_addr_first__8_BITS_92_TO_29_9_ETC___d42))
+	begin
+	  v__h1268 = $stime;
+	  #0;
+	end
+    v__h1262 = v__h1268 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_wr_req &&
-	  _0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d36 &&
-	  axi4_xactor_f_wr_addr_first__4_BITS_92_TO_29_5_ETC___d38 &&
-	  !axi4_xactor_f_wr_addr_first__4_BITS_92_TO_29_5_ETC___d43)
-	$display("%0d: Mem_Model [%0d]: rl_wr_req: @ %0h <= %0h strb %0h: OUT OF IMPLEMENTED BOUNDS");
+	  (!_0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d40 ||
+	   !axi4_xactor_f_wr_addr_first__8_BITS_92_TO_29_9_ETC___d42))
+	$display("%0d: Mem_Model [%0d]: rl_wr_req: @ %0h <= %0h strb %0h: OUT OF BOUNDS",
+		 v__h1262,
+		 ddr4_num,
+		 axi4_xactor_f_wr_addr$D_OUT[92:29],
+		 axi4_xactor_f_wr_data$D_OUT[576:65],
+		 axi4_xactor_f_wr_data$D_OUT[64:1]);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_rl_wr_req &&
+	  _0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d40 &&
+	  axi4_xactor_f_wr_addr_first__8_BITS_92_TO_29_9_ETC___d42 &&
+	  !axi4_xactor_f_wr_addr_first__8_BITS_92_TO_29_9_ETC___d52)
+	begin
+	  v__h1336 = $stime;
+	  #0;
+	end
+    v__h1330 = v__h1336 / 32'd10;
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_rl_wr_req &&
+	  _0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d40 &&
+	  axi4_xactor_f_wr_addr_first__8_BITS_92_TO_29_9_ETC___d42 &&
+	  !axi4_xactor_f_wr_addr_first__8_BITS_92_TO_29_9_ETC___d52)
+	$display("%0d: Mem_Model [%0d]: rl_wr_req: @ %0h <= %0h strb %0h: OUT OF IMPLEMENTED BOUNDS",
+		 v__h1330,
+		 ddr4_num,
+		 axi4_xactor_f_wr_addr$D_OUT[92:29],
+		 axi4_xactor_f_wr_data$D_OUT[576:65],
+		 axi4_xactor_f_wr_data$D_OUT[64:1]);
   end
   // synopsys translate_on
 endmodule  // mkMem_Model

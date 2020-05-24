@@ -31,52 +31,20 @@ module mkTop_HW_Side(CLK,
   input  CLK;
   input  RST_N;
 
-  // inlined wires
-  wire fsm_start_wire$whas, fsm_state_set_pw$whas;
-
-  // register fsm_jj_delay_count
-  reg [13 : 0] fsm_jj_delay_count;
-  wire [13 : 0] fsm_jj_delay_count$D_IN;
-  wire fsm_jj_delay_count$EN;
-
-  // register fsm_start_reg
-  reg fsm_start_reg;
-  wire fsm_start_reg$D_IN, fsm_start_reg$EN;
-
-  // register fsm_start_reg_1
-  reg fsm_start_reg_1;
-  wire fsm_start_reg_1$D_IN, fsm_start_reg_1$EN;
-
-  // register fsm_state_can_overlap
-  reg fsm_state_can_overlap;
-  wire fsm_state_can_overlap$D_IN, fsm_state_can_overlap$EN;
-
-  // register fsm_state_fired
-  reg fsm_state_fired;
-  wire fsm_state_fired$D_IN, fsm_state_fired$EN;
-
-  // register fsm_state_mkFSMstate
-  reg [4 : 0] fsm_state_mkFSMstate;
-  reg [4 : 0] fsm_state_mkFSMstate$D_IN;
-  wire fsm_state_mkFSMstate$EN;
-
   // register rg_counter_4ns
   reg [63 : 0] rg_counter_4ns;
   wire [63 : 0] rg_counter_4ns$D_IN;
   wire rg_counter_4ns$EN;
-
-  // register rg_done_once
-  reg rg_done_once;
-  wire rg_done_once$D_IN, rg_done_once$EN;
 
   // register rg_last_vled
   reg [15 : 0] rg_last_vled;
   wire [15 : 0] rg_last_vled$D_IN;
   wire rg_last_vled$EN;
 
-  // register rg_running
-  reg rg_running;
-  wire rg_running$D_IN, rg_running$EN;
+  // register rg_state
+  reg [1 : 0] rg_state;
+  wire [1 : 0] rg_state$D_IN;
+  wire rg_state$EN;
 
   // register rg_vdip
   reg [15 : 0] rg_vdip;
@@ -304,6 +272,51 @@ module mkTop_HW_Side(CLK,
        aws_BSV_top$ocl_slave_wready,
        aws_BSV_top$ocl_slave_wvalid;
 
+  // ports of submodule comms
+  wire [631 : 0] comms$fi_C_to_BSV_bytevec_enq_x;
+  wire [607 : 0] comms$fo_BSV_to_C_bytevec_first;
+  wire [576 : 0] comms$fo_AXI4_Wr_Data_d512_u0_first;
+  wire [530 : 0] comms$fi_AXI4_Rd_Data_i16_d512_u0_enq_x;
+  wire [108 : 0] comms$fo_AXI4_Rd_Addr_i16_a64_u0_first,
+		 comms$fo_AXI4_Wr_Addr_i16_a64_u0_first;
+  wire [35 : 0] comms$fo_AXI4L_Wr_Data_d32_first;
+  wire [34 : 0] comms$fo_AXI4L_Rd_Addr_a32_u0_first,
+		comms$fo_AXI4L_Wr_Addr_a32_u0_first;
+  wire [33 : 0] comms$fi_AXI4L_Rd_Data_d32_u0_enq_x;
+  wire [17 : 0] comms$fi_AXI4_Wr_Resp_i16_u0_enq_x;
+  wire [1 : 0] comms$fi_AXI4L_Wr_Resp_u0_enq_x;
+  wire comms$EN_fi_AXI4L_Rd_Data_d32_u0_enq,
+       comms$EN_fi_AXI4L_Wr_Resp_u0_enq,
+       comms$EN_fi_AXI4_Rd_Data_i16_d512_u0_enq,
+       comms$EN_fi_AXI4_Wr_Resp_i16_u0_enq,
+       comms$EN_fi_C_to_BSV_bytevec_enq,
+       comms$EN_fo_AXI4L_Rd_Addr_a32_u0_deq,
+       comms$EN_fo_AXI4L_Wr_Addr_a32_u0_deq,
+       comms$EN_fo_AXI4L_Wr_Data_d32_deq,
+       comms$EN_fo_AXI4_Rd_Addr_i16_a64_u0_deq,
+       comms$EN_fo_AXI4_Wr_Addr_i16_a64_u0_deq,
+       comms$EN_fo_AXI4_Wr_Data_d512_u0_deq,
+       comms$EN_fo_BSV_to_C_bytevec_deq,
+       comms$RDY_fi_AXI4L_Rd_Data_d32_u0_enq,
+       comms$RDY_fi_AXI4L_Wr_Resp_u0_enq,
+       comms$RDY_fi_AXI4_Rd_Data_i16_d512_u0_enq,
+       comms$RDY_fi_AXI4_Wr_Resp_i16_u0_enq,
+       comms$RDY_fi_C_to_BSV_bytevec_enq,
+       comms$RDY_fo_AXI4L_Rd_Addr_a32_u0_deq,
+       comms$RDY_fo_AXI4L_Rd_Addr_a32_u0_first,
+       comms$RDY_fo_AXI4L_Wr_Addr_a32_u0_deq,
+       comms$RDY_fo_AXI4L_Wr_Addr_a32_u0_first,
+       comms$RDY_fo_AXI4L_Wr_Data_d32_deq,
+       comms$RDY_fo_AXI4L_Wr_Data_d32_first,
+       comms$RDY_fo_AXI4_Rd_Addr_i16_a64_u0_deq,
+       comms$RDY_fo_AXI4_Rd_Addr_i16_a64_u0_first,
+       comms$RDY_fo_AXI4_Wr_Addr_i16_a64_u0_deq,
+       comms$RDY_fo_AXI4_Wr_Addr_i16_a64_u0_first,
+       comms$RDY_fo_AXI4_Wr_Data_d512_u0_deq,
+       comms$RDY_fo_AXI4_Wr_Data_d512_u0_first,
+       comms$RDY_fo_BSV_to_C_bytevec_deq,
+       comms$RDY_fo_BSV_to_C_bytevec_first;
+
   // ports of submodule ddr4_A
   wire [511 : 0] ddr4_A$rdata, ddr4_A$wdata;
   wire [63 : 0] ddr4_A$araddr, ddr4_A$awaddr, ddr4_A$wstrb;
@@ -422,12 +435,15 @@ module mkTop_HW_Side(CLK,
   wire dma_pcis_xactor_f_rd_addr$CLR,
        dma_pcis_xactor_f_rd_addr$DEQ,
        dma_pcis_xactor_f_rd_addr$EMPTY_N,
-       dma_pcis_xactor_f_rd_addr$ENQ;
+       dma_pcis_xactor_f_rd_addr$ENQ,
+       dma_pcis_xactor_f_rd_addr$FULL_N;
 
   // ports of submodule dma_pcis_xactor_f_rd_data
-  wire [530 : 0] dma_pcis_xactor_f_rd_data$D_IN;
+  wire [530 : 0] dma_pcis_xactor_f_rd_data$D_IN,
+		 dma_pcis_xactor_f_rd_data$D_OUT;
   wire dma_pcis_xactor_f_rd_data$CLR,
        dma_pcis_xactor_f_rd_data$DEQ,
+       dma_pcis_xactor_f_rd_data$EMPTY_N,
        dma_pcis_xactor_f_rd_data$ENQ,
        dma_pcis_xactor_f_rd_data$FULL_N;
 
@@ -437,7 +453,8 @@ module mkTop_HW_Side(CLK,
   wire dma_pcis_xactor_f_wr_addr$CLR,
        dma_pcis_xactor_f_wr_addr$DEQ,
        dma_pcis_xactor_f_wr_addr$EMPTY_N,
-       dma_pcis_xactor_f_wr_addr$ENQ;
+       dma_pcis_xactor_f_wr_addr$ENQ,
+       dma_pcis_xactor_f_wr_addr$FULL_N;
 
   // ports of submodule dma_pcis_xactor_f_wr_data
   wire [576 : 0] dma_pcis_xactor_f_wr_data$D_IN,
@@ -445,12 +462,15 @@ module mkTop_HW_Side(CLK,
   wire dma_pcis_xactor_f_wr_data$CLR,
        dma_pcis_xactor_f_wr_data$DEQ,
        dma_pcis_xactor_f_wr_data$EMPTY_N,
-       dma_pcis_xactor_f_wr_data$ENQ;
+       dma_pcis_xactor_f_wr_data$ENQ,
+       dma_pcis_xactor_f_wr_data$FULL_N;
 
   // ports of submodule dma_pcis_xactor_f_wr_resp
-  wire [17 : 0] dma_pcis_xactor_f_wr_resp$D_IN;
+  wire [17 : 0] dma_pcis_xactor_f_wr_resp$D_IN,
+		dma_pcis_xactor_f_wr_resp$D_OUT;
   wire dma_pcis_xactor_f_wr_resp$CLR,
        dma_pcis_xactor_f_wr_resp$DEQ,
+       dma_pcis_xactor_f_wr_resp$EMPTY_N,
        dma_pcis_xactor_f_wr_resp$ENQ,
        dma_pcis_xactor_f_wr_resp$FULL_N;
 
@@ -471,8 +491,7 @@ module mkTop_HW_Side(CLK,
        ocl_xactor_f_rd_data$FULL_N;
 
   // ports of submodule ocl_xactor_f_wr_addr
-  reg [34 : 0] ocl_xactor_f_wr_addr$D_IN;
-  wire [34 : 0] ocl_xactor_f_wr_addr$D_OUT;
+  wire [34 : 0] ocl_xactor_f_wr_addr$D_IN, ocl_xactor_f_wr_addr$D_OUT;
   wire ocl_xactor_f_wr_addr$CLR,
        ocl_xactor_f_wr_addr$DEQ,
        ocl_xactor_f_wr_addr$EMPTY_N,
@@ -480,8 +499,7 @@ module mkTop_HW_Side(CLK,
        ocl_xactor_f_wr_addr$FULL_N;
 
   // ports of submodule ocl_xactor_f_wr_data
-  reg [35 : 0] ocl_xactor_f_wr_data$D_IN;
-  wire [35 : 0] ocl_xactor_f_wr_data$D_OUT;
+  wire [35 : 0] ocl_xactor_f_wr_data$D_IN, ocl_xactor_f_wr_data$D_OUT;
   wire ocl_xactor_f_wr_data$CLR,
        ocl_xactor_f_wr_data$DEQ,
        ocl_xactor_f_wr_data$EMPTY_N,
@@ -497,29 +515,19 @@ module mkTop_HW_Side(CLK,
        ocl_xactor_f_wr_resp$FULL_N;
 
   // rule scheduling signals
-  wire CAN_FIRE_RL_fsm_action_d_init_np,
-       CAN_FIRE_RL_fsm_action_l161c10,
-       CAN_FIRE_RL_fsm_action_l169c10,
-       CAN_FIRE_RL_fsm_action_l180c10,
-       CAN_FIRE_RL_fsm_action_l194c10,
-       CAN_FIRE_RL_fsm_action_l198c10,
-       CAN_FIRE_RL_fsm_action_l201c10,
-       CAN_FIRE_RL_fsm_action_l211c10,
-       CAN_FIRE_RL_fsm_action_l212c21,
-       CAN_FIRE_RL_fsm_action_l214c37,
-       CAN_FIRE_RL_fsm_action_l215c13,
-       CAN_FIRE_RL_fsm_action_l220c10,
-       CAN_FIRE_RL_fsm_action_l221c10,
-       CAN_FIRE_RL_fsm_action_np,
-       CAN_FIRE_RL_fsm_fsm_start,
-       CAN_FIRE_RL_fsm_idle_l160c7,
-       CAN_FIRE_RL_fsm_restart,
-       CAN_FIRE_RL_fsm_start_reg__dreg_update,
-       CAN_FIRE_RL_fsm_state_every,
-       CAN_FIRE_RL_fsm_state_fired__dreg_update,
-       CAN_FIRE_RL_fsm_state_handle_abort,
-       CAN_FIRE_RL_rl_ocl_wr_response_drain,
-       CAN_FIRE_RL_rl_once,
+  wire CAN_FIRE_RL_rl_connect_dma_pcis_rd_addr,
+       CAN_FIRE_RL_rl_connect_dma_pcis_rd_data,
+       CAN_FIRE_RL_rl_connect_dma_pcis_wr_addr,
+       CAN_FIRE_RL_rl_connect_dma_pcis_wr_data,
+       CAN_FIRE_RL_rl_connect_dma_pcis_wr_resp,
+       CAN_FIRE_RL_rl_connect_ocl_rd_addr,
+       CAN_FIRE_RL_rl_connect_ocl_rd_data,
+       CAN_FIRE_RL_rl_connect_ocl_wr_addr,
+       CAN_FIRE_RL_rl_connect_ocl_wr_data,
+       CAN_FIRE_RL_rl_connect_ocl_wr_resp,
+       CAN_FIRE_RL_rl_connecting,
+       CAN_FIRE_RL_rl_host_recv,
+       CAN_FIRE_RL_rl_host_send,
        CAN_FIRE_RL_rl_rd_addr_channel,
        CAN_FIRE_RL_rl_rd_addr_channel_1,
        CAN_FIRE_RL_rl_rd_addr_channel_2,
@@ -532,6 +540,7 @@ module mkTop_HW_Side(CLK,
        CAN_FIRE_RL_rl_rd_data_channel_3,
        CAN_FIRE_RL_rl_rd_data_channel_4,
        CAN_FIRE_RL_rl_rd_data_channel_5,
+       CAN_FIRE_RL_rl_start_when_connected,
        CAN_FIRE_RL_rl_status_signals,
        CAN_FIRE_RL_rl_wr_addr_channel,
        CAN_FIRE_RL_rl_wr_addr_channel_1,
@@ -551,42 +560,19 @@ module mkTop_HW_Side(CLK,
        CAN_FIRE_RL_rl_wr_response_channel_3,
        CAN_FIRE_RL_rl_wr_response_channel_4,
        CAN_FIRE_RL_rl_wr_response_channel_5,
-       CAN_FIRE___me_check_36,
-       CAN_FIRE___me_check_37,
-       CAN_FIRE___me_check_38,
-       CAN_FIRE___me_check_39,
-       CAN_FIRE___me_check_40,
-       CAN_FIRE___me_check_41,
-       CAN_FIRE___me_check_42,
-       CAN_FIRE___me_check_43,
-       CAN_FIRE___me_check_44,
-       CAN_FIRE___me_check_45,
-       CAN_FIRE___me_check_46,
-       CAN_FIRE___me_check_47,
-       CAN_FIRE___me_check_48,
-       WILL_FIRE_RL_fsm_action_d_init_np,
-       WILL_FIRE_RL_fsm_action_l161c10,
-       WILL_FIRE_RL_fsm_action_l169c10,
-       WILL_FIRE_RL_fsm_action_l180c10,
-       WILL_FIRE_RL_fsm_action_l194c10,
-       WILL_FIRE_RL_fsm_action_l198c10,
-       WILL_FIRE_RL_fsm_action_l201c10,
-       WILL_FIRE_RL_fsm_action_l211c10,
-       WILL_FIRE_RL_fsm_action_l212c21,
-       WILL_FIRE_RL_fsm_action_l214c37,
-       WILL_FIRE_RL_fsm_action_l215c13,
-       WILL_FIRE_RL_fsm_action_l220c10,
-       WILL_FIRE_RL_fsm_action_l221c10,
-       WILL_FIRE_RL_fsm_action_np,
-       WILL_FIRE_RL_fsm_fsm_start,
-       WILL_FIRE_RL_fsm_idle_l160c7,
-       WILL_FIRE_RL_fsm_restart,
-       WILL_FIRE_RL_fsm_start_reg__dreg_update,
-       WILL_FIRE_RL_fsm_state_every,
-       WILL_FIRE_RL_fsm_state_fired__dreg_update,
-       WILL_FIRE_RL_fsm_state_handle_abort,
-       WILL_FIRE_RL_rl_ocl_wr_response_drain,
-       WILL_FIRE_RL_rl_once,
+       WILL_FIRE_RL_rl_connect_dma_pcis_rd_addr,
+       WILL_FIRE_RL_rl_connect_dma_pcis_rd_data,
+       WILL_FIRE_RL_rl_connect_dma_pcis_wr_addr,
+       WILL_FIRE_RL_rl_connect_dma_pcis_wr_data,
+       WILL_FIRE_RL_rl_connect_dma_pcis_wr_resp,
+       WILL_FIRE_RL_rl_connect_ocl_rd_addr,
+       WILL_FIRE_RL_rl_connect_ocl_rd_data,
+       WILL_FIRE_RL_rl_connect_ocl_wr_addr,
+       WILL_FIRE_RL_rl_connect_ocl_wr_data,
+       WILL_FIRE_RL_rl_connect_ocl_wr_resp,
+       WILL_FIRE_RL_rl_connecting,
+       WILL_FIRE_RL_rl_host_recv,
+       WILL_FIRE_RL_rl_host_send,
        WILL_FIRE_RL_rl_rd_addr_channel,
        WILL_FIRE_RL_rl_rd_addr_channel_1,
        WILL_FIRE_RL_rl_rd_addr_channel_2,
@@ -599,6 +585,7 @@ module mkTop_HW_Side(CLK,
        WILL_FIRE_RL_rl_rd_data_channel_3,
        WILL_FIRE_RL_rl_rd_data_channel_4,
        WILL_FIRE_RL_rl_rd_data_channel_5,
+       WILL_FIRE_RL_rl_start_when_connected,
        WILL_FIRE_RL_rl_status_signals,
        WILL_FIRE_RL_rl_wr_addr_channel,
        WILL_FIRE_RL_rl_wr_addr_channel_1,
@@ -617,42 +604,12 @@ module mkTop_HW_Side(CLK,
        WILL_FIRE_RL_rl_wr_response_channel_2,
        WILL_FIRE_RL_rl_wr_response_channel_3,
        WILL_FIRE_RL_rl_wr_response_channel_4,
-       WILL_FIRE_RL_rl_wr_response_channel_5,
-       WILL_FIRE___me_check_36,
-       WILL_FIRE___me_check_37,
-       WILL_FIRE___me_check_38,
-       WILL_FIRE___me_check_39,
-       WILL_FIRE___me_check_40,
-       WILL_FIRE___me_check_41,
-       WILL_FIRE___me_check_42,
-       WILL_FIRE___me_check_43,
-       WILL_FIRE___me_check_44,
-       WILL_FIRE___me_check_45,
-       WILL_FIRE___me_check_46,
-       WILL_FIRE___me_check_47,
-       WILL_FIRE___me_check_48;
-
-  // inputs to muxes for submodule ports
-  wire [35 : 0] MUX_ocl_xactor_f_wr_data$enq_1__VAL_1,
-		MUX_ocl_xactor_f_wr_data$enq_1__VAL_2;
-  wire [13 : 0] MUX_fsm_jj_delay_count$write_1__VAL_1;
-  wire MUX_rg_running$write_1__VAL_1;
+       WILL_FIRE_RL_rl_wr_response_channel_5;
 
   // declarations used by system tasks
   // synopsys translate_off
-  reg TASK_testplusargs___d304;
-  reg TASK_testplusargs___d303;
-  reg TASK_testplusargs___d313;
-  reg [63 : 0] v__h44054;
-  reg [31 : 0] v__h45539;
-  reg [31 : 0] v__h45533;
-  reg [31 : 0] v__h44040;
-  reg [31 : 0] verbosity___1__h43704;
+  reg [631 : 0] TASK_c_host_recv___d183;
   // synopsys translate_on
-
-  // remaining internal signals
-  wire [31 : 0] data__h43706;
-  wire fsm_abort_whas__64_AND_fsm_abort_wget__65_66_O_ETC___d365;
 
   // submodule aws_BSV_top
   mkAWS_BSV_Top aws_BSV_top(.CLK(CLK),
@@ -877,6 +834,77 @@ module mkTop_HW_Side(CLK,
 			    .ddr4_D_master_rready(aws_BSV_top$ddr4_D_master_rready),
 			    .m_vled(aws_BSV_top$m_vled));
 
+  // submodule comms
+  mkComms comms(.CLK(CLK),
+		.RST_N(RST_N),
+		.fi_AXI4L_Rd_Data_d32_u0_enq_x(comms$fi_AXI4L_Rd_Data_d32_u0_enq_x),
+		.fi_AXI4L_Wr_Resp_u0_enq_x(comms$fi_AXI4L_Wr_Resp_u0_enq_x),
+		.fi_AXI4_Rd_Data_i16_d512_u0_enq_x(comms$fi_AXI4_Rd_Data_i16_d512_u0_enq_x),
+		.fi_AXI4_Wr_Resp_i16_u0_enq_x(comms$fi_AXI4_Wr_Resp_i16_u0_enq_x),
+		.fi_C_to_BSV_bytevec_enq_x(comms$fi_C_to_BSV_bytevec_enq_x),
+		.EN_fo_AXI4_Wr_Addr_i16_a64_u0_deq(comms$EN_fo_AXI4_Wr_Addr_i16_a64_u0_deq),
+		.EN_fo_AXI4_Wr_Data_d512_u0_deq(comms$EN_fo_AXI4_Wr_Data_d512_u0_deq),
+		.EN_fo_AXI4_Rd_Addr_i16_a64_u0_deq(comms$EN_fo_AXI4_Rd_Addr_i16_a64_u0_deq),
+		.EN_fo_AXI4L_Wr_Addr_a32_u0_deq(comms$EN_fo_AXI4L_Wr_Addr_a32_u0_deq),
+		.EN_fo_AXI4L_Wr_Data_d32_deq(comms$EN_fo_AXI4L_Wr_Data_d32_deq),
+		.EN_fo_AXI4L_Rd_Addr_a32_u0_deq(comms$EN_fo_AXI4L_Rd_Addr_a32_u0_deq),
+		.EN_fi_AXI4_Wr_Resp_i16_u0_enq(comms$EN_fi_AXI4_Wr_Resp_i16_u0_enq),
+		.EN_fi_AXI4_Rd_Data_i16_d512_u0_enq(comms$EN_fi_AXI4_Rd_Data_i16_d512_u0_enq),
+		.EN_fi_AXI4L_Wr_Resp_u0_enq(comms$EN_fi_AXI4L_Wr_Resp_u0_enq),
+		.EN_fi_AXI4L_Rd_Data_d32_u0_enq(comms$EN_fi_AXI4L_Rd_Data_d32_u0_enq),
+		.EN_fi_C_to_BSV_bytevec_enq(comms$EN_fi_C_to_BSV_bytevec_enq),
+		.EN_fo_BSV_to_C_bytevec_deq(comms$EN_fo_BSV_to_C_bytevec_deq),
+		.fo_AXI4_Wr_Addr_i16_a64_u0_first(comms$fo_AXI4_Wr_Addr_i16_a64_u0_first),
+		.RDY_fo_AXI4_Wr_Addr_i16_a64_u0_first(comms$RDY_fo_AXI4_Wr_Addr_i16_a64_u0_first),
+		.RDY_fo_AXI4_Wr_Addr_i16_a64_u0_deq(comms$RDY_fo_AXI4_Wr_Addr_i16_a64_u0_deq),
+		.fo_AXI4_Wr_Addr_i16_a64_u0_notEmpty(),
+		.RDY_fo_AXI4_Wr_Addr_i16_a64_u0_notEmpty(),
+		.fo_AXI4_Wr_Data_d512_u0_first(comms$fo_AXI4_Wr_Data_d512_u0_first),
+		.RDY_fo_AXI4_Wr_Data_d512_u0_first(comms$RDY_fo_AXI4_Wr_Data_d512_u0_first),
+		.RDY_fo_AXI4_Wr_Data_d512_u0_deq(comms$RDY_fo_AXI4_Wr_Data_d512_u0_deq),
+		.fo_AXI4_Wr_Data_d512_u0_notEmpty(),
+		.RDY_fo_AXI4_Wr_Data_d512_u0_notEmpty(),
+		.fo_AXI4_Rd_Addr_i16_a64_u0_first(comms$fo_AXI4_Rd_Addr_i16_a64_u0_first),
+		.RDY_fo_AXI4_Rd_Addr_i16_a64_u0_first(comms$RDY_fo_AXI4_Rd_Addr_i16_a64_u0_first),
+		.RDY_fo_AXI4_Rd_Addr_i16_a64_u0_deq(comms$RDY_fo_AXI4_Rd_Addr_i16_a64_u0_deq),
+		.fo_AXI4_Rd_Addr_i16_a64_u0_notEmpty(),
+		.RDY_fo_AXI4_Rd_Addr_i16_a64_u0_notEmpty(),
+		.fo_AXI4L_Wr_Addr_a32_u0_first(comms$fo_AXI4L_Wr_Addr_a32_u0_first),
+		.RDY_fo_AXI4L_Wr_Addr_a32_u0_first(comms$RDY_fo_AXI4L_Wr_Addr_a32_u0_first),
+		.RDY_fo_AXI4L_Wr_Addr_a32_u0_deq(comms$RDY_fo_AXI4L_Wr_Addr_a32_u0_deq),
+		.fo_AXI4L_Wr_Addr_a32_u0_notEmpty(),
+		.RDY_fo_AXI4L_Wr_Addr_a32_u0_notEmpty(),
+		.fo_AXI4L_Wr_Data_d32_first(comms$fo_AXI4L_Wr_Data_d32_first),
+		.RDY_fo_AXI4L_Wr_Data_d32_first(comms$RDY_fo_AXI4L_Wr_Data_d32_first),
+		.RDY_fo_AXI4L_Wr_Data_d32_deq(comms$RDY_fo_AXI4L_Wr_Data_d32_deq),
+		.fo_AXI4L_Wr_Data_d32_notEmpty(),
+		.RDY_fo_AXI4L_Wr_Data_d32_notEmpty(),
+		.fo_AXI4L_Rd_Addr_a32_u0_first(comms$fo_AXI4L_Rd_Addr_a32_u0_first),
+		.RDY_fo_AXI4L_Rd_Addr_a32_u0_first(comms$RDY_fo_AXI4L_Rd_Addr_a32_u0_first),
+		.RDY_fo_AXI4L_Rd_Addr_a32_u0_deq(comms$RDY_fo_AXI4L_Rd_Addr_a32_u0_deq),
+		.fo_AXI4L_Rd_Addr_a32_u0_notEmpty(),
+		.RDY_fo_AXI4L_Rd_Addr_a32_u0_notEmpty(),
+		.RDY_fi_AXI4_Wr_Resp_i16_u0_enq(comms$RDY_fi_AXI4_Wr_Resp_i16_u0_enq),
+		.fi_AXI4_Wr_Resp_i16_u0_notFull(),
+		.RDY_fi_AXI4_Wr_Resp_i16_u0_notFull(),
+		.RDY_fi_AXI4_Rd_Data_i16_d512_u0_enq(comms$RDY_fi_AXI4_Rd_Data_i16_d512_u0_enq),
+		.fi_AXI4_Rd_Data_i16_d512_u0_notFull(),
+		.RDY_fi_AXI4_Rd_Data_i16_d512_u0_notFull(),
+		.RDY_fi_AXI4L_Wr_Resp_u0_enq(comms$RDY_fi_AXI4L_Wr_Resp_u0_enq),
+		.fi_AXI4L_Wr_Resp_u0_notFull(),
+		.RDY_fi_AXI4L_Wr_Resp_u0_notFull(),
+		.RDY_fi_AXI4L_Rd_Data_d32_u0_enq(comms$RDY_fi_AXI4L_Rd_Data_d32_u0_enq),
+		.fi_AXI4L_Rd_Data_d32_u0_notFull(),
+		.RDY_fi_AXI4L_Rd_Data_d32_u0_notFull(),
+		.RDY_fi_C_to_BSV_bytevec_enq(comms$RDY_fi_C_to_BSV_bytevec_enq),
+		.fi_C_to_BSV_bytevec_notFull(),
+		.RDY_fi_C_to_BSV_bytevec_notFull(),
+		.fo_BSV_to_C_bytevec_first(comms$fo_BSV_to_C_bytevec_first),
+		.RDY_fo_BSV_to_C_bytevec_first(comms$RDY_fo_BSV_to_C_bytevec_first),
+		.RDY_fo_BSV_to_C_bytevec_deq(comms$RDY_fo_BSV_to_C_bytevec_deq),
+		.fo_BSV_to_C_bytevec_notEmpty(),
+		.RDY_fo_BSV_to_C_bytevec_notEmpty());
+
   // submodule ddr4_A
   mkMem_Model #(.ddr4_num(2'd0)) ddr4_A(.CLK(CLK),
 					.RST_N(RST_N),
@@ -1058,7 +1086,7 @@ module mkTop_HW_Side(CLK,
 						     .DEQ(dma_pcis_xactor_f_rd_addr$DEQ),
 						     .CLR(dma_pcis_xactor_f_rd_addr$CLR),
 						     .D_OUT(dma_pcis_xactor_f_rd_addr$D_OUT),
-						     .FULL_N(),
+						     .FULL_N(dma_pcis_xactor_f_rd_addr$FULL_N),
 						     .EMPTY_N(dma_pcis_xactor_f_rd_addr$EMPTY_N));
 
   // submodule dma_pcis_xactor_f_rd_data
@@ -1069,9 +1097,9 @@ module mkTop_HW_Side(CLK,
 						     .ENQ(dma_pcis_xactor_f_rd_data$ENQ),
 						     .DEQ(dma_pcis_xactor_f_rd_data$DEQ),
 						     .CLR(dma_pcis_xactor_f_rd_data$CLR),
-						     .D_OUT(),
+						     .D_OUT(dma_pcis_xactor_f_rd_data$D_OUT),
 						     .FULL_N(dma_pcis_xactor_f_rd_data$FULL_N),
-						     .EMPTY_N());
+						     .EMPTY_N(dma_pcis_xactor_f_rd_data$EMPTY_N));
 
   // submodule dma_pcis_xactor_f_wr_addr
   FIFO2 #(.width(32'd109),
@@ -1082,7 +1110,7 @@ module mkTop_HW_Side(CLK,
 						     .DEQ(dma_pcis_xactor_f_wr_addr$DEQ),
 						     .CLR(dma_pcis_xactor_f_wr_addr$CLR),
 						     .D_OUT(dma_pcis_xactor_f_wr_addr$D_OUT),
-						     .FULL_N(),
+						     .FULL_N(dma_pcis_xactor_f_wr_addr$FULL_N),
 						     .EMPTY_N(dma_pcis_xactor_f_wr_addr$EMPTY_N));
 
   // submodule dma_pcis_xactor_f_wr_data
@@ -1094,7 +1122,7 @@ module mkTop_HW_Side(CLK,
 						     .DEQ(dma_pcis_xactor_f_wr_data$DEQ),
 						     .CLR(dma_pcis_xactor_f_wr_data$CLR),
 						     .D_OUT(dma_pcis_xactor_f_wr_data$D_OUT),
-						     .FULL_N(),
+						     .FULL_N(dma_pcis_xactor_f_wr_data$FULL_N),
 						     .EMPTY_N(dma_pcis_xactor_f_wr_data$EMPTY_N));
 
   // submodule dma_pcis_xactor_f_wr_resp
@@ -1105,9 +1133,9 @@ module mkTop_HW_Side(CLK,
 						     .ENQ(dma_pcis_xactor_f_wr_resp$ENQ),
 						     .DEQ(dma_pcis_xactor_f_wr_resp$DEQ),
 						     .CLR(dma_pcis_xactor_f_wr_resp$CLR),
-						     .D_OUT(),
+						     .D_OUT(dma_pcis_xactor_f_wr_resp$D_OUT),
 						     .FULL_N(dma_pcis_xactor_f_wr_resp$FULL_N),
-						     .EMPTY_N());
+						     .EMPTY_N(dma_pcis_xactor_f_wr_resp$EMPTY_N));
 
   // submodule ocl_xactor_f_rd_addr
   FIFO2 #(.width(32'd35), .guarded(32'd1)) ocl_xactor_f_rd_addr(.RST(RST_N),
@@ -1244,6 +1272,27 @@ module mkTop_HW_Side(CLK,
   assign CAN_FIRE_RL_rl_rd_data_channel_3 = 1'd1 ;
   assign WILL_FIRE_RL_rl_rd_data_channel_3 = 1'd1 ;
 
+  // rule RL_rl_connecting
+  assign CAN_FIRE_RL_rl_connecting = rg_state == 2'd0 ;
+  assign WILL_FIRE_RL_rl_connecting = CAN_FIRE_RL_rl_connecting ;
+
+  // rule RL_rl_start_when_connected
+  assign CAN_FIRE_RL_rl_start_when_connected = rg_state == 2'd1 ;
+  assign WILL_FIRE_RL_rl_start_when_connected =
+	     CAN_FIRE_RL_rl_start_when_connected ;
+
+  // rule RL_rl_host_recv
+  assign CAN_FIRE_RL_rl_host_recv =
+	     comms$RDY_fi_C_to_BSV_bytevec_enq && rg_state == 2'd2 ;
+  assign WILL_FIRE_RL_rl_host_recv = CAN_FIRE_RL_rl_host_recv ;
+
+  // rule RL_rl_host_send
+  assign CAN_FIRE_RL_rl_host_send =
+	     comms$RDY_fo_BSV_to_C_bytevec_first &&
+	     comms$RDY_fo_BSV_to_C_bytevec_deq &&
+	     rg_state == 2'd2 ;
+  assign WILL_FIRE_RL_rl_host_send = CAN_FIRE_RL_rl_host_send ;
+
   // rule RL_rl_wr_addr_channel_4
   assign CAN_FIRE_RL_rl_wr_addr_channel_4 = 1'd1 ;
   assign WILL_FIRE_RL_rl_wr_addr_channel_4 = 1'd1 ;
@@ -1263,6 +1312,30 @@ module mkTop_HW_Side(CLK,
   // rule RL_rl_rd_data_channel_4
   assign CAN_FIRE_RL_rl_rd_data_channel_4 = 1'd1 ;
   assign WILL_FIRE_RL_rl_rd_data_channel_4 = 1'd1 ;
+
+  // rule RL_rl_connect_dma_pcis_wr_addr
+  assign CAN_FIRE_RL_rl_connect_dma_pcis_wr_addr =
+	     comms$RDY_fo_AXI4_Wr_Addr_i16_a64_u0_first &&
+	     comms$RDY_fo_AXI4_Wr_Addr_i16_a64_u0_deq &&
+	     dma_pcis_xactor_f_wr_addr$FULL_N ;
+  assign WILL_FIRE_RL_rl_connect_dma_pcis_wr_addr =
+	     CAN_FIRE_RL_rl_connect_dma_pcis_wr_addr ;
+
+  // rule RL_rl_connect_dma_pcis_wr_data
+  assign CAN_FIRE_RL_rl_connect_dma_pcis_wr_data =
+	     comms$RDY_fo_AXI4_Wr_Data_d512_u0_first &&
+	     comms$RDY_fo_AXI4_Wr_Data_d512_u0_deq &&
+	     dma_pcis_xactor_f_wr_data$FULL_N ;
+  assign WILL_FIRE_RL_rl_connect_dma_pcis_wr_data =
+	     CAN_FIRE_RL_rl_connect_dma_pcis_wr_data ;
+
+  // rule RL_rl_connect_dma_pcis_rd_addr
+  assign CAN_FIRE_RL_rl_connect_dma_pcis_rd_addr =
+	     comms$RDY_fo_AXI4_Rd_Addr_i16_a64_u0_first &&
+	     comms$RDY_fo_AXI4_Rd_Addr_i16_a64_u0_deq &&
+	     dma_pcis_xactor_f_rd_addr$FULL_N ;
+  assign WILL_FIRE_RL_rl_connect_dma_pcis_rd_addr =
+	     CAN_FIRE_RL_rl_connect_dma_pcis_rd_addr ;
 
   // rule RL_rl_wr_addr_channel_5
   assign CAN_FIRE_RL_rl_wr_addr_channel_5 = 1'd1 ;
@@ -1284,285 +1357,61 @@ module mkTop_HW_Side(CLK,
   assign CAN_FIRE_RL_rl_rd_data_channel_5 = 1'd1 ;
   assign WILL_FIRE_RL_rl_rd_data_channel_5 = 1'd1 ;
 
+  // rule RL_rl_connect_ocl_wr_addr
+  assign CAN_FIRE_RL_rl_connect_ocl_wr_addr =
+	     comms$RDY_fo_AXI4L_Wr_Addr_a32_u0_first &&
+	     comms$RDY_fo_AXI4L_Wr_Addr_a32_u0_deq &&
+	     ocl_xactor_f_wr_addr$FULL_N ;
+  assign WILL_FIRE_RL_rl_connect_ocl_wr_addr =
+	     CAN_FIRE_RL_rl_connect_ocl_wr_addr ;
+
+  // rule RL_rl_connect_ocl_wr_data
+  assign CAN_FIRE_RL_rl_connect_ocl_wr_data =
+	     comms$RDY_fo_AXI4L_Wr_Data_d32_first &&
+	     comms$RDY_fo_AXI4L_Wr_Data_d32_deq &&
+	     ocl_xactor_f_wr_data$FULL_N ;
+  assign WILL_FIRE_RL_rl_connect_ocl_wr_data =
+	     CAN_FIRE_RL_rl_connect_ocl_wr_data ;
+
+  // rule RL_rl_connect_ocl_rd_addr
+  assign CAN_FIRE_RL_rl_connect_ocl_rd_addr =
+	     comms$RDY_fo_AXI4L_Rd_Addr_a32_u0_first &&
+	     comms$RDY_fo_AXI4L_Rd_Addr_a32_u0_deq &&
+	     ocl_xactor_f_rd_addr$FULL_N ;
+  assign WILL_FIRE_RL_rl_connect_ocl_rd_addr =
+	     CAN_FIRE_RL_rl_connect_ocl_rd_addr ;
+
+  // rule RL_rl_connect_dma_pcis_wr_resp
+  assign CAN_FIRE_RL_rl_connect_dma_pcis_wr_resp =
+	     comms$RDY_fi_AXI4_Wr_Resp_i16_u0_enq &&
+	     dma_pcis_xactor_f_wr_resp$EMPTY_N ;
+  assign WILL_FIRE_RL_rl_connect_dma_pcis_wr_resp =
+	     CAN_FIRE_RL_rl_connect_dma_pcis_wr_resp ;
+
+  // rule RL_rl_connect_dma_pcis_rd_data
+  assign CAN_FIRE_RL_rl_connect_dma_pcis_rd_data =
+	     comms$RDY_fi_AXI4_Rd_Data_i16_d512_u0_enq &&
+	     dma_pcis_xactor_f_rd_data$EMPTY_N ;
+  assign WILL_FIRE_RL_rl_connect_dma_pcis_rd_data =
+	     CAN_FIRE_RL_rl_connect_dma_pcis_rd_data ;
+
+  // rule RL_rl_connect_ocl_wr_resp
+  assign CAN_FIRE_RL_rl_connect_ocl_wr_resp =
+	     comms$RDY_fi_AXI4L_Wr_Resp_u0_enq &&
+	     ocl_xactor_f_wr_resp$EMPTY_N ;
+  assign WILL_FIRE_RL_rl_connect_ocl_wr_resp =
+	     CAN_FIRE_RL_rl_connect_ocl_wr_resp ;
+
+  // rule RL_rl_connect_ocl_rd_data
+  assign CAN_FIRE_RL_rl_connect_ocl_rd_data =
+	     comms$RDY_fi_AXI4L_Rd_Data_d32_u0_enq &&
+	     ocl_xactor_f_rd_data$EMPTY_N ;
+  assign WILL_FIRE_RL_rl_connect_ocl_rd_data =
+	     CAN_FIRE_RL_rl_connect_ocl_rd_data ;
+
   // rule RL_rl_status_signals
   assign CAN_FIRE_RL_rl_status_signals = 1'd1 ;
   assign WILL_FIRE_RL_rl_status_signals = 1'd1 ;
-
-  // rule RL_rl_once
-  assign CAN_FIRE_RL_rl_once =
-	     fsm_abort_whas__64_AND_fsm_abort_wget__65_66_O_ETC___d365 &&
-	     !fsm_start_reg &&
-	     !rg_done_once ;
-  assign WILL_FIRE_RL_rl_once = CAN_FIRE_RL_rl_once ;
-
-  // rule RL_rl_ocl_wr_response_drain
-  assign CAN_FIRE_RL_rl_ocl_wr_response_drain = ocl_xactor_f_wr_resp$EMPTY_N ;
-  assign WILL_FIRE_RL_rl_ocl_wr_response_drain =
-	     ocl_xactor_f_wr_resp$EMPTY_N ;
-
-  // rule RL_fsm_restart
-  assign CAN_FIRE_RL_fsm_restart = fsm_start_reg_1 && !fsm_state_fired ;
-  assign WILL_FIRE_RL_fsm_restart = CAN_FIRE_RL_fsm_restart ;
-
-  // rule RL_fsm_action_l169c10
-  assign CAN_FIRE_RL_fsm_action_l169c10 =
-	     ocl_xactor_f_wr_addr$FULL_N && ocl_xactor_f_wr_data$FULL_N &&
-	     fsm_state_mkFSMstate == 5'd1 ;
-  assign WILL_FIRE_RL_fsm_action_l169c10 = CAN_FIRE_RL_fsm_action_l169c10 ;
-
-  // rule RL_fsm_action_l180c10
-  assign CAN_FIRE_RL_fsm_action_l180c10 =
-	     ocl_xactor_f_wr_addr$FULL_N && ocl_xactor_f_wr_data$FULL_N &&
-	     fsm_state_mkFSMstate == 5'd2 ;
-  assign WILL_FIRE_RL_fsm_action_l180c10 = CAN_FIRE_RL_fsm_action_l180c10 ;
-
-  // rule RL_fsm_action_l194c10
-  assign CAN_FIRE_RL_fsm_action_l194c10 = fsm_state_mkFSMstate == 5'd3 ;
-  assign WILL_FIRE_RL_fsm_action_l194c10 = CAN_FIRE_RL_fsm_action_l194c10 ;
-
-  // rule RL_fsm_action_d_init_np
-  assign CAN_FIRE_RL_fsm_action_d_init_np = fsm_state_mkFSMstate == 5'd4 ;
-  assign WILL_FIRE_RL_fsm_action_d_init_np =
-	     CAN_FIRE_RL_fsm_action_d_init_np ;
-
-  // rule RL_fsm_action_np
-  assign CAN_FIRE_RL_fsm_action_np =
-	     fsm_jj_delay_count != 14'd9999 &&
-	     (fsm_state_mkFSMstate == 5'd5 || fsm_state_mkFSMstate == 5'd6) ;
-  assign WILL_FIRE_RL_fsm_action_np = CAN_FIRE_RL_fsm_action_np ;
-
-  // rule RL_fsm_action_l198c10
-  assign CAN_FIRE_RL_fsm_action_l198c10 =
-	     fsm_jj_delay_count == 14'd9999 &&
-	     (fsm_state_mkFSMstate == 5'd5 || fsm_state_mkFSMstate == 5'd6) ;
-  assign WILL_FIRE_RL_fsm_action_l198c10 = CAN_FIRE_RL_fsm_action_l198c10 ;
-
-  // rule RL_fsm_action_l201c10
-  assign CAN_FIRE_RL_fsm_action_l201c10 =
-	     ocl_xactor_f_wr_addr$FULL_N && ocl_xactor_f_wr_data$FULL_N &&
-	     fsm_state_mkFSMstate == 5'd7 ;
-  assign WILL_FIRE_RL_fsm_action_l201c10 = CAN_FIRE_RL_fsm_action_l201c10 ;
-
-  // rule RL_fsm_action_l211c10
-  assign CAN_FIRE_RL_fsm_action_l211c10 = fsm_state_mkFSMstate == 5'd8 ;
-  assign WILL_FIRE_RL_fsm_action_l211c10 = CAN_FIRE_RL_fsm_action_l211c10 ;
-
-  // rule RL_fsm_action_l212c21
-  assign CAN_FIRE_RL_fsm_action_l212c21 = fsm_state_mkFSMstate == 5'd9 ;
-  assign WILL_FIRE_RL_fsm_action_l212c21 = CAN_FIRE_RL_fsm_action_l212c21 ;
-
-  // rule RL_fsm_action_l214c37
-  assign CAN_FIRE_RL_fsm_action_l214c37 =
-	     ocl_xactor_f_rd_addr$FULL_N && rg_running &&
-	     (fsm_state_mkFSMstate == 5'd10 ||
-	      fsm_state_mkFSMstate == 5'd12) ;
-  assign WILL_FIRE_RL_fsm_action_l214c37 = CAN_FIRE_RL_fsm_action_l214c37 ;
-
-  // rule RL_fsm_action_l215c13
-  assign CAN_FIRE_RL_fsm_action_l215c13 =
-	     ocl_xactor_f_rd_data$EMPTY_N && fsm_state_mkFSMstate == 5'd11 ;
-  assign WILL_FIRE_RL_fsm_action_l215c13 = CAN_FIRE_RL_fsm_action_l215c13 ;
-
-  // rule RL_fsm_action_l220c10
-  assign CAN_FIRE_RL_fsm_action_l220c10 =
-	     !rg_running &&
-	     (fsm_state_mkFSMstate == 5'd10 ||
-	      fsm_state_mkFSMstate == 5'd12) ;
-  assign WILL_FIRE_RL_fsm_action_l220c10 = CAN_FIRE_RL_fsm_action_l220c10 ;
-
-  // rule RL_fsm_action_l221c10
-  assign CAN_FIRE_RL_fsm_action_l221c10 = fsm_state_mkFSMstate == 5'd13 ;
-  assign WILL_FIRE_RL_fsm_action_l221c10 = CAN_FIRE_RL_fsm_action_l221c10 ;
-
-  // rule __me_check_37
-  assign CAN_FIRE___me_check_37 = 1'b1 ;
-  assign WILL_FIRE___me_check_37 = 1'b1 ;
-
-  // rule __me_check_38
-  assign CAN_FIRE___me_check_38 = 1'b1 ;
-  assign WILL_FIRE___me_check_38 = 1'b1 ;
-
-  // rule __me_check_39
-  assign CAN_FIRE___me_check_39 = 1'b1 ;
-  assign WILL_FIRE___me_check_39 = 1'b1 ;
-
-  // rule __me_check_40
-  assign CAN_FIRE___me_check_40 = 1'b1 ;
-  assign WILL_FIRE___me_check_40 = 1'b1 ;
-
-  // rule __me_check_41
-  assign CAN_FIRE___me_check_41 = 1'b1 ;
-  assign WILL_FIRE___me_check_41 = 1'b1 ;
-
-  // rule __me_check_43
-  assign CAN_FIRE___me_check_43 = 1'b1 ;
-  assign WILL_FIRE___me_check_43 = 1'b1 ;
-
-  // rule __me_check_42
-  assign CAN_FIRE___me_check_42 = 1'b1 ;
-  assign WILL_FIRE___me_check_42 = 1'b1 ;
-
-  // rule __me_check_44
-  assign CAN_FIRE___me_check_44 = 1'b1 ;
-  assign WILL_FIRE___me_check_44 = 1'b1 ;
-
-  // rule __me_check_46
-  assign CAN_FIRE___me_check_46 = 1'b1 ;
-  assign WILL_FIRE___me_check_46 = 1'b1 ;
-
-  // rule __me_check_45
-  assign CAN_FIRE___me_check_45 = 1'b1 ;
-  assign WILL_FIRE___me_check_45 = 1'b1 ;
-
-  // rule __me_check_47
-  assign CAN_FIRE___me_check_47 = 1'b1 ;
-  assign WILL_FIRE___me_check_47 = 1'b1 ;
-
-  // rule __me_check_48
-  assign CAN_FIRE___me_check_48 = 1'b1 ;
-  assign WILL_FIRE___me_check_48 = 1'b1 ;
-
-  // rule RL_fsm_fsm_start
-  assign CAN_FIRE_RL_fsm_fsm_start =
-	     fsm_abort_whas__64_AND_fsm_abort_wget__65_66_O_ETC___d365 &&
-	     fsm_start_reg ;
-  assign WILL_FIRE_RL_fsm_fsm_start = CAN_FIRE_RL_fsm_fsm_start ;
-
-  // rule RL_fsm_action_l161c10
-  assign CAN_FIRE_RL_fsm_action_l161c10 =
-	     fsm_start_wire$whas &&
-	     (fsm_state_mkFSMstate == 5'd0 || fsm_state_mkFSMstate == 5'd14) ;
-  assign WILL_FIRE_RL_fsm_action_l161c10 = CAN_FIRE_RL_fsm_action_l161c10 ;
-
-  // rule __me_check_36
-  assign CAN_FIRE___me_check_36 = 1'b1 ;
-  assign WILL_FIRE___me_check_36 = 1'b1 ;
-
-  // rule RL_fsm_idle_l160c7
-  assign CAN_FIRE_RL_fsm_idle_l160c7 =
-	     !fsm_start_wire$whas && fsm_state_mkFSMstate == 5'd14 ;
-  assign WILL_FIRE_RL_fsm_idle_l160c7 = CAN_FIRE_RL_fsm_idle_l160c7 ;
-
-  // rule RL_fsm_start_reg__dreg_update
-  assign CAN_FIRE_RL_fsm_start_reg__dreg_update = 1'd1 ;
-  assign WILL_FIRE_RL_fsm_start_reg__dreg_update = 1'd1 ;
-
-  // rule RL_fsm_state_handle_abort
-  assign CAN_FIRE_RL_fsm_state_handle_abort = 1'b0 ;
-  assign WILL_FIRE_RL_fsm_state_handle_abort = 1'b0 ;
-
-  // rule RL_fsm_state_every
-  assign CAN_FIRE_RL_fsm_state_every = 1'd1 ;
-  assign WILL_FIRE_RL_fsm_state_every = 1'd1 ;
-
-  // rule RL_fsm_state_fired__dreg_update
-  assign CAN_FIRE_RL_fsm_state_fired__dreg_update = 1'd1 ;
-  assign WILL_FIRE_RL_fsm_state_fired__dreg_update = 1'd1 ;
-
-  // inputs to muxes for submodule ports
-  assign MUX_fsm_jj_delay_count$write_1__VAL_1 = fsm_jj_delay_count + 14'd1 ;
-  assign MUX_ocl_xactor_f_wr_data$enq_1__VAL_1 = { data__h43706, 4'd15 } ;
-  assign MUX_ocl_xactor_f_wr_data$enq_1__VAL_2 = { v__h44040, 4'd15 } ;
-  assign MUX_rg_running$write_1__VAL_1 =
-	     ocl_xactor_f_rd_data$D_OUT[31:0] < 32'd100000 ;
-
-  // inlined wires
-  assign fsm_start_wire$whas =
-	     WILL_FIRE_RL_fsm_fsm_start || WILL_FIRE_RL_fsm_restart ;
-  assign fsm_state_set_pw$whas =
-	     WILL_FIRE_RL_fsm_idle_l160c7 ||
-	     WILL_FIRE_RL_fsm_action_l221c10 ||
-	     WILL_FIRE_RL_fsm_action_l220c10 ||
-	     WILL_FIRE_RL_fsm_action_l215c13 ||
-	     WILL_FIRE_RL_fsm_action_l214c37 ||
-	     WILL_FIRE_RL_fsm_action_l212c21 ||
-	     WILL_FIRE_RL_fsm_action_l211c10 ||
-	     WILL_FIRE_RL_fsm_action_l201c10 ||
-	     WILL_FIRE_RL_fsm_action_l198c10 ||
-	     WILL_FIRE_RL_fsm_action_np ||
-	     WILL_FIRE_RL_fsm_action_d_init_np ||
-	     WILL_FIRE_RL_fsm_action_l194c10 ||
-	     WILL_FIRE_RL_fsm_action_l180c10 ||
-	     WILL_FIRE_RL_fsm_action_l169c10 ||
-	     WILL_FIRE_RL_fsm_action_l161c10 ;
-
-  // register fsm_jj_delay_count
-  assign fsm_jj_delay_count$D_IN =
-	     WILL_FIRE_RL_fsm_action_np ?
-	       MUX_fsm_jj_delay_count$write_1__VAL_1 :
-	       14'd0 ;
-  assign fsm_jj_delay_count$EN =
-	     WILL_FIRE_RL_fsm_action_np || WILL_FIRE_RL_fsm_action_d_init_np ;
-
-  // register fsm_start_reg
-  assign fsm_start_reg$D_IN = !WILL_FIRE_RL_fsm_fsm_start ;
-  assign fsm_start_reg$EN =
-	     WILL_FIRE_RL_fsm_fsm_start || WILL_FIRE_RL_rl_once ;
-
-  // register fsm_start_reg_1
-  assign fsm_start_reg_1$D_IN = fsm_start_wire$whas ;
-  assign fsm_start_reg_1$EN = 1'd1 ;
-
-  // register fsm_state_can_overlap
-  assign fsm_state_can_overlap$D_IN =
-	     fsm_state_set_pw$whas || fsm_state_can_overlap ;
-  assign fsm_state_can_overlap$EN = 1'd1 ;
-
-  // register fsm_state_fired
-  assign fsm_state_fired$D_IN = fsm_state_set_pw$whas ;
-  assign fsm_state_fired$EN = 1'd1 ;
-
-  // register fsm_state_mkFSMstate
-  always@(WILL_FIRE_RL_fsm_idle_l160c7 or
-	  WILL_FIRE_RL_fsm_action_l161c10 or
-	  WILL_FIRE_RL_fsm_action_l169c10 or
-	  WILL_FIRE_RL_fsm_action_l180c10 or
-	  WILL_FIRE_RL_fsm_action_l194c10 or
-	  WILL_FIRE_RL_fsm_action_d_init_np or
-	  WILL_FIRE_RL_fsm_action_np or
-	  WILL_FIRE_RL_fsm_action_l198c10 or
-	  WILL_FIRE_RL_fsm_action_l201c10 or
-	  WILL_FIRE_RL_fsm_action_l211c10 or
-	  WILL_FIRE_RL_fsm_action_l212c21 or
-	  WILL_FIRE_RL_fsm_action_l214c37 or
-	  WILL_FIRE_RL_fsm_action_l215c13 or
-	  WILL_FIRE_RL_fsm_action_l220c10 or WILL_FIRE_RL_fsm_action_l221c10)
-  begin
-    case (1'b1) // synopsys parallel_case
-      WILL_FIRE_RL_fsm_idle_l160c7: fsm_state_mkFSMstate$D_IN = 5'd0;
-      WILL_FIRE_RL_fsm_action_l161c10: fsm_state_mkFSMstate$D_IN = 5'd1;
-      WILL_FIRE_RL_fsm_action_l169c10: fsm_state_mkFSMstate$D_IN = 5'd2;
-      WILL_FIRE_RL_fsm_action_l180c10: fsm_state_mkFSMstate$D_IN = 5'd3;
-      WILL_FIRE_RL_fsm_action_l194c10: fsm_state_mkFSMstate$D_IN = 5'd4;
-      WILL_FIRE_RL_fsm_action_d_init_np: fsm_state_mkFSMstate$D_IN = 5'd5;
-      WILL_FIRE_RL_fsm_action_np: fsm_state_mkFSMstate$D_IN = 5'd6;
-      WILL_FIRE_RL_fsm_action_l198c10: fsm_state_mkFSMstate$D_IN = 5'd7;
-      WILL_FIRE_RL_fsm_action_l201c10: fsm_state_mkFSMstate$D_IN = 5'd8;
-      WILL_FIRE_RL_fsm_action_l211c10: fsm_state_mkFSMstate$D_IN = 5'd9;
-      WILL_FIRE_RL_fsm_action_l212c21: fsm_state_mkFSMstate$D_IN = 5'd10;
-      WILL_FIRE_RL_fsm_action_l214c37: fsm_state_mkFSMstate$D_IN = 5'd11;
-      WILL_FIRE_RL_fsm_action_l215c13: fsm_state_mkFSMstate$D_IN = 5'd12;
-      WILL_FIRE_RL_fsm_action_l220c10: fsm_state_mkFSMstate$D_IN = 5'd13;
-      WILL_FIRE_RL_fsm_action_l221c10: fsm_state_mkFSMstate$D_IN = 5'd14;
-      default: fsm_state_mkFSMstate$D_IN = 5'b01010 /* unspecified value */ ;
-    endcase
-  end
-  assign fsm_state_mkFSMstate$EN =
-	     WILL_FIRE_RL_fsm_idle_l160c7 ||
-	     WILL_FIRE_RL_fsm_action_l161c10 ||
-	     WILL_FIRE_RL_fsm_action_l169c10 ||
-	     WILL_FIRE_RL_fsm_action_l180c10 ||
-	     WILL_FIRE_RL_fsm_action_l194c10 ||
-	     WILL_FIRE_RL_fsm_action_d_init_np ||
-	     WILL_FIRE_RL_fsm_action_np ||
-	     WILL_FIRE_RL_fsm_action_l198c10 ||
-	     WILL_FIRE_RL_fsm_action_l201c10 ||
-	     WILL_FIRE_RL_fsm_action_l211c10 ||
-	     WILL_FIRE_RL_fsm_action_l212c21 ||
-	     WILL_FIRE_RL_fsm_action_l214c37 ||
-	     WILL_FIRE_RL_fsm_action_l215c13 ||
-	     WILL_FIRE_RL_fsm_action_l220c10 ||
-	     WILL_FIRE_RL_fsm_action_l221c10 ;
 
   // register rg_counter_4ns
   assign rg_counter_4ns$D_IN =
@@ -1570,21 +1419,15 @@ module mkTop_HW_Side(CLK,
 	     64'b0000000000000000000000000000000000000000000000000000000000000101 ;
   assign rg_counter_4ns$EN = 1'd1 ;
 
-  // register rg_done_once
-  assign rg_done_once$D_IN = 1'd1 ;
-  assign rg_done_once$EN = CAN_FIRE_RL_rl_once ;
-
   // register rg_last_vled
   assign rg_last_vled$D_IN = aws_BSV_top$m_vled ;
   assign rg_last_vled$EN = 1'd1 ;
 
-  // register rg_running
-  assign rg_running$D_IN =
-	     !WILL_FIRE_RL_fsm_action_l215c13 ||
-	     MUX_rg_running$write_1__VAL_1 ;
-  assign rg_running$EN =
-	     WILL_FIRE_RL_fsm_action_l215c13 ||
-	     WILL_FIRE_RL_fsm_action_l212c21 ;
+  // register rg_state
+  assign rg_state$D_IN = WILL_FIRE_RL_rl_connecting ? 2'd1 : 2'd2 ;
+  assign rg_state$EN =
+	     WILL_FIRE_RL_rl_connecting ||
+	     WILL_FIRE_RL_rl_start_when_connected ;
 
   // register rg_vdip
   assign rg_vdip$D_IN = 16'h0 ;
@@ -1707,6 +1550,41 @@ module mkTop_HW_Side(CLK,
   assign aws_BSV_top$ocl_slave_wstrb = ocl_xactor_f_wr_data$D_OUT[3:0] ;
   assign aws_BSV_top$ocl_slave_wvalid = ocl_xactor_f_wr_data$EMPTY_N ;
 
+  // submodule comms
+  assign comms$fi_AXI4L_Rd_Data_d32_u0_enq_x =
+	     { ocl_xactor_f_rd_data$D_OUT[31:0],
+	       ocl_xactor_f_rd_data$D_OUT[33:32] } ;
+  assign comms$fi_AXI4L_Wr_Resp_u0_enq_x = ocl_xactor_f_wr_resp$D_OUT ;
+  assign comms$fi_AXI4_Rd_Data_i16_d512_u0_enq_x =
+	     dma_pcis_xactor_f_rd_data$D_OUT ;
+  assign comms$fi_AXI4_Wr_Resp_i16_u0_enq_x =
+	     dma_pcis_xactor_f_wr_resp$D_OUT ;
+  assign comms$fi_C_to_BSV_bytevec_enq_x = TASK_c_host_recv___d183 ;
+  assign comms$EN_fo_AXI4_Wr_Addr_i16_a64_u0_deq =
+	     CAN_FIRE_RL_rl_connect_dma_pcis_wr_addr ;
+  assign comms$EN_fo_AXI4_Wr_Data_d512_u0_deq =
+	     CAN_FIRE_RL_rl_connect_dma_pcis_wr_data ;
+  assign comms$EN_fo_AXI4_Rd_Addr_i16_a64_u0_deq =
+	     CAN_FIRE_RL_rl_connect_dma_pcis_rd_addr ;
+  assign comms$EN_fo_AXI4L_Wr_Addr_a32_u0_deq =
+	     CAN_FIRE_RL_rl_connect_ocl_wr_addr ;
+  assign comms$EN_fo_AXI4L_Wr_Data_d32_deq =
+	     CAN_FIRE_RL_rl_connect_ocl_wr_data ;
+  assign comms$EN_fo_AXI4L_Rd_Addr_a32_u0_deq =
+	     CAN_FIRE_RL_rl_connect_ocl_rd_addr ;
+  assign comms$EN_fi_AXI4_Wr_Resp_i16_u0_enq =
+	     CAN_FIRE_RL_rl_connect_dma_pcis_wr_resp ;
+  assign comms$EN_fi_AXI4_Rd_Data_i16_d512_u0_enq =
+	     CAN_FIRE_RL_rl_connect_dma_pcis_rd_data ;
+  assign comms$EN_fi_AXI4L_Wr_Resp_u0_enq =
+	     CAN_FIRE_RL_rl_connect_ocl_wr_resp ;
+  assign comms$EN_fi_AXI4L_Rd_Data_d32_u0_enq =
+	     CAN_FIRE_RL_rl_connect_ocl_rd_data ;
+  assign comms$EN_fi_C_to_BSV_bytevec_enq =
+	     WILL_FIRE_RL_rl_host_recv &&
+	     TASK_c_host_recv___d183[7:0] != 8'd0 ;
+  assign comms$EN_fo_BSV_to_C_bytevec_deq = CAN_FIRE_RL_rl_host_send ;
+
   // submodule ddr4_A
   assign ddr4_A$araddr = aws_BSV_top$ddr4_A_master_araddr ;
   assign ddr4_A$arburst = aws_BSV_top$ddr4_A_master_arburst ;
@@ -1828,8 +1706,10 @@ module mkTop_HW_Side(CLK,
   assign ddr4_D$wvalid = aws_BSV_top$ddr4_D_master_wvalid ;
 
   // submodule dma_pcis_xactor_f_rd_addr
-  assign dma_pcis_xactor_f_rd_addr$D_IN = 109'h0 ;
-  assign dma_pcis_xactor_f_rd_addr$ENQ = 1'b0 ;
+  assign dma_pcis_xactor_f_rd_addr$D_IN =
+	     comms$fo_AXI4_Rd_Addr_i16_a64_u0_first ;
+  assign dma_pcis_xactor_f_rd_addr$ENQ =
+	     CAN_FIRE_RL_rl_connect_dma_pcis_rd_addr ;
   assign dma_pcis_xactor_f_rd_addr$DEQ =
 	     dma_pcis_xactor_f_rd_addr$EMPTY_N &&
 	     aws_BSV_top$dma_pcis_slave_arready ;
@@ -1844,20 +1724,25 @@ module mkTop_HW_Side(CLK,
   assign dma_pcis_xactor_f_rd_data$ENQ =
 	     aws_BSV_top$dma_pcis_slave_rvalid &&
 	     dma_pcis_xactor_f_rd_data$FULL_N ;
-  assign dma_pcis_xactor_f_rd_data$DEQ = 1'b0 ;
+  assign dma_pcis_xactor_f_rd_data$DEQ =
+	     CAN_FIRE_RL_rl_connect_dma_pcis_rd_data ;
   assign dma_pcis_xactor_f_rd_data$CLR = 1'b0 ;
 
   // submodule dma_pcis_xactor_f_wr_addr
-  assign dma_pcis_xactor_f_wr_addr$D_IN = 109'h0 ;
-  assign dma_pcis_xactor_f_wr_addr$ENQ = 1'b0 ;
+  assign dma_pcis_xactor_f_wr_addr$D_IN =
+	     comms$fo_AXI4_Wr_Addr_i16_a64_u0_first ;
+  assign dma_pcis_xactor_f_wr_addr$ENQ =
+	     CAN_FIRE_RL_rl_connect_dma_pcis_wr_addr ;
   assign dma_pcis_xactor_f_wr_addr$DEQ =
 	     dma_pcis_xactor_f_wr_addr$EMPTY_N &&
 	     aws_BSV_top$dma_pcis_slave_awready ;
   assign dma_pcis_xactor_f_wr_addr$CLR = 1'b0 ;
 
   // submodule dma_pcis_xactor_f_wr_data
-  assign dma_pcis_xactor_f_wr_data$D_IN = 577'h0 ;
-  assign dma_pcis_xactor_f_wr_data$ENQ = 1'b0 ;
+  assign dma_pcis_xactor_f_wr_data$D_IN =
+	     comms$fo_AXI4_Wr_Data_d512_u0_first ;
+  assign dma_pcis_xactor_f_wr_data$ENQ =
+	     CAN_FIRE_RL_rl_connect_dma_pcis_wr_data ;
   assign dma_pcis_xactor_f_wr_data$DEQ =
 	     dma_pcis_xactor_f_wr_data$EMPTY_N &&
 	     aws_BSV_top$dma_pcis_slave_wready ;
@@ -1870,12 +1755,13 @@ module mkTop_HW_Side(CLK,
   assign dma_pcis_xactor_f_wr_resp$ENQ =
 	     aws_BSV_top$dma_pcis_slave_bvalid &&
 	     dma_pcis_xactor_f_wr_resp$FULL_N ;
-  assign dma_pcis_xactor_f_wr_resp$DEQ = 1'b0 ;
+  assign dma_pcis_xactor_f_wr_resp$DEQ =
+	     CAN_FIRE_RL_rl_connect_dma_pcis_wr_resp ;
   assign dma_pcis_xactor_f_wr_resp$CLR = 1'b0 ;
 
   // submodule ocl_xactor_f_rd_addr
-  assign ocl_xactor_f_rd_addr$D_IN = 35'd524288 ;
-  assign ocl_xactor_f_rd_addr$ENQ = CAN_FIRE_RL_fsm_action_l214c37 ;
+  assign ocl_xactor_f_rd_addr$D_IN = comms$fo_AXI4L_Rd_Addr_a32_u0_first ;
+  assign ocl_xactor_f_rd_addr$ENQ = CAN_FIRE_RL_rl_connect_ocl_rd_addr ;
   assign ocl_xactor_f_rd_addr$DEQ =
 	     ocl_xactor_f_rd_addr$EMPTY_N && aws_BSV_top$ocl_slave_arready ;
   assign ocl_xactor_f_rd_addr$CLR = 1'b0 ;
@@ -1885,50 +1771,19 @@ module mkTop_HW_Side(CLK,
 	     { aws_BSV_top$ocl_slave_rresp, aws_BSV_top$ocl_slave_rdata } ;
   assign ocl_xactor_f_rd_data$ENQ =
 	     aws_BSV_top$ocl_slave_rvalid && ocl_xactor_f_rd_data$FULL_N ;
-  assign ocl_xactor_f_rd_data$DEQ = CAN_FIRE_RL_fsm_action_l215c13 ;
+  assign ocl_xactor_f_rd_data$DEQ = CAN_FIRE_RL_rl_connect_ocl_rd_data ;
   assign ocl_xactor_f_rd_data$CLR = 1'b0 ;
 
   // submodule ocl_xactor_f_wr_addr
-  always@(WILL_FIRE_RL_fsm_action_l169c10 or
-	  WILL_FIRE_RL_fsm_action_l180c10 or WILL_FIRE_RL_fsm_action_l201c10)
-  begin
-    case (1'b1) // synopsys parallel_case
-      WILL_FIRE_RL_fsm_action_l169c10: ocl_xactor_f_wr_addr$D_IN = 35'd524320;
-      WILL_FIRE_RL_fsm_action_l180c10: ocl_xactor_f_wr_addr$D_IN = 35'd524352;
-      WILL_FIRE_RL_fsm_action_l201c10: ocl_xactor_f_wr_addr$D_IN = 35'd524384;
-      default: ocl_xactor_f_wr_addr$D_IN =
-		   35'h2AAAAAAAA /* unspecified value */ ;
-    endcase
-  end
-  assign ocl_xactor_f_wr_addr$ENQ =
-	     WILL_FIRE_RL_fsm_action_l169c10 ||
-	     WILL_FIRE_RL_fsm_action_l180c10 ||
-	     WILL_FIRE_RL_fsm_action_l201c10 ;
+  assign ocl_xactor_f_wr_addr$D_IN = comms$fo_AXI4L_Wr_Addr_a32_u0_first ;
+  assign ocl_xactor_f_wr_addr$ENQ = CAN_FIRE_RL_rl_connect_ocl_wr_addr ;
   assign ocl_xactor_f_wr_addr$DEQ =
 	     ocl_xactor_f_wr_addr$EMPTY_N && aws_BSV_top$ocl_slave_awready ;
   assign ocl_xactor_f_wr_addr$CLR = 1'b0 ;
 
   // submodule ocl_xactor_f_wr_data
-  always@(WILL_FIRE_RL_fsm_action_l169c10 or
-	  MUX_ocl_xactor_f_wr_data$enq_1__VAL_1 or
-	  WILL_FIRE_RL_fsm_action_l180c10 or
-	  MUX_ocl_xactor_f_wr_data$enq_1__VAL_2 or
-	  WILL_FIRE_RL_fsm_action_l201c10)
-  begin
-    case (1'b1) // synopsys parallel_case
-      WILL_FIRE_RL_fsm_action_l169c10:
-	  ocl_xactor_f_wr_data$D_IN = MUX_ocl_xactor_f_wr_data$enq_1__VAL_1;
-      WILL_FIRE_RL_fsm_action_l180c10:
-	  ocl_xactor_f_wr_data$D_IN = MUX_ocl_xactor_f_wr_data$enq_1__VAL_2;
-      WILL_FIRE_RL_fsm_action_l201c10: ocl_xactor_f_wr_data$D_IN = 36'd15;
-      default: ocl_xactor_f_wr_data$D_IN =
-		   36'hAAAAAAAAA /* unspecified value */ ;
-    endcase
-  end
-  assign ocl_xactor_f_wr_data$ENQ =
-	     WILL_FIRE_RL_fsm_action_l169c10 ||
-	     WILL_FIRE_RL_fsm_action_l180c10 ||
-	     WILL_FIRE_RL_fsm_action_l201c10 ;
+  assign ocl_xactor_f_wr_data$D_IN = comms$fo_AXI4L_Wr_Data_d32_first ;
+  assign ocl_xactor_f_wr_data$ENQ = CAN_FIRE_RL_rl_connect_ocl_wr_data ;
   assign ocl_xactor_f_wr_data$DEQ =
 	     ocl_xactor_f_wr_data$EMPTY_N && aws_BSV_top$ocl_slave_wready ;
   assign ocl_xactor_f_wr_data$CLR = 1'b0 ;
@@ -1937,15 +1792,8 @@ module mkTop_HW_Side(CLK,
   assign ocl_xactor_f_wr_resp$D_IN = aws_BSV_top$ocl_slave_bresp ;
   assign ocl_xactor_f_wr_resp$ENQ =
 	     aws_BSV_top$ocl_slave_bvalid && ocl_xactor_f_wr_resp$FULL_N ;
-  assign ocl_xactor_f_wr_resp$DEQ = ocl_xactor_f_wr_resp$EMPTY_N ;
+  assign ocl_xactor_f_wr_resp$DEQ = CAN_FIRE_RL_rl_connect_ocl_wr_resp ;
   assign ocl_xactor_f_wr_resp$CLR = 1'b0 ;
-
-  // remaining internal signals
-  assign data__h43706 = { 28'd0, verbosity___1__h43704[3:0] } ;
-  assign fsm_abort_whas__64_AND_fsm_abort_wget__65_66_O_ETC___d365 =
-	     (fsm_state_mkFSMstate == 5'd0 ||
-	      fsm_state_mkFSMstate == 5'd14) &&
-	     (!fsm_start_reg_1 || fsm_state_fired) ;
 
   // handling of inlined registers
 
@@ -1953,42 +1801,20 @@ module mkTop_HW_Side(CLK,
   begin
     if (RST_N == `BSV_RESET_VALUE)
       begin
-        fsm_jj_delay_count <= `BSV_ASSIGNMENT_DELAY 14'd0;
-	fsm_start_reg <= `BSV_ASSIGNMENT_DELAY 1'd0;
-	fsm_start_reg_1 <= `BSV_ASSIGNMENT_DELAY 1'd0;
-	fsm_state_can_overlap <= `BSV_ASSIGNMENT_DELAY 1'd1;
-	fsm_state_fired <= `BSV_ASSIGNMENT_DELAY 1'd0;
-	fsm_state_mkFSMstate <= `BSV_ASSIGNMENT_DELAY 5'd0;
-	rg_counter_4ns <= `BSV_ASSIGNMENT_DELAY 64'd0;
-	rg_done_once <= `BSV_ASSIGNMENT_DELAY 1'd0;
+        rg_counter_4ns <= `BSV_ASSIGNMENT_DELAY 64'd0;
 	rg_last_vled <= `BSV_ASSIGNMENT_DELAY 16'd0;
+	rg_state <= `BSV_ASSIGNMENT_DELAY 2'd0;
 	rg_vdip <= `BSV_ASSIGNMENT_DELAY 16'd0;
       end
     else
       begin
-        if (fsm_jj_delay_count$EN)
-	  fsm_jj_delay_count <= `BSV_ASSIGNMENT_DELAY fsm_jj_delay_count$D_IN;
-	if (fsm_start_reg$EN)
-	  fsm_start_reg <= `BSV_ASSIGNMENT_DELAY fsm_start_reg$D_IN;
-	if (fsm_start_reg_1$EN)
-	  fsm_start_reg_1 <= `BSV_ASSIGNMENT_DELAY fsm_start_reg_1$D_IN;
-	if (fsm_state_can_overlap$EN)
-	  fsm_state_can_overlap <= `BSV_ASSIGNMENT_DELAY
-	      fsm_state_can_overlap$D_IN;
-	if (fsm_state_fired$EN)
-	  fsm_state_fired <= `BSV_ASSIGNMENT_DELAY fsm_state_fired$D_IN;
-	if (fsm_state_mkFSMstate$EN)
-	  fsm_state_mkFSMstate <= `BSV_ASSIGNMENT_DELAY
-	      fsm_state_mkFSMstate$D_IN;
-	if (rg_counter_4ns$EN)
+        if (rg_counter_4ns$EN)
 	  rg_counter_4ns <= `BSV_ASSIGNMENT_DELAY rg_counter_4ns$D_IN;
-	if (rg_done_once$EN)
-	  rg_done_once <= `BSV_ASSIGNMENT_DELAY rg_done_once$D_IN;
 	if (rg_last_vled$EN)
 	  rg_last_vled <= `BSV_ASSIGNMENT_DELAY rg_last_vled$D_IN;
+	if (rg_state$EN) rg_state <= `BSV_ASSIGNMENT_DELAY rg_state$D_IN;
 	if (rg_vdip$EN) rg_vdip <= `BSV_ASSIGNMENT_DELAY rg_vdip$D_IN;
       end
-    if (rg_running$EN) rg_running <= `BSV_ASSIGNMENT_DELAY rg_running$D_IN;
   end
 
   // synopsys translate_off
@@ -1996,16 +1822,9 @@ module mkTop_HW_Side(CLK,
   `else // not BSV_NO_INITIAL_BLOCKS
   initial
   begin
-    fsm_jj_delay_count = 14'h2AAA;
-    fsm_start_reg = 1'h0;
-    fsm_start_reg_1 = 1'h0;
-    fsm_state_can_overlap = 1'h0;
-    fsm_state_fired = 1'h0;
-    fsm_state_mkFSMstate = 5'h0A;
     rg_counter_4ns = 64'hAAAAAAAAAAAAAAAA;
-    rg_done_once = 1'h0;
     rg_last_vled = 16'hAAAA;
-    rg_running = 1'h0;
+    rg_state = 2'h2;
     rg_vdip = 16'hAAAA;
   end
   `endif // BSV_NO_INITIAL_BLOCKS
@@ -2018,228 +1837,28 @@ module mkTop_HW_Side(CLK,
   begin
     #0;
     if (RST_N != `BSV_RESET_VALUE)
-      if (ocl_xactor_f_wr_resp$EMPTY_N && ocl_xactor_f_wr_resp$D_OUT != 2'd0)
-	$write("Top_HW_Side: OCL response error: ");
-    if (RST_N != `BSV_RESET_VALUE)
-      if (ocl_xactor_f_wr_resp$EMPTY_N && ocl_xactor_f_wr_resp$D_OUT == 2'd1)
-	$write("AXI4_LITE_EXOKAY");
-    if (RST_N != `BSV_RESET_VALUE)
-      if (ocl_xactor_f_wr_resp$EMPTY_N && ocl_xactor_f_wr_resp$D_OUT == 2'd2)
-	$write("AXI4_LITE_SLVERR");
-    if (RST_N != `BSV_RESET_VALUE)
-      if (ocl_xactor_f_wr_resp$EMPTY_N &&
-	  ocl_xactor_f_wr_resp$D_OUT != 2'd0 &&
-	  ocl_xactor_f_wr_resp$D_OUT != 2'd1 &&
-	  ocl_xactor_f_wr_resp$D_OUT != 2'd2)
-	$write("AXI4_LITE_DECERR");
-    if (RST_N != `BSV_RESET_VALUE)
-      if (ocl_xactor_f_wr_resp$EMPTY_N && ocl_xactor_f_wr_resp$D_OUT != 2'd0)
-	$write("\n");
-    if (RST_N != `BSV_RESET_VALUE)
-      if (ocl_xactor_f_wr_resp$EMPTY_N && ocl_xactor_f_wr_resp$D_OUT != 2'd0)
-	$finish(32'd1);
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_fsm_action_l169c10)
-	begin
-	  TASK_testplusargs___d304 = $test$plusargs("v1");
-	  #0;
-	end
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_fsm_action_l169c10)
-	begin
-	  TASK_testplusargs___d303 = $test$plusargs("v2");
-	  #0;
-	end
-    verbosity___1__h43704 =
-	TASK_testplusargs___d303 ?
-	  32'd2 :
-	  (TASK_testplusargs___d304 ? 32'd1 : 32'd0);
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_fsm_action_l169c10)
-	$display("Top_HW_Side: verbosity = %0d, logdelay = 0x%0h",
-		 verbosity___1__h43704,
-		 32'd0);
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_fsm_action_l180c10)
-	begin
-	  TASK_testplusargs___d313 = $test$plusargs("tohost");
-	  #0;
-	end
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_fsm_action_l180c10 && TASK_testplusargs___d313)
-	begin
-	  v__h44054 = $imported_c_get_symbol_val("tohost");
-	  #0;
-	end
-    v__h44040 = TASK_testplusargs___d313 ? v__h44054[31:0] : 32'd1;
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_fsm_action_l180c10)
-	$display("Top_HW_Side: watch_tohost = %0d, tohost_addr = 0x%0h",
-		 TASK_testplusargs___d313,
-		 v__h44040);
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_fsm_action_l194c10)
-	$display("Top_HW_Side: Top_HW_Side: load DDR4 (TODO); for now, delay 10000 ticks");
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_fsm_action_l198c10)
-	$display("Top_HW_Side: Top_HW_Side: finished delay 10000 ticks");
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_fsm_action_l201c10)
-	begin
-	  v__h45539 = $stime;
-	  #0;
-	end
-    v__h45533 = v__h45539 / 32'd10;
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_fsm_action_l201c10)
-	$imported_c_start_timing({ 32'd0, v__h45533 });
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_fsm_action_l211c10)
-	$display("Top_HW_Side: polling remote counter");
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_fsm_action_l220c10)
-	$display("Top_HW_Side: remote counter exceeded limit");
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_fsm_action_l221c10) $finish(32'd0);
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_fsm_action_l169c10 &&
-	  (WILL_FIRE_RL_fsm_action_l180c10 ||
-	   WILL_FIRE_RL_fsm_action_l194c10 ||
-	   WILL_FIRE_RL_fsm_action_d_init_np ||
-	   WILL_FIRE_RL_fsm_action_np ||
-	   WILL_FIRE_RL_fsm_action_l198c10 ||
-	   WILL_FIRE_RL_fsm_action_l201c10 ||
-	   WILL_FIRE_RL_fsm_action_l211c10 ||
-	   WILL_FIRE_RL_fsm_action_l212c21 ||
-	   WILL_FIRE_RL_fsm_action_l214c37 ||
-	   WILL_FIRE_RL_fsm_action_l215c13 ||
-	   WILL_FIRE_RL_fsm_action_l220c10 ||
-	   WILL_FIRE_RL_fsm_action_l221c10))
-	$display("Error: \"../../src_Testbench_AWS/Top/Top_HW_Side.bsv\", line 169, column 10: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_fsm_action_l169c10] and\n  [RL_fsm_action_l180c10, RL_fsm_action_l194c10, RL_fsm_action_d_init_np,\n  RL_fsm_action_np, RL_fsm_action_l198c10, RL_fsm_action_l201c10,\n  RL_fsm_action_l211c10, RL_fsm_action_l212c21, RL_fsm_action_l214c37,\n  RL_fsm_action_l215c13, RL_fsm_action_l220c10, RL_fsm_action_l221c10] ) fired\n  in the same clock cycle.\n");
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_fsm_action_l180c10 &&
-	  (WILL_FIRE_RL_fsm_action_l194c10 ||
-	   WILL_FIRE_RL_fsm_action_d_init_np ||
-	   WILL_FIRE_RL_fsm_action_np ||
-	   WILL_FIRE_RL_fsm_action_l198c10 ||
-	   WILL_FIRE_RL_fsm_action_l201c10 ||
-	   WILL_FIRE_RL_fsm_action_l211c10 ||
-	   WILL_FIRE_RL_fsm_action_l212c21 ||
-	   WILL_FIRE_RL_fsm_action_l214c37 ||
-	   WILL_FIRE_RL_fsm_action_l215c13 ||
-	   WILL_FIRE_RL_fsm_action_l220c10 ||
-	   WILL_FIRE_RL_fsm_action_l221c10))
-	$display("Error: \"../../src_Testbench_AWS/Top/Top_HW_Side.bsv\", line 180, column 10: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_fsm_action_l180c10] and\n  [RL_fsm_action_l194c10, RL_fsm_action_d_init_np, RL_fsm_action_np,\n  RL_fsm_action_l198c10, RL_fsm_action_l201c10, RL_fsm_action_l211c10,\n  RL_fsm_action_l212c21, RL_fsm_action_l214c37, RL_fsm_action_l215c13,\n  RL_fsm_action_l220c10, RL_fsm_action_l221c10] ) fired in the same clock\n  cycle.\n");
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_fsm_action_l194c10 &&
-	  (WILL_FIRE_RL_fsm_action_d_init_np || WILL_FIRE_RL_fsm_action_np ||
-	   WILL_FIRE_RL_fsm_action_l198c10 ||
-	   WILL_FIRE_RL_fsm_action_l201c10 ||
-	   WILL_FIRE_RL_fsm_action_l211c10 ||
-	   WILL_FIRE_RL_fsm_action_l212c21 ||
-	   WILL_FIRE_RL_fsm_action_l214c37 ||
-	   WILL_FIRE_RL_fsm_action_l215c13 ||
-	   WILL_FIRE_RL_fsm_action_l220c10 ||
-	   WILL_FIRE_RL_fsm_action_l221c10))
-	$display("Error: \"../../src_Testbench_AWS/Top/Top_HW_Side.bsv\", line 194, column 10: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_fsm_action_l194c10] and\n  [RL_fsm_action_d_init_np, RL_fsm_action_np, RL_fsm_action_l198c10,\n  RL_fsm_action_l201c10, RL_fsm_action_l211c10, RL_fsm_action_l212c21,\n  RL_fsm_action_l214c37, RL_fsm_action_l215c13, RL_fsm_action_l220c10,\n  RL_fsm_action_l221c10] ) fired in the same clock cycle.\n");
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_fsm_action_d_init_np &&
-	  (WILL_FIRE_RL_fsm_action_np || WILL_FIRE_RL_fsm_action_l198c10 ||
-	   WILL_FIRE_RL_fsm_action_l201c10 ||
-	   WILL_FIRE_RL_fsm_action_l211c10 ||
-	   WILL_FIRE_RL_fsm_action_l212c21 ||
-	   WILL_FIRE_RL_fsm_action_l214c37 ||
-	   WILL_FIRE_RL_fsm_action_l215c13 ||
-	   WILL_FIRE_RL_fsm_action_l220c10 ||
-	   WILL_FIRE_RL_fsm_action_l221c10))
-	$display("Error: \"StmtFSM.bs\", line 41, column 0: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_fsm_action_d_init_np] and\n  [RL_fsm_action_np, RL_fsm_action_l198c10, RL_fsm_action_l201c10,\n  RL_fsm_action_l211c10, RL_fsm_action_l212c21, RL_fsm_action_l214c37,\n  RL_fsm_action_l215c13, RL_fsm_action_l220c10, RL_fsm_action_l221c10] ) fired\n  in the same clock cycle.\n");
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_fsm_action_np &&
-	  (WILL_FIRE_RL_fsm_action_l198c10 ||
-	   WILL_FIRE_RL_fsm_action_l201c10 ||
-	   WILL_FIRE_RL_fsm_action_l211c10 ||
-	   WILL_FIRE_RL_fsm_action_l212c21 ||
-	   WILL_FIRE_RL_fsm_action_l214c37 ||
-	   WILL_FIRE_RL_fsm_action_l215c13 ||
-	   WILL_FIRE_RL_fsm_action_l220c10 ||
-	   WILL_FIRE_RL_fsm_action_l221c10))
-	$display("Error: \"StmtFSM.bs\", line 41, column 0: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_fsm_action_np] and\n  [RL_fsm_action_l198c10, RL_fsm_action_l201c10, RL_fsm_action_l211c10,\n  RL_fsm_action_l212c21, RL_fsm_action_l214c37, RL_fsm_action_l215c13,\n  RL_fsm_action_l220c10, RL_fsm_action_l221c10] ) fired in the same clock\n  cycle.\n");
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_fsm_action_l201c10 &&
-	  (WILL_FIRE_RL_fsm_action_l211c10 ||
-	   WILL_FIRE_RL_fsm_action_l212c21 ||
-	   WILL_FIRE_RL_fsm_action_l214c37 ||
-	   WILL_FIRE_RL_fsm_action_l215c13 ||
-	   WILL_FIRE_RL_fsm_action_l220c10 ||
-	   WILL_FIRE_RL_fsm_action_l221c10))
-	$display("Error: \"../../src_Testbench_AWS/Top/Top_HW_Side.bsv\", line 201, column 10: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_fsm_action_l201c10] and\n  [RL_fsm_action_l211c10, RL_fsm_action_l212c21, RL_fsm_action_l214c37,\n  RL_fsm_action_l215c13, RL_fsm_action_l220c10, RL_fsm_action_l221c10] ) fired\n  in the same clock cycle.\n");
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_fsm_action_l198c10 &&
-	  (WILL_FIRE_RL_fsm_action_l201c10 ||
-	   WILL_FIRE_RL_fsm_action_l211c10 ||
-	   WILL_FIRE_RL_fsm_action_l212c21 ||
-	   WILL_FIRE_RL_fsm_action_l214c37 ||
-	   WILL_FIRE_RL_fsm_action_l215c13 ||
-	   WILL_FIRE_RL_fsm_action_l220c10 ||
-	   WILL_FIRE_RL_fsm_action_l221c10))
-	$display("Error: \"../../src_Testbench_AWS/Top/Top_HW_Side.bsv\", line 198, column 10: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_fsm_action_l198c10] and\n  [RL_fsm_action_l201c10, RL_fsm_action_l211c10, RL_fsm_action_l212c21,\n  RL_fsm_action_l214c37, RL_fsm_action_l215c13, RL_fsm_action_l220c10,\n  RL_fsm_action_l221c10] ) fired in the same clock cycle.\n");
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_fsm_action_l211c10 &&
-	  (WILL_FIRE_RL_fsm_action_l212c21 ||
-	   WILL_FIRE_RL_fsm_action_l214c37 ||
-	   WILL_FIRE_RL_fsm_action_l215c13 ||
-	   WILL_FIRE_RL_fsm_action_l220c10 ||
-	   WILL_FIRE_RL_fsm_action_l221c10))
-	$display("Error: \"../../src_Testbench_AWS/Top/Top_HW_Side.bsv\", line 211, column 10: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_fsm_action_l211c10] and\n  [RL_fsm_action_l212c21, RL_fsm_action_l214c37, RL_fsm_action_l215c13,\n  RL_fsm_action_l220c10, RL_fsm_action_l221c10] ) fired in the same clock\n  cycle.\n");
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_fsm_action_l214c37 &&
-	  (WILL_FIRE_RL_fsm_action_l215c13 ||
-	   WILL_FIRE_RL_fsm_action_l220c10 ||
-	   WILL_FIRE_RL_fsm_action_l221c10))
-	$display("Error: \"../../src_Testbench_AWS/Top/Top_HW_Side.bsv\", line 214, column 37: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_fsm_action_l214c37] and\n  [RL_fsm_action_l215c13, RL_fsm_action_l220c10, RL_fsm_action_l221c10] )\n  fired in the same clock cycle.\n");
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_fsm_action_l212c21 &&
-	  (WILL_FIRE_RL_fsm_action_l214c37 ||
-	   WILL_FIRE_RL_fsm_action_l215c13 ||
-	   WILL_FIRE_RL_fsm_action_l220c10 ||
-	   WILL_FIRE_RL_fsm_action_l221c10))
-	$display("Error: \"../../src_Testbench_AWS/Top/Top_HW_Side.bsv\", line 212, column 21: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_fsm_action_l212c21] and\n  [RL_fsm_action_l214c37, RL_fsm_action_l215c13, RL_fsm_action_l220c10,\n  RL_fsm_action_l221c10] ) fired in the same clock cycle.\n");
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_fsm_action_l215c13 &&
-	  (WILL_FIRE_RL_fsm_action_l220c10 ||
-	   WILL_FIRE_RL_fsm_action_l221c10))
-	$display("Error: \"../../src_Testbench_AWS/Top/Top_HW_Side.bsv\", line 215, column 13: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_fsm_action_l215c13] and\n  [RL_fsm_action_l220c10, RL_fsm_action_l221c10] ) fired in the same clock\n  cycle.\n");
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_fsm_action_l220c10 && WILL_FIRE_RL_fsm_action_l221c10)
-	$display("Error: \"../../src_Testbench_AWS/Top/Top_HW_Side.bsv\", line 220, column 10: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_fsm_action_l220c10] and\n  [RL_fsm_action_l221c10] ) fired in the same clock cycle.\n");
-    if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_fsm_action_l161c10)
+      if (WILL_FIRE_RL_rl_connecting)
 	$display("================================================================");
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_fsm_action_l161c10)
-	$display("Bluespec RISC-V + WindSoC AWS simulation v1.0");
+      if (WILL_FIRE_RL_rl_connecting)
+	$display("Bluespec AWSteria simulation v1.0");
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_fsm_action_l161c10)
-	$display("Copyright (c) 2017-2020 Bluespec, Inc. All Rights Reserved.");
+      if (WILL_FIRE_RL_rl_connecting)
+	$display("Copyright (c) 2020 Bluespec, Inc. All Rights Reserved.");
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_fsm_action_l161c10)
+      if (WILL_FIRE_RL_rl_connecting)
 	$display("================================================================");
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_fsm_action_l161c10 &&
-	  (WILL_FIRE_RL_fsm_action_l169c10 ||
-	   WILL_FIRE_RL_fsm_action_l180c10 ||
-	   WILL_FIRE_RL_fsm_action_l194c10 ||
-	   WILL_FIRE_RL_fsm_action_d_init_np ||
-	   WILL_FIRE_RL_fsm_action_np ||
-	   WILL_FIRE_RL_fsm_action_l198c10 ||
-	   WILL_FIRE_RL_fsm_action_l201c10 ||
-	   WILL_FIRE_RL_fsm_action_l211c10 ||
-	   WILL_FIRE_RL_fsm_action_l212c21 ||
-	   WILL_FIRE_RL_fsm_action_l214c37 ||
-	   WILL_FIRE_RL_fsm_action_l215c13 ||
-	   WILL_FIRE_RL_fsm_action_l220c10 ||
-	   WILL_FIRE_RL_fsm_action_l221c10))
-	$display("Error: \"../../src_Testbench_AWS/Top/Top_HW_Side.bsv\", line 161, column 10: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_fsm_action_l161c10] and\n  [RL_fsm_action_l169c10, RL_fsm_action_l180c10, RL_fsm_action_l194c10,\n  RL_fsm_action_d_init_np, RL_fsm_action_np, RL_fsm_action_l198c10,\n  RL_fsm_action_l201c10, RL_fsm_action_l211c10, RL_fsm_action_l212c21,\n  RL_fsm_action_l214c37, RL_fsm_action_l215c13, RL_fsm_action_l220c10,\n  RL_fsm_action_l221c10] ) fired in the same clock cycle.\n");
+      if (WILL_FIRE_RL_rl_connecting) $imported_c_host_connect(16'd30000);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_rl_host_recv)
+	begin
+	  TASK_c_host_recv___d183 = $imported_c_host_recv(8'd79);
+	  #0;
+	end
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_rl_host_send)
+	$imported_c_host_send(comms$fo_BSV_to_C_bytevec_first, 8'd76);
   end
   // synopsys translate_on
 endmodule  // mkTop_HW_Side

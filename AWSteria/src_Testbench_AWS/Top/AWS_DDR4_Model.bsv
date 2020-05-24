@@ -82,9 +82,11 @@ module mkMem_Model #(parameter Bit #(2) ddr4_num) (AXI4_16_64_512_0_Slave_IFC);
 			      ruser: ?};
 
       if (! ok1)
-	 $display ("%0d: Mem_Model [%0d]: rl_rd_req: @ %0h -> OUT OF BOUNDS");
+	 $display ("%0d: Mem_Model [%0d]: rl_rd_req: @ %0h -> OUT OF BOUNDS",
+		   cur_cycle, ddr4_num, rda.araddr);
       else if (! ok2)
-	 $display ("%0d: Mem_Model [%0d]: rl_rd_req: @ %0h -> OUT OF IMPLEMENTED BOUNDS");
+	 $display ("%0d: Mem_Model [%0d]: rl_rd_req: @ %0h -> OUT OF IMPLEMENTED BOUNDS",
+		   cur_cycle, ddr4_num, rda.araddr);
       else begin
 	 let data = rf.sub (offset_W);
 	 rdd = AXI4_Rd_Data {rid:   rda.arid,
@@ -116,9 +118,11 @@ module mkMem_Model #(parameter Bit #(2) ddr4_num) (AXI4_16_64_512_0_Slave_IFC);
       let wrr = AXI4_Wr_Resp {bid:   wra.awid, bresp: axi4_resp_slverr, buser: ?};
 
       if (! ok1)
-	 $display ("%0d: Mem_Model [%0d]: rl_wr_req: @ %0h <= %0h strb %0h: OUT OF BOUNDS");
+	 $display ("%0d: Mem_Model [%0d]: rl_wr_req: @ %0h <= %0h strb %0h: OUT OF BOUNDS",
+		   cur_cycle, ddr4_num, wra.awaddr, wrd.wdata, wrd.wstrb);
       else if (! ok2)
-	 $display ("%0d: Mem_Model [%0d]: rl_wr_req: @ %0h <= %0h strb %0h: OUT OF IMPLEMENTED BOUNDS");
+	 $display ("%0d: Mem_Model [%0d]: rl_wr_req: @ %0h <= %0h strb %0h: OUT OF IMPLEMENTED BOUNDS",
+		   cur_cycle, ddr4_num, wra.awaddr, wrd.wdata, wrd.wstrb);
       else begin
 	 let old_data = rf.sub (offset_W);
 	 let new_data = fv_new_data (old_data, wrd.wdata, wrd.wstrb);

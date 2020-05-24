@@ -35,11 +35,10 @@ DCP_FOLDER        ?= AWSteria
 # DCP_FOLDER        ?= example-cl-dram-dma
 # DCP_FOLDER        ?= HelloWorld
 
+# standard test_dram_dma example
+# DCP_TARFILE       ?= 20_05_16-210151.Developer_CL.tar
 # AWSteria
 # DCP_TARFILE       ?= 20_05_14-225622.Developer_CL.tar
-
-# standard test_dram_dma example
-DCP_TARFILE       ?= 20_05_16-210151.Developer_CL.tar
 
 # Pick a name for a bucket to be created which will hold the DCP
 LOGS_BUCKET       ?= $(DCP_BUCKET)
@@ -48,11 +47,11 @@ LOGS_FOLDER       ?= $(DCP_FOLDER)-logs
 
 # Pick a name for the AFI Image to be produced
 # AFI_NAME          ?= RSN-example-cl-dram-dma
-AFI_NAME          ?= RSNAwsteriaTest2
+AFI_NAME          ?= RSNAwsteriaTest3
 
 # Write a description for the AFI Image to be produced
 # AFI_DESCRIPTION   ?= "RSN-example-cl-dram-dma"
-AFI_DESCRIPTION   ?= "AWSteria take 2"
+AFI_DESCRIPTION   ?= "AWSteria take 3"
 
 # There are additional vars described below close to where they're
 # used, which you should edit for your use-case:

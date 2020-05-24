@@ -1758,7 +1758,6 @@ module mkFabric_2x3(CLK,
   reg [31 : 0] v__h21870;
   reg [31 : 0] v__h22271;
   reg [31 : 0] v__h5743;
-  reg [31 : 0] v__h22265;
   reg [31 : 0] v__h16765;
   reg [31 : 0] v__h9903;
   reg [31 : 0] v__h5737;
@@ -1797,6 +1796,7 @@ module mkFabric_2x3(CLK,
   reg [31 : 0] v__h21110;
   reg [31 : 0] v__h21351;
   reg [31 : 0] v__h21864;
+  reg [31 : 0] v__h22265;
   // synopsys translate_on
 
   // remaining internal signals

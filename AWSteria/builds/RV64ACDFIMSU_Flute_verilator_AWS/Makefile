@@ -4,7 +4,8 @@
 # Edit this def to point at your clone of the GitHub Flute repo:
 # (https://github.com/bluespec/Flute)
 
-REPO ?= /home/nikhil/git_clones/Flute
+AWSTERIA ?= ../..
+REPO     ?= /home/nikhil/git_clones/Flute
 
 # ================================================================
 # Edit this def to configure desired ISA features
@@ -33,11 +34,11 @@ TEST ?= rv64ui-p-add
 #================================================================
 # Common boilerplate rules
 
-include ./Include_Common.mk
+include $(AWSTERIA)/builds/Resources/Include_Common.mk
 
 #================================================================
 # Makefile rules for building for specific simulator: verilator
 
-include $(REPO)/builds/Resources/Include_verilator.mk
+include $(AWSTERIA)/builds/Resources/Include_verilator.mk
 
 # ================================================================

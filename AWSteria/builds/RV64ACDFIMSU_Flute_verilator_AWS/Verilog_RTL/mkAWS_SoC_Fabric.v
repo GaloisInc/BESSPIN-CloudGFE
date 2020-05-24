@@ -2137,6 +2137,7 @@ module mkAWS_SoC_Fabric(CLK,
   reg [31 : 0] v__h27045;
   reg [31 : 0] v__h27446;
   reg [31 : 0] v__h6512;
+  reg [31 : 0] v__h12860;
   reg [31 : 0] v__h6506;
   reg [31 : 0] v__h9903;
   reg [31 : 0] v__h10318;
@@ -2145,7 +2146,6 @@ module mkAWS_SoC_Fabric(CLK,
   reg [31 : 0] v__h11633;
   reg [31 : 0] v__h12042;
   reg [31 : 0] v__h12451;
-  reg [31 : 0] v__h12860;
   reg [31 : 0] v__h13257;
   reg [31 : 0] v__h13610;
   reg [31 : 0] v__h14042;
