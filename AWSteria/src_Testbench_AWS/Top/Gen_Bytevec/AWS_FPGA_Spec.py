@@ -119,6 +119,9 @@ def mk_BSV_to_C_AXI4L_structs (wd_data, wd_user):
             mkAXI4L_Rd_Data_spec (wd_data, wd_user) ]
 
 # ================================================================
+# This is the final result of this spec,
+# used by the 'bytevec mux generator' program to generate BSV code for
+# the 'hw side' and C code for the 'host-side'.
 
 C_to_BSV_structs = (mk_C_to_BSV_AXI4_structs  (16, 64, 512, 0) +
                     mk_C_to_BSV_AXI4L_structs (32, 32, 0))
@@ -126,6 +129,6 @@ C_to_BSV_structs = (mk_C_to_BSV_AXI4_structs  (16, 64, 512, 0) +
 BSV_to_C_structs = (mk_BSV_to_C_AXI4_structs (16, 512, 0) +
                     mk_BSV_to_C_AXI4L_structs (32, 0))
 
-package_name = "Comms"
+package_name = "Bytevec"
 
 # ================================================================

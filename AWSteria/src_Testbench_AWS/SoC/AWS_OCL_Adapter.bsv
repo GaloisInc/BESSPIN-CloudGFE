@@ -87,7 +87,7 @@ endinterface
 (* synthesize *)
 module mkOCL_Adapter (OCL_Adapter_IFC);
    // 0: quiet; 1: rules
-   Integer verbosity = 0;
+   Integer verbosity = 1;
 
    // Transactor for the OCL AXI4-Lite interface
    AXI4L_32_32_0_Slave_Xactor_IFC  ocl_xactor <- mkAXI4_Lite_Slave_Xactor;

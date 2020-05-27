@@ -5,19 +5,19 @@
 #include  <stdint.h>
 #include  <string.h>
 
-#include  "Comms.h"
+#include  "Bytevec.h"
 
 static int verbosity = 1;
 
 // ================================================================
 // State constructor and initializer
 
-Comms_state *mk_Comms_state (void)
+Bytevec_state *mk_Bytevec_state (void)
 {
-    Comms_state *p_state = (Comms_state *) malloc (sizeof (Comms_state));
+    Bytevec_state *p_state = (Bytevec_state *) malloc (sizeof (Bytevec_state));
     if (p_state == NULL) return p_state;
 
-    memset (p_state, 0, sizeof (Comms_state));
+    memset (p_state, 0, sizeof (Bytevec_state));
 
     // Initialize credits for BSV-to-C queues
     p_state->credits_AXI4_Wr_Resp_i16_u0 = BSV_TO_C_FIFO_SIZE;
@@ -188,132 +188,157 @@ void AXI4L_Rd_Data_d32_u0_from_bytevec (AXI4L_Rd_Data_d32_u0 *ps,
 
 // ================================================================
 // C to BSV struct->bytevec encoder
-// Returns 1: packet available with credit; bytevec ready for sending 
-//         0: no packet with credit available; bytevec is credits-only packet
+// Returns 1: bytevec has info; should be sent
+//         0: bytevec has no info; should not be sent
 
-int Comms_to_bytevec (Comms_state *pstate)
+int Bytevec_struct_to_bytevec (Bytevec_state *pstate)
 {
-    // Initialize to default 'credits-only' packet (channel 0)
-    pstate->bytevec_C_to_BSV [0] = 6;
+    int verbosity2 = 1;    // local verbosity for this function
+
     // ---- Fill in credits for BSV-to-C channels
+    uint32_t total_credits = 0;
+
+    total_credits += pstate->credits_AXI4_Wr_Resp_i16_u0;
     pstate->bytevec_C_to_BSV [1] = pstate->credits_AXI4_Wr_Resp_i16_u0;
     pstate->credits_AXI4_Wr_Resp_i16_u0 = 0;
+
+    total_credits += pstate->credits_AXI4_Rd_Data_i16_d512_u0;
     pstate->bytevec_C_to_BSV [2] = pstate->credits_AXI4_Rd_Data_i16_d512_u0;
     pstate->credits_AXI4_Rd_Data_i16_d512_u0 = 0;
+
+    total_credits += pstate->credits_AXI4L_Wr_Resp_u0;
     pstate->bytevec_C_to_BSV [3] = pstate->credits_AXI4L_Wr_Resp_u0;
     pstate->credits_AXI4L_Wr_Resp_u0 = 0;
+
+    total_credits += pstate->credits_AXI4L_Rd_Data_d32_u0;
     pstate->bytevec_C_to_BSV [4] = pstate->credits_AXI4L_Rd_Data_d32_u0;
     pstate->credits_AXI4L_Rd_Data_d32_u0 = 0;
-    // ---- Default channel 0: 'credits-only'
-    pstate->bytevec_C_to_BSV [5] = 0;
 
     // C to BSV: AXI4_Wr_Addr_i16_a64_u0
     if ((pstate->size_AXI4_Wr_Addr_i16_a64_u0 != 0) && (pstate->credits_AXI4_Wr_Addr_i16_a64_u0 != 0)) {
-        // ---- This packet size
-        pstate->bytevec_C_to_BSV [0] = 24;
-        // ---- Channel id (C-to-BSV struct id)
-        pstate->bytevec_C_to_BSV [5] = 1;
+        pstate->bytevec_C_to_BSV [0] = 24;    // Packet size
+        pstate->bytevec_C_to_BSV [5] = 1;    // Channel Id
         // ---- Payload from struct
-        AXI4_Wr_Addr_i16_a64_u0_to_bytevec (pstate->bytevec_C_to_BSV + 6,
-                                            & pstate->buf_AXI4_Wr_Addr_i16_a64_u0 [pstate->head_AXI4_Wr_Addr_i16_a64_u0]);
+        uint64_t head_index = (pstate->head_AXI4_Wr_Addr_i16_a64_u0 & C_TO_BSV_FIFO_INDEX_MASK);
+        AXI4_Wr_Addr_i16_a64_u0_to_bytevec (pstate->bytevec_C_to_BSV + 5 + 1,
+                        & pstate->buf_AXI4_Wr_Addr_i16_a64_u0 [head_index]);
         // ---- Dequeue the struct and return success (bytevec ready)
         pstate->head_AXI4_Wr_Addr_i16_a64_u0 += 1;
         pstate->size_AXI4_Wr_Addr_i16_a64_u0 -= 1;
         pstate->credits_AXI4_Wr_Addr_i16_a64_u0 -= 1;
+        if (verbosity2 != 0)
+            fprintf (stdout, "Bytevec_struct_to_bytevec: encoded AXI4_Wr_Addr_i16_a64_u0\n");
         return 1;
     }
 
     // C to BSV: AXI4_Wr_Data_d512_u0
     if ((pstate->size_AXI4_Wr_Data_d512_u0 != 0) && (pstate->credits_AXI4_Wr_Data_d512_u0 != 0)) {
-        // ---- This packet size
-        pstate->bytevec_C_to_BSV [0] = 79;
-        // ---- Channel id (C-to-BSV struct id)
-        pstate->bytevec_C_to_BSV [5] = 2;
+        pstate->bytevec_C_to_BSV [0] = 79;    // Packet size
+        pstate->bytevec_C_to_BSV [5] = 2;    // Channel Id
         // ---- Payload from struct
-        AXI4_Wr_Data_d512_u0_to_bytevec (pstate->bytevec_C_to_BSV + 6,
-                                         & pstate->buf_AXI4_Wr_Data_d512_u0 [pstate->head_AXI4_Wr_Data_d512_u0]);
+        uint64_t head_index = (pstate->head_AXI4_Wr_Data_d512_u0 & C_TO_BSV_FIFO_INDEX_MASK);
+        AXI4_Wr_Data_d512_u0_to_bytevec (pstate->bytevec_C_to_BSV + 5 + 1,
+                        & pstate->buf_AXI4_Wr_Data_d512_u0 [head_index]);
         // ---- Dequeue the struct and return success (bytevec ready)
         pstate->head_AXI4_Wr_Data_d512_u0 += 1;
         pstate->size_AXI4_Wr_Data_d512_u0 -= 1;
         pstate->credits_AXI4_Wr_Data_d512_u0 -= 1;
+        if (verbosity2 != 0)
+            fprintf (stdout, "Bytevec_struct_to_bytevec: encoded AXI4_Wr_Data_d512_u0\n");
         return 1;
     }
 
     // C to BSV: AXI4_Rd_Addr_i16_a64_u0
     if ((pstate->size_AXI4_Rd_Addr_i16_a64_u0 != 0) && (pstate->credits_AXI4_Rd_Addr_i16_a64_u0 != 0)) {
-        // ---- This packet size
-        pstate->bytevec_C_to_BSV [0] = 24;
-        // ---- Channel id (C-to-BSV struct id)
-        pstate->bytevec_C_to_BSV [5] = 3;
+        pstate->bytevec_C_to_BSV [0] = 24;    // Packet size
+        pstate->bytevec_C_to_BSV [5] = 3;    // Channel Id
         // ---- Payload from struct
-        AXI4_Rd_Addr_i16_a64_u0_to_bytevec (pstate->bytevec_C_to_BSV + 6,
-                                            & pstate->buf_AXI4_Rd_Addr_i16_a64_u0 [pstate->head_AXI4_Rd_Addr_i16_a64_u0]);
+        uint64_t head_index = (pstate->head_AXI4_Rd_Addr_i16_a64_u0 & C_TO_BSV_FIFO_INDEX_MASK);
+        AXI4_Rd_Addr_i16_a64_u0_to_bytevec (pstate->bytevec_C_to_BSV + 5 + 1,
+                        & pstate->buf_AXI4_Rd_Addr_i16_a64_u0 [head_index]);
         // ---- Dequeue the struct and return success (bytevec ready)
         pstate->head_AXI4_Rd_Addr_i16_a64_u0 += 1;
         pstate->size_AXI4_Rd_Addr_i16_a64_u0 -= 1;
         pstate->credits_AXI4_Rd_Addr_i16_a64_u0 -= 1;
+        if (verbosity2 != 0)
+            fprintf (stdout, "Bytevec_struct_to_bytevec: encoded AXI4_Rd_Addr_i16_a64_u0\n");
         return 1;
     }
 
     // C to BSV: AXI4L_Wr_Addr_a32_u0
     if ((pstate->size_AXI4L_Wr_Addr_a32_u0 != 0) && (pstate->credits_AXI4L_Wr_Addr_a32_u0 != 0)) {
-        // ---- This packet size
-        pstate->bytevec_C_to_BSV [0] = 11;
-        // ---- Channel id (C-to-BSV struct id)
-        pstate->bytevec_C_to_BSV [5] = 4;
+        pstate->bytevec_C_to_BSV [0] = 11;    // Packet size
+        pstate->bytevec_C_to_BSV [5] = 4;    // Channel Id
         // ---- Payload from struct
-        AXI4L_Wr_Addr_a32_u0_to_bytevec (pstate->bytevec_C_to_BSV + 6,
-                                         & pstate->buf_AXI4L_Wr_Addr_a32_u0 [pstate->head_AXI4L_Wr_Addr_a32_u0]);
+        uint64_t head_index = (pstate->head_AXI4L_Wr_Addr_a32_u0 & C_TO_BSV_FIFO_INDEX_MASK);
+        AXI4L_Wr_Addr_a32_u0_to_bytevec (pstate->bytevec_C_to_BSV + 5 + 1,
+                        & pstate->buf_AXI4L_Wr_Addr_a32_u0 [head_index]);
         // ---- Dequeue the struct and return success (bytevec ready)
         pstate->head_AXI4L_Wr_Addr_a32_u0 += 1;
         pstate->size_AXI4L_Wr_Addr_a32_u0 -= 1;
         pstate->credits_AXI4L_Wr_Addr_a32_u0 -= 1;
+        if (verbosity2 != 0)
+            fprintf (stdout, "Bytevec_struct_to_bytevec: encoded AXI4L_Wr_Addr_a32_u0\n");
         return 1;
     }
 
     // C to BSV: AXI4L_Wr_Data_d32
     if ((pstate->size_AXI4L_Wr_Data_d32 != 0) && (pstate->credits_AXI4L_Wr_Data_d32 != 0)) {
-        // ---- This packet size
-        pstate->bytevec_C_to_BSV [0] = 11;
-        // ---- Channel id (C-to-BSV struct id)
-        pstate->bytevec_C_to_BSV [5] = 5;
+        pstate->bytevec_C_to_BSV [0] = 11;    // Packet size
+        pstate->bytevec_C_to_BSV [5] = 5;    // Channel Id
         // ---- Payload from struct
-        AXI4L_Wr_Data_d32_to_bytevec (pstate->bytevec_C_to_BSV + 6,
-                                      & pstate->buf_AXI4L_Wr_Data_d32 [pstate->head_AXI4L_Wr_Data_d32]);
+        uint64_t head_index = (pstate->head_AXI4L_Wr_Data_d32 & C_TO_BSV_FIFO_INDEX_MASK);
+        AXI4L_Wr_Data_d32_to_bytevec (pstate->bytevec_C_to_BSV + 5 + 1,
+                        & pstate->buf_AXI4L_Wr_Data_d32 [head_index]);
         // ---- Dequeue the struct and return success (bytevec ready)
         pstate->head_AXI4L_Wr_Data_d32 += 1;
         pstate->size_AXI4L_Wr_Data_d32 -= 1;
         pstate->credits_AXI4L_Wr_Data_d32 -= 1;
+        if (verbosity2 != 0)
+            fprintf (stdout, "Bytevec_struct_to_bytevec: encoded AXI4L_Wr_Data_d32\n");
         return 1;
     }
 
     // C to BSV: AXI4L_Rd_Addr_a32_u0
     if ((pstate->size_AXI4L_Rd_Addr_a32_u0 != 0) && (pstate->credits_AXI4L_Rd_Addr_a32_u0 != 0)) {
-        // ---- This packet size
-        pstate->bytevec_C_to_BSV [0] = 11;
-        // ---- Channel id (C-to-BSV struct id)
-        pstate->bytevec_C_to_BSV [5] = 6;
+        pstate->bytevec_C_to_BSV [0] = 11;    // Packet size
+        pstate->bytevec_C_to_BSV [5] = 6;    // Channel Id
         // ---- Payload from struct
-        AXI4L_Rd_Addr_a32_u0_to_bytevec (pstate->bytevec_C_to_BSV + 6,
-                                         & pstate->buf_AXI4L_Rd_Addr_a32_u0 [pstate->head_AXI4L_Rd_Addr_a32_u0]);
+        uint64_t head_index = (pstate->head_AXI4L_Rd_Addr_a32_u0 & C_TO_BSV_FIFO_INDEX_MASK);
+        AXI4L_Rd_Addr_a32_u0_to_bytevec (pstate->bytevec_C_to_BSV + 5 + 1,
+                        & pstate->buf_AXI4L_Rd_Addr_a32_u0 [head_index]);
         // ---- Dequeue the struct and return success (bytevec ready)
         pstate->head_AXI4L_Rd_Addr_a32_u0 += 1;
         pstate->size_AXI4L_Rd_Addr_a32_u0 -= 1;
         pstate->credits_AXI4L_Rd_Addr_a32_u0 -= 1;
+        if (verbosity2 != 0)
+            fprintf (stdout, "Bytevec_struct_to_bytevec: encoded AXI4L_Rd_Addr_a32_u0\n");
         return 1;
     }
 
-    // No actual packets can be sent; bytevec is a 'credits-only packet'
+    // Credits-only bytevec
+    if (total_credits != 0) {
+        pstate->bytevec_C_to_BSV [0] = 1 + 5;    // packet size
+        pstate->bytevec_C_to_BSV [5] = 0;    // chan id = credits-only
+        if (verbosity2 != 0)
+            fprintf (stdout, "Bytevec_struct_to_bytevec: bytevec is credits-only\n");
+        return 1;
+    }
+
+    // No bytevec to send
     return 0;
 }
-
 
 // ================================================================
 // BSV to C bytevec->struct decoder
 // pstate->bytevec_BSV_to_C contains a bytevec
+// Returns 1: bytevec had payload struct
+//         0: bytevec had credits-only
 
-void Comms_from_bytevec (Comms_state *pstate)
+int Bytevec_struct_from_bytevec (Bytevec_state *pstate)
 {
+    int verbosity2 = 2;    // local verbosity for this function
+
     // ---- Restore credits for remote C-to-BSV receive buffers
     pstate->credits_AXI4_Wr_Addr_i16_a64_u0 += pstate->bytevec_BSV_to_C [1];
     pstate->credits_AXI4_Wr_Data_d512_u0 += pstate->bytevec_BSV_to_C [2];
@@ -327,9 +352,12 @@ void Comms_from_bytevec (Comms_state *pstate)
         // ---- Fill in struct from payload
         uint64_t head_index = (pstate->head_AXI4_Wr_Resp_i16_u0 & BSV_TO_C_FIFO_INDEX_MASK);
         AXI4_Wr_Resp_i16_u0_from_bytevec (& pstate->buf_AXI4_Wr_Resp_i16_u0 [head_index],
-                                          pstate->bytevec_BSV_to_C + 6);
+                                       pstate->bytevec_BSV_to_C + 7 + 1);
         // ---- Enqueue the struct
         pstate->size_AXI4_Wr_Resp_i16_u0 += 1;
+        if (verbosity2 != 0)
+            fprintf (stdout, "Bytevec_struct_from_bytevec: received AXI4_Wr_Resp_i16_u0 struct\n");
+        return 1;
     }
 
     // BSV to C: AXI4_Rd_Data_i16_d512_u0
@@ -337,9 +365,12 @@ void Comms_from_bytevec (Comms_state *pstate)
         // ---- Fill in struct from payload
         uint64_t head_index = (pstate->head_AXI4_Rd_Data_i16_d512_u0 & BSV_TO_C_FIFO_INDEX_MASK);
         AXI4_Rd_Data_i16_d512_u0_from_bytevec (& pstate->buf_AXI4_Rd_Data_i16_d512_u0 [head_index],
-                                               pstate->bytevec_BSV_to_C + 6);
+                                       pstate->bytevec_BSV_to_C + 7 + 1);
         // ---- Enqueue the struct
         pstate->size_AXI4_Rd_Data_i16_d512_u0 += 1;
+        if (verbosity2 != 0)
+            fprintf (stdout, "Bytevec_struct_from_bytevec: received AXI4_Rd_Data_i16_d512_u0 struct\n");
+        return 1;
     }
 
     // BSV to C: AXI4L_Wr_Resp_u0
@@ -347,9 +378,12 @@ void Comms_from_bytevec (Comms_state *pstate)
         // ---- Fill in struct from payload
         uint64_t head_index = (pstate->head_AXI4L_Wr_Resp_u0 & BSV_TO_C_FIFO_INDEX_MASK);
         AXI4L_Wr_Resp_u0_from_bytevec (& pstate->buf_AXI4L_Wr_Resp_u0 [head_index],
-                                       pstate->bytevec_BSV_to_C + 6);
+                                       pstate->bytevec_BSV_to_C + 7 + 1);
         // ---- Enqueue the struct
         pstate->size_AXI4L_Wr_Resp_u0 += 1;
+        if (verbosity2 != 0)
+            fprintf (stdout, "Bytevec_struct_from_bytevec: received AXI4L_Wr_Resp_u0 struct\n");
+        return 1;
     }
 
     // BSV to C: AXI4L_Rd_Data_d32_u0
@@ -357,10 +391,16 @@ void Comms_from_bytevec (Comms_state *pstate)
         // ---- Fill in struct from payload
         uint64_t head_index = (pstate->head_AXI4L_Rd_Data_d32_u0 & BSV_TO_C_FIFO_INDEX_MASK);
         AXI4L_Rd_Data_d32_u0_from_bytevec (& pstate->buf_AXI4L_Rd_Data_d32_u0 [head_index],
-                                           pstate->bytevec_BSV_to_C + 6);
+                                       pstate->bytevec_BSV_to_C + 7 + 1);
         // ---- Enqueue the struct
         pstate->size_AXI4L_Rd_Data_d32_u0 += 1;
+        if (verbosity2 != 0)
+            fprintf (stdout, "Bytevec_struct_from_bytevec: received AXI4L_Rd_Data_d32_u0 struct\n");
+        return 1;
     }
+    if (verbosity2 != 0)
+        fprintf (stdout, "Bytevec_struct_from_bytevec: bytevec is credits-only\n");
+    return 0;
 }
 
 // ================================================================
@@ -368,8 +408,8 @@ void Comms_from_bytevec (Comms_state *pstate)
 // Return 0 if failed (queue overflow) or 1 if success
 // TODO: make this thread-safe
 
-int Comms_enqueue_AXI4_Wr_Addr_i16_a64_u0 (Comms_state *p_state,
-                                           AXI4_Wr_Addr_i16_a64_u0 *p_struct)
+int Bytevec_enqueue_AXI4_Wr_Addr_i16_a64_u0 (Bytevec_state *p_state,
+                                             AXI4_Wr_Addr_i16_a64_u0 *p_struct)
 {
     if (p_state->size_AXI4_Wr_Addr_i16_a64_u0 >= C_TO_BSV_FIFO_SIZE) return 0;
 
@@ -389,8 +429,8 @@ int Comms_enqueue_AXI4_Wr_Addr_i16_a64_u0 (Comms_state *p_state,
 // Return 0 if failed (queue overflow) or 1 if success
 // TODO: make this thread-safe
 
-int Comms_enqueue_AXI4_Wr_Data_d512_u0 (Comms_state *p_state,
-                                        AXI4_Wr_Data_d512_u0 *p_struct)
+int Bytevec_enqueue_AXI4_Wr_Data_d512_u0 (Bytevec_state *p_state,
+                                          AXI4_Wr_Data_d512_u0 *p_struct)
 {
     if (p_state->size_AXI4_Wr_Data_d512_u0 >= C_TO_BSV_FIFO_SIZE) return 0;
 
@@ -410,8 +450,8 @@ int Comms_enqueue_AXI4_Wr_Data_d512_u0 (Comms_state *p_state,
 // Return 0 if failed (queue overflow) or 1 if success
 // TODO: make this thread-safe
 
-int Comms_enqueue_AXI4_Rd_Addr_i16_a64_u0 (Comms_state *p_state,
-                                           AXI4_Rd_Addr_i16_a64_u0 *p_struct)
+int Bytevec_enqueue_AXI4_Rd_Addr_i16_a64_u0 (Bytevec_state *p_state,
+                                             AXI4_Rd_Addr_i16_a64_u0 *p_struct)
 {
     if (p_state->size_AXI4_Rd_Addr_i16_a64_u0 >= C_TO_BSV_FIFO_SIZE) return 0;
 
@@ -431,8 +471,8 @@ int Comms_enqueue_AXI4_Rd_Addr_i16_a64_u0 (Comms_state *p_state,
 // Return 0 if failed (queue overflow) or 1 if success
 // TODO: make this thread-safe
 
-int Comms_enqueue_AXI4L_Wr_Addr_a32_u0 (Comms_state *p_state,
-                                        AXI4L_Wr_Addr_a32_u0 *p_struct)
+int Bytevec_enqueue_AXI4L_Wr_Addr_a32_u0 (Bytevec_state *p_state,
+                                          AXI4L_Wr_Addr_a32_u0 *p_struct)
 {
     if (p_state->size_AXI4L_Wr_Addr_a32_u0 >= C_TO_BSV_FIFO_SIZE) return 0;
 
@@ -452,8 +492,8 @@ int Comms_enqueue_AXI4L_Wr_Addr_a32_u0 (Comms_state *p_state,
 // Return 0 if failed (queue overflow) or 1 if success
 // TODO: make this thread-safe
 
-int Comms_enqueue_AXI4L_Wr_Data_d32 (Comms_state *p_state,
-                                     AXI4L_Wr_Data_d32 *p_struct)
+int Bytevec_enqueue_AXI4L_Wr_Data_d32 (Bytevec_state *p_state,
+                                       AXI4L_Wr_Data_d32 *p_struct)
 {
     if (p_state->size_AXI4L_Wr_Data_d32 >= C_TO_BSV_FIFO_SIZE) return 0;
 
@@ -473,8 +513,8 @@ int Comms_enqueue_AXI4L_Wr_Data_d32 (Comms_state *p_state,
 // Return 0 if failed (queue overflow) or 1 if success
 // TODO: make this thread-safe
 
-int Comms_enqueue_AXI4L_Rd_Addr_a32_u0 (Comms_state *p_state,
-                                        AXI4L_Rd_Addr_a32_u0 *p_struct)
+int Bytevec_enqueue_AXI4L_Rd_Addr_a32_u0 (Bytevec_state *p_state,
+                                          AXI4L_Rd_Addr_a32_u0 *p_struct)
 {
     if (p_state->size_AXI4L_Rd_Addr_a32_u0 >= C_TO_BSV_FIFO_SIZE) return 0;
 
@@ -494,8 +534,8 @@ int Comms_enqueue_AXI4L_Rd_Addr_a32_u0 (Comms_state *p_state,
 // Return 0 if failed (none available) or 1 if success
 // TODO: make this thread-safe
 
-int Comms_dequeue_AXI4_Wr_Resp_i16_u0 (Comms_state *p_state,
-                                       AXI4_Wr_Resp_i16_u0 *p_struct)
+int Bytevec_dequeue_AXI4_Wr_Resp_i16_u0 (Bytevec_state *p_state,
+                                         AXI4_Wr_Resp_i16_u0 *p_struct)
 {
     if (p_state->size_AXI4_Wr_Resp_i16_u0 == 0) return 0;
 
@@ -516,8 +556,8 @@ int Comms_dequeue_AXI4_Wr_Resp_i16_u0 (Comms_state *p_state,
 // Return 0 if failed (none available) or 1 if success
 // TODO: make this thread-safe
 
-int Comms_dequeue_AXI4_Rd_Data_i16_d512_u0 (Comms_state *p_state,
-                                            AXI4_Rd_Data_i16_d512_u0 *p_struct)
+int Bytevec_dequeue_AXI4_Rd_Data_i16_d512_u0 (Bytevec_state *p_state,
+                                              AXI4_Rd_Data_i16_d512_u0 *p_struct)
 {
     if (p_state->size_AXI4_Rd_Data_i16_d512_u0 == 0) return 0;
 
@@ -538,8 +578,8 @@ int Comms_dequeue_AXI4_Rd_Data_i16_d512_u0 (Comms_state *p_state,
 // Return 0 if failed (none available) or 1 if success
 // TODO: make this thread-safe
 
-int Comms_dequeue_AXI4L_Wr_Resp_u0 (Comms_state *p_state,
-                                    AXI4L_Wr_Resp_u0 *p_struct)
+int Bytevec_dequeue_AXI4L_Wr_Resp_u0 (Bytevec_state *p_state,
+                                      AXI4L_Wr_Resp_u0 *p_struct)
 {
     if (p_state->size_AXI4L_Wr_Resp_u0 == 0) return 0;
 
@@ -560,8 +600,8 @@ int Comms_dequeue_AXI4L_Wr_Resp_u0 (Comms_state *p_state,
 // Return 0 if failed (none available) or 1 if success
 // TODO: make this thread-safe
 
-int Comms_dequeue_AXI4L_Rd_Data_d32_u0 (Comms_state *p_state,
-                                        AXI4L_Rd_Data_d32_u0 *p_struct)
+int Bytevec_dequeue_AXI4L_Rd_Data_d32_u0 (Bytevec_state *p_state,
+                                          AXI4L_Rd_Data_d32_u0 *p_struct)
 {
     if (p_state->size_AXI4L_Rd_Data_d32_u0 == 0) return 0;
 

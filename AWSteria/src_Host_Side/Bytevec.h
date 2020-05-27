@@ -174,29 +174,30 @@ typedef struct {
     // Bytevecs for C to BSV and BSV to C packets
     uint8_t bytevec_C_to_BSV [79];
     uint8_t bytevec_BSV_to_C [76];
-} Comms_state;
+} Bytevec_state;
 
 // ================================================================
 // State constructor and initializer
 
 extern
-Comms_state *mk_Comms_state (void);
+Bytevec_state *mk_Bytevec_state (void);
 
 // ================================================================
 // C to BSV struct->bytevec encoder
-// Returns 1: packet available with credit; bytevec ready for sending 
-//         0: no packet with credit available; bytevec is credits-only packet
+// Returns 1: bytevec has info; should be sent
+//         0: bytevec has no info; should not be sent
 
 extern
-int Comms_to_bytevec (Comms_state *pstate);
-
+int Bytevec_struct_to_bytevec (Bytevec_state *pstate);
 
 // ================================================================
 // BSV to C bytevec->struct decoder
 // pstate->bytevec_BSV_to_C contains a bytevec
+// Returns 1: bytevec had payload struct
+//         0: bytevec had credits-only
 
 extern
-void Comms_from_bytevec (Comms_state *pstate);
+int Bytevec_struct_from_bytevec (Bytevec_state *pstate);
 
 // ================================================================
 // Enqueue a AXI4_Wr_Addr_i16_a64_u0 struct to be sent from C to BSV
@@ -204,8 +205,8 @@ void Comms_from_bytevec (Comms_state *pstate);
 // TODO: make this thread-safe
 
 extern
-int Comms_enqueue_AXI4_Wr_Addr_i16_a64_u0 (Comms_state *p_state,
-                                           AXI4_Wr_Addr_i16_a64_u0 *p_struct);
+int Bytevec_enqueue_AXI4_Wr_Addr_i16_a64_u0 (Bytevec_state *p_state,
+                                             AXI4_Wr_Addr_i16_a64_u0 *p_struct);
 
 // ================================================================
 // Enqueue a AXI4_Wr_Data_d512_u0 struct to be sent from C to BSV
@@ -213,8 +214,8 @@ int Comms_enqueue_AXI4_Wr_Addr_i16_a64_u0 (Comms_state *p_state,
 // TODO: make this thread-safe
 
 extern
-int Comms_enqueue_AXI4_Wr_Data_d512_u0 (Comms_state *p_state,
-                                        AXI4_Wr_Data_d512_u0 *p_struct);
+int Bytevec_enqueue_AXI4_Wr_Data_d512_u0 (Bytevec_state *p_state,
+                                          AXI4_Wr_Data_d512_u0 *p_struct);
 
 // ================================================================
 // Enqueue a AXI4_Rd_Addr_i16_a64_u0 struct to be sent from C to BSV
@@ -222,8 +223,8 @@ int Comms_enqueue_AXI4_Wr_Data_d512_u0 (Comms_state *p_state,
 // TODO: make this thread-safe
 
 extern
-int Comms_enqueue_AXI4_Rd_Addr_i16_a64_u0 (Comms_state *p_state,
-                                           AXI4_Rd_Addr_i16_a64_u0 *p_struct);
+int Bytevec_enqueue_AXI4_Rd_Addr_i16_a64_u0 (Bytevec_state *p_state,
+                                             AXI4_Rd_Addr_i16_a64_u0 *p_struct);
 
 // ================================================================
 // Enqueue a AXI4L_Wr_Addr_a32_u0 struct to be sent from C to BSV
@@ -231,8 +232,8 @@ int Comms_enqueue_AXI4_Rd_Addr_i16_a64_u0 (Comms_state *p_state,
 // TODO: make this thread-safe
 
 extern
-int Comms_enqueue_AXI4L_Wr_Addr_a32_u0 (Comms_state *p_state,
-                                        AXI4L_Wr_Addr_a32_u0 *p_struct);
+int Bytevec_enqueue_AXI4L_Wr_Addr_a32_u0 (Bytevec_state *p_state,
+                                          AXI4L_Wr_Addr_a32_u0 *p_struct);
 
 // ================================================================
 // Enqueue a AXI4L_Wr_Data_d32 struct to be sent from C to BSV
@@ -240,8 +241,8 @@ int Comms_enqueue_AXI4L_Wr_Addr_a32_u0 (Comms_state *p_state,
 // TODO: make this thread-safe
 
 extern
-int Comms_enqueue_AXI4L_Wr_Data_d32 (Comms_state *p_state,
-                                     AXI4L_Wr_Data_d32 *p_struct);
+int Bytevec_enqueue_AXI4L_Wr_Data_d32 (Bytevec_state *p_state,
+                                       AXI4L_Wr_Data_d32 *p_struct);
 
 // ================================================================
 // Enqueue a AXI4L_Rd_Addr_a32_u0 struct to be sent from C to BSV
@@ -249,8 +250,8 @@ int Comms_enqueue_AXI4L_Wr_Data_d32 (Comms_state *p_state,
 // TODO: make this thread-safe
 
 extern
-int Comms_enqueue_AXI4L_Rd_Addr_a32_u0 (Comms_state *p_state,
-                                        AXI4L_Rd_Addr_a32_u0 *p_struct);
+int Bytevec_enqueue_AXI4L_Rd_Addr_a32_u0 (Bytevec_state *p_state,
+                                          AXI4L_Rd_Addr_a32_u0 *p_struct);
 
 // ================================================================
 // Dequeue a AXI4_Wr_Resp_i16_u0 struct received from BSV to C
@@ -258,8 +259,8 @@ int Comms_enqueue_AXI4L_Rd_Addr_a32_u0 (Comms_state *p_state,
 // TODO: make this thread-safe
 
 extern
-int Comms_dequeue_AXI4_Wr_Resp_i16_u0 (Comms_state *p_state,
-                                       AXI4_Wr_Resp_i16_u0 *p_struct);
+int Bytevec_dequeue_AXI4_Wr_Resp_i16_u0 (Bytevec_state *p_state,
+                                         AXI4_Wr_Resp_i16_u0 *p_struct);
 
 // ================================================================
 // Dequeue a AXI4_Rd_Data_i16_d512_u0 struct received from BSV to C
@@ -267,8 +268,8 @@ int Comms_dequeue_AXI4_Wr_Resp_i16_u0 (Comms_state *p_state,
 // TODO: make this thread-safe
 
 extern
-int Comms_dequeue_AXI4_Rd_Data_i16_d512_u0 (Comms_state *p_state,
-                                            AXI4_Rd_Data_i16_d512_u0 *p_struct);
+int Bytevec_dequeue_AXI4_Rd_Data_i16_d512_u0 (Bytevec_state *p_state,
+                                              AXI4_Rd_Data_i16_d512_u0 *p_struct);
 
 // ================================================================
 // Dequeue a AXI4L_Wr_Resp_u0 struct received from BSV to C
@@ -276,8 +277,8 @@ int Comms_dequeue_AXI4_Rd_Data_i16_d512_u0 (Comms_state *p_state,
 // TODO: make this thread-safe
 
 extern
-int Comms_dequeue_AXI4L_Wr_Resp_u0 (Comms_state *p_state,
-                                    AXI4L_Wr_Resp_u0 *p_struct);
+int Bytevec_dequeue_AXI4L_Wr_Resp_u0 (Bytevec_state *p_state,
+                                      AXI4L_Wr_Resp_u0 *p_struct);
 
 // ================================================================
 // Dequeue a AXI4L_Rd_Data_d32_u0 struct received from BSV to C
@@ -285,7 +286,7 @@ int Comms_dequeue_AXI4L_Wr_Resp_u0 (Comms_state *p_state,
 // TODO: make this thread-safe
 
 extern
-int Comms_dequeue_AXI4L_Rd_Data_d32_u0 (Comms_state *p_state,
-                                        AXI4L_Rd_Data_d32_u0 *p_struct);
+int Bytevec_dequeue_AXI4L_Rd_Data_d32_u0 (Bytevec_state *p_state,
+                                          AXI4L_Rd_Data_d32_u0 *p_struct);
 
 // ================================================================

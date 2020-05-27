@@ -30,13 +30,14 @@ import TV_Info        :: *;
 
 import AXI4_Types      :: *;
 import AXI4_Lite_Types :: *;
+import AXI4_Deburster  :: *;
 
 import AWS_BSV_Top_Defs :: *;
 import AWS_BSV_Top      :: *;
 import AWS_DDR4_Model   :: *;
 
 // Communication with host
-import Comms     :: *;
+import Bytevec   :: *;
 import C_Imports :: *;
 
 // ================================================================
@@ -51,7 +52,7 @@ deriving (Eq, Bits, FShow);
 module mkTop_HW_Side (Empty) ;
 
    // 0: quiet; 1: rules
-   Integer verbosity = 0;
+   Integer verbosity = 1;
 
    Reg #(State) rg_state <- mkReg (STATE_CONNECTING);
 
@@ -64,11 +65,24 @@ module mkTop_HW_Side (Empty) ;
    AXI4_16_64_512_0_Slave_IFC  ddr4_C <- mkMem_Model (2);
    AXI4_16_64_512_0_Slave_IFC  ddr4_D <- mkMem_Model (3);
 
-   // Connect memory models to AWS_BSV_Top
-   mkConnection (aws_BSV_top.ddr4_A_master, ddr4_A);
-   mkConnection (aws_BSV_top.ddr4_B_master, ddr4_B);
-   mkConnection (aws_BSV_top.ddr4_C_master, ddr4_C);
-   mkConnection (aws_BSV_top.ddr4_D_master, ddr4_D);
+   // AXI4 Deburster in front of DDR4 A
+   AXI4_Deburster_IFC #(16, 64, 512, 0) ddr4_A_deburster <- mkAXI4_Deburster_DDR4;
+   AXI4_Deburster_IFC #(16, 64, 512, 0) ddr4_B_deburster <- mkAXI4_Deburster_DDR4;
+   AXI4_Deburster_IFC #(16, 64, 512, 0) ddr4_C_deburster <- mkAXI4_Deburster_DDR4;
+   AXI4_Deburster_IFC #(16, 64, 512, 0) ddr4_D_deburster <- mkAXI4_Deburster_DDR4;
+
+
+   // Connect AWS_BSV_Top ddr ports to debursters
+   mkConnection (aws_BSV_top.ddr4_A_master, ddr4_A_deburster.from_master);
+   mkConnection (aws_BSV_top.ddr4_B_master, ddr4_B_deburster.from_master);
+   mkConnection (aws_BSV_top.ddr4_C_master, ddr4_C_deburster.from_master);
+   mkConnection (aws_BSV_top.ddr4_D_master, ddr4_D_deburster.from_master);
+
+   // Connect debursters to DDR models
+   mkConnection (ddr4_A_deburster.to_slave, ddr4_A);
+   mkConnection (ddr4_B_deburster.to_slave, ddr4_B);
+   mkConnection (ddr4_C_deburster.to_slave, ddr4_C);
+   mkConnection (ddr4_D_deburster.to_slave, ddr4_D);
 
    // ================================================================
    // BEHAVIOR: start up
@@ -95,11 +109,11 @@ module mkTop_HW_Side (Empty) ;
    // Interaction with remote host
 
    // Communication box (converts between bytevecs and message structs)
-   Comms_IFC comms <- mkComms;
+   Bytevec_IFC comms <- mkBytevec;
 
    // Receive a bytevec from host and put into communication box
    rule rl_host_recv (rg_state == STATE_RUNNING);
-      Vector #(79, Bit #(8)) bytevec <- c_host_recv (79);
+      Bytevec_C_to_BSV bytevec <- c_host_recv (fromInteger (bytevec_C_to_BSV_size));
       // Protocol: bytevec [0] is the size of the bytevec
       // 0 is used to indicate that no bytevec was available from the host
       if (bytevec [0] != 0) begin
@@ -108,8 +122,9 @@ module mkTop_HW_Side (Empty) ;
 	 // Debug
 	 if (verbosity != 0) begin
 	    $write ("Top_HW_Side.rl_host_recv\n    [");
-	    for (Integer j = 0; j < 79; j = j + 1)
-	       $write (" %02h", bytevec [j]);
+	    for (Integer j = 0; j < bytevec_C_to_BSV_size; j = j + 1)
+	       if (fromInteger (j) < bytevec [0])
+		  $write (" %02h", bytevec [j]);
 	    $display ("]");
 	 end
       end
@@ -117,16 +132,18 @@ module mkTop_HW_Side (Empty) ;
 
    // Get a bytevec from communication box and send to host
    rule rl_host_send (rg_state == STATE_RUNNING);
-      Vector #(76, Bit #(8)) bytevec <- pop_o (comms.fo_BSV_to_C_bytevec);
-      c_host_send (bytevec, 76);
+      BSV_to_C_Bytevec bytevec <- pop_o (comms.fo_BSV_to_C_bytevec);
 
       // Debug
       if (verbosity != 0) begin
 	 $write ("Top_HW_Side.rl_host_send\n    [");
-	 for (Integer j = 0; j < 76; j = j + 1)
-	    $write (" %02h", bytevec [j]);
+	 for (Integer j = 0; j < fromInteger (bytevec_BSV_to_C_size); j = j + 1)
+	    if (fromInteger (j) < bytevec [0])
+	       $write (" %02h", bytevec [j]);
 	 $display ("]");
       end
+
+      c_host_send (bytevec, fromInteger (bytevec_BSV_to_C_size));
    endrule
 
    // ----------------
@@ -309,6 +326,15 @@ module mkTop_HW_Side (Empty) ;
 
    //  None (this is top-level)
 
+endmodule
+
+// ================================================================
+// Specialization of parameterized AXI4 Deburster for DDR4s
+
+(* synthesize *)
+module mkAXI4_Deburster_DDR4 (AXI4_Deburster_IFC #(16, 64, 512, 0));
+   let m <- mkAXI4_Deburster;
+   return m;
 endmodule
 
 // ================================================================

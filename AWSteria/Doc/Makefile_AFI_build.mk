@@ -38,7 +38,7 @@ DCP_FOLDER        ?= AWSteria
 # standard test_dram_dma example
 # DCP_TARFILE       ?= 20_05_16-210151.Developer_CL.tar
 # AWSteria
-# DCP_TARFILE       ?= 20_05_14-225622.Developer_CL.tar
+DCP_TARFILE       ?= 20_05_24-162730.Developer_CL.tar
 
 # Pick a name for a bucket to be created which will hold the DCP
 LOGS_BUCKET       ?= $(DCP_BUCKET)

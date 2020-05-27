@@ -1,6 +1,6 @@
 // This file was generated from spec file 'AWS_FPGA_Spec'
 
-package Comms;
+package Bytevec;
 
 import Vector     :: *;
 import FIFOF      :: *;
@@ -123,9 +123,22 @@ typedef struct {
     Bit #(0)        ruser;    // 0 bytes
 } AXI4L_Rd_Data_d32_u0
 deriving (Bits, FShow);
-// ================================================================
 
-interface Comms_IFC;
+// ================================================================
+// Bytevecs
+
+typedef  79  Bytevec_C_to_BSV_Size;
+Integer  bytevec_C_to_BSV_size = 79;
+typedef  Vector #(Bytevec_C_to_BSV_Size, Bit #(8))  Bytevec_C_to_BSV;
+
+typedef  76  BSV_to_C_Bytevec_Size;
+Integer  bytevec_BSV_to_C_size = 76;
+typedef  Vector #(BSV_to_C_Bytevec_Size, Bit #(8))  BSV_to_C_Bytevec;
+
+// ================================================================
+// INTERFACE
+
+interface Bytevec_IFC;
     // ---------------- Facing BSV
     // C to BSV
     interface FIFOF_O #(AXI4_Wr_Addr_i16_a64_u0)  fo_AXI4_Wr_Addr_i16_a64_u0;
@@ -142,17 +155,18 @@ interface Comms_IFC;
     interface FIFOF_I #(AXI4L_Rd_Data_d32_u0)      fi_AXI4L_Rd_Data_d32_u0;
 
     // ---------------- Facing C
-    interface FIFOF_I #(Vector #(79, Bit #(8))) fi_C_to_BSV_bytevec;
-    interface FIFOF_O #(Vector #(76, Bit #(8))) fo_BSV_to_C_bytevec;
+    interface FIFOF_I #(Bytevec_C_to_BSV) fi_C_to_BSV_bytevec;
+    interface FIFOF_O #(BSV_to_C_Bytevec) fo_BSV_to_C_bytevec;
 endinterface
 
 // ================================================================
 
 (* synthesize *)
-module mkComms (Comms_IFC);
+module mkBytevec (Bytevec_IFC);
+   Integer verbosity = 1;
 
    // FIFOs and credit counters for C_to_BSV
-   FIFOF #(Vector #(79, Bit #(8))) f_C_to_BSV_bytevec <- mkFIFOF;
+   FIFOF #(Bytevec_C_to_BSV) f_C_to_BSV_bytevec <- mkFIFOF;
 
    FIFOF #(AXI4_Wr_Addr_i16_a64_u0) f_AXI4_Wr_Addr_i16_a64_u0 <- mkSizedFIFOF (128);
    Reg #(Bit #(8)) rg_credits_AXI4_Wr_Addr_i16_a64_u0 <- mkReg (128);
@@ -173,7 +187,7 @@ module mkComms (Comms_IFC);
    Reg #(Bit #(8)) rg_credits_AXI4L_Rd_Addr_a32_u0 <- mkReg (128);
 
    // FIFOs and credit counters for BSV_to_C
-   FIFOF #(Vector #(76, Bit #(8))) f_BSV_to_C_bytevec <- mkFIFOF;
+   FIFOF #(BSV_to_C_Bytevec) f_BSV_to_C_bytevec <- mkFIFOF;
 
    FIFOF #(AXI4_Wr_Resp_i16_u0) f_AXI4_Wr_Resp_i16_u0 <- mkFIFOF;
    Reg #(Bit #(8)) rg_credits_AXI4_Wr_Resp_i16_u0 <- mkReg (0);
@@ -192,6 +206,14 @@ module mkComms (Comms_IFC);
 
    let bytevec_C_to_BSV = f_C_to_BSV_bytevec.first;
 
+   rule rl_debug_bytevec_C_to_BSV (False);
+      $write ("Bytevec.rl_debug\n  ");
+      for (Integer j = 0; j < valueOf (Bytevec_C_to_BSV_Size); j = j + 1)
+         if (fromInteger (j) < bytevec_C_to_BSV [0])
+            $write (" %02h", bytevec_C_to_BSV [j]);
+      $display ("\n");
+   endrule
+
    // Common function to restore credits for BSV-to-C channels
    function Action restore_credits_for_BSV_to_C ();
       action
@@ -201,6 +223,15 @@ module mkComms (Comms_IFC);
          rg_credits_AXI4L_Rd_Data_d32_u0 <= rg_credits_AXI4L_Rd_Data_d32_u0 + bytevec_C_to_BSV [4];
       endaction
    endfunction
+
+   rule rl_C_to_BSV_credits_only (bytevec_C_to_BSV [5] == 0);
+
+      restore_credits_for_BSV_to_C;
+
+      f_C_to_BSV_bytevec.deq;
+      if (verbosity != 0)
+         $display ("Bytevec.rl_C_to_BSV_credits_only");
+   endrule
 
    rule rl_C_to_BSV_AXI4_Wr_Addr_i16_a64_u0 (bytevec_C_to_BSV [5] == 1);
 
@@ -229,10 +260,12 @@ module mkComms (Comms_IFC);
                   awregion : truncate (bytevec_C_to_BSV [23]),
                   awuser : ? };
 
-      // Collect the C-to-BSV packet and dequeue the bytevec
+      // Enqueue the C-to-BSV struct and dequeue the bytevec
       f_AXI4_Wr_Addr_i16_a64_u0.enq (s);
       rg_credits_AXI4_Wr_Addr_i16_a64_u0 <= rg_credits_AXI4_Wr_Addr_i16_a64_u0 - 1;
       f_C_to_BSV_bytevec.deq;
+      if (verbosity != 0)
+         $display ("Bytevec: received: ", fshow (s));
    endrule
 
    rule rl_C_to_BSV_AXI4_Wr_Data_d512_u0 (bytevec_C_to_BSV [5] == 2);
@@ -306,21 +339,23 @@ module mkComms (Comms_IFC);
                                       bytevec_C_to_BSV [8],
                                       bytevec_C_to_BSV [7],
                                       bytevec_C_to_BSV [6] } ),
-                  wstrb : truncate ({ bytevec_C_to_BSV [14],
-                                      bytevec_C_to_BSV [13],
-                                      bytevec_C_to_BSV [12],
-                                      bytevec_C_to_BSV [11],
-                                      bytevec_C_to_BSV [10],
-                                      bytevec_C_to_BSV [9],
-                                      bytevec_C_to_BSV [8],
-                                      bytevec_C_to_BSV [7] } ),
-                  wlast : truncate (bytevec_C_to_BSV [15]),
+                  wstrb : truncate ({ bytevec_C_to_BSV [77],
+                                      bytevec_C_to_BSV [76],
+                                      bytevec_C_to_BSV [75],
+                                      bytevec_C_to_BSV [74],
+                                      bytevec_C_to_BSV [73],
+                                      bytevec_C_to_BSV [72],
+                                      bytevec_C_to_BSV [71],
+                                      bytevec_C_to_BSV [70] } ),
+                  wlast : truncate (bytevec_C_to_BSV [78]),
                   wuser : ? };
 
-      // Collect the C-to-BSV packet and dequeue the bytevec
+      // Enqueue the C-to-BSV struct and dequeue the bytevec
       f_AXI4_Wr_Data_d512_u0.enq (s);
       rg_credits_AXI4_Wr_Data_d512_u0 <= rg_credits_AXI4_Wr_Data_d512_u0 - 1;
       f_C_to_BSV_bytevec.deq;
+      if (verbosity != 0)
+         $display ("Bytevec: received: ", fshow (s));
    endrule
 
    rule rl_C_to_BSV_AXI4_Rd_Addr_i16_a64_u0 (bytevec_C_to_BSV [5] == 3);
@@ -350,10 +385,12 @@ module mkComms (Comms_IFC);
                   arregion : truncate (bytevec_C_to_BSV [23]),
                   aruser : ? };
 
-      // Collect the C-to-BSV packet and dequeue the bytevec
+      // Enqueue the C-to-BSV struct and dequeue the bytevec
       f_AXI4_Rd_Addr_i16_a64_u0.enq (s);
       rg_credits_AXI4_Rd_Addr_i16_a64_u0 <= rg_credits_AXI4_Rd_Addr_i16_a64_u0 - 1;
       f_C_to_BSV_bytevec.deq;
+      if (verbosity != 0)
+         $display ("Bytevec: received: ", fshow (s));
    endrule
 
    rule rl_C_to_BSV_AXI4L_Wr_Addr_a32_u0 (bytevec_C_to_BSV [5] == 4);
@@ -370,10 +407,12 @@ module mkComms (Comms_IFC);
                   awprot : truncate (bytevec_C_to_BSV [10]),
                   awuser : ? };
 
-      // Collect the C-to-BSV packet and dequeue the bytevec
+      // Enqueue the C-to-BSV struct and dequeue the bytevec
       f_AXI4L_Wr_Addr_a32_u0.enq (s);
       rg_credits_AXI4L_Wr_Addr_a32_u0 <= rg_credits_AXI4L_Wr_Addr_a32_u0 - 1;
       f_C_to_BSV_bytevec.deq;
+      if (verbosity != 0)
+         $display ("Bytevec: received: ", fshow (s));
    endrule
 
    rule rl_C_to_BSV_AXI4L_Wr_Data_d32 (bytevec_C_to_BSV [5] == 5);
@@ -389,10 +428,12 @@ module mkComms (Comms_IFC);
                                       bytevec_C_to_BSV [6] } ),
                   wstrb : truncate (bytevec_C_to_BSV [10]) };
 
-      // Collect the C-to-BSV packet and dequeue the bytevec
+      // Enqueue the C-to-BSV struct and dequeue the bytevec
       f_AXI4L_Wr_Data_d32.enq (s);
       rg_credits_AXI4L_Wr_Data_d32 <= rg_credits_AXI4L_Wr_Data_d32 - 1;
       f_C_to_BSV_bytevec.deq;
+      if (verbosity != 0)
+         $display ("Bytevec: received: ", fshow (s));
    endrule
 
    rule rl_C_to_BSV_AXI4L_Rd_Addr_a32_u0 (bytevec_C_to_BSV [5] == 6);
@@ -409,17 +450,19 @@ module mkComms (Comms_IFC);
                   arprot : truncate (bytevec_C_to_BSV [10]),
                   aruser : ? };
 
-      // Collect the C-to-BSV packet and dequeue the bytevec
+      // Enqueue the C-to-BSV struct and dequeue the bytevec
       f_AXI4L_Rd_Addr_a32_u0.enq (s);
       rg_credits_AXI4L_Rd_Addr_a32_u0 <= rg_credits_AXI4L_Rd_Addr_a32_u0 - 1;
       f_C_to_BSV_bytevec.deq;
+      if (verbosity != 0)
+         $display ("Bytevec: received: ", fshow (s));
    endrule
 
    // ================================================================
-   // BEHAVIOR: BSV to C packets
+   // BEHAVIOR: BSV to C structs
 
    // Common function to fill in credits for C_to_BSV channels
-   function ActionValue #(Vector #(76, Bit #(8))) fill_credits_for_C_to_BSV (Vector #(76, Bit #(8)) bv);
+   function ActionValue #(BSV_to_C_Bytevec) fill_credits_for_C_to_BSV (BSV_to_C_Bytevec bv);
       actionvalue
          bv [1] = rg_credits_AXI4_Wr_Addr_i16_a64_u0;    rg_credits_AXI4_Wr_Addr_i16_a64_u0 <= 0;
          bv [2] = rg_credits_AXI4_Wr_Data_d512_u0;    rg_credits_AXI4_Wr_Data_d512_u0 <= 0;
@@ -436,7 +479,7 @@ module mkComms (Comms_IFC);
                && (rg_credits_AXI4_Wr_Resp_i16_u0 != 0));
 
    rule rl_BSV_to_C_AXI4_Wr_Resp_i16_u0 (ready_AXI4_Wr_Resp_i16_u0);
-      Vector #(76, Bit #(8)) bytevec_BSV_to_C = replicate (0);
+      BSV_to_C_Bytevec bytevec_BSV_to_C = replicate (0);
       bytevec_BSV_to_C [0] = 11;
 
       bytevec_BSV_to_C <- fill_credits_for_C_to_BSV (bytevec_BSV_to_C);
@@ -452,6 +495,8 @@ module mkComms (Comms_IFC);
 
       // Send the bytevec to C
       f_BSV_to_C_bytevec.enq (bytevec_BSV_to_C);
+      if (verbosity != 0)
+         $display ("Bytevec: sent: ", fshow (s));
    endrule
 
    Bool ready_AXI4_Rd_Data_i16_d512_u0 =
@@ -459,7 +504,7 @@ module mkComms (Comms_IFC);
                && (rg_credits_AXI4_Rd_Data_i16_d512_u0 != 0));
 
    rule rl_BSV_to_C_AXI4_Rd_Data_i16_d512_u0 (ready_AXI4_Rd_Data_i16_d512_u0);
-      Vector #(76, Bit #(8)) bytevec_BSV_to_C = replicate (0);
+      BSV_to_C_Bytevec bytevec_BSV_to_C = replicate (0);
       bytevec_BSV_to_C [0] = 76;
 
       bytevec_BSV_to_C <- fill_credits_for_C_to_BSV (bytevec_BSV_to_C);
@@ -540,6 +585,8 @@ module mkComms (Comms_IFC);
 
       // Send the bytevec to C
       f_BSV_to_C_bytevec.enq (bytevec_BSV_to_C);
+      if (verbosity != 0)
+         $display ("Bytevec: sent: ", fshow (s));
    endrule
 
    Bool ready_AXI4L_Wr_Resp_u0 =
@@ -547,7 +594,7 @@ module mkComms (Comms_IFC);
                && (rg_credits_AXI4L_Wr_Resp_u0 != 0));
 
    rule rl_BSV_to_C_AXI4L_Wr_Resp_u0 (ready_AXI4L_Wr_Resp_u0);
-      Vector #(76, Bit #(8)) bytevec_BSV_to_C = replicate (0);
+      BSV_to_C_Bytevec bytevec_BSV_to_C = replicate (0);
       bytevec_BSV_to_C [0] = 9;
 
       bytevec_BSV_to_C <- fill_credits_for_C_to_BSV (bytevec_BSV_to_C);
@@ -561,6 +608,8 @@ module mkComms (Comms_IFC);
 
       // Send the bytevec to C
       f_BSV_to_C_bytevec.enq (bytevec_BSV_to_C);
+      if (verbosity != 0)
+         $display ("Bytevec: sent: ", fshow (s));
    endrule
 
    Bool ready_AXI4L_Rd_Data_d32_u0 =
@@ -568,7 +617,7 @@ module mkComms (Comms_IFC);
                && (rg_credits_AXI4L_Rd_Data_d32_u0 != 0));
 
    rule rl_BSV_to_C_AXI4L_Rd_Data_d32_u0 (ready_AXI4L_Rd_Data_d32_u0);
-      Vector #(76, Bit #(8)) bytevec_BSV_to_C = replicate (0);
+      BSV_to_C_Bytevec bytevec_BSV_to_C = replicate (0);
       bytevec_BSV_to_C [0] = 13;
 
       bytevec_BSV_to_C <- fill_credits_for_C_to_BSV (bytevec_BSV_to_C);
@@ -586,19 +635,42 @@ module mkComms (Comms_IFC);
 
       // Send the bytevec to C
       f_BSV_to_C_bytevec.enq (bytevec_BSV_to_C);
+      if (verbosity != 0)
+         $display ("Bytevec: sent: ", fshow (s));
    endrule
 
-   // If no packets to send, send a 'credits-only' packet
+   // If no struct to send, send a 'credits-only' bytevec
    rule rl_BSV_to_C_credits_only ((! ready_AXI4_Wr_Resp_i16_u0) &&
                                   (! ready_AXI4_Rd_Data_i16_d512_u0) &&
                                   (! ready_AXI4L_Wr_Resp_u0) &&
                                   (! ready_AXI4L_Rd_Data_d32_u0));
-      Vector #(76, Bit #(8)) bytevec_BSV_to_C = replicate (0);
+      BSV_to_C_Bytevec  bytevec_BSV_to_C = replicate (0);
       bytevec_BSV_to_C [0] = 8;
 
       bytevec_BSV_to_C <- fill_credits_for_C_to_BSV (bytevec_BSV_to_C);
 
       bytevec_BSV_to_C [7] = 0;    // type 0 = credits-only
+
+      // Send the bytevec to C if any non-zero credits
+      Bool non_zero = False;
+      non_zero = non_zero || (bytevec_BSV_to_C [1] != 0);
+      non_zero = non_zero || (bytevec_BSV_to_C [2] != 0);
+      non_zero = non_zero || (bytevec_BSV_to_C [3] != 0);
+      non_zero = non_zero || (bytevec_BSV_to_C [4] != 0);
+      non_zero = non_zero || (bytevec_BSV_to_C [5] != 0);
+      non_zero = non_zero || (bytevec_BSV_to_C [6] != 0);
+      if (non_zero) begin
+         f_BSV_to_C_bytevec.enq (bytevec_BSV_to_C);
+         if (verbosity != 0) begin
+            $display ("Bytevec.rl_BSV_to_C_credits_only");
+            $display ("    %0d AXI4_Wr_Addr_i16_a64_u0", bytevec_BSV_to_C [1]);
+            $display ("    %0d AXI4_Wr_Data_d512_u0", bytevec_BSV_to_C [2]);
+            $display ("    %0d AXI4_Rd_Addr_i16_a64_u0", bytevec_BSV_to_C [3]);
+            $display ("    %0d AXI4L_Wr_Addr_a32_u0", bytevec_BSV_to_C [4]);
+            $display ("    %0d AXI4L_Wr_Data_d32", bytevec_BSV_to_C [5]);
+            $display ("    %0d AXI4L_Rd_Addr_a32_u0", bytevec_BSV_to_C [6]);
+         end
+      end
    endrule
 
    // Bogus rule, just for anchoring this urgency attribute

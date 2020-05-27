@@ -31,7 +31,6 @@
 #include <assert.h>
 
 // For comms polling
-#include <sys/types.h>
 #include <poll.h>
 #include <sched.h>
 

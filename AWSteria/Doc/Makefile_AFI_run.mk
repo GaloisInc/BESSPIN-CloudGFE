@@ -29,16 +29,22 @@ SW_EXE            = test_hello_world
 
 # The following will only be known after Step_3f_Start_AFI_Creation:
 
-AFI_ID  = "afi-0d31f0d4cb999bf13"
-AGFI_ID = "agfi-083e63670297bf487"
+# 
+AFI_ID  = "afi-0735d1366f0532f90"
+AGFI_ID = "agfi-037d7a8803a9d632c"
 
 # ================================================================
+# (These steps are also in the 'build flow' documentation.)
 # git clone the GitHub AWS-FPGA repository into your F1 instance
 
 .PHONY: Step_0c_Clone_aws-fpga
 Step_0c_Clone_aws-fpga:
 	@echo "Cloning aws-fpga; one-time step into F1 instance"
 	git clone  https://github.com/aws/aws-fpga.git  $(AWS_FPGA_REPO_DIR)
+
+.PHONY: Step_3g_AFI_Check_Status
+Step_3g_AFI_Check_Status:
+	aws ec2 describe-fpga-images --fpga-image-ids  $(AFI_ID)
 
 # ================================================================
 # Set up AWS FPGA Management tools

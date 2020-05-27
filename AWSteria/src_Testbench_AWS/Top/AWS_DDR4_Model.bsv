@@ -43,7 +43,7 @@ module mkMem_Model #(parameter Bit #(2) ddr4_num) (AXI4_16_64_512_0_Slave_IFC);
 
    // Note: each 'word' in the RegFile is 512b = 64B => uses 6 lsbs of address.
 
-   Bit #(64) implemented_words = 'h_0100_0000;    // 16M words, each 64 B => 1 GB size
+   Bit #(64) implemented_words = 'h_0400_0000;    // 64M words, each 64 B => 4 GB size
 
    RegFile #(Bit #(64), Bit #(512)) rf <- mkRegFile (0, implemented_words - 1);
 
