@@ -345,6 +345,87 @@ module mkTop_HW_Side(CLK,
        ddr4_A$wready,
        ddr4_A$wvalid;
 
+  // ports of submodule ddr4_A_deburster
+  wire [511 : 0] ddr4_A_deburster$from_master_rdata,
+		 ddr4_A_deburster$from_master_wdata,
+		 ddr4_A_deburster$to_slave_rdata,
+		 ddr4_A_deburster$to_slave_wdata;
+  wire [63 : 0] ddr4_A_deburster$from_master_araddr,
+		ddr4_A_deburster$from_master_awaddr,
+		ddr4_A_deburster$from_master_wstrb,
+		ddr4_A_deburster$to_slave_araddr,
+		ddr4_A_deburster$to_slave_awaddr,
+		ddr4_A_deburster$to_slave_wstrb;
+  wire [15 : 0] ddr4_A_deburster$from_master_arid,
+		ddr4_A_deburster$from_master_awid,
+		ddr4_A_deburster$from_master_bid,
+		ddr4_A_deburster$from_master_rid,
+		ddr4_A_deburster$to_slave_arid,
+		ddr4_A_deburster$to_slave_awid,
+		ddr4_A_deburster$to_slave_bid,
+		ddr4_A_deburster$to_slave_rid;
+  wire [7 : 0] ddr4_A_deburster$from_master_arlen,
+	       ddr4_A_deburster$from_master_awlen,
+	       ddr4_A_deburster$to_slave_arlen,
+	       ddr4_A_deburster$to_slave_awlen;
+  wire [3 : 0] ddr4_A_deburster$from_master_arcache,
+	       ddr4_A_deburster$from_master_arqos,
+	       ddr4_A_deburster$from_master_arregion,
+	       ddr4_A_deburster$from_master_awcache,
+	       ddr4_A_deburster$from_master_awqos,
+	       ddr4_A_deburster$from_master_awregion,
+	       ddr4_A_deburster$to_slave_arcache,
+	       ddr4_A_deburster$to_slave_arqos,
+	       ddr4_A_deburster$to_slave_arregion,
+	       ddr4_A_deburster$to_slave_awcache,
+	       ddr4_A_deburster$to_slave_awqos,
+	       ddr4_A_deburster$to_slave_awregion;
+  wire [2 : 0] ddr4_A_deburster$from_master_arprot,
+	       ddr4_A_deburster$from_master_arsize,
+	       ddr4_A_deburster$from_master_awprot,
+	       ddr4_A_deburster$from_master_awsize,
+	       ddr4_A_deburster$to_slave_arprot,
+	       ddr4_A_deburster$to_slave_arsize,
+	       ddr4_A_deburster$to_slave_awprot,
+	       ddr4_A_deburster$to_slave_awsize;
+  wire [1 : 0] ddr4_A_deburster$from_master_arburst,
+	       ddr4_A_deburster$from_master_awburst,
+	       ddr4_A_deburster$from_master_bresp,
+	       ddr4_A_deburster$from_master_rresp,
+	       ddr4_A_deburster$to_slave_arburst,
+	       ddr4_A_deburster$to_slave_awburst,
+	       ddr4_A_deburster$to_slave_bresp,
+	       ddr4_A_deburster$to_slave_rresp;
+  wire ddr4_A_deburster$EN_reset,
+       ddr4_A_deburster$from_master_arlock,
+       ddr4_A_deburster$from_master_arready,
+       ddr4_A_deburster$from_master_arvalid,
+       ddr4_A_deburster$from_master_awlock,
+       ddr4_A_deburster$from_master_awready,
+       ddr4_A_deburster$from_master_awvalid,
+       ddr4_A_deburster$from_master_bready,
+       ddr4_A_deburster$from_master_bvalid,
+       ddr4_A_deburster$from_master_rlast,
+       ddr4_A_deburster$from_master_rready,
+       ddr4_A_deburster$from_master_rvalid,
+       ddr4_A_deburster$from_master_wlast,
+       ddr4_A_deburster$from_master_wready,
+       ddr4_A_deburster$from_master_wvalid,
+       ddr4_A_deburster$to_slave_arlock,
+       ddr4_A_deburster$to_slave_arready,
+       ddr4_A_deburster$to_slave_arvalid,
+       ddr4_A_deburster$to_slave_awlock,
+       ddr4_A_deburster$to_slave_awready,
+       ddr4_A_deburster$to_slave_awvalid,
+       ddr4_A_deburster$to_slave_bready,
+       ddr4_A_deburster$to_slave_bvalid,
+       ddr4_A_deburster$to_slave_rlast,
+       ddr4_A_deburster$to_slave_rready,
+       ddr4_A_deburster$to_slave_rvalid,
+       ddr4_A_deburster$to_slave_wlast,
+       ddr4_A_deburster$to_slave_wready,
+       ddr4_A_deburster$to_slave_wvalid;
+
   // ports of submodule ddr4_B
   wire [511 : 0] ddr4_B$rdata, ddr4_B$wdata;
   wire [63 : 0] ddr4_B$araddr, ddr4_B$awaddr, ddr4_B$wstrb;
@@ -372,6 +453,87 @@ module mkTop_HW_Side(CLK,
        ddr4_B$wlast,
        ddr4_B$wready,
        ddr4_B$wvalid;
+
+  // ports of submodule ddr4_B_deburster
+  wire [511 : 0] ddr4_B_deburster$from_master_rdata,
+		 ddr4_B_deburster$from_master_wdata,
+		 ddr4_B_deburster$to_slave_rdata,
+		 ddr4_B_deburster$to_slave_wdata;
+  wire [63 : 0] ddr4_B_deburster$from_master_araddr,
+		ddr4_B_deburster$from_master_awaddr,
+		ddr4_B_deburster$from_master_wstrb,
+		ddr4_B_deburster$to_slave_araddr,
+		ddr4_B_deburster$to_slave_awaddr,
+		ddr4_B_deburster$to_slave_wstrb;
+  wire [15 : 0] ddr4_B_deburster$from_master_arid,
+		ddr4_B_deburster$from_master_awid,
+		ddr4_B_deburster$from_master_bid,
+		ddr4_B_deburster$from_master_rid,
+		ddr4_B_deburster$to_slave_arid,
+		ddr4_B_deburster$to_slave_awid,
+		ddr4_B_deburster$to_slave_bid,
+		ddr4_B_deburster$to_slave_rid;
+  wire [7 : 0] ddr4_B_deburster$from_master_arlen,
+	       ddr4_B_deburster$from_master_awlen,
+	       ddr4_B_deburster$to_slave_arlen,
+	       ddr4_B_deburster$to_slave_awlen;
+  wire [3 : 0] ddr4_B_deburster$from_master_arcache,
+	       ddr4_B_deburster$from_master_arqos,
+	       ddr4_B_deburster$from_master_arregion,
+	       ddr4_B_deburster$from_master_awcache,
+	       ddr4_B_deburster$from_master_awqos,
+	       ddr4_B_deburster$from_master_awregion,
+	       ddr4_B_deburster$to_slave_arcache,
+	       ddr4_B_deburster$to_slave_arqos,
+	       ddr4_B_deburster$to_slave_arregion,
+	       ddr4_B_deburster$to_slave_awcache,
+	       ddr4_B_deburster$to_slave_awqos,
+	       ddr4_B_deburster$to_slave_awregion;
+  wire [2 : 0] ddr4_B_deburster$from_master_arprot,
+	       ddr4_B_deburster$from_master_arsize,
+	       ddr4_B_deburster$from_master_awprot,
+	       ddr4_B_deburster$from_master_awsize,
+	       ddr4_B_deburster$to_slave_arprot,
+	       ddr4_B_deburster$to_slave_arsize,
+	       ddr4_B_deburster$to_slave_awprot,
+	       ddr4_B_deburster$to_slave_awsize;
+  wire [1 : 0] ddr4_B_deburster$from_master_arburst,
+	       ddr4_B_deburster$from_master_awburst,
+	       ddr4_B_deburster$from_master_bresp,
+	       ddr4_B_deburster$from_master_rresp,
+	       ddr4_B_deburster$to_slave_arburst,
+	       ddr4_B_deburster$to_slave_awburst,
+	       ddr4_B_deburster$to_slave_bresp,
+	       ddr4_B_deburster$to_slave_rresp;
+  wire ddr4_B_deburster$EN_reset,
+       ddr4_B_deburster$from_master_arlock,
+       ddr4_B_deburster$from_master_arready,
+       ddr4_B_deburster$from_master_arvalid,
+       ddr4_B_deburster$from_master_awlock,
+       ddr4_B_deburster$from_master_awready,
+       ddr4_B_deburster$from_master_awvalid,
+       ddr4_B_deburster$from_master_bready,
+       ddr4_B_deburster$from_master_bvalid,
+       ddr4_B_deburster$from_master_rlast,
+       ddr4_B_deburster$from_master_rready,
+       ddr4_B_deburster$from_master_rvalid,
+       ddr4_B_deburster$from_master_wlast,
+       ddr4_B_deburster$from_master_wready,
+       ddr4_B_deburster$from_master_wvalid,
+       ddr4_B_deburster$to_slave_arlock,
+       ddr4_B_deburster$to_slave_arready,
+       ddr4_B_deburster$to_slave_arvalid,
+       ddr4_B_deburster$to_slave_awlock,
+       ddr4_B_deburster$to_slave_awready,
+       ddr4_B_deburster$to_slave_awvalid,
+       ddr4_B_deburster$to_slave_bready,
+       ddr4_B_deburster$to_slave_bvalid,
+       ddr4_B_deburster$to_slave_rlast,
+       ddr4_B_deburster$to_slave_rready,
+       ddr4_B_deburster$to_slave_rvalid,
+       ddr4_B_deburster$to_slave_wlast,
+       ddr4_B_deburster$to_slave_wready,
+       ddr4_B_deburster$to_slave_wvalid;
 
   // ports of submodule ddr4_C
   wire [511 : 0] ddr4_C$rdata, ddr4_C$wdata;
@@ -401,6 +563,87 @@ module mkTop_HW_Side(CLK,
        ddr4_C$wready,
        ddr4_C$wvalid;
 
+  // ports of submodule ddr4_C_deburster
+  wire [511 : 0] ddr4_C_deburster$from_master_rdata,
+		 ddr4_C_deburster$from_master_wdata,
+		 ddr4_C_deburster$to_slave_rdata,
+		 ddr4_C_deburster$to_slave_wdata;
+  wire [63 : 0] ddr4_C_deburster$from_master_araddr,
+		ddr4_C_deburster$from_master_awaddr,
+		ddr4_C_deburster$from_master_wstrb,
+		ddr4_C_deburster$to_slave_araddr,
+		ddr4_C_deburster$to_slave_awaddr,
+		ddr4_C_deburster$to_slave_wstrb;
+  wire [15 : 0] ddr4_C_deburster$from_master_arid,
+		ddr4_C_deburster$from_master_awid,
+		ddr4_C_deburster$from_master_bid,
+		ddr4_C_deburster$from_master_rid,
+		ddr4_C_deburster$to_slave_arid,
+		ddr4_C_deburster$to_slave_awid,
+		ddr4_C_deburster$to_slave_bid,
+		ddr4_C_deburster$to_slave_rid;
+  wire [7 : 0] ddr4_C_deburster$from_master_arlen,
+	       ddr4_C_deburster$from_master_awlen,
+	       ddr4_C_deburster$to_slave_arlen,
+	       ddr4_C_deburster$to_slave_awlen;
+  wire [3 : 0] ddr4_C_deburster$from_master_arcache,
+	       ddr4_C_deburster$from_master_arqos,
+	       ddr4_C_deburster$from_master_arregion,
+	       ddr4_C_deburster$from_master_awcache,
+	       ddr4_C_deburster$from_master_awqos,
+	       ddr4_C_deburster$from_master_awregion,
+	       ddr4_C_deburster$to_slave_arcache,
+	       ddr4_C_deburster$to_slave_arqos,
+	       ddr4_C_deburster$to_slave_arregion,
+	       ddr4_C_deburster$to_slave_awcache,
+	       ddr4_C_deburster$to_slave_awqos,
+	       ddr4_C_deburster$to_slave_awregion;
+  wire [2 : 0] ddr4_C_deburster$from_master_arprot,
+	       ddr4_C_deburster$from_master_arsize,
+	       ddr4_C_deburster$from_master_awprot,
+	       ddr4_C_deburster$from_master_awsize,
+	       ddr4_C_deburster$to_slave_arprot,
+	       ddr4_C_deburster$to_slave_arsize,
+	       ddr4_C_deburster$to_slave_awprot,
+	       ddr4_C_deburster$to_slave_awsize;
+  wire [1 : 0] ddr4_C_deburster$from_master_arburst,
+	       ddr4_C_deburster$from_master_awburst,
+	       ddr4_C_deburster$from_master_bresp,
+	       ddr4_C_deburster$from_master_rresp,
+	       ddr4_C_deburster$to_slave_arburst,
+	       ddr4_C_deburster$to_slave_awburst,
+	       ddr4_C_deburster$to_slave_bresp,
+	       ddr4_C_deburster$to_slave_rresp;
+  wire ddr4_C_deburster$EN_reset,
+       ddr4_C_deburster$from_master_arlock,
+       ddr4_C_deburster$from_master_arready,
+       ddr4_C_deburster$from_master_arvalid,
+       ddr4_C_deburster$from_master_awlock,
+       ddr4_C_deburster$from_master_awready,
+       ddr4_C_deburster$from_master_awvalid,
+       ddr4_C_deburster$from_master_bready,
+       ddr4_C_deburster$from_master_bvalid,
+       ddr4_C_deburster$from_master_rlast,
+       ddr4_C_deburster$from_master_rready,
+       ddr4_C_deburster$from_master_rvalid,
+       ddr4_C_deburster$from_master_wlast,
+       ddr4_C_deburster$from_master_wready,
+       ddr4_C_deburster$from_master_wvalid,
+       ddr4_C_deburster$to_slave_arlock,
+       ddr4_C_deburster$to_slave_arready,
+       ddr4_C_deburster$to_slave_arvalid,
+       ddr4_C_deburster$to_slave_awlock,
+       ddr4_C_deburster$to_slave_awready,
+       ddr4_C_deburster$to_slave_awvalid,
+       ddr4_C_deburster$to_slave_bready,
+       ddr4_C_deburster$to_slave_bvalid,
+       ddr4_C_deburster$to_slave_rlast,
+       ddr4_C_deburster$to_slave_rready,
+       ddr4_C_deburster$to_slave_rvalid,
+       ddr4_C_deburster$to_slave_wlast,
+       ddr4_C_deburster$to_slave_wready,
+       ddr4_C_deburster$to_slave_wvalid;
+
   // ports of submodule ddr4_D
   wire [511 : 0] ddr4_D$rdata, ddr4_D$wdata;
   wire [63 : 0] ddr4_D$araddr, ddr4_D$awaddr, ddr4_D$wstrb;
@@ -428,6 +671,87 @@ module mkTop_HW_Side(CLK,
        ddr4_D$wlast,
        ddr4_D$wready,
        ddr4_D$wvalid;
+
+  // ports of submodule ddr4_D_deburster
+  wire [511 : 0] ddr4_D_deburster$from_master_rdata,
+		 ddr4_D_deburster$from_master_wdata,
+		 ddr4_D_deburster$to_slave_rdata,
+		 ddr4_D_deburster$to_slave_wdata;
+  wire [63 : 0] ddr4_D_deburster$from_master_araddr,
+		ddr4_D_deburster$from_master_awaddr,
+		ddr4_D_deburster$from_master_wstrb,
+		ddr4_D_deburster$to_slave_araddr,
+		ddr4_D_deburster$to_slave_awaddr,
+		ddr4_D_deburster$to_slave_wstrb;
+  wire [15 : 0] ddr4_D_deburster$from_master_arid,
+		ddr4_D_deburster$from_master_awid,
+		ddr4_D_deburster$from_master_bid,
+		ddr4_D_deburster$from_master_rid,
+		ddr4_D_deburster$to_slave_arid,
+		ddr4_D_deburster$to_slave_awid,
+		ddr4_D_deburster$to_slave_bid,
+		ddr4_D_deburster$to_slave_rid;
+  wire [7 : 0] ddr4_D_deburster$from_master_arlen,
+	       ddr4_D_deburster$from_master_awlen,
+	       ddr4_D_deburster$to_slave_arlen,
+	       ddr4_D_deburster$to_slave_awlen;
+  wire [3 : 0] ddr4_D_deburster$from_master_arcache,
+	       ddr4_D_deburster$from_master_arqos,
+	       ddr4_D_deburster$from_master_arregion,
+	       ddr4_D_deburster$from_master_awcache,
+	       ddr4_D_deburster$from_master_awqos,
+	       ddr4_D_deburster$from_master_awregion,
+	       ddr4_D_deburster$to_slave_arcache,
+	       ddr4_D_deburster$to_slave_arqos,
+	       ddr4_D_deburster$to_slave_arregion,
+	       ddr4_D_deburster$to_slave_awcache,
+	       ddr4_D_deburster$to_slave_awqos,
+	       ddr4_D_deburster$to_slave_awregion;
+  wire [2 : 0] ddr4_D_deburster$from_master_arprot,
+	       ddr4_D_deburster$from_master_arsize,
+	       ddr4_D_deburster$from_master_awprot,
+	       ddr4_D_deburster$from_master_awsize,
+	       ddr4_D_deburster$to_slave_arprot,
+	       ddr4_D_deburster$to_slave_arsize,
+	       ddr4_D_deburster$to_slave_awprot,
+	       ddr4_D_deburster$to_slave_awsize;
+  wire [1 : 0] ddr4_D_deburster$from_master_arburst,
+	       ddr4_D_deburster$from_master_awburst,
+	       ddr4_D_deburster$from_master_bresp,
+	       ddr4_D_deburster$from_master_rresp,
+	       ddr4_D_deburster$to_slave_arburst,
+	       ddr4_D_deburster$to_slave_awburst,
+	       ddr4_D_deburster$to_slave_bresp,
+	       ddr4_D_deburster$to_slave_rresp;
+  wire ddr4_D_deburster$EN_reset,
+       ddr4_D_deburster$from_master_arlock,
+       ddr4_D_deburster$from_master_arready,
+       ddr4_D_deburster$from_master_arvalid,
+       ddr4_D_deburster$from_master_awlock,
+       ddr4_D_deburster$from_master_awready,
+       ddr4_D_deburster$from_master_awvalid,
+       ddr4_D_deburster$from_master_bready,
+       ddr4_D_deburster$from_master_bvalid,
+       ddr4_D_deburster$from_master_rlast,
+       ddr4_D_deburster$from_master_rready,
+       ddr4_D_deburster$from_master_rvalid,
+       ddr4_D_deburster$from_master_wlast,
+       ddr4_D_deburster$from_master_wready,
+       ddr4_D_deburster$from_master_wvalid,
+       ddr4_D_deburster$to_slave_arlock,
+       ddr4_D_deburster$to_slave_arready,
+       ddr4_D_deburster$to_slave_arvalid,
+       ddr4_D_deburster$to_slave_awlock,
+       ddr4_D_deburster$to_slave_awready,
+       ddr4_D_deburster$to_slave_awvalid,
+       ddr4_D_deburster$to_slave_bready,
+       ddr4_D_deburster$to_slave_bvalid,
+       ddr4_D_deburster$to_slave_rlast,
+       ddr4_D_deburster$to_slave_rready,
+       ddr4_D_deburster$to_slave_rvalid,
+       ddr4_D_deburster$to_slave_wlast,
+       ddr4_D_deburster$to_slave_wready,
+       ddr4_D_deburster$to_slave_wvalid;
 
   // ports of submodule dma_pcis_xactor_f_rd_addr
   wire [108 : 0] dma_pcis_xactor_f_rd_addr$D_IN,
@@ -534,12 +858,20 @@ module mkTop_HW_Side(CLK,
        CAN_FIRE_RL_rl_rd_addr_channel_3,
        CAN_FIRE_RL_rl_rd_addr_channel_4,
        CAN_FIRE_RL_rl_rd_addr_channel_5,
+       CAN_FIRE_RL_rl_rd_addr_channel_6,
+       CAN_FIRE_RL_rl_rd_addr_channel_7,
+       CAN_FIRE_RL_rl_rd_addr_channel_8,
+       CAN_FIRE_RL_rl_rd_addr_channel_9,
        CAN_FIRE_RL_rl_rd_data_channel,
        CAN_FIRE_RL_rl_rd_data_channel_1,
        CAN_FIRE_RL_rl_rd_data_channel_2,
        CAN_FIRE_RL_rl_rd_data_channel_3,
        CAN_FIRE_RL_rl_rd_data_channel_4,
        CAN_FIRE_RL_rl_rd_data_channel_5,
+       CAN_FIRE_RL_rl_rd_data_channel_6,
+       CAN_FIRE_RL_rl_rd_data_channel_7,
+       CAN_FIRE_RL_rl_rd_data_channel_8,
+       CAN_FIRE_RL_rl_rd_data_channel_9,
        CAN_FIRE_RL_rl_start_when_connected,
        CAN_FIRE_RL_rl_status_signals,
        CAN_FIRE_RL_rl_wr_addr_channel,
@@ -548,18 +880,30 @@ module mkTop_HW_Side(CLK,
        CAN_FIRE_RL_rl_wr_addr_channel_3,
        CAN_FIRE_RL_rl_wr_addr_channel_4,
        CAN_FIRE_RL_rl_wr_addr_channel_5,
+       CAN_FIRE_RL_rl_wr_addr_channel_6,
+       CAN_FIRE_RL_rl_wr_addr_channel_7,
+       CAN_FIRE_RL_rl_wr_addr_channel_8,
+       CAN_FIRE_RL_rl_wr_addr_channel_9,
        CAN_FIRE_RL_rl_wr_data_channel,
        CAN_FIRE_RL_rl_wr_data_channel_1,
        CAN_FIRE_RL_rl_wr_data_channel_2,
        CAN_FIRE_RL_rl_wr_data_channel_3,
        CAN_FIRE_RL_rl_wr_data_channel_4,
        CAN_FIRE_RL_rl_wr_data_channel_5,
+       CAN_FIRE_RL_rl_wr_data_channel_6,
+       CAN_FIRE_RL_rl_wr_data_channel_7,
+       CAN_FIRE_RL_rl_wr_data_channel_8,
+       CAN_FIRE_RL_rl_wr_data_channel_9,
        CAN_FIRE_RL_rl_wr_response_channel,
        CAN_FIRE_RL_rl_wr_response_channel_1,
        CAN_FIRE_RL_rl_wr_response_channel_2,
        CAN_FIRE_RL_rl_wr_response_channel_3,
        CAN_FIRE_RL_rl_wr_response_channel_4,
        CAN_FIRE_RL_rl_wr_response_channel_5,
+       CAN_FIRE_RL_rl_wr_response_channel_6,
+       CAN_FIRE_RL_rl_wr_response_channel_7,
+       CAN_FIRE_RL_rl_wr_response_channel_8,
+       CAN_FIRE_RL_rl_wr_response_channel_9,
        WILL_FIRE_RL_rl_connect_dma_pcis_rd_addr,
        WILL_FIRE_RL_rl_connect_dma_pcis_rd_data,
        WILL_FIRE_RL_rl_connect_dma_pcis_wr_addr,
@@ -579,12 +923,20 @@ module mkTop_HW_Side(CLK,
        WILL_FIRE_RL_rl_rd_addr_channel_3,
        WILL_FIRE_RL_rl_rd_addr_channel_4,
        WILL_FIRE_RL_rl_rd_addr_channel_5,
+       WILL_FIRE_RL_rl_rd_addr_channel_6,
+       WILL_FIRE_RL_rl_rd_addr_channel_7,
+       WILL_FIRE_RL_rl_rd_addr_channel_8,
+       WILL_FIRE_RL_rl_rd_addr_channel_9,
        WILL_FIRE_RL_rl_rd_data_channel,
        WILL_FIRE_RL_rl_rd_data_channel_1,
        WILL_FIRE_RL_rl_rd_data_channel_2,
        WILL_FIRE_RL_rl_rd_data_channel_3,
        WILL_FIRE_RL_rl_rd_data_channel_4,
        WILL_FIRE_RL_rl_rd_data_channel_5,
+       WILL_FIRE_RL_rl_rd_data_channel_6,
+       WILL_FIRE_RL_rl_rd_data_channel_7,
+       WILL_FIRE_RL_rl_rd_data_channel_8,
+       WILL_FIRE_RL_rl_rd_data_channel_9,
        WILL_FIRE_RL_rl_start_when_connected,
        WILL_FIRE_RL_rl_status_signals,
        WILL_FIRE_RL_rl_wr_addr_channel,
@@ -593,22 +945,34 @@ module mkTop_HW_Side(CLK,
        WILL_FIRE_RL_rl_wr_addr_channel_3,
        WILL_FIRE_RL_rl_wr_addr_channel_4,
        WILL_FIRE_RL_rl_wr_addr_channel_5,
+       WILL_FIRE_RL_rl_wr_addr_channel_6,
+       WILL_FIRE_RL_rl_wr_addr_channel_7,
+       WILL_FIRE_RL_rl_wr_addr_channel_8,
+       WILL_FIRE_RL_rl_wr_addr_channel_9,
        WILL_FIRE_RL_rl_wr_data_channel,
        WILL_FIRE_RL_rl_wr_data_channel_1,
        WILL_FIRE_RL_rl_wr_data_channel_2,
        WILL_FIRE_RL_rl_wr_data_channel_3,
        WILL_FIRE_RL_rl_wr_data_channel_4,
        WILL_FIRE_RL_rl_wr_data_channel_5,
+       WILL_FIRE_RL_rl_wr_data_channel_6,
+       WILL_FIRE_RL_rl_wr_data_channel_7,
+       WILL_FIRE_RL_rl_wr_data_channel_8,
+       WILL_FIRE_RL_rl_wr_data_channel_9,
        WILL_FIRE_RL_rl_wr_response_channel,
        WILL_FIRE_RL_rl_wr_response_channel_1,
        WILL_FIRE_RL_rl_wr_response_channel_2,
        WILL_FIRE_RL_rl_wr_response_channel_3,
        WILL_FIRE_RL_rl_wr_response_channel_4,
-       WILL_FIRE_RL_rl_wr_response_channel_5;
+       WILL_FIRE_RL_rl_wr_response_channel_5,
+       WILL_FIRE_RL_rl_wr_response_channel_6,
+       WILL_FIRE_RL_rl_wr_response_channel_7,
+       WILL_FIRE_RL_rl_wr_response_channel_8,
+       WILL_FIRE_RL_rl_wr_response_channel_9;
 
   // declarations used by system tasks
   // synopsys translate_off
-  reg [631 : 0] TASK_c_host_recv___d183;
+  reg [631 : 0] TASK_c_host_recv___d359;
   // synopsys translate_on
 
   // submodule aws_BSV_top
@@ -835,75 +1199,75 @@ module mkTop_HW_Side(CLK,
 			    .m_vled(aws_BSV_top$m_vled));
 
   // submodule comms
-  mkComms comms(.CLK(CLK),
-		.RST_N(RST_N),
-		.fi_AXI4L_Rd_Data_d32_u0_enq_x(comms$fi_AXI4L_Rd_Data_d32_u0_enq_x),
-		.fi_AXI4L_Wr_Resp_u0_enq_x(comms$fi_AXI4L_Wr_Resp_u0_enq_x),
-		.fi_AXI4_Rd_Data_i16_d512_u0_enq_x(comms$fi_AXI4_Rd_Data_i16_d512_u0_enq_x),
-		.fi_AXI4_Wr_Resp_i16_u0_enq_x(comms$fi_AXI4_Wr_Resp_i16_u0_enq_x),
-		.fi_C_to_BSV_bytevec_enq_x(comms$fi_C_to_BSV_bytevec_enq_x),
-		.EN_fo_AXI4_Wr_Addr_i16_a64_u0_deq(comms$EN_fo_AXI4_Wr_Addr_i16_a64_u0_deq),
-		.EN_fo_AXI4_Wr_Data_d512_u0_deq(comms$EN_fo_AXI4_Wr_Data_d512_u0_deq),
-		.EN_fo_AXI4_Rd_Addr_i16_a64_u0_deq(comms$EN_fo_AXI4_Rd_Addr_i16_a64_u0_deq),
-		.EN_fo_AXI4L_Wr_Addr_a32_u0_deq(comms$EN_fo_AXI4L_Wr_Addr_a32_u0_deq),
-		.EN_fo_AXI4L_Wr_Data_d32_deq(comms$EN_fo_AXI4L_Wr_Data_d32_deq),
-		.EN_fo_AXI4L_Rd_Addr_a32_u0_deq(comms$EN_fo_AXI4L_Rd_Addr_a32_u0_deq),
-		.EN_fi_AXI4_Wr_Resp_i16_u0_enq(comms$EN_fi_AXI4_Wr_Resp_i16_u0_enq),
-		.EN_fi_AXI4_Rd_Data_i16_d512_u0_enq(comms$EN_fi_AXI4_Rd_Data_i16_d512_u0_enq),
-		.EN_fi_AXI4L_Wr_Resp_u0_enq(comms$EN_fi_AXI4L_Wr_Resp_u0_enq),
-		.EN_fi_AXI4L_Rd_Data_d32_u0_enq(comms$EN_fi_AXI4L_Rd_Data_d32_u0_enq),
-		.EN_fi_C_to_BSV_bytevec_enq(comms$EN_fi_C_to_BSV_bytevec_enq),
-		.EN_fo_BSV_to_C_bytevec_deq(comms$EN_fo_BSV_to_C_bytevec_deq),
-		.fo_AXI4_Wr_Addr_i16_a64_u0_first(comms$fo_AXI4_Wr_Addr_i16_a64_u0_first),
-		.RDY_fo_AXI4_Wr_Addr_i16_a64_u0_first(comms$RDY_fo_AXI4_Wr_Addr_i16_a64_u0_first),
-		.RDY_fo_AXI4_Wr_Addr_i16_a64_u0_deq(comms$RDY_fo_AXI4_Wr_Addr_i16_a64_u0_deq),
-		.fo_AXI4_Wr_Addr_i16_a64_u0_notEmpty(),
-		.RDY_fo_AXI4_Wr_Addr_i16_a64_u0_notEmpty(),
-		.fo_AXI4_Wr_Data_d512_u0_first(comms$fo_AXI4_Wr_Data_d512_u0_first),
-		.RDY_fo_AXI4_Wr_Data_d512_u0_first(comms$RDY_fo_AXI4_Wr_Data_d512_u0_first),
-		.RDY_fo_AXI4_Wr_Data_d512_u0_deq(comms$RDY_fo_AXI4_Wr_Data_d512_u0_deq),
-		.fo_AXI4_Wr_Data_d512_u0_notEmpty(),
-		.RDY_fo_AXI4_Wr_Data_d512_u0_notEmpty(),
-		.fo_AXI4_Rd_Addr_i16_a64_u0_first(comms$fo_AXI4_Rd_Addr_i16_a64_u0_first),
-		.RDY_fo_AXI4_Rd_Addr_i16_a64_u0_first(comms$RDY_fo_AXI4_Rd_Addr_i16_a64_u0_first),
-		.RDY_fo_AXI4_Rd_Addr_i16_a64_u0_deq(comms$RDY_fo_AXI4_Rd_Addr_i16_a64_u0_deq),
-		.fo_AXI4_Rd_Addr_i16_a64_u0_notEmpty(),
-		.RDY_fo_AXI4_Rd_Addr_i16_a64_u0_notEmpty(),
-		.fo_AXI4L_Wr_Addr_a32_u0_first(comms$fo_AXI4L_Wr_Addr_a32_u0_first),
-		.RDY_fo_AXI4L_Wr_Addr_a32_u0_first(comms$RDY_fo_AXI4L_Wr_Addr_a32_u0_first),
-		.RDY_fo_AXI4L_Wr_Addr_a32_u0_deq(comms$RDY_fo_AXI4L_Wr_Addr_a32_u0_deq),
-		.fo_AXI4L_Wr_Addr_a32_u0_notEmpty(),
-		.RDY_fo_AXI4L_Wr_Addr_a32_u0_notEmpty(),
-		.fo_AXI4L_Wr_Data_d32_first(comms$fo_AXI4L_Wr_Data_d32_first),
-		.RDY_fo_AXI4L_Wr_Data_d32_first(comms$RDY_fo_AXI4L_Wr_Data_d32_first),
-		.RDY_fo_AXI4L_Wr_Data_d32_deq(comms$RDY_fo_AXI4L_Wr_Data_d32_deq),
-		.fo_AXI4L_Wr_Data_d32_notEmpty(),
-		.RDY_fo_AXI4L_Wr_Data_d32_notEmpty(),
-		.fo_AXI4L_Rd_Addr_a32_u0_first(comms$fo_AXI4L_Rd_Addr_a32_u0_first),
-		.RDY_fo_AXI4L_Rd_Addr_a32_u0_first(comms$RDY_fo_AXI4L_Rd_Addr_a32_u0_first),
-		.RDY_fo_AXI4L_Rd_Addr_a32_u0_deq(comms$RDY_fo_AXI4L_Rd_Addr_a32_u0_deq),
-		.fo_AXI4L_Rd_Addr_a32_u0_notEmpty(),
-		.RDY_fo_AXI4L_Rd_Addr_a32_u0_notEmpty(),
-		.RDY_fi_AXI4_Wr_Resp_i16_u0_enq(comms$RDY_fi_AXI4_Wr_Resp_i16_u0_enq),
-		.fi_AXI4_Wr_Resp_i16_u0_notFull(),
-		.RDY_fi_AXI4_Wr_Resp_i16_u0_notFull(),
-		.RDY_fi_AXI4_Rd_Data_i16_d512_u0_enq(comms$RDY_fi_AXI4_Rd_Data_i16_d512_u0_enq),
-		.fi_AXI4_Rd_Data_i16_d512_u0_notFull(),
-		.RDY_fi_AXI4_Rd_Data_i16_d512_u0_notFull(),
-		.RDY_fi_AXI4L_Wr_Resp_u0_enq(comms$RDY_fi_AXI4L_Wr_Resp_u0_enq),
-		.fi_AXI4L_Wr_Resp_u0_notFull(),
-		.RDY_fi_AXI4L_Wr_Resp_u0_notFull(),
-		.RDY_fi_AXI4L_Rd_Data_d32_u0_enq(comms$RDY_fi_AXI4L_Rd_Data_d32_u0_enq),
-		.fi_AXI4L_Rd_Data_d32_u0_notFull(),
-		.RDY_fi_AXI4L_Rd_Data_d32_u0_notFull(),
-		.RDY_fi_C_to_BSV_bytevec_enq(comms$RDY_fi_C_to_BSV_bytevec_enq),
-		.fi_C_to_BSV_bytevec_notFull(),
-		.RDY_fi_C_to_BSV_bytevec_notFull(),
-		.fo_BSV_to_C_bytevec_first(comms$fo_BSV_to_C_bytevec_first),
-		.RDY_fo_BSV_to_C_bytevec_first(comms$RDY_fo_BSV_to_C_bytevec_first),
-		.RDY_fo_BSV_to_C_bytevec_deq(comms$RDY_fo_BSV_to_C_bytevec_deq),
-		.fo_BSV_to_C_bytevec_notEmpty(),
-		.RDY_fo_BSV_to_C_bytevec_notEmpty());
+  mkBytevec comms(.CLK(CLK),
+		  .RST_N(RST_N),
+		  .fi_AXI4L_Rd_Data_d32_u0_enq_x(comms$fi_AXI4L_Rd_Data_d32_u0_enq_x),
+		  .fi_AXI4L_Wr_Resp_u0_enq_x(comms$fi_AXI4L_Wr_Resp_u0_enq_x),
+		  .fi_AXI4_Rd_Data_i16_d512_u0_enq_x(comms$fi_AXI4_Rd_Data_i16_d512_u0_enq_x),
+		  .fi_AXI4_Wr_Resp_i16_u0_enq_x(comms$fi_AXI4_Wr_Resp_i16_u0_enq_x),
+		  .fi_C_to_BSV_bytevec_enq_x(comms$fi_C_to_BSV_bytevec_enq_x),
+		  .EN_fo_AXI4_Wr_Addr_i16_a64_u0_deq(comms$EN_fo_AXI4_Wr_Addr_i16_a64_u0_deq),
+		  .EN_fo_AXI4_Wr_Data_d512_u0_deq(comms$EN_fo_AXI4_Wr_Data_d512_u0_deq),
+		  .EN_fo_AXI4_Rd_Addr_i16_a64_u0_deq(comms$EN_fo_AXI4_Rd_Addr_i16_a64_u0_deq),
+		  .EN_fo_AXI4L_Wr_Addr_a32_u0_deq(comms$EN_fo_AXI4L_Wr_Addr_a32_u0_deq),
+		  .EN_fo_AXI4L_Wr_Data_d32_deq(comms$EN_fo_AXI4L_Wr_Data_d32_deq),
+		  .EN_fo_AXI4L_Rd_Addr_a32_u0_deq(comms$EN_fo_AXI4L_Rd_Addr_a32_u0_deq),
+		  .EN_fi_AXI4_Wr_Resp_i16_u0_enq(comms$EN_fi_AXI4_Wr_Resp_i16_u0_enq),
+		  .EN_fi_AXI4_Rd_Data_i16_d512_u0_enq(comms$EN_fi_AXI4_Rd_Data_i16_d512_u0_enq),
+		  .EN_fi_AXI4L_Wr_Resp_u0_enq(comms$EN_fi_AXI4L_Wr_Resp_u0_enq),
+		  .EN_fi_AXI4L_Rd_Data_d32_u0_enq(comms$EN_fi_AXI4L_Rd_Data_d32_u0_enq),
+		  .EN_fi_C_to_BSV_bytevec_enq(comms$EN_fi_C_to_BSV_bytevec_enq),
+		  .EN_fo_BSV_to_C_bytevec_deq(comms$EN_fo_BSV_to_C_bytevec_deq),
+		  .fo_AXI4_Wr_Addr_i16_a64_u0_first(comms$fo_AXI4_Wr_Addr_i16_a64_u0_first),
+		  .RDY_fo_AXI4_Wr_Addr_i16_a64_u0_first(comms$RDY_fo_AXI4_Wr_Addr_i16_a64_u0_first),
+		  .RDY_fo_AXI4_Wr_Addr_i16_a64_u0_deq(comms$RDY_fo_AXI4_Wr_Addr_i16_a64_u0_deq),
+		  .fo_AXI4_Wr_Addr_i16_a64_u0_notEmpty(),
+		  .RDY_fo_AXI4_Wr_Addr_i16_a64_u0_notEmpty(),
+		  .fo_AXI4_Wr_Data_d512_u0_first(comms$fo_AXI4_Wr_Data_d512_u0_first),
+		  .RDY_fo_AXI4_Wr_Data_d512_u0_first(comms$RDY_fo_AXI4_Wr_Data_d512_u0_first),
+		  .RDY_fo_AXI4_Wr_Data_d512_u0_deq(comms$RDY_fo_AXI4_Wr_Data_d512_u0_deq),
+		  .fo_AXI4_Wr_Data_d512_u0_notEmpty(),
+		  .RDY_fo_AXI4_Wr_Data_d512_u0_notEmpty(),
+		  .fo_AXI4_Rd_Addr_i16_a64_u0_first(comms$fo_AXI4_Rd_Addr_i16_a64_u0_first),
+		  .RDY_fo_AXI4_Rd_Addr_i16_a64_u0_first(comms$RDY_fo_AXI4_Rd_Addr_i16_a64_u0_first),
+		  .RDY_fo_AXI4_Rd_Addr_i16_a64_u0_deq(comms$RDY_fo_AXI4_Rd_Addr_i16_a64_u0_deq),
+		  .fo_AXI4_Rd_Addr_i16_a64_u0_notEmpty(),
+		  .RDY_fo_AXI4_Rd_Addr_i16_a64_u0_notEmpty(),
+		  .fo_AXI4L_Wr_Addr_a32_u0_first(comms$fo_AXI4L_Wr_Addr_a32_u0_first),
+		  .RDY_fo_AXI4L_Wr_Addr_a32_u0_first(comms$RDY_fo_AXI4L_Wr_Addr_a32_u0_first),
+		  .RDY_fo_AXI4L_Wr_Addr_a32_u0_deq(comms$RDY_fo_AXI4L_Wr_Addr_a32_u0_deq),
+		  .fo_AXI4L_Wr_Addr_a32_u0_notEmpty(),
+		  .RDY_fo_AXI4L_Wr_Addr_a32_u0_notEmpty(),
+		  .fo_AXI4L_Wr_Data_d32_first(comms$fo_AXI4L_Wr_Data_d32_first),
+		  .RDY_fo_AXI4L_Wr_Data_d32_first(comms$RDY_fo_AXI4L_Wr_Data_d32_first),
+		  .RDY_fo_AXI4L_Wr_Data_d32_deq(comms$RDY_fo_AXI4L_Wr_Data_d32_deq),
+		  .fo_AXI4L_Wr_Data_d32_notEmpty(),
+		  .RDY_fo_AXI4L_Wr_Data_d32_notEmpty(),
+		  .fo_AXI4L_Rd_Addr_a32_u0_first(comms$fo_AXI4L_Rd_Addr_a32_u0_first),
+		  .RDY_fo_AXI4L_Rd_Addr_a32_u0_first(comms$RDY_fo_AXI4L_Rd_Addr_a32_u0_first),
+		  .RDY_fo_AXI4L_Rd_Addr_a32_u0_deq(comms$RDY_fo_AXI4L_Rd_Addr_a32_u0_deq),
+		  .fo_AXI4L_Rd_Addr_a32_u0_notEmpty(),
+		  .RDY_fo_AXI4L_Rd_Addr_a32_u0_notEmpty(),
+		  .RDY_fi_AXI4_Wr_Resp_i16_u0_enq(comms$RDY_fi_AXI4_Wr_Resp_i16_u0_enq),
+		  .fi_AXI4_Wr_Resp_i16_u0_notFull(),
+		  .RDY_fi_AXI4_Wr_Resp_i16_u0_notFull(),
+		  .RDY_fi_AXI4_Rd_Data_i16_d512_u0_enq(comms$RDY_fi_AXI4_Rd_Data_i16_d512_u0_enq),
+		  .fi_AXI4_Rd_Data_i16_d512_u0_notFull(),
+		  .RDY_fi_AXI4_Rd_Data_i16_d512_u0_notFull(),
+		  .RDY_fi_AXI4L_Wr_Resp_u0_enq(comms$RDY_fi_AXI4L_Wr_Resp_u0_enq),
+		  .fi_AXI4L_Wr_Resp_u0_notFull(),
+		  .RDY_fi_AXI4L_Wr_Resp_u0_notFull(),
+		  .RDY_fi_AXI4L_Rd_Data_d32_u0_enq(comms$RDY_fi_AXI4L_Rd_Data_d32_u0_enq),
+		  .fi_AXI4L_Rd_Data_d32_u0_notFull(),
+		  .RDY_fi_AXI4L_Rd_Data_d32_u0_notFull(),
+		  .RDY_fi_C_to_BSV_bytevec_enq(comms$RDY_fi_C_to_BSV_bytevec_enq),
+		  .fi_C_to_BSV_bytevec_notFull(),
+		  .RDY_fi_C_to_BSV_bytevec_notFull(),
+		  .fo_BSV_to_C_bytevec_first(comms$fo_BSV_to_C_bytevec_first),
+		  .RDY_fo_BSV_to_C_bytevec_first(comms$RDY_fo_BSV_to_C_bytevec_first),
+		  .RDY_fo_BSV_to_C_bytevec_deq(comms$RDY_fo_BSV_to_C_bytevec_deq),
+		  .fo_BSV_to_C_bytevec_notEmpty(),
+		  .RDY_fo_BSV_to_C_bytevec_notEmpty());
 
   // submodule ddr4_A
   mkMem_Model #(.ddr4_num(2'd0)) ddr4_A(.CLK(CLK),
@@ -948,6 +1312,90 @@ module mkTop_HW_Side(CLK,
 					.rresp(ddr4_A$rresp),
 					.rlast(ddr4_A$rlast));
 
+  // submodule ddr4_A_deburster
+  mkAXI4_Deburster_DDR4 ddr4_A_deburster(.CLK(CLK),
+					 .RST_N(RST_N),
+					 .from_master_araddr(ddr4_A_deburster$from_master_araddr),
+					 .from_master_arburst(ddr4_A_deburster$from_master_arburst),
+					 .from_master_arcache(ddr4_A_deburster$from_master_arcache),
+					 .from_master_arid(ddr4_A_deburster$from_master_arid),
+					 .from_master_arlen(ddr4_A_deburster$from_master_arlen),
+					 .from_master_arlock(ddr4_A_deburster$from_master_arlock),
+					 .from_master_arprot(ddr4_A_deburster$from_master_arprot),
+					 .from_master_arqos(ddr4_A_deburster$from_master_arqos),
+					 .from_master_arregion(ddr4_A_deburster$from_master_arregion),
+					 .from_master_arsize(ddr4_A_deburster$from_master_arsize),
+					 .from_master_arvalid(ddr4_A_deburster$from_master_arvalid),
+					 .from_master_awaddr(ddr4_A_deburster$from_master_awaddr),
+					 .from_master_awburst(ddr4_A_deburster$from_master_awburst),
+					 .from_master_awcache(ddr4_A_deburster$from_master_awcache),
+					 .from_master_awid(ddr4_A_deburster$from_master_awid),
+					 .from_master_awlen(ddr4_A_deburster$from_master_awlen),
+					 .from_master_awlock(ddr4_A_deburster$from_master_awlock),
+					 .from_master_awprot(ddr4_A_deburster$from_master_awprot),
+					 .from_master_awqos(ddr4_A_deburster$from_master_awqos),
+					 .from_master_awregion(ddr4_A_deburster$from_master_awregion),
+					 .from_master_awsize(ddr4_A_deburster$from_master_awsize),
+					 .from_master_awvalid(ddr4_A_deburster$from_master_awvalid),
+					 .from_master_bready(ddr4_A_deburster$from_master_bready),
+					 .from_master_rready(ddr4_A_deburster$from_master_rready),
+					 .from_master_wdata(ddr4_A_deburster$from_master_wdata),
+					 .from_master_wlast(ddr4_A_deburster$from_master_wlast),
+					 .from_master_wstrb(ddr4_A_deburster$from_master_wstrb),
+					 .from_master_wvalid(ddr4_A_deburster$from_master_wvalid),
+					 .to_slave_arready(ddr4_A_deburster$to_slave_arready),
+					 .to_slave_awready(ddr4_A_deburster$to_slave_awready),
+					 .to_slave_bid(ddr4_A_deburster$to_slave_bid),
+					 .to_slave_bresp(ddr4_A_deburster$to_slave_bresp),
+					 .to_slave_bvalid(ddr4_A_deburster$to_slave_bvalid),
+					 .to_slave_rdata(ddr4_A_deburster$to_slave_rdata),
+					 .to_slave_rid(ddr4_A_deburster$to_slave_rid),
+					 .to_slave_rlast(ddr4_A_deburster$to_slave_rlast),
+					 .to_slave_rresp(ddr4_A_deburster$to_slave_rresp),
+					 .to_slave_rvalid(ddr4_A_deburster$to_slave_rvalid),
+					 .to_slave_wready(ddr4_A_deburster$to_slave_wready),
+					 .EN_reset(ddr4_A_deburster$EN_reset),
+					 .RDY_reset(),
+					 .from_master_awready(ddr4_A_deburster$from_master_awready),
+					 .from_master_wready(ddr4_A_deburster$from_master_wready),
+					 .from_master_bvalid(ddr4_A_deburster$from_master_bvalid),
+					 .from_master_bid(ddr4_A_deburster$from_master_bid),
+					 .from_master_bresp(ddr4_A_deburster$from_master_bresp),
+					 .from_master_arready(ddr4_A_deburster$from_master_arready),
+					 .from_master_rvalid(ddr4_A_deburster$from_master_rvalid),
+					 .from_master_rid(ddr4_A_deburster$from_master_rid),
+					 .from_master_rdata(ddr4_A_deburster$from_master_rdata),
+					 .from_master_rresp(ddr4_A_deburster$from_master_rresp),
+					 .from_master_rlast(ddr4_A_deburster$from_master_rlast),
+					 .to_slave_awvalid(ddr4_A_deburster$to_slave_awvalid),
+					 .to_slave_awid(ddr4_A_deburster$to_slave_awid),
+					 .to_slave_awaddr(ddr4_A_deburster$to_slave_awaddr),
+					 .to_slave_awlen(ddr4_A_deburster$to_slave_awlen),
+					 .to_slave_awsize(ddr4_A_deburster$to_slave_awsize),
+					 .to_slave_awburst(ddr4_A_deburster$to_slave_awburst),
+					 .to_slave_awlock(ddr4_A_deburster$to_slave_awlock),
+					 .to_slave_awcache(ddr4_A_deburster$to_slave_awcache),
+					 .to_slave_awprot(ddr4_A_deburster$to_slave_awprot),
+					 .to_slave_awqos(ddr4_A_deburster$to_slave_awqos),
+					 .to_slave_awregion(ddr4_A_deburster$to_slave_awregion),
+					 .to_slave_wvalid(ddr4_A_deburster$to_slave_wvalid),
+					 .to_slave_wdata(ddr4_A_deburster$to_slave_wdata),
+					 .to_slave_wstrb(ddr4_A_deburster$to_slave_wstrb),
+					 .to_slave_wlast(ddr4_A_deburster$to_slave_wlast),
+					 .to_slave_bready(ddr4_A_deburster$to_slave_bready),
+					 .to_slave_arvalid(ddr4_A_deburster$to_slave_arvalid),
+					 .to_slave_arid(ddr4_A_deburster$to_slave_arid),
+					 .to_slave_araddr(ddr4_A_deburster$to_slave_araddr),
+					 .to_slave_arlen(ddr4_A_deburster$to_slave_arlen),
+					 .to_slave_arsize(ddr4_A_deburster$to_slave_arsize),
+					 .to_slave_arburst(ddr4_A_deburster$to_slave_arburst),
+					 .to_slave_arlock(ddr4_A_deburster$to_slave_arlock),
+					 .to_slave_arcache(ddr4_A_deburster$to_slave_arcache),
+					 .to_slave_arprot(ddr4_A_deburster$to_slave_arprot),
+					 .to_slave_arqos(ddr4_A_deburster$to_slave_arqos),
+					 .to_slave_arregion(ddr4_A_deburster$to_slave_arregion),
+					 .to_slave_rready(ddr4_A_deburster$to_slave_rready));
+
   // submodule ddr4_B
   mkMem_Model #(.ddr4_num(2'd1)) ddr4_B(.CLK(CLK),
 					.RST_N(RST_N),
@@ -990,6 +1438,90 @@ module mkTop_HW_Side(CLK,
 					.rdata(ddr4_B$rdata),
 					.rresp(ddr4_B$rresp),
 					.rlast(ddr4_B$rlast));
+
+  // submodule ddr4_B_deburster
+  mkAXI4_Deburster_DDR4 ddr4_B_deburster(.CLK(CLK),
+					 .RST_N(RST_N),
+					 .from_master_araddr(ddr4_B_deburster$from_master_araddr),
+					 .from_master_arburst(ddr4_B_deburster$from_master_arburst),
+					 .from_master_arcache(ddr4_B_deburster$from_master_arcache),
+					 .from_master_arid(ddr4_B_deburster$from_master_arid),
+					 .from_master_arlen(ddr4_B_deburster$from_master_arlen),
+					 .from_master_arlock(ddr4_B_deburster$from_master_arlock),
+					 .from_master_arprot(ddr4_B_deburster$from_master_arprot),
+					 .from_master_arqos(ddr4_B_deburster$from_master_arqos),
+					 .from_master_arregion(ddr4_B_deburster$from_master_arregion),
+					 .from_master_arsize(ddr4_B_deburster$from_master_arsize),
+					 .from_master_arvalid(ddr4_B_deburster$from_master_arvalid),
+					 .from_master_awaddr(ddr4_B_deburster$from_master_awaddr),
+					 .from_master_awburst(ddr4_B_deburster$from_master_awburst),
+					 .from_master_awcache(ddr4_B_deburster$from_master_awcache),
+					 .from_master_awid(ddr4_B_deburster$from_master_awid),
+					 .from_master_awlen(ddr4_B_deburster$from_master_awlen),
+					 .from_master_awlock(ddr4_B_deburster$from_master_awlock),
+					 .from_master_awprot(ddr4_B_deburster$from_master_awprot),
+					 .from_master_awqos(ddr4_B_deburster$from_master_awqos),
+					 .from_master_awregion(ddr4_B_deburster$from_master_awregion),
+					 .from_master_awsize(ddr4_B_deburster$from_master_awsize),
+					 .from_master_awvalid(ddr4_B_deburster$from_master_awvalid),
+					 .from_master_bready(ddr4_B_deburster$from_master_bready),
+					 .from_master_rready(ddr4_B_deburster$from_master_rready),
+					 .from_master_wdata(ddr4_B_deburster$from_master_wdata),
+					 .from_master_wlast(ddr4_B_deburster$from_master_wlast),
+					 .from_master_wstrb(ddr4_B_deburster$from_master_wstrb),
+					 .from_master_wvalid(ddr4_B_deburster$from_master_wvalid),
+					 .to_slave_arready(ddr4_B_deburster$to_slave_arready),
+					 .to_slave_awready(ddr4_B_deburster$to_slave_awready),
+					 .to_slave_bid(ddr4_B_deburster$to_slave_bid),
+					 .to_slave_bresp(ddr4_B_deburster$to_slave_bresp),
+					 .to_slave_bvalid(ddr4_B_deburster$to_slave_bvalid),
+					 .to_slave_rdata(ddr4_B_deburster$to_slave_rdata),
+					 .to_slave_rid(ddr4_B_deburster$to_slave_rid),
+					 .to_slave_rlast(ddr4_B_deburster$to_slave_rlast),
+					 .to_slave_rresp(ddr4_B_deburster$to_slave_rresp),
+					 .to_slave_rvalid(ddr4_B_deburster$to_slave_rvalid),
+					 .to_slave_wready(ddr4_B_deburster$to_slave_wready),
+					 .EN_reset(ddr4_B_deburster$EN_reset),
+					 .RDY_reset(),
+					 .from_master_awready(ddr4_B_deburster$from_master_awready),
+					 .from_master_wready(ddr4_B_deburster$from_master_wready),
+					 .from_master_bvalid(ddr4_B_deburster$from_master_bvalid),
+					 .from_master_bid(ddr4_B_deburster$from_master_bid),
+					 .from_master_bresp(ddr4_B_deburster$from_master_bresp),
+					 .from_master_arready(ddr4_B_deburster$from_master_arready),
+					 .from_master_rvalid(ddr4_B_deburster$from_master_rvalid),
+					 .from_master_rid(ddr4_B_deburster$from_master_rid),
+					 .from_master_rdata(ddr4_B_deburster$from_master_rdata),
+					 .from_master_rresp(ddr4_B_deburster$from_master_rresp),
+					 .from_master_rlast(ddr4_B_deburster$from_master_rlast),
+					 .to_slave_awvalid(ddr4_B_deburster$to_slave_awvalid),
+					 .to_slave_awid(ddr4_B_deburster$to_slave_awid),
+					 .to_slave_awaddr(ddr4_B_deburster$to_slave_awaddr),
+					 .to_slave_awlen(ddr4_B_deburster$to_slave_awlen),
+					 .to_slave_awsize(ddr4_B_deburster$to_slave_awsize),
+					 .to_slave_awburst(ddr4_B_deburster$to_slave_awburst),
+					 .to_slave_awlock(ddr4_B_deburster$to_slave_awlock),
+					 .to_slave_awcache(ddr4_B_deburster$to_slave_awcache),
+					 .to_slave_awprot(ddr4_B_deburster$to_slave_awprot),
+					 .to_slave_awqos(ddr4_B_deburster$to_slave_awqos),
+					 .to_slave_awregion(ddr4_B_deburster$to_slave_awregion),
+					 .to_slave_wvalid(ddr4_B_deburster$to_slave_wvalid),
+					 .to_slave_wdata(ddr4_B_deburster$to_slave_wdata),
+					 .to_slave_wstrb(ddr4_B_deburster$to_slave_wstrb),
+					 .to_slave_wlast(ddr4_B_deburster$to_slave_wlast),
+					 .to_slave_bready(ddr4_B_deburster$to_slave_bready),
+					 .to_slave_arvalid(ddr4_B_deburster$to_slave_arvalid),
+					 .to_slave_arid(ddr4_B_deburster$to_slave_arid),
+					 .to_slave_araddr(ddr4_B_deburster$to_slave_araddr),
+					 .to_slave_arlen(ddr4_B_deburster$to_slave_arlen),
+					 .to_slave_arsize(ddr4_B_deburster$to_slave_arsize),
+					 .to_slave_arburst(ddr4_B_deburster$to_slave_arburst),
+					 .to_slave_arlock(ddr4_B_deburster$to_slave_arlock),
+					 .to_slave_arcache(ddr4_B_deburster$to_slave_arcache),
+					 .to_slave_arprot(ddr4_B_deburster$to_slave_arprot),
+					 .to_slave_arqos(ddr4_B_deburster$to_slave_arqos),
+					 .to_slave_arregion(ddr4_B_deburster$to_slave_arregion),
+					 .to_slave_rready(ddr4_B_deburster$to_slave_rready));
 
   // submodule ddr4_C
   mkMem_Model #(.ddr4_num(2'd2)) ddr4_C(.CLK(CLK),
@@ -1034,6 +1566,90 @@ module mkTop_HW_Side(CLK,
 					.rresp(ddr4_C$rresp),
 					.rlast(ddr4_C$rlast));
 
+  // submodule ddr4_C_deburster
+  mkAXI4_Deburster_DDR4 ddr4_C_deburster(.CLK(CLK),
+					 .RST_N(RST_N),
+					 .from_master_araddr(ddr4_C_deburster$from_master_araddr),
+					 .from_master_arburst(ddr4_C_deburster$from_master_arburst),
+					 .from_master_arcache(ddr4_C_deburster$from_master_arcache),
+					 .from_master_arid(ddr4_C_deburster$from_master_arid),
+					 .from_master_arlen(ddr4_C_deburster$from_master_arlen),
+					 .from_master_arlock(ddr4_C_deburster$from_master_arlock),
+					 .from_master_arprot(ddr4_C_deburster$from_master_arprot),
+					 .from_master_arqos(ddr4_C_deburster$from_master_arqos),
+					 .from_master_arregion(ddr4_C_deburster$from_master_arregion),
+					 .from_master_arsize(ddr4_C_deburster$from_master_arsize),
+					 .from_master_arvalid(ddr4_C_deburster$from_master_arvalid),
+					 .from_master_awaddr(ddr4_C_deburster$from_master_awaddr),
+					 .from_master_awburst(ddr4_C_deburster$from_master_awburst),
+					 .from_master_awcache(ddr4_C_deburster$from_master_awcache),
+					 .from_master_awid(ddr4_C_deburster$from_master_awid),
+					 .from_master_awlen(ddr4_C_deburster$from_master_awlen),
+					 .from_master_awlock(ddr4_C_deburster$from_master_awlock),
+					 .from_master_awprot(ddr4_C_deburster$from_master_awprot),
+					 .from_master_awqos(ddr4_C_deburster$from_master_awqos),
+					 .from_master_awregion(ddr4_C_deburster$from_master_awregion),
+					 .from_master_awsize(ddr4_C_deburster$from_master_awsize),
+					 .from_master_awvalid(ddr4_C_deburster$from_master_awvalid),
+					 .from_master_bready(ddr4_C_deburster$from_master_bready),
+					 .from_master_rready(ddr4_C_deburster$from_master_rready),
+					 .from_master_wdata(ddr4_C_deburster$from_master_wdata),
+					 .from_master_wlast(ddr4_C_deburster$from_master_wlast),
+					 .from_master_wstrb(ddr4_C_deburster$from_master_wstrb),
+					 .from_master_wvalid(ddr4_C_deburster$from_master_wvalid),
+					 .to_slave_arready(ddr4_C_deburster$to_slave_arready),
+					 .to_slave_awready(ddr4_C_deburster$to_slave_awready),
+					 .to_slave_bid(ddr4_C_deburster$to_slave_bid),
+					 .to_slave_bresp(ddr4_C_deburster$to_slave_bresp),
+					 .to_slave_bvalid(ddr4_C_deburster$to_slave_bvalid),
+					 .to_slave_rdata(ddr4_C_deburster$to_slave_rdata),
+					 .to_slave_rid(ddr4_C_deburster$to_slave_rid),
+					 .to_slave_rlast(ddr4_C_deburster$to_slave_rlast),
+					 .to_slave_rresp(ddr4_C_deburster$to_slave_rresp),
+					 .to_slave_rvalid(ddr4_C_deburster$to_slave_rvalid),
+					 .to_slave_wready(ddr4_C_deburster$to_slave_wready),
+					 .EN_reset(ddr4_C_deburster$EN_reset),
+					 .RDY_reset(),
+					 .from_master_awready(ddr4_C_deburster$from_master_awready),
+					 .from_master_wready(ddr4_C_deburster$from_master_wready),
+					 .from_master_bvalid(ddr4_C_deburster$from_master_bvalid),
+					 .from_master_bid(ddr4_C_deburster$from_master_bid),
+					 .from_master_bresp(ddr4_C_deburster$from_master_bresp),
+					 .from_master_arready(ddr4_C_deburster$from_master_arready),
+					 .from_master_rvalid(ddr4_C_deburster$from_master_rvalid),
+					 .from_master_rid(ddr4_C_deburster$from_master_rid),
+					 .from_master_rdata(ddr4_C_deburster$from_master_rdata),
+					 .from_master_rresp(ddr4_C_deburster$from_master_rresp),
+					 .from_master_rlast(ddr4_C_deburster$from_master_rlast),
+					 .to_slave_awvalid(ddr4_C_deburster$to_slave_awvalid),
+					 .to_slave_awid(ddr4_C_deburster$to_slave_awid),
+					 .to_slave_awaddr(ddr4_C_deburster$to_slave_awaddr),
+					 .to_slave_awlen(ddr4_C_deburster$to_slave_awlen),
+					 .to_slave_awsize(ddr4_C_deburster$to_slave_awsize),
+					 .to_slave_awburst(ddr4_C_deburster$to_slave_awburst),
+					 .to_slave_awlock(ddr4_C_deburster$to_slave_awlock),
+					 .to_slave_awcache(ddr4_C_deburster$to_slave_awcache),
+					 .to_slave_awprot(ddr4_C_deburster$to_slave_awprot),
+					 .to_slave_awqos(ddr4_C_deburster$to_slave_awqos),
+					 .to_slave_awregion(ddr4_C_deburster$to_slave_awregion),
+					 .to_slave_wvalid(ddr4_C_deburster$to_slave_wvalid),
+					 .to_slave_wdata(ddr4_C_deburster$to_slave_wdata),
+					 .to_slave_wstrb(ddr4_C_deburster$to_slave_wstrb),
+					 .to_slave_wlast(ddr4_C_deburster$to_slave_wlast),
+					 .to_slave_bready(ddr4_C_deburster$to_slave_bready),
+					 .to_slave_arvalid(ddr4_C_deburster$to_slave_arvalid),
+					 .to_slave_arid(ddr4_C_deburster$to_slave_arid),
+					 .to_slave_araddr(ddr4_C_deburster$to_slave_araddr),
+					 .to_slave_arlen(ddr4_C_deburster$to_slave_arlen),
+					 .to_slave_arsize(ddr4_C_deburster$to_slave_arsize),
+					 .to_slave_arburst(ddr4_C_deburster$to_slave_arburst),
+					 .to_slave_arlock(ddr4_C_deburster$to_slave_arlock),
+					 .to_slave_arcache(ddr4_C_deburster$to_slave_arcache),
+					 .to_slave_arprot(ddr4_C_deburster$to_slave_arprot),
+					 .to_slave_arqos(ddr4_C_deburster$to_slave_arqos),
+					 .to_slave_arregion(ddr4_C_deburster$to_slave_arregion),
+					 .to_slave_rready(ddr4_C_deburster$to_slave_rready));
+
   // submodule ddr4_D
   mkMem_Model #(.ddr4_num(2'd3)) ddr4_D(.CLK(CLK),
 					.RST_N(RST_N),
@@ -1076,6 +1692,90 @@ module mkTop_HW_Side(CLK,
 					.rdata(ddr4_D$rdata),
 					.rresp(ddr4_D$rresp),
 					.rlast(ddr4_D$rlast));
+
+  // submodule ddr4_D_deburster
+  mkAXI4_Deburster_DDR4 ddr4_D_deburster(.CLK(CLK),
+					 .RST_N(RST_N),
+					 .from_master_araddr(ddr4_D_deburster$from_master_araddr),
+					 .from_master_arburst(ddr4_D_deburster$from_master_arburst),
+					 .from_master_arcache(ddr4_D_deburster$from_master_arcache),
+					 .from_master_arid(ddr4_D_deburster$from_master_arid),
+					 .from_master_arlen(ddr4_D_deburster$from_master_arlen),
+					 .from_master_arlock(ddr4_D_deburster$from_master_arlock),
+					 .from_master_arprot(ddr4_D_deburster$from_master_arprot),
+					 .from_master_arqos(ddr4_D_deburster$from_master_arqos),
+					 .from_master_arregion(ddr4_D_deburster$from_master_arregion),
+					 .from_master_arsize(ddr4_D_deburster$from_master_arsize),
+					 .from_master_arvalid(ddr4_D_deburster$from_master_arvalid),
+					 .from_master_awaddr(ddr4_D_deburster$from_master_awaddr),
+					 .from_master_awburst(ddr4_D_deburster$from_master_awburst),
+					 .from_master_awcache(ddr4_D_deburster$from_master_awcache),
+					 .from_master_awid(ddr4_D_deburster$from_master_awid),
+					 .from_master_awlen(ddr4_D_deburster$from_master_awlen),
+					 .from_master_awlock(ddr4_D_deburster$from_master_awlock),
+					 .from_master_awprot(ddr4_D_deburster$from_master_awprot),
+					 .from_master_awqos(ddr4_D_deburster$from_master_awqos),
+					 .from_master_awregion(ddr4_D_deburster$from_master_awregion),
+					 .from_master_awsize(ddr4_D_deburster$from_master_awsize),
+					 .from_master_awvalid(ddr4_D_deburster$from_master_awvalid),
+					 .from_master_bready(ddr4_D_deburster$from_master_bready),
+					 .from_master_rready(ddr4_D_deburster$from_master_rready),
+					 .from_master_wdata(ddr4_D_deburster$from_master_wdata),
+					 .from_master_wlast(ddr4_D_deburster$from_master_wlast),
+					 .from_master_wstrb(ddr4_D_deburster$from_master_wstrb),
+					 .from_master_wvalid(ddr4_D_deburster$from_master_wvalid),
+					 .to_slave_arready(ddr4_D_deburster$to_slave_arready),
+					 .to_slave_awready(ddr4_D_deburster$to_slave_awready),
+					 .to_slave_bid(ddr4_D_deburster$to_slave_bid),
+					 .to_slave_bresp(ddr4_D_deburster$to_slave_bresp),
+					 .to_slave_bvalid(ddr4_D_deburster$to_slave_bvalid),
+					 .to_slave_rdata(ddr4_D_deburster$to_slave_rdata),
+					 .to_slave_rid(ddr4_D_deburster$to_slave_rid),
+					 .to_slave_rlast(ddr4_D_deburster$to_slave_rlast),
+					 .to_slave_rresp(ddr4_D_deburster$to_slave_rresp),
+					 .to_slave_rvalid(ddr4_D_deburster$to_slave_rvalid),
+					 .to_slave_wready(ddr4_D_deburster$to_slave_wready),
+					 .EN_reset(ddr4_D_deburster$EN_reset),
+					 .RDY_reset(),
+					 .from_master_awready(ddr4_D_deburster$from_master_awready),
+					 .from_master_wready(ddr4_D_deburster$from_master_wready),
+					 .from_master_bvalid(ddr4_D_deburster$from_master_bvalid),
+					 .from_master_bid(ddr4_D_deburster$from_master_bid),
+					 .from_master_bresp(ddr4_D_deburster$from_master_bresp),
+					 .from_master_arready(ddr4_D_deburster$from_master_arready),
+					 .from_master_rvalid(ddr4_D_deburster$from_master_rvalid),
+					 .from_master_rid(ddr4_D_deburster$from_master_rid),
+					 .from_master_rdata(ddr4_D_deburster$from_master_rdata),
+					 .from_master_rresp(ddr4_D_deburster$from_master_rresp),
+					 .from_master_rlast(ddr4_D_deburster$from_master_rlast),
+					 .to_slave_awvalid(ddr4_D_deburster$to_slave_awvalid),
+					 .to_slave_awid(ddr4_D_deburster$to_slave_awid),
+					 .to_slave_awaddr(ddr4_D_deburster$to_slave_awaddr),
+					 .to_slave_awlen(ddr4_D_deburster$to_slave_awlen),
+					 .to_slave_awsize(ddr4_D_deburster$to_slave_awsize),
+					 .to_slave_awburst(ddr4_D_deburster$to_slave_awburst),
+					 .to_slave_awlock(ddr4_D_deburster$to_slave_awlock),
+					 .to_slave_awcache(ddr4_D_deburster$to_slave_awcache),
+					 .to_slave_awprot(ddr4_D_deburster$to_slave_awprot),
+					 .to_slave_awqos(ddr4_D_deburster$to_slave_awqos),
+					 .to_slave_awregion(ddr4_D_deburster$to_slave_awregion),
+					 .to_slave_wvalid(ddr4_D_deburster$to_slave_wvalid),
+					 .to_slave_wdata(ddr4_D_deburster$to_slave_wdata),
+					 .to_slave_wstrb(ddr4_D_deburster$to_slave_wstrb),
+					 .to_slave_wlast(ddr4_D_deburster$to_slave_wlast),
+					 .to_slave_bready(ddr4_D_deburster$to_slave_bready),
+					 .to_slave_arvalid(ddr4_D_deburster$to_slave_arvalid),
+					 .to_slave_arid(ddr4_D_deburster$to_slave_arid),
+					 .to_slave_araddr(ddr4_D_deburster$to_slave_araddr),
+					 .to_slave_arlen(ddr4_D_deburster$to_slave_arlen),
+					 .to_slave_arsize(ddr4_D_deburster$to_slave_arsize),
+					 .to_slave_arburst(ddr4_D_deburster$to_slave_arburst),
+					 .to_slave_arlock(ddr4_D_deburster$to_slave_arlock),
+					 .to_slave_arcache(ddr4_D_deburster$to_slave_arcache),
+					 .to_slave_arprot(ddr4_D_deburster$to_slave_arprot),
+					 .to_slave_arqos(ddr4_D_deburster$to_slave_arqos),
+					 .to_slave_arregion(ddr4_D_deburster$to_slave_arregion),
+					 .to_slave_rready(ddr4_D_deburster$to_slave_rready));
 
   // submodule dma_pcis_xactor_f_rd_addr
   FIFO2 #(.width(32'd109),
@@ -1272,27 +1972,6 @@ module mkTop_HW_Side(CLK,
   assign CAN_FIRE_RL_rl_rd_data_channel_3 = 1'd1 ;
   assign WILL_FIRE_RL_rl_rd_data_channel_3 = 1'd1 ;
 
-  // rule RL_rl_connecting
-  assign CAN_FIRE_RL_rl_connecting = rg_state == 2'd0 ;
-  assign WILL_FIRE_RL_rl_connecting = CAN_FIRE_RL_rl_connecting ;
-
-  // rule RL_rl_start_when_connected
-  assign CAN_FIRE_RL_rl_start_when_connected = rg_state == 2'd1 ;
-  assign WILL_FIRE_RL_rl_start_when_connected =
-	     CAN_FIRE_RL_rl_start_when_connected ;
-
-  // rule RL_rl_host_recv
-  assign CAN_FIRE_RL_rl_host_recv =
-	     comms$RDY_fi_C_to_BSV_bytevec_enq && rg_state == 2'd2 ;
-  assign WILL_FIRE_RL_rl_host_recv = CAN_FIRE_RL_rl_host_recv ;
-
-  // rule RL_rl_host_send
-  assign CAN_FIRE_RL_rl_host_send =
-	     comms$RDY_fo_BSV_to_C_bytevec_first &&
-	     comms$RDY_fo_BSV_to_C_bytevec_deq &&
-	     rg_state == 2'd2 ;
-  assign WILL_FIRE_RL_rl_host_send = CAN_FIRE_RL_rl_host_send ;
-
   // rule RL_rl_wr_addr_channel_4
   assign CAN_FIRE_RL_rl_wr_addr_channel_4 = 1'd1 ;
   assign WILL_FIRE_RL_rl_wr_addr_channel_4 = 1'd1 ;
@@ -1312,30 +1991,6 @@ module mkTop_HW_Side(CLK,
   // rule RL_rl_rd_data_channel_4
   assign CAN_FIRE_RL_rl_rd_data_channel_4 = 1'd1 ;
   assign WILL_FIRE_RL_rl_rd_data_channel_4 = 1'd1 ;
-
-  // rule RL_rl_connect_dma_pcis_wr_addr
-  assign CAN_FIRE_RL_rl_connect_dma_pcis_wr_addr =
-	     comms$RDY_fo_AXI4_Wr_Addr_i16_a64_u0_first &&
-	     comms$RDY_fo_AXI4_Wr_Addr_i16_a64_u0_deq &&
-	     dma_pcis_xactor_f_wr_addr$FULL_N ;
-  assign WILL_FIRE_RL_rl_connect_dma_pcis_wr_addr =
-	     CAN_FIRE_RL_rl_connect_dma_pcis_wr_addr ;
-
-  // rule RL_rl_connect_dma_pcis_wr_data
-  assign CAN_FIRE_RL_rl_connect_dma_pcis_wr_data =
-	     comms$RDY_fo_AXI4_Wr_Data_d512_u0_first &&
-	     comms$RDY_fo_AXI4_Wr_Data_d512_u0_deq &&
-	     dma_pcis_xactor_f_wr_data$FULL_N ;
-  assign WILL_FIRE_RL_rl_connect_dma_pcis_wr_data =
-	     CAN_FIRE_RL_rl_connect_dma_pcis_wr_data ;
-
-  // rule RL_rl_connect_dma_pcis_rd_addr
-  assign CAN_FIRE_RL_rl_connect_dma_pcis_rd_addr =
-	     comms$RDY_fo_AXI4_Rd_Addr_i16_a64_u0_first &&
-	     comms$RDY_fo_AXI4_Rd_Addr_i16_a64_u0_deq &&
-	     dma_pcis_xactor_f_rd_addr$FULL_N ;
-  assign WILL_FIRE_RL_rl_connect_dma_pcis_rd_addr =
-	     CAN_FIRE_RL_rl_connect_dma_pcis_rd_addr ;
 
   // rule RL_rl_wr_addr_channel_5
   assign CAN_FIRE_RL_rl_wr_addr_channel_5 = 1'd1 ;
@@ -1357,26 +2012,150 @@ module mkTop_HW_Side(CLK,
   assign CAN_FIRE_RL_rl_rd_data_channel_5 = 1'd1 ;
   assign WILL_FIRE_RL_rl_rd_data_channel_5 = 1'd1 ;
 
+  // rule RL_rl_wr_addr_channel_6
+  assign CAN_FIRE_RL_rl_wr_addr_channel_6 = 1'd1 ;
+  assign WILL_FIRE_RL_rl_wr_addr_channel_6 = 1'd1 ;
+
+  // rule RL_rl_wr_data_channel_6
+  assign CAN_FIRE_RL_rl_wr_data_channel_6 = 1'd1 ;
+  assign WILL_FIRE_RL_rl_wr_data_channel_6 = 1'd1 ;
+
+  // rule RL_rl_wr_response_channel_6
+  assign CAN_FIRE_RL_rl_wr_response_channel_6 = 1'd1 ;
+  assign WILL_FIRE_RL_rl_wr_response_channel_6 = 1'd1 ;
+
+  // rule RL_rl_rd_addr_channel_6
+  assign CAN_FIRE_RL_rl_rd_addr_channel_6 = 1'd1 ;
+  assign WILL_FIRE_RL_rl_rd_addr_channel_6 = 1'd1 ;
+
+  // rule RL_rl_rd_data_channel_6
+  assign CAN_FIRE_RL_rl_rd_data_channel_6 = 1'd1 ;
+  assign WILL_FIRE_RL_rl_rd_data_channel_6 = 1'd1 ;
+
+  // rule RL_rl_wr_addr_channel_7
+  assign CAN_FIRE_RL_rl_wr_addr_channel_7 = 1'd1 ;
+  assign WILL_FIRE_RL_rl_wr_addr_channel_7 = 1'd1 ;
+
+  // rule RL_rl_wr_data_channel_7
+  assign CAN_FIRE_RL_rl_wr_data_channel_7 = 1'd1 ;
+  assign WILL_FIRE_RL_rl_wr_data_channel_7 = 1'd1 ;
+
+  // rule RL_rl_wr_response_channel_7
+  assign CAN_FIRE_RL_rl_wr_response_channel_7 = 1'd1 ;
+  assign WILL_FIRE_RL_rl_wr_response_channel_7 = 1'd1 ;
+
+  // rule RL_rl_rd_addr_channel_7
+  assign CAN_FIRE_RL_rl_rd_addr_channel_7 = 1'd1 ;
+  assign WILL_FIRE_RL_rl_rd_addr_channel_7 = 1'd1 ;
+
+  // rule RL_rl_rd_data_channel_7
+  assign CAN_FIRE_RL_rl_rd_data_channel_7 = 1'd1 ;
+  assign WILL_FIRE_RL_rl_rd_data_channel_7 = 1'd1 ;
+
+  // rule RL_rl_connecting
+  assign CAN_FIRE_RL_rl_connecting = rg_state == 2'd0 ;
+  assign WILL_FIRE_RL_rl_connecting = rg_state == 2'd0 ;
+
+  // rule RL_rl_start_when_connected
+  assign CAN_FIRE_RL_rl_start_when_connected = rg_state == 2'd1 ;
+  assign WILL_FIRE_RL_rl_start_when_connected = rg_state == 2'd1 ;
+
+  // rule RL_rl_host_recv
+  assign CAN_FIRE_RL_rl_host_recv =
+	     comms$RDY_fi_C_to_BSV_bytevec_enq && rg_state == 2'd2 ;
+  assign WILL_FIRE_RL_rl_host_recv = CAN_FIRE_RL_rl_host_recv ;
+
+  // rule RL_rl_host_send
+  assign CAN_FIRE_RL_rl_host_send =
+	     comms$RDY_fo_BSV_to_C_bytevec_deq &&
+	     comms$RDY_fo_BSV_to_C_bytevec_first &&
+	     rg_state == 2'd2 ;
+  assign WILL_FIRE_RL_rl_host_send = CAN_FIRE_RL_rl_host_send ;
+
+  // rule RL_rl_wr_addr_channel_8
+  assign CAN_FIRE_RL_rl_wr_addr_channel_8 = 1'd1 ;
+  assign WILL_FIRE_RL_rl_wr_addr_channel_8 = 1'd1 ;
+
+  // rule RL_rl_wr_data_channel_8
+  assign CAN_FIRE_RL_rl_wr_data_channel_8 = 1'd1 ;
+  assign WILL_FIRE_RL_rl_wr_data_channel_8 = 1'd1 ;
+
+  // rule RL_rl_wr_response_channel_8
+  assign CAN_FIRE_RL_rl_wr_response_channel_8 = 1'd1 ;
+  assign WILL_FIRE_RL_rl_wr_response_channel_8 = 1'd1 ;
+
+  // rule RL_rl_rd_addr_channel_8
+  assign CAN_FIRE_RL_rl_rd_addr_channel_8 = 1'd1 ;
+  assign WILL_FIRE_RL_rl_rd_addr_channel_8 = 1'd1 ;
+
+  // rule RL_rl_rd_data_channel_8
+  assign CAN_FIRE_RL_rl_rd_data_channel_8 = 1'd1 ;
+  assign WILL_FIRE_RL_rl_rd_data_channel_8 = 1'd1 ;
+
+  // rule RL_rl_connect_dma_pcis_wr_addr
+  assign CAN_FIRE_RL_rl_connect_dma_pcis_wr_addr =
+	     comms$RDY_fo_AXI4_Wr_Addr_i16_a64_u0_deq &&
+	     comms$RDY_fo_AXI4_Wr_Addr_i16_a64_u0_first &&
+	     dma_pcis_xactor_f_wr_addr$FULL_N ;
+  assign WILL_FIRE_RL_rl_connect_dma_pcis_wr_addr =
+	     CAN_FIRE_RL_rl_connect_dma_pcis_wr_addr ;
+
+  // rule RL_rl_connect_dma_pcis_wr_data
+  assign CAN_FIRE_RL_rl_connect_dma_pcis_wr_data =
+	     comms$RDY_fo_AXI4_Wr_Data_d512_u0_deq &&
+	     comms$RDY_fo_AXI4_Wr_Data_d512_u0_first &&
+	     dma_pcis_xactor_f_wr_data$FULL_N ;
+  assign WILL_FIRE_RL_rl_connect_dma_pcis_wr_data =
+	     CAN_FIRE_RL_rl_connect_dma_pcis_wr_data ;
+
+  // rule RL_rl_connect_dma_pcis_rd_addr
+  assign CAN_FIRE_RL_rl_connect_dma_pcis_rd_addr =
+	     comms$RDY_fo_AXI4_Rd_Addr_i16_a64_u0_deq &&
+	     comms$RDY_fo_AXI4_Rd_Addr_i16_a64_u0_first &&
+	     dma_pcis_xactor_f_rd_addr$FULL_N ;
+  assign WILL_FIRE_RL_rl_connect_dma_pcis_rd_addr =
+	     CAN_FIRE_RL_rl_connect_dma_pcis_rd_addr ;
+
+  // rule RL_rl_wr_addr_channel_9
+  assign CAN_FIRE_RL_rl_wr_addr_channel_9 = 1'd1 ;
+  assign WILL_FIRE_RL_rl_wr_addr_channel_9 = 1'd1 ;
+
+  // rule RL_rl_wr_data_channel_9
+  assign CAN_FIRE_RL_rl_wr_data_channel_9 = 1'd1 ;
+  assign WILL_FIRE_RL_rl_wr_data_channel_9 = 1'd1 ;
+
+  // rule RL_rl_wr_response_channel_9
+  assign CAN_FIRE_RL_rl_wr_response_channel_9 = 1'd1 ;
+  assign WILL_FIRE_RL_rl_wr_response_channel_9 = 1'd1 ;
+
+  // rule RL_rl_rd_addr_channel_9
+  assign CAN_FIRE_RL_rl_rd_addr_channel_9 = 1'd1 ;
+  assign WILL_FIRE_RL_rl_rd_addr_channel_9 = 1'd1 ;
+
+  // rule RL_rl_rd_data_channel_9
+  assign CAN_FIRE_RL_rl_rd_data_channel_9 = 1'd1 ;
+  assign WILL_FIRE_RL_rl_rd_data_channel_9 = 1'd1 ;
+
   // rule RL_rl_connect_ocl_wr_addr
   assign CAN_FIRE_RL_rl_connect_ocl_wr_addr =
-	     comms$RDY_fo_AXI4L_Wr_Addr_a32_u0_first &&
 	     comms$RDY_fo_AXI4L_Wr_Addr_a32_u0_deq &&
+	     comms$RDY_fo_AXI4L_Wr_Addr_a32_u0_first &&
 	     ocl_xactor_f_wr_addr$FULL_N ;
   assign WILL_FIRE_RL_rl_connect_ocl_wr_addr =
 	     CAN_FIRE_RL_rl_connect_ocl_wr_addr ;
 
   // rule RL_rl_connect_ocl_wr_data
   assign CAN_FIRE_RL_rl_connect_ocl_wr_data =
-	     comms$RDY_fo_AXI4L_Wr_Data_d32_first &&
 	     comms$RDY_fo_AXI4L_Wr_Data_d32_deq &&
+	     comms$RDY_fo_AXI4L_Wr_Data_d32_first &&
 	     ocl_xactor_f_wr_data$FULL_N ;
   assign WILL_FIRE_RL_rl_connect_ocl_wr_data =
 	     CAN_FIRE_RL_rl_connect_ocl_wr_data ;
 
   // rule RL_rl_connect_ocl_rd_addr
   assign CAN_FIRE_RL_rl_connect_ocl_rd_addr =
-	     comms$RDY_fo_AXI4L_Rd_Addr_a32_u0_first &&
 	     comms$RDY_fo_AXI4L_Rd_Addr_a32_u0_deq &&
+	     comms$RDY_fo_AXI4L_Rd_Addr_a32_u0_first &&
 	     ocl_xactor_f_rd_addr$FULL_N ;
   assign WILL_FIRE_RL_rl_connect_ocl_rd_addr =
 	     CAN_FIRE_RL_rl_connect_ocl_rd_addr ;
@@ -1434,50 +2213,86 @@ module mkTop_HW_Side(CLK,
   assign rg_vdip$EN = 1'b0 ;
 
   // submodule aws_BSV_top
-  assign aws_BSV_top$ddr4_A_master_arready = ddr4_A$arready ;
-  assign aws_BSV_top$ddr4_A_master_awready = ddr4_A$awready ;
-  assign aws_BSV_top$ddr4_A_master_bid = ddr4_A$bid ;
-  assign aws_BSV_top$ddr4_A_master_bresp = ddr4_A$bresp ;
-  assign aws_BSV_top$ddr4_A_master_bvalid = ddr4_A$bvalid ;
-  assign aws_BSV_top$ddr4_A_master_rdata = ddr4_A$rdata ;
-  assign aws_BSV_top$ddr4_A_master_rid = ddr4_A$rid ;
-  assign aws_BSV_top$ddr4_A_master_rlast = ddr4_A$rlast ;
-  assign aws_BSV_top$ddr4_A_master_rresp = ddr4_A$rresp ;
-  assign aws_BSV_top$ddr4_A_master_rvalid = ddr4_A$rvalid ;
-  assign aws_BSV_top$ddr4_A_master_wready = ddr4_A$wready ;
-  assign aws_BSV_top$ddr4_B_master_arready = ddr4_B$arready ;
-  assign aws_BSV_top$ddr4_B_master_awready = ddr4_B$awready ;
-  assign aws_BSV_top$ddr4_B_master_bid = ddr4_B$bid ;
-  assign aws_BSV_top$ddr4_B_master_bresp = ddr4_B$bresp ;
-  assign aws_BSV_top$ddr4_B_master_bvalid = ddr4_B$bvalid ;
-  assign aws_BSV_top$ddr4_B_master_rdata = ddr4_B$rdata ;
-  assign aws_BSV_top$ddr4_B_master_rid = ddr4_B$rid ;
-  assign aws_BSV_top$ddr4_B_master_rlast = ddr4_B$rlast ;
-  assign aws_BSV_top$ddr4_B_master_rresp = ddr4_B$rresp ;
-  assign aws_BSV_top$ddr4_B_master_rvalid = ddr4_B$rvalid ;
-  assign aws_BSV_top$ddr4_B_master_wready = ddr4_B$wready ;
-  assign aws_BSV_top$ddr4_C_master_arready = ddr4_C$arready ;
-  assign aws_BSV_top$ddr4_C_master_awready = ddr4_C$awready ;
-  assign aws_BSV_top$ddr4_C_master_bid = ddr4_C$bid ;
-  assign aws_BSV_top$ddr4_C_master_bresp = ddr4_C$bresp ;
-  assign aws_BSV_top$ddr4_C_master_bvalid = ddr4_C$bvalid ;
-  assign aws_BSV_top$ddr4_C_master_rdata = ddr4_C$rdata ;
-  assign aws_BSV_top$ddr4_C_master_rid = ddr4_C$rid ;
-  assign aws_BSV_top$ddr4_C_master_rlast = ddr4_C$rlast ;
-  assign aws_BSV_top$ddr4_C_master_rresp = ddr4_C$rresp ;
-  assign aws_BSV_top$ddr4_C_master_rvalid = ddr4_C$rvalid ;
-  assign aws_BSV_top$ddr4_C_master_wready = ddr4_C$wready ;
-  assign aws_BSV_top$ddr4_D_master_arready = ddr4_D$arready ;
-  assign aws_BSV_top$ddr4_D_master_awready = ddr4_D$awready ;
-  assign aws_BSV_top$ddr4_D_master_bid = ddr4_D$bid ;
-  assign aws_BSV_top$ddr4_D_master_bresp = ddr4_D$bresp ;
-  assign aws_BSV_top$ddr4_D_master_bvalid = ddr4_D$bvalid ;
-  assign aws_BSV_top$ddr4_D_master_rdata = ddr4_D$rdata ;
-  assign aws_BSV_top$ddr4_D_master_rid = ddr4_D$rid ;
-  assign aws_BSV_top$ddr4_D_master_rlast = ddr4_D$rlast ;
-  assign aws_BSV_top$ddr4_D_master_rresp = ddr4_D$rresp ;
-  assign aws_BSV_top$ddr4_D_master_rvalid = ddr4_D$rvalid ;
-  assign aws_BSV_top$ddr4_D_master_wready = ddr4_D$wready ;
+  assign aws_BSV_top$ddr4_A_master_arready =
+	     ddr4_A_deburster$from_master_arready ;
+  assign aws_BSV_top$ddr4_A_master_awready =
+	     ddr4_A_deburster$from_master_awready ;
+  assign aws_BSV_top$ddr4_A_master_bid = ddr4_A_deburster$from_master_bid ;
+  assign aws_BSV_top$ddr4_A_master_bresp =
+	     ddr4_A_deburster$from_master_bresp ;
+  assign aws_BSV_top$ddr4_A_master_bvalid =
+	     ddr4_A_deburster$from_master_bvalid ;
+  assign aws_BSV_top$ddr4_A_master_rdata =
+	     ddr4_A_deburster$from_master_rdata ;
+  assign aws_BSV_top$ddr4_A_master_rid = ddr4_A_deburster$from_master_rid ;
+  assign aws_BSV_top$ddr4_A_master_rlast =
+	     ddr4_A_deburster$from_master_rlast ;
+  assign aws_BSV_top$ddr4_A_master_rresp =
+	     ddr4_A_deburster$from_master_rresp ;
+  assign aws_BSV_top$ddr4_A_master_rvalid =
+	     ddr4_A_deburster$from_master_rvalid ;
+  assign aws_BSV_top$ddr4_A_master_wready =
+	     ddr4_A_deburster$from_master_wready ;
+  assign aws_BSV_top$ddr4_B_master_arready =
+	     ddr4_B_deburster$from_master_arready ;
+  assign aws_BSV_top$ddr4_B_master_awready =
+	     ddr4_B_deburster$from_master_awready ;
+  assign aws_BSV_top$ddr4_B_master_bid = ddr4_B_deburster$from_master_bid ;
+  assign aws_BSV_top$ddr4_B_master_bresp =
+	     ddr4_B_deburster$from_master_bresp ;
+  assign aws_BSV_top$ddr4_B_master_bvalid =
+	     ddr4_B_deburster$from_master_bvalid ;
+  assign aws_BSV_top$ddr4_B_master_rdata =
+	     ddr4_B_deburster$from_master_rdata ;
+  assign aws_BSV_top$ddr4_B_master_rid = ddr4_B_deburster$from_master_rid ;
+  assign aws_BSV_top$ddr4_B_master_rlast =
+	     ddr4_B_deburster$from_master_rlast ;
+  assign aws_BSV_top$ddr4_B_master_rresp =
+	     ddr4_B_deburster$from_master_rresp ;
+  assign aws_BSV_top$ddr4_B_master_rvalid =
+	     ddr4_B_deburster$from_master_rvalid ;
+  assign aws_BSV_top$ddr4_B_master_wready =
+	     ddr4_B_deburster$from_master_wready ;
+  assign aws_BSV_top$ddr4_C_master_arready =
+	     ddr4_C_deburster$from_master_arready ;
+  assign aws_BSV_top$ddr4_C_master_awready =
+	     ddr4_C_deburster$from_master_awready ;
+  assign aws_BSV_top$ddr4_C_master_bid = ddr4_C_deburster$from_master_bid ;
+  assign aws_BSV_top$ddr4_C_master_bresp =
+	     ddr4_C_deburster$from_master_bresp ;
+  assign aws_BSV_top$ddr4_C_master_bvalid =
+	     ddr4_C_deburster$from_master_bvalid ;
+  assign aws_BSV_top$ddr4_C_master_rdata =
+	     ddr4_C_deburster$from_master_rdata ;
+  assign aws_BSV_top$ddr4_C_master_rid = ddr4_C_deburster$from_master_rid ;
+  assign aws_BSV_top$ddr4_C_master_rlast =
+	     ddr4_C_deburster$from_master_rlast ;
+  assign aws_BSV_top$ddr4_C_master_rresp =
+	     ddr4_C_deburster$from_master_rresp ;
+  assign aws_BSV_top$ddr4_C_master_rvalid =
+	     ddr4_C_deburster$from_master_rvalid ;
+  assign aws_BSV_top$ddr4_C_master_wready =
+	     ddr4_C_deburster$from_master_wready ;
+  assign aws_BSV_top$ddr4_D_master_arready =
+	     ddr4_D_deburster$from_master_arready ;
+  assign aws_BSV_top$ddr4_D_master_awready =
+	     ddr4_D_deburster$from_master_awready ;
+  assign aws_BSV_top$ddr4_D_master_bid = ddr4_D_deburster$from_master_bid ;
+  assign aws_BSV_top$ddr4_D_master_bresp =
+	     ddr4_D_deburster$from_master_bresp ;
+  assign aws_BSV_top$ddr4_D_master_bvalid =
+	     ddr4_D_deburster$from_master_bvalid ;
+  assign aws_BSV_top$ddr4_D_master_rdata =
+	     ddr4_D_deburster$from_master_rdata ;
+  assign aws_BSV_top$ddr4_D_master_rid = ddr4_D_deburster$from_master_rid ;
+  assign aws_BSV_top$ddr4_D_master_rlast =
+	     ddr4_D_deburster$from_master_rlast ;
+  assign aws_BSV_top$ddr4_D_master_rresp =
+	     ddr4_D_deburster$from_master_rresp ;
+  assign aws_BSV_top$ddr4_D_master_rvalid =
+	     ddr4_D_deburster$from_master_rvalid ;
+  assign aws_BSV_top$ddr4_D_master_wready =
+	     ddr4_D_deburster$from_master_wready ;
   assign aws_BSV_top$dma_pcis_slave_araddr =
 	     dma_pcis_xactor_f_rd_addr$D_OUT[92:29] ;
   assign aws_BSV_top$dma_pcis_slave_arburst =
@@ -1559,7 +2374,7 @@ module mkTop_HW_Side(CLK,
 	     dma_pcis_xactor_f_rd_data$D_OUT ;
   assign comms$fi_AXI4_Wr_Resp_i16_u0_enq_x =
 	     dma_pcis_xactor_f_wr_resp$D_OUT ;
-  assign comms$fi_C_to_BSV_bytevec_enq_x = TASK_c_host_recv___d183 ;
+  assign comms$fi_C_to_BSV_bytevec_enq_x = TASK_c_host_recv___d359 ;
   assign comms$EN_fo_AXI4_Wr_Addr_i16_a64_u0_deq =
 	     CAN_FIRE_RL_rl_connect_dma_pcis_wr_addr ;
   assign comms$EN_fo_AXI4_Wr_Data_d512_u0_deq =
@@ -1582,128 +2397,400 @@ module mkTop_HW_Side(CLK,
 	     CAN_FIRE_RL_rl_connect_ocl_rd_data ;
   assign comms$EN_fi_C_to_BSV_bytevec_enq =
 	     WILL_FIRE_RL_rl_host_recv &&
-	     TASK_c_host_recv___d183[7:0] != 8'd0 ;
+	     TASK_c_host_recv___d359[7:0] != 8'd0 ;
   assign comms$EN_fo_BSV_to_C_bytevec_deq = CAN_FIRE_RL_rl_host_send ;
 
   // submodule ddr4_A
-  assign ddr4_A$araddr = aws_BSV_top$ddr4_A_master_araddr ;
-  assign ddr4_A$arburst = aws_BSV_top$ddr4_A_master_arburst ;
-  assign ddr4_A$arcache = aws_BSV_top$ddr4_A_master_arcache ;
-  assign ddr4_A$arid = aws_BSV_top$ddr4_A_master_arid ;
-  assign ddr4_A$arlen = aws_BSV_top$ddr4_A_master_arlen ;
-  assign ddr4_A$arlock = aws_BSV_top$ddr4_A_master_arlock ;
-  assign ddr4_A$arprot = aws_BSV_top$ddr4_A_master_arprot ;
-  assign ddr4_A$arqos = aws_BSV_top$ddr4_A_master_arqos ;
-  assign ddr4_A$arregion = aws_BSV_top$ddr4_A_master_arregion ;
-  assign ddr4_A$arsize = aws_BSV_top$ddr4_A_master_arsize ;
-  assign ddr4_A$arvalid = aws_BSV_top$ddr4_A_master_arvalid ;
-  assign ddr4_A$awaddr = aws_BSV_top$ddr4_A_master_awaddr ;
-  assign ddr4_A$awburst = aws_BSV_top$ddr4_A_master_awburst ;
-  assign ddr4_A$awcache = aws_BSV_top$ddr4_A_master_awcache ;
-  assign ddr4_A$awid = aws_BSV_top$ddr4_A_master_awid ;
-  assign ddr4_A$awlen = aws_BSV_top$ddr4_A_master_awlen ;
-  assign ddr4_A$awlock = aws_BSV_top$ddr4_A_master_awlock ;
-  assign ddr4_A$awprot = aws_BSV_top$ddr4_A_master_awprot ;
-  assign ddr4_A$awqos = aws_BSV_top$ddr4_A_master_awqos ;
-  assign ddr4_A$awregion = aws_BSV_top$ddr4_A_master_awregion ;
-  assign ddr4_A$awsize = aws_BSV_top$ddr4_A_master_awsize ;
-  assign ddr4_A$awvalid = aws_BSV_top$ddr4_A_master_awvalid ;
-  assign ddr4_A$bready = aws_BSV_top$ddr4_A_master_bready ;
-  assign ddr4_A$rready = aws_BSV_top$ddr4_A_master_rready ;
-  assign ddr4_A$wdata = aws_BSV_top$ddr4_A_master_wdata ;
-  assign ddr4_A$wlast = aws_BSV_top$ddr4_A_master_wlast ;
-  assign ddr4_A$wstrb = aws_BSV_top$ddr4_A_master_wstrb ;
-  assign ddr4_A$wvalid = aws_BSV_top$ddr4_A_master_wvalid ;
+  assign ddr4_A$araddr = ddr4_A_deburster$to_slave_araddr ;
+  assign ddr4_A$arburst = ddr4_A_deburster$to_slave_arburst ;
+  assign ddr4_A$arcache = ddr4_A_deburster$to_slave_arcache ;
+  assign ddr4_A$arid = ddr4_A_deburster$to_slave_arid ;
+  assign ddr4_A$arlen = ddr4_A_deburster$to_slave_arlen ;
+  assign ddr4_A$arlock = ddr4_A_deburster$to_slave_arlock ;
+  assign ddr4_A$arprot = ddr4_A_deburster$to_slave_arprot ;
+  assign ddr4_A$arqos = ddr4_A_deburster$to_slave_arqos ;
+  assign ddr4_A$arregion = ddr4_A_deburster$to_slave_arregion ;
+  assign ddr4_A$arsize = ddr4_A_deburster$to_slave_arsize ;
+  assign ddr4_A$arvalid = ddr4_A_deburster$to_slave_arvalid ;
+  assign ddr4_A$awaddr = ddr4_A_deburster$to_slave_awaddr ;
+  assign ddr4_A$awburst = ddr4_A_deburster$to_slave_awburst ;
+  assign ddr4_A$awcache = ddr4_A_deburster$to_slave_awcache ;
+  assign ddr4_A$awid = ddr4_A_deburster$to_slave_awid ;
+  assign ddr4_A$awlen = ddr4_A_deburster$to_slave_awlen ;
+  assign ddr4_A$awlock = ddr4_A_deburster$to_slave_awlock ;
+  assign ddr4_A$awprot = ddr4_A_deburster$to_slave_awprot ;
+  assign ddr4_A$awqos = ddr4_A_deburster$to_slave_awqos ;
+  assign ddr4_A$awregion = ddr4_A_deburster$to_slave_awregion ;
+  assign ddr4_A$awsize = ddr4_A_deburster$to_slave_awsize ;
+  assign ddr4_A$awvalid = ddr4_A_deburster$to_slave_awvalid ;
+  assign ddr4_A$bready = ddr4_A_deburster$to_slave_bready ;
+  assign ddr4_A$rready = ddr4_A_deburster$to_slave_rready ;
+  assign ddr4_A$wdata = ddr4_A_deburster$to_slave_wdata ;
+  assign ddr4_A$wlast = ddr4_A_deburster$to_slave_wlast ;
+  assign ddr4_A$wstrb = ddr4_A_deburster$to_slave_wstrb ;
+  assign ddr4_A$wvalid = ddr4_A_deburster$to_slave_wvalid ;
+
+  // submodule ddr4_A_deburster
+  assign ddr4_A_deburster$from_master_araddr =
+	     aws_BSV_top$ddr4_A_master_araddr ;
+  assign ddr4_A_deburster$from_master_arburst =
+	     aws_BSV_top$ddr4_A_master_arburst ;
+  assign ddr4_A_deburster$from_master_arcache =
+	     aws_BSV_top$ddr4_A_master_arcache ;
+  assign ddr4_A_deburster$from_master_arid = aws_BSV_top$ddr4_A_master_arid ;
+  assign ddr4_A_deburster$from_master_arlen =
+	     aws_BSV_top$ddr4_A_master_arlen ;
+  assign ddr4_A_deburster$from_master_arlock =
+	     aws_BSV_top$ddr4_A_master_arlock ;
+  assign ddr4_A_deburster$from_master_arprot =
+	     aws_BSV_top$ddr4_A_master_arprot ;
+  assign ddr4_A_deburster$from_master_arqos =
+	     aws_BSV_top$ddr4_A_master_arqos ;
+  assign ddr4_A_deburster$from_master_arregion =
+	     aws_BSV_top$ddr4_A_master_arregion ;
+  assign ddr4_A_deburster$from_master_arsize =
+	     aws_BSV_top$ddr4_A_master_arsize ;
+  assign ddr4_A_deburster$from_master_arvalid =
+	     aws_BSV_top$ddr4_A_master_arvalid ;
+  assign ddr4_A_deburster$from_master_awaddr =
+	     aws_BSV_top$ddr4_A_master_awaddr ;
+  assign ddr4_A_deburster$from_master_awburst =
+	     aws_BSV_top$ddr4_A_master_awburst ;
+  assign ddr4_A_deburster$from_master_awcache =
+	     aws_BSV_top$ddr4_A_master_awcache ;
+  assign ddr4_A_deburster$from_master_awid = aws_BSV_top$ddr4_A_master_awid ;
+  assign ddr4_A_deburster$from_master_awlen =
+	     aws_BSV_top$ddr4_A_master_awlen ;
+  assign ddr4_A_deburster$from_master_awlock =
+	     aws_BSV_top$ddr4_A_master_awlock ;
+  assign ddr4_A_deburster$from_master_awprot =
+	     aws_BSV_top$ddr4_A_master_awprot ;
+  assign ddr4_A_deburster$from_master_awqos =
+	     aws_BSV_top$ddr4_A_master_awqos ;
+  assign ddr4_A_deburster$from_master_awregion =
+	     aws_BSV_top$ddr4_A_master_awregion ;
+  assign ddr4_A_deburster$from_master_awsize =
+	     aws_BSV_top$ddr4_A_master_awsize ;
+  assign ddr4_A_deburster$from_master_awvalid =
+	     aws_BSV_top$ddr4_A_master_awvalid ;
+  assign ddr4_A_deburster$from_master_bready =
+	     aws_BSV_top$ddr4_A_master_bready ;
+  assign ddr4_A_deburster$from_master_rready =
+	     aws_BSV_top$ddr4_A_master_rready ;
+  assign ddr4_A_deburster$from_master_wdata =
+	     aws_BSV_top$ddr4_A_master_wdata ;
+  assign ddr4_A_deburster$from_master_wlast =
+	     aws_BSV_top$ddr4_A_master_wlast ;
+  assign ddr4_A_deburster$from_master_wstrb =
+	     aws_BSV_top$ddr4_A_master_wstrb ;
+  assign ddr4_A_deburster$from_master_wvalid =
+	     aws_BSV_top$ddr4_A_master_wvalid ;
+  assign ddr4_A_deburster$to_slave_arready = ddr4_A$arready ;
+  assign ddr4_A_deburster$to_slave_awready = ddr4_A$awready ;
+  assign ddr4_A_deburster$to_slave_bid = ddr4_A$bid ;
+  assign ddr4_A_deburster$to_slave_bresp = ddr4_A$bresp ;
+  assign ddr4_A_deburster$to_slave_bvalid = ddr4_A$bvalid ;
+  assign ddr4_A_deburster$to_slave_rdata = ddr4_A$rdata ;
+  assign ddr4_A_deburster$to_slave_rid = ddr4_A$rid ;
+  assign ddr4_A_deburster$to_slave_rlast = ddr4_A$rlast ;
+  assign ddr4_A_deburster$to_slave_rresp = ddr4_A$rresp ;
+  assign ddr4_A_deburster$to_slave_rvalid = ddr4_A$rvalid ;
+  assign ddr4_A_deburster$to_slave_wready = ddr4_A$wready ;
+  assign ddr4_A_deburster$EN_reset = 1'b0 ;
 
   // submodule ddr4_B
-  assign ddr4_B$araddr = aws_BSV_top$ddr4_B_master_araddr ;
-  assign ddr4_B$arburst = aws_BSV_top$ddr4_B_master_arburst ;
-  assign ddr4_B$arcache = aws_BSV_top$ddr4_B_master_arcache ;
-  assign ddr4_B$arid = aws_BSV_top$ddr4_B_master_arid ;
-  assign ddr4_B$arlen = aws_BSV_top$ddr4_B_master_arlen ;
-  assign ddr4_B$arlock = aws_BSV_top$ddr4_B_master_arlock ;
-  assign ddr4_B$arprot = aws_BSV_top$ddr4_B_master_arprot ;
-  assign ddr4_B$arqos = aws_BSV_top$ddr4_B_master_arqos ;
-  assign ddr4_B$arregion = aws_BSV_top$ddr4_B_master_arregion ;
-  assign ddr4_B$arsize = aws_BSV_top$ddr4_B_master_arsize ;
-  assign ddr4_B$arvalid = aws_BSV_top$ddr4_B_master_arvalid ;
-  assign ddr4_B$awaddr = aws_BSV_top$ddr4_B_master_awaddr ;
-  assign ddr4_B$awburst = aws_BSV_top$ddr4_B_master_awburst ;
-  assign ddr4_B$awcache = aws_BSV_top$ddr4_B_master_awcache ;
-  assign ddr4_B$awid = aws_BSV_top$ddr4_B_master_awid ;
-  assign ddr4_B$awlen = aws_BSV_top$ddr4_B_master_awlen ;
-  assign ddr4_B$awlock = aws_BSV_top$ddr4_B_master_awlock ;
-  assign ddr4_B$awprot = aws_BSV_top$ddr4_B_master_awprot ;
-  assign ddr4_B$awqos = aws_BSV_top$ddr4_B_master_awqos ;
-  assign ddr4_B$awregion = aws_BSV_top$ddr4_B_master_awregion ;
-  assign ddr4_B$awsize = aws_BSV_top$ddr4_B_master_awsize ;
-  assign ddr4_B$awvalid = aws_BSV_top$ddr4_B_master_awvalid ;
-  assign ddr4_B$bready = aws_BSV_top$ddr4_B_master_bready ;
-  assign ddr4_B$rready = aws_BSV_top$ddr4_B_master_rready ;
-  assign ddr4_B$wdata = aws_BSV_top$ddr4_B_master_wdata ;
-  assign ddr4_B$wlast = aws_BSV_top$ddr4_B_master_wlast ;
-  assign ddr4_B$wstrb = aws_BSV_top$ddr4_B_master_wstrb ;
-  assign ddr4_B$wvalid = aws_BSV_top$ddr4_B_master_wvalid ;
+  assign ddr4_B$araddr = ddr4_B_deburster$to_slave_araddr ;
+  assign ddr4_B$arburst = ddr4_B_deburster$to_slave_arburst ;
+  assign ddr4_B$arcache = ddr4_B_deburster$to_slave_arcache ;
+  assign ddr4_B$arid = ddr4_B_deburster$to_slave_arid ;
+  assign ddr4_B$arlen = ddr4_B_deburster$to_slave_arlen ;
+  assign ddr4_B$arlock = ddr4_B_deburster$to_slave_arlock ;
+  assign ddr4_B$arprot = ddr4_B_deburster$to_slave_arprot ;
+  assign ddr4_B$arqos = ddr4_B_deburster$to_slave_arqos ;
+  assign ddr4_B$arregion = ddr4_B_deburster$to_slave_arregion ;
+  assign ddr4_B$arsize = ddr4_B_deburster$to_slave_arsize ;
+  assign ddr4_B$arvalid = ddr4_B_deburster$to_slave_arvalid ;
+  assign ddr4_B$awaddr = ddr4_B_deburster$to_slave_awaddr ;
+  assign ddr4_B$awburst = ddr4_B_deburster$to_slave_awburst ;
+  assign ddr4_B$awcache = ddr4_B_deburster$to_slave_awcache ;
+  assign ddr4_B$awid = ddr4_B_deburster$to_slave_awid ;
+  assign ddr4_B$awlen = ddr4_B_deburster$to_slave_awlen ;
+  assign ddr4_B$awlock = ddr4_B_deburster$to_slave_awlock ;
+  assign ddr4_B$awprot = ddr4_B_deburster$to_slave_awprot ;
+  assign ddr4_B$awqos = ddr4_B_deburster$to_slave_awqos ;
+  assign ddr4_B$awregion = ddr4_B_deburster$to_slave_awregion ;
+  assign ddr4_B$awsize = ddr4_B_deburster$to_slave_awsize ;
+  assign ddr4_B$awvalid = ddr4_B_deburster$to_slave_awvalid ;
+  assign ddr4_B$bready = ddr4_B_deburster$to_slave_bready ;
+  assign ddr4_B$rready = ddr4_B_deburster$to_slave_rready ;
+  assign ddr4_B$wdata = ddr4_B_deburster$to_slave_wdata ;
+  assign ddr4_B$wlast = ddr4_B_deburster$to_slave_wlast ;
+  assign ddr4_B$wstrb = ddr4_B_deburster$to_slave_wstrb ;
+  assign ddr4_B$wvalid = ddr4_B_deburster$to_slave_wvalid ;
+
+  // submodule ddr4_B_deburster
+  assign ddr4_B_deburster$from_master_araddr =
+	     aws_BSV_top$ddr4_B_master_araddr ;
+  assign ddr4_B_deburster$from_master_arburst =
+	     aws_BSV_top$ddr4_B_master_arburst ;
+  assign ddr4_B_deburster$from_master_arcache =
+	     aws_BSV_top$ddr4_B_master_arcache ;
+  assign ddr4_B_deburster$from_master_arid = aws_BSV_top$ddr4_B_master_arid ;
+  assign ddr4_B_deburster$from_master_arlen =
+	     aws_BSV_top$ddr4_B_master_arlen ;
+  assign ddr4_B_deburster$from_master_arlock =
+	     aws_BSV_top$ddr4_B_master_arlock ;
+  assign ddr4_B_deburster$from_master_arprot =
+	     aws_BSV_top$ddr4_B_master_arprot ;
+  assign ddr4_B_deburster$from_master_arqos =
+	     aws_BSV_top$ddr4_B_master_arqos ;
+  assign ddr4_B_deburster$from_master_arregion =
+	     aws_BSV_top$ddr4_B_master_arregion ;
+  assign ddr4_B_deburster$from_master_arsize =
+	     aws_BSV_top$ddr4_B_master_arsize ;
+  assign ddr4_B_deburster$from_master_arvalid =
+	     aws_BSV_top$ddr4_B_master_arvalid ;
+  assign ddr4_B_deburster$from_master_awaddr =
+	     aws_BSV_top$ddr4_B_master_awaddr ;
+  assign ddr4_B_deburster$from_master_awburst =
+	     aws_BSV_top$ddr4_B_master_awburst ;
+  assign ddr4_B_deburster$from_master_awcache =
+	     aws_BSV_top$ddr4_B_master_awcache ;
+  assign ddr4_B_deburster$from_master_awid = aws_BSV_top$ddr4_B_master_awid ;
+  assign ddr4_B_deburster$from_master_awlen =
+	     aws_BSV_top$ddr4_B_master_awlen ;
+  assign ddr4_B_deburster$from_master_awlock =
+	     aws_BSV_top$ddr4_B_master_awlock ;
+  assign ddr4_B_deburster$from_master_awprot =
+	     aws_BSV_top$ddr4_B_master_awprot ;
+  assign ddr4_B_deburster$from_master_awqos =
+	     aws_BSV_top$ddr4_B_master_awqos ;
+  assign ddr4_B_deburster$from_master_awregion =
+	     aws_BSV_top$ddr4_B_master_awregion ;
+  assign ddr4_B_deburster$from_master_awsize =
+	     aws_BSV_top$ddr4_B_master_awsize ;
+  assign ddr4_B_deburster$from_master_awvalid =
+	     aws_BSV_top$ddr4_B_master_awvalid ;
+  assign ddr4_B_deburster$from_master_bready =
+	     aws_BSV_top$ddr4_B_master_bready ;
+  assign ddr4_B_deburster$from_master_rready =
+	     aws_BSV_top$ddr4_B_master_rready ;
+  assign ddr4_B_deburster$from_master_wdata =
+	     aws_BSV_top$ddr4_B_master_wdata ;
+  assign ddr4_B_deburster$from_master_wlast =
+	     aws_BSV_top$ddr4_B_master_wlast ;
+  assign ddr4_B_deburster$from_master_wstrb =
+	     aws_BSV_top$ddr4_B_master_wstrb ;
+  assign ddr4_B_deburster$from_master_wvalid =
+	     aws_BSV_top$ddr4_B_master_wvalid ;
+  assign ddr4_B_deburster$to_slave_arready = ddr4_B$arready ;
+  assign ddr4_B_deburster$to_slave_awready = ddr4_B$awready ;
+  assign ddr4_B_deburster$to_slave_bid = ddr4_B$bid ;
+  assign ddr4_B_deburster$to_slave_bresp = ddr4_B$bresp ;
+  assign ddr4_B_deburster$to_slave_bvalid = ddr4_B$bvalid ;
+  assign ddr4_B_deburster$to_slave_rdata = ddr4_B$rdata ;
+  assign ddr4_B_deburster$to_slave_rid = ddr4_B$rid ;
+  assign ddr4_B_deburster$to_slave_rlast = ddr4_B$rlast ;
+  assign ddr4_B_deburster$to_slave_rresp = ddr4_B$rresp ;
+  assign ddr4_B_deburster$to_slave_rvalid = ddr4_B$rvalid ;
+  assign ddr4_B_deburster$to_slave_wready = ddr4_B$wready ;
+  assign ddr4_B_deburster$EN_reset = 1'b0 ;
 
   // submodule ddr4_C
-  assign ddr4_C$araddr = aws_BSV_top$ddr4_C_master_araddr ;
-  assign ddr4_C$arburst = aws_BSV_top$ddr4_C_master_arburst ;
-  assign ddr4_C$arcache = aws_BSV_top$ddr4_C_master_arcache ;
-  assign ddr4_C$arid = aws_BSV_top$ddr4_C_master_arid ;
-  assign ddr4_C$arlen = aws_BSV_top$ddr4_C_master_arlen ;
-  assign ddr4_C$arlock = aws_BSV_top$ddr4_C_master_arlock ;
-  assign ddr4_C$arprot = aws_BSV_top$ddr4_C_master_arprot ;
-  assign ddr4_C$arqos = aws_BSV_top$ddr4_C_master_arqos ;
-  assign ddr4_C$arregion = aws_BSV_top$ddr4_C_master_arregion ;
-  assign ddr4_C$arsize = aws_BSV_top$ddr4_C_master_arsize ;
-  assign ddr4_C$arvalid = aws_BSV_top$ddr4_C_master_arvalid ;
-  assign ddr4_C$awaddr = aws_BSV_top$ddr4_C_master_awaddr ;
-  assign ddr4_C$awburst = aws_BSV_top$ddr4_C_master_awburst ;
-  assign ddr4_C$awcache = aws_BSV_top$ddr4_C_master_awcache ;
-  assign ddr4_C$awid = aws_BSV_top$ddr4_C_master_awid ;
-  assign ddr4_C$awlen = aws_BSV_top$ddr4_C_master_awlen ;
-  assign ddr4_C$awlock = aws_BSV_top$ddr4_C_master_awlock ;
-  assign ddr4_C$awprot = aws_BSV_top$ddr4_C_master_awprot ;
-  assign ddr4_C$awqos = aws_BSV_top$ddr4_C_master_awqos ;
-  assign ddr4_C$awregion = aws_BSV_top$ddr4_C_master_awregion ;
-  assign ddr4_C$awsize = aws_BSV_top$ddr4_C_master_awsize ;
-  assign ddr4_C$awvalid = aws_BSV_top$ddr4_C_master_awvalid ;
-  assign ddr4_C$bready = aws_BSV_top$ddr4_C_master_bready ;
-  assign ddr4_C$rready = aws_BSV_top$ddr4_C_master_rready ;
-  assign ddr4_C$wdata = aws_BSV_top$ddr4_C_master_wdata ;
-  assign ddr4_C$wlast = aws_BSV_top$ddr4_C_master_wlast ;
-  assign ddr4_C$wstrb = aws_BSV_top$ddr4_C_master_wstrb ;
-  assign ddr4_C$wvalid = aws_BSV_top$ddr4_C_master_wvalid ;
+  assign ddr4_C$araddr = ddr4_C_deburster$to_slave_araddr ;
+  assign ddr4_C$arburst = ddr4_C_deburster$to_slave_arburst ;
+  assign ddr4_C$arcache = ddr4_C_deburster$to_slave_arcache ;
+  assign ddr4_C$arid = ddr4_C_deburster$to_slave_arid ;
+  assign ddr4_C$arlen = ddr4_C_deburster$to_slave_arlen ;
+  assign ddr4_C$arlock = ddr4_C_deburster$to_slave_arlock ;
+  assign ddr4_C$arprot = ddr4_C_deburster$to_slave_arprot ;
+  assign ddr4_C$arqos = ddr4_C_deburster$to_slave_arqos ;
+  assign ddr4_C$arregion = ddr4_C_deburster$to_slave_arregion ;
+  assign ddr4_C$arsize = ddr4_C_deburster$to_slave_arsize ;
+  assign ddr4_C$arvalid = ddr4_C_deburster$to_slave_arvalid ;
+  assign ddr4_C$awaddr = ddr4_C_deburster$to_slave_awaddr ;
+  assign ddr4_C$awburst = ddr4_C_deburster$to_slave_awburst ;
+  assign ddr4_C$awcache = ddr4_C_deburster$to_slave_awcache ;
+  assign ddr4_C$awid = ddr4_C_deburster$to_slave_awid ;
+  assign ddr4_C$awlen = ddr4_C_deburster$to_slave_awlen ;
+  assign ddr4_C$awlock = ddr4_C_deburster$to_slave_awlock ;
+  assign ddr4_C$awprot = ddr4_C_deburster$to_slave_awprot ;
+  assign ddr4_C$awqos = ddr4_C_deburster$to_slave_awqos ;
+  assign ddr4_C$awregion = ddr4_C_deburster$to_slave_awregion ;
+  assign ddr4_C$awsize = ddr4_C_deburster$to_slave_awsize ;
+  assign ddr4_C$awvalid = ddr4_C_deburster$to_slave_awvalid ;
+  assign ddr4_C$bready = ddr4_C_deburster$to_slave_bready ;
+  assign ddr4_C$rready = ddr4_C_deburster$to_slave_rready ;
+  assign ddr4_C$wdata = ddr4_C_deburster$to_slave_wdata ;
+  assign ddr4_C$wlast = ddr4_C_deburster$to_slave_wlast ;
+  assign ddr4_C$wstrb = ddr4_C_deburster$to_slave_wstrb ;
+  assign ddr4_C$wvalid = ddr4_C_deburster$to_slave_wvalid ;
+
+  // submodule ddr4_C_deburster
+  assign ddr4_C_deburster$from_master_araddr =
+	     aws_BSV_top$ddr4_C_master_araddr ;
+  assign ddr4_C_deburster$from_master_arburst =
+	     aws_BSV_top$ddr4_C_master_arburst ;
+  assign ddr4_C_deburster$from_master_arcache =
+	     aws_BSV_top$ddr4_C_master_arcache ;
+  assign ddr4_C_deburster$from_master_arid = aws_BSV_top$ddr4_C_master_arid ;
+  assign ddr4_C_deburster$from_master_arlen =
+	     aws_BSV_top$ddr4_C_master_arlen ;
+  assign ddr4_C_deburster$from_master_arlock =
+	     aws_BSV_top$ddr4_C_master_arlock ;
+  assign ddr4_C_deburster$from_master_arprot =
+	     aws_BSV_top$ddr4_C_master_arprot ;
+  assign ddr4_C_deburster$from_master_arqos =
+	     aws_BSV_top$ddr4_C_master_arqos ;
+  assign ddr4_C_deburster$from_master_arregion =
+	     aws_BSV_top$ddr4_C_master_arregion ;
+  assign ddr4_C_deburster$from_master_arsize =
+	     aws_BSV_top$ddr4_C_master_arsize ;
+  assign ddr4_C_deburster$from_master_arvalid =
+	     aws_BSV_top$ddr4_C_master_arvalid ;
+  assign ddr4_C_deburster$from_master_awaddr =
+	     aws_BSV_top$ddr4_C_master_awaddr ;
+  assign ddr4_C_deburster$from_master_awburst =
+	     aws_BSV_top$ddr4_C_master_awburst ;
+  assign ddr4_C_deburster$from_master_awcache =
+	     aws_BSV_top$ddr4_C_master_awcache ;
+  assign ddr4_C_deburster$from_master_awid = aws_BSV_top$ddr4_C_master_awid ;
+  assign ddr4_C_deburster$from_master_awlen =
+	     aws_BSV_top$ddr4_C_master_awlen ;
+  assign ddr4_C_deburster$from_master_awlock =
+	     aws_BSV_top$ddr4_C_master_awlock ;
+  assign ddr4_C_deburster$from_master_awprot =
+	     aws_BSV_top$ddr4_C_master_awprot ;
+  assign ddr4_C_deburster$from_master_awqos =
+	     aws_BSV_top$ddr4_C_master_awqos ;
+  assign ddr4_C_deburster$from_master_awregion =
+	     aws_BSV_top$ddr4_C_master_awregion ;
+  assign ddr4_C_deburster$from_master_awsize =
+	     aws_BSV_top$ddr4_C_master_awsize ;
+  assign ddr4_C_deburster$from_master_awvalid =
+	     aws_BSV_top$ddr4_C_master_awvalid ;
+  assign ddr4_C_deburster$from_master_bready =
+	     aws_BSV_top$ddr4_C_master_bready ;
+  assign ddr4_C_deburster$from_master_rready =
+	     aws_BSV_top$ddr4_C_master_rready ;
+  assign ddr4_C_deburster$from_master_wdata =
+	     aws_BSV_top$ddr4_C_master_wdata ;
+  assign ddr4_C_deburster$from_master_wlast =
+	     aws_BSV_top$ddr4_C_master_wlast ;
+  assign ddr4_C_deburster$from_master_wstrb =
+	     aws_BSV_top$ddr4_C_master_wstrb ;
+  assign ddr4_C_deburster$from_master_wvalid =
+	     aws_BSV_top$ddr4_C_master_wvalid ;
+  assign ddr4_C_deburster$to_slave_arready = ddr4_C$arready ;
+  assign ddr4_C_deburster$to_slave_awready = ddr4_C$awready ;
+  assign ddr4_C_deburster$to_slave_bid = ddr4_C$bid ;
+  assign ddr4_C_deburster$to_slave_bresp = ddr4_C$bresp ;
+  assign ddr4_C_deburster$to_slave_bvalid = ddr4_C$bvalid ;
+  assign ddr4_C_deburster$to_slave_rdata = ddr4_C$rdata ;
+  assign ddr4_C_deburster$to_slave_rid = ddr4_C$rid ;
+  assign ddr4_C_deburster$to_slave_rlast = ddr4_C$rlast ;
+  assign ddr4_C_deburster$to_slave_rresp = ddr4_C$rresp ;
+  assign ddr4_C_deburster$to_slave_rvalid = ddr4_C$rvalid ;
+  assign ddr4_C_deburster$to_slave_wready = ddr4_C$wready ;
+  assign ddr4_C_deburster$EN_reset = 1'b0 ;
 
   // submodule ddr4_D
-  assign ddr4_D$araddr = aws_BSV_top$ddr4_D_master_araddr ;
-  assign ddr4_D$arburst = aws_BSV_top$ddr4_D_master_arburst ;
-  assign ddr4_D$arcache = aws_BSV_top$ddr4_D_master_arcache ;
-  assign ddr4_D$arid = aws_BSV_top$ddr4_D_master_arid ;
-  assign ddr4_D$arlen = aws_BSV_top$ddr4_D_master_arlen ;
-  assign ddr4_D$arlock = aws_BSV_top$ddr4_D_master_arlock ;
-  assign ddr4_D$arprot = aws_BSV_top$ddr4_D_master_arprot ;
-  assign ddr4_D$arqos = aws_BSV_top$ddr4_D_master_arqos ;
-  assign ddr4_D$arregion = aws_BSV_top$ddr4_D_master_arregion ;
-  assign ddr4_D$arsize = aws_BSV_top$ddr4_D_master_arsize ;
-  assign ddr4_D$arvalid = aws_BSV_top$ddr4_D_master_arvalid ;
-  assign ddr4_D$awaddr = aws_BSV_top$ddr4_D_master_awaddr ;
-  assign ddr4_D$awburst = aws_BSV_top$ddr4_D_master_awburst ;
-  assign ddr4_D$awcache = aws_BSV_top$ddr4_D_master_awcache ;
-  assign ddr4_D$awid = aws_BSV_top$ddr4_D_master_awid ;
-  assign ddr4_D$awlen = aws_BSV_top$ddr4_D_master_awlen ;
-  assign ddr4_D$awlock = aws_BSV_top$ddr4_D_master_awlock ;
-  assign ddr4_D$awprot = aws_BSV_top$ddr4_D_master_awprot ;
-  assign ddr4_D$awqos = aws_BSV_top$ddr4_D_master_awqos ;
-  assign ddr4_D$awregion = aws_BSV_top$ddr4_D_master_awregion ;
-  assign ddr4_D$awsize = aws_BSV_top$ddr4_D_master_awsize ;
-  assign ddr4_D$awvalid = aws_BSV_top$ddr4_D_master_awvalid ;
-  assign ddr4_D$bready = aws_BSV_top$ddr4_D_master_bready ;
-  assign ddr4_D$rready = aws_BSV_top$ddr4_D_master_rready ;
-  assign ddr4_D$wdata = aws_BSV_top$ddr4_D_master_wdata ;
-  assign ddr4_D$wlast = aws_BSV_top$ddr4_D_master_wlast ;
-  assign ddr4_D$wstrb = aws_BSV_top$ddr4_D_master_wstrb ;
-  assign ddr4_D$wvalid = aws_BSV_top$ddr4_D_master_wvalid ;
+  assign ddr4_D$araddr = ddr4_D_deburster$to_slave_araddr ;
+  assign ddr4_D$arburst = ddr4_D_deburster$to_slave_arburst ;
+  assign ddr4_D$arcache = ddr4_D_deburster$to_slave_arcache ;
+  assign ddr4_D$arid = ddr4_D_deburster$to_slave_arid ;
+  assign ddr4_D$arlen = ddr4_D_deburster$to_slave_arlen ;
+  assign ddr4_D$arlock = ddr4_D_deburster$to_slave_arlock ;
+  assign ddr4_D$arprot = ddr4_D_deburster$to_slave_arprot ;
+  assign ddr4_D$arqos = ddr4_D_deburster$to_slave_arqos ;
+  assign ddr4_D$arregion = ddr4_D_deburster$to_slave_arregion ;
+  assign ddr4_D$arsize = ddr4_D_deburster$to_slave_arsize ;
+  assign ddr4_D$arvalid = ddr4_D_deburster$to_slave_arvalid ;
+  assign ddr4_D$awaddr = ddr4_D_deburster$to_slave_awaddr ;
+  assign ddr4_D$awburst = ddr4_D_deburster$to_slave_awburst ;
+  assign ddr4_D$awcache = ddr4_D_deburster$to_slave_awcache ;
+  assign ddr4_D$awid = ddr4_D_deburster$to_slave_awid ;
+  assign ddr4_D$awlen = ddr4_D_deburster$to_slave_awlen ;
+  assign ddr4_D$awlock = ddr4_D_deburster$to_slave_awlock ;
+  assign ddr4_D$awprot = ddr4_D_deburster$to_slave_awprot ;
+  assign ddr4_D$awqos = ddr4_D_deburster$to_slave_awqos ;
+  assign ddr4_D$awregion = ddr4_D_deburster$to_slave_awregion ;
+  assign ddr4_D$awsize = ddr4_D_deburster$to_slave_awsize ;
+  assign ddr4_D$awvalid = ddr4_D_deburster$to_slave_awvalid ;
+  assign ddr4_D$bready = ddr4_D_deburster$to_slave_bready ;
+  assign ddr4_D$rready = ddr4_D_deburster$to_slave_rready ;
+  assign ddr4_D$wdata = ddr4_D_deburster$to_slave_wdata ;
+  assign ddr4_D$wlast = ddr4_D_deburster$to_slave_wlast ;
+  assign ddr4_D$wstrb = ddr4_D_deburster$to_slave_wstrb ;
+  assign ddr4_D$wvalid = ddr4_D_deburster$to_slave_wvalid ;
+
+  // submodule ddr4_D_deburster
+  assign ddr4_D_deburster$from_master_araddr =
+	     aws_BSV_top$ddr4_D_master_araddr ;
+  assign ddr4_D_deburster$from_master_arburst =
+	     aws_BSV_top$ddr4_D_master_arburst ;
+  assign ddr4_D_deburster$from_master_arcache =
+	     aws_BSV_top$ddr4_D_master_arcache ;
+  assign ddr4_D_deburster$from_master_arid = aws_BSV_top$ddr4_D_master_arid ;
+  assign ddr4_D_deburster$from_master_arlen =
+	     aws_BSV_top$ddr4_D_master_arlen ;
+  assign ddr4_D_deburster$from_master_arlock =
+	     aws_BSV_top$ddr4_D_master_arlock ;
+  assign ddr4_D_deburster$from_master_arprot =
+	     aws_BSV_top$ddr4_D_master_arprot ;
+  assign ddr4_D_deburster$from_master_arqos =
+	     aws_BSV_top$ddr4_D_master_arqos ;
+  assign ddr4_D_deburster$from_master_arregion =
+	     aws_BSV_top$ddr4_D_master_arregion ;
+  assign ddr4_D_deburster$from_master_arsize =
+	     aws_BSV_top$ddr4_D_master_arsize ;
+  assign ddr4_D_deburster$from_master_arvalid =
+	     aws_BSV_top$ddr4_D_master_arvalid ;
+  assign ddr4_D_deburster$from_master_awaddr =
+	     aws_BSV_top$ddr4_D_master_awaddr ;
+  assign ddr4_D_deburster$from_master_awburst =
+	     aws_BSV_top$ddr4_D_master_awburst ;
+  assign ddr4_D_deburster$from_master_awcache =
+	     aws_BSV_top$ddr4_D_master_awcache ;
+  assign ddr4_D_deburster$from_master_awid = aws_BSV_top$ddr4_D_master_awid ;
+  assign ddr4_D_deburster$from_master_awlen =
+	     aws_BSV_top$ddr4_D_master_awlen ;
+  assign ddr4_D_deburster$from_master_awlock =
+	     aws_BSV_top$ddr4_D_master_awlock ;
+  assign ddr4_D_deburster$from_master_awprot =
+	     aws_BSV_top$ddr4_D_master_awprot ;
+  assign ddr4_D_deburster$from_master_awqos =
+	     aws_BSV_top$ddr4_D_master_awqos ;
+  assign ddr4_D_deburster$from_master_awregion =
+	     aws_BSV_top$ddr4_D_master_awregion ;
+  assign ddr4_D_deburster$from_master_awsize =
+	     aws_BSV_top$ddr4_D_master_awsize ;
+  assign ddr4_D_deburster$from_master_awvalid =
+	     aws_BSV_top$ddr4_D_master_awvalid ;
+  assign ddr4_D_deburster$from_master_bready =
+	     aws_BSV_top$ddr4_D_master_bready ;
+  assign ddr4_D_deburster$from_master_rready =
+	     aws_BSV_top$ddr4_D_master_rready ;
+  assign ddr4_D_deburster$from_master_wdata =
+	     aws_BSV_top$ddr4_D_master_wdata ;
+  assign ddr4_D_deburster$from_master_wlast =
+	     aws_BSV_top$ddr4_D_master_wlast ;
+  assign ddr4_D_deburster$from_master_wstrb =
+	     aws_BSV_top$ddr4_D_master_wstrb ;
+  assign ddr4_D_deburster$from_master_wvalid =
+	     aws_BSV_top$ddr4_D_master_wvalid ;
+  assign ddr4_D_deburster$to_slave_arready = ddr4_D$arready ;
+  assign ddr4_D_deburster$to_slave_awready = ddr4_D$awready ;
+  assign ddr4_D_deburster$to_slave_bid = ddr4_D$bid ;
+  assign ddr4_D_deburster$to_slave_bresp = ddr4_D$bresp ;
+  assign ddr4_D_deburster$to_slave_bvalid = ddr4_D$bvalid ;
+  assign ddr4_D_deburster$to_slave_rdata = ddr4_D$rdata ;
+  assign ddr4_D_deburster$to_slave_rid = ddr4_D$rid ;
+  assign ddr4_D_deburster$to_slave_rlast = ddr4_D$rlast ;
+  assign ddr4_D_deburster$to_slave_rresp = ddr4_D$rresp ;
+  assign ddr4_D_deburster$to_slave_rvalid = ddr4_D$rvalid ;
+  assign ddr4_D_deburster$to_slave_wready = ddr4_D$wready ;
+  assign ddr4_D_deburster$EN_reset = 1'b0 ;
 
   // submodule dma_pcis_xactor_f_rd_addr
   assign dma_pcis_xactor_f_rd_addr$D_IN =
@@ -1761,7 +2848,10 @@ module mkTop_HW_Side(CLK,
 
   // submodule ocl_xactor_f_rd_addr
   assign ocl_xactor_f_rd_addr$D_IN = comms$fo_AXI4L_Rd_Addr_a32_u0_first ;
-  assign ocl_xactor_f_rd_addr$ENQ = CAN_FIRE_RL_rl_connect_ocl_rd_addr ;
+  assign ocl_xactor_f_rd_addr$ENQ =
+	     comms$RDY_fo_AXI4L_Rd_Addr_a32_u0_deq &&
+	     comms$RDY_fo_AXI4L_Rd_Addr_a32_u0_first &&
+	     ocl_xactor_f_rd_addr$FULL_N ;
   assign ocl_xactor_f_rd_addr$DEQ =
 	     ocl_xactor_f_rd_addr$EMPTY_N && aws_BSV_top$ocl_slave_arready ;
   assign ocl_xactor_f_rd_addr$CLR = 1'b0 ;
@@ -1771,19 +2861,27 @@ module mkTop_HW_Side(CLK,
 	     { aws_BSV_top$ocl_slave_rresp, aws_BSV_top$ocl_slave_rdata } ;
   assign ocl_xactor_f_rd_data$ENQ =
 	     aws_BSV_top$ocl_slave_rvalid && ocl_xactor_f_rd_data$FULL_N ;
-  assign ocl_xactor_f_rd_data$DEQ = CAN_FIRE_RL_rl_connect_ocl_rd_data ;
+  assign ocl_xactor_f_rd_data$DEQ =
+	     comms$RDY_fi_AXI4L_Rd_Data_d32_u0_enq &&
+	     ocl_xactor_f_rd_data$EMPTY_N ;
   assign ocl_xactor_f_rd_data$CLR = 1'b0 ;
 
   // submodule ocl_xactor_f_wr_addr
   assign ocl_xactor_f_wr_addr$D_IN = comms$fo_AXI4L_Wr_Addr_a32_u0_first ;
-  assign ocl_xactor_f_wr_addr$ENQ = CAN_FIRE_RL_rl_connect_ocl_wr_addr ;
+  assign ocl_xactor_f_wr_addr$ENQ =
+	     comms$RDY_fo_AXI4L_Wr_Addr_a32_u0_deq &&
+	     comms$RDY_fo_AXI4L_Wr_Addr_a32_u0_first &&
+	     ocl_xactor_f_wr_addr$FULL_N ;
   assign ocl_xactor_f_wr_addr$DEQ =
 	     ocl_xactor_f_wr_addr$EMPTY_N && aws_BSV_top$ocl_slave_awready ;
   assign ocl_xactor_f_wr_addr$CLR = 1'b0 ;
 
   // submodule ocl_xactor_f_wr_data
   assign ocl_xactor_f_wr_data$D_IN = comms$fo_AXI4L_Wr_Data_d32_first ;
-  assign ocl_xactor_f_wr_data$ENQ = CAN_FIRE_RL_rl_connect_ocl_wr_data ;
+  assign ocl_xactor_f_wr_data$ENQ =
+	     comms$RDY_fo_AXI4L_Wr_Data_d32_deq &&
+	     comms$RDY_fo_AXI4L_Wr_Data_d32_first &&
+	     ocl_xactor_f_wr_data$FULL_N ;
   assign ocl_xactor_f_wr_data$DEQ =
 	     ocl_xactor_f_wr_data$EMPTY_N && aws_BSV_top$ocl_slave_wready ;
   assign ocl_xactor_f_wr_data$CLR = 1'b0 ;
@@ -1792,7 +2890,9 @@ module mkTop_HW_Side(CLK,
   assign ocl_xactor_f_wr_resp$D_IN = aws_BSV_top$ocl_slave_bresp ;
   assign ocl_xactor_f_wr_resp$ENQ =
 	     aws_BSV_top$ocl_slave_bvalid && ocl_xactor_f_wr_resp$FULL_N ;
-  assign ocl_xactor_f_wr_resp$DEQ = CAN_FIRE_RL_rl_connect_ocl_wr_resp ;
+  assign ocl_xactor_f_wr_resp$DEQ =
+	     comms$RDY_fi_AXI4L_Wr_Resp_u0_enq &&
+	     ocl_xactor_f_wr_resp$EMPTY_N ;
   assign ocl_xactor_f_wr_resp$CLR = 1'b0 ;
 
   // handling of inlined registers
@@ -1853,7 +2953,7 @@ module mkTop_HW_Side(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_host_recv)
 	begin
-	  TASK_c_host_recv___d183 = $imported_c_host_recv(8'd79);
+	  TASK_c_host_recv___d359 = $imported_c_host_recv(8'd79);
 	  #0;
 	end
     if (RST_N != `BSV_RESET_VALUE)

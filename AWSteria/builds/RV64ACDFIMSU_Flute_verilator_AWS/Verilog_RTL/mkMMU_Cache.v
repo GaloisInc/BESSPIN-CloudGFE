@@ -755,13 +755,13 @@ module mkMMU_Cache(CLK,
        MUX_master_xactor_f_rd_addr$enq_1__SEL_2,
        MUX_master_xactor_f_rd_addr$enq_1__SEL_3,
        MUX_ram_state_and_ctag_cset$a_put_1__SEL_1,
-       MUX_ram_state_and_ctag_cset$b_put_3__SEL_1,
+       MUX_ram_state_and_ctag_cset$b_put_1__SEL_1,
        MUX_ram_word64_set$a_put_1__SEL_1,
        MUX_ram_word64_set$b_put_1__SEL_2,
-       MUX_rg_error_during_refill$write_1__SEL_1,
        MUX_rg_exc_code$write_1__SEL_1,
        MUX_rg_exc_code$write_1__SEL_2,
        MUX_rg_exc_code$write_1__SEL_3,
+       MUX_rg_exc_code$write_1__SEL_4,
        MUX_rg_exc_code$write_1__SEL_5,
        MUX_rg_exc_code$write_1__SEL_6,
        MUX_rg_exc_code$write_1__SEL_7,
@@ -775,7 +775,7 @@ module mkMMU_Cache(CLK,
        MUX_tlb$insert_1__SEL_1,
        MUX_tlb$insert_1__SEL_2,
        MUX_tlb$insert_1__SEL_3,
-       MUX_tlb$insert_1__SEL_4;
+       MUX_tlb$insert_2__SEL_4;
 
   // declarations used by system tasks
   // synopsys translate_off
@@ -1066,7 +1066,7 @@ module mkMMU_Cache(CLK,
   wire [31 : 0] IF_rg_f3_15_EQ_0b0_16_THEN_IF_rg_addr_5_BITS_2_ETC__q32,
 		ld_val5618_BITS_31_TO_0__q39,
 		ld_val5618_BITS_63_TO_32__q46,
-		master_xactor_f_rd_dataD_OUT_BITS_34_TO_3__q3,
+		master_xactor_f_rd_dataD_OUT_BITS_34_TO_3__q4,
 		master_xactor_f_rd_dataD_OUT_BITS_66_TO_35__q10,
 		rg_st_amo_val_BITS_31_TO_0__q33,
 		w17858_BITS_31_TO_0__q52,
@@ -1077,7 +1077,7 @@ module mkMMU_Cache(CLK,
 		ld_val5618_BITS_47_TO_32__q45,
 		ld_val5618_BITS_63_TO_48__q49,
 		master_xactor_f_rd_dataD_OUT_BITS_18_TO_3__q2,
-		master_xactor_f_rd_dataD_OUT_BITS_34_TO_19__q6,
+		master_xactor_f_rd_dataD_OUT_BITS_34_TO_19__q7,
 		master_xactor_f_rd_dataD_OUT_BITS_50_TO_35__q9,
 		master_xactor_f_rd_dataD_OUT_BITS_66_TO_51__q13,
 		word64776_BITS_15_TO_0__q16,
@@ -1093,10 +1093,10 @@ module mkMMU_Cache(CLK,
 	       ld_val5618_BITS_63_TO_56__q50,
 	       ld_val5618_BITS_7_TO_0__q37,
 	       master_xactor_f_rd_dataD_OUT_BITS_10_TO_3__q1,
-	       master_xactor_f_rd_dataD_OUT_BITS_18_TO_11__q4,
-	       master_xactor_f_rd_dataD_OUT_BITS_26_TO_19__q5,
-	       master_xactor_f_rd_dataD_OUT_BITS_34_TO_27__q7,
-	       master_xactor_f_rd_dataD_OUT_BITS_42_TO_35__q8,
+	       master_xactor_f_rd_dataD_OUT_BITS_18_TO_11__q5,
+	       master_xactor_f_rd_dataD_OUT_BITS_26_TO_19__q6,
+	       master_xactor_f_rd_dataD_OUT_BITS_34_TO_27__q8,
+	       master_xactor_f_rd_dataD_OUT_BITS_42_TO_35__q3,
 	       master_xactor_f_rd_dataD_OUT_BITS_50_TO_43__q11,
 	       master_xactor_f_rd_dataD_OUT_BITS_58_TO_51__q12,
 	       master_xactor_f_rd_dataD_OUT_BITS_66_TO_59__q14,
@@ -1838,7 +1838,7 @@ module mkMMU_Cache(CLK,
 	     WILL_FIRE_RL_rl_cache_refill_rsps_loop &&
 	     rg_word64_set_in_cache[2:0] == 3'd0 &&
 	     master_xactor_f_rd_data$D_OUT[2:1] == 2'b0 ;
-  assign MUX_ram_state_and_ctag_cset$b_put_3__SEL_1 =
+  assign MUX_ram_state_and_ctag_cset$b_put_1__SEL_1 =
 	     EN_req &&
 	     req_f3_BITS_1_TO_0_430_EQ_0b0_431_OR_req_f3_BI_ETC___d1460 ;
   assign MUX_ram_word64_set$a_put_1__SEL_1 =
@@ -1847,9 +1847,6 @@ module mkMMU_Cache(CLK,
   assign MUX_ram_word64_set$b_put_1__SEL_2 =
 	     WILL_FIRE_RL_rl_cache_refill_rsps_loop &&
 	     rg_word64_set_in_cache[2:0] != 3'd7 ;
-  assign MUX_rg_error_during_refill$write_1__SEL_1 =
-	     WILL_FIRE_RL_rl_cache_refill_rsps_loop &&
-	     master_xactor_f_rd_data$D_OUT[2:1] != 2'b0 ;
   assign MUX_rg_exc_code$write_1__SEL_1 =
 	     EN_req &&
 	     NOT_req_f3_BITS_1_TO_0_430_EQ_0b0_431_432_AND__ETC___d1451 ;
@@ -1858,6 +1855,9 @@ module mkMMU_Cache(CLK,
 	     master_xactor_f_rd_data$D_OUT[2:1] != 2'b0 ;
   assign MUX_rg_exc_code$write_1__SEL_3 =
 	     WILL_FIRE_RL_rl_io_read_rsp &&
+	     master_xactor_f_rd_data$D_OUT[2:1] != 2'b0 ;
+  assign MUX_rg_exc_code$write_1__SEL_4 =
+	     WILL_FIRE_RL_rl_cache_refill_rsps_loop &&
 	     master_xactor_f_rd_data$D_OUT[2:1] != 2'b0 ;
   assign MUX_rg_exc_code$write_1__SEL_5 =
 	     WILL_FIRE_RL_rl_ptw_level_0 &&
@@ -1901,7 +1901,7 @@ module mkMMU_Cache(CLK,
   assign MUX_tlb$insert_1__SEL_3 =
 	     WILL_FIRE_RL_rl_ptw_level_1 &&
 	     master_xactor_f_rd_data_first__38_BITS_2_TO_1__ETC___d1047 ;
-  assign MUX_tlb$insert_1__SEL_4 =
+  assign MUX_tlb$insert_2__SEL_4 =
 	     WILL_FIRE_RL_rl_ptw_level_0 &&
 	     master_xactor_f_rd_data$D_OUT[2:1] == 2'b0 &&
 	     master_xactor_f_rd_data$D_OUT[3] &&
@@ -2071,8 +2071,7 @@ module mkMMU_Cache(CLK,
 	     WILL_FIRE_RL_rl_reset || WILL_FIRE_RL_rl_start_reset ;
 
   // register rg_error_during_refill
-  assign rg_error_during_refill$D_IN =
-	     MUX_rg_error_during_refill$write_1__SEL_1 ;
+  assign rg_error_during_refill$D_IN = MUX_rg_exc_code$write_1__SEL_4 ;
   assign rg_error_during_refill$EN =
 	     WILL_FIRE_RL_rl_cache_refill_rsps_loop &&
 	     master_xactor_f_rd_data$D_OUT[2:1] != 2'b0 ||
@@ -2083,7 +2082,7 @@ module mkMMU_Cache(CLK,
 	  MUX_rg_exc_code$write_1__VAL_1 or
 	  MUX_rg_exc_code$write_1__SEL_2 or
 	  MUX_rg_exc_code$write_1__SEL_3 or
-	  MUX_rg_error_during_refill$write_1__SEL_1 or
+	  MUX_rg_exc_code$write_1__SEL_4 or
 	  access_exc_code__h2791 or
 	  MUX_rg_exc_code$write_1__SEL_5 or
 	  MUX_rg_exc_code$write_1__VAL_5 or
@@ -2095,8 +2094,7 @@ module mkMMU_Cache(CLK,
 	rg_exc_code$D_IN = MUX_rg_exc_code$write_1__VAL_1;
     MUX_rg_exc_code$write_1__SEL_2: rg_exc_code$D_IN = 4'd7;
     MUX_rg_exc_code$write_1__SEL_3: rg_exc_code$D_IN = 4'd5;
-    MUX_rg_error_during_refill$write_1__SEL_1:
-	rg_exc_code$D_IN = access_exc_code__h2791;
+    MUX_rg_exc_code$write_1__SEL_4: rg_exc_code$D_IN = access_exc_code__h2791;
     MUX_rg_exc_code$write_1__SEL_5:
 	rg_exc_code$D_IN = MUX_rg_exc_code$write_1__VAL_5;
     MUX_rg_exc_code$write_1__SEL_6:
@@ -2381,7 +2379,8 @@ module mkMMU_Cache(CLK,
   assign f_reset_reqs$D_IN = !EN_server_reset_request_put ;
   assign f_reset_reqs$ENQ =
 	     EN_server_reset_request_put || EN_server_flush_request_put ;
-  assign f_reset_reqs$DEQ = MUX_rg_state$write_1__SEL_18 ;
+  assign f_reset_reqs$DEQ =
+	     WILL_FIRE_RL_rl_reset && rg_cset_in_cache == 6'd63 ;
   assign f_reset_reqs$CLR = 1'b0 ;
 
   // submodule f_reset_rsps
@@ -2471,7 +2470,11 @@ module mkMMU_Cache(CLK,
 	       8'd0,
 	       x__h3055,
 	       18'd65536 } ;
-  assign master_xactor_f_wr_addr$ENQ = CAN_FIRE_RL_rl_fabric_send_write_req ;
+  assign master_xactor_f_wr_addr$ENQ =
+	     ctr_wr_rsps_pending_crg != 4'd15 &&
+	     f_fabric_write_reqs$EMPTY_N &&
+	     master_xactor_f_wr_addr$FULL_N &&
+	     master_xactor_f_wr_data$FULL_N ;
   assign master_xactor_f_wr_addr$DEQ =
 	     master_xactor_f_wr_addr$EMPTY_N && mem_master_awready ;
   assign master_xactor_f_wr_addr$CLR =
@@ -2482,7 +2485,11 @@ module mkMMU_Cache(CLK,
 	     { mem_req_wr_data_wdata__h3234,
 	       mem_req_wr_data_wstrb__h3235,
 	       1'd1 } ;
-  assign master_xactor_f_wr_data$ENQ = CAN_FIRE_RL_rl_fabric_send_write_req ;
+  assign master_xactor_f_wr_data$ENQ =
+	     ctr_wr_rsps_pending_crg != 4'd15 &&
+	     f_fabric_write_reqs$EMPTY_N &&
+	     master_xactor_f_wr_addr$FULL_N &&
+	     master_xactor_f_wr_data$FULL_N ;
   assign master_xactor_f_wr_data$DEQ =
 	     master_xactor_f_wr_data$EMPTY_N && mem_master_wready ;
   assign master_xactor_f_wr_data$CLR =
@@ -2492,7 +2499,8 @@ module mkMMU_Cache(CLK,
   assign master_xactor_f_wr_resp$D_IN = { mem_master_bid, mem_master_bresp } ;
   assign master_xactor_f_wr_resp$ENQ =
 	     mem_master_bvalid && master_xactor_f_wr_resp$FULL_N ;
-  assign master_xactor_f_wr_resp$DEQ = CAN_FIRE_RL_rl_discard_write_rsp ;
+  assign master_xactor_f_wr_resp$DEQ =
+	     b__h28707 != 4'd0 && master_xactor_f_wr_resp$EMPTY_N ;
   assign master_xactor_f_wr_resp$CLR =
 	     WILL_FIRE_RL_rl_start_reset && !f_reset_reqs$D_OUT ;
 
@@ -2502,7 +2510,7 @@ module mkMMU_Cache(CLK,
 	       rg_addr[11:6] :
 	       rg_cset_in_cache ;
   assign ram_state_and_ctag_cset$ADDRB =
-	     MUX_ram_state_and_ctag_cset$b_put_3__SEL_1 ?
+	     MUX_ram_state_and_ctag_cset$b_put_1__SEL_1 ?
 	       req_addr[11:6] :
 	       rg_addr[11:6] ;
   assign ram_state_and_ctag_cset$DIA =
@@ -2510,7 +2518,7 @@ module mkMMU_Cache(CLK,
 	       MUX_ram_state_and_ctag_cset$a_put_3__VAL_1 :
 	       106'h15555555555554AAAAAAAAAAAAA ;
   assign ram_state_and_ctag_cset$DIB =
-	     MUX_ram_state_and_ctag_cset$b_put_3__SEL_1 ?
+	     MUX_ram_state_and_ctag_cset$b_put_1__SEL_1 ?
 	       106'h2AAAAAAAAAAAAAAAAAAAAAAAAAA /* unspecified value */  :
 	       106'h2AAAAAAAAAAAAAAAAAAAAAAAAAA /* unspecified value */  ;
   assign ram_state_and_ctag_cset$WEA = 1'd1 ;
@@ -2530,7 +2538,7 @@ module mkMMU_Cache(CLK,
 	     MUX_ram_word64_set$a_put_1__SEL_1 ?
 	       rg_word64_set_in_cache :
 	       rg_addr[11:3] ;
-  always@(MUX_ram_state_and_ctag_cset$b_put_3__SEL_1 or
+  always@(MUX_ram_state_and_ctag_cset$b_put_1__SEL_1 or
 	  req_addr or
 	  MUX_ram_word64_set$b_put_1__SEL_2 or
 	  MUX_ram_word64_set$b_put_2__VAL_2 or
@@ -2540,7 +2548,7 @@ module mkMMU_Cache(CLK,
 	  MUX_ram_word64_set$b_put_2__VAL_4)
   begin
     case (1'b1) // synopsys parallel_case
-      MUX_ram_state_and_ctag_cset$b_put_3__SEL_1:
+      MUX_ram_state_and_ctag_cset$b_put_1__SEL_1:
 	  ram_word64_set$ADDRB = req_addr[11:3];
       MUX_ram_word64_set$b_put_1__SEL_2:
 	  ram_word64_set$ADDRB = MUX_ram_word64_set$b_put_2__VAL_2;
@@ -2554,12 +2562,12 @@ module mkMMU_Cache(CLK,
 	     MUX_ram_word64_set$a_put_1__SEL_1 ?
 	       MUX_ram_word64_set$a_put_3__VAL_1 :
 	       MUX_ram_word64_set$a_put_3__VAL_2 ;
-  always@(MUX_ram_state_and_ctag_cset$b_put_3__SEL_1 or
+  always@(MUX_ram_state_and_ctag_cset$b_put_1__SEL_1 or
 	  MUX_ram_word64_set$b_put_1__SEL_2 or
 	  WILL_FIRE_RL_rl_rereq or WILL_FIRE_RL_rl_start_cache_refill)
   begin
     case (1'b1) // synopsys parallel_case
-      MUX_ram_state_and_ctag_cset$b_put_3__SEL_1:
+      MUX_ram_state_and_ctag_cset$b_put_1__SEL_1:
 	  ram_word64_set$DIB =
 	      128'hAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA /* unspecified value */ ;
       MUX_ram_word64_set$b_put_1__SEL_2:
@@ -2603,19 +2611,19 @@ module mkMMU_Cache(CLK,
   always@(MUX_tlb$insert_1__SEL_1 or
 	  tlb$lookup or
 	  MUX_tlb$insert_1__SEL_2 or
-	  MUX_tlb$insert_1__SEL_3 or MUX_tlb$insert_1__SEL_4)
+	  MUX_tlb$insert_1__SEL_3 or MUX_tlb$insert_2__SEL_4)
   begin
     case (1'b1) // synopsys parallel_case
       MUX_tlb$insert_1__SEL_1: tlb$insert_level = tlb$lookup[65:64];
       MUX_tlb$insert_1__SEL_2: tlb$insert_level = 2'd2;
       MUX_tlb$insert_1__SEL_3: tlb$insert_level = 2'd1;
-      MUX_tlb$insert_1__SEL_4: tlb$insert_level = 2'd0;
+      MUX_tlb$insert_2__SEL_4: tlb$insert_level = 2'd0;
       default: tlb$insert_level = 2'b10 /* unspecified value */ ;
     endcase
   end
   assign tlb$insert_pte =
 	     (MUX_tlb$insert_1__SEL_2 || MUX_tlb$insert_1__SEL_3 ||
-	      MUX_tlb$insert_1__SEL_4) ?
+	      MUX_tlb$insert_2__SEL_4) ?
 	       master_xactor_f_rd_data$D_OUT[66:3] :
 	       value__h7083 ;
   assign tlb$insert_pte_pa =
@@ -3252,19 +3260,19 @@ module mkMMU_Cache(CLK,
 	     !rg_lrsc_pa_68_EQ_IF_rg_priv_4_ULE_0b1_5_AND_rg_ETC___d269 ;
   assign master_xactor_f_rd_dataD_OUT_BITS_10_TO_3__q1 =
 	     master_xactor_f_rd_data$D_OUT[10:3] ;
-  assign master_xactor_f_rd_dataD_OUT_BITS_18_TO_11__q4 =
+  assign master_xactor_f_rd_dataD_OUT_BITS_18_TO_11__q5 =
 	     master_xactor_f_rd_data$D_OUT[18:11] ;
   assign master_xactor_f_rd_dataD_OUT_BITS_18_TO_3__q2 =
 	     master_xactor_f_rd_data$D_OUT[18:3] ;
-  assign master_xactor_f_rd_dataD_OUT_BITS_26_TO_19__q5 =
+  assign master_xactor_f_rd_dataD_OUT_BITS_26_TO_19__q6 =
 	     master_xactor_f_rd_data$D_OUT[26:19] ;
-  assign master_xactor_f_rd_dataD_OUT_BITS_34_TO_19__q6 =
+  assign master_xactor_f_rd_dataD_OUT_BITS_34_TO_19__q7 =
 	     master_xactor_f_rd_data$D_OUT[34:19] ;
-  assign master_xactor_f_rd_dataD_OUT_BITS_34_TO_27__q7 =
+  assign master_xactor_f_rd_dataD_OUT_BITS_34_TO_27__q8 =
 	     master_xactor_f_rd_data$D_OUT[34:27] ;
-  assign master_xactor_f_rd_dataD_OUT_BITS_34_TO_3__q3 =
+  assign master_xactor_f_rd_dataD_OUT_BITS_34_TO_3__q4 =
 	     master_xactor_f_rd_data$D_OUT[34:3] ;
-  assign master_xactor_f_rd_dataD_OUT_BITS_42_TO_35__q8 =
+  assign master_xactor_f_rd_dataD_OUT_BITS_42_TO_35__q3 =
 	     master_xactor_f_rd_data$D_OUT[42:35] ;
   assign master_xactor_f_rd_dataD_OUT_BITS_50_TO_35__q9 =
 	     master_xactor_f_rd_data$D_OUT[50:35] ;
@@ -3518,17 +3526,17 @@ module mkMMU_Cache(CLK,
 	     { {56{master_xactor_f_rd_dataD_OUT_BITS_10_TO_3__q1[7]}},
 	       master_xactor_f_rd_dataD_OUT_BITS_10_TO_3__q1 } ;
   assign result__h35708 =
-	     { {56{master_xactor_f_rd_dataD_OUT_BITS_18_TO_11__q4[7]}},
-	       master_xactor_f_rd_dataD_OUT_BITS_18_TO_11__q4 } ;
+	     { {56{master_xactor_f_rd_dataD_OUT_BITS_18_TO_11__q5[7]}},
+	       master_xactor_f_rd_dataD_OUT_BITS_18_TO_11__q5 } ;
   assign result__h35735 =
-	     { {56{master_xactor_f_rd_dataD_OUT_BITS_26_TO_19__q5[7]}},
-	       master_xactor_f_rd_dataD_OUT_BITS_26_TO_19__q5 } ;
+	     { {56{master_xactor_f_rd_dataD_OUT_BITS_26_TO_19__q6[7]}},
+	       master_xactor_f_rd_dataD_OUT_BITS_26_TO_19__q6 } ;
   assign result__h35762 =
-	     { {56{master_xactor_f_rd_dataD_OUT_BITS_34_TO_27__q7[7]}},
-	       master_xactor_f_rd_dataD_OUT_BITS_34_TO_27__q7 } ;
+	     { {56{master_xactor_f_rd_dataD_OUT_BITS_34_TO_27__q8[7]}},
+	       master_xactor_f_rd_dataD_OUT_BITS_34_TO_27__q8 } ;
   assign result__h35789 =
-	     { {56{master_xactor_f_rd_dataD_OUT_BITS_42_TO_35__q8[7]}},
-	       master_xactor_f_rd_dataD_OUT_BITS_42_TO_35__q8 } ;
+	     { {56{master_xactor_f_rd_dataD_OUT_BITS_42_TO_35__q3[7]}},
+	       master_xactor_f_rd_dataD_OUT_BITS_42_TO_35__q3 } ;
   assign result__h35816 =
 	     { {56{master_xactor_f_rd_dataD_OUT_BITS_50_TO_43__q11[7]}},
 	       master_xactor_f_rd_dataD_OUT_BITS_50_TO_43__q11 } ;
@@ -3550,8 +3558,8 @@ module mkMMU_Cache(CLK,
 	     { {48{master_xactor_f_rd_dataD_OUT_BITS_18_TO_3__q2[15]}},
 	       master_xactor_f_rd_dataD_OUT_BITS_18_TO_3__q2 } ;
   assign result__h36174 =
-	     { {48{master_xactor_f_rd_dataD_OUT_BITS_34_TO_19__q6[15]}},
-	       master_xactor_f_rd_dataD_OUT_BITS_34_TO_19__q6 } ;
+	     { {48{master_xactor_f_rd_dataD_OUT_BITS_34_TO_19__q7[15]}},
+	       master_xactor_f_rd_dataD_OUT_BITS_34_TO_19__q7 } ;
   assign result__h36201 =
 	     { {48{master_xactor_f_rd_dataD_OUT_BITS_50_TO_35__q9[15]}},
 	       master_xactor_f_rd_dataD_OUT_BITS_50_TO_35__q9 } ;
@@ -3563,8 +3571,8 @@ module mkMMU_Cache(CLK,
   assign result__h36322 = { 48'd0, master_xactor_f_rd_data$D_OUT[50:35] } ;
   assign result__h36349 = { 48'd0, master_xactor_f_rd_data$D_OUT[66:51] } ;
   assign result__h36389 =
-	     { {32{master_xactor_f_rd_dataD_OUT_BITS_34_TO_3__q3[31]}},
-	       master_xactor_f_rd_dataD_OUT_BITS_34_TO_3__q3 } ;
+	     { {32{master_xactor_f_rd_dataD_OUT_BITS_34_TO_3__q4[31]}},
+	       master_xactor_f_rd_dataD_OUT_BITS_34_TO_3__q4 } ;
   assign result__h36416 =
 	     { {32{master_xactor_f_rd_dataD_OUT_BITS_66_TO_35__q10[31]}},
 	       master_xactor_f_rd_dataD_OUT_BITS_66_TO_35__q10 } ;
@@ -4063,6 +4071,27 @@ module mkMMU_Cache(CLK,
     endcase
   end
   always@(rg_addr or
+	  result__h21095 or
+	  result__h21123 or result__h21151 or result__h21179)
+  begin
+    case (rg_addr[2:0])
+      3'h0:
+	  IF_rg_addr_5_BITS_2_TO_0_19_EQ_0x0_20_THEN_SEX_ETC___d625 =
+	      result__h21095;
+      3'h2:
+	  IF_rg_addr_5_BITS_2_TO_0_19_EQ_0x0_20_THEN_SEX_ETC___d625 =
+	      result__h21123;
+      3'h4:
+	  IF_rg_addr_5_BITS_2_TO_0_19_EQ_0x0_20_THEN_SEX_ETC___d625 =
+	      result__h21151;
+      3'h6:
+	  IF_rg_addr_5_BITS_2_TO_0_19_EQ_0x0_20_THEN_SEX_ETC___d625 =
+	      result__h21179;
+      default: IF_rg_addr_5_BITS_2_TO_0_19_EQ_0x0_20_THEN_SEX_ETC___d625 =
+		   64'd0;
+    endcase
+  end
+  always@(rg_addr or
 	  result__h20854 or
 	  result__h20882 or
 	  result__h20910 or
@@ -4095,27 +4124,6 @@ module mkMMU_Cache(CLK,
       3'h7:
 	  IF_rg_addr_5_BITS_2_TO_0_19_EQ_0x0_20_THEN_0_C_ETC___d613 =
 	      result__h21050;
-    endcase
-  end
-  always@(rg_addr or
-	  result__h21095 or
-	  result__h21123 or result__h21151 or result__h21179)
-  begin
-    case (rg_addr[2:0])
-      3'h0:
-	  IF_rg_addr_5_BITS_2_TO_0_19_EQ_0x0_20_THEN_SEX_ETC___d625 =
-	      result__h21095;
-      3'h2:
-	  IF_rg_addr_5_BITS_2_TO_0_19_EQ_0x0_20_THEN_SEX_ETC___d625 =
-	      result__h21123;
-      3'h4:
-	  IF_rg_addr_5_BITS_2_TO_0_19_EQ_0x0_20_THEN_SEX_ETC___d625 =
-	      result__h21151;
-      3'h6:
-	  IF_rg_addr_5_BITS_2_TO_0_19_EQ_0x0_20_THEN_SEX_ETC___d625 =
-	      result__h21179;
-      default: IF_rg_addr_5_BITS_2_TO_0_19_EQ_0x0_20_THEN_SEX_ETC___d625 =
-		   64'd0;
     endcase
   end
   always@(rg_addr or
@@ -4482,27 +4490,6 @@ module mkMMU_Cache(CLK,
     endcase
   end
   always@(rg_addr or
-	  result__h36147 or
-	  result__h36174 or result__h36201 or result__h36228)
-  begin
-    case (rg_addr[2:0])
-      3'h0:
-	  IF_rg_addr_5_BITS_2_TO_0_19_EQ_0x0_20_THEN_SEX_ETC___d1217 =
-	      result__h36147;
-      3'h2:
-	  IF_rg_addr_5_BITS_2_TO_0_19_EQ_0x0_20_THEN_SEX_ETC___d1217 =
-	      result__h36174;
-      3'h4:
-	  IF_rg_addr_5_BITS_2_TO_0_19_EQ_0x0_20_THEN_SEX_ETC___d1217 =
-	      result__h36201;
-      3'h6:
-	  IF_rg_addr_5_BITS_2_TO_0_19_EQ_0x0_20_THEN_SEX_ETC___d1217 =
-	      result__h36228;
-      default: IF_rg_addr_5_BITS_2_TO_0_19_EQ_0x0_20_THEN_SEX_ETC___d1217 =
-		   64'd0;
-    endcase
-  end
-  always@(rg_addr or
 	  result__h36268 or
 	  result__h36295 or result__h36322 or result__h36349)
   begin
@@ -4556,6 +4543,27 @@ module mkMMU_Cache(CLK,
       3'h7:
 	  IF_rg_addr_5_BITS_2_TO_0_19_EQ_0x0_20_THEN_0_C_ETC___d1205 =
 	      result__h36103;
+    endcase
+  end
+  always@(rg_addr or
+	  result__h36147 or
+	  result__h36174 or result__h36201 or result__h36228)
+  begin
+    case (rg_addr[2:0])
+      3'h0:
+	  IF_rg_addr_5_BITS_2_TO_0_19_EQ_0x0_20_THEN_SEX_ETC___d1217 =
+	      result__h36147;
+      3'h2:
+	  IF_rg_addr_5_BITS_2_TO_0_19_EQ_0x0_20_THEN_SEX_ETC___d1217 =
+	      result__h36174;
+      3'h4:
+	  IF_rg_addr_5_BITS_2_TO_0_19_EQ_0x0_20_THEN_SEX_ETC___d1217 =
+	      result__h36201;
+      3'h6:
+	  IF_rg_addr_5_BITS_2_TO_0_19_EQ_0x0_20_THEN_SEX_ETC___d1217 =
+	      result__h36228;
+      default: IF_rg_addr_5_BITS_2_TO_0_19_EQ_0x0_20_THEN_SEX_ETC___d1217 =
+		   64'd0;
     endcase
   end
   always@(rg_addr or

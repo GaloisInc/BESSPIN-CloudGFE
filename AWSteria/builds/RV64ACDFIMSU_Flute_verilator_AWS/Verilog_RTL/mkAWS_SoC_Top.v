@@ -1266,6 +1266,9 @@ module mkAWS_SoC_Top(CLK,
        WILL_FIRE_to_ddr4_m_rvalid,
        WILL_FIRE_to_ddr4_m_wready;
 
+  // inputs to muxes for submodule ports
+  wire MUX_rg_state$write_1__SEL_1, MUX_rg_state$write_1__SEL_2;
+
   // declarations used by system tasks
   // synopsys translate_off
   reg [31 : 0] v__h12935;
@@ -2409,21 +2412,24 @@ module mkAWS_SoC_Top(CLK,
   assign WILL_FIRE_RL_rl_connect_external_interrupt_requests = 1'd1 ;
 
   // rule RL_rl_reset_start_initial
-  assign CAN_FIRE_RL_rl_reset_start_initial =
-	     uart0$RDY_server_reset_request_put && fabric$RDY_reset &&
-	     core$RDY_cpu_reset_server_request_put &&
-	     rg_state == 2'd0 ;
-  assign WILL_FIRE_RL_rl_reset_start_initial =
-	     CAN_FIRE_RL_rl_reset_start_initial ;
+  assign CAN_FIRE_RL_rl_reset_start_initial = MUX_rg_state$write_1__SEL_1 ;
+  assign WILL_FIRE_RL_rl_reset_start_initial = MUX_rg_state$write_1__SEL_1 ;
 
   // rule RL_rl_reset_complete_initial
-  assign CAN_FIRE_RL_rl_reset_complete_initial =
-	     uart0$RDY_server_reset_response_get &&
-	     core$RDY_cpu_reset_server_response_get &&
-	     mem0_controller$RDY_ma_set_addr_map &&
-	     rg_state == 2'd1 ;
+  assign CAN_FIRE_RL_rl_reset_complete_initial = MUX_rg_state$write_1__SEL_2 ;
   assign WILL_FIRE_RL_rl_reset_complete_initial =
-	     CAN_FIRE_RL_rl_reset_complete_initial ;
+	     MUX_rg_state$write_1__SEL_2 ;
+
+  // inputs to muxes for submodule ports
+  assign MUX_rg_state$write_1__SEL_1 =
+	     fabric$RDY_reset && uart0$RDY_server_reset_request_put &&
+	     core$RDY_cpu_reset_server_request_put &&
+	     rg_state == 2'd0 ;
+  assign MUX_rg_state$write_1__SEL_2 =
+	     uart0$RDY_server_reset_response_get &&
+	     mem0_controller$RDY_ma_set_addr_map &&
+	     core$RDY_cpu_reset_server_response_get &&
+	     rg_state == 2'd1 ;
 
   // register rg_aws_host_to_hw_interrupt
   assign rg_aws_host_to_hw_interrupt$D_IN = ma_aws_host_to_hw_interrupt_x ;
@@ -2499,7 +2505,7 @@ module mkAWS_SoC_Top(CLK,
   assign boot_rom$slave_wlast = boot_rom_axi4_deburster$to_slave_wlast ;
   assign boot_rom$slave_wstrb = boot_rom_axi4_deburster$to_slave_wstrb ;
   assign boot_rom$slave_wvalid = boot_rom_axi4_deburster$to_slave_wvalid ;
-  assign boot_rom$EN_set_addr_map = CAN_FIRE_RL_rl_reset_complete_initial ;
+  assign boot_rom$EN_set_addr_map = MUX_rg_state$write_1__SEL_2 ;
 
   // submodule boot_rom_axi4_deburster
   assign boot_rom_axi4_deburster$from_master_araddr =
@@ -2631,10 +2637,8 @@ module mkAWS_SoC_Top(CLK,
   assign core$set_verbosity_logdelay = ma_set_verbosity_logdelay1 ;
   assign core$set_verbosity_verbosity = ma_set_verbosity_verbosity1 ;
   assign core$EN_set_verbosity = EN_ma_set_verbosity ;
-  assign core$EN_cpu_reset_server_request_put =
-	     CAN_FIRE_RL_rl_reset_start_initial ;
-  assign core$EN_cpu_reset_server_response_get =
-	     CAN_FIRE_RL_rl_reset_complete_initial ;
+  assign core$EN_cpu_reset_server_request_put = MUX_rg_state$write_1__SEL_1 ;
+  assign core$EN_cpu_reset_server_response_get = MUX_rg_state$write_1__SEL_2 ;
 
   // submodule fabric
   assign fabric$set_verbosity_verbosity = 4'h0 ;
@@ -2758,7 +2762,7 @@ module mkAWS_SoC_Top(CLK,
   assign fabric$v_to_slaves_3_rresp = aws_host_access$slave_rresp ;
   assign fabric$v_to_slaves_3_rvalid = aws_host_access$slave_rvalid ;
   assign fabric$v_to_slaves_3_wready = aws_host_access$slave_wready ;
-  assign fabric$EN_reset = CAN_FIRE_RL_rl_reset_start_initial ;
+  assign fabric$EN_reset = MUX_rg_state$write_1__SEL_1 ;
   assign fabric$EN_set_verbosity = 1'b0 ;
 
   // submodule mem0_controller
@@ -2837,8 +2841,7 @@ module mkAWS_SoC_Top(CLK,
   assign mem0_controller$to_ddr4_rresp = to_ddr4_rresp ;
   assign mem0_controller$to_ddr4_rvalid = to_ddr4_rvalid ;
   assign mem0_controller$to_ddr4_wready = to_ddr4_wready ;
-  assign mem0_controller$EN_ma_set_addr_map =
-	     CAN_FIRE_RL_rl_reset_complete_initial ;
+  assign mem0_controller$EN_ma_set_addr_map = MUX_rg_state$write_1__SEL_2 ;
   assign mem0_controller$EN_ma_set_watch_tohost = EN_ma_set_watch_tohost ;
   assign mem0_controller$EN_ma_ddr4_ready = EN_ma_ddr4_ready ;
 
@@ -2960,11 +2963,9 @@ module mkAWS_SoC_Top(CLK,
   assign uart0$slave_wlast = fabric$v_to_slaves_2_wlast ;
   assign uart0$slave_wstrb = fabric$v_to_slaves_2_wstrb ;
   assign uart0$slave_wvalid = fabric$v_to_slaves_2_wvalid ;
-  assign uart0$EN_server_reset_request_put =
-	     CAN_FIRE_RL_rl_reset_start_initial ;
-  assign uart0$EN_server_reset_response_get =
-	     CAN_FIRE_RL_rl_reset_complete_initial ;
-  assign uart0$EN_set_addr_map = CAN_FIRE_RL_rl_reset_complete_initial ;
+  assign uart0$EN_server_reset_request_put = MUX_rg_state$write_1__SEL_1 ;
+  assign uart0$EN_server_reset_response_get = MUX_rg_state$write_1__SEL_2 ;
+  assign uart0$EN_set_addr_map = MUX_rg_state$write_1__SEL_2 ;
   assign uart0$EN_get_to_console_get = EN_get_to_console_get ;
   assign uart0$EN_put_from_console_put = EN_put_from_console_put ;
 
