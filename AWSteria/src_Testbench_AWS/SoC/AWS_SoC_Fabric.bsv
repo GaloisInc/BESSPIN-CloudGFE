@@ -22,6 +22,46 @@ import SoC_Map     :: *;    // for Num_Masters, Num_Slaves
 typedef Bit #(TLog #(Num_Slaves))  Slave_Num;
 
 // ================================================================
+// Extra definitions for the fabric
+
+// Count and master-numbers of masters in the fabric.
+
+Integer imem_master_num   = 0;
+Integer dmem_master_num   = 1;
+Integer accel0_master_num = 2;
+
+`ifdef INCLUDE_ACCEL0
+typedef 3 Num_Masters;
+`else
+typedef 2 Num_Masters;
+`endif
+
+// Count and slave-numbers of slaves in the fabric.
+
+`ifdef INCLUDE_ACCEL0
+typedef 5 Num_Slaves;
+`else
+typedef 4 Num_Slaves;
+`endif
+
+Integer boot_rom_slave_num        = 0;
+Integer mem0_controller_slave_num = 1;
+Integer uart16550_0_slave_num     = 2;
+Integer host_access_slave_num     = 3;
+Integer accel0_slave_num          = 4;
+
+// ================================================================
+// Interrupt request numbers (== index in to vector of
+// interrupt-request lines in Core)
+
+typedef  16  N_External_Interrupt_Sources;
+Integer  n_external_interrupt_sources = valueOf (N_External_Interrupt_Sources);
+
+Integer irq_num_uart16550_0 = 0;
+Integer irq_num_host_to_hw  = 1;
+Integer irq_num_accel0      = 2;
+
+// ================================================================
 // Specialization of parameterized AXI4 fabric for this SoC.
 
 typedef AXI4_Fabric_IFC #(Num_Masters,
@@ -58,14 +98,14 @@ module mkAWS_SoC_Fabric (AWS_SoC_Fabric_IFC);
 `endif
 
       // UART
-      else if (   (soc_map.m_uart0_addr_base <= addr)
-	       && (addr < soc_map.m_uart0_addr_lim))
-	 return tuple2 (True, fromInteger (uart0_slave_num));
+      else if (   (soc_map.m_uart16550_0_addr_base <= addr)
+	       && (addr < soc_map.m_uart16550_0_addr_lim))
+	 return tuple2 (True, fromInteger (uart16550_0_slave_num));
 
       // AWS host mem access
-      else if (   (soc_map.m_aws_host_access_addr_base <= addr)
-	       && (addr < soc_map.m_aws_host_access_addr_lim))
-	 return tuple2 (True, fromInteger (aws_host_access_slave_num));
+      else if (   (soc_map.m_host_access_addr_base <= addr)
+	       && (addr < soc_map.m_host_access_addr_lim))
+	 return tuple2 (True, fromInteger (host_access_slave_num));
 
 `ifdef HTIF_MEMORY
       else if (   (soc_map.m_htif_addr_base <= addr)

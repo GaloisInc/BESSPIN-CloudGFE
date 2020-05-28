@@ -204,10 +204,10 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    mkConnection (mem0_controller_axi4_deburster.to_slave,        mem0_controller.slave);
 
    // Fabric to UART0
-   mkConnection (fabric.v_to_slaves [uart0_slave_num],  uart0.slave);
+   mkConnection (fabric.v_to_slaves [uart16550_0_slave_num],  uart0.slave);
 
    // Fabric to AWS Host Access
-   mkConnection (fabric.v_to_slaves [aws_host_access_slave_num], aws_host_access.slave);
+   mkConnection (fabric.v_to_slaves [host_access_slave_num], aws_host_access.slave);
 
 `ifdef INCLUDE_ACCEL0
    // Fabric to accel0
@@ -229,12 +229,12 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    rule rl_connect_external_interrupt_requests;
       // UART
       Bool intr = uart0.intr;
-      core.core_external_interrupt_sources [irq_num_uart0].m_interrupt_req (intr);
-      Integer last_irq_num = irq_num_uart0;
+      core.core_external_interrupt_sources [irq_num_uart16550_0].m_interrupt_req (intr);
+      Integer last_irq_num = irq_num_uart16550_0;
 
       // AWS Host-to-HW interrupt
-      core.core_external_interrupt_sources [irq_num_aws_host_to_hw].m_interrupt_req (rg_aws_host_to_hw_interrupt);
-      last_irq_num = irq_num_aws_host_to_hw;
+      core.core_external_interrupt_sources [irq_num_host_to_hw].m_interrupt_req (rg_aws_host_to_hw_interrupt);
+      last_irq_num = irq_num_host_to_hw;
 
 `ifdef INCLUDE_ACCEL0
       Bool intr_accel0 = accel0.interrupt_req;
@@ -282,7 +282,7 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
 	 mem0_controller.ma_set_addr_map (soc_map.m_mem0_controller_addr_base,
 					  soc_map.m_mem0_controller_addr_lim);
 
-	 uart0.set_addr_map (soc_map.m_uart0_addr_base, soc_map.m_uart0_addr_lim);
+	 uart0.set_addr_map (soc_map.m_uart16550_0_addr_base, soc_map.m_uart16550_0_addr_lim);
 
 `ifdef INCLUDE_ACCEL0
 	 accel0.init (fabric_default_id,
@@ -299,8 +299,8 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
 		      soc_map.m_mem0_controller_addr_base,
 		      soc_map.m_mem0_controller_addr_lim);
 	    $display ("  UART0:           0x%0h .. 0x%0h",
-		      soc_map.m_uart0_addr_base,
-		      soc_map.m_uart0_addr_lim);
+		      soc_map.m_uart16550_0_addr_base,
+		      soc_map.m_uart16550_0_addr_lim);
 	 end
       endaction
    endfunction
