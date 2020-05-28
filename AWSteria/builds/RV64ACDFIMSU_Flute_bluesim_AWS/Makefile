@@ -4,8 +4,10 @@
 # Edit this def to point at your clone of the GitHub Flute repo:
 # (https://github.com/bluespec/Flute)
 
-AWSTERIA ?= ../..
-REPO     ?= /home/nikhil/git_clones/Flute
+AWSTERIA   ?= $(HOME)/git_clones/AWS/BESSPIN-CloudGFE/AWSteria
+FLUTE_REPO ?= $(HOME)/git_clones/Flute
+
+REPO ?= $(FLUTE_REPO)
 
 # ================================================================
 # Edit this def to configure desired ISA features
