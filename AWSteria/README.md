@@ -72,6 +72,10 @@ them as you wish):
     - See `Doc/Makefile_AFI_run.mk`
         - To deploy and run on an Amazon AWS FPGA-attached machine.
 
+It is expected that (1) and (2) will be most heavily used for rapid
+development iteration.  Then, use (3) to sanity-check that it runs in
+the standard XSIM flow.  Then use (4) to build and run for FPGA.
+
 ----------------------------------------------------------------
 
 A Tour of the Code
