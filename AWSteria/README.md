@@ -38,97 +38,39 @@ studio where one develops AWS apps.  It also suggests "austere", being
 a minimalist approach using no other tools.
 
 ----------------------------------------------------------------
-
 Example to build-and-run out of the box
 ---------------------------------------
 
-This example allows you to build and run the structure shown in [Fig
-3](Doc/Fig_3_AWS_BSV_XSim_WindSoC.png) in the `Doc/` directory, using
-the standard AWS XSIM flow.  The "C Tests" code reads a Mem-hex32 file
-containing the code for the RISC-V ISA test `rv64ui-p-add`, and DMAs
-it into DDR A via the `DMA_PCIS` high-bandwidth bus.  Then it talks
-over the `OCL` bus to the SoC, allowing it to access memory (until
-then the Flute CPU is stalled trying to fetch an instruction).  The
-CPU then executes the ISA test to completion.  The C code continually
-polls the SoC over the `OCL` bus until it hears that the test is
-completed, and finally exits.
+We provide an example to build and run the structure shown in [Fig
+3](Doc/Fig_3_AWS_BSV_XSim_WindSoC.png) in the `Doc/` directory.  The
+"C Tests" code reads a Mem-hex32 file containing the code for the
+RISC-V ISA test `rv64ui-p-add`, and DMAs it into DDR A via the
+`DMA_PCIS` high-bandwidth bus.  Then it talks over the `OCL` bus to
+the SoC, allowing it to access memory (until then the Flute CPU is
+stalled trying to fetch an instruction).  The CPU then executes the
+ISA test to completion.  The C code continually polls the SoC over the
+`OCL` bus until it hears that the test is completed, and finally
+exits.
 
-There are several manual steps for now; we'll automate these once we
-have a full understanding of all the steps.
+There are four "flows" you can use to build-and-run the example. Each
+is described in a Makefile-as-document in the `Doc/` directory (the
+Makefiles describes each step separately; you are welcome to script
+them as you wish):
 
-1. Bluespec BSV compilation:
+1. Bluesim simulation
+    - See `Doc/Makefile_Bluesim.mk`
 
-            $ cd  builds/RV64ACDFIMSU_Flute_verilator_AWS/
+2. Verilator simulation
+    - (NOT AVAILABLE YET. Expected soon)
 
-    One-time step: Edit the def of REPO in `Makefile` to point at your clone of the
-    GitHub Flute repo.
+3. Standard AWS flow for XSIM (Xilinx simultor) simulation
+    - See `Doc/Makefile_XSIM.mk`
 
-    Then:
-
-            $ make compile
-
-    will create the sub-directory `Verilog_RTL`, and invoke the
-    Bluespec `bsc` compiler to compile Flute, its SoC, `BSV_AWS_TOP`
-    etc. into Verilog RTL in that directory.
-
-2. Build and run the design on XSIM (Xilinx Verilog Simulator) using the AWS flow:
-
-    **One-time step:** Perform your standard mantra to setup Xilinx tools. This
-    should at least set the `XILINX_VIVADO` environment variable to point to
-    your Vivado install directory and add `$XILINX_VIVADO/bin/` to your `PATH`.
-    It may look something like this:
-
-            $ source  /tools/Xilinx/Vivado/2019.1/settings64.sh
-
-    **One-time step:** Perform the standard AWS HDK setup mantra:
-
-            $ cd  $(AWS_FPGA)
-            $ source  hdk_setup.sh
-
-    **One-time step:** set up `CL_DIR` to point at the top-level dir
-    of the design:
-
-            $ cd  ... back to your main AWSteria directory ...
-            $ cd  developer_designs/cl_BSV_WindSoC
-            $ export CL_DIR=$(pwd)
-
-    **Copy RTL into the design directories, and prep a script file:**
-
-            $ cd  verif/scripts
-            $ make -f AWSteria_Makefile.mk  prep
-
-    This will temporarily change dirs to the `design` directory (where
-    the AWS flow expects RTL files to live) and use the `Makefile`
-    there to copy RTL files from Step 1 and from the Bluespec library;
-    then creates a file
-
-            ../verif/scripts/top.vivado.f_design_files
-
-    containing a manifest of all the design RTL files just copied, and
-    then append it to `top.vivado.f_template` to create
-    `top.vivado.f`.  This is a script file for XSIM.
-
-    **Run**:
-
-            $ cd  verif/scripts
-            $ make -f AWSteria_Makefile.mk  test
-
-    This should run build an XSIM simulation executable and run it,
-    corresponding to the Figure `Doc/Fig_3_AWS_BSV_XSim_WindSoC.png`.
-    The C program that represents the "host-side" software is in:
-
-            developer_designs/cl_BSV_WindSoC/software/runtime/test_dram_dma_hwsw_cosim.c
-            developer_designs/cl_BSV_WindSoC/software/runtime/Memhex32_read.{h,c}
-
-    The C program reads `Mem.hex`, a mem-hex32 file holding the code
-    for the RISC-V ISA test `rv64ui-p-add`, DMAs it into AWS' DDR A
-    using the AWS `DMA_PCIS` port, then communicates over the AWS OCL
-    port with the SoC to allow the CPU (Flute) to access memory, so
-    that it executes the test.  The file:
-
-            log_make.txt
-
-    is a transcript of this last step, so you can see what to expect.
+4. Standard AWS flow for FPGA
+    - See `Doc/Makefile_AFI_build.mk`
+        - To compile and build the AFI (Amazon FPGA Instance)
+    - See `Doc/Makefile_AFI_run.mk`
+        - To deploy and run on an Amazon AWS FPGA-attached machine.
 
 ----------------------------------------------------------------
 
@@ -139,10 +81,19 @@ The directory tree looks like this:
 
             .
             ├── builds
+            │   ├── Resources
+            │   │   └── Verilator_resources
+            │   ├── RV64ACDFIMSU_Flute_bluesim_AWS
+            │   └── RV64ACDFIMSU_Flute_verilator_AWS
+            │       └── Verilog_RTL
             ├── developer_designs
             ├── Doc
             ├── README.md
+            ├── src_Host_Side
             └── src_Testbench_AWS
+                ├── SoC
+                └── Top
+                    └── Gen_Bytevec
 
 This repo contains no Piccolo/Flute/Toooba code at all.  Those are
 used unmodified from their original repositories (including
@@ -153,11 +104,14 @@ memory (AWS DDR4), and different connections for the Debug Module and
 UART (AWS OCL port), and providing a fast back-door for loading the
 DDR4s (AWS DMA\_PCIS port).
 
-Directory `Doc` has a number of diagrams showing how this code evolved
-with incremental changes from the standard AWS examples.  The SVG
-files are the original sources, created using Inkscape, and the PNG
-files are automatically generated from them using Inkscape in batch
-mode (see the Makefile therein).
+Directory `Doc` has a number of Makefiles describing the four major
+flows: Bluesim, Verilator, XSIM and FPGA.
+
+Directory `Doc` also has a number of diagrams showing how this code
+evolved with incremental changes from the standard AWS examples.  The
+SVG files are the original sources, created using Inkscape, and the
+PNG files are automatically generated from them using Inkscape in
+batch mode (see the Makefile therein).
 
 Directory `src_Testbench_AWS/` is a substitute for the `src_Testbench`
 directory in the Piccolo/Flute/Toooba repositories.  As in the
@@ -170,17 +124,20 @@ non-synthesizable imports of C code).
                 ├── SoC
                 └── Top
 
+Directory `src_Host_Side` is used for Bluesim or verilator sim; it
+provides libraries linked with the host-side software; these libraries
+provide an emulation of the AWS OCL and DMA PCIS interfaces through
+which host-side software interacts with the hardware.
+
 Directory `builds/` is similar to the corresponding directory in the
-Piccolo/Flute/Toooba repositories, and is used:
+Piccolo/Flute/Toooba repositories, and `builds/Resources` is used
+during creation of Bluesim and verilator simulation executables.
 
- * To generate RTL from BSV (see Step 1 in Example section)
+Directory `builds/RV64ACDFIMSU_Flute_bluesim_AWS` is used to create
+Bluesim executables.
 
- * To build and run standalone Bluesim/verilator simulation
-      executables, without going through the AWS XSim flow, for more
-      convenience and likely higher simulation speed. (2020-05-01:
-      this flow is not yet documented; will do so soon; just needs a
-      top-level testbench facility to load a MemHex file through the
-      `DMI_PCIS` port.)
+Directories `builds/RV64ACDFIMSU_Flute_verilator_AWS` is used to create
+verilator executables, but also to generate RTL for the XSIM flow.
 
 Directory `developer_designs` is similar to the corresponding
 directories in the standard Amazon `aws-fpga` repository:

@@ -52,7 +52,7 @@ deriving (Eq, Bits, FShow);
 module mkTop_HW_Side (Empty) ;
 
    // 0: quiet; 1: rules
-   Integer verbosity = 1;
+   Integer verbosity = 0;
 
    Reg #(State) rg_state <- mkReg (STATE_CONNECTING);
 

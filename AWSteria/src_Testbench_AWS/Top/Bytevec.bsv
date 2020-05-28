@@ -163,7 +163,7 @@ endinterface
 
 (* synthesize *)
 module mkBytevec (Bytevec_IFC);
-   Integer verbosity = 1;
+   Integer verbosity = 0;
 
    // FIFOs and credit counters for C_to_BSV
    FIFOF #(Bytevec_C_to_BSV) f_C_to_BSV_bytevec <- mkFIFOF;

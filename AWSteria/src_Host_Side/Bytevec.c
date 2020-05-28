@@ -7,7 +7,7 @@
 
 #include  "Bytevec.h"
 
-static int verbosity = 1;
+static int verbosity = 0;
 
 // ================================================================
 // State constructor and initializer
@@ -193,7 +193,7 @@ void AXI4L_Rd_Data_d32_u0_from_bytevec (AXI4L_Rd_Data_d32_u0 *ps,
 
 int Bytevec_struct_to_bytevec (Bytevec_state *pstate)
 {
-    int verbosity2 = 1;    // local verbosity for this function
+    int verbosity2 = 0;    // local verbosity for this function
 
     // ---- Fill in credits for BSV-to-C channels
     uint32_t total_credits = 0;
@@ -337,7 +337,7 @@ int Bytevec_struct_to_bytevec (Bytevec_state *pstate)
 
 int Bytevec_struct_from_bytevec (Bytevec_state *pstate)
 {
-    int verbosity2 = 2;    // local verbosity for this function
+    int verbosity2 = 0;    // local verbosity for this function
 
     // ---- Restore credits for remote C-to-BSV receive buffers
     pstate->credits_AXI4_Wr_Addr_i16_a64_u0 += pstate->bytevec_BSV_to_C [1];

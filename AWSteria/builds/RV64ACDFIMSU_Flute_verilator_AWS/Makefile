@@ -5,7 +5,7 @@
 # (https://github.com/bluespec/Flute)
 
 AWSTERIA ?= ../..
-REPO     ?= /home/nikhil/git_clones/Flute
+REPO     ?= $(FLUTE_REPO)
 
 # ================================================================
 # Edit this def to configure desired ISA features

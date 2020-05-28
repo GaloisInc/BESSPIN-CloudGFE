@@ -135,7 +135,7 @@ def gen_module (package_name,
               "\n" +
               "(* synthesize *)\n" +
               "module mk{0:s} ({0:s}_IFC);\n".format (package_name) +
-              "   Integer verbosity = 1;\n")
+              "   Integer verbosity = 0;\n")
 
     result += "\n"
     result += "   // FIFOs and credit counters for C_to_BSV\n"

@@ -67,7 +67,7 @@ void AWS_Sim_Lib_shutdown (void)
 static
 bool do_comms (void)
 {
-    int verbosity = 1;
+    int verbosity = 0;
 
     check_state_initialized ();
 
@@ -125,7 +125,7 @@ bool do_comms (void)
 
 int fpga_dma_burst_read (int fd, uint8_t *buffer, size_t size, uint64_t address)
 {
-    int  verbosity2 = 1;
+    int  verbosity2 = 0;
     bool tcp_activity;
 
     check_state_initialized ();
@@ -231,7 +231,7 @@ int fpga_dma_burst_read (int fd, uint8_t *buffer, size_t size, uint64_t address)
 
 int fpga_dma_burst_write (int fd, uint8_t *buffer, size_t size, uint64_t address)
 {
-    int  verbosity2 = 1;
+    int  verbosity2 = 0;
     bool tcp_activity;
 
     check_state_initialized ();
@@ -333,6 +333,7 @@ int fpga_dma_burst_write (int fd, uint8_t *buffer, size_t size, uint64_t address
 
 int fpga_pci_peek (uint32_t ocl_addr, uint32_t *p_ocl_data)
 {
+    int  verbosity2 = 0;
     check_state_initialized ();
 
     AXI4L_Rd_Addr_a32_u0  rda;
@@ -342,7 +343,8 @@ int fpga_pci_peek (uint32_t ocl_addr, uint32_t *p_ocl_data)
     rda.arprot = 0;
     rda.aruser = 0;
 
-    fprintf (stdout, "fpga_pci_peek: enqueue AXI4L Rd_Addr %08x\n", rda.araddr);
+    if (verbosity2 != 0)
+	fprintf (stdout, "fpga_pci_peek: enqueue AXI4L Rd_Addr %08x\n", rda.araddr);
     Bytevec_enqueue_AXI4L_Rd_Addr_a32_u0 (p_bytevec_state, & rda);
 
     while (true) {
@@ -356,7 +358,8 @@ int fpga_pci_peek (uint32_t ocl_addr, uint32_t *p_ocl_data)
 	    break;
 	}
     }
-    fprintf (stdout, "fpga_pci_peek: rresp %0d, rdata %08x\n", rdd.rresp, rdd.rdata);
+    if (verbosity2 != 0)
+	fprintf (stdout, "fpga_pci_peek: rresp %0d, rdata %08x\n", rdd.rresp, rdd.rdata);
     return 0;
 }
 
@@ -364,6 +367,7 @@ int fpga_pci_peek (uint32_t ocl_addr, uint32_t *p_ocl_data)
 
 int fpga_pci_poke (uint32_t ocl_addr, uint32_t ocl_data)
 {
+    int  verbosity2 = 0;
     check_state_initialized ();
 
     AXI4L_Wr_Addr_a32_u0  wra;
@@ -388,7 +392,8 @@ int fpga_pci_poke (uint32_t ocl_addr, uint32_t ocl_data)
 	int status = Bytevec_dequeue_AXI4L_Wr_Resp_u0 (p_bytevec_state, & wrr);
 	if (status == 1) break;
     }
-    fprintf (stdout, "fpga_pci_poke: bresp = %0d\n", wrr.bresp);
+    if (verbosity2 != 0)
+	fprintf (stdout, "fpga_pci_poke: bresp = %0d\n", wrr.bresp);
     return 0;
 }
 

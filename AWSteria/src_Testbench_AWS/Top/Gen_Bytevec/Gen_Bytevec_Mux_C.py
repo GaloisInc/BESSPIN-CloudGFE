@@ -43,7 +43,7 @@ def Gen_C  (spec_filename,
     file_c.write ("\n")
     file_c.write ('#include  "{:s}"\n'.format (output_h_filename))
     file_c.write ("\n")
-    file_c.write ("static int verbosity = 1;\n")
+    file_c.write ("static int verbosity = 0;\n")
 
     # ----------------
     for struct in C_to_BSV_structs + BSV_to_C_structs:
@@ -314,7 +314,7 @@ c_template_struct_to_bytevec_function = (
     x +
     ["int @PKG_struct_to_bytevec (@PKG_state *pstate)",
      "{",
-     "    int verbosity2 = 1;    // local verbosity for this function",
+     "    int verbosity2 = 0;    // local verbosity for this function",
      "",
      "    // ---- Fill in credits for BSV-to-C channels",
      "    uint32_t total_credits = 0;",
@@ -418,7 +418,7 @@ c_template_struct_from_bytevec_function = (
     x +
     ["int @PKG_struct_from_bytevec (@PKG_state *pstate)",
      "{",
-     "    int verbosity2 = 2;    // local verbosity for this function",
+     "    int verbosity2 = 0;    // local verbosity for this function",
      "",
      "    // ---- Restore credits for remote C-to-BSV receive buffers",
      ""])
