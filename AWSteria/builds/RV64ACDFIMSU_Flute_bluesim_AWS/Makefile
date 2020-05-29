@@ -4,7 +4,7 @@
 # Edit this def to point at your clone of the GitHub Flute repo:
 # (https://github.com/bluespec/Flute)
 
-AWSTERIA   = $(HOME)/git_clones/tmp/BESSPIN-CloudGFE/AWSteria
+AWSTERIA   = $(HOME)/git_clones/AWS/BESSPIN-CloudGFE/AWSteria
 # AWSTERIA   = $(HOME)/git-repos/BESSPIN-CloudGFE/AWSteria
 
 FLUTE_REPO = $(HOME)/git_clones/Flute
