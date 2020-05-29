@@ -1,6 +1,10 @@
 # Minimal CloudGFE Setup
 
-This readme will guide you through bringing up an F1 instance with a CloudGFE processor (Rocket P2) running Linux and FreeBSD.
+This readme will guide you through bringing up an F1 instance with a CloudGFE processor. Currently supported:
+* Chisel P1 running FreeRTOS
+* Chisel P2 running Linux and FreeBSD
+* Bluespec P2 running Linux and FreeBSD
+
 This assumes you are familiar with AWS.
 
 ## Start F1 Instance
@@ -13,13 +17,15 @@ Once the instance launches, login and add your AWS keys, either via copy/pasting
 
 The quick-start files are located on Amazon S3. The CloudGFE AFI is also access-controlled. If you are not using the `Galois_TA-2_F1_DEV` account, you'll need to create an github issue or send both your [AWS ID and canonical user ID](https://docs.aws.amazon.com/general/latest/gr/acct-identifiers.html) to [dhand@galois.com](mailto:dhand@galois.com) for access to both. The canonical ID can quickly be found using `aws s3api list-buckets`.
 
-## Pull Minimal CloudGFE Package
+## Pull a CloudGFE Software Support Package
+
+See the [README](README.md) for a full list of software packages. We'll use the Chisel P2 in this example.
 
 Download the setup package from S3:
 ```
 cd ~
-aws s3 cp s3://firesim-845509001885/minimal_cloudgfe.tgz .
-tar xzvf minimal_cloudgfe.tgz
+aws s3 cp s3://firesim-localuser/swpkgs/firesim-cloudgfe-chisel-p2-sw.tgz .
+tar xzvf firesim-cloudgfe-chisel-p2-sw.tgz
 ```
 
 ## Initial Setup
@@ -29,54 +35,84 @@ Subsequent runs should only setup the kernel modules. Thus, you can run this scr
 instance. It does not need to be run between simulations.
 
 ```
-cd ~/minimal_cloudgfe
+cd ~/sw
 ./setup.sh
 ```
 
-## Boot Linux
+## Example Binaries
 
-The `./run_sim.sh` script will handle configuring networking, bringing up the switch software, programming the FPGA, and starting the simulation.
-It takes three arguments:
+A number of example binaries have been precompiled and provided for use (FreeRTOS, Linux, FreeBSD, and a helloworld bare-metal example).
+To download this package:
+```
+cd ~
+aws s3 cp s3://firesim-localuser/swpkgs/cloudgfe_binaries.tgz
+tar xzvf cloudgfe_binaries.tgz
+```
+
+## `run_sim.sh` Script
+
+Inside the `~/sw/sim` folder, the `./run_sim.sh` script handles configuring networking, bringing up the switch software, programming the FPGA, and starting the simulation.
+It expects three arguments:
 
 ```
 ./run_sim.sh <blockimage> <dwarf> <elf>
 ```
 
 * `blockimage` - the image file presented via the block device
-* `dwarf` - currently unknown purpose. Give it `elf-dwarf` as an argument for now
+* `dwarf` - so far unused debugging file. Can supply `elf-dwarf` as an argument or an empty file for now
 * `elf` - ELF binary to be loaded into memory and executed
-
-To boot linux:
-```
-cd ~/minimal_cloudgfe/sim
-./run_sim.sh linux-uniform0-br-base.img linux-uniform0-br-base-bin-dwarf linux-uniform0-br-base-bin
-```
 
 The script launches 3 `screen` sessions:
 * `fsim0` - UART console and simulator output
 * `switch0` - Software switch log
-* `bootcheck` - Checks for successful Linux boot to bring up networking interface
+* `bootcheck` - Checks for successful Linux boot to bring up networking interface.
 
 The `fsim0` screen will be attached automatically. You can exit it while keeping the sim running using `Ctrl-a` followed by `d`, or `C-a d` in screen terms.
 
-Once Linux boots, the login is `root` and password `firesim`. You can also SSH into the target OS:
+## P1 32-bit Binaries
+
+Three FreeRTOS examples have been provided. Only the UART and IceNet ethernet drivers are included at this time.
+
+```
+cd ~/sw/sim/
+./run_sim.sh ~/cloudgfe_binaries/freertos_32bit/freertos_peekpoke.img ~/cloudgfe_binaries/freertos_32bit/freertos_peekpoke.dwarf  ~/cloudgfe_binaries/freertos_32bit/freertos_peekpoke.elf
+```
+
+The `peekpoke` example will start a webserver at `http://172.16.0.2` that can peek and poke memory locations on the FPGA. See the original GFE documentation for how to use this webserver.
+
+The bare-metal `helloworld_32bit` example will print "Hello World!" and immediately exit. If it is too quick to see the output, check `uartlog`.
+
+## P2 64-bit Binaries
+### Linux
+
+There are two flavors of Linux provided. The first, `busyboxlinux_64bit` is a Busybox-based Linux OS built using buildroot. It uses the block device to provide a persistent filesystem.
+The second, `debianlinux_64bit`, is a Debian-based Linux OS. The kernel and ramdisk image are combined into the single ELF file. While this OS includes block device drivers, only an empty image is provided.
+
+To boot Debian Linux:
+```
+cd ~/sw/sim
+./run_sim.sh ~/cloudgfe_binaries/debianlinux_64bit/debian.img ~/cloudgfe_binaries/debianlinux_64bit/debian.dwarf ~/cloudgfe_binaries/debianlinux_64bit/debian.elf
+```
+The login for Debian is `root` and password `riscv`. The login for Busybox is `root` and password `firesim`.
+
+Busybox linux will boot with full network / internet access. You can SSH into it from the F1 instance using:
 ```
 TERM=Linux ssh root@172.16.0.2
 ```
 
 Running `poweroff -f` within the target OS will automatically stop the simulator cleanly. If it becomes stuck or unresponsive, you can also use the `./kill_sim.sh` script.
 
-## Boot FreeBSD
+### FreeBSD
 
-Read the Linux section above first - a lot of the same information applies. The current FreeBSD build does not include Ethernet or Block device drivers, so SSH will not work. `freebsd.img` is also just an empty file. The filesystem is stored within the ELF.
+The current FreeBSD build does not include Ethernet or Block device drivers, so SSH will not work. `freebsd.img` is also just an empty file. The filesystem is stored within the ELF.
 
 ```
-./run_sim.sh freebsd.img freebsd-bin-dwarf freebsd-bin
+./run_sim.sh ~/cloudgfe_binaries/freebsd_64bit/freebsd.img ~/cloudgfe_binaries/freebsd_64bit/freebsd.dwarf ~/cloudgfe_binaries/freebsd_64bit/freebsd.elf
 ```
 
 ## Networking Notes
 * The target OS has full internet access by default, but it is NAT'd behind the host OS.
-* This Linux image starts a simple Dropbear SSH server and Apache HTTP server. On the host OS you can run:
+* The Busybox Linux image starts a simple Dropbear SSH server and Apache HTTP server. On the host OS you can run:
 ```
 curl http://172.16.0.2
 <html><body><h1>Hello!</h1>
