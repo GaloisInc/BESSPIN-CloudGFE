@@ -25,7 +25,7 @@ static inline int do_dma_write(int fd, uint8_t *buffer, size_t size,
 
 // ****************************************************************
 
-static const char this_file_name [] = "test_dram_dma_hwsw_cosim.c";
+static const char this_file_name [] = "test.c";
 
 #include "Memhex32_read.h"
 
@@ -394,6 +394,35 @@ uint32_t mk_chan_data_addr (uint32_t addr_base, uint32_t chan)
 }
 
 // ================
+// This function tests a channel's status.
+//     Function result is 0 if ok, 1 if error
+//     If ok, 'p_status' result is 1 if 'notEmpty' (hw-to-host
+//     channel) or 'notFull' (host-to-hw channel), and 0 otherwise.
+
+int test_for_chan_avail (uint32_t ocl_addr_base, uint32_t chan,  uint32_t *p_status)
+{
+    int       verbosity = 0;
+    int       rc;
+    uint32_t  ocl_addr  = mk_chan_status_addr (ocl_addr_base, chan);
+
+    rc = fpga_pci_peek (ocl_addr, p_status);
+    if (verbosity != 0)
+	fprintf (stdout, "    test_for_chan_avail: chan %0d, peek rc = %0d data = %08x\n",
+		 chan, rc, *p_status);
+    if (rc != 0) {
+	fprintf (stdout, "ERROR: %s: test_for_chan_avail: OCL peek chan %0d.\n",
+		 this_file_name, chan);
+	goto out;
+    }
+
+ out:
+    if (rc != 0) {
+	fprintf (stdout, "    addr_base %0x chan %0d\n", ocl_addr_base, chan);
+    }
+    return rc;
+}
+
+// ================
 // This function reads a channel's status in a loop, waiting for a 1 (notEmpty/notFull).
 // (times out after 1000 usecs).
 
@@ -407,12 +436,9 @@ int wait_for_chan_avail (uint32_t ocl_addr_base, uint32_t chan)
     int rc;
 
     while (true) {
-	rc = fpga_pci_peek (ocl_addr, & ocl_data_from_hw);
-	if (verbosity != 0)
-	    fprintf (stdout, "    wait_for_chan_avail: chan %0d, peek rc = %0d data = %08x\n",
-		     chan, rc, ocl_data_from_hw);
+	rc = test_for_chan_avail (ocl_addr_base, chan, & ocl_data_from_hw);
 	if (rc != 0) {
-	    fprintf (stdout, "ERROR: %s: wait_for_chan_avail: OCL peek chan %0d.\n",
+	    fprintf (stdout, "ERROR: %s: wait_for_chan_avail %0d.\n",
 		     this_file_name, chan);
 	    goto out;
 	}
@@ -509,19 +535,20 @@ int start_hw (void)
     }
 
     // ----------------
-    // Poll the HW status until non-zero (hw task completion)
-    // There's no timeout because HW may never stop (e.g., an executing CPU).
+    // Poll the HW:
+    //  - for status non-zero (hw task completion)
+    //  - for UART output (and relay it to the console screen)
+    // There's no timeout here because HW may never stop (e.g., an executing CPU).
 
     fprintf (stdout, "Host_side: Polling HW status for completion\n");
 
     ocl_addr = mk_chan_data_addr (ocl_hw_to_host_chan_addr_base, hw_to_host_chan_status);
 
     while (true) {
+	// ----------------
+	// Poll status
 	rc = wait_for_chan_avail (ocl_hw_to_host_chan_addr_base, hw_to_host_chan_status);
 	if (rc != 0) goto out;
-
-	if (verbosity != 0)
-	    fprintf (stdout, "    OCL read addr %08x\n", ocl_addr);
 
 	rc = fpga_pci_peek (ocl_addr, & ocl_data_from_hw);
 	if (rc != 0) {
@@ -531,7 +558,38 @@ int start_hw (void)
 
 	if ((ocl_data_from_hw) & 0xFF != 0) break;
 
-	usleep (10);
+	// ----------------
+	// Poll UART
+	uint32_t uart_addr, uart_chan_status, uart_data_from_hw;
+
+	rc = test_for_chan_avail (ocl_hw_to_host_chan_addr_base, hw_to_host_chan_UART, & uart_chan_status);
+	if (rc != 0) goto out;
+
+	if (uart_chan_status == 0) {
+	    usleep (10);
+	}
+	else {
+	    // Byte is available from UART
+	    uart_addr = mk_chan_data_addr (ocl_hw_to_host_chan_addr_base, hw_to_host_chan_UART);
+	    rc = fpga_pci_peek (uart_addr, & uart_data_from_hw);
+	    if (rc != 0) {
+		fprintf (stdout, "ERROR: fpga_pci_peek (uart_addr %0x) failed\n", uart_addr);
+		goto out;
+	    }
+	    // OK: received a char from hw; echo to console screen
+	    uart_data_from_hw = (uart_data_from_hw & 0xFF);
+	    fprintf (stdout, "UART output: 0x%02x", uart_data_from_hw);
+	    if ((' ' <= uart_data_from_hw) && (uart_data_from_hw < 0xFF))
+		fprintf (stdout, "    '%c'", uart_data_from_hw);
+	    else
+		switch (uart_data_from_hw) {
+		case '\t': fprintf (stdout, "    \\t");
+		case '\r': fprintf (stdout, "    \\r");
+		case '\n': fprintf (stdout, "    \\n");
+		}
+	    fprintf (stdout, "\n");
+	    fflush (stdout);
+	}
     }
     fprintf (stdout, "%s: Final HW status 0x%0x\n", this_file_name, ocl_data_from_hw);
     if (ocl_data_from_hw == 1) {
