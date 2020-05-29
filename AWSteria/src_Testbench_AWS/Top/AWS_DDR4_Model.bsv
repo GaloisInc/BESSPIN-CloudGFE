@@ -127,7 +127,7 @@ module mkMem_Model #(parameter Bit #(2) ddr4_num) (AXI4_16_64_512_0_Slave_IFC);
 	 let old_data = rf.sub (offset_W);
 	 let new_data = fv_new_data (old_data, wrd.wdata, wrd.wstrb);
 	 rf.upd (offset_W, new_data);
-	 if (verbosity > 0) begin
+	 if (verbosity > 1) begin
 	    $display ("    Old: %h", old_data);
 	    $display ("    New: %h", new_data);
 	 end

@@ -108,6 +108,10 @@ module mkTop_HW_Side (Empty) ;
    // ================================================================
    // Interaction with remote host
 
+   Integer verbosity_bytevec = 0;
+   Integer verbosity_AXI     = 0;
+   Integer verbosity_AXIL    = 0;
+
    // Communication box (converts between bytevecs and message structs)
    Bytevec_IFC comms <- mkBytevec;
 
@@ -120,7 +124,7 @@ module mkTop_HW_Side (Empty) ;
 	 comms.fi_C_to_BSV_bytevec.enq (bytevec);
 
 	 // Debug
-	 if (verbosity != 0) begin
+	 if (verbosity_bytevec != 0) begin
 	    $write ("Top_HW_Side.rl_host_recv\n    [");
 	    for (Integer j = 0; j < bytevec_C_to_BSV_size; j = j + 1)
 	       if (fromInteger (j) < bytevec [0])
@@ -135,7 +139,7 @@ module mkTop_HW_Side (Empty) ;
       BSV_to_C_Bytevec bytevec <- pop_o (comms.fo_BSV_to_C_bytevec);
 
       // Debug
-      if (verbosity != 0) begin
+      if (verbosity_bytevec != 0) begin
 	 $write ("Top_HW_Side.rl_host_send\n    [");
 	 for (Integer j = 0; j < fromInteger (bytevec_BSV_to_C_size); j = j + 1)
 	    if (fromInteger (j) < bytevec [0])

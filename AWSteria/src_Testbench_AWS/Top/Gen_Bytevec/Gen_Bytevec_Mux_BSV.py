@@ -244,10 +244,10 @@ def gen_module (package_name,
         result += "\n"
         result += "      // Enqueue the C-to-BSV struct and dequeue the bytevec\n"
         result += "      f_{:s}.enq (s);\n".format (struct_name)
-        result += "      rg_credits_{0:s} <= rg_credits_{0:s} - 1;\n".format (struct_name)
         result += "      f_C_to_BSV_bytevec.deq;\n"
         result += "      if (verbosity != 0)\n"
-        result += '         $display ("{:s}: received: ", fshow (s));\n'.format (package_name)
+        result += ('         $display ("{:s}: received {:s}: ", fshow (s));\n'.
+                   format (package_name, struct_name))
         result += "   endrule\n"
 
     # ================================================================
