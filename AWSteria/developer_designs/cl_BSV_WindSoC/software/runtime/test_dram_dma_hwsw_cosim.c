@@ -215,7 +215,6 @@ int dma_example_hwsw_cosim(int slot_id, size_t buffer_size)
     }
 
     printf("Now performing the DMA transactions...\n");
-    // Temporarily reduced limit from DIMM 3 to DIMM 2 because DIMM 3 DMA shows errors
     for (dimm = 0; dimm < 4; dimm++) {
         fprintf (stdout, "DMA'ing buffer of %0ld bytes to DIMM %0d\n", buffer_size, dimm);
         rc = do_dma_write(write_fd, write_buffer, buffer_size,
@@ -224,7 +223,6 @@ int dma_example_hwsw_cosim(int slot_id, size_t buffer_size)
     }
 
     bool passed = true;
-    // Temporarily reduced limit from DIMM 3 to DIMM 2 because DIMM 3 DMA shows errors
     for (dimm = 0; dimm < 4; dimm++) {
         fprintf (stdout, "DMA'ing buffer of %0ld bytes from DIMM %0d\n", buffer_size, dimm);
         rc = do_dma_read(read_fd, read_buffer, buffer_size,
@@ -521,6 +519,37 @@ int wait_for_chan_avail (pci_bar_handle_t pci_bar_handle, uint32_t ocl_addr_base
     return rc;
 }
 
+// ================
+
+int test_for_chan_avail (pci_bar_handle_t pci_bar_handle, uint32_t ocl_addr_base, uint32_t chan)
+{
+    int verbosity = 1;
+
+    uint32_t ocl_addr = mk_chan_status_addr (ocl_addr_base, chan);
+    uint32_t ocl_data_from_hw;
+    int rc;
+
+    rc = fpga_pci_peek (pci_bar_handle, ocl_addr, & ocl_data_from_hw);
+    if (verbosity > 1)
+      fprintf (stdout, "    wait_for_chan_avail: chan %0d, peek rc = %0d data = %08x\n",
+	       chan, rc, ocl_data_from_hw);
+    fail_on (rc, out, "ERROR: %s: test_chan_avail: OCL peek chan %0d.\n",
+	     this_file_name, chan);
+    /*
+      if (chan == hw_to_host_chan_status
+      && (ocl_data_from_hw != status)) {
+      status = ocl_data_from_hw;
+      fprintf (stdout, "STATUS: %8x\n", status);
+      }
+    */
+    return (ocl_data_from_hw & 0xFF);
+ out:
+    if (rc != 0) {
+      fprintf (stdout, "    addr_base %0x chan %0d\n", ocl_addr_base, chan);
+    }
+    return rc;
+}
+
 int start_hw (int slot_id, int pf_id, int bar_id)
 {
     int rc, verbosity = 1;
@@ -595,29 +624,45 @@ int start_hw (int slot_id, int pf_id, int bar_id)
     // Poll the HW status until non-zero (hw task completion)
     // There's no timeout because HW may never stop (e.g., an executing CPU).
 
-    fprintf (stdout, "Host_side: Polling HW status for completion (let's hope)\n");
+    fprintf (stdout, "Host_side: Starting polling loop\n");
 
-    ocl_addr = mk_chan_data_addr (ocl_hw_to_host_chan_addr_base, hw_to_host_chan_status);
 
     while (true) {
-	rc = wait_for_chan_avail (pci_bar_handle, ocl_hw_to_host_chan_addr_base, hw_to_host_chan_status);
-	if (rc != 0) goto out;
-
+      // hw_to_host_chan_status
+      ocl_addr = mk_chan_data_addr (ocl_hw_to_host_chan_addr_base, hw_to_host_chan_status);
+      rc = test_for_chan_avail (pci_bar_handle, ocl_hw_to_host_chan_addr_base, hw_to_host_chan_status);
+      if (rc==1) {
 	rc = fpga_pci_peek (pci_bar_handle, ocl_addr, & ocl_data_from_hw);
-	fail_on(rc, out, "Unable to read read from the fpga !");
+	fail_on(rc, out, "Unable to read from the fpga !");
 
 	if (verbosity != 0)
 	  fprintf (stdout, "    OCL read addr %08x, data %08x\n", ocl_addr, ocl_data_from_hw);
 	if ((ocl_data_from_hw & 0xFF) != 0) break;
+      }
 
-	usleep (10);
+      // hw_to_host_chan_UART
+      ocl_addr = mk_chan_data_addr (ocl_hw_to_host_chan_addr_base, hw_to_host_chan_UART);
+      rc = test_for_chan_avail (pci_bar_handle, ocl_hw_to_host_chan_addr_base, hw_to_host_chan_UART);
+      if (rc==1) {
+	rc = fpga_pci_peek (pci_bar_handle, ocl_addr, & ocl_data_from_hw);
+	fail_on(rc, out, "Unable to read from the fpga !");
+
+	//if (verbosity != 0)
+	  fprintf (stdout, "    OCL UART read addr %08x, data %08x\n", ocl_addr, ocl_data_from_hw);
+	putchar(ocl_data_from_hw & 0xFF);
+      }
+
+      // host_to_hw_chan_UART
+              // Deferred (for non-blocking console input)
+
+      usleep (1000);
     }
     fprintf (stdout, "%s: Final HW status 0x%0x\n", this_file_name, ocl_data_from_hw);
     if ((ocl_data_from_hw & 0xFF) == 1) {
-	fprintf (stdout, "    (Write of 1 to tohost: TEST PASSED)\n");
+      fprintf (stdout, "    (Write of 1 to tohost: TEST PASSED)\n");
     }
     else if ((ocl_data_from_hw & 0xFF) != 0) {
-	fprintf (stdout, "    (Non-xero write, but not 1, to tohost: TEST FAILED)\n"); /*  */
+      fprintf (stdout, "    (Non-xero write, but not 1, to tohost: TEST FAILED)\n"); /*  */
     }
 
 out:
@@ -632,102 +677,5 @@ out:
     // if there is an error code, exit with status 1
     return (rc != 0 ? 1 : 0);
 }
-
-// ================================================================
-// DELETE AFTER FIXUP
-
-/*
-uint32_t ocl_client_control  = 1;
-uint32_t ocl_client_UART     = 2;
-uint32_t ocl_client_debugger = 3;
-
-uint32_t control_addr_verbosity   = 0x4;
-uint32_t control_addr_tohost      = 0x8;
-uint32_t control_addr_ddr4_loaded = 0xc;
-
-int start_hw (int slot_id, int pf_id, int bar_id)
-{
-    int rc;
-    uint32_t ocl_addr, ocl_data;
-
-    // pci_bar_handle_t is a handler for an address space exposed by
-    // one PCI BAR on one of the PCI PFs of the FPGA
-    pci_bar_handle_t pci_bar_handle = PCI_BAR_HANDLE_INIT;
-
-    // attach to the fpga, with a pci_bar_handle out param
-    // To attach to multiple slots or BARs, call this function multiple times,
-    // saving the pci_bar_handle to specify which address space to interact with in
-    // other API calls.
-    // This function accepts the slot_id, physical function, and bar number
-
-#ifndef SV_TEST
-    rc = fpga_pci_attach(slot_id, pf_id, bar_id, 0, & pci_bar_handle);
-    fail_on(rc, out, "Unable to attach to the AFI on slot id %d", slot_id);
-#endif
-
-    // ----------------
-    // Set up CPU verbosity and logdelay
-    uint32_t verbosity = 1;
-    uint32_t logdelay  = 0;    // # of instructions after which to set verbosity
-    fprintf (stdout, "Host_side: verbosity = %0d, logdelay = %0d\n", verbosity, logdelay);
-
-    ocl_addr = (ocl_client_control << 16 | control_addr_verbosity);
-    ocl_data = ((logdelay & 0xFFFFFFF0) | (verbosity & 0xF));
-    rc       = fpga_pci_poke (pci_bar_handle, ocl_addr, ocl_data);
-    fail_on (rc, out, "ERROR: %s: Unable to write to OCL port.\n", this_file_name);
-
-    // ----------------
-    // Set up 'watch tohost' and 'tohost addr'
-    bool     watch_tohost = true;
-    uint32_t tohost_addr  = 0x80001000;    // Convention: misaligned if not watching tohost
-    fprintf (stdout, "Host_side: watch_tohost = %0d, tohost_addr = 0x%0x\n",
-	     watch_tohost, tohost_addr);
-
-    ocl_addr = (ocl_client_control << 16 | control_addr_tohost);
-    ocl_data = tohost_addr;
-    rc = fpga_pci_poke (pci_bar_handle, ocl_addr, ocl_data);
-    fail_on (rc, out, "ERROR: %s: Unable to write to OCL port.\n", this_file_name);
-
-    // ----------------
-    // Go! Inform hw that DDR4 is loaded, allow the CPU to access it
-
-    fprintf (stdout, "Host_side: Sending DDR4 Loaded message\n");
-    ocl_addr = (ocl_client_control << 16 | control_addr_ddr4_loaded);
-    ocl_data = tohost_addr;
-    rc = fpga_pci_poke (pci_bar_handle, ocl_addr, ocl_data);
-    fail_on (rc, out, "ERROR: %s: Unable to write to OCL port.\n", this_file_name);
-
-    // ----------------
-    // Poll the HW status until non-zero
-    ocl_addr = (ocl_client_control << 16 | 0);
-    uint32_t hw_status;
-
-    while (true) {
-	rc = fpga_pci_peek (pci_bar_handle, ocl_addr, & hw_status);
-	fail_on(rc, out, "Unable to read read from the fpga !");
-	if (hw_status != 0) break;
-	usleep (1);
-    }
-    fprintf (stdout, "%s: Final HW status 0x%0x\n", this_file_name, hw_status);
-    if (hw_status == 1) {
-	fprintf (stdout, "    (Non-zero write tohost)\n");
-    }
-    else if (hw_status == 2) {
-	fprintf (stdout, "    (Memory system error)\n");
-    }
-
-out:
-    // clean up
-    if (pci_bar_handle >= 0) {
-        rc = fpga_pci_detach(pci_bar_handle);
-        if (rc) {
-            printf("Failure while detaching from the fpga.\n");
-        }
-    }
-
-    // if there is an error code, exit with status 1
-    return (rc != 0 ? 1 : 0);
-}
-*/
 
 // ================================================================
