@@ -262,10 +262,9 @@ module mkBytevec (Bytevec_IFC);
 
       // Enqueue the C-to-BSV struct and dequeue the bytevec
       f_AXI4_Wr_Addr_i16_a64_u0.enq (s);
-      rg_credits_AXI4_Wr_Addr_i16_a64_u0 <= rg_credits_AXI4_Wr_Addr_i16_a64_u0 - 1;
       f_C_to_BSV_bytevec.deq;
       if (verbosity != 0)
-         $display ("Bytevec: received: ", fshow (s));
+         $display ("Bytevec: received AXI4_Wr_Addr_i16_a64_u0: ", fshow (s));
    endrule
 
    rule rl_C_to_BSV_AXI4_Wr_Data_d512_u0 (bytevec_C_to_BSV [5] == 2);
@@ -352,10 +351,9 @@ module mkBytevec (Bytevec_IFC);
 
       // Enqueue the C-to-BSV struct and dequeue the bytevec
       f_AXI4_Wr_Data_d512_u0.enq (s);
-      rg_credits_AXI4_Wr_Data_d512_u0 <= rg_credits_AXI4_Wr_Data_d512_u0 - 1;
       f_C_to_BSV_bytevec.deq;
       if (verbosity != 0)
-         $display ("Bytevec: received: ", fshow (s));
+         $display ("Bytevec: received AXI4_Wr_Data_d512_u0: ", fshow (s));
    endrule
 
    rule rl_C_to_BSV_AXI4_Rd_Addr_i16_a64_u0 (bytevec_C_to_BSV [5] == 3);
@@ -387,10 +385,9 @@ module mkBytevec (Bytevec_IFC);
 
       // Enqueue the C-to-BSV struct and dequeue the bytevec
       f_AXI4_Rd_Addr_i16_a64_u0.enq (s);
-      rg_credits_AXI4_Rd_Addr_i16_a64_u0 <= rg_credits_AXI4_Rd_Addr_i16_a64_u0 - 1;
       f_C_to_BSV_bytevec.deq;
       if (verbosity != 0)
-         $display ("Bytevec: received: ", fshow (s));
+         $display ("Bytevec: received AXI4_Rd_Addr_i16_a64_u0: ", fshow (s));
    endrule
 
    rule rl_C_to_BSV_AXI4L_Wr_Addr_a32_u0 (bytevec_C_to_BSV [5] == 4);
@@ -409,10 +406,9 @@ module mkBytevec (Bytevec_IFC);
 
       // Enqueue the C-to-BSV struct and dequeue the bytevec
       f_AXI4L_Wr_Addr_a32_u0.enq (s);
-      rg_credits_AXI4L_Wr_Addr_a32_u0 <= rg_credits_AXI4L_Wr_Addr_a32_u0 - 1;
       f_C_to_BSV_bytevec.deq;
       if (verbosity != 0)
-         $display ("Bytevec: received: ", fshow (s));
+         $display ("Bytevec: received AXI4L_Wr_Addr_a32_u0: ", fshow (s));
    endrule
 
    rule rl_C_to_BSV_AXI4L_Wr_Data_d32 (bytevec_C_to_BSV [5] == 5);
@@ -430,10 +426,9 @@ module mkBytevec (Bytevec_IFC);
 
       // Enqueue the C-to-BSV struct and dequeue the bytevec
       f_AXI4L_Wr_Data_d32.enq (s);
-      rg_credits_AXI4L_Wr_Data_d32 <= rg_credits_AXI4L_Wr_Data_d32 - 1;
       f_C_to_BSV_bytevec.deq;
       if (verbosity != 0)
-         $display ("Bytevec: received: ", fshow (s));
+         $display ("Bytevec: received AXI4L_Wr_Data_d32: ", fshow (s));
    endrule
 
    rule rl_C_to_BSV_AXI4L_Rd_Addr_a32_u0 (bytevec_C_to_BSV [5] == 6);
@@ -452,10 +447,9 @@ module mkBytevec (Bytevec_IFC);
 
       // Enqueue the C-to-BSV struct and dequeue the bytevec
       f_AXI4L_Rd_Addr_a32_u0.enq (s);
-      rg_credits_AXI4L_Rd_Addr_a32_u0 <= rg_credits_AXI4L_Rd_Addr_a32_u0 - 1;
       f_C_to_BSV_bytevec.deq;
       if (verbosity != 0)
-         $display ("Bytevec: received: ", fshow (s));
+         $display ("Bytevec: received AXI4L_Rd_Addr_a32_u0: ", fshow (s));
    endrule
 
    // ================================================================

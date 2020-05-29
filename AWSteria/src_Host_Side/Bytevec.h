@@ -188,16 +188,16 @@ Bytevec_state *mk_Bytevec_state (void);
 //         0: bytevec has no info; should not be sent
 
 extern
-int Bytevec_struct_to_bytevec (Bytevec_state *pstate);
+int Bytevec_struct_to_bytevec (Bytevec_state *p_state);
 
 // ================================================================
 // BSV to C bytevec->struct decoder
-// pstate->bytevec_BSV_to_C contains a bytevec
+// p_state->bytevec_BSV_to_C contains a bytevec
 // Returns 1: bytevec had payload struct
 //         0: bytevec had credits-only
 
 extern
-int Bytevec_struct_from_bytevec (Bytevec_state *pstate);
+int Bytevec_struct_from_bytevec (Bytevec_state *p_state);
 
 // ================================================================
 // Enqueue a AXI4_Wr_Addr_i16_a64_u0 struct to be sent from C to BSV

@@ -307,12 +307,12 @@ x = ["",
 h_template_struct_to_bytevec_function = (
     x +
     ["extern",
-     "int @PKG_struct_to_bytevec (@PKG_state *pstate);",
+     "int @PKG_struct_to_bytevec (@PKG_state *p_state);",
      ""])
 
 c_template_struct_to_bytevec_function = (
     x +
-    ["int @PKG_struct_to_bytevec (@PKG_state *pstate)",
+    ["int @PKG_struct_to_bytevec (@PKG_state *p_state)",
      "{",
      "    int verbosity2 = 0;    // local verbosity for this function",
      "",
@@ -323,28 +323,33 @@ c_template_struct_to_bytevec_function = (
 # This is repeated for each BSV_to_C struct type
 c_template_struct_to_bytevec_function_credits = [
     "",
-    "    total_credits += pstate->credits_@BSV_TO_C_STRUCT;",
-    "    pstate->bytevec_C_to_BSV [@BSV_TO_C_CREDIT_INDEX] = pstate->credits_@BSV_TO_C_STRUCT;",
-    "    pstate->credits_@BSV_TO_C_STRUCT = 0;",
+    "    total_credits += p_state->credits_@BSV_TO_C_STRUCT;",
+    "    p_state->bytevec_C_to_BSV [@BSV_TO_C_CREDIT_INDEX] = p_state->credits_@BSV_TO_C_STRUCT;",
+    "    p_state->credits_@BSV_TO_C_STRUCT = 0;",
     ""]
 
 # This is repeated for each C_to_BSV struct type
 c_template_struct_to_bytevec_function_encode = [
     "",
     "    // C to BSV: @C_TO_BSV_STRUCT",
-    "    if ((pstate->size_@C_TO_BSV_STRUCT != 0) && (pstate->credits_@C_TO_BSV_STRUCT != 0)) {",
-    "        pstate->bytevec_C_to_BSV [0] = @PKT_SIZE;    // Packet size",
-    "        pstate->bytevec_C_to_BSV [@CHAN_ID_INDEX] = @THIS_CHAN_ID;    // Channel Id",
+    "    if ((p_state->size_@C_TO_BSV_STRUCT != 0) && (p_state->credits_@C_TO_BSV_STRUCT != 0)) {",
+    "        p_state->bytevec_C_to_BSV [0] = @PKT_SIZE;    // Packet size",
+    "        p_state->bytevec_C_to_BSV [@CHAN_ID_INDEX] = @THIS_CHAN_ID;    // Channel Id",
     "        // ---- Payload from struct",
-    "        uint64_t head_index = (pstate->head_@C_TO_BSV_STRUCT & C_TO_BSV_FIFO_INDEX_MASK);",
-    "        @C_TO_BSV_STRUCT_to_bytevec (pstate->bytevec_C_to_BSV + @CHAN_ID_INDEX + 1,",
-    "                        & pstate->buf_@C_TO_BSV_STRUCT [head_index]);",
+    "        uint64_t head_index = (p_state->head_@C_TO_BSV_STRUCT & C_TO_BSV_FIFO_INDEX_MASK);",
+    "        @C_TO_BSV_STRUCT_to_bytevec (p_state->bytevec_C_to_BSV + @CHAN_ID_INDEX + 1,",
+    "                        & p_state->buf_@C_TO_BSV_STRUCT [head_index]);",
     "        // ---- Dequeue the struct and return success (bytevec ready)",
-    "        pstate->head_@C_TO_BSV_STRUCT += 1;",
-    "        pstate->size_@C_TO_BSV_STRUCT -= 1;",
-    "        pstate->credits_@C_TO_BSV_STRUCT -= 1;",
-    "        if (verbosity2 != 0)",
+    "        p_state->head_@C_TO_BSV_STRUCT += 1;",
+    "        p_state->size_@C_TO_BSV_STRUCT -= 1;",
+    "        p_state->credits_@C_TO_BSV_STRUCT -= 1;",
+    "        if (verbosity2 != 0) {",
     '            fprintf (stdout, "@PKG_struct_to_bytevec: encoded @C_TO_BSV_STRUCT\\n");',
+    '            fprintf (stdout, "  head %0lx  size %0lx  credits %0lx\\n",',
+    '                     p_state->head_@C_TO_BSV_STRUCT,',
+    '                     p_state->size_@C_TO_BSV_STRUCT,',
+    '                     p_state->credits_@C_TO_BSV_STRUCT);',
+    "        }",
     "        return 1;",
     "    }",
     ""]
@@ -354,8 +359,8 @@ c_template_struct_to_bytevec_function_final = [
     "",
     "    // Credits-only bytevec",
     "    if (total_credits != 0) {",
-    "        pstate->bytevec_C_to_BSV [0] = 1 + @CHAN_ID_INDEX;    // packet size",
-    "        pstate->bytevec_C_to_BSV [@CHAN_ID_INDEX] = 0;    // chan id = credits-only",
+    "        p_state->bytevec_C_to_BSV [0] = 1 + @CHAN_ID_INDEX;    // packet size",
+    "        p_state->bytevec_C_to_BSV [@CHAN_ID_INDEX] = 0;    // chan id = credits-only",
     "        if (verbosity2 != 0)",
     '            fprintf (stdout, "@PKG_struct_to_bytevec: bytevec is credits-only\\n");',
     "        return 1;",
@@ -403,7 +408,7 @@ def gen_struct_to_bytevec_function (package_name,
 x = ["",
      "// ================================================================",
      "// BSV to C bytevec->struct decoder",
-     "// pstate->bytevec_BSV_to_C contains a bytevec",
+     "// p_state->bytevec_BSV_to_C contains a bytevec",
      "// Returns 1: bytevec had payload struct",
      "//         0: bytevec had credits-only",
      ""]
@@ -411,12 +416,12 @@ x = ["",
 h_template_struct_from_bytevec_function = (
     x +
     ["extern",
-     "int @PKG_struct_from_bytevec (@PKG_state *pstate);",
+     "int @PKG_struct_from_bytevec (@PKG_state *p_state);",
      ""])
 
 c_template_struct_from_bytevec_function = (
     x +
-    ["int @PKG_struct_from_bytevec (@PKG_state *pstate)",
+    ["int @PKG_struct_from_bytevec (@PKG_state *p_state)",
      "{",
      "    int verbosity2 = 0;    // local verbosity for this function",
      "",
@@ -425,20 +430,20 @@ c_template_struct_from_bytevec_function = (
 
 # This is repeated for each C_TO_BSV struct type
 c_template_struct_from_bytevec_function_credits = [
-    "    pstate->credits_@C_TO_BSV_STRUCT += pstate->bytevec_BSV_to_C [@C_TO_BSV_CREDIT_INDEX];",
+    "    p_state->credits_@C_TO_BSV_STRUCT += p_state->bytevec_BSV_to_C [@C_TO_BSV_CREDIT_INDEX];",
     ""]
 
 # This is repeated for each BSV_to_C struct type
 c_template_struct_from_bytevec_function_decode = [
     "",
     "    // BSV to C: @BSV_TO_C_STRUCT",
-    "    if (pstate->bytevec_BSV_to_C [@CHAN_ID_INDEX] == @THIS_CHAN_ID) {",
+    "    if (p_state->bytevec_BSV_to_C [@CHAN_ID_INDEX] == @THIS_CHAN_ID) {",
     "        // ---- Fill in struct from payload",
-    "        uint64_t head_index = (pstate->head_@BSV_TO_C_STRUCT & BSV_TO_C_FIFO_INDEX_MASK);",
-    "        @BSV_TO_C_STRUCT_from_bytevec (& pstate->buf_@BSV_TO_C_STRUCT [head_index],",
-    "                                       pstate->bytevec_BSV_to_C + @CHAN_ID_INDEX + 1);",
+    "        uint64_t head_index = (p_state->head_@BSV_TO_C_STRUCT & BSV_TO_C_FIFO_INDEX_MASK);",
+    "        @BSV_TO_C_STRUCT_from_bytevec (& p_state->buf_@BSV_TO_C_STRUCT [head_index],",
+    "                                       p_state->bytevec_BSV_to_C + @CHAN_ID_INDEX + 1);",
     "        // ---- Enqueue the struct",
-    "        pstate->size_@BSV_TO_C_STRUCT += 1;",
+    "        p_state->size_@BSV_TO_C_STRUCT += 1;",
     "        if (verbosity2 != 0)",
     '            fprintf (stdout, "@PKG_struct_from_bytevec: received @BSV_TO_C_STRUCT struct\\n");',
     "        return 1;",
@@ -510,17 +515,27 @@ def gen_C_to_BSV_API_enqueue_functions (package_name,
 
         c_txt += (x +
                   y + "\n" +
-                  "{\n")
+                  "{\n" +
+                  "    int verbosity2 = 0;\n")
 
         c_txt += ("    if (p_state->size_{:s} >= C_TO_BSV_FIFO_SIZE) return 0;\n".format (struct_name) +
                   "\n" +
-                  "    uint8_t tail_index = p_state->head_{0:s} +\n".format (struct_name) +
-                  "                         p_state->size_{0:s};\n".format (struct_name) +
+                  "    uint64_t tail_index = p_state->head_{0:s} +\n".format (struct_name) +
+                  "                          p_state->size_{0:s};\n".format (struct_name) +
                   "    tail_index = (tail_index & C_TO_BSV_FIFO_INDEX_MASK);\n" +
                   "    memcpy (& (p_state->buf_{:s} [tail_index]),\n".format (struct_name) +
                   "            p_struct,\n".format (struct_name) +
                   "            sizeof ({:s}));\n".format (struct_name) +
-                  "    p_state->size_{:s} += 1;\n".format (struct_name))
+                  "    p_state->size_{:s} += 1;\n".format (struct_name) +
+                  "    if (verbosity2 != 0) {\n" +
+                  ('        fprintf (stdout, "{:s}_enqueue_{:s}:\\n");\n'.
+                   format (package_name, struct_name)) +
+                  '        fprintf (stdout, "  head %0lx  size %0lx  credits %0lx\\n",\n' +
+                  '                 p_state->head_{:s},\n'.format (struct_name) +
+                  '                 p_state->size_{:s},\n'.format (struct_name) +
+                  '                 p_state->credits_{:s});\n'.format (struct_name) +
+                  "    }\n")
+
         c_txt += ("\n" +
                   "    return 1;\n" +
                   "}\n")

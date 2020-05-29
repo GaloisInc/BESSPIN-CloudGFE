@@ -108,6 +108,10 @@ module mkTop_HW_Side (Empty) ;
    // ================================================================
    // Interaction with remote host
 
+   Integer verbosity_bytevec = 0;
+   Integer verbosity_AXI     = 0;
+   Integer verbosity_AXIL    = 0;
+
    // Communication box (converts between bytevecs and message structs)
    Bytevec_IFC comms <- mkBytevec;
 
@@ -120,7 +124,7 @@ module mkTop_HW_Side (Empty) ;
 	 comms.fi_C_to_BSV_bytevec.enq (bytevec);
 
 	 // Debug
-	 if (verbosity != 0) begin
+	 if (verbosity_bytevec != 0) begin
 	    $write ("Top_HW_Side.rl_host_recv\n    [");
 	    for (Integer j = 0; j < bytevec_C_to_BSV_size; j = j + 1)
 	       if (fromInteger (j) < bytevec [0])
@@ -135,7 +139,7 @@ module mkTop_HW_Side (Empty) ;
       BSV_to_C_Bytevec bytevec <- pop_o (comms.fo_BSV_to_C_bytevec);
 
       // Debug
-      if (verbosity != 0) begin
+      if (verbosity_bytevec != 0) begin
 	 $write ("Top_HW_Side.rl_host_send\n    [");
 	 for (Integer j = 0; j < fromInteger (bytevec_BSV_to_C_size); j = j + 1)
 	    if (fromInteger (j) < bytevec [0])
@@ -175,6 +179,8 @@ module mkTop_HW_Side (Empty) ;
       dma_pcis_xactor.i_wr_addr.enq (x2);
    endrule
 
+   Reg #(Bit #(8)) rg_AXI4_wr_data_beat <- mkReg (0);
+
    // Connect AXI4 WR_DATA channel
    // Basically: mkConnection (comms.fo_AXI4_Wr_Data_d512_u0,  dma_pcis_xactor.i_wr_data)
    rule rl_connect_dma_pcis_wr_data;
@@ -184,6 +190,12 @@ module mkTop_HW_Side (Empty) ;
 			     wlast: unpack (x1.wlast),
 			     wuser: x1.wuser};
       dma_pcis_xactor.i_wr_data.enq (x2);
+
+      if (verbosity_AXI != 0) begin
+	 $display ("Top_HW_Side.rl_connect_dma_pcis_wr_data: beat %0d", rg_AXI4_wr_data_beat);
+	 $display ("    ", fshow (x2));
+      end
+      rg_AXI4_wr_data_beat <= (x2.wlast ? 0: (rg_AXI4_wr_data_beat + 1));
    endrule
 
    // Connect AXI4 RD_ADDR channel
