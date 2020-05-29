@@ -1,8 +1,8 @@
 # Minimal CloudGFE Setup
 
 This readme will guide you through bringing up an F1 instance with a CloudGFE processor. Currently supported:
-* Rocket P1 running FreeRTOS
-* Rocket P2 running Linux and FreeBSD
+* Chisel P1 running FreeRTOS
+* Chisel P2 running Linux and FreeBSD
 * Bluespec P2 running Linux and FreeBSD
 
 This assumes you are familiar with AWS.
@@ -59,13 +59,13 @@ It expects three arguments:
 ```
 
 * `blockimage` - the image file presented via the block device
-* `dwarf` - currently unknown purpose. Give it `elf-dwarf` as an argument for now
+* `dwarf` - so far unused debugging file. Can supply `elf-dwarf` as an argument or an empty file for now
 * `elf` - ELF binary to be loaded into memory and executed
 
 The script launches 3 `screen` sessions:
 * `fsim0` - UART console and simulator output
 * `switch0` - Software switch log
-* `bootcheck` - Checks for successful Linux boot to bring up networking interface
+* `bootcheck` - Checks for successful Linux boot to bring up networking interface.
 
 The `fsim0` screen will be attached automatically. You can exit it while keeping the sim running using `Ctrl-a` followed by `d`, or `C-a d` in screen terms.
 
@@ -82,7 +82,8 @@ The `peekpoke` example will start a webserver at `http://172.16.0.2` that can pe
 
 The bare-metal `helloworld_32bit` example will print "Hello World!" and immediately exit. If it is too quick to see the output, check `uartlog`.
 
-## Boot Linux on P2
+## P2 64-bit Binaries
+### Linux
 
 There are two flavors of Linux provided. The first, `busyboxlinux_64bit` is a Busybox-based Linux OS built using buildroot. It uses the block device to provide a persistent filesystem.
 The second, `debianlinux_64bit`, is a Debian-based Linux OS. The kernel and ramdisk image are combined into the single ELF file. While this OS includes block device drivers, only an empty image is provided.
@@ -101,7 +102,7 @@ TERM=Linux ssh root@172.16.0.2
 
 Running `poweroff -f` within the target OS will automatically stop the simulator cleanly. If it becomes stuck or unresponsive, you can also use the `./kill_sim.sh` script.
 
-## Boot FreeBSD on P2
+### FreeBSD
 
 The current FreeBSD build does not include Ethernet or Block device drivers, so SSH will not work. `freebsd.img` is also just an empty file. The filesystem is stored within the ELF.
 
