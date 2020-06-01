@@ -105,8 +105,10 @@ ${CL_ROOT}/design/mkAWS_SoC_Fabric.v
 ${CL_ROOT}/design/mkAWS_SoC_Top.v
 ${CL_ROOT}/design/mkAXI4_16_64_512_0_Fabric_2_4.v
 ${CL_ROOT}/design/mkAXI4_Deburster_A.v
+${CL_ROOT}/design/mkAXI4_Deburster_DDR4.v
 ${CL_ROOT}/design/mkBoot_ROM.v
 ${CL_ROOT}/design/mkBranch_Predictor.v
+${CL_ROOT}/design/mkBytevec.v
 ${CL_ROOT}/design/mkCore.v
 ${CL_ROOT}/design/mkCPU.v
 ${CL_ROOT}/design/mkCSR_MIE.v

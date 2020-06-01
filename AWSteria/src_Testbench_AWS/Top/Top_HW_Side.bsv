@@ -179,6 +179,8 @@ module mkTop_HW_Side (Empty) ;
       dma_pcis_xactor.i_wr_addr.enq (x2);
    endrule
 
+   Reg #(Bit #(8)) rg_AXI4_wr_data_beat <- mkReg (0);
+
    // Connect AXI4 WR_DATA channel
    // Basically: mkConnection (comms.fo_AXI4_Wr_Data_d512_u0,  dma_pcis_xactor.i_wr_data)
    rule rl_connect_dma_pcis_wr_data;
@@ -188,6 +190,12 @@ module mkTop_HW_Side (Empty) ;
 			     wlast: unpack (x1.wlast),
 			     wuser: x1.wuser};
       dma_pcis_xactor.i_wr_data.enq (x2);
+
+      if (verbosity_AXI != 0) begin
+	 $display ("Top_HW_Side.rl_connect_dma_pcis_wr_data: beat %0d", rg_AXI4_wr_data_beat);
+	 $display ("    ", fshow (x2));
+      end
+      rg_AXI4_wr_data_beat <= (x2.wlast ? 0: (rg_AXI4_wr_data_beat + 1));
    endrule
 
    // Connect AXI4 RD_ADDR channel

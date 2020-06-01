@@ -67,7 +67,7 @@ void AWS_Sim_Lib_shutdown (void)
 static
 bool do_comms (void)
 {
-    int verbosity = 0;
+    int verbosity2 = 0;
 
     check_state_initialized ();
 
@@ -75,11 +75,11 @@ bool do_comms (void)
     bool activity = false;
 
     // Send
-    if (verbosity > 1)
+    if (verbosity2 > 1)
 	fprintf (stdout, "do_comms: packet to_bytevec\n");
     int ready = Bytevec_struct_to_bytevec (p_bytevec_state);
     if (ready) {
-	if (verbosity != 0) {
+	if (verbosity2 != 0) {
 	    fprintf (stdout, "do_comms: sending %0d bytes\n  ", p_bytevec_state->bytevec_C_to_BSV [0]);
 	    for (int j = 0; j < p_bytevec_state->bytevec_C_to_BSV [0]; j++)
 		fprintf (stdout, " %02x", p_bytevec_state->bytevec_C_to_BSV [j]);
@@ -96,7 +96,7 @@ bool do_comms (void)
     }
         
     // Receive
-    if (verbosity > 1)
+    if (verbosity2 > 1)
 	fprintf (stdout, "do_comms: attempt receive bytevec\n");
     const bool poll    = true;
     status = tcp_client_recv (poll, 1, p_bytevec_state->bytevec_BSV_to_C);
@@ -105,14 +105,14 @@ bool do_comms (void)
 	uint32_t size = p_bytevec_state->bytevec_BSV_to_C [0] - 1;
 	status = tcp_client_recv (no_poll, size, & (p_bytevec_state->bytevec_BSV_to_C [1]));
 
-	if (verbosity != 0) {
+	if (verbosity2 != 0) {
 	    fprintf (stdout, "do_comms: received %0d bytes\n  ", p_bytevec_state->bytevec_BSV_to_C [0]);
 	    for (int j = 0; j < p_bytevec_state->bytevec_BSV_to_C [0]; j++)
 		fprintf (stdout, " %02x", p_bytevec_state->bytevec_BSV_to_C [j]);
 	    fprintf (stdout, "\n");
 	}
 
-	if (verbosity != 0)
+	if (verbosity2 != 0)
 	    fprintf (stdout, "do_comms: packet from_bytevec\n");
 	Bytevec_struct_from_bytevec (p_bytevec_state);
 
@@ -171,7 +171,12 @@ int fpga_dma_burst_read (int fd, uint8_t *buffer, size_t size, uint64_t address)
     if (verbosity2 != 0)
 	fprintf (stdout, "fpga_dma_burst_read: araddr %0lx arlen %0d arsize %0x arburst %0x",
 		 rda.araddr, rda.arlen, rda.arsize, rda.arburst);
-    Bytevec_enqueue_AXI4_Rd_Addr_i16_a64_u0 (p_bytevec_state, & rda);
+    while (true) {
+	int status = Bytevec_enqueue_AXI4_Rd_Addr_i16_a64_u0 (p_bytevec_state, & rda);
+	if (status == 1) break;
+	usleep (1);
+	tcp_activity = do_comms ();
+    }
     tcp_activity = do_comms ();
 
     // ----------------
@@ -277,7 +282,12 @@ int fpga_dma_burst_write (int fd, uint8_t *buffer, size_t size, uint64_t address
     if (verbosity2 != 0)
 	fprintf (stdout, "fpga_dma_burst_write: awaddr %0lx awlen %0d awsize %0x awburst %0x\n",
 		 wra.awaddr, wra.awlen, wra.awsize, wra.awburst);
-    Bytevec_enqueue_AXI4_Wr_Addr_i16_a64_u0 (p_bytevec_state, & wra);
+    while (true) {
+	int status = Bytevec_enqueue_AXI4_Wr_Addr_i16_a64_u0 (p_bytevec_state, & wra);
+	if (status == 1) break;
+	usleep (1);
+	tcp_activity = do_comms ();
+    }
     tcp_activity = do_comms ();
 
     // ----------------
@@ -301,7 +311,12 @@ int fpga_dma_burst_write (int fd, uint8_t *buffer, size_t size, uint64_t address
 	    fprintf (stdout, "\n");
 	}
 
-	Bytevec_enqueue_AXI4_Wr_Data_d512_u0  (p_bytevec_state, & wrd);
+	while (true) {
+	    int status = Bytevec_enqueue_AXI4_Wr_Data_d512_u0  (p_bytevec_state, & wrd);
+	    if (status == 1) break;
+	    usleep (1);
+	    tcp_activity = do_comms ();
+	}
 	tcp_activity = do_comms ();
 	pb += 64;
     }    
@@ -334,6 +349,8 @@ int fpga_dma_burst_write (int fd, uint8_t *buffer, size_t size, uint64_t address
 int fpga_pci_peek (uint32_t ocl_addr, uint32_t *p_ocl_data)
 {
     int  verbosity2 = 0;
+    bool tcp_activity;
+
     check_state_initialized ();
 
     AXI4L_Rd_Addr_a32_u0  rda;
@@ -345,7 +362,12 @@ int fpga_pci_peek (uint32_t ocl_addr, uint32_t *p_ocl_data)
 
     if (verbosity2 != 0)
 	fprintf (stdout, "fpga_pci_peek: enqueue AXI4L Rd_Addr %08x\n", rda.araddr);
-    Bytevec_enqueue_AXI4L_Rd_Addr_a32_u0 (p_bytevec_state, & rda);
+    while (true) {
+	int status = Bytevec_enqueue_AXI4L_Rd_Addr_a32_u0 (p_bytevec_state, & rda);
+	if (status == 1) break;
+	usleep (1);
+	tcp_activity = do_comms ();
+    }
 
     while (true) {
 	bool tcp_activity = do_comms ();
@@ -368,6 +390,8 @@ int fpga_pci_peek (uint32_t ocl_addr, uint32_t *p_ocl_data)
 int fpga_pci_poke (uint32_t ocl_addr, uint32_t ocl_data)
 {
     int  verbosity2 = 0;
+    bool tcp_activity;
+
     check_state_initialized ();
 
     AXI4L_Wr_Addr_a32_u0  wra;
@@ -381,8 +405,18 @@ int fpga_pci_poke (uint32_t ocl_addr, uint32_t ocl_data)
     wrd.wdata  = ocl_data;
     wrd.wstrb  = 0xFF;
 
-    Bytevec_enqueue_AXI4L_Wr_Addr_a32_u0 (p_bytevec_state, & wra);
-    Bytevec_enqueue_AXI4L_Wr_Data_d32    (p_bytevec_state, & wrd);
+    while (true) {
+	int status = Bytevec_enqueue_AXI4L_Wr_Addr_a32_u0 (p_bytevec_state, & wra);
+	if (status == 1) break;
+	usleep (1);
+	tcp_activity = do_comms ();
+    }
+    while (true) {
+	int status = Bytevec_enqueue_AXI4L_Wr_Data_d32    (p_bytevec_state, & wrd);
+	if (status == 1) break;
+	usleep (1);
+	tcp_activity = do_comms ();
+    }
 
     while (true) {
 	bool tcp_activity = do_comms ();
