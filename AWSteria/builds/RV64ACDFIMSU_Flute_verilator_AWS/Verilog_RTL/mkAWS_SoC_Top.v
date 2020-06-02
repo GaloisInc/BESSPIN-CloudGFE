@@ -2427,8 +2427,8 @@ module mkAWS_SoC_Top(CLK,
 	     rg_state == 2'd0 ;
   assign MUX_rg_state$write_1__SEL_2 =
 	     uart0$RDY_server_reset_response_get &&
-	     mem0_controller$RDY_ma_set_addr_map &&
 	     core$RDY_cpu_reset_server_response_get &&
+	     mem0_controller$RDY_ma_set_addr_map &&
 	     rg_state == 2'd1 ;
 
   // register rg_aws_host_to_hw_interrupt

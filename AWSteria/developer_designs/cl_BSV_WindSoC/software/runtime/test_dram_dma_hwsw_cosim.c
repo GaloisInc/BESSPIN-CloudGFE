@@ -590,7 +590,8 @@ int start_hw (int slot_id, int pf_id, int bar_id)
     // ----------------
     // Set up 'watch tohost' and 'tohost addr'
     bool     watch_tohost = true;
-    uint32_t tohost_addr  = 0x80001000;    // Convention: misaligned if not watching tohost
+    uint32_t tohost_addr  = 0xbffff000;    // Convention: misaligned if not watching tohost
+    // uint32_t tohost_addr  = 0x80001000;    // Convention: misaligned if not watching tohost
     fprintf (stdout, "Host_side: set watch_tohost = %0d, tohost_addr = 0x%0x\n",
 	     watch_tohost, tohost_addr);
 

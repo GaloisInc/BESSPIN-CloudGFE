@@ -2059,12 +2059,11 @@ module mkTop_HW_Side(CLK,
 
   // rule RL_rl_connecting
   assign CAN_FIRE_RL_rl_connecting = rg_state == 2'd0 ;
-  assign WILL_FIRE_RL_rl_connecting = CAN_FIRE_RL_rl_connecting ;
+  assign WILL_FIRE_RL_rl_connecting = rg_state == 2'd0 ;
 
   // rule RL_rl_start_when_connected
   assign CAN_FIRE_RL_rl_start_when_connected = rg_state == 2'd1 ;
-  assign WILL_FIRE_RL_rl_start_when_connected =
-	     CAN_FIRE_RL_rl_start_when_connected ;
+  assign WILL_FIRE_RL_rl_start_when_connected = rg_state == 2'd1 ;
 
   // rule RL_rl_host_recv
   assign CAN_FIRE_RL_rl_host_recv =

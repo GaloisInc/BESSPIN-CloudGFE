@@ -5710,9 +5710,6 @@ module mkAWS_SoC_Fabric(CLK,
   begin
     #0;
     if (RST_N != `BSV_RESET_VALUE)
-      if (EN_set_verbosity)
-	$display("%0d: %m.m_set_verbosity: %0d", set_verbosity_verbosity);
-    if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_fabric_rl_wr_xaction_master_to_slave &&
 	  fabric_cfg_verbosity != 4'd0)
 	begin

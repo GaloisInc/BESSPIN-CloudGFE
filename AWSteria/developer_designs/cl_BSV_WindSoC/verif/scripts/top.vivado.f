@@ -115,6 +115,7 @@ ${CL_ROOT}/design/mkCSR_MIE.v
 ${CL_ROOT}/design/mkCSR_MIP.v
 ${CL_ROOT}/design/mkCSR_RegFile.v
 ${CL_ROOT}/design/mkFabric_2x3.v
+${CL_ROOT}/design/mkFabric_AXI4.v
 ${CL_ROOT}/design/mkFBox_Core.v
 ${CL_ROOT}/design/mkFBox_Top.v
 ${CL_ROOT}/design/mkFPR_RegFile.v

@@ -76,10 +76,6 @@ Step_3_Copy_RTL_etc:
 # then append it to `top.vivado.f_template` to create 'top.vivado.f`.
 # This is a script file for XSIM.
 
-
-
-2. Build and run the design on XSIM (Xilinx Verilog Simulator) using the AWS flow:
-
 # ================================================================
 # Build an XSIM executable object and run it
 
