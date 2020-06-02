@@ -315,6 +315,7 @@ def gen_module (package_name,
         result += "\n"
         result += "      // Send the bytevec to C\n"
         result += "      f_BSV_to_C_bytevec.enq (bytevec_BSV_to_C);\n"
+        result += "      rg_credits_{0:s} <= rg_credits_{0:s} - 1;\n".format (struct_name)
         result += "      if (verbosity != 0)\n"
         result += '         $display ("{:s}: sent: ", fshow (s));\n'.format (package_name)
         result += "   endrule\n"

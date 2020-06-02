@@ -489,6 +489,7 @@ module mkBytevec (Bytevec_IFC);
 
       // Send the bytevec to C
       f_BSV_to_C_bytevec.enq (bytevec_BSV_to_C);
+      rg_credits_AXI4_Wr_Resp_i16_u0 <= rg_credits_AXI4_Wr_Resp_i16_u0 - 1;
       if (verbosity != 0)
          $display ("Bytevec: sent: ", fshow (s));
    endrule
@@ -579,6 +580,7 @@ module mkBytevec (Bytevec_IFC);
 
       // Send the bytevec to C
       f_BSV_to_C_bytevec.enq (bytevec_BSV_to_C);
+      rg_credits_AXI4_Rd_Data_i16_d512_u0 <= rg_credits_AXI4_Rd_Data_i16_d512_u0 - 1;
       if (verbosity != 0)
          $display ("Bytevec: sent: ", fshow (s));
    endrule
@@ -602,6 +604,7 @@ module mkBytevec (Bytevec_IFC);
 
       // Send the bytevec to C
       f_BSV_to_C_bytevec.enq (bytevec_BSV_to_C);
+      rg_credits_AXI4L_Wr_Resp_u0 <= rg_credits_AXI4L_Wr_Resp_u0 - 1;
       if (verbosity != 0)
          $display ("Bytevec: sent: ", fshow (s));
    endrule
@@ -629,6 +632,7 @@ module mkBytevec (Bytevec_IFC);
 
       // Send the bytevec to C
       f_BSV_to_C_bytevec.enq (bytevec_BSV_to_C);
+      rg_credits_AXI4L_Rd_Data_d32_u0 <= rg_credits_AXI4L_Rd_Data_d32_u0 - 1;
       if (verbosity != 0)
          $display ("Bytevec: sent: ", fshow (s));
    endrule
