@@ -1,0 +1,3 @@
+[submodule "FireSim/firesim"]
+	path = FireSim/firesim
+	url = ../firesim.git

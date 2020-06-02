@@ -14,7 +14,7 @@ all: copy_RTL  copy_BSV_lib_RTL
 copy_RTL:
 	@echo "Copying from RTL_DIR = $(RTL_DIR)"
 	cp -p  $(RTL_DIR)/*.v  .
-	rm  mkTop_HW_Side*  mkMem_Model*
+	rm  -f mkTop_HW_Side*  mkMem_Model*  mkComms*
 	ls -1  mk*.v > AA_design_files.txt
 	sed  -f AA_sed_script.txt  AA_design_files.txt  > ../verif/scripts/top.vivado.f_design_files
 	rm  -f AA_design_files.txt

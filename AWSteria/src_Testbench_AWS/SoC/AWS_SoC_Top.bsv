@@ -209,13 +209,13 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
 
    // Fabric to UART0
    let uart0_slave <- fromAXI4_Slave_Synth(uart0.slave);
-   slave_vector[uart0_slave_num] = toAXI4_Slave_Synth(zeroSlaveUserFields(uart0_slave));
-   route_vector[uart0_slave_num] = soc_map.m_uart0_addr_range;
+   slave_vector[uart16550_0_slave_num] = toAXI4_Slave_Synth(zeroSlaveUserFields(uart0_slave));
+   route_vector[uart16550_0_slave_num] = soc_map.m_uart16550_0_addr_range;
 
    // Fabric to AWS Host Access
    let aws_host_access_slave <- fromAXI4_Slave_Synth(aws_host_access.slave);
-   slave_vector[aws_host_access_slave_num] = toAXI4_Slave_Synth(zeroSlaveUserFields(aws_host_access_slave));
-   route_vector[aws_host_access_slave_num] = soc_map.m_aws_host_access_addr_range;
+   slave_vector[host_access_slave_num] = toAXI4_Slave_Synth(zeroSlaveUserFields(aws_host_access_slave));
+   route_vector[host_access_slave_num] = soc_map.m_host_access_addr_range;
 
 `ifdef INCLUDE_ACCEL0
    // Fabric to accel0
@@ -242,12 +242,12 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    rule rl_connect_external_interrupt_requests;
       // UART
       Bool intr = uart0.intr;
-      core.core_external_interrupt_sources [irq_num_uart0].m_interrupt_req (intr);
-      Integer last_irq_num = irq_num_uart0;
+      core.core_external_interrupt_sources [irq_num_uart16550_0].m_interrupt_req (intr);
+      Integer last_irq_num = irq_num_uart16550_0;
 
       // AWS Host-to-HW interrupt
-      core.core_external_interrupt_sources [irq_num_aws_host_to_hw].m_interrupt_req (rg_aws_host_to_hw_interrupt);
-      last_irq_num = irq_num_aws_host_to_hw;
+      core.core_external_interrupt_sources [irq_num_host_to_hw].m_interrupt_req (rg_aws_host_to_hw_interrupt);
+      last_irq_num = irq_num_host_to_hw;
 
 `ifdef INCLUDE_ACCEL0
       Bool intr_accel0 = accel0.interrupt_req;
@@ -296,8 +296,8 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
 	 mem0_controller.ma_set_addr_map (rangeBase(soc_map.m_mem0_controller_addr_range),
 			                  rangeTop(soc_map.m_mem0_controller_addr_range));
 
-	 uart0.set_addr_map (rangeBase(soc_map.m_uart0_addr_range),
-                             rangeTop(soc_map.m_uart0_addr_range));
+	 uart0.set_addr_map (rangeBase(soc_map.m_uart16550_0_addr_range),
+                             rangeTop(soc_map.m_uart16550_0_addr_range));
 
 `ifdef INCLUDE_ACCEL0
 	 accel0.init (fabric_default_id,
@@ -314,8 +314,8 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
 		      rangeBase(soc_map.m_mem0_controller_addr_range),
 		      rangeTop(soc_map.m_mem0_controller_addr_range));
 	    $display ("  UART0:           0x%0h .. 0x%0h",
-		      rangeBase(soc_map.m_uart0_addr_range),
-		      rangeTop(soc_map.m_uart0_addr_range));
+		      rangeBase(soc_map.m_uart16550_0_addr_range),
+		      rangeTop(soc_map.m_uart16550_0_addr_range));
 	 end
       endaction
    endfunction
