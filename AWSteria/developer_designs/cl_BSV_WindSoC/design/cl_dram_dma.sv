@@ -515,29 +515,29 @@ module cl_dram_dma #(parameter NUM_DDR=4)
 
 		  // ----------------
 		  // OCL SLAVE (AXI4_Lite_32_32 Slave)
-		  .ocl_slave_awvalid (sh_ocl_awvalid),
-		  .ocl_slave_awaddr  (sh_ocl_awaddr),
-		  .ocl_slave_awprot  (3'b0),        // unused
-		  .ocl_slave_awready (ocl_sh_awready),
+		  .ocl_slave_aw_awvalid (sh_ocl_awvalid),
+		  .ocl_slave_aw_awaddr  (sh_ocl_awaddr),
+		  .ocl_slave_aw_awprot  (3'b0),        // unused
+		  .ocl_slave_aw_awready (ocl_sh_awready),
 
-		  .ocl_slave_wvalid  (sh_ocl_wvalid),
-		  .ocl_slave_wdata   (sh_ocl_wdata),
-		  .ocl_slave_wstrb   (sh_ocl_wstrb),
-		  .ocl_slave_wready  (ocl_sh_wready),
+		  .ocl_slave_w_wvalid  (sh_ocl_wvalid),
+		  .ocl_slave_w_wdata   (sh_ocl_wdata),
+		  .ocl_slave_w_wstrb   (sh_ocl_wstrb),
+		  .ocl_slave_w_wready  (ocl_sh_wready),
 
-		  .ocl_slave_bvalid  (ocl_sh_bvalid),
-		  .ocl_slave_bresp   (ocl_sh_bresp),
-		  .ocl_slave_bready  (sh_ocl_bready),
+		  .ocl_slave_b_bvalid  (ocl_sh_bvalid),
+		  .ocl_slave_b_bresp   (ocl_sh_bresp),
+		  .ocl_slave_b_bready  (sh_ocl_bready),
 
-		  .ocl_slave_arvalid (sh_ocl_arvalid),
-		  .ocl_slave_araddr  (sh_ocl_araddr),
-		  .ocl_slave_arprot  (3'b0),        // unused
-		  .ocl_slave_arready (ocl_sh_arready),
+		  .ocl_slave_ar_arvalid (sh_ocl_arvalid),
+		  .ocl_slave_ar_araddr  (sh_ocl_araddr),
+		  .ocl_slave_ar_arprot  (3'b0),        // unused
+		  .ocl_slave_ar_arready (ocl_sh_arready),
 
-		  .ocl_slave_rvalid  (ocl_sh_rvalid),
-		  .ocl_slave_rresp   (ocl_sh_rresp),
-		  .ocl_slave_rdata   (ocl_sh_rdata),
-		  .ocl_slave_rready  (sh_ocl_rready),
+		  .ocl_slave_r_rvalid  (ocl_sh_rvalid),
+		  .ocl_slave_r_rresp   (ocl_sh_rresp),
+		  .ocl_slave_r_rdata   (ocl_sh_rdata),
+		  .ocl_slave_r_rready  (sh_ocl_rready),
 
 		  // ----------------
 		  // DDR A

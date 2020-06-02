@@ -15,10 +15,11 @@ import RegFile         :: *;
 import Connectable     :: *;
 import StmtFSM         :: *;
 
-import Semi_FIFOF      :: *;
-import Cur_Cycle       :: *;
-import AXI4_Types      :: *;
-import AXI4_Lite_Types :: *;
+import Semi_FIFOF :: *;
+import Cur_Cycle  :: *;
+import AXI4       :: *;
+import AXI4Lite   :: *;
+import SourceSink :: *;
 
 import AWS_BSV_Top_Defs :: *;
 import AWS_BSV_Top      :: *;
@@ -37,7 +38,7 @@ endfunction
 // ================================================================
 
 (* synthesize *)
-module mkMem_Model #(parameter Bit #(2) ddr4_num) (AXI4_16_64_512_0_Slave_IFC);
+module mkMem_Model #(parameter Bit #(2) ddr4_num) (AXI4_16_64_512_0_0_0_0_0_Slave_Synth);
 
    Integer verbosity = 0;
 
@@ -47,7 +48,9 @@ module mkMem_Model #(parameter Bit #(2) ddr4_num) (AXI4_16_64_512_0_Slave_IFC);
 
    RegFile #(Bit #(64), Bit #(512)) rf <- mkRegFile (0, implemented_words - 1);
 
-   AXI4_16_64_512_0_Slave_Xactor_IFC  axi4_xactor <- mkAXI4_Slave_Xactor;
+   AXI4_Slave_Xactor#( Wd_Id_16, Wd_Addr_64, Wd_Data_512
+                      , Wd_AWUser_0, Wd_WUser_0, Wd_BUser_0, Wd_ARUser_0, Wd_RUser_0)
+     axi4_xactor <- mkAXI4_Slave_Xactor;
 
    // base and last are the full 16 GB space logically served by this
    // DDR model, regardless of how much of the space is implemented.
@@ -67,7 +70,7 @@ module mkMem_Model #(parameter Bit #(2) ddr4_num) (AXI4_16_64_512_0_Slave_IFC);
    // Read requests
 
    rule rl_rd_req;
-      let rda <- pop_o (axi4_xactor.o_rd_addr);
+      let rda <- get(axi4_xactor.master.ar);
 
       Bool ok1      = ((addr_base <= rda.araddr) && (rda.araddr <= addr_last));
       let  offset_b = rda.araddr - addr_base;
@@ -75,11 +78,11 @@ module mkMem_Model #(parameter Bit #(2) ddr4_num) (AXI4_16_64_512_0_Slave_IFC);
       let  offset_W = (offset_b >> 6);
 
       // Default error response
-      let rdd = AXI4_Rd_Data {rid:   rda.arid,
-			      rdata: zeroExtend (rda.araddr),    // To help debugging
-			      rresp: axi4_resp_slverr,
-			      rlast: True,
-			      ruser: ?};
+      let rdd = AXI4_RFlit {rid:   rda.arid,
+			    rdata: zeroExtend (rda.araddr),    // To help debugging
+			    rresp: SLVERR,
+			    rlast: True,
+			    ruser: ?};
 
       if (! ok1)
 	 $display ("%0d: Mem_Model [%0d]: rl_rd_req: @ %0h -> OUT OF BOUNDS",
@@ -89,25 +92,25 @@ module mkMem_Model #(parameter Bit #(2) ddr4_num) (AXI4_16_64_512_0_Slave_IFC);
 		   cur_cycle, ddr4_num, rda.araddr);
       else begin
 	 let data = rf.sub (offset_W);
-	 rdd = AXI4_Rd_Data {rid:   rda.arid,
-			     rdata: data,
-			     rresp: axi4_resp_okay,
-			     rlast: True,
-			     ruser: ?};
+	 rdd = AXI4_RFlit {rid:   rda.arid,
+			   rdata: data,
+			   rresp: OKAY,
+			   rlast: True,
+			   ruser: ?};
 	 if (verbosity > 0)
 	    $display ("%0d: Mem_Model [%0d]: rl_rd_req: @ %0h -> %0h",
 		      cur_cycle, ddr4_num, rda.araddr, data);
       end
 
-      axi4_xactor.i_rd_data.enq (rdd);
+      axi4_xactor.master.r.put(rdd);
    endrule
 
    // ----------------
    // Write requests
 
    rule rl_wr_req;
-      let wra <- pop_o (axi4_xactor.o_wr_addr);
-      let wrd <- pop_o (axi4_xactor.o_wr_data);
+      let wra <- get(axi4_xactor.master.aw);
+      let wrd <- get(axi4_xactor.master.w);
 
       Bool ok1      = ((addr_base <= wra.awaddr) && (wra.awaddr <= addr_last));
       let  offset_b = wra.awaddr - addr_base;
@@ -115,7 +118,7 @@ module mkMem_Model #(parameter Bit #(2) ddr4_num) (AXI4_16_64_512_0_Slave_IFC);
       let  offset_W = (offset_b >> 6);
 
       // Default error response
-      let wrr = AXI4_Wr_Resp {bid:   wra.awid, bresp: axi4_resp_slverr, buser: ?};
+      let wrr = AXI4_BFlit {bid:   wra.awid, bresp: SLVERR, buser: ?};
 
       if (! ok1)
 	 $display ("%0d: Mem_Model [%0d]: rl_wr_req: @ %0h <= %0h strb %0h: OUT OF BOUNDS",
@@ -131,20 +134,20 @@ module mkMem_Model #(parameter Bit #(2) ddr4_num) (AXI4_16_64_512_0_Slave_IFC);
 	    $display ("    Old: %h", old_data);
 	    $display ("    New: %h", new_data);
 	 end
-	 wrr = AXI4_Wr_Resp {bid: wra.awid, bresp: axi4_resp_okay, buser: ?};
+	 wrr = AXI4_BFlit {bid: wra.awid, bresp: OKAY, buser: ?};
 
 	 if (verbosity > 0)
 	    $display ("%0d: Mem_Model [%0d]: rl_wr_req: @ %0h <= %0h strb %0h",
 		      cur_cycle, ddr4_num, wra.awaddr, wrd.wdata, wrd.wstrb);
       end
 
-      axi4_xactor.i_wr_resp.enq (wrr);
+      axi4_xactor.master.b.put(wrr);
    endrule
 
    // ================================================================
    // INTERFACE
 
-   return axi4_xactor.axi_side;
+   return axi4_xactor.slaveSynth;
 endmodule
 
 // ================================================================
