@@ -1,0 +1,71 @@
+Log of ./test 
+Tue Jun  2 15:39:08 2020
+
+buffer_size = 0x80 (128) bytes
+AWS_Sim_Lib_init()
+tcp_client_open: connecting to '127.0.0.1' port 30000
+tcp_client_open: connected
+AWS_Sim_Lib_init: initialized, connected to simulation server
+buffer_size = 0x80 (128) bytes
+Write- and read-buffer size: 128
+Memory has been allocated, initializing DMA and filling the buffer...
+filling buffer with  random data...
+First 64 bytes of write-buffer contents:
+    00000000: 03020100
+    00000004: 07060504
+    00000008: 0b0a0908
+    0000000c: 0f0e0d0c
+    00000010: 13121110
+    00000014: 17161514
+    00000018: 1b1a1918
+    0000001c: 1f1e1d1c
+    00000020: 23222120
+    00000024: 27262524
+    00000028: 2b2a2928
+    0000002c: 2f2e2d2c
+    00000030: 33323130
+    00000034: 37363534
+    00000038: 3b3a3938
+    0000003c: 3f3e3d3c
+Now performing the DMA transactions...
+----------------------------------------------------------------
+DMA'ing buffer of 128 bytes to DIMM 0
+----------------------------------------------------------------
+DMA'ing buffer of 128 bytes to DIMM 1
+----------------------------------------------------------------
+DMA'ing buffer of 128 bytes to DIMM 2
+----------------------------------------------------------------
+DMA'ing buffer of 128 bytes to DIMM 3
+----------------------------------------------------------------
+DMA'ing buffer of 128 bytes from DIMM 0
+fpga_dma_burst_read complete
+Comparing 128 bytes buffers for DIMM 0
+DIMM 0 passed!
+----------------------------------------------------------------
+DMA'ing buffer of 128 bytes from DIMM 1
+fpga_dma_burst_read complete
+Comparing 128 bytes buffers for DIMM 1
+DIMM 1 passed!
+----------------------------------------------------------------
+DMA'ing buffer of 128 bytes from DIMM 2
+fpga_dma_burst_read complete
+Comparing 128 bytes buffers for DIMM 2
+DIMM 2 passed!
+----------------------------------------------------------------
+DMA'ing buffer of 128 bytes from DIMM 3
+fpga_dma_burst_read complete
+Comparing 128 bytes buffers for DIMM 3
+DIMM 3 passed!
+Freeing write_buffer
+Freeing read_buffer
+test.c: Reading Mem Hex32 file into local buffer: Mem.hex
+Mem_hex32 file read ok.
+    addr_base 0xbffff000  addr_lim 0xc0001000 (8192 bytes)
+test.c: 4KB DMA buffer allocated at 0x5616440a9000
+Downloading to AWS DDR4
+test.c: DMA 4096 bytes to addr 0xbffff000
+ERROR: tcp_client_recv (): read () failed on byte 0
+./test exited with status code 1
+
+Tue Jun  2 15:39:11 2020
+----------------
