@@ -477,7 +477,7 @@ int start_hw (void)
 
     // ----------------
     // Set up CPU verbosity and logdelay
-    uint32_t cpu_verbosity = 1;
+    uint32_t cpu_verbosity = 0;
     uint32_t logdelay      = 0;    // # of instructions after which to set verbosity
     fprintf (stdout, "Host_side: set verbosity = %0d, logdelay = %0d\n", cpu_verbosity, logdelay);
 
@@ -579,16 +579,21 @@ int start_hw (void)
 	    }
 	    // OK: received a char from hw; echo to console screen
 	    uart_data_from_hw = (uart_data_from_hw & 0xFF);
-	    fprintf (stdout, "UART output: 0x%02x", uart_data_from_hw);
-	    if ((' ' <= uart_data_from_hw) && (uart_data_from_hw < 0xFF))
+	    if (verbosity > 1 ) {
+	      fprintf (stdout, "UART output: 0x%02x", uart_data_from_hw);
+	      if ((' ' <= uart_data_from_hw) && (uart_data_from_hw < 0xFF))
 		fprintf (stdout, "    '%c'", uart_data_from_hw);
-	    else
+	      else
 		switch (uart_data_from_hw) {
 		case '\t': fprintf (stdout, "    \\t");
 		case '\r': fprintf (stdout, "    \\r");
 		case '\n': fprintf (stdout, "    \\n");
 		}
-	    fprintf (stdout, "\n");
+	      fprintf (stdout, "\n");
+	    }
+	    else {
+	      putchar (uart_data_from_hw);
+	    }
 	    fflush (stdout);
 	}
     }
