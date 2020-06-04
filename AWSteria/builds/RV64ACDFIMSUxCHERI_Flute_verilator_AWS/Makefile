@@ -4,7 +4,8 @@
 # Edit this def to point at your clone of the GitHub Flute repo:
 # (https://github.com/bluespec/Flute)
 
-REPO ?= /local/scratch/aj443/Flute
+REPO ?= $(HOME)/git_clones/CHERI_Flute
+# REPO ?= /local/scratch/aj443/Flute
 
 # ================================================================
 # Edit this def to configure desired ISA features
