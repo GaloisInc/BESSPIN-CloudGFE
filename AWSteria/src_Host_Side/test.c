@@ -13,6 +13,8 @@
 #include "test_dram_dma_common.h"
 #include "AWS_Sim_Lib.h"
 
+#include "SimpleQueue.c"
+
 #define MEM_16G              (1ULL << 34)
 
 void usage(const char* program_name);
@@ -40,6 +42,8 @@ int main(int argc, char **argv)
     size_t buffer_size;
     buffer_size = 128;
     fprintf (stdout, "buffer_size = 0x%0lx (%0ld) bytes\n", buffer_size, buffer_size);
+
+    QueueInit(); // for console input
 
     int rc;
     int slot_id = 0;
@@ -541,61 +545,92 @@ int start_hw (void)
     //  - for UART output (and relay it to the console screen)
     // There's no timeout here because HW may never stop (e.g., an executing CPU).
 
-    fprintf (stdout, "Host_side: Polling HW status for completion\n");
+    fprintf (stdout, "Host_side: Starting polling loop\n");
 
-    ocl_addr = mk_chan_data_addr (ocl_hw_to_host_chan_addr_base, hw_to_host_chan_status);
 
     while (true) {
-	// ----------------
-	// Poll status
-	rc = wait_for_chan_avail (ocl_hw_to_host_chan_addr_base, hw_to_host_chan_status);
-	if (rc != 0) goto out;
+      uint32_t chan_status, uart_data_from_hw;
 
+      // hw_to_host_chan_status
+      ocl_addr = mk_chan_data_addr (ocl_hw_to_host_chan_addr_base, hw_to_host_chan_status);
+      rc = test_for_chan_avail (ocl_hw_to_host_chan_addr_base, hw_to_host_chan_status, &chan_status);
+      if (rc != 0) goto out;
+
+      if (chan_status != 0) {
 	rc = fpga_pci_peek (ocl_addr, & ocl_data_from_hw);
 	if (rc != 0) {
-	    fprintf (stdout, "Unable to read read from the fpga !");
-	    goto out;
+	  fprintf (stdout, "Unable to read read from the fpga !");
+	  goto out;
 	}
 
 	if ((ocl_data_from_hw) & 0xFF != 0) break;
+      }
 
-	// ----------------
-	// Poll UART
-	uint32_t uart_addr, uart_chan_status, uart_data_from_hw;
-
-	rc = test_for_chan_avail (ocl_hw_to_host_chan_addr_base, hw_to_host_chan_UART, & uart_chan_status);
-	if (rc != 0) goto out;
-
-	if (uart_chan_status == 0) {
-	    usleep (10);
+      // ----------------
+      // hw_to_host_chan_UART
+      ocl_addr = mk_chan_data_addr (ocl_hw_to_host_chan_addr_base, hw_to_host_chan_UART);
+      rc = test_for_chan_avail (ocl_hw_to_host_chan_addr_base, hw_to_host_chan_UART, & chan_status);
+      if (rc != 0) goto out;
+      if (chan_status == 1) {
+	// Byte is available from UART
+	rc = fpga_pci_peek (ocl_addr, & uart_data_from_hw);
+	if (rc != 0) {
+	  fprintf (stdout, "ERROR: fpga_pci_peek (ocl_addr %0x) failed\n", ocl_addr);
+	  goto out;
 	}
-	else {
-	    // Byte is available from UART
-	    uart_addr = mk_chan_data_addr (ocl_hw_to_host_chan_addr_base, hw_to_host_chan_UART);
-	    rc = fpga_pci_peek (uart_addr, & uart_data_from_hw);
-	    if (rc != 0) {
-		fprintf (stdout, "ERROR: fpga_pci_peek (uart_addr %0x) failed\n", uart_addr);
-		goto out;
-	    }
-	    // OK: received a char from hw; echo to console screen
-	    uart_data_from_hw = (uart_data_from_hw & 0xFF);
-	    if (verbosity > 1 ) {
-	      fprintf (stdout, "UART output: 0x%02x", uart_data_from_hw);
-	      if ((' ' <= uart_data_from_hw) && (uart_data_from_hw < 0xFF))
-		fprintf (stdout, "    '%c'", uart_data_from_hw);
-	      else
-		switch (uart_data_from_hw) {
-		case '\t': fprintf (stdout, "    \\t");
-		case '\r': fprintf (stdout, "    \\r");
-		case '\n': fprintf (stdout, "    \\n");
-		}
-	      fprintf (stdout, "\n");
-	    }
-	    else {
-	      putchar (uart_data_from_hw);
-	    }
-	    fflush (stdout);
+	// OK: received a char from hw; echo to console screen
+	uart_data_from_hw = (uart_data_from_hw & 0xFF);
+	if (verbosity > 1 )
+	  fprintf (stdout, "    OCL UART read addr %08x, data %02x\n", ocl_addr, ocl_data_from_hw);
+	else
+	  putchar (uart_data_from_hw);
+	fflush (stdout);
+      }
+
+      // ----------------
+      // host_to_hw_chan_UART
+      ocl_addr = mk_chan_data_addr (ocl_host_to_hw_chan_addr_base, host_to_hw_chan_UART);
+      rc = test_for_chan_avail (ocl_host_to_hw_chan_addr_base, host_to_hw_chan_UART, & chan_status);
+      if (rc != 0) goto out;
+
+      if (chan_status != 0 && !QueueEmpty()) {
+	// Byte is available for UART, and space available in channel
+	int ch;
+	QueueGet(&ch);
+	rc = fpga_pci_poke (ocl_addr, ch);
+	if (rc != 0) {
+	  fprintf (stdout, "ERROR: fpga_pci_poke (ocl_addr %0x) failed\n", ocl_addr);
+	  goto out;
 	}
+      }
+
+      // ----------------
+      // Input from console
+      int stdin_fd = 0;
+      int fd_max = -1;
+      fd_set rfds,  wfds, efds;
+      int delay = 10; // ms
+      struct timeval tv;
+
+      FD_ZERO(&rfds);
+      FD_ZERO(&wfds);
+      FD_ZERO(&efds);
+      FD_SET(stdin_fd, &rfds);
+      fd_max = stdin_fd;
+
+      tv.tv_sec = delay / 1000;
+      tv.tv_usec = (delay % 1000) * 1000;
+      int ret = select(fd_max + 1, &rfds, &wfds, &efds, &tv);
+      if (FD_ISSET(stdin_fd, &rfds)) {
+	// Read from stdin and enqueue for HTIF/UART get char
+	char buf[128];
+	memset(buf, 0, sizeof(buf));
+	int ret = read(0, buf, sizeof(buf));
+	for (int i=0; i < ret; i++) {
+	  QueuePut(buf[i]);
+	}
+      }
+
     }
     fprintf (stdout, "%s: Final HW status 0x%0x\n", this_file_name, ocl_data_from_hw);
     if (ocl_data_from_hw == 1) {

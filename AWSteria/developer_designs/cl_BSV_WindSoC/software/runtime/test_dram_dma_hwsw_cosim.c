@@ -35,6 +35,8 @@
 
 #include "test_dram_dma_common.h"
 
+#include "SimpleQueue.c"
+
 #define MEM_16G              (1ULL << 34)
 
 void usage(const char* program_name);
@@ -87,6 +89,8 @@ int main(int argc, char **argv)
     buffer_size = 1ULL << 24;
 #endif
     fprintf (stdout, "buffer_size = 0x%0lx (%0ld) bytes\n", buffer_size, buffer_size);
+
+    QueueInit();
 
     /* The statements within SCOPE ifdef below are needed for HW/SW
      * co-simulation with VCS */
@@ -521,28 +525,20 @@ int wait_for_chan_avail (pci_bar_handle_t pci_bar_handle, uint32_t ocl_addr_base
 
 // ================
 
-int test_for_chan_avail (pci_bar_handle_t pci_bar_handle, uint32_t ocl_addr_base, uint32_t chan)
+int test_for_chan_avail (pci_bar_handle_t pci_bar_handle,
+			 uint32_t ocl_addr_base, uint32_t chan, uint32_t *p_status)
 {
     int verbosity = 1;
 
     uint32_t ocl_addr = mk_chan_status_addr (ocl_addr_base, chan);
-    uint32_t ocl_data_from_hw;
     int rc;
 
-    rc = fpga_pci_peek (pci_bar_handle, ocl_addr, & ocl_data_from_hw);
+    rc = fpga_pci_peek (pci_bar_handle, ocl_addr, p_status);
     if (verbosity > 1)
-      fprintf (stdout, "    wait_for_chan_avail: chan %0d, peek rc = %0d data = %08x\n",
-	       chan, rc, ocl_data_from_hw);
+      fprintf (stdout, "    test_for_chan_avail: chan %0d, peek rc = %0d data = %08x\n",
+	       chan, rc, *p_status);
     fail_on (rc, out, "ERROR: %s: test_chan_avail: OCL peek chan %0d.\n",
 	     this_file_name, chan);
-    /*
-      if (chan == hw_to_host_chan_status
-      && (ocl_data_from_hw != status)) {
-      status = ocl_data_from_hw;
-      fprintf (stdout, "STATUS: %8x\n", status);
-      }
-    */
-    return (ocl_data_from_hw & 0xFF);
  out:
     if (rc != 0) {
       fprintf (stdout, "    addr_base %0x chan %0d\n", ocl_addr_base, chan);
@@ -552,7 +548,7 @@ int test_for_chan_avail (pci_bar_handle_t pci_bar_handle, uint32_t ocl_addr_base
 
 int start_hw (int slot_id, int pf_id, int bar_id)
 {
-    int rc, verbosity = 1;
+    int rc, verbosity = 0;
     uint32_t ocl_addr, ocl_data_to_hw, ocl_data_from_hw;
 
     // pci_bar_handle_t is a handler for an address space exposed by
@@ -572,7 +568,7 @@ int start_hw (int slot_id, int pf_id, int bar_id)
 
     // ----------------
     // Set up CPU verbosity and logdelay
-    uint32_t cpu_verbosity = 1;
+    uint32_t cpu_verbosity = 0;
     uint32_t logdelay      = 0;    // # of instructions after which to set verbosity
     fprintf (stdout, "Host_side: set verbosity = %0d, logdelay = %0d\n", cpu_verbosity, logdelay);
 
@@ -629,35 +625,90 @@ int start_hw (int slot_id, int pf_id, int bar_id)
 
 
     while (true) {
+      uint32_t chan_status, uart_data_from_hw;
+
       // hw_to_host_chan_status
       ocl_addr = mk_chan_data_addr (ocl_hw_to_host_chan_addr_base, hw_to_host_chan_status);
-      rc = test_for_chan_avail (pci_bar_handle, ocl_hw_to_host_chan_addr_base, hw_to_host_chan_status);
-      if (rc==1) {
+      rc = test_for_chan_avail (pci_bar_handle,
+				ocl_hw_to_host_chan_addr_base, hw_to_host_chan_status, &chan_status);
+      if (rc != 0) goto out;
+
+      if (chan_status != 9) {
 	rc = fpga_pci_peek (pci_bar_handle, ocl_addr, & ocl_data_from_hw);
 	fail_on(rc, out, "Unable to read from the fpga !");
 
-	if (verbosity != 0)
-	  fprintf (stdout, "    OCL read addr %08x, data %08x\n", ocl_addr, ocl_data_from_hw);
 	if ((ocl_data_from_hw & 0xFF) != 0) break;
       }
 
+      // ----------------
       // hw_to_host_chan_UART
       ocl_addr = mk_chan_data_addr (ocl_hw_to_host_chan_addr_base, hw_to_host_chan_UART);
-      rc = test_for_chan_avail (pci_bar_handle, ocl_hw_to_host_chan_addr_base, hw_to_host_chan_UART);
-      if (rc==1) {
+      rc = test_for_chan_avail (pci_bar_handle,
+				ocl_hw_to_host_chan_addr_base, hw_to_host_chan_UART, &chan_status);
+      if (rc != 0) goto out;
+      if (chan_status==1) {
+	// Byte is available from UART
 	rc = fpga_pci_peek (pci_bar_handle, ocl_addr, & ocl_data_from_hw);
 	fail_on(rc, out, "Unable to read from the fpga !");
 
-	//if (verbosity != 0)
-	  fprintf (stdout, "    OCL UART read addr %08x, data %08x\n", ocl_addr, ocl_data_from_hw);
-	putchar(ocl_data_from_hw & 0xFF);
+	uart_data_from_hw = (uart_data_from_hw & 0xFF);
+	if (verbosity != 0)
+	  fprintf (stdout, "    OCL UART read addr %08x, data %02x\n", ocl_addr, ocl_data_from_hw);
+	else
+	  putchar(ocl_data_from_hw);
+	fflush(stdout);
       }
 
+      // ----------------
       // host_to_hw_chan_UART
-              // Deferred (for non-blocking console input)
+      ocl_addr = mk_chan_data_addr (ocl_host_to_hw_chan_addr_base, host_to_hw_chan_UART);
+      rc = test_for_chan_avail (pci_bar_handle,
+				ocl_host_to_hw_chan_addr_base, host_to_hw_chan_UART, & chan_status);
+      if (rc != 0) goto out;
+
+      if (chan_status != 0 && !QueueEmpty()) {
+	// Byte is available for UART
+	int ch;
+	QueueGet(&ch);
+	rc = fpga_pci_poke (pci_bar_handle, ocl_addr, ch);
+	if (rc != 0) {
+	  fprintf (stdout, "ERROR: fpga_pci_poke (ocl_addr %0x) failed\n", ocl_addr);
+	  goto out;
+	}
+      }
+
+      // ----------------
+      // Input from console
+      int stdin_fd = 0;
+      int fd_max = -1;
+      fd_set rfds,  wfds, efds;
+      int delay = 10; // ms
+      struct timeval tv;
+
+      FD_ZERO(&rfds);
+      FD_ZERO(&wfds);
+      FD_ZERO(&efds);
+      FD_SET(stdin_fd, &rfds);
+      fd_max = stdin_fd;
+
+      tv.tv_sec = delay / 1000;
+      tv.tv_usec = (delay % 1000) * 1000;
+      int i = select(fd_max + 1, &rfds, &wfds, &efds, &tv);
+      if (FD_ISSET(stdin_fd, &rfds)) {
+	// Read from stdin and enqueue for HTIF/UART get char
+	char buf[128];
+	memset(buf, 0, sizeof(buf));
+	int ret = read(0, buf, sizeof(buf));
+	for (i=0; i < ret; i++) {
+	  QueuePut(buf[i]);
+	}
+      }
+
+
 
       usleep (1000);
     }
+    sleep(2);
     fprintf (stdout, "%s: Final HW status 0x%0x\n", this_file_name, ocl_data_from_hw);
     if ((ocl_data_from_hw & 0xFF) == 1) {
       fprintf (stdout, "    (Write of 1 to tohost: TEST PASSED)\n");
