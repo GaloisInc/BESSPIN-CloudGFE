@@ -291,7 +291,7 @@ int load_mem_hex32_using_DMA (int slot_id, char *filename)
     uint64_t  addr1 = ((addr_base >> 6) << 6);    // 64B aligned (required by AWS)
     while (addr1 < addr_lim) {
 	int chunk_size = (addr_lim - addr1);
-	if (chunk_size > 0x1000) chunk_size = 0x1000;    // Trimmed to 4KB if nec'y
+	if (chunk_size > 0x80) chunk_size = 0x80;    // Trimmed to 4KB if nec'y
 
 	// Copy data to DMA buffer
 	memcpy (dma_buf, & (buf [addr1]), chunk_size);
