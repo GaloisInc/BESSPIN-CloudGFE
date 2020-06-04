@@ -7,7 +7,8 @@
 AWSTERIA   = $(HOME)/git_clones/AWS/BESSPIN-CloudGFE/AWSteria
 # AWSTERIA   = $(HOME)/git-repos/BESSPIN-CloudGFE/AWSteria
 
-FLUTE_REPO = $(HOME)/git_clones/Flute
+FLUTE_REPO ?= $(HOME)/git_clones/CHERI_Flute
+# FLUTE_REPO = $(HOME)/git_clones/Flute
 # FLUTE_REPO = $(HOME)/git-repos/Flute
 
 REPO ?= $(FLUTE_REPO)
@@ -20,6 +21,10 @@ ARCH ?= RV64ACDFIMSU
 # ================================================================
 # RISC-V config macros passed into Bluespec 'bsc' compiler
 
+CAPSIZE = 128
+TAGS_STRUCT = 0 64
+TAGS_ALIGN = 32
+
 BSC_COMPILATION_FLAGS += \
 	-D RV64 \
 	-D ISA_PRIV_M  -D ISA_PRIV_U  -D ISA_PRIV_S  \
@@ -30,6 +35,11 @@ BSC_COMPILATION_FLAGS += \
 	-D MULT_SYNTH    \
 	-D Near_Mem_Caches    \
 	-D FABRIC64    \
+	-D CAP128 \
+	-D RISCV \
+	-D MEM64 \
+	-D ISA_CHERI \
+	-D NO_TAGTABLE_ZEROING \
 
 
 # Default ISA test

@@ -52,7 +52,7 @@ deriving (Eq, Bits, FShow);
 module mkTop_HW_Side (Empty) ;
 
    // 0: quiet; 1: rules
-   Integer verbosity = 0;
+   Integer verbosity = 1;
 
    Reg #(State) rg_state <- mkReg (STATE_CONNECTING);
 
@@ -108,8 +108,6 @@ module mkTop_HW_Side (Empty) ;
    // Interaction with remote host
 
    Integer verbosity_bytevec = 0;
-   Integer verbosity_AXI     = 0;
-   Integer verbosity_AXIL    = 0;
 
    // Communication box (converts between bytevecs and message structs)
    Bytevec_IFC comms <- mkBytevec;
@@ -152,6 +150,8 @@ module mkTop_HW_Side (Empty) ;
    // ----------------
    // Connect communication box and DMA_PCIS AXI4 port of aws_BSV_top
 
+   Integer verbosity_AXI = 0;
+
    // Note: the rl_xxx's below can't be replaced by 'mkConnection'
    // because although t1 and t2 are isomorphic types, they are
    // different BSV types coming from different declarations.
@@ -176,6 +176,11 @@ module mkTop_HW_Side (Empty) ;
 			    awregion: x1.awregion,
 			    awuser: x1.awuser};
       dma_pcis_xactor.slave.aw.put (x2);
+
+      if (verbosity_AXI != 0) begin
+	 $display ("Top_HW_Side.rl_connect_dma_pcis_wr_addr:");
+	 $display ("    ", fshow (AXI4_AWFlit #(16,64,0)'(x2)));
+      end
    endrule
 
    Reg #(Bit #(8)) rg_AXI4_wr_data_beat <- mkReg (0);
@@ -213,6 +218,11 @@ module mkTop_HW_Side (Empty) ;
 			    arregion: x1.arregion,
 			    aruser: x1.aruser};
       dma_pcis_xactor.slave.ar.put (x2);
+
+      if (verbosity_AXI != 0) begin
+	 $display ("Top_HW_Side.rl_connect_dma_pcis_rd_addr:");
+	 $display ("    ", fshow (AXI4_ARFlit #(16,64,0)'(x2)));
+      end
    endrule
 
    // Connect AXI4 WR_RESP channel
@@ -223,6 +233,11 @@ module mkTop_HW_Side (Empty) ;
 				    bresp: pack (x1.bresp),
 				    buser: x1.buser};
       comms.fi_AXI4_Wr_Resp_i16_u0.enq (x2);
+
+      if (verbosity_AXI != 0) begin
+	 $display ("Top_HW_Side.rl_connect_dma_pcis_wr_resp:");
+	 $display ("    ", fshow (x2));
+      end
    endrule
 
    // Connect AXI4 RD_DATA channel
@@ -235,10 +250,17 @@ module mkTop_HW_Side (Empty) ;
 					 rlast: pack (x1.rlast),
 					 ruser: x1.ruser};
       comms.fi_AXI4_Rd_Data_i16_d512_u0.enq (x2);
+
+      if (verbosity_AXI != 0) begin
+	 $display ("Top_HW_Side.rl_connect_dma_pcis_rd_data:");
+	 $display ("    ", fshow (x2));
+      end
    endrule
 
    // ----------------
    // Connect communication box and OCL AXI4-Lite port of aws_BSV_top
+
+   Integer verbosity_AXI4L = 1;
 
    AXI4L_32_32_0_0_0_0_0_Master_Xactor ocl_xactor <- mkAXI4Lite_Master_Xactor;
 
@@ -252,6 +274,11 @@ module mkTop_HW_Side (Empty) ;
 				awprot: x1.awprot,
 				awuser: x1.awuser};
       ocl_xactor.slave.aw.put (x2);
+
+      if (verbosity_AXI4L != 0) begin
+	 $display ("Top_HW_Side.rl_connect_ocl_wr_addr:");
+	 $display ("    ", fshow (AXI4Lite_AWFlit #(32,0)'(x2)));
+      end
    endrule
 
    // Connect AXI4L WR_DATA channel
@@ -261,6 +288,11 @@ module mkTop_HW_Side (Empty) ;
       let x2 = AXI4Lite_WFlit {wdata: x1.wdata,
 			       wstrb: x1.wstrb};
       ocl_xactor.slave.w.put (x2);
+
+      if (verbosity_AXI4L != 0) begin
+	 $display ("Top_HW_Side.rl_connect_ocl_wr_data:");
+	 $display ("    ", fshow (AXI4Lite_WFlit #(32,0)'(x2)));
+      end
    endrule
 
    // Connect AXI4L RD_ADDR channel
@@ -271,6 +303,11 @@ module mkTop_HW_Side (Empty) ;
 				arprot: x1.arprot,
 				aruser: x1.aruser};
       ocl_xactor.slave.ar.put (x2);
+
+      if (verbosity_AXI4L != 0) begin
+	 $display ("Top_HW_Side.rl_connect_ocl_rd_addr:");
+	 $display ("    ", fshow (AXI4Lite_ARFlit #(32,0)'(x2)));
+      end
    endrule
 
    // Connect AXI4L WR_RESP channel
@@ -280,6 +317,11 @@ module mkTop_HW_Side (Empty) ;
       let x2 = AXI4L_Wr_Resp_u0 {bresp: pack (x1.bresp),
 				 buser: x1.buser};
       comms.fi_AXI4L_Wr_Resp_u0.enq (x2);
+
+      if (verbosity_AXI4L != 0) begin
+	 $display ("Top_HW_Side.rl_connect_ocl_wr_resp:");
+	 $display ("    ", fshow (x2));
+      end
    endrule
 
    // Connect AXI4L RD_DATA channel
@@ -290,6 +332,11 @@ module mkTop_HW_Side (Empty) ;
 				     rdata: x1.rdata,
 				     ruser: x1.ruser};
       comms.fi_AXI4L_Rd_Data_d32_u0.enq (x2);
+
+      if (verbosity_AXI4L != 0) begin
+	 $display ("Top_HW_Side.rl_connect_ocl_rd_data:");
+	 $display ("    ", fshow (x2));
+      end
    endrule
 
    // ================================================================
