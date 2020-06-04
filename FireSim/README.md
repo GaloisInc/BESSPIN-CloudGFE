@@ -5,7 +5,7 @@ This is the FireSim-based platform for CloudGFE.
 **Currently Supported Processors**:
 | Processor   | AGFI                     | SW Package                                                          |
 |-------------|--------------------------|---------------------------------------------------------------------|
-| Chisel P1   | `agfi-01c6bf6f90700bec2` | `s3://firesim-localuser/swpkgs/firesim-cloudgfe-chisel-p1-sw.tgz`   |
+| Chisel P1   | `agfi-02ff99d48991066db` | `s3://firesim-localuser/swpkgs/firesim-cloudgfe-chisel-p1-sw.tgz`   |
 | Chisel P2   | `agfi-0640a58e5553a75bd` | `s3://firesim-localuser/swpkgs/firesim-cloudgfe-chisel-p2-sw.tgz`   |
 | Bluespec P2 | `agfi-0eb2fa447870a5426` | `s3://firesim-localuser/swpkgs/firesim-cloudgfe-bluespec-p2-sw.tgz` |
 
