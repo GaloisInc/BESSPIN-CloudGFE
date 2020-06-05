@@ -14,3 +14,7 @@ developer_designs/cl_BSV_WindSoC/build/scripts/tight_setup_hold_pins.txt
 developer_designs/cl_BSV_WindSoC/software/runtime/test_dram_dma
 developer_designs/cl_BSV_WindSoC/software/runtime/test_dram_dma_hwsw_cosim
 developer_designs/cl_BSV_WindSoC/software/runtime/test_dram_dma_retention
+vpi_wrapper_*
+log_*.txt
+exe_HW_sim*
+src_Host_Side/test
