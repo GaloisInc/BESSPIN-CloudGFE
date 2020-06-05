@@ -6,49 +6,175 @@
 //
 // Ports:
 // Name                         I/O  size props
-// awready                        O     1 reg
-// wready                         O     1 reg
-// bvalid                         O     1 reg
-// bid                            O    16 reg
-// bresp                          O     2 reg
-// arready                        O     1 reg
-// rvalid                         O     1 reg
-// rid                            O    16 reg
-// rdata                          O   512 reg
-// rresp                          O     2 reg
-// rlast                          O     1 reg
+// awready                        O     1
+// wready                         O     1
+// bid                            O    16
+// bresp                          O     2
+// bvalid                         O     1
+// arready                        O     1
+// rid                            O    16
+// rdata                          O   512
+// rresp                          O     2
+// rlast                          O     1
+// rvalid                         O     1
 // CLK                            I     1 clock
 // RST_N                          I     1 reset
-// awvalid                        I     1
-// awid                           I    16 reg
-// awaddr                         I    64 reg
-// awlen                          I     8 reg
-// awsize                         I     3 reg
-// awburst                        I     2 reg
-// awlock                         I     1 reg
-// awcache                        I     4 reg
-// awprot                         I     3 reg
-// awqos                          I     4 reg
-// awregion                       I     4 reg
-// wvalid                         I     1
-// wdata                          I   512 reg
-// wstrb                          I    64 reg
-// wlast                          I     1 reg
+// awid                           I    16
+// awaddr                         I    64
+// awlen                          I     8
+// awsize                         I     3
+// awburst                        I     2
+// awlock                         I     1
+// awcache                        I     4
+// awprot                         I     3
+// awqos                          I     4
+// awregion                       I     4
+// wdata                          I   512
+// wstrb                          I    64
+// wlast                          I     1
 // bready                         I     1
-// arvalid                        I     1
-// arid                           I    16 reg
-// araddr                         I    64 reg
-// arlen                          I     8 reg
-// arsize                         I     3 reg
-// arburst                        I     2 reg
-// arlock                         I     1 reg
-// arcache                        I     4 reg
-// arprot                         I     3 reg
-// arqos                          I     4 reg
-// arregion                       I     4 reg
+// arid                           I    16
+// araddr                         I    64
+// arlen                          I     8
+// arsize                         I     3
+// arburst                        I     2
+// arlock                         I     1
+// arcache                        I     4
+// arprot                         I     3
+// arqos                          I     4
+// arregion                       I     4
 // rready                         I     1
+// awvalid                        I     1
+// wvalid                         I     1
+// arvalid                        I     1
 //
-// No combinational paths from inputs to outputs
+// Combinational paths from inputs to outputs:
+//   (awid,
+//    awaddr,
+//    awlen,
+//    awsize,
+//    awburst,
+//    awlock,
+//    awcache,
+//    awprot,
+//    awqos,
+//    awregion,
+//    wdata,
+//    wstrb,
+//    wlast,
+//    awvalid,
+//    wvalid) -> bid
+//   (awid,
+//    awaddr,
+//    awlen,
+//    awsize,
+//    awburst,
+//    awlock,
+//    awcache,
+//    awprot,
+//    awqos,
+//    awregion,
+//    wdata,
+//    wstrb,
+//    wlast,
+//    awvalid,
+//    wvalid) -> bresp
+//   (awid,
+//    awaddr,
+//    awlen,
+//    awsize,
+//    awburst,
+//    awlock,
+//    awcache,
+//    awprot,
+//    awqos,
+//    awregion,
+//    wdata,
+//    wstrb,
+//    wlast,
+//    awvalid,
+//    wvalid) -> buser
+//   (awid,
+//    awaddr,
+//    awlen,
+//    awsize,
+//    awburst,
+//    awlock,
+//    awcache,
+//    awprot,
+//    awqos,
+//    awregion,
+//    wdata,
+//    wstrb,
+//    wlast,
+//    awvalid,
+//    wvalid) -> bvalid
+//   (arid,
+//    araddr,
+//    arlen,
+//    arsize,
+//    arburst,
+//    arlock,
+//    arcache,
+//    arprot,
+//    arqos,
+//    arregion,
+//    arvalid) -> rid
+//   (arid,
+//    araddr,
+//    arlen,
+//    arsize,
+//    arburst,
+//    arlock,
+//    arcache,
+//    arprot,
+//    arqos,
+//    arregion,
+//    arvalid) -> rdata
+//   (arid,
+//    araddr,
+//    arlen,
+//    arsize,
+//    arburst,
+//    arlock,
+//    arcache,
+//    arprot,
+//    arqos,
+//    arregion,
+//    arvalid) -> rresp
+//   (arid,
+//    araddr,
+//    arlen,
+//    arsize,
+//    arburst,
+//    arlock,
+//    arcache,
+//    arprot,
+//    arqos,
+//    arregion,
+//    arvalid) -> rlast
+//   (arid,
+//    araddr,
+//    arlen,
+//    arsize,
+//    arburst,
+//    arlock,
+//    arcache,
+//    arprot,
+//    arqos,
+//    arregion,
+//    arvalid) -> ruser
+//   (arid,
+//    araddr,
+//    arlen,
+//    arsize,
+//    arburst,
+//    arlock,
+//    arcache,
+//    arprot,
+//    arqos,
+//    arregion,
+//    arvalid) -> rvalid
 //
 //
 
@@ -68,7 +194,6 @@
 module mkMem_Model(CLK,
 		   RST_N,
 
-		   awvalid,
 		   awid,
 		   awaddr,
 		   awlen,
@@ -79,25 +204,25 @@ module mkMem_Model(CLK,
 		   awprot,
 		   awqos,
 		   awregion,
+		   awvalid,
 
 		   awready,
 
-		   wvalid,
 		   wdata,
 		   wstrb,
 		   wlast,
+		   wvalid,
 
 		   wready,
-
-		   bvalid,
 
 		   bid,
 
 		   bresp,
 
+		   bvalid,
+
 		   bready,
 
-		   arvalid,
 		   arid,
 		   araddr,
 		   arlen,
@@ -108,10 +233,9 @@ module mkMem_Model(CLK,
 		   arprot,
 		   arqos,
 		   arregion,
+		   arvalid,
 
 		   arready,
-
-		   rvalid,
 
 		   rid,
 
@@ -121,13 +245,14 @@ module mkMem_Model(CLK,
 
 		   rlast,
 
+		   rvalid,
+
 		   rready);
   parameter [1 : 0] ddr4_num = 2'b0;
   input  CLK;
   input  RST_N;
 
-  // action method m_awvalid
-  input  awvalid;
+  // action method aw_awflit
   input  [15 : 0] awid;
   input  [63 : 0] awaddr;
   input  [7 : 0] awlen;
@@ -138,35 +263,35 @@ module mkMem_Model(CLK,
   input  [2 : 0] awprot;
   input  [3 : 0] awqos;
   input  [3 : 0] awregion;
+  input  awvalid;
 
-  // value method m_awready
+  // value method aw_awready
   output awready;
 
-  // action method m_wvalid
-  input  wvalid;
+  // action method w_wflit
   input  [511 : 0] wdata;
   input  [63 : 0] wstrb;
   input  wlast;
+  input  wvalid;
 
-  // value method m_wready
+  // value method w_wready
   output wready;
 
-  // value method m_bvalid
-  output bvalid;
-
-  // value method m_bid
+  // value method b_bid
   output [15 : 0] bid;
 
-  // value method m_bresp
+  // value method b_bresp
   output [1 : 0] bresp;
 
-  // value method m_buser
+  // value method b_buser
 
-  // action method m_bready
+  // value method b_bvalid
+  output bvalid;
+
+  // action method b_bready
   input  bready;
 
-  // action method m_arvalid
-  input  arvalid;
+  // action method ar_arflit
   input  [15 : 0] arid;
   input  [63 : 0] araddr;
   input  [7 : 0] arlen;
@@ -177,28 +302,29 @@ module mkMem_Model(CLK,
   input  [2 : 0] arprot;
   input  [3 : 0] arqos;
   input  [3 : 0] arregion;
+  input  arvalid;
 
-  // value method m_arready
+  // value method ar_arready
   output arready;
 
-  // value method m_rvalid
-  output rvalid;
-
-  // value method m_rid
+  // value method r_rid
   output [15 : 0] rid;
 
-  // value method m_rdata
+  // value method r_rdata
   output [511 : 0] rdata;
 
-  // value method m_rresp
+  // value method r_rresp
   output [1 : 0] rresp;
 
-  // value method m_rlast
+  // value method r_rlast
   output rlast;
 
-  // value method m_ruser
+  // value method r_ruser
 
-  // action method m_rready
+  // value method r_rvalid
+  output rvalid;
+
+  // action method r_rready
   input  rready;
 
   // signals for module outputs
@@ -207,45 +333,64 @@ module mkMem_Model(CLK,
   wire [1 : 0] bresp, rresp;
   wire arready, awready, bvalid, rlast, rvalid, wready;
 
-  // ports of submodule axi4_xactor_f_rd_addr
-  wire [108 : 0] axi4_xactor_f_rd_addr$D_IN, axi4_xactor_f_rd_addr$D_OUT;
-  wire axi4_xactor_f_rd_addr$CLR,
-       axi4_xactor_f_rd_addr$DEQ,
-       axi4_xactor_f_rd_addr$EMPTY_N,
-       axi4_xactor_f_rd_addr$ENQ,
-       axi4_xactor_f_rd_addr$FULL_N;
+  // inlined wires
+  wire [577 : 0] axi4_xactor_shim_wff_rv$port0__write_1,
+		 axi4_xactor_shim_wff_rv$port1__read,
+		 axi4_xactor_shim_wff_rv$port2__read,
+		 axi4_xactor_shim_wff_rv$port3__read;
+  wire [576 : 0] axi4_xactor_ug_slave_u_w_putWire$wget;
+  wire [531 : 0] axi4_xactor_shim_rff_rv$port0__write_1,
+		 axi4_xactor_shim_rff_rv$port1__read,
+		 axi4_xactor_shim_rff_rv$port2__read,
+		 axi4_xactor_shim_rff_rv$port3__read;
+  wire [109 : 0] axi4_xactor_shim_arff_rv$port0__write_1,
+		 axi4_xactor_shim_arff_rv$port1__read,
+		 axi4_xactor_shim_arff_rv$port2__read,
+		 axi4_xactor_shim_arff_rv$port3__read,
+		 axi4_xactor_shim_awff_rv$port0__write_1,
+		 axi4_xactor_shim_awff_rv$port1__read,
+		 axi4_xactor_shim_awff_rv$port2__read,
+		 axi4_xactor_shim_awff_rv$port3__read;
+  wire [108 : 0] axi4_xactor_ug_slave_u_ar_putWire$wget,
+		 axi4_xactor_ug_slave_u_aw_putWire$wget;
+  wire [18 : 0] axi4_xactor_shim_bff_rv$port0__write_1,
+		axi4_xactor_shim_bff_rv$port1__read,
+		axi4_xactor_shim_bff_rv$port2__read,
+		axi4_xactor_shim_bff_rv$port3__read;
+  wire axi4_xactor_ug_slave_u_ar_putWire$whas,
+       axi4_xactor_ug_slave_u_aw_putWire$whas,
+       axi4_xactor_ug_slave_u_b_dropWire$whas,
+       axi4_xactor_ug_slave_u_r_dropWire$whas,
+       axi4_xactor_ug_slave_u_w_putWire$whas;
 
-  // ports of submodule axi4_xactor_f_rd_data
-  wire [530 : 0] axi4_xactor_f_rd_data$D_IN, axi4_xactor_f_rd_data$D_OUT;
-  wire axi4_xactor_f_rd_data$CLR,
-       axi4_xactor_f_rd_data$DEQ,
-       axi4_xactor_f_rd_data$EMPTY_N,
-       axi4_xactor_f_rd_data$ENQ,
-       axi4_xactor_f_rd_data$FULL_N;
+  // register axi4_xactor_clearing
+  reg axi4_xactor_clearing;
+  wire axi4_xactor_clearing$D_IN, axi4_xactor_clearing$EN;
 
-  // ports of submodule axi4_xactor_f_wr_addr
-  wire [108 : 0] axi4_xactor_f_wr_addr$D_IN, axi4_xactor_f_wr_addr$D_OUT;
-  wire axi4_xactor_f_wr_addr$CLR,
-       axi4_xactor_f_wr_addr$DEQ,
-       axi4_xactor_f_wr_addr$EMPTY_N,
-       axi4_xactor_f_wr_addr$ENQ,
-       axi4_xactor_f_wr_addr$FULL_N;
+  // register axi4_xactor_shim_arff_rv
+  reg [109 : 0] axi4_xactor_shim_arff_rv;
+  wire [109 : 0] axi4_xactor_shim_arff_rv$D_IN;
+  wire axi4_xactor_shim_arff_rv$EN;
 
-  // ports of submodule axi4_xactor_f_wr_data
-  wire [576 : 0] axi4_xactor_f_wr_data$D_IN, axi4_xactor_f_wr_data$D_OUT;
-  wire axi4_xactor_f_wr_data$CLR,
-       axi4_xactor_f_wr_data$DEQ,
-       axi4_xactor_f_wr_data$EMPTY_N,
-       axi4_xactor_f_wr_data$ENQ,
-       axi4_xactor_f_wr_data$FULL_N;
+  // register axi4_xactor_shim_awff_rv
+  reg [109 : 0] axi4_xactor_shim_awff_rv;
+  wire [109 : 0] axi4_xactor_shim_awff_rv$D_IN;
+  wire axi4_xactor_shim_awff_rv$EN;
 
-  // ports of submodule axi4_xactor_f_wr_resp
-  wire [17 : 0] axi4_xactor_f_wr_resp$D_IN, axi4_xactor_f_wr_resp$D_OUT;
-  wire axi4_xactor_f_wr_resp$CLR,
-       axi4_xactor_f_wr_resp$DEQ,
-       axi4_xactor_f_wr_resp$EMPTY_N,
-       axi4_xactor_f_wr_resp$ENQ,
-       axi4_xactor_f_wr_resp$FULL_N;
+  // register axi4_xactor_shim_bff_rv
+  reg [18 : 0] axi4_xactor_shim_bff_rv;
+  wire [18 : 0] axi4_xactor_shim_bff_rv$D_IN;
+  wire axi4_xactor_shim_bff_rv$EN;
+
+  // register axi4_xactor_shim_rff_rv
+  reg [531 : 0] axi4_xactor_shim_rff_rv;
+  wire [531 : 0] axi4_xactor_shim_rff_rv$D_IN;
+  wire axi4_xactor_shim_rff_rv$EN;
+
+  // register axi4_xactor_shim_wff_rv
+  reg [577 : 0] axi4_xactor_shim_wff_rv;
+  wire [577 : 0] axi4_xactor_shim_wff_rv$D_IN;
+  wire axi4_xactor_shim_wff_rv$EN;
 
   // ports of submodule rf
   wire [511 : 0] rf$D_IN, rf$D_OUT_1, rf$D_OUT_2;
@@ -258,160 +403,134 @@ module mkMem_Model(CLK,
   wire rf$WE;
 
   // rule scheduling signals
-  wire CAN_FIRE_RL_rl_rd_req,
+  wire CAN_FIRE_RL_axi4_xactor_do_clear,
+       CAN_FIRE_RL_axi4_xactor_ug_slave_u_ar_doPut,
+       CAN_FIRE_RL_axi4_xactor_ug_slave_u_ar_warnDoPut,
+       CAN_FIRE_RL_axi4_xactor_ug_slave_u_aw_doPut,
+       CAN_FIRE_RL_axi4_xactor_ug_slave_u_aw_warnDoPut,
+       CAN_FIRE_RL_axi4_xactor_ug_slave_u_b_doDrop,
+       CAN_FIRE_RL_axi4_xactor_ug_slave_u_b_setPeek,
+       CAN_FIRE_RL_axi4_xactor_ug_slave_u_b_warnDoDrop,
+       CAN_FIRE_RL_axi4_xactor_ug_slave_u_r_doDrop,
+       CAN_FIRE_RL_axi4_xactor_ug_slave_u_r_setPeek,
+       CAN_FIRE_RL_axi4_xactor_ug_slave_u_r_warnDoDrop,
+       CAN_FIRE_RL_axi4_xactor_ug_slave_u_w_doPut,
+       CAN_FIRE_RL_axi4_xactor_ug_slave_u_w_warnDoPut,
+       CAN_FIRE_RL_rl_rd_req,
        CAN_FIRE_RL_rl_wr_req,
-       CAN_FIRE_m_arvalid,
-       CAN_FIRE_m_awvalid,
-       CAN_FIRE_m_bready,
-       CAN_FIRE_m_rready,
-       CAN_FIRE_m_wvalid,
+       CAN_FIRE_ar_arflit,
+       CAN_FIRE_aw_awflit,
+       CAN_FIRE_b_bready,
+       CAN_FIRE_r_rready,
+       CAN_FIRE_w_wflit,
+       WILL_FIRE_RL_axi4_xactor_do_clear,
+       WILL_FIRE_RL_axi4_xactor_ug_slave_u_ar_doPut,
+       WILL_FIRE_RL_axi4_xactor_ug_slave_u_ar_warnDoPut,
+       WILL_FIRE_RL_axi4_xactor_ug_slave_u_aw_doPut,
+       WILL_FIRE_RL_axi4_xactor_ug_slave_u_aw_warnDoPut,
+       WILL_FIRE_RL_axi4_xactor_ug_slave_u_b_doDrop,
+       WILL_FIRE_RL_axi4_xactor_ug_slave_u_b_setPeek,
+       WILL_FIRE_RL_axi4_xactor_ug_slave_u_b_warnDoDrop,
+       WILL_FIRE_RL_axi4_xactor_ug_slave_u_r_doDrop,
+       WILL_FIRE_RL_axi4_xactor_ug_slave_u_r_setPeek,
+       WILL_FIRE_RL_axi4_xactor_ug_slave_u_r_warnDoDrop,
+       WILL_FIRE_RL_axi4_xactor_ug_slave_u_w_doPut,
+       WILL_FIRE_RL_axi4_xactor_ug_slave_u_w_warnDoPut,
        WILL_FIRE_RL_rl_rd_req,
        WILL_FIRE_RL_rl_wr_req,
-       WILL_FIRE_m_arvalid,
-       WILL_FIRE_m_awvalid,
-       WILL_FIRE_m_bready,
-       WILL_FIRE_m_rready,
-       WILL_FIRE_m_wvalid;
+       WILL_FIRE_ar_arflit,
+       WILL_FIRE_aw_awflit,
+       WILL_FIRE_b_bready,
+       WILL_FIRE_r_rready,
+       WILL_FIRE_w_wflit;
 
   // declarations used by system tasks
   // synopsys translate_off
-  reg [31 : 0] v__h838;
-  reg [31 : 0] v__h928;
-  reg [31 : 0] v__h1268;
-  reg [31 : 0] v__h1336;
-  reg [31 : 0] v__h832;
-  reg [31 : 0] v__h922;
-  reg [31 : 0] v__h1262;
-  reg [31 : 0] v__h1330;
+  reg [31 : 0] v__h3352;
+  reg [31 : 0] v__h3436;
+  reg [31 : 0] v__h4005;
+  reg [31 : 0] v__h4073;
+  reg [31 : 0] v__h3346;
+  reg [31 : 0] v__h3430;
+  reg [31 : 0] v__h3999;
+  reg [31 : 0] v__h4067;
   // synopsys translate_on
 
   // remaining internal signals
-  wire [511 : 0] mask__h1402,
-		 x1_avValue_rdata__h1008,
-		 x__h1413,
-		 y__h1414,
-		 y__h1415,
-		 y_avValue_rdata__h1020;
-  wire [63 : 0] addr_base__h679,
-		addr_impl_last__h681,
-		addr_last__h680,
-		offset_b__h1215,
-		offset_b__h783;
-  wire [1 : 0] x1_avValue_rresp__h1027;
-  wire NOT_axi4_xactor_f_rd_addr_first_BITS_92_TO_29__ETC___d19,
-       _0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d40,
-       _0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d7,
-       axi4_xactor_f_rd_addr_first_BITS_92_TO_29_ULE__ETC___d10,
-       axi4_xactor_f_wr_addr_first__8_BITS_92_TO_29_9_ETC___d42,
-       axi4_xactor_f_wr_addr_first__8_BITS_92_TO_29_9_ETC___d52;
+  wire [530 : 0] axi4_xactor_shim_rff_rvport1__read_BITS_530_TO_0__q2;
+  wire [511 : 0] mask__h4139,
+		 x1_avValue_rdata__h3518,
+		 x__h4150,
+		 y__h4151,
+		 y__h4152,
+		 y_avValue_rdata__h3530;
+  wire [63 : 0] addr_base__h3109,
+		addr_impl_last__h3111,
+		addr_last__h3110,
+		offset_b__h3297,
+		offset_b__h3952;
+  wire [17 : 0] axi4_xactor_shim_bff_rvport1__read_BITS_17_TO_0__q1;
+  wire [1 : 0] IF_NOT_0b0_CONCAT_ddr4_num_CONCAT_0x0_2_ULE_ax_ETC___d373,
+	       IF_NOT_0b0_CONCAT_ddr4_num_CONCAT_0x0_2_ULE_ax_ETC___d78;
+  wire _0b0_CONCAT_ddr4_num_CONCAT_0x0_2_ULE_axi4_xact_ETC___d54,
+       _0b0_CONCAT_ddr4_num_CONCAT_0x0_2_ULE_axi4_xact_ETC___d92,
+       axi4_xactor_shim_arff_rv_port1__read__5_BITS_9_ETC___d57,
+       axi4_xactor_shim_arff_rv_port1__read__5_BITS_9_ETC___d65,
+       axi4_xactor_shim_awff_rv_port1__read__1_BITS_9_ETC___d103,
+       axi4_xactor_shim_awff_rv_port1__read__1_BITS_9_ETC___d94;
 
-  // action method m_awvalid
-  assign CAN_FIRE_m_awvalid = 1'd1 ;
-  assign WILL_FIRE_m_awvalid = 1'd1 ;
+  // action method aw_awflit
+  assign CAN_FIRE_aw_awflit = 1'd1 ;
+  assign WILL_FIRE_aw_awflit = awvalid ;
 
-  // value method m_awready
-  assign awready = axi4_xactor_f_wr_addr$FULL_N ;
+  // value method aw_awready
+  assign awready = !axi4_xactor_shim_awff_rv[109] ;
 
-  // action method m_wvalid
-  assign CAN_FIRE_m_wvalid = 1'd1 ;
-  assign WILL_FIRE_m_wvalid = 1'd1 ;
+  // action method w_wflit
+  assign CAN_FIRE_w_wflit = 1'd1 ;
+  assign WILL_FIRE_w_wflit = wvalid ;
 
-  // value method m_wready
-  assign wready = axi4_xactor_f_wr_data$FULL_N ;
+  // value method w_wready
+  assign wready = !axi4_xactor_shim_wff_rv[577] ;
 
-  // value method m_bvalid
-  assign bvalid = axi4_xactor_f_wr_resp$EMPTY_N ;
+  // value method b_bid
+  assign bid = axi4_xactor_shim_bff_rvport1__read_BITS_17_TO_0__q1[17:2] ;
 
-  // value method m_bid
-  assign bid = axi4_xactor_f_wr_resp$D_OUT[17:2] ;
+  // value method b_bresp
+  assign bresp = axi4_xactor_shim_bff_rvport1__read_BITS_17_TO_0__q1[1:0] ;
 
-  // value method m_bresp
-  assign bresp = axi4_xactor_f_wr_resp$D_OUT[1:0] ;
+  // value method b_bvalid
+  assign bvalid = axi4_xactor_shim_bff_rv$port1__read[18] ;
 
-  // action method m_bready
-  assign CAN_FIRE_m_bready = 1'd1 ;
-  assign WILL_FIRE_m_bready = 1'd1 ;
+  // action method b_bready
+  assign CAN_FIRE_b_bready = 1'd1 ;
+  assign WILL_FIRE_b_bready = 1'd1 ;
 
-  // action method m_arvalid
-  assign CAN_FIRE_m_arvalid = 1'd1 ;
-  assign WILL_FIRE_m_arvalid = 1'd1 ;
+  // action method ar_arflit
+  assign CAN_FIRE_ar_arflit = 1'd1 ;
+  assign WILL_FIRE_ar_arflit = arvalid ;
 
-  // value method m_arready
-  assign arready = axi4_xactor_f_rd_addr$FULL_N ;
+  // value method ar_arready
+  assign arready = !axi4_xactor_shim_arff_rv[109] ;
 
-  // value method m_rvalid
-  assign rvalid = axi4_xactor_f_rd_data$EMPTY_N ;
+  // value method r_rid
+  assign rid = axi4_xactor_shim_rff_rvport1__read_BITS_530_TO_0__q2[530:515] ;
 
-  // value method m_rid
-  assign rid = axi4_xactor_f_rd_data$D_OUT[530:515] ;
+  // value method r_rdata
+  assign rdata = axi4_xactor_shim_rff_rvport1__read_BITS_530_TO_0__q2[514:3] ;
 
-  // value method m_rdata
-  assign rdata = axi4_xactor_f_rd_data$D_OUT[514:3] ;
+  // value method r_rresp
+  assign rresp = axi4_xactor_shim_rff_rvport1__read_BITS_530_TO_0__q2[2:1] ;
 
-  // value method m_rresp
-  assign rresp = axi4_xactor_f_rd_data$D_OUT[2:1] ;
+  // value method r_rlast
+  assign rlast = axi4_xactor_shim_rff_rvport1__read_BITS_530_TO_0__q2[0] ;
 
-  // value method m_rlast
-  assign rlast = axi4_xactor_f_rd_data$D_OUT[0] ;
+  // value method r_rvalid
+  assign rvalid = axi4_xactor_shim_rff_rv$port1__read[531] ;
 
-  // action method m_rready
-  assign CAN_FIRE_m_rready = 1'd1 ;
-  assign WILL_FIRE_m_rready = 1'd1 ;
-
-  // submodule axi4_xactor_f_rd_addr
-  FIFO2 #(.width(32'd109), .guarded(32'd1)) axi4_xactor_f_rd_addr(.RST(RST_N),
-								  .CLK(CLK),
-								  .D_IN(axi4_xactor_f_rd_addr$D_IN),
-								  .ENQ(axi4_xactor_f_rd_addr$ENQ),
-								  .DEQ(axi4_xactor_f_rd_addr$DEQ),
-								  .CLR(axi4_xactor_f_rd_addr$CLR),
-								  .D_OUT(axi4_xactor_f_rd_addr$D_OUT),
-								  .FULL_N(axi4_xactor_f_rd_addr$FULL_N),
-								  .EMPTY_N(axi4_xactor_f_rd_addr$EMPTY_N));
-
-  // submodule axi4_xactor_f_rd_data
-  FIFO2 #(.width(32'd531), .guarded(32'd1)) axi4_xactor_f_rd_data(.RST(RST_N),
-								  .CLK(CLK),
-								  .D_IN(axi4_xactor_f_rd_data$D_IN),
-								  .ENQ(axi4_xactor_f_rd_data$ENQ),
-								  .DEQ(axi4_xactor_f_rd_data$DEQ),
-								  .CLR(axi4_xactor_f_rd_data$CLR),
-								  .D_OUT(axi4_xactor_f_rd_data$D_OUT),
-								  .FULL_N(axi4_xactor_f_rd_data$FULL_N),
-								  .EMPTY_N(axi4_xactor_f_rd_data$EMPTY_N));
-
-  // submodule axi4_xactor_f_wr_addr
-  FIFO2 #(.width(32'd109), .guarded(32'd1)) axi4_xactor_f_wr_addr(.RST(RST_N),
-								  .CLK(CLK),
-								  .D_IN(axi4_xactor_f_wr_addr$D_IN),
-								  .ENQ(axi4_xactor_f_wr_addr$ENQ),
-								  .DEQ(axi4_xactor_f_wr_addr$DEQ),
-								  .CLR(axi4_xactor_f_wr_addr$CLR),
-								  .D_OUT(axi4_xactor_f_wr_addr$D_OUT),
-								  .FULL_N(axi4_xactor_f_wr_addr$FULL_N),
-								  .EMPTY_N(axi4_xactor_f_wr_addr$EMPTY_N));
-
-  // submodule axi4_xactor_f_wr_data
-  FIFO2 #(.width(32'd577), .guarded(32'd1)) axi4_xactor_f_wr_data(.RST(RST_N),
-								  .CLK(CLK),
-								  .D_IN(axi4_xactor_f_wr_data$D_IN),
-								  .ENQ(axi4_xactor_f_wr_data$ENQ),
-								  .DEQ(axi4_xactor_f_wr_data$DEQ),
-								  .CLR(axi4_xactor_f_wr_data$CLR),
-								  .D_OUT(axi4_xactor_f_wr_data$D_OUT),
-								  .FULL_N(axi4_xactor_f_wr_data$FULL_N),
-								  .EMPTY_N(axi4_xactor_f_wr_data$EMPTY_N));
-
-  // submodule axi4_xactor_f_wr_resp
-  FIFO2 #(.width(32'd18), .guarded(32'd1)) axi4_xactor_f_wr_resp(.RST(RST_N),
-								 .CLK(CLK),
-								 .D_IN(axi4_xactor_f_wr_resp$D_IN),
-								 .ENQ(axi4_xactor_f_wr_resp$ENQ),
-								 .DEQ(axi4_xactor_f_wr_resp$DEQ),
-								 .CLR(axi4_xactor_f_wr_resp$CLR),
-								 .D_OUT(axi4_xactor_f_wr_resp$D_OUT),
-								 .FULL_N(axi4_xactor_f_wr_resp$FULL_N),
-								 .EMPTY_N(axi4_xactor_f_wr_resp$EMPTY_N));
+  // action method r_rready
+  assign CAN_FIRE_r_rready = 1'd1 ;
+  assign WILL_FIRE_r_rready = 1'd1 ;
 
   // submodule rf
   RegFile #(.addr_width(32'd64),
@@ -432,45 +551,109 @@ module mkMem_Model(CLK,
 				  .D_OUT_4(),
 				  .D_OUT_5());
 
+  // rule RL_axi4_xactor_ug_slave_u_aw_warnDoPut
+  assign CAN_FIRE_RL_axi4_xactor_ug_slave_u_aw_warnDoPut =
+	     axi4_xactor_ug_slave_u_aw_putWire$whas &&
+	     axi4_xactor_shim_awff_rv[109] ;
+  assign WILL_FIRE_RL_axi4_xactor_ug_slave_u_aw_warnDoPut =
+	     CAN_FIRE_RL_axi4_xactor_ug_slave_u_aw_warnDoPut ;
+
+  // rule RL_axi4_xactor_ug_slave_u_aw_doPut
+  assign CAN_FIRE_RL_axi4_xactor_ug_slave_u_aw_doPut =
+	     !axi4_xactor_shim_awff_rv[109] &&
+	     axi4_xactor_ug_slave_u_aw_putWire$whas ;
+  assign WILL_FIRE_RL_axi4_xactor_ug_slave_u_aw_doPut =
+	     CAN_FIRE_RL_axi4_xactor_ug_slave_u_aw_doPut ;
+
+  // rule RL_axi4_xactor_ug_slave_u_w_warnDoPut
+  assign CAN_FIRE_RL_axi4_xactor_ug_slave_u_w_warnDoPut =
+	     axi4_xactor_ug_slave_u_w_putWire$whas &&
+	     axi4_xactor_shim_wff_rv[577] ;
+  assign WILL_FIRE_RL_axi4_xactor_ug_slave_u_w_warnDoPut =
+	     CAN_FIRE_RL_axi4_xactor_ug_slave_u_w_warnDoPut ;
+
+  // rule RL_axi4_xactor_ug_slave_u_w_doPut
+  assign CAN_FIRE_RL_axi4_xactor_ug_slave_u_w_doPut =
+	     !axi4_xactor_shim_wff_rv[577] &&
+	     axi4_xactor_ug_slave_u_w_putWire$whas ;
+  assign WILL_FIRE_RL_axi4_xactor_ug_slave_u_w_doPut =
+	     CAN_FIRE_RL_axi4_xactor_ug_slave_u_w_doPut ;
+
+  // rule RL_axi4_xactor_ug_slave_u_ar_warnDoPut
+  assign CAN_FIRE_RL_axi4_xactor_ug_slave_u_ar_warnDoPut =
+	     axi4_xactor_ug_slave_u_ar_putWire$whas &&
+	     axi4_xactor_shim_arff_rv[109] ;
+  assign WILL_FIRE_RL_axi4_xactor_ug_slave_u_ar_warnDoPut =
+	     CAN_FIRE_RL_axi4_xactor_ug_slave_u_ar_warnDoPut ;
+
+  // rule RL_axi4_xactor_ug_slave_u_ar_doPut
+  assign CAN_FIRE_RL_axi4_xactor_ug_slave_u_ar_doPut =
+	     !axi4_xactor_shim_arff_rv[109] &&
+	     axi4_xactor_ug_slave_u_ar_putWire$whas ;
+  assign WILL_FIRE_RL_axi4_xactor_ug_slave_u_ar_doPut =
+	     CAN_FIRE_RL_axi4_xactor_ug_slave_u_ar_doPut ;
+
   // rule RL_rl_rd_req
   assign CAN_FIRE_RL_rl_rd_req =
-	     axi4_xactor_f_rd_addr$EMPTY_N && axi4_xactor_f_rd_data$FULL_N ;
+	     !axi4_xactor_clearing &&
+	     axi4_xactor_shim_arff_rv$port1__read[109] &&
+	     !axi4_xactor_shim_rff_rv[531] ;
   assign WILL_FIRE_RL_rl_rd_req = CAN_FIRE_RL_rl_rd_req ;
 
   // rule RL_rl_wr_req
   assign CAN_FIRE_RL_rl_wr_req =
-	     axi4_xactor_f_wr_addr$EMPTY_N && axi4_xactor_f_wr_data$EMPTY_N &&
-	     axi4_xactor_f_wr_resp$FULL_N ;
+	     !axi4_xactor_clearing &&
+	     axi4_xactor_shim_awff_rv$port1__read[109] &&
+	     axi4_xactor_shim_wff_rv$port1__read[577] &&
+	     !axi4_xactor_shim_bff_rv[18] ;
   assign WILL_FIRE_RL_rl_wr_req = CAN_FIRE_RL_rl_wr_req ;
 
-  // submodule axi4_xactor_f_rd_addr
-  assign axi4_xactor_f_rd_addr$D_IN =
-	     { arid,
-	       araddr,
-	       arlen,
-	       arsize,
-	       arburst,
-	       arlock,
-	       arcache,
-	       arprot,
-	       arqos,
-	       arregion } ;
-  assign axi4_xactor_f_rd_addr$ENQ = arvalid && axi4_xactor_f_rd_addr$FULL_N ;
-  assign axi4_xactor_f_rd_addr$DEQ = CAN_FIRE_RL_rl_rd_req ;
-  assign axi4_xactor_f_rd_addr$CLR = 1'b0 ;
+  // rule RL_axi4_xactor_ug_slave_u_b_setPeek
+  assign CAN_FIRE_RL_axi4_xactor_ug_slave_u_b_setPeek =
+	     axi4_xactor_shim_bff_rv$port1__read[18] ;
+  assign WILL_FIRE_RL_axi4_xactor_ug_slave_u_b_setPeek =
+	     axi4_xactor_shim_bff_rv$port1__read[18] ;
 
-  // submodule axi4_xactor_f_rd_data
-  assign axi4_xactor_f_rd_data$D_IN =
-	     { axi4_xactor_f_rd_addr$D_OUT[108:93],
-	       x1_avValue_rdata__h1008,
-	       x1_avValue_rresp__h1027,
-	       1'd1 } ;
-  assign axi4_xactor_f_rd_data$ENQ = CAN_FIRE_RL_rl_rd_req ;
-  assign axi4_xactor_f_rd_data$DEQ = rready && axi4_xactor_f_rd_data$EMPTY_N ;
-  assign axi4_xactor_f_rd_data$CLR = 1'b0 ;
+  // rule RL_axi4_xactor_ug_slave_u_b_warnDoDrop
+  assign CAN_FIRE_RL_axi4_xactor_ug_slave_u_b_warnDoDrop =
+	     axi4_xactor_ug_slave_u_b_dropWire$whas &&
+	     !axi4_xactor_shim_bff_rv$port1__read[18] ;
+  assign WILL_FIRE_RL_axi4_xactor_ug_slave_u_b_warnDoDrop =
+	     CAN_FIRE_RL_axi4_xactor_ug_slave_u_b_warnDoDrop ;
 
-  // submodule axi4_xactor_f_wr_addr
-  assign axi4_xactor_f_wr_addr$D_IN =
+  // rule RL_axi4_xactor_ug_slave_u_b_doDrop
+  assign CAN_FIRE_RL_axi4_xactor_ug_slave_u_b_doDrop =
+	     axi4_xactor_shim_bff_rv$port1__read[18] &&
+	     axi4_xactor_ug_slave_u_b_dropWire$whas ;
+  assign WILL_FIRE_RL_axi4_xactor_ug_slave_u_b_doDrop =
+	     CAN_FIRE_RL_axi4_xactor_ug_slave_u_b_doDrop ;
+
+  // rule RL_axi4_xactor_ug_slave_u_r_setPeek
+  assign CAN_FIRE_RL_axi4_xactor_ug_slave_u_r_setPeek =
+	     axi4_xactor_shim_rff_rv$port1__read[531] ;
+  assign WILL_FIRE_RL_axi4_xactor_ug_slave_u_r_setPeek =
+	     axi4_xactor_shim_rff_rv$port1__read[531] ;
+
+  // rule RL_axi4_xactor_ug_slave_u_r_warnDoDrop
+  assign CAN_FIRE_RL_axi4_xactor_ug_slave_u_r_warnDoDrop =
+	     axi4_xactor_ug_slave_u_r_dropWire$whas &&
+	     !axi4_xactor_shim_rff_rv$port1__read[531] ;
+  assign WILL_FIRE_RL_axi4_xactor_ug_slave_u_r_warnDoDrop =
+	     CAN_FIRE_RL_axi4_xactor_ug_slave_u_r_warnDoDrop ;
+
+  // rule RL_axi4_xactor_ug_slave_u_r_doDrop
+  assign CAN_FIRE_RL_axi4_xactor_ug_slave_u_r_doDrop =
+	     axi4_xactor_shim_rff_rv$port1__read[531] &&
+	     axi4_xactor_ug_slave_u_r_dropWire$whas ;
+  assign WILL_FIRE_RL_axi4_xactor_ug_slave_u_r_doDrop =
+	     CAN_FIRE_RL_axi4_xactor_ug_slave_u_r_doDrop ;
+
+  // rule RL_axi4_xactor_do_clear
+  assign CAN_FIRE_RL_axi4_xactor_do_clear = axi4_xactor_clearing ;
+  assign WILL_FIRE_RL_axi4_xactor_do_clear = axi4_xactor_clearing ;
+
+  // inlined wires
+  assign axi4_xactor_ug_slave_u_aw_putWire$wget =
 	     { awid,
 	       awaddr,
 	       awlen,
@@ -481,208 +664,381 @@ module mkMem_Model(CLK,
 	       awprot,
 	       awqos,
 	       awregion } ;
-  assign axi4_xactor_f_wr_addr$ENQ = awvalid && axi4_xactor_f_wr_addr$FULL_N ;
-  assign axi4_xactor_f_wr_addr$DEQ = CAN_FIRE_RL_rl_wr_req ;
-  assign axi4_xactor_f_wr_addr$CLR = 1'b0 ;
+  assign axi4_xactor_ug_slave_u_aw_putWire$whas =
+	     awvalid && !axi4_xactor_shim_awff_rv[109] ;
+  assign axi4_xactor_ug_slave_u_w_putWire$wget = { wdata, wstrb, wlast } ;
+  assign axi4_xactor_ug_slave_u_w_putWire$whas =
+	     wvalid && !axi4_xactor_shim_wff_rv[577] ;
+  assign axi4_xactor_ug_slave_u_ar_putWire$wget =
+	     { arid,
+	       araddr,
+	       arlen,
+	       arsize,
+	       arburst,
+	       arlock,
+	       arcache,
+	       arprot,
+	       arqos,
+	       arregion } ;
+  assign axi4_xactor_ug_slave_u_ar_putWire$whas =
+	     arvalid && !axi4_xactor_shim_arff_rv[109] ;
+  assign axi4_xactor_ug_slave_u_b_dropWire$whas =
+	     axi4_xactor_shim_bff_rv$port1__read[18] && bready ;
+  assign axi4_xactor_ug_slave_u_r_dropWire$whas =
+	     axi4_xactor_shim_rff_rv$port1__read[531] && rready ;
+  assign axi4_xactor_shim_awff_rv$port0__write_1 =
+	     { 1'd1, axi4_xactor_ug_slave_u_aw_putWire$wget } ;
+  assign axi4_xactor_shim_awff_rv$port1__read =
+	     CAN_FIRE_RL_axi4_xactor_ug_slave_u_aw_doPut ?
+	       axi4_xactor_shim_awff_rv$port0__write_1 :
+	       axi4_xactor_shim_awff_rv ;
+  assign axi4_xactor_shim_awff_rv$port2__read =
+	     CAN_FIRE_RL_rl_wr_req ?
+	       110'h0AAAAAAAAAAAAAAAAAAAAAAAAAAA :
+	       axi4_xactor_shim_awff_rv$port1__read ;
+  assign axi4_xactor_shim_awff_rv$port3__read =
+	     axi4_xactor_clearing ?
+	       110'h0AAAAAAAAAAAAAAAAAAAAAAAAAAA :
+	       axi4_xactor_shim_awff_rv$port2__read ;
+  assign axi4_xactor_shim_wff_rv$port0__write_1 =
+	     { 1'd1, axi4_xactor_ug_slave_u_w_putWire$wget } ;
+  assign axi4_xactor_shim_wff_rv$port1__read =
+	     CAN_FIRE_RL_axi4_xactor_ug_slave_u_w_doPut ?
+	       axi4_xactor_shim_wff_rv$port0__write_1 :
+	       axi4_xactor_shim_wff_rv ;
+  assign axi4_xactor_shim_wff_rv$port2__read =
+	     CAN_FIRE_RL_rl_wr_req ?
+	       578'h0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA :
+	       axi4_xactor_shim_wff_rv$port1__read ;
+  assign axi4_xactor_shim_wff_rv$port3__read =
+	     axi4_xactor_clearing ?
+	       578'h0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA :
+	       axi4_xactor_shim_wff_rv$port2__read ;
+  assign axi4_xactor_shim_bff_rv$port0__write_1 =
+	     { 1'd1,
+	       axi4_xactor_shim_awff_rv$port1__read[108:93],
+	       IF_NOT_0b0_CONCAT_ddr4_num_CONCAT_0x0_2_ULE_ax_ETC___d373 } ;
+  assign axi4_xactor_shim_bff_rv$port1__read =
+	     CAN_FIRE_RL_rl_wr_req ?
+	       axi4_xactor_shim_bff_rv$port0__write_1 :
+	       axi4_xactor_shim_bff_rv ;
+  assign axi4_xactor_shim_bff_rv$port2__read =
+	     CAN_FIRE_RL_axi4_xactor_ug_slave_u_b_doDrop ?
+	       19'd174762 :
+	       axi4_xactor_shim_bff_rv$port1__read ;
+  assign axi4_xactor_shim_bff_rv$port3__read =
+	     axi4_xactor_clearing ?
+	       19'd174762 :
+	       axi4_xactor_shim_bff_rv$port2__read ;
+  assign axi4_xactor_shim_arff_rv$port0__write_1 =
+	     { 1'd1, axi4_xactor_ug_slave_u_ar_putWire$wget } ;
+  assign axi4_xactor_shim_arff_rv$port1__read =
+	     CAN_FIRE_RL_axi4_xactor_ug_slave_u_ar_doPut ?
+	       axi4_xactor_shim_arff_rv$port0__write_1 :
+	       axi4_xactor_shim_arff_rv ;
+  assign axi4_xactor_shim_arff_rv$port2__read =
+	     CAN_FIRE_RL_rl_rd_req ?
+	       110'h0AAAAAAAAAAAAAAAAAAAAAAAAAAA :
+	       axi4_xactor_shim_arff_rv$port1__read ;
+  assign axi4_xactor_shim_arff_rv$port3__read =
+	     axi4_xactor_clearing ?
+	       110'h0AAAAAAAAAAAAAAAAAAAAAAAAAAA :
+	       axi4_xactor_shim_arff_rv$port2__read ;
+  assign axi4_xactor_shim_rff_rv$port0__write_1 =
+	     { 1'd1,
+	       axi4_xactor_shim_arff_rv$port1__read[108:93],
+	       x1_avValue_rdata__h3518,
+	       IF_NOT_0b0_CONCAT_ddr4_num_CONCAT_0x0_2_ULE_ax_ETC___d78,
+	       1'd1 } ;
+  assign axi4_xactor_shim_rff_rv$port1__read =
+	     CAN_FIRE_RL_rl_rd_req ?
+	       axi4_xactor_shim_rff_rv$port0__write_1 :
+	       axi4_xactor_shim_rff_rv ;
+  assign axi4_xactor_shim_rff_rv$port2__read =
+	     CAN_FIRE_RL_axi4_xactor_ug_slave_u_r_doDrop ?
+	       532'h2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA :
+	       axi4_xactor_shim_rff_rv$port1__read ;
+  assign axi4_xactor_shim_rff_rv$port3__read =
+	     axi4_xactor_clearing ?
+	       532'h2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA :
+	       axi4_xactor_shim_rff_rv$port2__read ;
 
-  // submodule axi4_xactor_f_wr_data
-  assign axi4_xactor_f_wr_data$D_IN = { wdata, wstrb, wlast } ;
-  assign axi4_xactor_f_wr_data$ENQ = wvalid && axi4_xactor_f_wr_data$FULL_N ;
-  assign axi4_xactor_f_wr_data$DEQ = CAN_FIRE_RL_rl_wr_req ;
-  assign axi4_xactor_f_wr_data$CLR = 1'b0 ;
+  // register axi4_xactor_clearing
+  assign axi4_xactor_clearing$D_IN = 1'd0 ;
+  assign axi4_xactor_clearing$EN = axi4_xactor_clearing ;
 
-  // submodule axi4_xactor_f_wr_resp
-  assign axi4_xactor_f_wr_resp$D_IN =
-	     { axi4_xactor_f_wr_addr$D_OUT[108:93],
-	       (!_0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d40 ||
-		!axi4_xactor_f_wr_addr_first__8_BITS_92_TO_29_9_ETC___d42 ||
-		!axi4_xactor_f_wr_addr_first__8_BITS_92_TO_29_9_ETC___d52) ?
-		 2'b10 :
-		 2'b0 } ;
-  assign axi4_xactor_f_wr_resp$ENQ = CAN_FIRE_RL_rl_wr_req ;
-  assign axi4_xactor_f_wr_resp$DEQ = bready && axi4_xactor_f_wr_resp$EMPTY_N ;
-  assign axi4_xactor_f_wr_resp$CLR = 1'b0 ;
+  // register axi4_xactor_shim_arff_rv
+  assign axi4_xactor_shim_arff_rv$D_IN =
+	     axi4_xactor_shim_arff_rv$port3__read ;
+  assign axi4_xactor_shim_arff_rv$EN = 1'b1 ;
+
+  // register axi4_xactor_shim_awff_rv
+  assign axi4_xactor_shim_awff_rv$D_IN =
+	     axi4_xactor_shim_awff_rv$port3__read ;
+  assign axi4_xactor_shim_awff_rv$EN = 1'b1 ;
+
+  // register axi4_xactor_shim_bff_rv
+  assign axi4_xactor_shim_bff_rv$D_IN = axi4_xactor_shim_bff_rv$port3__read ;
+  assign axi4_xactor_shim_bff_rv$EN = 1'b1 ;
+
+  // register axi4_xactor_shim_rff_rv
+  assign axi4_xactor_shim_rff_rv$D_IN = axi4_xactor_shim_rff_rv$port3__read ;
+  assign axi4_xactor_shim_rff_rv$EN = 1'b1 ;
+
+  // register axi4_xactor_shim_wff_rv
+  assign axi4_xactor_shim_wff_rv$D_IN = axi4_xactor_shim_wff_rv$port3__read ;
+  assign axi4_xactor_shim_wff_rv$EN = 1'b1 ;
 
   // submodule rf
-  assign rf$ADDR_1 = { 6'd0, offset_b__h1215[63:6] } ;
-  assign rf$ADDR_2 = { 6'd0, offset_b__h783[63:6] } ;
+  assign rf$ADDR_1 = { 6'd0, offset_b__h3952[63:6] } ;
+  assign rf$ADDR_2 = { 6'd0, offset_b__h3297[63:6] } ;
   assign rf$ADDR_3 = 64'h0 ;
   assign rf$ADDR_4 = 64'h0 ;
   assign rf$ADDR_5 = 64'h0 ;
-  assign rf$ADDR_IN = { 6'd0, offset_b__h1215[63:6] } ;
-  assign rf$D_IN = x__h1413 | y__h1414 ;
+  assign rf$ADDR_IN = { 6'd0, offset_b__h3952[63:6] } ;
+  assign rf$D_IN = x__h4150 | y__h4151 ;
   assign rf$WE =
 	     WILL_FIRE_RL_rl_wr_req &&
-	     _0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d40 &&
-	     axi4_xactor_f_wr_addr_first__8_BITS_92_TO_29_9_ETC___d42 &&
-	     axi4_xactor_f_wr_addr_first__8_BITS_92_TO_29_9_ETC___d52 ;
+	     _0b0_CONCAT_ddr4_num_CONCAT_0x0_2_ULE_axi4_xact_ETC___d92 &&
+	     axi4_xactor_shim_awff_rv_port1__read__1_BITS_9_ETC___d94 &&
+	     axi4_xactor_shim_awff_rv_port1__read__1_BITS_9_ETC___d103 ;
 
   // remaining internal signals
-  assign NOT_axi4_xactor_f_rd_addr_first_BITS_92_TO_29__ETC___d19 =
-	     offset_b__h783 > addr_impl_last__h681 ;
-  assign _0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d40 =
-	     addr_base__h679 <= axi4_xactor_f_wr_addr$D_OUT[92:29] ;
-  assign _0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d7 =
-	     addr_base__h679 <= axi4_xactor_f_rd_addr$D_OUT[92:29] ;
-  assign addr_base__h679 = { 28'b0, ddr4_num, 34'h0 } ;
-  assign addr_impl_last__h681 = addr_base__h679 + 64'h00000000FFFFFFFF ;
-  assign addr_last__h680 = { 28'b0, ddr4_num, 34'h3FFFFFFFF } ;
-  assign axi4_xactor_f_rd_addr_first_BITS_92_TO_29_ULE__ETC___d10 =
-	     axi4_xactor_f_rd_addr$D_OUT[92:29] <= addr_last__h680 ;
-  assign axi4_xactor_f_wr_addr_first__8_BITS_92_TO_29_9_ETC___d42 =
-	     axi4_xactor_f_wr_addr$D_OUT[92:29] <= addr_last__h680 ;
-  assign axi4_xactor_f_wr_addr_first__8_BITS_92_TO_29_9_ETC___d52 =
-	     offset_b__h1215 <= addr_impl_last__h681 ;
-  assign mask__h1402 =
-	     { axi4_xactor_f_wr_data$D_OUT[64] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[63] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[62] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[61] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[60] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[59] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[58] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[57] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[56] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[55] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[54] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[53] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[52] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[51] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[50] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[49] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[48] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[47] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[46] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[45] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[44] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[43] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[42] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[41] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[40] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[39] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[38] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[37] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[36] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[35] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[34] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[33] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[32] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[31] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[30] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[29] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[28] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[27] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[26] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[25] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[24] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[23] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[22] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[21] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[20] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[19] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[18] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[17] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[16] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[15] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[14] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[13] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[12] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[11] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[10] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[9] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[8] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[7] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[6] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[5] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[4] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[3] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[2] ? 8'hFF : 8'h0,
-	       axi4_xactor_f_wr_data$D_OUT[1] ? 8'hFF : 8'h0 } ;
-  assign offset_b__h1215 =
-	     axi4_xactor_f_wr_addr$D_OUT[92:29] - addr_base__h679 ;
-  assign offset_b__h783 =
-	     axi4_xactor_f_rd_addr$D_OUT[92:29] - addr_base__h679 ;
-  assign x1_avValue_rdata__h1008 =
-	     (!_0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d7 ||
-	      !axi4_xactor_f_rd_addr_first_BITS_92_TO_29_ULE__ETC___d10 ||
-	      NOT_axi4_xactor_f_rd_addr_first_BITS_92_TO_29__ETC___d19) ?
-	       y_avValue_rdata__h1020 :
+  assign IF_NOT_0b0_CONCAT_ddr4_num_CONCAT_0x0_2_ULE_ax_ETC___d373 =
+	     (!_0b0_CONCAT_ddr4_num_CONCAT_0x0_2_ULE_axi4_xact_ETC___d92 ||
+	      !axi4_xactor_shim_awff_rv_port1__read__1_BITS_9_ETC___d94) ?
+	       2'd2 :
+	       (axi4_xactor_shim_awff_rv_port1__read__1_BITS_9_ETC___d103 ?
+		  2'd0 :
+		  2'd2) ;
+  assign IF_NOT_0b0_CONCAT_ddr4_num_CONCAT_0x0_2_ULE_ax_ETC___d78 =
+	     (!_0b0_CONCAT_ddr4_num_CONCAT_0x0_2_ULE_axi4_xact_ETC___d54 ||
+	      !axi4_xactor_shim_arff_rv_port1__read__5_BITS_9_ETC___d57) ?
+	       2'd2 :
+	       (axi4_xactor_shim_arff_rv_port1__read__5_BITS_9_ETC___d65 ?
+		  2'd0 :
+		  2'd2) ;
+  assign _0b0_CONCAT_ddr4_num_CONCAT_0x0_2_ULE_axi4_xact_ETC___d54 =
+	     addr_base__h3109 <= axi4_xactor_shim_arff_rv$port1__read[92:29] ;
+  assign _0b0_CONCAT_ddr4_num_CONCAT_0x0_2_ULE_axi4_xact_ETC___d92 =
+	     addr_base__h3109 <= axi4_xactor_shim_awff_rv$port1__read[92:29] ;
+  assign addr_base__h3109 = { 28'b0, ddr4_num, 34'h0 } ;
+  assign addr_impl_last__h3111 = addr_base__h3109 + 64'h00000000FFFFFFFF ;
+  assign addr_last__h3110 = { 28'b0, ddr4_num, 34'h3FFFFFFFF } ;
+  assign axi4_xactor_shim_arff_rv_port1__read__5_BITS_9_ETC___d57 =
+	     axi4_xactor_shim_arff_rv$port1__read[92:29] <= addr_last__h3110 ;
+  assign axi4_xactor_shim_arff_rv_port1__read__5_BITS_9_ETC___d65 =
+	     offset_b__h3297 <= addr_impl_last__h3111 ;
+  assign axi4_xactor_shim_awff_rv_port1__read__1_BITS_9_ETC___d103 =
+	     offset_b__h3952 <= addr_impl_last__h3111 ;
+  assign axi4_xactor_shim_awff_rv_port1__read__1_BITS_9_ETC___d94 =
+	     axi4_xactor_shim_awff_rv$port1__read[92:29] <= addr_last__h3110 ;
+  assign axi4_xactor_shim_bff_rvport1__read_BITS_17_TO_0__q1 =
+	     axi4_xactor_shim_bff_rv$port1__read[17:0] ;
+  assign axi4_xactor_shim_rff_rvport1__read_BITS_530_TO_0__q2 =
+	     axi4_xactor_shim_rff_rv$port1__read[530:0] ;
+  assign mask__h4139 =
+	     { axi4_xactor_shim_wff_rv$port1__read[64] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[63] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[62] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[61] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[60] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[59] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[58] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[57] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[56] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[55] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[54] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[53] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[52] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[51] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[50] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[49] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[48] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[47] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[46] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[45] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[44] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[43] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[42] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[41] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[40] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[39] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[38] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[37] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[36] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[35] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[34] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[33] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[32] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[31] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[30] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[29] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[28] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[27] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[26] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[25] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[24] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[23] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[22] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[21] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[20] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[19] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[18] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[17] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[16] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[15] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[14] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[13] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[12] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[11] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[10] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[9] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[8] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[7] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[6] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[5] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[4] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[3] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[2] ? 8'hFF : 8'h0,
+	       axi4_xactor_shim_wff_rv$port1__read[1] ? 8'hFF : 8'h0 } ;
+  assign offset_b__h3297 =
+	     axi4_xactor_shim_arff_rv$port1__read[92:29] - addr_base__h3109 ;
+  assign offset_b__h3952 =
+	     axi4_xactor_shim_awff_rv$port1__read[92:29] - addr_base__h3109 ;
+  assign x1_avValue_rdata__h3518 =
+	     (!_0b0_CONCAT_ddr4_num_CONCAT_0x0_2_ULE_axi4_xact_ETC___d54 ||
+	      !axi4_xactor_shim_arff_rv_port1__read__5_BITS_9_ETC___d57 ||
+	      !axi4_xactor_shim_arff_rv_port1__read__5_BITS_9_ETC___d65) ?
+	       y_avValue_rdata__h3530 :
 	       rf$D_OUT_2 ;
-  assign x1_avValue_rresp__h1027 =
-	     (!_0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d7 ||
-	      !axi4_xactor_f_rd_addr_first_BITS_92_TO_29_ULE__ETC___d10 ||
-	      NOT_axi4_xactor_f_rd_addr_first_BITS_92_TO_29__ETC___d19) ?
-	       2'b10 :
-	       2'b0 ;
-  assign x__h1413 = rf$D_OUT_1 & y__h1415 ;
-  assign y__h1414 = axi4_xactor_f_wr_data$D_OUT[576:65] & mask__h1402 ;
-  assign y__h1415 =
-	     { axi4_xactor_f_wr_data$D_OUT[64] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[63] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[62] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[61] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[60] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[59] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[58] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[57] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[56] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[55] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[54] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[53] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[52] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[51] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[50] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[49] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[48] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[47] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[46] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[45] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[44] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[43] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[42] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[41] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[40] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[39] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[38] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[37] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[36] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[35] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[34] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[33] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[32] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[31] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[30] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[29] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[28] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[27] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[26] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[25] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[24] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[23] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[22] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[21] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[20] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[19] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[18] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[17] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[16] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[15] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[14] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[13] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[12] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[11] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[10] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[9] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[8] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[7] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[6] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[5] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[4] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[3] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[2] ? 8'd0 : 8'd255,
-	       axi4_xactor_f_wr_data$D_OUT[1] ? 8'd0 : 8'd255 } ;
-  assign y_avValue_rdata__h1020 =
-	     { 448'd0, axi4_xactor_f_rd_addr$D_OUT[92:29] } ;
+  assign x__h4150 = rf$D_OUT_1 & y__h4152 ;
+  assign y__h4151 =
+	     axi4_xactor_shim_wff_rv$port1__read[576:65] & mask__h4139 ;
+  assign y__h4152 =
+	     { axi4_xactor_shim_wff_rv$port1__read[64] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[63] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[62] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[61] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[60] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[59] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[58] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[57] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[56] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[55] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[54] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[53] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[52] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[51] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[50] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[49] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[48] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[47] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[46] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[45] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[44] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[43] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[42] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[41] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[40] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[39] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[38] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[37] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[36] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[35] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[34] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[33] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[32] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[31] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[30] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[29] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[28] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[27] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[26] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[25] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[24] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[23] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[22] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[21] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[20] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[19] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[18] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[17] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[16] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[15] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[14] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[13] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[12] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[11] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[10] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[9] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[8] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[7] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[6] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[5] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[4] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[3] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[2] ? 8'd0 : 8'd255,
+	       axi4_xactor_shim_wff_rv$port1__read[1] ? 8'd0 : 8'd255 } ;
+  assign y_avValue_rdata__h3530 =
+	     { 448'd0, axi4_xactor_shim_arff_rv$port1__read[92:29] } ;
+
+  // handling of inlined registers
+
+  always@(posedge CLK)
+  begin
+    if (RST_N == `BSV_RESET_VALUE)
+      begin
+        axi4_xactor_clearing <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	axi4_xactor_shim_arff_rv <= `BSV_ASSIGNMENT_DELAY
+	    110'h0AAAAAAAAAAAAAAAAAAAAAAAAAAA;
+	axi4_xactor_shim_awff_rv <= `BSV_ASSIGNMENT_DELAY
+	    110'h0AAAAAAAAAAAAAAAAAAAAAAAAAAA;
+	axi4_xactor_shim_bff_rv <= `BSV_ASSIGNMENT_DELAY 19'd174762;
+	axi4_xactor_shim_rff_rv <= `BSV_ASSIGNMENT_DELAY
+	    532'h2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+	axi4_xactor_shim_wff_rv <= `BSV_ASSIGNMENT_DELAY
+	    578'h0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+      end
+    else
+      begin
+        if (axi4_xactor_clearing$EN)
+	  axi4_xactor_clearing <= `BSV_ASSIGNMENT_DELAY
+	      axi4_xactor_clearing$D_IN;
+	if (axi4_xactor_shim_arff_rv$EN)
+	  axi4_xactor_shim_arff_rv <= `BSV_ASSIGNMENT_DELAY
+	      axi4_xactor_shim_arff_rv$D_IN;
+	if (axi4_xactor_shim_awff_rv$EN)
+	  axi4_xactor_shim_awff_rv <= `BSV_ASSIGNMENT_DELAY
+	      axi4_xactor_shim_awff_rv$D_IN;
+	if (axi4_xactor_shim_bff_rv$EN)
+	  axi4_xactor_shim_bff_rv <= `BSV_ASSIGNMENT_DELAY
+	      axi4_xactor_shim_bff_rv$D_IN;
+	if (axi4_xactor_shim_rff_rv$EN)
+	  axi4_xactor_shim_rff_rv <= `BSV_ASSIGNMENT_DELAY
+	      axi4_xactor_shim_rff_rv$D_IN;
+	if (axi4_xactor_shim_wff_rv$EN)
+	  axi4_xactor_shim_wff_rv <= `BSV_ASSIGNMENT_DELAY
+	      axi4_xactor_shim_wff_rv$D_IN;
+      end
+  end
+
+  // synopsys translate_off
+  `ifdef BSV_NO_INITIAL_BLOCKS
+  `else // not BSV_NO_INITIAL_BLOCKS
+  initial
+  begin
+    axi4_xactor_clearing = 1'h0;
+    axi4_xactor_shim_arff_rv = 110'h2AAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    axi4_xactor_shim_awff_rv = 110'h2AAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    axi4_xactor_shim_bff_rv = 19'h2AAAA;
+    axi4_xactor_shim_rff_rv =
+	532'hAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    axi4_xactor_shim_wff_rv =
+	578'h2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+  end
+  `endif // BSV_NO_INITIAL_BLOCKS
+  // synopsys translate_on
 
   // handling of system tasks
 
@@ -691,81 +1047,96 @@ module mkMem_Model(CLK,
   begin
     #0;
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_rl_rd_req &&
-	  (!_0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d7 ||
-	   !axi4_xactor_f_rd_addr_first_BITS_92_TO_29_ULE__ETC___d10))
-	begin
-	  v__h838 = $stime;
-	  #0;
-	end
-    v__h832 = v__h838 / 32'd10;
+      if (WILL_FIRE_RL_axi4_xactor_ug_slave_u_aw_warnDoPut)
+	$display("WARNING: putting into a Sink that can't be put into");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_axi4_xactor_ug_slave_u_w_warnDoPut)
+	$display("WARNING: putting into a Sink that can't be put into");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_axi4_xactor_ug_slave_u_ar_warnDoPut)
+	$display("WARNING: putting into a Sink that can't be put into");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_rd_req &&
-	  (!_0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d7 ||
-	   !axi4_xactor_f_rd_addr_first_BITS_92_TO_29_ULE__ETC___d10))
+	  (!_0b0_CONCAT_ddr4_num_CONCAT_0x0_2_ULE_axi4_xact_ETC___d54 ||
+	   !axi4_xactor_shim_arff_rv_port1__read__5_BITS_9_ETC___d57))
+	begin
+	  v__h3352 = $stime;
+	  #0;
+	end
+    v__h3346 = v__h3352 / 32'd10;
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_rl_rd_req &&
+	  (!_0b0_CONCAT_ddr4_num_CONCAT_0x0_2_ULE_axi4_xact_ETC___d54 ||
+	   !axi4_xactor_shim_arff_rv_port1__read__5_BITS_9_ETC___d57))
 	$display("%0d: Mem_Model [%0d]: rl_rd_req: @ %0h -> OUT OF BOUNDS",
-		 v__h832,
+		 v__h3346,
 		 ddr4_num,
-		 axi4_xactor_f_rd_addr$D_OUT[92:29]);
+		 axi4_xactor_shim_arff_rv$port1__read[92:29]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_rd_req &&
-	  _0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d7 &&
-	  axi4_xactor_f_rd_addr_first_BITS_92_TO_29_ULE__ETC___d10 &&
-	  NOT_axi4_xactor_f_rd_addr_first_BITS_92_TO_29__ETC___d19)
+	  _0b0_CONCAT_ddr4_num_CONCAT_0x0_2_ULE_axi4_xact_ETC___d54 &&
+	  axi4_xactor_shim_arff_rv_port1__read__5_BITS_9_ETC___d57 &&
+	  !axi4_xactor_shim_arff_rv_port1__read__5_BITS_9_ETC___d65)
 	begin
-	  v__h928 = $stime;
+	  v__h3436 = $stime;
 	  #0;
 	end
-    v__h922 = v__h928 / 32'd10;
+    v__h3430 = v__h3436 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_rd_req &&
-	  _0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d7 &&
-	  axi4_xactor_f_rd_addr_first_BITS_92_TO_29_ULE__ETC___d10 &&
-	  NOT_axi4_xactor_f_rd_addr_first_BITS_92_TO_29__ETC___d19)
+	  _0b0_CONCAT_ddr4_num_CONCAT_0x0_2_ULE_axi4_xact_ETC___d54 &&
+	  axi4_xactor_shim_arff_rv_port1__read__5_BITS_9_ETC___d57 &&
+	  !axi4_xactor_shim_arff_rv_port1__read__5_BITS_9_ETC___d65)
 	$display("%0d: Mem_Model [%0d]: rl_rd_req: @ %0h -> OUT OF IMPLEMENTED BOUNDS",
-		 v__h922,
+		 v__h3430,
 		 ddr4_num,
-		 axi4_xactor_f_rd_addr$D_OUT[92:29]);
+		 axi4_xactor_shim_arff_rv$port1__read[92:29]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_wr_req &&
-	  (!_0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d40 ||
-	   !axi4_xactor_f_wr_addr_first__8_BITS_92_TO_29_9_ETC___d42))
+	  (!_0b0_CONCAT_ddr4_num_CONCAT_0x0_2_ULE_axi4_xact_ETC___d92 ||
+	   !axi4_xactor_shim_awff_rv_port1__read__1_BITS_9_ETC___d94))
 	begin
-	  v__h1268 = $stime;
+	  v__h4005 = $stime;
 	  #0;
 	end
-    v__h1262 = v__h1268 / 32'd10;
+    v__h3999 = v__h4005 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_wr_req &&
-	  (!_0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d40 ||
-	   !axi4_xactor_f_wr_addr_first__8_BITS_92_TO_29_9_ETC___d42))
+	  (!_0b0_CONCAT_ddr4_num_CONCAT_0x0_2_ULE_axi4_xact_ETC___d92 ||
+	   !axi4_xactor_shim_awff_rv_port1__read__1_BITS_9_ETC___d94))
 	$display("%0d: Mem_Model [%0d]: rl_wr_req: @ %0h <= %0h strb %0h: OUT OF BOUNDS",
-		 v__h1262,
+		 v__h3999,
 		 ddr4_num,
-		 axi4_xactor_f_wr_addr$D_OUT[92:29],
-		 axi4_xactor_f_wr_data$D_OUT[576:65],
-		 axi4_xactor_f_wr_data$D_OUT[64:1]);
+		 axi4_xactor_shim_awff_rv$port1__read[92:29],
+		 axi4_xactor_shim_wff_rv$port1__read[576:65],
+		 axi4_xactor_shim_wff_rv$port1__read[64:1]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_wr_req &&
-	  _0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d40 &&
-	  axi4_xactor_f_wr_addr_first__8_BITS_92_TO_29_9_ETC___d42 &&
-	  !axi4_xactor_f_wr_addr_first__8_BITS_92_TO_29_9_ETC___d52)
+	  _0b0_CONCAT_ddr4_num_CONCAT_0x0_2_ULE_axi4_xact_ETC___d92 &&
+	  axi4_xactor_shim_awff_rv_port1__read__1_BITS_9_ETC___d94 &&
+	  !axi4_xactor_shim_awff_rv_port1__read__1_BITS_9_ETC___d103)
 	begin
-	  v__h1336 = $stime;
+	  v__h4073 = $stime;
 	  #0;
 	end
-    v__h1330 = v__h1336 / 32'd10;
+    v__h4067 = v__h4073 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_wr_req &&
-	  _0b0_CONCAT_ddr4_num_CONCAT_0x0_ULE_axi4_xactor_ETC___d40 &&
-	  axi4_xactor_f_wr_addr_first__8_BITS_92_TO_29_9_ETC___d42 &&
-	  !axi4_xactor_f_wr_addr_first__8_BITS_92_TO_29_9_ETC___d52)
+	  _0b0_CONCAT_ddr4_num_CONCAT_0x0_2_ULE_axi4_xact_ETC___d92 &&
+	  axi4_xactor_shim_awff_rv_port1__read__1_BITS_9_ETC___d94 &&
+	  !axi4_xactor_shim_awff_rv_port1__read__1_BITS_9_ETC___d103)
 	$display("%0d: Mem_Model [%0d]: rl_wr_req: @ %0h <= %0h strb %0h: OUT OF IMPLEMENTED BOUNDS",
-		 v__h1330,
+		 v__h4067,
 		 ddr4_num,
-		 axi4_xactor_f_wr_addr$D_OUT[92:29],
-		 axi4_xactor_f_wr_data$D_OUT[576:65],
-		 axi4_xactor_f_wr_data$D_OUT[64:1]);
+		 axi4_xactor_shim_awff_rv$port1__read[92:29],
+		 axi4_xactor_shim_wff_rv$port1__read[576:65],
+		 axi4_xactor_shim_wff_rv$port1__read[64:1]);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_axi4_xactor_ug_slave_u_b_warnDoDrop)
+	$display("WARNING: dropping from Source that can't be dropped from");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_axi4_xactor_ug_slave_u_r_warnDoDrop)
+	$display("WARNING: dropping from Source that can't be dropped from");
   end
   // synopsys translate_on
 endmodule  // mkMem_Model

@@ -9,18 +9,19 @@
 // RDY_server_reset_request_put   O     1 reg
 // RDY_server_reset_response_get  O     1 reg
 // valid                          O     1
-// word_fst                       O    64
-// word_snd                       O     5
+// word_fst                       O    64 reg
+// word_snd                       O     5 reg
 // verbosity                      I     4
 // CLK                            I     1 clock
 // RST_N                          I     1 reset
-// req_opcode                     I     7
-// req_f7                         I     7
-// req_rm                         I     3
-// req_rs2                        I     5
-// req_v1                         I    64
-// req_v2                         I    64
-// req_v3                         I    64
+// req_opcode                     I     7 reg
+// req_f7                         I     7 reg
+// req_rm                         I     3 reg
+// req_rs2                        I     5 reg
+// req_v1                         I    64 reg
+// req_v2                         I    64 reg
+// req_v3                         I    64 reg
+// req_valid                      I     1
 // EN_server_reset_request_put    I     1
 // EN_server_reset_response_get   I     1
 // EN_req                         I     1
@@ -59,6 +60,7 @@ module mkFBox_Top(verbosity,
 		  req_v1,
 		  req_v2,
 		  req_v3,
+		  req_valid,
 		  EN_req,
 
 		  valid,
@@ -86,6 +88,7 @@ module mkFBox_Top(verbosity,
   input  [63 : 0] req_v1;
   input  [63 : 0] req_v2;
   input  [63 : 0] req_v3;
+  input  req_valid;
   input  EN_req;
 
   // value method valid
@@ -115,6 +118,7 @@ module mkFBox_Top(verbosity,
        fbox_core$EN_server_reset_response_get,
        fbox_core$RDY_server_reset_request_put,
        fbox_core$RDY_server_reset_response_get,
+       fbox_core$req_valid,
        fbox_core$valid;
 
   // rule scheduling signals
@@ -163,6 +167,7 @@ module mkFBox_Top(verbosity,
 			.req_v1(fbox_core$req_v1),
 			.req_v2(fbox_core$req_v2),
 			.req_v3(fbox_core$req_v3),
+			.req_valid(fbox_core$req_valid),
 			.EN_server_reset_request_put(fbox_core$EN_server_reset_request_put),
 			.EN_server_reset_response_get(fbox_core$EN_server_reset_response_get),
 			.EN_req(fbox_core$EN_req),
@@ -180,6 +185,7 @@ module mkFBox_Top(verbosity,
   assign fbox_core$req_v1 = req_v1 ;
   assign fbox_core$req_v2 = req_v2 ;
   assign fbox_core$req_v3 = req_v3 ;
+  assign fbox_core$req_valid = req_valid ;
   assign fbox_core$EN_server_reset_request_put = EN_server_reset_request_put ;
   assign fbox_core$EN_server_reset_response_get =
 	     EN_server_reset_response_get ;

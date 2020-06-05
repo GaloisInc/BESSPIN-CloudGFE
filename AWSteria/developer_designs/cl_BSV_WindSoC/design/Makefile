@@ -2,8 +2,8 @@
 # Also prepares
 
 # This def points at the dir with the RTL generated from the BSV code
-#RTL_DIR = ../../../builds/RV64ACDFIMSU_Flute_verilator_AWS/Verilog_RTL
-RTL_DIR = ../../../builds/RV64ACDFIMSUxCHERI_Flute_verilator_AWS/Verilog_RTL
+RTL_DIR = ../../../builds/RV64ACDFIMSU_Flute_verilator_AWS/Verilog_RTL
+# RTL_DIR = ../../../builds/RV64ACDFIMSUxCHERI_Flute_verilator_AWS/Verilog_RTL
 
 # BLUESPECDIR should point at the bsc installation library, from where
 # we copy certain RTL files

@@ -10,8 +10,7 @@
 // RDY_cpu_reset_server_request_put  O     1 reg
 // cpu_reset_server_response_get  O     1 reg
 // RDY_cpu_reset_server_response_get  O     1 reg
-// cpu_imem_master_awvalid        O     1 reg
-// cpu_imem_master_awid           O     4 reg
+// cpu_imem_master_awid           O     6
 // cpu_imem_master_awaddr         O    64 reg
 // cpu_imem_master_awlen          O     8 reg
 // cpu_imem_master_awsize         O     3 reg
@@ -21,13 +20,13 @@
 // cpu_imem_master_awprot         O     3 reg
 // cpu_imem_master_awqos          O     4 reg
 // cpu_imem_master_awregion       O     4 reg
-// cpu_imem_master_wvalid         O     1 reg
+// cpu_imem_master_awvalid        O     1 reg
 // cpu_imem_master_wdata          O    64 reg
 // cpu_imem_master_wstrb          O     8 reg
 // cpu_imem_master_wlast          O     1 reg
+// cpu_imem_master_wvalid         O     1 reg
 // cpu_imem_master_bready         O     1 reg
-// cpu_imem_master_arvalid        O     1 reg
-// cpu_imem_master_arid           O     4 reg
+// cpu_imem_master_arid           O     6
 // cpu_imem_master_araddr         O    64 reg
 // cpu_imem_master_arlen          O     8 reg
 // cpu_imem_master_arsize         O     3 reg
@@ -37,35 +36,36 @@
 // cpu_imem_master_arprot         O     3 reg
 // cpu_imem_master_arqos          O     4 reg
 // cpu_imem_master_arregion       O     4 reg
+// cpu_imem_master_arvalid        O     1 reg
 // cpu_imem_master_rready         O     1 reg
-// cpu_dmem_master_awvalid        O     1 reg
-// cpu_dmem_master_awid           O     4 reg
-// cpu_dmem_master_awaddr         O    64 reg
-// cpu_dmem_master_awlen          O     8 reg
-// cpu_dmem_master_awsize         O     3 reg
-// cpu_dmem_master_awburst        O     2 reg
-// cpu_dmem_master_awlock         O     1 reg
-// cpu_dmem_master_awcache        O     4 reg
-// cpu_dmem_master_awprot         O     3 reg
-// cpu_dmem_master_awqos          O     4 reg
-// cpu_dmem_master_awregion       O     4 reg
-// cpu_dmem_master_wvalid         O     1 reg
-// cpu_dmem_master_wdata          O    64 reg
-// cpu_dmem_master_wstrb          O     8 reg
-// cpu_dmem_master_wlast          O     1 reg
-// cpu_dmem_master_bready         O     1 reg
-// cpu_dmem_master_arvalid        O     1 reg
-// cpu_dmem_master_arid           O     4 reg
-// cpu_dmem_master_araddr         O    64 reg
-// cpu_dmem_master_arlen          O     8 reg
-// cpu_dmem_master_arsize         O     3 reg
-// cpu_dmem_master_arburst        O     2 reg
-// cpu_dmem_master_arlock         O     1 reg
-// cpu_dmem_master_arcache        O     4 reg
-// cpu_dmem_master_arprot         O     3 reg
-// cpu_dmem_master_arqos          O     4 reg
-// cpu_dmem_master_arregion       O     4 reg
-// cpu_dmem_master_rready         O     1 reg
+// cpu_dmem_master_awid           O     6
+// cpu_dmem_master_awaddr         O    64
+// cpu_dmem_master_awlen          O     8
+// cpu_dmem_master_awsize         O     3
+// cpu_dmem_master_awburst        O     2
+// cpu_dmem_master_awlock         O     1
+// cpu_dmem_master_awcache        O     4
+// cpu_dmem_master_awprot         O     3
+// cpu_dmem_master_awqos          O     4
+// cpu_dmem_master_awregion       O     4
+// cpu_dmem_master_awvalid        O     1
+// cpu_dmem_master_wdata          O    64
+// cpu_dmem_master_wstrb          O     8
+// cpu_dmem_master_wlast          O     1
+// cpu_dmem_master_wvalid         O     1
+// cpu_dmem_master_bready         O     1
+// cpu_dmem_master_arid           O     6
+// cpu_dmem_master_araddr         O    64
+// cpu_dmem_master_arlen          O     8
+// cpu_dmem_master_arsize         O     3
+// cpu_dmem_master_arburst        O     2
+// cpu_dmem_master_arlock         O     1
+// cpu_dmem_master_arcache        O     4
+// cpu_dmem_master_arprot         O     3
+// cpu_dmem_master_arqos          O     4
+// cpu_dmem_master_arregion       O     4
+// cpu_dmem_master_arvalid        O     1
+// cpu_dmem_master_rready         O     1
 // CLK                            I     1 clock
 // RST_N                          I     1 reset
 // set_verbosity_verbosity        I     4 reg
@@ -73,26 +73,22 @@
 // cpu_reset_server_request_put   I     1 reg
 // cpu_imem_master_awready        I     1
 // cpu_imem_master_wready         I     1
-// cpu_imem_master_bvalid         I     1
-// cpu_imem_master_bid            I     4 reg
+// cpu_imem_master_bid            I     6 reg
 // cpu_imem_master_bresp          I     2 reg
 // cpu_imem_master_arready        I     1
-// cpu_imem_master_rvalid         I     1
-// cpu_imem_master_rid            I     4 reg
+// cpu_imem_master_rid            I     6 reg
 // cpu_imem_master_rdata          I    64 reg
 // cpu_imem_master_rresp          I     2 reg
 // cpu_imem_master_rlast          I     1 reg
 // cpu_dmem_master_awready        I     1
 // cpu_dmem_master_wready         I     1
-// cpu_dmem_master_bvalid         I     1
-// cpu_dmem_master_bid            I     4 reg
-// cpu_dmem_master_bresp          I     2 reg
+// cpu_dmem_master_bid            I     6
+// cpu_dmem_master_bresp          I     2
 // cpu_dmem_master_arready        I     1
-// cpu_dmem_master_rvalid         I     1
-// cpu_dmem_master_rid            I     4 reg
-// cpu_dmem_master_rdata          I    64 reg
-// cpu_dmem_master_rresp          I     2 reg
-// cpu_dmem_master_rlast          I     1 reg
+// cpu_dmem_master_rid            I     6
+// cpu_dmem_master_rdata          I    64
+// cpu_dmem_master_rresp          I     2
+// cpu_dmem_master_rlast          I     1
 // core_external_interrupt_sources_0_m_interrupt_req_set_not_clear  I     1
 // core_external_interrupt_sources_1_m_interrupt_req_set_not_clear  I     1
 // core_external_interrupt_sources_2_m_interrupt_req_set_not_clear  I     1
@@ -112,6 +108,10 @@
 // nmi_req_set_not_clear          I     1
 // EN_set_verbosity               I     1
 // EN_cpu_reset_server_request_put  I     1
+// cpu_imem_master_bvalid         I     1
+// cpu_imem_master_rvalid         I     1
+// cpu_dmem_master_bvalid         I     1
+// cpu_dmem_master_rvalid         I     1
 // EN_cpu_reset_server_response_get  I     1
 //
 // No combinational paths from inputs to outputs
@@ -147,8 +147,6 @@ module mkCore(CLK,
 	      cpu_reset_server_response_get,
 	      RDY_cpu_reset_server_response_get,
 
-	      cpu_imem_master_awvalid,
-
 	      cpu_imem_master_awid,
 
 	      cpu_imem_master_awaddr,
@@ -169,9 +167,9 @@ module mkCore(CLK,
 
 	      cpu_imem_master_awregion,
 
-	      cpu_imem_master_awready,
+	      cpu_imem_master_awvalid,
 
-	      cpu_imem_master_wvalid,
+	      cpu_imem_master_awready,
 
 	      cpu_imem_master_wdata,
 
@@ -179,15 +177,15 @@ module mkCore(CLK,
 
 	      cpu_imem_master_wlast,
 
+	      cpu_imem_master_wvalid,
+
 	      cpu_imem_master_wready,
 
-	      cpu_imem_master_bvalid,
 	      cpu_imem_master_bid,
 	      cpu_imem_master_bresp,
+	      cpu_imem_master_bvalid,
 
 	      cpu_imem_master_bready,
-
-	      cpu_imem_master_arvalid,
 
 	      cpu_imem_master_arid,
 
@@ -209,17 +207,17 @@ module mkCore(CLK,
 
 	      cpu_imem_master_arregion,
 
+	      cpu_imem_master_arvalid,
+
 	      cpu_imem_master_arready,
 
-	      cpu_imem_master_rvalid,
 	      cpu_imem_master_rid,
 	      cpu_imem_master_rdata,
 	      cpu_imem_master_rresp,
 	      cpu_imem_master_rlast,
+	      cpu_imem_master_rvalid,
 
 	      cpu_imem_master_rready,
-
-	      cpu_dmem_master_awvalid,
 
 	      cpu_dmem_master_awid,
 
@@ -241,9 +239,9 @@ module mkCore(CLK,
 
 	      cpu_dmem_master_awregion,
 
-	      cpu_dmem_master_awready,
+	      cpu_dmem_master_awvalid,
 
-	      cpu_dmem_master_wvalid,
+	      cpu_dmem_master_awready,
 
 	      cpu_dmem_master_wdata,
 
@@ -251,15 +249,15 @@ module mkCore(CLK,
 
 	      cpu_dmem_master_wlast,
 
+	      cpu_dmem_master_wvalid,
+
 	      cpu_dmem_master_wready,
 
-	      cpu_dmem_master_bvalid,
 	      cpu_dmem_master_bid,
 	      cpu_dmem_master_bresp,
+	      cpu_dmem_master_bvalid,
 
 	      cpu_dmem_master_bready,
-
-	      cpu_dmem_master_arvalid,
 
 	      cpu_dmem_master_arid,
 
@@ -281,13 +279,15 @@ module mkCore(CLK,
 
 	      cpu_dmem_master_arregion,
 
+	      cpu_dmem_master_arvalid,
+
 	      cpu_dmem_master_arready,
 
-	      cpu_dmem_master_rvalid,
 	      cpu_dmem_master_rid,
 	      cpu_dmem_master_rdata,
 	      cpu_dmem_master_rresp,
 	      cpu_dmem_master_rlast,
+	      cpu_dmem_master_rvalid,
 
 	      cpu_dmem_master_rready,
 
@@ -343,226 +343,226 @@ module mkCore(CLK,
   output cpu_reset_server_response_get;
   output RDY_cpu_reset_server_response_get;
 
-  // value method cpu_imem_master_m_awvalid
-  output cpu_imem_master_awvalid;
+  // value method cpu_imem_master_aw_awid
+  output [5 : 0] cpu_imem_master_awid;
 
-  // value method cpu_imem_master_m_awid
-  output [3 : 0] cpu_imem_master_awid;
-
-  // value method cpu_imem_master_m_awaddr
+  // value method cpu_imem_master_aw_awaddr
   output [63 : 0] cpu_imem_master_awaddr;
 
-  // value method cpu_imem_master_m_awlen
+  // value method cpu_imem_master_aw_awlen
   output [7 : 0] cpu_imem_master_awlen;
 
-  // value method cpu_imem_master_m_awsize
+  // value method cpu_imem_master_aw_awsize
   output [2 : 0] cpu_imem_master_awsize;
 
-  // value method cpu_imem_master_m_awburst
+  // value method cpu_imem_master_aw_awburst
   output [1 : 0] cpu_imem_master_awburst;
 
-  // value method cpu_imem_master_m_awlock
+  // value method cpu_imem_master_aw_awlock
   output cpu_imem_master_awlock;
 
-  // value method cpu_imem_master_m_awcache
+  // value method cpu_imem_master_aw_awcache
   output [3 : 0] cpu_imem_master_awcache;
 
-  // value method cpu_imem_master_m_awprot
+  // value method cpu_imem_master_aw_awprot
   output [2 : 0] cpu_imem_master_awprot;
 
-  // value method cpu_imem_master_m_awqos
+  // value method cpu_imem_master_aw_awqos
   output [3 : 0] cpu_imem_master_awqos;
 
-  // value method cpu_imem_master_m_awregion
+  // value method cpu_imem_master_aw_awregion
   output [3 : 0] cpu_imem_master_awregion;
 
-  // value method cpu_imem_master_m_awuser
+  // value method cpu_imem_master_aw_awuser
 
-  // action method cpu_imem_master_m_awready
+  // value method cpu_imem_master_aw_awvalid
+  output cpu_imem_master_awvalid;
+
+  // action method cpu_imem_master_aw_awready
   input  cpu_imem_master_awready;
 
-  // value method cpu_imem_master_m_wvalid
-  output cpu_imem_master_wvalid;
-
-  // value method cpu_imem_master_m_wdata
+  // value method cpu_imem_master_w_wdata
   output [63 : 0] cpu_imem_master_wdata;
 
-  // value method cpu_imem_master_m_wstrb
+  // value method cpu_imem_master_w_wstrb
   output [7 : 0] cpu_imem_master_wstrb;
 
-  // value method cpu_imem_master_m_wlast
+  // value method cpu_imem_master_w_wlast
   output cpu_imem_master_wlast;
 
-  // value method cpu_imem_master_m_wuser
+  // value method cpu_imem_master_w_wuser
 
-  // action method cpu_imem_master_m_wready
+  // value method cpu_imem_master_w_wvalid
+  output cpu_imem_master_wvalid;
+
+  // action method cpu_imem_master_w_wready
   input  cpu_imem_master_wready;
 
-  // action method cpu_imem_master_m_bvalid
-  input  cpu_imem_master_bvalid;
-  input  [3 : 0] cpu_imem_master_bid;
+  // action method cpu_imem_master_b_bflit
+  input  [5 : 0] cpu_imem_master_bid;
   input  [1 : 0] cpu_imem_master_bresp;
+  input  cpu_imem_master_bvalid;
 
-  // value method cpu_imem_master_m_bready
+  // value method cpu_imem_master_b_bready
   output cpu_imem_master_bready;
 
-  // value method cpu_imem_master_m_arvalid
-  output cpu_imem_master_arvalid;
+  // value method cpu_imem_master_ar_arid
+  output [5 : 0] cpu_imem_master_arid;
 
-  // value method cpu_imem_master_m_arid
-  output [3 : 0] cpu_imem_master_arid;
-
-  // value method cpu_imem_master_m_araddr
+  // value method cpu_imem_master_ar_araddr
   output [63 : 0] cpu_imem_master_araddr;
 
-  // value method cpu_imem_master_m_arlen
+  // value method cpu_imem_master_ar_arlen
   output [7 : 0] cpu_imem_master_arlen;
 
-  // value method cpu_imem_master_m_arsize
+  // value method cpu_imem_master_ar_arsize
   output [2 : 0] cpu_imem_master_arsize;
 
-  // value method cpu_imem_master_m_arburst
+  // value method cpu_imem_master_ar_arburst
   output [1 : 0] cpu_imem_master_arburst;
 
-  // value method cpu_imem_master_m_arlock
+  // value method cpu_imem_master_ar_arlock
   output cpu_imem_master_arlock;
 
-  // value method cpu_imem_master_m_arcache
+  // value method cpu_imem_master_ar_arcache
   output [3 : 0] cpu_imem_master_arcache;
 
-  // value method cpu_imem_master_m_arprot
+  // value method cpu_imem_master_ar_arprot
   output [2 : 0] cpu_imem_master_arprot;
 
-  // value method cpu_imem_master_m_arqos
+  // value method cpu_imem_master_ar_arqos
   output [3 : 0] cpu_imem_master_arqos;
 
-  // value method cpu_imem_master_m_arregion
+  // value method cpu_imem_master_ar_arregion
   output [3 : 0] cpu_imem_master_arregion;
 
-  // value method cpu_imem_master_m_aruser
+  // value method cpu_imem_master_ar_aruser
 
-  // action method cpu_imem_master_m_arready
+  // value method cpu_imem_master_ar_arvalid
+  output cpu_imem_master_arvalid;
+
+  // action method cpu_imem_master_ar_arready
   input  cpu_imem_master_arready;
 
-  // action method cpu_imem_master_m_rvalid
-  input  cpu_imem_master_rvalid;
-  input  [3 : 0] cpu_imem_master_rid;
+  // action method cpu_imem_master_r_rflit
+  input  [5 : 0] cpu_imem_master_rid;
   input  [63 : 0] cpu_imem_master_rdata;
   input  [1 : 0] cpu_imem_master_rresp;
   input  cpu_imem_master_rlast;
+  input  cpu_imem_master_rvalid;
 
-  // value method cpu_imem_master_m_rready
+  // value method cpu_imem_master_r_rready
   output cpu_imem_master_rready;
 
-  // value method cpu_dmem_master_m_awvalid
-  output cpu_dmem_master_awvalid;
+  // value method cpu_dmem_master_aw_awid
+  output [5 : 0] cpu_dmem_master_awid;
 
-  // value method cpu_dmem_master_m_awid
-  output [3 : 0] cpu_dmem_master_awid;
-
-  // value method cpu_dmem_master_m_awaddr
+  // value method cpu_dmem_master_aw_awaddr
   output [63 : 0] cpu_dmem_master_awaddr;
 
-  // value method cpu_dmem_master_m_awlen
+  // value method cpu_dmem_master_aw_awlen
   output [7 : 0] cpu_dmem_master_awlen;
 
-  // value method cpu_dmem_master_m_awsize
+  // value method cpu_dmem_master_aw_awsize
   output [2 : 0] cpu_dmem_master_awsize;
 
-  // value method cpu_dmem_master_m_awburst
+  // value method cpu_dmem_master_aw_awburst
   output [1 : 0] cpu_dmem_master_awburst;
 
-  // value method cpu_dmem_master_m_awlock
+  // value method cpu_dmem_master_aw_awlock
   output cpu_dmem_master_awlock;
 
-  // value method cpu_dmem_master_m_awcache
+  // value method cpu_dmem_master_aw_awcache
   output [3 : 0] cpu_dmem_master_awcache;
 
-  // value method cpu_dmem_master_m_awprot
+  // value method cpu_dmem_master_aw_awprot
   output [2 : 0] cpu_dmem_master_awprot;
 
-  // value method cpu_dmem_master_m_awqos
+  // value method cpu_dmem_master_aw_awqos
   output [3 : 0] cpu_dmem_master_awqos;
 
-  // value method cpu_dmem_master_m_awregion
+  // value method cpu_dmem_master_aw_awregion
   output [3 : 0] cpu_dmem_master_awregion;
 
-  // value method cpu_dmem_master_m_awuser
+  // value method cpu_dmem_master_aw_awuser
 
-  // action method cpu_dmem_master_m_awready
+  // value method cpu_dmem_master_aw_awvalid
+  output cpu_dmem_master_awvalid;
+
+  // action method cpu_dmem_master_aw_awready
   input  cpu_dmem_master_awready;
 
-  // value method cpu_dmem_master_m_wvalid
-  output cpu_dmem_master_wvalid;
-
-  // value method cpu_dmem_master_m_wdata
+  // value method cpu_dmem_master_w_wdata
   output [63 : 0] cpu_dmem_master_wdata;
 
-  // value method cpu_dmem_master_m_wstrb
+  // value method cpu_dmem_master_w_wstrb
   output [7 : 0] cpu_dmem_master_wstrb;
 
-  // value method cpu_dmem_master_m_wlast
+  // value method cpu_dmem_master_w_wlast
   output cpu_dmem_master_wlast;
 
-  // value method cpu_dmem_master_m_wuser
+  // value method cpu_dmem_master_w_wuser
 
-  // action method cpu_dmem_master_m_wready
+  // value method cpu_dmem_master_w_wvalid
+  output cpu_dmem_master_wvalid;
+
+  // action method cpu_dmem_master_w_wready
   input  cpu_dmem_master_wready;
 
-  // action method cpu_dmem_master_m_bvalid
-  input  cpu_dmem_master_bvalid;
-  input  [3 : 0] cpu_dmem_master_bid;
+  // action method cpu_dmem_master_b_bflit
+  input  [5 : 0] cpu_dmem_master_bid;
   input  [1 : 0] cpu_dmem_master_bresp;
+  input  cpu_dmem_master_bvalid;
 
-  // value method cpu_dmem_master_m_bready
+  // value method cpu_dmem_master_b_bready
   output cpu_dmem_master_bready;
 
-  // value method cpu_dmem_master_m_arvalid
-  output cpu_dmem_master_arvalid;
+  // value method cpu_dmem_master_ar_arid
+  output [5 : 0] cpu_dmem_master_arid;
 
-  // value method cpu_dmem_master_m_arid
-  output [3 : 0] cpu_dmem_master_arid;
-
-  // value method cpu_dmem_master_m_araddr
+  // value method cpu_dmem_master_ar_araddr
   output [63 : 0] cpu_dmem_master_araddr;
 
-  // value method cpu_dmem_master_m_arlen
+  // value method cpu_dmem_master_ar_arlen
   output [7 : 0] cpu_dmem_master_arlen;
 
-  // value method cpu_dmem_master_m_arsize
+  // value method cpu_dmem_master_ar_arsize
   output [2 : 0] cpu_dmem_master_arsize;
 
-  // value method cpu_dmem_master_m_arburst
+  // value method cpu_dmem_master_ar_arburst
   output [1 : 0] cpu_dmem_master_arburst;
 
-  // value method cpu_dmem_master_m_arlock
+  // value method cpu_dmem_master_ar_arlock
   output cpu_dmem_master_arlock;
 
-  // value method cpu_dmem_master_m_arcache
+  // value method cpu_dmem_master_ar_arcache
   output [3 : 0] cpu_dmem_master_arcache;
 
-  // value method cpu_dmem_master_m_arprot
+  // value method cpu_dmem_master_ar_arprot
   output [2 : 0] cpu_dmem_master_arprot;
 
-  // value method cpu_dmem_master_m_arqos
+  // value method cpu_dmem_master_ar_arqos
   output [3 : 0] cpu_dmem_master_arqos;
 
-  // value method cpu_dmem_master_m_arregion
+  // value method cpu_dmem_master_ar_arregion
   output [3 : 0] cpu_dmem_master_arregion;
 
-  // value method cpu_dmem_master_m_aruser
+  // value method cpu_dmem_master_ar_aruser
 
-  // action method cpu_dmem_master_m_arready
+  // value method cpu_dmem_master_ar_arvalid
+  output cpu_dmem_master_arvalid;
+
+  // action method cpu_dmem_master_ar_arready
   input  cpu_dmem_master_arready;
 
-  // action method cpu_dmem_master_m_rvalid
-  input  cpu_dmem_master_rvalid;
-  input  [3 : 0] cpu_dmem_master_rid;
+  // action method cpu_dmem_master_r_rflit
+  input  [5 : 0] cpu_dmem_master_rid;
   input  [63 : 0] cpu_dmem_master_rdata;
   input  [1 : 0] cpu_dmem_master_rresp;
   input  cpu_dmem_master_rlast;
+  input  cpu_dmem_master_rvalid;
 
-  // value method cpu_dmem_master_m_rready
+  // value method cpu_dmem_master_r_rready
   output cpu_dmem_master_rready;
 
   // action method core_external_interrupt_sources_0_m_interrupt_req
@@ -629,20 +629,20 @@ module mkCore(CLK,
 	       cpu_imem_master_arlen,
 	       cpu_imem_master_awlen,
 	       cpu_imem_master_wstrb;
+  wire [5 : 0] cpu_dmem_master_arid,
+	       cpu_dmem_master_awid,
+	       cpu_imem_master_arid,
+	       cpu_imem_master_awid;
   wire [3 : 0] cpu_dmem_master_arcache,
-	       cpu_dmem_master_arid,
 	       cpu_dmem_master_arqos,
 	       cpu_dmem_master_arregion,
 	       cpu_dmem_master_awcache,
-	       cpu_dmem_master_awid,
 	       cpu_dmem_master_awqos,
 	       cpu_dmem_master_awregion,
 	       cpu_imem_master_arcache,
-	       cpu_imem_master_arid,
 	       cpu_imem_master_arqos,
 	       cpu_imem_master_arregion,
 	       cpu_imem_master_awcache,
-	       cpu_imem_master_awid,
 	       cpu_imem_master_awqos,
 	       cpu_imem_master_awregion;
   wire [2 : 0] cpu_dmem_master_arprot,
@@ -678,6 +678,414 @@ module mkCore(CLK,
        cpu_imem_master_wvalid,
        cpu_reset_server_response_get;
 
+  // inlined wires
+  wire [172 : 0] split_0_doPut$wget, split_1_doPut$wget, split_2_doPut$wget;
+  wire [99 : 0] tagController_tmp_shimMaster_arff_rv$port0__write_1,
+		tagController_tmp_shimMaster_arff_rv$port1__read,
+		tagController_tmp_shimMaster_arff_rv$port2__read,
+		tagController_tmp_shimMaster_arff_rv$port3__read,
+		tagController_tmp_shimMaster_awff_rv$port0__write_1,
+		tagController_tmp_shimMaster_awff_rv$port1__read,
+		tagController_tmp_shimMaster_awff_rv$port2__read,
+		tagController_tmp_shimMaster_awff_rv$port3__read;
+  wire [98 : 0] tagController_tmp_shimSlave_arff_rv$port0__write_1,
+		tagController_tmp_shimSlave_arff_rv$port1__read,
+		tagController_tmp_shimSlave_arff_rv$port2__read,
+		tagController_tmp_shimSlave_arff_rv$port3__read,
+		tagController_tmp_shimSlave_awff_rv$port0__write_1,
+		tagController_tmp_shimSlave_awff_rv$port1__read,
+		tagController_tmp_shimSlave_awff_rv$port2__read,
+		tagController_tmp_shimSlave_awff_rv$port3__read;
+  wire [97 : 0] ssNoSynth_0_ar_buffer_enqw$wget,
+		ssNoSynth_1_ar_buffer_enqw$wget,
+		ssNoSynth_1_aw_buffer_enqw$wget,
+		ssNoSynth_2_ar_buffer_enqw$wget,
+		ssNoSynth_2_aw_buffer_enqw$wget,
+		tagController_tmp_ug_slave_u_ar_putWire$wget,
+		tagController_tmp_ug_slave_u_aw_putWire$wget;
+  wire [96 : 0] ifcs_0_1_noRoute_currentReq$port0__write_1,
+		ifcs_0_1_noRoute_currentReq$port1__read,
+		ifcs_0_noRoute_inner_currentReq$port0__write_1,
+		ifcs_0_noRoute_inner_currentReq$port1__read;
+  wire [74 : 0] tagController_tmp_shimSlave_wff_rv$port0__write_1,
+		tagController_tmp_shimSlave_wff_rv$port1__read,
+		tagController_tmp_shimSlave_wff_rv$port2__read,
+		tagController_tmp_shimSlave_wff_rv$port3__read;
+  wire [73 : 0] ssNoSynth_1_w_buffer_enqw$wget,
+		ssNoSynth_2_w_buffer_enqw$wget,
+		tagController_tmp_shimMaster_rff_rv$port0__write_1,
+		tagController_tmp_shimMaster_rff_rv$port1__read,
+		tagController_tmp_shimMaster_rff_rv$port2__read,
+		tagController_tmp_shimMaster_rff_rv$port3__read,
+		tagController_tmp_shimMaster_wff_rv$port0__write_1,
+		tagController_tmp_shimMaster_wff_rv$port1__read,
+		tagController_tmp_shimMaster_wff_rv$port2__read,
+		tagController_tmp_shimMaster_wff_rv$port3__read,
+		tagController_tmp_shimSlave_rff_rv$port0__write_1,
+		tagController_tmp_shimSlave_rff_rv$port1__read,
+		tagController_tmp_shimSlave_rff_rv$port2__read,
+		tagController_tmp_shimSlave_rff_rv$port3__read,
+		tagController_tmp_ug_slave_u_w_putWire$wget;
+  wire [72 : 0] cpu_imem_ug_u_r_putWire$wget,
+		tagController_tmp_ug_master_u_r_putWire$wget,
+		tagController_tmp_ug_slave_u_r_peekWire$wget;
+  wire [71 : 0] msNoSynth_0_r_buffer_enqw$wget,
+		msNoSynth_1_r_buffer_enqw$wget;
+  wire [8 : 0] ifcs_0_1_noRoute_flitCount$port0__write_1,
+	       ifcs_0_1_noRoute_flitCount$port1__write_1,
+	       ifcs_0_1_noRoute_flitCount$port2__read,
+	       ifcs_1_1_noRoute_flitCount$port1__write_1,
+	       ifcs_1_1_noRoute_flitCount$port2__read,
+	       tagController_tmp_shimMaster_bff_rv$port0__write_1,
+	       tagController_tmp_shimMaster_bff_rv$port1__read,
+	       tagController_tmp_shimMaster_bff_rv$port2__read,
+	       tagController_tmp_shimMaster_bff_rv$port3__read;
+  wire [7 : 0] tagController_tmp_shimSlave_bff_rv$port0__write_1,
+	       tagController_tmp_shimSlave_bff_rv$port1__read,
+	       tagController_tmp_shimSlave_bff_rv$port2__read,
+	       tagController_tmp_shimSlave_bff_rv$port3__read,
+	       tagController_tmp_ug_master_u_b_putWire$wget;
+  wire [6 : 0] cpu_imem_ug_u_b_putWire$wget,
+	       tagController_tmp_ug_slave_u_b_peekWire$wget;
+  wire [5 : 0] msNoSynth_0_b_buffer_enqw$wget, msNoSynth_1_b_buffer_enqw$wget;
+  wire cpu_imem_ug_u_ar_dropWire$whas,
+       cpu_imem_ug_u_aw_dropWire$whas,
+       cpu_imem_ug_u_b_putWire$whas,
+       cpu_imem_ug_u_r_putWire$whas,
+       cpu_imem_ug_u_w_dropWire$whas,
+       flitToSink_0$whas,
+       flitToSink_1$whas,
+       flitToSink_1_0$whas,
+       flitToSink_1_0_1$whas,
+       flitToSink_1_1$whas,
+       flitToSink_1_1_0$whas,
+       flitToSink_1_1_1$whas,
+       flitToSink_1_1_1_1$whas,
+       flitToSink_1_2$whas,
+       flitToSink_2$whas,
+       ifcs_0_noRoute_inner_currentReq$EN_port0__write,
+       ifcs_0_noRoute_inner_pendingReq$EN_port0__write,
+       ifcs_0_noRoute_inner_pendingReq$port1__read,
+       ifcs_0_noRoute_inner_pendingReq$port2__read,
+       merged_0_doDrop$whas,
+       msNoSynth_0_ar_dwReady$whas,
+       msNoSynth_0_b_buffer_enqw$whas,
+       msNoSynth_0_r_buffer_enqw$whas,
+       msNoSynth_0_w_dwReady$whas,
+       msNoSynth_1_b_buffer_enqw$whas,
+       msNoSynth_1_r_buffer_enqw$whas,
+       reqWires_0$wget,
+       reqWires_1$wget,
+       reqWires_1_0$wget,
+       reqWires_1_0_1$wget,
+       reqWires_1_1$wget,
+       reqWires_1_1_0$wget,
+       reqWires_1_1_1$wget,
+       reqWires_1_1_1_1$wget,
+       reqWires_1_1_2$wget,
+       reqWires_1_2$wget,
+       sourceSelect_1_0$whas,
+       sourceSelect_1_0_1$whas,
+       sourceSelect_1_1$whas,
+       sourceSelect_1_1_1$whas,
+       sourceSelect_1_2$whas,
+       ssNoSynth_0_b_dwReady$whas,
+       ssNoSynth_0_r_dwReady$whas,
+       ssNoSynth_0_w_buffer_enqw$whas,
+       ssNoSynth_1_b_dwReady$whas,
+       ssNoSynth_1_r_dwReady$whas,
+       ssNoSynth_1_w_buffer_enqw$whas,
+       ssNoSynth_2_b_dwReady$whas,
+       ssNoSynth_2_r_dwReady$whas,
+       ssNoSynth_2_w_buffer_enqw$whas,
+       tagController_tmp_shimMaster_arff_rv$EN_port0__write,
+       tagController_tmp_shimMaster_awff_rv$EN_port0__write,
+       tagController_tmp_shimMaster_wff_rv$EN_port0__write,
+       tagController_tmp_shimSlave_bff_rv$EN_port0__write,
+       tagController_tmp_shimSlave_rff_rv$EN_port0__write,
+       tagController_tmp_ug_master_u_ar_dropWire$whas,
+       tagController_tmp_ug_master_u_aw_dropWire$whas,
+       tagController_tmp_ug_master_u_b_putWire$whas,
+       tagController_tmp_ug_master_u_r_putWire$whas,
+       tagController_tmp_ug_master_u_w_dropWire$whas,
+       tagController_tmp_ug_slave_u_ar_putWire$whas,
+       tagController_tmp_ug_slave_u_aw_putWire$whas,
+       tagController_tmp_ug_slave_u_b_dropWire$whas,
+       tagController_tmp_ug_slave_u_r_dropWire$whas,
+       tagController_tmp_ug_slave_u_w_putWire$whas;
+
+  // register activeSource_0
+  reg activeSource_0;
+  wire activeSource_0$D_IN, activeSource_0$EN;
+
+  // register activeSource_1
+  reg activeSource_1;
+  wire activeSource_1$D_IN, activeSource_1$EN;
+
+  // register activeSource_1_0
+  reg activeSource_1_0;
+  wire activeSource_1_0$D_IN, activeSource_1_0$EN;
+
+  // register activeSource_1_0_1
+  reg activeSource_1_0_1;
+  wire activeSource_1_0_1$D_IN, activeSource_1_0_1$EN;
+
+  // register activeSource_1_1
+  reg activeSource_1_1;
+  wire activeSource_1_1$D_IN, activeSource_1_1$EN;
+
+  // register activeSource_1_1_0
+  reg activeSource_1_1_0;
+  reg activeSource_1_1_0$D_IN;
+  wire activeSource_1_1_0$EN;
+
+  // register activeSource_1_1_1
+  reg activeSource_1_1_1;
+  wire activeSource_1_1_1$D_IN, activeSource_1_1_1$EN;
+
+  // register activeSource_1_1_1_1
+  reg activeSource_1_1_1_1;
+  reg activeSource_1_1_1_1$D_IN;
+  wire activeSource_1_1_1_1$EN;
+
+  // register activeSource_1_1_2
+  reg activeSource_1_1_2;
+  reg activeSource_1_1_2$D_IN;
+  wire activeSource_1_1_2$EN;
+
+  // register activeSource_1_2
+  reg activeSource_1_2;
+  wire activeSource_1_2$D_IN, activeSource_1_2$EN;
+
+  // register arbiter_1_1_firstHot
+  reg arbiter_1_1_firstHot;
+  wire arbiter_1_1_firstHot$D_IN, arbiter_1_1_firstHot$EN;
+
+  // register arbiter_1_1_lastSelect
+  reg arbiter_1_1_lastSelect;
+  wire arbiter_1_1_lastSelect$D_IN, arbiter_1_1_lastSelect$EN;
+
+  // register arbiter_1_1_lastSelect_1
+  reg arbiter_1_1_lastSelect_1;
+  wire arbiter_1_1_lastSelect_1$D_IN, arbiter_1_1_lastSelect_1$EN;
+
+  // register arbiter_1_firstHot
+  reg arbiter_1_firstHot;
+  wire arbiter_1_firstHot$D_IN, arbiter_1_firstHot$EN;
+
+  // register arbiter_1_firstHot_1
+  reg arbiter_1_firstHot_1;
+  wire arbiter_1_firstHot_1$D_IN, arbiter_1_firstHot_1$EN;
+
+  // register arbiter_1_lastSelect
+  reg arbiter_1_lastSelect;
+  wire arbiter_1_lastSelect$D_IN, arbiter_1_lastSelect$EN;
+
+  // register arbiter_1_lastSelect_1
+  reg arbiter_1_lastSelect_1;
+  wire arbiter_1_lastSelect_1$D_IN, arbiter_1_lastSelect_1$EN;
+
+  // register arbiter_1_lastSelect_2
+  reg arbiter_1_lastSelect_2;
+  wire arbiter_1_lastSelect_2$D_IN, arbiter_1_lastSelect_2$EN;
+
+  // register arbiter_firstHot
+  reg arbiter_firstHot;
+  wire arbiter_firstHot$D_IN, arbiter_firstHot$EN;
+
+  // register arbiter_lastSelect
+  reg arbiter_lastSelect;
+  wire arbiter_lastSelect$D_IN, arbiter_lastSelect$EN;
+
+  // register ifcs_0_1_noRoute_currentReq
+  reg [96 : 0] ifcs_0_1_noRoute_currentReq;
+  wire [96 : 0] ifcs_0_1_noRoute_currentReq$D_IN;
+  wire ifcs_0_1_noRoute_currentReq$EN;
+
+  // register ifcs_0_1_noRoute_flitCount
+  reg [8 : 0] ifcs_0_1_noRoute_flitCount;
+  wire [8 : 0] ifcs_0_1_noRoute_flitCount$D_IN;
+  wire ifcs_0_1_noRoute_flitCount$EN;
+
+  // register ifcs_0_1_state
+  reg [1 : 0] ifcs_0_1_state;
+  wire [1 : 0] ifcs_0_1_state$D_IN;
+  wire ifcs_0_1_state$EN;
+
+  // register ifcs_0_1_state_1
+  reg ifcs_0_1_state_1;
+  wire ifcs_0_1_state_1$D_IN, ifcs_0_1_state_1$EN;
+
+  // register ifcs_0_noRoute_inner_currentReq
+  reg [96 : 0] ifcs_0_noRoute_inner_currentReq;
+  wire [96 : 0] ifcs_0_noRoute_inner_currentReq$D_IN;
+  wire ifcs_0_noRoute_inner_currentReq$EN;
+
+  // register ifcs_0_noRoute_inner_pendingReq
+  reg ifcs_0_noRoute_inner_pendingReq;
+  wire ifcs_0_noRoute_inner_pendingReq$D_IN,
+       ifcs_0_noRoute_inner_pendingReq$EN;
+
+  // register ifcs_0_state
+  reg [1 : 0] ifcs_0_state;
+  reg [1 : 0] ifcs_0_state$D_IN;
+  wire ifcs_0_state$EN;
+
+  // register ifcs_0_state_1
+  reg ifcs_0_state_1;
+  wire ifcs_0_state_1$D_IN, ifcs_0_state_1$EN;
+
+  // register ifcs_1_1_noRoute_currentReq
+  reg [96 : 0] ifcs_1_1_noRoute_currentReq;
+  wire [96 : 0] ifcs_1_1_noRoute_currentReq$D_IN;
+  wire ifcs_1_1_noRoute_currentReq$EN;
+
+  // register ifcs_1_1_noRoute_flitCount
+  reg [8 : 0] ifcs_1_1_noRoute_flitCount;
+  wire [8 : 0] ifcs_1_1_noRoute_flitCount$D_IN;
+  wire ifcs_1_1_noRoute_flitCount$EN;
+
+  // register ifcs_1_1_state
+  reg [1 : 0] ifcs_1_1_state;
+  wire [1 : 0] ifcs_1_1_state$D_IN;
+  wire ifcs_1_1_state$EN;
+
+  // register ifcs_1_1_state_1
+  reg ifcs_1_1_state_1;
+  wire ifcs_1_1_state_1$D_IN, ifcs_1_1_state_1$EN;
+
+  // register ifcs_1_noRoute_inner_currentReq
+  reg [96 : 0] ifcs_1_noRoute_inner_currentReq;
+  wire [96 : 0] ifcs_1_noRoute_inner_currentReq$D_IN;
+  wire ifcs_1_noRoute_inner_currentReq$EN;
+
+  // register ifcs_1_noRoute_inner_pendingReq
+  reg ifcs_1_noRoute_inner_pendingReq;
+  wire ifcs_1_noRoute_inner_pendingReq$D_IN,
+       ifcs_1_noRoute_inner_pendingReq$EN;
+
+  // register ifcs_1_state
+  reg [1 : 0] ifcs_1_state;
+  wire [1 : 0] ifcs_1_state$D_IN;
+  wire ifcs_1_state$EN;
+
+  // register ifcs_1_state_1
+  reg ifcs_1_state_1;
+  wire ifcs_1_state_1$D_IN, ifcs_1_state_1$EN;
+
+  // register ifcs_2_1_state
+  reg ifcs_2_1_state;
+  wire ifcs_2_1_state$D_IN, ifcs_2_1_state$EN;
+
+  // register ifcs_2_state
+  reg ifcs_2_state;
+  wire ifcs_2_state$D_IN, ifcs_2_state$EN;
+
+  // register merged_0_flitLeft
+  reg [7 : 0] merged_0_flitLeft;
+  wire [7 : 0] merged_0_flitLeft$D_IN;
+  wire merged_0_flitLeft$EN;
+
+  // register merged_1_flitLeft
+  reg [7 : 0] merged_1_flitLeft;
+  wire [7 : 0] merged_1_flitLeft$D_IN;
+  wire merged_1_flitLeft$EN;
+
+  // register split_0_flitLeft
+  reg [7 : 0] split_0_flitLeft;
+  wire [7 : 0] split_0_flitLeft$D_IN;
+  wire split_0_flitLeft$EN;
+
+  // register split_1_flitLeft
+  reg [7 : 0] split_1_flitLeft;
+  wire [7 : 0] split_1_flitLeft$D_IN;
+  wire split_1_flitLeft$EN;
+
+  // register split_2_flitLeft
+  reg [7 : 0] split_2_flitLeft;
+  wire [7 : 0] split_2_flitLeft$D_IN;
+  wire split_2_flitLeft$EN;
+
+  // register state
+  reg state;
+  wire state$D_IN, state$EN;
+
+  // register state_1
+  reg state_1;
+  wire state_1$D_IN, state_1$EN;
+
+  // register state_1_1
+  reg state_1_1;
+  wire state_1_1$D_IN, state_1_1$EN;
+
+  // register state_1_1_1
+  reg state_1_1_1;
+  wire state_1_1_1$D_IN, state_1_1_1$EN;
+
+  // register tagController_tmp_addrOffset
+  reg [63 : 0] tagController_tmp_addrOffset;
+  wire [63 : 0] tagController_tmp_addrOffset$D_IN;
+  wire tagController_tmp_addrOffset$EN;
+
+  // register tagController_tmp_doneSendingAW
+  reg tagController_tmp_doneSendingAW;
+  wire tagController_tmp_doneSendingAW$D_IN,
+       tagController_tmp_doneSendingAW$EN;
+
+  // register tagController_tmp_reset_done
+  reg tagController_tmp_reset_done;
+  wire tagController_tmp_reset_done$D_IN, tagController_tmp_reset_done$EN;
+
+  // register tagController_tmp_shimMaster_arff_rv
+  reg [99 : 0] tagController_tmp_shimMaster_arff_rv;
+  wire [99 : 0] tagController_tmp_shimMaster_arff_rv$D_IN;
+  wire tagController_tmp_shimMaster_arff_rv$EN;
+
+  // register tagController_tmp_shimMaster_awff_rv
+  reg [99 : 0] tagController_tmp_shimMaster_awff_rv;
+  wire [99 : 0] tagController_tmp_shimMaster_awff_rv$D_IN;
+  wire tagController_tmp_shimMaster_awff_rv$EN;
+
+  // register tagController_tmp_shimMaster_bff_rv
+  reg [8 : 0] tagController_tmp_shimMaster_bff_rv;
+  wire [8 : 0] tagController_tmp_shimMaster_bff_rv$D_IN;
+  wire tagController_tmp_shimMaster_bff_rv$EN;
+
+  // register tagController_tmp_shimMaster_rff_rv
+  reg [73 : 0] tagController_tmp_shimMaster_rff_rv;
+  wire [73 : 0] tagController_tmp_shimMaster_rff_rv$D_IN;
+  wire tagController_tmp_shimMaster_rff_rv$EN;
+
+  // register tagController_tmp_shimMaster_wff_rv
+  reg [73 : 0] tagController_tmp_shimMaster_wff_rv;
+  wire [73 : 0] tagController_tmp_shimMaster_wff_rv$D_IN;
+  wire tagController_tmp_shimMaster_wff_rv$EN;
+
+  // register tagController_tmp_shimSlave_arff_rv
+  reg [98 : 0] tagController_tmp_shimSlave_arff_rv;
+  wire [98 : 0] tagController_tmp_shimSlave_arff_rv$D_IN;
+  wire tagController_tmp_shimSlave_arff_rv$EN;
+
+  // register tagController_tmp_shimSlave_awff_rv
+  reg [98 : 0] tagController_tmp_shimSlave_awff_rv;
+  wire [98 : 0] tagController_tmp_shimSlave_awff_rv$D_IN;
+  wire tagController_tmp_shimSlave_awff_rv$EN;
+
+  // register tagController_tmp_shimSlave_bff_rv
+  reg [7 : 0] tagController_tmp_shimSlave_bff_rv;
+  wire [7 : 0] tagController_tmp_shimSlave_bff_rv$D_IN;
+  wire tagController_tmp_shimSlave_bff_rv$EN;
+
+  // register tagController_tmp_shimSlave_rff_rv
+  reg [73 : 0] tagController_tmp_shimSlave_rff_rv;
+  wire [73 : 0] tagController_tmp_shimSlave_rff_rv$D_IN;
+  wire tagController_tmp_shimSlave_rff_rv$EN;
+
+  // register tagController_tmp_shimSlave_wff_rv
+  reg [74 : 0] tagController_tmp_shimSlave_wff_rv;
+  wire [74 : 0] tagController_tmp_shimSlave_wff_rv$D_IN;
+  wire tagController_tmp_shimSlave_wff_rv$EN;
+
   // ports of submodule cpu
   wire [63 : 0] cpu$dmem_master_araddr,
 		cpu$dmem_master_awaddr,
@@ -694,6 +1102,10 @@ module mkCore(CLK,
 	       cpu$imem_master_arlen,
 	       cpu$imem_master_awlen,
 	       cpu$imem_master_wstrb;
+  wire [4 : 0] cpu$imem_master_arid,
+	       cpu$imem_master_awid,
+	       cpu$imem_master_bid,
+	       cpu$imem_master_rid;
   wire [3 : 0] cpu$dmem_master_arcache,
 	       cpu$dmem_master_arid,
 	       cpu$dmem_master_arqos,
@@ -705,15 +1117,11 @@ module mkCore(CLK,
 	       cpu$dmem_master_bid,
 	       cpu$dmem_master_rid,
 	       cpu$imem_master_arcache,
-	       cpu$imem_master_arid,
 	       cpu$imem_master_arqos,
 	       cpu$imem_master_arregion,
 	       cpu$imem_master_awcache,
-	       cpu$imem_master_awid,
 	       cpu$imem_master_awqos,
 	       cpu$imem_master_awregion,
-	       cpu$imem_master_bid,
-	       cpu$imem_master_rid,
 	       cpu$set_verbosity_verbosity;
   wire [2 : 0] cpu$dmem_master_arprot,
 	       cpu$dmem_master_arsize,
@@ -746,9 +1154,11 @@ module mkCore(CLK,
        cpu$dmem_master_bvalid,
        cpu$dmem_master_rlast,
        cpu$dmem_master_rready,
+       cpu$dmem_master_ruser,
        cpu$dmem_master_rvalid,
        cpu$dmem_master_wlast,
        cpu$dmem_master_wready,
+       cpu$dmem_master_wuser,
        cpu$dmem_master_wvalid,
        cpu$hart0_server_reset_request_put,
        cpu$hart0_server_reset_response_get,
@@ -762,15 +1172,83 @@ module mkCore(CLK,
        cpu$imem_master_bvalid,
        cpu$imem_master_rlast,
        cpu$imem_master_rready,
+       cpu$imem_master_ruser,
        cpu$imem_master_rvalid,
        cpu$imem_master_wlast,
        cpu$imem_master_wready,
+       cpu$imem_master_wuser,
        cpu$imem_master_wvalid,
        cpu$m_external_interrupt_req_set_not_clear,
        cpu$nmi_req_set_not_clear,
        cpu$s_external_interrupt_req_set_not_clear,
        cpu$software_interrupt_req_set_not_clear,
        cpu$timer_interrupt_req_set_not_clear;
+
+  // ports of submodule cpu_imem_b_buffer_ff
+  wire [6 : 0] cpu_imem_b_buffer_ff$D_IN, cpu_imem_b_buffer_ff$D_OUT;
+  wire cpu_imem_b_buffer_ff$CLR,
+       cpu_imem_b_buffer_ff$DEQ,
+       cpu_imem_b_buffer_ff$EMPTY_N,
+       cpu_imem_b_buffer_ff$ENQ,
+       cpu_imem_b_buffer_ff$FULL_N;
+
+  // ports of submodule cpu_imem_b_buffer_firstValid
+  wire cpu_imem_b_buffer_firstValid$D_IN,
+       cpu_imem_b_buffer_firstValid$EN,
+       cpu_imem_b_buffer_firstValid$Q_OUT;
+
+  // ports of submodule cpu_imem_r_buffer_ff
+  wire [72 : 0] cpu_imem_r_buffer_ff$D_IN, cpu_imem_r_buffer_ff$D_OUT;
+  wire cpu_imem_r_buffer_ff$CLR,
+       cpu_imem_r_buffer_ff$DEQ,
+       cpu_imem_r_buffer_ff$EMPTY_N,
+       cpu_imem_r_buffer_ff$ENQ,
+       cpu_imem_r_buffer_ff$FULL_N;
+
+  // ports of submodule cpu_imem_r_buffer_firstValid
+  wire cpu_imem_r_buffer_firstValid$D_IN,
+       cpu_imem_r_buffer_firstValid$EN,
+       cpu_imem_r_buffer_firstValid$Q_OUT;
+
+  // ports of submodule delay_shim_arff
+  wire [97 : 0] delay_shim_arff$D_IN, delay_shim_arff$D_OUT;
+  wire delay_shim_arff$CLR,
+       delay_shim_arff$DEQ,
+       delay_shim_arff$EMPTY_N,
+       delay_shim_arff$ENQ,
+       delay_shim_arff$FULL_N;
+
+  // ports of submodule delay_shim_awff
+  wire [97 : 0] delay_shim_awff$D_IN, delay_shim_awff$D_OUT;
+  wire delay_shim_awff$CLR,
+       delay_shim_awff$DEQ,
+       delay_shim_awff$EMPTY_N,
+       delay_shim_awff$ENQ,
+       delay_shim_awff$FULL_N;
+
+  // ports of submodule delay_shim_bff
+  wire [6 : 0] delay_shim_bff$D_IN, delay_shim_bff$D_OUT;
+  wire delay_shim_bff$CLR,
+       delay_shim_bff$DEQ,
+       delay_shim_bff$EMPTY_N,
+       delay_shim_bff$ENQ,
+       delay_shim_bff$FULL_N;
+
+  // ports of submodule delay_shim_rff
+  wire [72 : 0] delay_shim_rff$D_IN, delay_shim_rff$D_OUT;
+  wire delay_shim_rff$CLR,
+       delay_shim_rff$DEQ,
+       delay_shim_rff$EMPTY_N,
+       delay_shim_rff$ENQ,
+       delay_shim_rff$FULL_N;
+
+  // ports of submodule delay_shim_wff
+  wire [73 : 0] delay_shim_wff$D_IN, delay_shim_wff$D_OUT;
+  wire delay_shim_wff$CLR,
+       delay_shim_wff$DEQ,
+       delay_shim_wff$EMPTY_N,
+       delay_shim_wff$ENQ,
+       delay_shim_wff$FULL_N;
 
   // ports of submodule f_reset_reqs
   wire f_reset_reqs$CLR,
@@ -790,195 +1268,240 @@ module mkCore(CLK,
        f_reset_rsps$ENQ,
        f_reset_rsps$FULL_N;
 
-  // ports of submodule fabric_2x3
-  wire [63 : 0] fabric_2x3$v_from_masters_0_araddr,
-		fabric_2x3$v_from_masters_0_awaddr,
-		fabric_2x3$v_from_masters_0_rdata,
-		fabric_2x3$v_from_masters_0_wdata,
-		fabric_2x3$v_from_masters_1_araddr,
-		fabric_2x3$v_from_masters_1_awaddr,
-		fabric_2x3$v_from_masters_1_wdata,
-		fabric_2x3$v_to_slaves_0_araddr,
-		fabric_2x3$v_to_slaves_0_awaddr,
-		fabric_2x3$v_to_slaves_0_rdata,
-		fabric_2x3$v_to_slaves_0_wdata,
-		fabric_2x3$v_to_slaves_1_araddr,
-		fabric_2x3$v_to_slaves_1_awaddr,
-		fabric_2x3$v_to_slaves_1_rdata,
-		fabric_2x3$v_to_slaves_1_wdata,
-		fabric_2x3$v_to_slaves_2_araddr,
-		fabric_2x3$v_to_slaves_2_awaddr,
-		fabric_2x3$v_to_slaves_2_rdata,
-		fabric_2x3$v_to_slaves_2_wdata;
-  wire [7 : 0] fabric_2x3$v_from_masters_0_arlen,
-	       fabric_2x3$v_from_masters_0_awlen,
-	       fabric_2x3$v_from_masters_0_wstrb,
-	       fabric_2x3$v_from_masters_1_arlen,
-	       fabric_2x3$v_from_masters_1_awlen,
-	       fabric_2x3$v_from_masters_1_wstrb,
-	       fabric_2x3$v_to_slaves_0_arlen,
-	       fabric_2x3$v_to_slaves_0_awlen,
-	       fabric_2x3$v_to_slaves_0_wstrb,
-	       fabric_2x3$v_to_slaves_1_arlen,
-	       fabric_2x3$v_to_slaves_1_awlen,
-	       fabric_2x3$v_to_slaves_1_wstrb,
-	       fabric_2x3$v_to_slaves_2_arlen,
-	       fabric_2x3$v_to_slaves_2_awlen,
-	       fabric_2x3$v_to_slaves_2_wstrb;
-  wire [3 : 0] fabric_2x3$set_verbosity_verbosity,
-	       fabric_2x3$v_from_masters_0_arcache,
-	       fabric_2x3$v_from_masters_0_arid,
-	       fabric_2x3$v_from_masters_0_arqos,
-	       fabric_2x3$v_from_masters_0_arregion,
-	       fabric_2x3$v_from_masters_0_awcache,
-	       fabric_2x3$v_from_masters_0_awid,
-	       fabric_2x3$v_from_masters_0_awqos,
-	       fabric_2x3$v_from_masters_0_awregion,
-	       fabric_2x3$v_from_masters_0_bid,
-	       fabric_2x3$v_from_masters_0_rid,
-	       fabric_2x3$v_from_masters_1_arcache,
-	       fabric_2x3$v_from_masters_1_arid,
-	       fabric_2x3$v_from_masters_1_arqos,
-	       fabric_2x3$v_from_masters_1_arregion,
-	       fabric_2x3$v_from_masters_1_awcache,
-	       fabric_2x3$v_from_masters_1_awid,
-	       fabric_2x3$v_from_masters_1_awqos,
-	       fabric_2x3$v_from_masters_1_awregion,
-	       fabric_2x3$v_to_slaves_0_arcache,
-	       fabric_2x3$v_to_slaves_0_arid,
-	       fabric_2x3$v_to_slaves_0_arqos,
-	       fabric_2x3$v_to_slaves_0_arregion,
-	       fabric_2x3$v_to_slaves_0_awcache,
-	       fabric_2x3$v_to_slaves_0_awid,
-	       fabric_2x3$v_to_slaves_0_awqos,
-	       fabric_2x3$v_to_slaves_0_awregion,
-	       fabric_2x3$v_to_slaves_0_bid,
-	       fabric_2x3$v_to_slaves_0_rid,
-	       fabric_2x3$v_to_slaves_1_arcache,
-	       fabric_2x3$v_to_slaves_1_arid,
-	       fabric_2x3$v_to_slaves_1_arqos,
-	       fabric_2x3$v_to_slaves_1_arregion,
-	       fabric_2x3$v_to_slaves_1_awcache,
-	       fabric_2x3$v_to_slaves_1_awid,
-	       fabric_2x3$v_to_slaves_1_awqos,
-	       fabric_2x3$v_to_slaves_1_awregion,
-	       fabric_2x3$v_to_slaves_1_bid,
-	       fabric_2x3$v_to_slaves_1_rid,
-	       fabric_2x3$v_to_slaves_2_arcache,
-	       fabric_2x3$v_to_slaves_2_arid,
-	       fabric_2x3$v_to_slaves_2_arqos,
-	       fabric_2x3$v_to_slaves_2_arregion,
-	       fabric_2x3$v_to_slaves_2_awcache,
-	       fabric_2x3$v_to_slaves_2_awid,
-	       fabric_2x3$v_to_slaves_2_awqos,
-	       fabric_2x3$v_to_slaves_2_awregion,
-	       fabric_2x3$v_to_slaves_2_bid,
-	       fabric_2x3$v_to_slaves_2_rid;
-  wire [2 : 0] fabric_2x3$v_from_masters_0_arprot,
-	       fabric_2x3$v_from_masters_0_arsize,
-	       fabric_2x3$v_from_masters_0_awprot,
-	       fabric_2x3$v_from_masters_0_awsize,
-	       fabric_2x3$v_from_masters_1_arprot,
-	       fabric_2x3$v_from_masters_1_arsize,
-	       fabric_2x3$v_from_masters_1_awprot,
-	       fabric_2x3$v_from_masters_1_awsize,
-	       fabric_2x3$v_to_slaves_0_arprot,
-	       fabric_2x3$v_to_slaves_0_arsize,
-	       fabric_2x3$v_to_slaves_0_awprot,
-	       fabric_2x3$v_to_slaves_0_awsize,
-	       fabric_2x3$v_to_slaves_1_arprot,
-	       fabric_2x3$v_to_slaves_1_arsize,
-	       fabric_2x3$v_to_slaves_1_awprot,
-	       fabric_2x3$v_to_slaves_1_awsize,
-	       fabric_2x3$v_to_slaves_2_arprot,
-	       fabric_2x3$v_to_slaves_2_arsize,
-	       fabric_2x3$v_to_slaves_2_awprot,
-	       fabric_2x3$v_to_slaves_2_awsize;
-  wire [1 : 0] fabric_2x3$v_from_masters_0_arburst,
-	       fabric_2x3$v_from_masters_0_awburst,
-	       fabric_2x3$v_from_masters_0_bresp,
-	       fabric_2x3$v_from_masters_0_rresp,
-	       fabric_2x3$v_from_masters_1_arburst,
-	       fabric_2x3$v_from_masters_1_awburst,
-	       fabric_2x3$v_to_slaves_0_arburst,
-	       fabric_2x3$v_to_slaves_0_awburst,
-	       fabric_2x3$v_to_slaves_0_bresp,
-	       fabric_2x3$v_to_slaves_0_rresp,
-	       fabric_2x3$v_to_slaves_1_arburst,
-	       fabric_2x3$v_to_slaves_1_awburst,
-	       fabric_2x3$v_to_slaves_1_bresp,
-	       fabric_2x3$v_to_slaves_1_rresp,
-	       fabric_2x3$v_to_slaves_2_arburst,
-	       fabric_2x3$v_to_slaves_2_awburst,
-	       fabric_2x3$v_to_slaves_2_bresp,
-	       fabric_2x3$v_to_slaves_2_rresp;
-  wire fabric_2x3$EN_reset,
-       fabric_2x3$EN_set_verbosity,
-       fabric_2x3$RDY_reset,
-       fabric_2x3$v_from_masters_0_arlock,
-       fabric_2x3$v_from_masters_0_arready,
-       fabric_2x3$v_from_masters_0_arvalid,
-       fabric_2x3$v_from_masters_0_awlock,
-       fabric_2x3$v_from_masters_0_awready,
-       fabric_2x3$v_from_masters_0_awvalid,
-       fabric_2x3$v_from_masters_0_bready,
-       fabric_2x3$v_from_masters_0_bvalid,
-       fabric_2x3$v_from_masters_0_rlast,
-       fabric_2x3$v_from_masters_0_rready,
-       fabric_2x3$v_from_masters_0_rvalid,
-       fabric_2x3$v_from_masters_0_wlast,
-       fabric_2x3$v_from_masters_0_wready,
-       fabric_2x3$v_from_masters_0_wvalid,
-       fabric_2x3$v_from_masters_1_arlock,
-       fabric_2x3$v_from_masters_1_arvalid,
-       fabric_2x3$v_from_masters_1_awlock,
-       fabric_2x3$v_from_masters_1_awvalid,
-       fabric_2x3$v_from_masters_1_bready,
-       fabric_2x3$v_from_masters_1_rready,
-       fabric_2x3$v_from_masters_1_wlast,
-       fabric_2x3$v_from_masters_1_wvalid,
-       fabric_2x3$v_to_slaves_0_arlock,
-       fabric_2x3$v_to_slaves_0_arready,
-       fabric_2x3$v_to_slaves_0_arvalid,
-       fabric_2x3$v_to_slaves_0_awlock,
-       fabric_2x3$v_to_slaves_0_awready,
-       fabric_2x3$v_to_slaves_0_awvalid,
-       fabric_2x3$v_to_slaves_0_bready,
-       fabric_2x3$v_to_slaves_0_bvalid,
-       fabric_2x3$v_to_slaves_0_rlast,
-       fabric_2x3$v_to_slaves_0_rready,
-       fabric_2x3$v_to_slaves_0_rvalid,
-       fabric_2x3$v_to_slaves_0_wlast,
-       fabric_2x3$v_to_slaves_0_wready,
-       fabric_2x3$v_to_slaves_0_wvalid,
-       fabric_2x3$v_to_slaves_1_arlock,
-       fabric_2x3$v_to_slaves_1_arready,
-       fabric_2x3$v_to_slaves_1_arvalid,
-       fabric_2x3$v_to_slaves_1_awlock,
-       fabric_2x3$v_to_slaves_1_awready,
-       fabric_2x3$v_to_slaves_1_awvalid,
-       fabric_2x3$v_to_slaves_1_bready,
-       fabric_2x3$v_to_slaves_1_bvalid,
-       fabric_2x3$v_to_slaves_1_rlast,
-       fabric_2x3$v_to_slaves_1_rready,
-       fabric_2x3$v_to_slaves_1_rvalid,
-       fabric_2x3$v_to_slaves_1_wlast,
-       fabric_2x3$v_to_slaves_1_wready,
-       fabric_2x3$v_to_slaves_1_wvalid,
-       fabric_2x3$v_to_slaves_2_arlock,
-       fabric_2x3$v_to_slaves_2_arready,
-       fabric_2x3$v_to_slaves_2_arvalid,
-       fabric_2x3$v_to_slaves_2_awlock,
-       fabric_2x3$v_to_slaves_2_awready,
-       fabric_2x3$v_to_slaves_2_awvalid,
-       fabric_2x3$v_to_slaves_2_bready,
-       fabric_2x3$v_to_slaves_2_bvalid,
-       fabric_2x3$v_to_slaves_2_rlast,
-       fabric_2x3$v_to_slaves_2_rready,
-       fabric_2x3$v_to_slaves_2_rvalid,
-       fabric_2x3$v_to_slaves_2_wlast,
-       fabric_2x3$v_to_slaves_2_wready,
-       fabric_2x3$v_to_slaves_2_wvalid;
+  // ports of submodule ifcs_0_1_innerReq
+  wire [97 : 0] ifcs_0_1_innerReq$D_IN, ifcs_0_1_innerReq$D_OUT;
+  wire ifcs_0_1_innerReq$CLR,
+       ifcs_0_1_innerReq$DEQ,
+       ifcs_0_1_innerReq$EMPTY_N,
+       ifcs_0_1_innerReq$ENQ,
+       ifcs_0_1_innerReq$FULL_N;
+
+  // ports of submodule ifcs_0_1_innerRoute
+  wire [2 : 0] ifcs_0_1_innerRoute$D_IN, ifcs_0_1_innerRoute$D_OUT;
+  wire ifcs_0_1_innerRoute$CLR,
+       ifcs_0_1_innerRoute$DEQ,
+       ifcs_0_1_innerRoute$EMPTY_N,
+       ifcs_0_1_innerRoute$ENQ,
+       ifcs_0_1_innerRoute$FULL_N;
+
+  // ports of submodule ifcs_0_1_noRouteRsp
+  wire [71 : 0] ifcs_0_1_noRouteRsp$D_IN, ifcs_0_1_noRouteRsp$D_OUT;
+  wire ifcs_0_1_noRouteRsp$CLR,
+       ifcs_0_1_noRouteRsp$DEQ,
+       ifcs_0_1_noRouteRsp$EMPTY_N,
+       ifcs_0_1_noRouteRsp$ENQ,
+       ifcs_0_1_noRouteRsp$FULL_N;
+
+  // ports of submodule ifcs_0_1_routeBack
+  wire [1 : 0] ifcs_0_1_routeBack$D_IN, ifcs_0_1_routeBack$D_OUT;
+  wire ifcs_0_1_routeBack$CLR,
+       ifcs_0_1_routeBack$DEQ,
+       ifcs_0_1_routeBack$EMPTY_N,
+       ifcs_0_1_routeBack$ENQ,
+       ifcs_0_1_routeBack$FULL_N;
+
+  // ports of submodule ifcs_0_1_rspBack
+  wire [71 : 0] ifcs_0_1_rspBack$D_IN, ifcs_0_1_rspBack$D_OUT;
+  wire ifcs_0_1_rspBack$CLR,
+       ifcs_0_1_rspBack$DEQ,
+       ifcs_0_1_rspBack$EMPTY_N,
+       ifcs_0_1_rspBack$ENQ,
+       ifcs_0_1_rspBack$FULL_N;
+
+  // ports of submodule ifcs_0_innerReq
+  wire [172 : 0] ifcs_0_innerReq$D_IN, ifcs_0_innerReq$D_OUT;
+  wire ifcs_0_innerReq$CLR,
+       ifcs_0_innerReq$DEQ,
+       ifcs_0_innerReq$EMPTY_N,
+       ifcs_0_innerReq$ENQ,
+       ifcs_0_innerReq$FULL_N;
+
+  // ports of submodule ifcs_0_innerRoute
+  wire [2 : 0] ifcs_0_innerRoute$D_IN, ifcs_0_innerRoute$D_OUT;
+  wire ifcs_0_innerRoute$CLR,
+       ifcs_0_innerRoute$DEQ,
+       ifcs_0_innerRoute$EMPTY_N,
+       ifcs_0_innerRoute$ENQ,
+       ifcs_0_innerRoute$FULL_N;
+
+  // ports of submodule ifcs_0_noRouteRsp
+  wire [5 : 0] ifcs_0_noRouteRsp$D_IN, ifcs_0_noRouteRsp$D_OUT;
+  wire ifcs_0_noRouteRsp$CLR,
+       ifcs_0_noRouteRsp$DEQ,
+       ifcs_0_noRouteRsp$EMPTY_N,
+       ifcs_0_noRouteRsp$ENQ,
+       ifcs_0_noRouteRsp$FULL_N;
+
+  // ports of submodule ifcs_0_routeBack
+  wire [1 : 0] ifcs_0_routeBack$D_IN, ifcs_0_routeBack$D_OUT;
+  wire ifcs_0_routeBack$CLR,
+       ifcs_0_routeBack$DEQ,
+       ifcs_0_routeBack$EMPTY_N,
+       ifcs_0_routeBack$ENQ,
+       ifcs_0_routeBack$FULL_N;
+
+  // ports of submodule ifcs_0_rspBack
+  wire [5 : 0] ifcs_0_rspBack$D_IN, ifcs_0_rspBack$D_OUT;
+  wire ifcs_0_rspBack$CLR,
+       ifcs_0_rspBack$DEQ,
+       ifcs_0_rspBack$EMPTY_N,
+       ifcs_0_rspBack$ENQ,
+       ifcs_0_rspBack$FULL_N;
+
+  // ports of submodule ifcs_1_1_innerReq
+  wire [97 : 0] ifcs_1_1_innerReq$D_IN, ifcs_1_1_innerReq$D_OUT;
+  wire ifcs_1_1_innerReq$CLR,
+       ifcs_1_1_innerReq$DEQ,
+       ifcs_1_1_innerReq$EMPTY_N,
+       ifcs_1_1_innerReq$ENQ;
+
+  // ports of submodule ifcs_1_1_innerRoute
+  wire [2 : 0] ifcs_1_1_innerRoute$D_IN, ifcs_1_1_innerRoute$D_OUT;
+  wire ifcs_1_1_innerRoute$CLR,
+       ifcs_1_1_innerRoute$DEQ,
+       ifcs_1_1_innerRoute$EMPTY_N,
+       ifcs_1_1_innerRoute$ENQ;
+
+  // ports of submodule ifcs_1_1_noRouteRsp
+  wire [71 : 0] ifcs_1_1_noRouteRsp$D_IN, ifcs_1_1_noRouteRsp$D_OUT;
+  wire ifcs_1_1_noRouteRsp$CLR,
+       ifcs_1_1_noRouteRsp$DEQ,
+       ifcs_1_1_noRouteRsp$EMPTY_N,
+       ifcs_1_1_noRouteRsp$ENQ,
+       ifcs_1_1_noRouteRsp$FULL_N;
+
+  // ports of submodule ifcs_1_1_routeBack
+  wire [1 : 0] ifcs_1_1_routeBack$D_IN, ifcs_1_1_routeBack$D_OUT;
+  wire ifcs_1_1_routeBack$CLR,
+       ifcs_1_1_routeBack$DEQ,
+       ifcs_1_1_routeBack$EMPTY_N,
+       ifcs_1_1_routeBack$ENQ,
+       ifcs_1_1_routeBack$FULL_N;
+
+  // ports of submodule ifcs_1_1_rspBack
+  wire [71 : 0] ifcs_1_1_rspBack$D_IN, ifcs_1_1_rspBack$D_OUT;
+  wire ifcs_1_1_rspBack$CLR,
+       ifcs_1_1_rspBack$DEQ,
+       ifcs_1_1_rspBack$EMPTY_N,
+       ifcs_1_1_rspBack$ENQ,
+       ifcs_1_1_rspBack$FULL_N;
+
+  // ports of submodule ifcs_1_innerReq
+  wire [172 : 0] ifcs_1_innerReq$D_IN, ifcs_1_innerReq$D_OUT;
+  wire ifcs_1_innerReq$CLR,
+       ifcs_1_innerReq$DEQ,
+       ifcs_1_innerReq$EMPTY_N,
+       ifcs_1_innerReq$ENQ;
+
+  // ports of submodule ifcs_1_innerRoute
+  wire [2 : 0] ifcs_1_innerRoute$D_IN, ifcs_1_innerRoute$D_OUT;
+  wire ifcs_1_innerRoute$CLR,
+       ifcs_1_innerRoute$DEQ,
+       ifcs_1_innerRoute$EMPTY_N,
+       ifcs_1_innerRoute$ENQ;
+
+  // ports of submodule ifcs_1_noRouteRsp
+  wire [5 : 0] ifcs_1_noRouteRsp$D_IN, ifcs_1_noRouteRsp$D_OUT;
+  wire ifcs_1_noRouteRsp$CLR,
+       ifcs_1_noRouteRsp$DEQ,
+       ifcs_1_noRouteRsp$EMPTY_N,
+       ifcs_1_noRouteRsp$ENQ;
+
+  // ports of submodule ifcs_1_routeBack
+  wire [1 : 0] ifcs_1_routeBack$D_IN, ifcs_1_routeBack$D_OUT;
+  wire ifcs_1_routeBack$CLR,
+       ifcs_1_routeBack$DEQ,
+       ifcs_1_routeBack$EMPTY_N,
+       ifcs_1_routeBack$ENQ,
+       ifcs_1_routeBack$FULL_N;
+
+  // ports of submodule ifcs_1_rspBack
+  wire [5 : 0] ifcs_1_rspBack$D_IN, ifcs_1_rspBack$D_OUT;
+  wire ifcs_1_rspBack$CLR,
+       ifcs_1_rspBack$DEQ,
+       ifcs_1_rspBack$EMPTY_N,
+       ifcs_1_rspBack$ENQ,
+       ifcs_1_rspBack$FULL_N;
+
+  // ports of submodule ifcs_2_1_routeBack
+  wire [1 : 0] ifcs_2_1_routeBack$D_IN, ifcs_2_1_routeBack$D_OUT;
+  wire ifcs_2_1_routeBack$CLR,
+       ifcs_2_1_routeBack$DEQ,
+       ifcs_2_1_routeBack$EMPTY_N,
+       ifcs_2_1_routeBack$ENQ,
+       ifcs_2_1_routeBack$FULL_N;
+
+  // ports of submodule ifcs_2_1_rspBack
+  wire [71 : 0] ifcs_2_1_rspBack$D_IN, ifcs_2_1_rspBack$D_OUT;
+  wire ifcs_2_1_rspBack$CLR,
+       ifcs_2_1_rspBack$DEQ,
+       ifcs_2_1_rspBack$EMPTY_N,
+       ifcs_2_1_rspBack$ENQ,
+       ifcs_2_1_rspBack$FULL_N;
+
+  // ports of submodule ifcs_2_routeBack
+  wire [1 : 0] ifcs_2_routeBack$D_IN, ifcs_2_routeBack$D_OUT;
+  wire ifcs_2_routeBack$CLR,
+       ifcs_2_routeBack$DEQ,
+       ifcs_2_routeBack$EMPTY_N,
+       ifcs_2_routeBack$ENQ,
+       ifcs_2_routeBack$FULL_N;
+
+  // ports of submodule ifcs_2_rspBack
+  wire [5 : 0] ifcs_2_rspBack$D_IN, ifcs_2_rspBack$D_OUT;
+  wire ifcs_2_rspBack$CLR,
+       ifcs_2_rspBack$DEQ,
+       ifcs_2_rspBack$EMPTY_N,
+       ifcs_2_rspBack$ENQ,
+       ifcs_2_rspBack$FULL_N;
+
+  // ports of submodule msNoSynth_0_b_buffer_ff
+  wire [5 : 0] msNoSynth_0_b_buffer_ff$D_IN, msNoSynth_0_b_buffer_ff$D_OUT;
+  wire msNoSynth_0_b_buffer_ff$CLR,
+       msNoSynth_0_b_buffer_ff$DEQ,
+       msNoSynth_0_b_buffer_ff$EMPTY_N,
+       msNoSynth_0_b_buffer_ff$ENQ,
+       msNoSynth_0_b_buffer_ff$FULL_N;
+
+  // ports of submodule msNoSynth_0_b_buffer_firstValid
+  wire msNoSynth_0_b_buffer_firstValid$D_IN,
+       msNoSynth_0_b_buffer_firstValid$EN,
+       msNoSynth_0_b_buffer_firstValid$Q_OUT;
+
+  // ports of submodule msNoSynth_0_r_buffer_ff
+  wire [71 : 0] msNoSynth_0_r_buffer_ff$D_IN, msNoSynth_0_r_buffer_ff$D_OUT;
+  wire msNoSynth_0_r_buffer_ff$CLR,
+       msNoSynth_0_r_buffer_ff$DEQ,
+       msNoSynth_0_r_buffer_ff$EMPTY_N,
+       msNoSynth_0_r_buffer_ff$ENQ,
+       msNoSynth_0_r_buffer_ff$FULL_N;
+
+  // ports of submodule msNoSynth_0_r_buffer_firstValid
+  wire msNoSynth_0_r_buffer_firstValid$D_IN,
+       msNoSynth_0_r_buffer_firstValid$EN,
+       msNoSynth_0_r_buffer_firstValid$Q_OUT;
+
+  // ports of submodule msNoSynth_1_b_buffer_ff
+  wire [5 : 0] msNoSynth_1_b_buffer_ff$D_IN;
+  wire msNoSynth_1_b_buffer_ff$CLR,
+       msNoSynth_1_b_buffer_ff$DEQ,
+       msNoSynth_1_b_buffer_ff$ENQ,
+       msNoSynth_1_b_buffer_ff$FULL_N;
+
+  // ports of submodule msNoSynth_1_b_buffer_firstValid
+  wire msNoSynth_1_b_buffer_firstValid$D_IN,
+       msNoSynth_1_b_buffer_firstValid$EN;
+
+  // ports of submodule msNoSynth_1_r_buffer_ff
+  wire [71 : 0] msNoSynth_1_r_buffer_ff$D_IN;
+  wire msNoSynth_1_r_buffer_ff$CLR,
+       msNoSynth_1_r_buffer_ff$DEQ,
+       msNoSynth_1_r_buffer_ff$ENQ,
+       msNoSynth_1_r_buffer_ff$FULL_N;
+
+  // ports of submodule msNoSynth_1_r_buffer_firstValid
+  wire msNoSynth_1_r_buffer_firstValid$D_IN,
+       msNoSynth_1_r_buffer_firstValid$EN;
 
   // ports of submodule near_mem_io
   wire [63 : 0] near_mem_io$axi4_slave_araddr,
@@ -990,16 +1513,16 @@ module mkCore(CLK,
   wire [7 : 0] near_mem_io$axi4_slave_arlen,
 	       near_mem_io$axi4_slave_awlen,
 	       near_mem_io$axi4_slave_wstrb;
+  wire [4 : 0] near_mem_io$axi4_slave_arid,
+	       near_mem_io$axi4_slave_awid,
+	       near_mem_io$axi4_slave_bid,
+	       near_mem_io$axi4_slave_rid;
   wire [3 : 0] near_mem_io$axi4_slave_arcache,
-	       near_mem_io$axi4_slave_arid,
 	       near_mem_io$axi4_slave_arqos,
 	       near_mem_io$axi4_slave_arregion,
 	       near_mem_io$axi4_slave_awcache,
-	       near_mem_io$axi4_slave_awid,
 	       near_mem_io$axi4_slave_awqos,
-	       near_mem_io$axi4_slave_awregion,
-	       near_mem_io$axi4_slave_bid,
-	       near_mem_io$axi4_slave_rid;
+	       near_mem_io$axi4_slave_awregion;
   wire [2 : 0] near_mem_io$axi4_slave_arprot,
 	       near_mem_io$axi4_slave_arsize,
 	       near_mem_io$axi4_slave_awprot,
@@ -1027,9 +1550,11 @@ module mkCore(CLK,
        near_mem_io$axi4_slave_bvalid,
        near_mem_io$axi4_slave_rlast,
        near_mem_io$axi4_slave_rready,
+       near_mem_io$axi4_slave_ruser,
        near_mem_io$axi4_slave_rvalid,
        near_mem_io$axi4_slave_wlast,
        near_mem_io$axi4_slave_wready,
+       near_mem_io$axi4_slave_wuser,
        near_mem_io$axi4_slave_wvalid,
        near_mem_io$get_sw_interrupt_req_get,
        near_mem_io$get_timer_interrupt_req_get;
@@ -1044,16 +1569,16 @@ module mkCore(CLK,
   wire [7 : 0] plic$axi4_slave_arlen,
 	       plic$axi4_slave_awlen,
 	       plic$axi4_slave_wstrb;
+  wire [4 : 0] plic$axi4_slave_arid,
+	       plic$axi4_slave_awid,
+	       plic$axi4_slave_bid,
+	       plic$axi4_slave_rid;
   wire [3 : 0] plic$axi4_slave_arcache,
-	       plic$axi4_slave_arid,
 	       plic$axi4_slave_arqos,
 	       plic$axi4_slave_arregion,
 	       plic$axi4_slave_awcache,
-	       plic$axi4_slave_awid,
 	       plic$axi4_slave_awqos,
 	       plic$axi4_slave_awregion,
-	       plic$axi4_slave_bid,
-	       plic$axi4_slave_rid,
 	       plic$set_verbosity_verbosity;
   wire [2 : 0] plic$axi4_slave_arprot,
 	       plic$axi4_slave_arsize,
@@ -1080,9 +1605,11 @@ module mkCore(CLK,
        plic$axi4_slave_bvalid,
        plic$axi4_slave_rlast,
        plic$axi4_slave_rready,
+       plic$axi4_slave_ruser,
        plic$axi4_slave_rvalid,
        plic$axi4_slave_wlast,
        plic$axi4_slave_wready,
+       plic$axi4_slave_wuser,
        plic$axi4_slave_wvalid,
        plic$v_sources_0_m_interrupt_req_set_not_clear,
        plic$v_sources_10_m_interrupt_req_set_not_clear,
@@ -1104,40 +1631,400 @@ module mkCore(CLK,
        plic$v_targets_1_m_eip;
 
   // ports of submodule soc_map
+  wire [127 : 0] soc_map$m_near_mem_io_addr_range, soc_map$m_plic_addr_range;
   wire [63 : 0] soc_map$m_is_IO_addr_addr,
 		soc_map$m_is_mem_addr_addr,
-		soc_map$m_is_near_mem_IO_addr_addr,
-		soc_map$m_near_mem_io_addr_base,
-		soc_map$m_near_mem_io_addr_lim,
-		soc_map$m_plic_addr_base,
-		soc_map$m_plic_addr_lim;
+		soc_map$m_is_near_mem_IO_addr_addr;
+
+  // ports of submodule ssNoSynth_0_ar_buffer_ff
+  wire [97 : 0] ssNoSynth_0_ar_buffer_ff$D_IN, ssNoSynth_0_ar_buffer_ff$D_OUT;
+  wire ssNoSynth_0_ar_buffer_ff$CLR,
+       ssNoSynth_0_ar_buffer_ff$DEQ,
+       ssNoSynth_0_ar_buffer_ff$EMPTY_N,
+       ssNoSynth_0_ar_buffer_ff$ENQ,
+       ssNoSynth_0_ar_buffer_ff$FULL_N;
+
+  // ports of submodule ssNoSynth_0_ar_buffer_firstValid
+  wire ssNoSynth_0_ar_buffer_firstValid$D_IN,
+       ssNoSynth_0_ar_buffer_firstValid$EN,
+       ssNoSynth_0_ar_buffer_firstValid$Q_OUT;
+
+  // ports of submodule ssNoSynth_0_aw_buffer_ff
+  wire [97 : 0] ssNoSynth_0_aw_buffer_ff$D_IN, ssNoSynth_0_aw_buffer_ff$D_OUT;
+  wire ssNoSynth_0_aw_buffer_ff$CLR,
+       ssNoSynth_0_aw_buffer_ff$DEQ,
+       ssNoSynth_0_aw_buffer_ff$EMPTY_N,
+       ssNoSynth_0_aw_buffer_ff$ENQ,
+       ssNoSynth_0_aw_buffer_ff$FULL_N;
+
+  // ports of submodule ssNoSynth_0_aw_buffer_firstValid
+  wire ssNoSynth_0_aw_buffer_firstValid$D_IN,
+       ssNoSynth_0_aw_buffer_firstValid$EN,
+       ssNoSynth_0_aw_buffer_firstValid$Q_OUT;
+
+  // ports of submodule ssNoSynth_0_w_buffer_ff
+  wire [73 : 0] ssNoSynth_0_w_buffer_ff$D_IN, ssNoSynth_0_w_buffer_ff$D_OUT;
+  wire ssNoSynth_0_w_buffer_ff$CLR,
+       ssNoSynth_0_w_buffer_ff$DEQ,
+       ssNoSynth_0_w_buffer_ff$EMPTY_N,
+       ssNoSynth_0_w_buffer_ff$ENQ,
+       ssNoSynth_0_w_buffer_ff$FULL_N;
+
+  // ports of submodule ssNoSynth_0_w_buffer_firstValid
+  wire ssNoSynth_0_w_buffer_firstValid$D_IN,
+       ssNoSynth_0_w_buffer_firstValid$EN,
+       ssNoSynth_0_w_buffer_firstValid$Q_OUT;
+
+  // ports of submodule ssNoSynth_1_ar_buffer_ff
+  wire [97 : 0] ssNoSynth_1_ar_buffer_ff$D_IN, ssNoSynth_1_ar_buffer_ff$D_OUT;
+  wire ssNoSynth_1_ar_buffer_ff$CLR,
+       ssNoSynth_1_ar_buffer_ff$DEQ,
+       ssNoSynth_1_ar_buffer_ff$EMPTY_N,
+       ssNoSynth_1_ar_buffer_ff$ENQ,
+       ssNoSynth_1_ar_buffer_ff$FULL_N;
+
+  // ports of submodule ssNoSynth_1_ar_buffer_firstValid
+  wire ssNoSynth_1_ar_buffer_firstValid$D_IN,
+       ssNoSynth_1_ar_buffer_firstValid$EN,
+       ssNoSynth_1_ar_buffer_firstValid$Q_OUT;
+
+  // ports of submodule ssNoSynth_1_aw_buffer_ff
+  wire [97 : 0] ssNoSynth_1_aw_buffer_ff$D_IN, ssNoSynth_1_aw_buffer_ff$D_OUT;
+  wire ssNoSynth_1_aw_buffer_ff$CLR,
+       ssNoSynth_1_aw_buffer_ff$DEQ,
+       ssNoSynth_1_aw_buffer_ff$EMPTY_N,
+       ssNoSynth_1_aw_buffer_ff$ENQ,
+       ssNoSynth_1_aw_buffer_ff$FULL_N;
+
+  // ports of submodule ssNoSynth_1_aw_buffer_firstValid
+  wire ssNoSynth_1_aw_buffer_firstValid$D_IN,
+       ssNoSynth_1_aw_buffer_firstValid$EN,
+       ssNoSynth_1_aw_buffer_firstValid$Q_OUT;
+
+  // ports of submodule ssNoSynth_1_w_buffer_ff
+  wire [73 : 0] ssNoSynth_1_w_buffer_ff$D_IN, ssNoSynth_1_w_buffer_ff$D_OUT;
+  wire ssNoSynth_1_w_buffer_ff$CLR,
+       ssNoSynth_1_w_buffer_ff$DEQ,
+       ssNoSynth_1_w_buffer_ff$EMPTY_N,
+       ssNoSynth_1_w_buffer_ff$ENQ,
+       ssNoSynth_1_w_buffer_ff$FULL_N;
+
+  // ports of submodule ssNoSynth_1_w_buffer_firstValid
+  wire ssNoSynth_1_w_buffer_firstValid$D_IN,
+       ssNoSynth_1_w_buffer_firstValid$EN,
+       ssNoSynth_1_w_buffer_firstValid$Q_OUT;
+
+  // ports of submodule ssNoSynth_2_ar_buffer_ff
+  wire [97 : 0] ssNoSynth_2_ar_buffer_ff$D_IN, ssNoSynth_2_ar_buffer_ff$D_OUT;
+  wire ssNoSynth_2_ar_buffer_ff$CLR,
+       ssNoSynth_2_ar_buffer_ff$DEQ,
+       ssNoSynth_2_ar_buffer_ff$EMPTY_N,
+       ssNoSynth_2_ar_buffer_ff$ENQ,
+       ssNoSynth_2_ar_buffer_ff$FULL_N;
+
+  // ports of submodule ssNoSynth_2_ar_buffer_firstValid
+  wire ssNoSynth_2_ar_buffer_firstValid$D_IN,
+       ssNoSynth_2_ar_buffer_firstValid$EN,
+       ssNoSynth_2_ar_buffer_firstValid$Q_OUT;
+
+  // ports of submodule ssNoSynth_2_aw_buffer_ff
+  wire [97 : 0] ssNoSynth_2_aw_buffer_ff$D_IN, ssNoSynth_2_aw_buffer_ff$D_OUT;
+  wire ssNoSynth_2_aw_buffer_ff$CLR,
+       ssNoSynth_2_aw_buffer_ff$DEQ,
+       ssNoSynth_2_aw_buffer_ff$EMPTY_N,
+       ssNoSynth_2_aw_buffer_ff$ENQ,
+       ssNoSynth_2_aw_buffer_ff$FULL_N;
+
+  // ports of submodule ssNoSynth_2_aw_buffer_firstValid
+  wire ssNoSynth_2_aw_buffer_firstValid$D_IN,
+       ssNoSynth_2_aw_buffer_firstValid$EN,
+       ssNoSynth_2_aw_buffer_firstValid$Q_OUT;
+
+  // ports of submodule ssNoSynth_2_w_buffer_ff
+  wire [73 : 0] ssNoSynth_2_w_buffer_ff$D_IN, ssNoSynth_2_w_buffer_ff$D_OUT;
+  wire ssNoSynth_2_w_buffer_ff$CLR,
+       ssNoSynth_2_w_buffer_ff$DEQ,
+       ssNoSynth_2_w_buffer_ff$EMPTY_N,
+       ssNoSynth_2_w_buffer_ff$ENQ,
+       ssNoSynth_2_w_buffer_ff$FULL_N;
+
+  // ports of submodule ssNoSynth_2_w_buffer_firstValid
+  wire ssNoSynth_2_w_buffer_firstValid$D_IN,
+       ssNoSynth_2_w_buffer_firstValid$EN,
+       ssNoSynth_2_w_buffer_firstValid$Q_OUT;
+
+  // ports of submodule tagController_tmp_awreqff
+  wire [97 : 0] tagController_tmp_awreqff$D_IN,
+		tagController_tmp_awreqff$D_OUT;
+  wire tagController_tmp_awreqff$CLR,
+       tagController_tmp_awreqff$DEQ,
+       tagController_tmp_awreqff$EMPTY_N,
+       tagController_tmp_awreqff$ENQ,
+       tagController_tmp_awreqff$FULL_N;
+
+  // ports of submodule tagController_tmp_newRst
+  wire tagController_tmp_newRst$ASSERT_IN, tagController_tmp_newRst$OUT_RST;
+
+  // ports of submodule tagController_tmp_tagCon
+  wire [140 : 0] tagController_tmp_tagCon$cache_request_put_val,
+		 tagController_tmp_tagCon$memory_request_get;
+  wire [76 : 0] tagController_tmp_tagCon$cache_response_get,
+		tagController_tmp_tagCon$memory_response_put_val;
+  wire tagController_tmp_tagCon$EN_cache_request_put,
+       tagController_tmp_tagCon$EN_cache_response_get,
+       tagController_tmp_tagCon$EN_memory_request_get,
+       tagController_tmp_tagCon$EN_memory_response_put,
+       tagController_tmp_tagCon$RDY_cache_request_put,
+       tagController_tmp_tagCon$RDY_cache_response_get,
+       tagController_tmp_tagCon$RDY_memory_request_get,
+       tagController_tmp_tagCon$RDY_memory_response_put;
 
   // rule scheduling signals
-  wire CAN_FIRE_RL_rl_cpu_hart0_reset_complete,
+  wire CAN_FIRE_RL_arbitrate,
+       CAN_FIRE_RL_arbitrate_1,
+       CAN_FIRE_RL_arbitrate_2,
+       CAN_FIRE_RL_arbitrate_3,
+       CAN_FIRE_RL_burst,
+       CAN_FIRE_RL_burst_1,
+       CAN_FIRE_RL_burst_2,
+       CAN_FIRE_RL_burst_3,
+       CAN_FIRE_RL_burst_4,
+       CAN_FIRE_RL_burst_5,
+       CAN_FIRE_RL_burst_6,
+       CAN_FIRE_RL_burst_7,
+       CAN_FIRE_RL_burst_8,
+       CAN_FIRE_RL_burst_9,
+       CAN_FIRE_RL_checkSinkReady,
+       CAN_FIRE_RL_checkSinkReady_1,
+       CAN_FIRE_RL_checkSinkReady_2,
+       CAN_FIRE_RL_checkSinkReady_3,
+       CAN_FIRE_RL_checkSinkReady_4,
+       CAN_FIRE_RL_checkSinkReady_5,
+       CAN_FIRE_RL_checkSinkReady_6,
+       CAN_FIRE_RL_checkSinkReady_7,
+       CAN_FIRE_RL_checkSinkReady_8,
+       CAN_FIRE_RL_checkSinkReady_9,
+       CAN_FIRE_RL_cpu_imem_ar_forwardReady,
+       CAN_FIRE_RL_cpu_imem_aw_forwardReady,
+       CAN_FIRE_RL_cpu_imem_b_buffer_dequeue,
+       CAN_FIRE_RL_cpu_imem_b_buffer_enqueue,
+       CAN_FIRE_RL_cpu_imem_b_dropFlit,
+       CAN_FIRE_RL_cpu_imem_b_forwardFlit,
+       CAN_FIRE_RL_cpu_imem_r_buffer_dequeue,
+       CAN_FIRE_RL_cpu_imem_r_buffer_enqueue,
+       CAN_FIRE_RL_cpu_imem_r_dropFlit,
+       CAN_FIRE_RL_cpu_imem_r_forwardFlit,
+       CAN_FIRE_RL_cpu_imem_ug_u_ar_doDrop,
+       CAN_FIRE_RL_cpu_imem_ug_u_ar_setPeek,
+       CAN_FIRE_RL_cpu_imem_ug_u_ar_warnDoDrop,
+       CAN_FIRE_RL_cpu_imem_ug_u_aw_doDrop,
+       CAN_FIRE_RL_cpu_imem_ug_u_aw_setPeek,
+       CAN_FIRE_RL_cpu_imem_ug_u_aw_warnDoDrop,
+       CAN_FIRE_RL_cpu_imem_ug_u_b_doPut,
+       CAN_FIRE_RL_cpu_imem_ug_u_b_warnDoPut,
+       CAN_FIRE_RL_cpu_imem_ug_u_r_doPut,
+       CAN_FIRE_RL_cpu_imem_ug_u_r_warnDoPut,
+       CAN_FIRE_RL_cpu_imem_ug_u_w_doDrop,
+       CAN_FIRE_RL_cpu_imem_ug_u_w_setPeek,
+       CAN_FIRE_RL_cpu_imem_ug_u_w_warnDoDrop,
+       CAN_FIRE_RL_cpu_imem_w_forwardReady,
+       CAN_FIRE_RL_craftReq,
+       CAN_FIRE_RL_craftReq_1,
+       CAN_FIRE_RL_craftReq_2,
+       CAN_FIRE_RL_craftReq_3,
+       CAN_FIRE_RL_craftReq_4,
+       CAN_FIRE_RL_craftReq_5,
+       CAN_FIRE_RL_craftReq_6,
+       CAN_FIRE_RL_craftReq_7,
+       CAN_FIRE_RL_craftReq_8,
+       CAN_FIRE_RL_craftReq_9,
+       CAN_FIRE_RL_ifcs_0_1_drainFlits,
+       CAN_FIRE_RL_ifcs_0_1_drainNoRouteResponse,
+       CAN_FIRE_RL_ifcs_0_1_firstFlit,
+       CAN_FIRE_RL_ifcs_0_1_firstFlit_1,
+       CAN_FIRE_RL_ifcs_0_1_followFlits,
+       CAN_FIRE_RL_ifcs_0_1_followFlits_1,
+       CAN_FIRE_RL_ifcs_0_1_forwardRsp,
+       CAN_FIRE_RL_ifcs_0_1_nonRoutableFlit,
+       CAN_FIRE_RL_ifcs_0_1_nonRoutableGenRsp,
+       CAN_FIRE_RL_ifcs_0_drainFlits,
+       CAN_FIRE_RL_ifcs_0_drainNoRouteResponse,
+       CAN_FIRE_RL_ifcs_0_firstFlit,
+       CAN_FIRE_RL_ifcs_0_firstFlit_1,
+       CAN_FIRE_RL_ifcs_0_followFlits,
+       CAN_FIRE_RL_ifcs_0_followFlits_1,
+       CAN_FIRE_RL_ifcs_0_forwardRsp,
+       CAN_FIRE_RL_ifcs_0_nonRoutableFlit,
+       CAN_FIRE_RL_ifcs_0_nonRoutableGenRsp,
+       CAN_FIRE_RL_ifcs_1_1_drainNoRouteResponse,
+       CAN_FIRE_RL_ifcs_1_1_firstFlit_1,
+       CAN_FIRE_RL_ifcs_1_1_followFlits_1,
+       CAN_FIRE_RL_ifcs_1_1_forwardRsp,
+       CAN_FIRE_RL_ifcs_1_1_nonRoutableGenRsp,
+       CAN_FIRE_RL_ifcs_1_drainNoRouteResponse,
+       CAN_FIRE_RL_ifcs_1_firstFlit_1,
+       CAN_FIRE_RL_ifcs_1_followFlits_1,
+       CAN_FIRE_RL_ifcs_1_forwardRsp,
+       CAN_FIRE_RL_ifcs_2_1_firstFlit,
+       CAN_FIRE_RL_ifcs_2_1_followFlits,
+       CAN_FIRE_RL_ifcs_2_firstFlit,
+       CAN_FIRE_RL_ifcs_2_followFlits,
+       CAN_FIRE_RL_merged_0_genFirst,
+       CAN_FIRE_RL_merged_0_genOther,
+       CAN_FIRE_RL_mkConnectionGetPut,
+       CAN_FIRE_RL_mkConnectionGetPut_1,
+       CAN_FIRE_RL_mkConnectionGetPut_2,
+       CAN_FIRE_RL_mkConnectionGetPut_3,
+       CAN_FIRE_RL_mkConnectionGetPut_4,
+       CAN_FIRE_RL_msNoSynth_0_ar_forwardReady,
+       CAN_FIRE_RL_msNoSynth_0_aw_forwardReady,
+       CAN_FIRE_RL_msNoSynth_0_b_buffer_dequeue,
+       CAN_FIRE_RL_msNoSynth_0_b_buffer_enqueue,
+       CAN_FIRE_RL_msNoSynth_0_b_dropFlit,
+       CAN_FIRE_RL_msNoSynth_0_b_forwardFlit,
+       CAN_FIRE_RL_msNoSynth_0_r_buffer_dequeue,
+       CAN_FIRE_RL_msNoSynth_0_r_buffer_enqueue,
+       CAN_FIRE_RL_msNoSynth_0_r_dropFlit,
+       CAN_FIRE_RL_msNoSynth_0_r_forwardFlit,
+       CAN_FIRE_RL_msNoSynth_0_w_forwardReady,
+       CAN_FIRE_RL_msNoSynth_1_b_buffer_dequeue,
+       CAN_FIRE_RL_msNoSynth_1_b_buffer_enqueue,
+       CAN_FIRE_RL_msNoSynth_1_r_buffer_dequeue,
+       CAN_FIRE_RL_msNoSynth_1_r_buffer_enqueue,
+       CAN_FIRE_RL_rl_cpu_hart0_reset_complete,
        CAN_FIRE_RL_rl_cpu_hart0_reset_from_soc_start,
-       CAN_FIRE_RL_rl_rd_addr_channel,
-       CAN_FIRE_RL_rl_rd_addr_channel_1,
-       CAN_FIRE_RL_rl_rd_addr_channel_2,
-       CAN_FIRE_RL_rl_rd_addr_channel_3,
-       CAN_FIRE_RL_rl_rd_data_channel,
-       CAN_FIRE_RL_rl_rd_data_channel_1,
-       CAN_FIRE_RL_rl_rd_data_channel_2,
-       CAN_FIRE_RL_rl_rd_data_channel_3,
        CAN_FIRE_RL_rl_relay_external_interrupts,
        CAN_FIRE_RL_rl_relay_sw_interrupts,
        CAN_FIRE_RL_rl_relay_timer_interrupts,
-       CAN_FIRE_RL_rl_wr_addr_channel,
-       CAN_FIRE_RL_rl_wr_addr_channel_1,
-       CAN_FIRE_RL_rl_wr_addr_channel_2,
-       CAN_FIRE_RL_rl_wr_addr_channel_3,
-       CAN_FIRE_RL_rl_wr_data_channel,
-       CAN_FIRE_RL_rl_wr_data_channel_1,
-       CAN_FIRE_RL_rl_wr_data_channel_2,
-       CAN_FIRE_RL_rl_wr_data_channel_3,
-       CAN_FIRE_RL_rl_wr_response_channel,
-       CAN_FIRE_RL_rl_wr_response_channel_1,
-       CAN_FIRE_RL_rl_wr_response_channel_2,
-       CAN_FIRE_RL_rl_wr_response_channel_3,
+       CAN_FIRE_RL_sink_selected,
+       CAN_FIRE_RL_sink_selected_1,
+       CAN_FIRE_RL_sink_selected_2,
+       CAN_FIRE_RL_sink_selected_3,
+       CAN_FIRE_RL_sink_selected_4,
+       CAN_FIRE_RL_sink_selected_5,
+       CAN_FIRE_RL_sink_selected_6,
+       CAN_FIRE_RL_sink_selected_7,
+       CAN_FIRE_RL_sink_selected_8,
+       CAN_FIRE_RL_sink_selected_9,
+       CAN_FIRE_RL_source_selected,
+       CAN_FIRE_RL_source_selected_1,
+       CAN_FIRE_RL_source_selected_2,
+       CAN_FIRE_RL_source_selected_3,
+       CAN_FIRE_RL_source_selected_4,
+       CAN_FIRE_RL_source_selected_5,
+       CAN_FIRE_RL_source_selected_6,
+       CAN_FIRE_RL_source_selected_7,
+       CAN_FIRE_RL_source_selected_8,
+       CAN_FIRE_RL_source_selected_9,
+       CAN_FIRE_RL_split_0_putFirst,
+       CAN_FIRE_RL_split_0_putOther,
+       CAN_FIRE_RL_split_1_putFirst,
+       CAN_FIRE_RL_split_1_putOther,
+       CAN_FIRE_RL_split_2_putFirst,
+       CAN_FIRE_RL_split_2_putOther,
+       CAN_FIRE_RL_ssNoSynth_0_ar_buffer_dequeue,
+       CAN_FIRE_RL_ssNoSynth_0_ar_buffer_enqueue,
+       CAN_FIRE_RL_ssNoSynth_0_ar_dropFlit,
+       CAN_FIRE_RL_ssNoSynth_0_ar_forwardFlit,
+       CAN_FIRE_RL_ssNoSynth_0_aw_buffer_dequeue,
+       CAN_FIRE_RL_ssNoSynth_0_aw_buffer_enqueue,
+       CAN_FIRE_RL_ssNoSynth_0_aw_dropFlit,
+       CAN_FIRE_RL_ssNoSynth_0_aw_forwardFlit,
+       CAN_FIRE_RL_ssNoSynth_0_b_forwardReady,
+       CAN_FIRE_RL_ssNoSynth_0_r_forwardReady,
+       CAN_FIRE_RL_ssNoSynth_0_w_buffer_dequeue,
+       CAN_FIRE_RL_ssNoSynth_0_w_buffer_enqueue,
+       CAN_FIRE_RL_ssNoSynth_0_w_dropFlit,
+       CAN_FIRE_RL_ssNoSynth_0_w_forwardFlit,
+       CAN_FIRE_RL_ssNoSynth_1_ar_buffer_dequeue,
+       CAN_FIRE_RL_ssNoSynth_1_ar_buffer_enqueue,
+       CAN_FIRE_RL_ssNoSynth_1_ar_dropFlit,
+       CAN_FIRE_RL_ssNoSynth_1_ar_forwardFlit,
+       CAN_FIRE_RL_ssNoSynth_1_aw_buffer_dequeue,
+       CAN_FIRE_RL_ssNoSynth_1_aw_buffer_enqueue,
+       CAN_FIRE_RL_ssNoSynth_1_aw_dropFlit,
+       CAN_FIRE_RL_ssNoSynth_1_aw_forwardFlit,
+       CAN_FIRE_RL_ssNoSynth_1_b_forwardReady,
+       CAN_FIRE_RL_ssNoSynth_1_r_forwardReady,
+       CAN_FIRE_RL_ssNoSynth_1_w_buffer_dequeue,
+       CAN_FIRE_RL_ssNoSynth_1_w_buffer_enqueue,
+       CAN_FIRE_RL_ssNoSynth_1_w_dropFlit,
+       CAN_FIRE_RL_ssNoSynth_1_w_forwardFlit,
+       CAN_FIRE_RL_ssNoSynth_2_ar_buffer_dequeue,
+       CAN_FIRE_RL_ssNoSynth_2_ar_buffer_enqueue,
+       CAN_FIRE_RL_ssNoSynth_2_ar_dropFlit,
+       CAN_FIRE_RL_ssNoSynth_2_ar_forwardFlit,
+       CAN_FIRE_RL_ssNoSynth_2_aw_buffer_dequeue,
+       CAN_FIRE_RL_ssNoSynth_2_aw_buffer_enqueue,
+       CAN_FIRE_RL_ssNoSynth_2_aw_dropFlit,
+       CAN_FIRE_RL_ssNoSynth_2_aw_forwardFlit,
+       CAN_FIRE_RL_ssNoSynth_2_b_forwardReady,
+       CAN_FIRE_RL_ssNoSynth_2_r_forwardReady,
+       CAN_FIRE_RL_ssNoSynth_2_w_buffer_dequeue,
+       CAN_FIRE_RL_ssNoSynth_2_w_buffer_enqueue,
+       CAN_FIRE_RL_ssNoSynth_2_w_dropFlit,
+       CAN_FIRE_RL_ssNoSynth_2_w_forwardFlit,
+       CAN_FIRE_RL_tagController_tmp_getCacheAW,
+       CAN_FIRE_RL_tagController_tmp_passCacheRead,
+       CAN_FIRE_RL_tagController_tmp_passCacheResponse,
+       CAN_FIRE_RL_tagController_tmp_passCacheWrite,
+       CAN_FIRE_RL_tagController_tmp_passMemoryRequest,
+       CAN_FIRE_RL_tagController_tmp_passMemoryResponseRead,
+       CAN_FIRE_RL_tagController_tmp_passMemoryResponseWrite,
+       CAN_FIRE_RL_tagController_tmp_propagateReset,
+       CAN_FIRE_RL_tagController_tmp_ug_master_u_ar_doDrop,
+       CAN_FIRE_RL_tagController_tmp_ug_master_u_ar_setPeek,
+       CAN_FIRE_RL_tagController_tmp_ug_master_u_ar_warnDoDrop,
+       CAN_FIRE_RL_tagController_tmp_ug_master_u_aw_doDrop,
+       CAN_FIRE_RL_tagController_tmp_ug_master_u_aw_setPeek,
+       CAN_FIRE_RL_tagController_tmp_ug_master_u_aw_warnDoDrop,
+       CAN_FIRE_RL_tagController_tmp_ug_master_u_b_doPut,
+       CAN_FIRE_RL_tagController_tmp_ug_master_u_b_warnDoPut,
+       CAN_FIRE_RL_tagController_tmp_ug_master_u_r_doPut,
+       CAN_FIRE_RL_tagController_tmp_ug_master_u_r_warnDoPut,
+       CAN_FIRE_RL_tagController_tmp_ug_master_u_w_doDrop,
+       CAN_FIRE_RL_tagController_tmp_ug_master_u_w_setPeek,
+       CAN_FIRE_RL_tagController_tmp_ug_master_u_w_warnDoDrop,
+       CAN_FIRE_RL_tagController_tmp_ug_slave_u_ar_doPut,
+       CAN_FIRE_RL_tagController_tmp_ug_slave_u_ar_warnDoPut,
+       CAN_FIRE_RL_tagController_tmp_ug_slave_u_aw_doPut,
+       CAN_FIRE_RL_tagController_tmp_ug_slave_u_aw_warnDoPut,
+       CAN_FIRE_RL_tagController_tmp_ug_slave_u_b_doDrop,
+       CAN_FIRE_RL_tagController_tmp_ug_slave_u_b_setPeek,
+       CAN_FIRE_RL_tagController_tmp_ug_slave_u_b_warnDoDrop,
+       CAN_FIRE_RL_tagController_tmp_ug_slave_u_r_doDrop,
+       CAN_FIRE_RL_tagController_tmp_ug_slave_u_r_setPeek,
+       CAN_FIRE_RL_tagController_tmp_ug_slave_u_r_warnDoDrop,
+       CAN_FIRE_RL_tagController_tmp_ug_slave_u_w_doPut,
+       CAN_FIRE_RL_tagController_tmp_ug_slave_u_w_warnDoPut,
+       CAN_FIRE___me_check_129,
+       CAN_FIRE___me_check_130,
+       CAN_FIRE___me_check_131,
+       CAN_FIRE___me_check_133,
+       CAN_FIRE___me_check_138,
+       CAN_FIRE___me_check_140,
+       CAN_FIRE___me_check_142,
+       CAN_FIRE___me_check_150,
+       CAN_FIRE___me_check_152,
+       CAN_FIRE___me_check_154,
+       CAN_FIRE___me_check_163,
+       CAN_FIRE___me_check_165,
+       CAN_FIRE___me_check_167,
+       CAN_FIRE___me_check_169,
+       CAN_FIRE___me_check_171,
+       CAN_FIRE___me_check_172,
+       CAN_FIRE___me_check_173,
+       CAN_FIRE___me_check_175,
+       CAN_FIRE___me_check_181,
+       CAN_FIRE___me_check_183,
+       CAN_FIRE___me_check_185,
+       CAN_FIRE___me_check_193,
+       CAN_FIRE___me_check_195,
+       CAN_FIRE___me_check_197,
+       CAN_FIRE___me_check_206,
+       CAN_FIRE___me_check_208,
+       CAN_FIRE___me_check_210,
+       CAN_FIRE___me_check_212,
        CAN_FIRE_core_external_interrupt_sources_0_m_interrupt_req,
        CAN_FIRE_core_external_interrupt_sources_10_m_interrupt_req,
        CAN_FIRE_core_external_interrupt_sources_11_m_interrupt_req,
@@ -1154,45 +2041,265 @@ module mkCore(CLK,
        CAN_FIRE_core_external_interrupt_sources_7_m_interrupt_req,
        CAN_FIRE_core_external_interrupt_sources_8_m_interrupt_req,
        CAN_FIRE_core_external_interrupt_sources_9_m_interrupt_req,
-       CAN_FIRE_cpu_dmem_master_m_arready,
-       CAN_FIRE_cpu_dmem_master_m_awready,
-       CAN_FIRE_cpu_dmem_master_m_bvalid,
-       CAN_FIRE_cpu_dmem_master_m_rvalid,
-       CAN_FIRE_cpu_dmem_master_m_wready,
-       CAN_FIRE_cpu_imem_master_m_arready,
-       CAN_FIRE_cpu_imem_master_m_awready,
-       CAN_FIRE_cpu_imem_master_m_bvalid,
-       CAN_FIRE_cpu_imem_master_m_rvalid,
-       CAN_FIRE_cpu_imem_master_m_wready,
+       CAN_FIRE_cpu_dmem_master_ar_arready,
+       CAN_FIRE_cpu_dmem_master_aw_awready,
+       CAN_FIRE_cpu_dmem_master_b_bflit,
+       CAN_FIRE_cpu_dmem_master_r_rflit,
+       CAN_FIRE_cpu_dmem_master_w_wready,
+       CAN_FIRE_cpu_imem_master_ar_arready,
+       CAN_FIRE_cpu_imem_master_aw_awready,
+       CAN_FIRE_cpu_imem_master_b_bflit,
+       CAN_FIRE_cpu_imem_master_r_rflit,
+       CAN_FIRE_cpu_imem_master_w_wready,
        CAN_FIRE_cpu_reset_server_request_put,
        CAN_FIRE_cpu_reset_server_response_get,
        CAN_FIRE_nmi_req,
        CAN_FIRE_set_verbosity,
+       WILL_FIRE_RL_arbitrate,
+       WILL_FIRE_RL_arbitrate_1,
+       WILL_FIRE_RL_arbitrate_2,
+       WILL_FIRE_RL_arbitrate_3,
+       WILL_FIRE_RL_burst,
+       WILL_FIRE_RL_burst_1,
+       WILL_FIRE_RL_burst_2,
+       WILL_FIRE_RL_burst_3,
+       WILL_FIRE_RL_burst_4,
+       WILL_FIRE_RL_burst_5,
+       WILL_FIRE_RL_burst_6,
+       WILL_FIRE_RL_burst_7,
+       WILL_FIRE_RL_burst_8,
+       WILL_FIRE_RL_burst_9,
+       WILL_FIRE_RL_checkSinkReady,
+       WILL_FIRE_RL_checkSinkReady_1,
+       WILL_FIRE_RL_checkSinkReady_2,
+       WILL_FIRE_RL_checkSinkReady_3,
+       WILL_FIRE_RL_checkSinkReady_4,
+       WILL_FIRE_RL_checkSinkReady_5,
+       WILL_FIRE_RL_checkSinkReady_6,
+       WILL_FIRE_RL_checkSinkReady_7,
+       WILL_FIRE_RL_checkSinkReady_8,
+       WILL_FIRE_RL_checkSinkReady_9,
+       WILL_FIRE_RL_cpu_imem_ar_forwardReady,
+       WILL_FIRE_RL_cpu_imem_aw_forwardReady,
+       WILL_FIRE_RL_cpu_imem_b_buffer_dequeue,
+       WILL_FIRE_RL_cpu_imem_b_buffer_enqueue,
+       WILL_FIRE_RL_cpu_imem_b_dropFlit,
+       WILL_FIRE_RL_cpu_imem_b_forwardFlit,
+       WILL_FIRE_RL_cpu_imem_r_buffer_dequeue,
+       WILL_FIRE_RL_cpu_imem_r_buffer_enqueue,
+       WILL_FIRE_RL_cpu_imem_r_dropFlit,
+       WILL_FIRE_RL_cpu_imem_r_forwardFlit,
+       WILL_FIRE_RL_cpu_imem_ug_u_ar_doDrop,
+       WILL_FIRE_RL_cpu_imem_ug_u_ar_setPeek,
+       WILL_FIRE_RL_cpu_imem_ug_u_ar_warnDoDrop,
+       WILL_FIRE_RL_cpu_imem_ug_u_aw_doDrop,
+       WILL_FIRE_RL_cpu_imem_ug_u_aw_setPeek,
+       WILL_FIRE_RL_cpu_imem_ug_u_aw_warnDoDrop,
+       WILL_FIRE_RL_cpu_imem_ug_u_b_doPut,
+       WILL_FIRE_RL_cpu_imem_ug_u_b_warnDoPut,
+       WILL_FIRE_RL_cpu_imem_ug_u_r_doPut,
+       WILL_FIRE_RL_cpu_imem_ug_u_r_warnDoPut,
+       WILL_FIRE_RL_cpu_imem_ug_u_w_doDrop,
+       WILL_FIRE_RL_cpu_imem_ug_u_w_setPeek,
+       WILL_FIRE_RL_cpu_imem_ug_u_w_warnDoDrop,
+       WILL_FIRE_RL_cpu_imem_w_forwardReady,
+       WILL_FIRE_RL_craftReq,
+       WILL_FIRE_RL_craftReq_1,
+       WILL_FIRE_RL_craftReq_2,
+       WILL_FIRE_RL_craftReq_3,
+       WILL_FIRE_RL_craftReq_4,
+       WILL_FIRE_RL_craftReq_5,
+       WILL_FIRE_RL_craftReq_6,
+       WILL_FIRE_RL_craftReq_7,
+       WILL_FIRE_RL_craftReq_8,
+       WILL_FIRE_RL_craftReq_9,
+       WILL_FIRE_RL_ifcs_0_1_drainFlits,
+       WILL_FIRE_RL_ifcs_0_1_drainNoRouteResponse,
+       WILL_FIRE_RL_ifcs_0_1_firstFlit,
+       WILL_FIRE_RL_ifcs_0_1_firstFlit_1,
+       WILL_FIRE_RL_ifcs_0_1_followFlits,
+       WILL_FIRE_RL_ifcs_0_1_followFlits_1,
+       WILL_FIRE_RL_ifcs_0_1_forwardRsp,
+       WILL_FIRE_RL_ifcs_0_1_nonRoutableFlit,
+       WILL_FIRE_RL_ifcs_0_1_nonRoutableGenRsp,
+       WILL_FIRE_RL_ifcs_0_drainFlits,
+       WILL_FIRE_RL_ifcs_0_drainNoRouteResponse,
+       WILL_FIRE_RL_ifcs_0_firstFlit,
+       WILL_FIRE_RL_ifcs_0_firstFlit_1,
+       WILL_FIRE_RL_ifcs_0_followFlits,
+       WILL_FIRE_RL_ifcs_0_followFlits_1,
+       WILL_FIRE_RL_ifcs_0_forwardRsp,
+       WILL_FIRE_RL_ifcs_0_nonRoutableFlit,
+       WILL_FIRE_RL_ifcs_0_nonRoutableGenRsp,
+       WILL_FIRE_RL_ifcs_1_1_drainNoRouteResponse,
+       WILL_FIRE_RL_ifcs_1_1_firstFlit_1,
+       WILL_FIRE_RL_ifcs_1_1_followFlits_1,
+       WILL_FIRE_RL_ifcs_1_1_forwardRsp,
+       WILL_FIRE_RL_ifcs_1_1_nonRoutableGenRsp,
+       WILL_FIRE_RL_ifcs_1_drainNoRouteResponse,
+       WILL_FIRE_RL_ifcs_1_firstFlit_1,
+       WILL_FIRE_RL_ifcs_1_followFlits_1,
+       WILL_FIRE_RL_ifcs_1_forwardRsp,
+       WILL_FIRE_RL_ifcs_2_1_firstFlit,
+       WILL_FIRE_RL_ifcs_2_1_followFlits,
+       WILL_FIRE_RL_ifcs_2_firstFlit,
+       WILL_FIRE_RL_ifcs_2_followFlits,
+       WILL_FIRE_RL_merged_0_genFirst,
+       WILL_FIRE_RL_merged_0_genOther,
+       WILL_FIRE_RL_mkConnectionGetPut,
+       WILL_FIRE_RL_mkConnectionGetPut_1,
+       WILL_FIRE_RL_mkConnectionGetPut_2,
+       WILL_FIRE_RL_mkConnectionGetPut_3,
+       WILL_FIRE_RL_mkConnectionGetPut_4,
+       WILL_FIRE_RL_msNoSynth_0_ar_forwardReady,
+       WILL_FIRE_RL_msNoSynth_0_aw_forwardReady,
+       WILL_FIRE_RL_msNoSynth_0_b_buffer_dequeue,
+       WILL_FIRE_RL_msNoSynth_0_b_buffer_enqueue,
+       WILL_FIRE_RL_msNoSynth_0_b_dropFlit,
+       WILL_FIRE_RL_msNoSynth_0_b_forwardFlit,
+       WILL_FIRE_RL_msNoSynth_0_r_buffer_dequeue,
+       WILL_FIRE_RL_msNoSynth_0_r_buffer_enqueue,
+       WILL_FIRE_RL_msNoSynth_0_r_dropFlit,
+       WILL_FIRE_RL_msNoSynth_0_r_forwardFlit,
+       WILL_FIRE_RL_msNoSynth_0_w_forwardReady,
+       WILL_FIRE_RL_msNoSynth_1_b_buffer_dequeue,
+       WILL_FIRE_RL_msNoSynth_1_b_buffer_enqueue,
+       WILL_FIRE_RL_msNoSynth_1_r_buffer_dequeue,
+       WILL_FIRE_RL_msNoSynth_1_r_buffer_enqueue,
        WILL_FIRE_RL_rl_cpu_hart0_reset_complete,
        WILL_FIRE_RL_rl_cpu_hart0_reset_from_soc_start,
-       WILL_FIRE_RL_rl_rd_addr_channel,
-       WILL_FIRE_RL_rl_rd_addr_channel_1,
-       WILL_FIRE_RL_rl_rd_addr_channel_2,
-       WILL_FIRE_RL_rl_rd_addr_channel_3,
-       WILL_FIRE_RL_rl_rd_data_channel,
-       WILL_FIRE_RL_rl_rd_data_channel_1,
-       WILL_FIRE_RL_rl_rd_data_channel_2,
-       WILL_FIRE_RL_rl_rd_data_channel_3,
        WILL_FIRE_RL_rl_relay_external_interrupts,
        WILL_FIRE_RL_rl_relay_sw_interrupts,
        WILL_FIRE_RL_rl_relay_timer_interrupts,
-       WILL_FIRE_RL_rl_wr_addr_channel,
-       WILL_FIRE_RL_rl_wr_addr_channel_1,
-       WILL_FIRE_RL_rl_wr_addr_channel_2,
-       WILL_FIRE_RL_rl_wr_addr_channel_3,
-       WILL_FIRE_RL_rl_wr_data_channel,
-       WILL_FIRE_RL_rl_wr_data_channel_1,
-       WILL_FIRE_RL_rl_wr_data_channel_2,
-       WILL_FIRE_RL_rl_wr_data_channel_3,
-       WILL_FIRE_RL_rl_wr_response_channel,
-       WILL_FIRE_RL_rl_wr_response_channel_1,
-       WILL_FIRE_RL_rl_wr_response_channel_2,
-       WILL_FIRE_RL_rl_wr_response_channel_3,
+       WILL_FIRE_RL_sink_selected,
+       WILL_FIRE_RL_sink_selected_1,
+       WILL_FIRE_RL_sink_selected_2,
+       WILL_FIRE_RL_sink_selected_3,
+       WILL_FIRE_RL_sink_selected_4,
+       WILL_FIRE_RL_sink_selected_5,
+       WILL_FIRE_RL_sink_selected_6,
+       WILL_FIRE_RL_sink_selected_7,
+       WILL_FIRE_RL_sink_selected_8,
+       WILL_FIRE_RL_sink_selected_9,
+       WILL_FIRE_RL_source_selected,
+       WILL_FIRE_RL_source_selected_1,
+       WILL_FIRE_RL_source_selected_2,
+       WILL_FIRE_RL_source_selected_3,
+       WILL_FIRE_RL_source_selected_4,
+       WILL_FIRE_RL_source_selected_5,
+       WILL_FIRE_RL_source_selected_6,
+       WILL_FIRE_RL_source_selected_7,
+       WILL_FIRE_RL_source_selected_8,
+       WILL_FIRE_RL_source_selected_9,
+       WILL_FIRE_RL_split_0_putFirst,
+       WILL_FIRE_RL_split_0_putOther,
+       WILL_FIRE_RL_split_1_putFirst,
+       WILL_FIRE_RL_split_1_putOther,
+       WILL_FIRE_RL_split_2_putFirst,
+       WILL_FIRE_RL_split_2_putOther,
+       WILL_FIRE_RL_ssNoSynth_0_ar_buffer_dequeue,
+       WILL_FIRE_RL_ssNoSynth_0_ar_buffer_enqueue,
+       WILL_FIRE_RL_ssNoSynth_0_ar_dropFlit,
+       WILL_FIRE_RL_ssNoSynth_0_ar_forwardFlit,
+       WILL_FIRE_RL_ssNoSynth_0_aw_buffer_dequeue,
+       WILL_FIRE_RL_ssNoSynth_0_aw_buffer_enqueue,
+       WILL_FIRE_RL_ssNoSynth_0_aw_dropFlit,
+       WILL_FIRE_RL_ssNoSynth_0_aw_forwardFlit,
+       WILL_FIRE_RL_ssNoSynth_0_b_forwardReady,
+       WILL_FIRE_RL_ssNoSynth_0_r_forwardReady,
+       WILL_FIRE_RL_ssNoSynth_0_w_buffer_dequeue,
+       WILL_FIRE_RL_ssNoSynth_0_w_buffer_enqueue,
+       WILL_FIRE_RL_ssNoSynth_0_w_dropFlit,
+       WILL_FIRE_RL_ssNoSynth_0_w_forwardFlit,
+       WILL_FIRE_RL_ssNoSynth_1_ar_buffer_dequeue,
+       WILL_FIRE_RL_ssNoSynth_1_ar_buffer_enqueue,
+       WILL_FIRE_RL_ssNoSynth_1_ar_dropFlit,
+       WILL_FIRE_RL_ssNoSynth_1_ar_forwardFlit,
+       WILL_FIRE_RL_ssNoSynth_1_aw_buffer_dequeue,
+       WILL_FIRE_RL_ssNoSynth_1_aw_buffer_enqueue,
+       WILL_FIRE_RL_ssNoSynth_1_aw_dropFlit,
+       WILL_FIRE_RL_ssNoSynth_1_aw_forwardFlit,
+       WILL_FIRE_RL_ssNoSynth_1_b_forwardReady,
+       WILL_FIRE_RL_ssNoSynth_1_r_forwardReady,
+       WILL_FIRE_RL_ssNoSynth_1_w_buffer_dequeue,
+       WILL_FIRE_RL_ssNoSynth_1_w_buffer_enqueue,
+       WILL_FIRE_RL_ssNoSynth_1_w_dropFlit,
+       WILL_FIRE_RL_ssNoSynth_1_w_forwardFlit,
+       WILL_FIRE_RL_ssNoSynth_2_ar_buffer_dequeue,
+       WILL_FIRE_RL_ssNoSynth_2_ar_buffer_enqueue,
+       WILL_FIRE_RL_ssNoSynth_2_ar_dropFlit,
+       WILL_FIRE_RL_ssNoSynth_2_ar_forwardFlit,
+       WILL_FIRE_RL_ssNoSynth_2_aw_buffer_dequeue,
+       WILL_FIRE_RL_ssNoSynth_2_aw_buffer_enqueue,
+       WILL_FIRE_RL_ssNoSynth_2_aw_dropFlit,
+       WILL_FIRE_RL_ssNoSynth_2_aw_forwardFlit,
+       WILL_FIRE_RL_ssNoSynth_2_b_forwardReady,
+       WILL_FIRE_RL_ssNoSynth_2_r_forwardReady,
+       WILL_FIRE_RL_ssNoSynth_2_w_buffer_dequeue,
+       WILL_FIRE_RL_ssNoSynth_2_w_buffer_enqueue,
+       WILL_FIRE_RL_ssNoSynth_2_w_dropFlit,
+       WILL_FIRE_RL_ssNoSynth_2_w_forwardFlit,
+       WILL_FIRE_RL_tagController_tmp_getCacheAW,
+       WILL_FIRE_RL_tagController_tmp_passCacheRead,
+       WILL_FIRE_RL_tagController_tmp_passCacheResponse,
+       WILL_FIRE_RL_tagController_tmp_passCacheWrite,
+       WILL_FIRE_RL_tagController_tmp_passMemoryRequest,
+       WILL_FIRE_RL_tagController_tmp_passMemoryResponseRead,
+       WILL_FIRE_RL_tagController_tmp_passMemoryResponseWrite,
+       WILL_FIRE_RL_tagController_tmp_propagateReset,
+       WILL_FIRE_RL_tagController_tmp_ug_master_u_ar_doDrop,
+       WILL_FIRE_RL_tagController_tmp_ug_master_u_ar_setPeek,
+       WILL_FIRE_RL_tagController_tmp_ug_master_u_ar_warnDoDrop,
+       WILL_FIRE_RL_tagController_tmp_ug_master_u_aw_doDrop,
+       WILL_FIRE_RL_tagController_tmp_ug_master_u_aw_setPeek,
+       WILL_FIRE_RL_tagController_tmp_ug_master_u_aw_warnDoDrop,
+       WILL_FIRE_RL_tagController_tmp_ug_master_u_b_doPut,
+       WILL_FIRE_RL_tagController_tmp_ug_master_u_b_warnDoPut,
+       WILL_FIRE_RL_tagController_tmp_ug_master_u_r_doPut,
+       WILL_FIRE_RL_tagController_tmp_ug_master_u_r_warnDoPut,
+       WILL_FIRE_RL_tagController_tmp_ug_master_u_w_doDrop,
+       WILL_FIRE_RL_tagController_tmp_ug_master_u_w_setPeek,
+       WILL_FIRE_RL_tagController_tmp_ug_master_u_w_warnDoDrop,
+       WILL_FIRE_RL_tagController_tmp_ug_slave_u_ar_doPut,
+       WILL_FIRE_RL_tagController_tmp_ug_slave_u_ar_warnDoPut,
+       WILL_FIRE_RL_tagController_tmp_ug_slave_u_aw_doPut,
+       WILL_FIRE_RL_tagController_tmp_ug_slave_u_aw_warnDoPut,
+       WILL_FIRE_RL_tagController_tmp_ug_slave_u_b_doDrop,
+       WILL_FIRE_RL_tagController_tmp_ug_slave_u_b_setPeek,
+       WILL_FIRE_RL_tagController_tmp_ug_slave_u_b_warnDoDrop,
+       WILL_FIRE_RL_tagController_tmp_ug_slave_u_r_doDrop,
+       WILL_FIRE_RL_tagController_tmp_ug_slave_u_r_setPeek,
+       WILL_FIRE_RL_tagController_tmp_ug_slave_u_r_warnDoDrop,
+       WILL_FIRE_RL_tagController_tmp_ug_slave_u_w_doPut,
+       WILL_FIRE_RL_tagController_tmp_ug_slave_u_w_warnDoPut,
+       WILL_FIRE___me_check_129,
+       WILL_FIRE___me_check_130,
+       WILL_FIRE___me_check_131,
+       WILL_FIRE___me_check_133,
+       WILL_FIRE___me_check_138,
+       WILL_FIRE___me_check_140,
+       WILL_FIRE___me_check_142,
+       WILL_FIRE___me_check_150,
+       WILL_FIRE___me_check_152,
+       WILL_FIRE___me_check_154,
+       WILL_FIRE___me_check_163,
+       WILL_FIRE___me_check_165,
+       WILL_FIRE___me_check_167,
+       WILL_FIRE___me_check_169,
+       WILL_FIRE___me_check_171,
+       WILL_FIRE___me_check_172,
+       WILL_FIRE___me_check_173,
+       WILL_FIRE___me_check_175,
+       WILL_FIRE___me_check_181,
+       WILL_FIRE___me_check_183,
+       WILL_FIRE___me_check_185,
+       WILL_FIRE___me_check_193,
+       WILL_FIRE___me_check_195,
+       WILL_FIRE___me_check_197,
+       WILL_FIRE___me_check_206,
+       WILL_FIRE___me_check_208,
+       WILL_FIRE___me_check_210,
+       WILL_FIRE___me_check_212,
        WILL_FIRE_core_external_interrupt_sources_0_m_interrupt_req,
        WILL_FIRE_core_external_interrupt_sources_10_m_interrupt_req,
        WILL_FIRE_core_external_interrupt_sources_11_m_interrupt_req,
@@ -1209,31 +2316,318 @@ module mkCore(CLK,
        WILL_FIRE_core_external_interrupt_sources_7_m_interrupt_req,
        WILL_FIRE_core_external_interrupt_sources_8_m_interrupt_req,
        WILL_FIRE_core_external_interrupt_sources_9_m_interrupt_req,
-       WILL_FIRE_cpu_dmem_master_m_arready,
-       WILL_FIRE_cpu_dmem_master_m_awready,
-       WILL_FIRE_cpu_dmem_master_m_bvalid,
-       WILL_FIRE_cpu_dmem_master_m_rvalid,
-       WILL_FIRE_cpu_dmem_master_m_wready,
-       WILL_FIRE_cpu_imem_master_m_arready,
-       WILL_FIRE_cpu_imem_master_m_awready,
-       WILL_FIRE_cpu_imem_master_m_bvalid,
-       WILL_FIRE_cpu_imem_master_m_rvalid,
-       WILL_FIRE_cpu_imem_master_m_wready,
+       WILL_FIRE_cpu_dmem_master_ar_arready,
+       WILL_FIRE_cpu_dmem_master_aw_awready,
+       WILL_FIRE_cpu_dmem_master_b_bflit,
+       WILL_FIRE_cpu_dmem_master_r_rflit,
+       WILL_FIRE_cpu_dmem_master_w_wready,
+       WILL_FIRE_cpu_imem_master_ar_arready,
+       WILL_FIRE_cpu_imem_master_aw_awready,
+       WILL_FIRE_cpu_imem_master_b_bflit,
+       WILL_FIRE_cpu_imem_master_r_rflit,
+       WILL_FIRE_cpu_imem_master_w_wready,
        WILL_FIRE_cpu_reset_server_request_put,
        WILL_FIRE_cpu_reset_server_response_get,
        WILL_FIRE_nmi_req,
        WILL_FIRE_set_verbosity;
 
+  // inputs to muxes for submodule ports
+  reg [71 : 0] MUX_msNoSynth_0_r_buffer_enqw$wset_1__VAL_2,
+	       MUX_msNoSynth_1_r_buffer_enqw$wset_1__VAL_2;
+  reg [5 : 0] MUX_msNoSynth_0_b_buffer_enqw$wset_1__VAL_2,
+	      MUX_msNoSynth_1_b_buffer_enqw$wset_1__VAL_2;
+  wire [140 : 0] MUX_tagController_tmp_tagCon$cache_request_put_1__VAL_1,
+		 MUX_tagController_tmp_tagCon$cache_request_put_1__VAL_2;
+  wire [76 : 0] MUX_tagController_tmp_tagCon$memory_response_put_1__VAL_1,
+		MUX_tagController_tmp_tagCon$memory_response_put_1__VAL_2;
+  wire [7 : 0] MUX_merged_0_flitLeft$write_1__VAL_1,
+	       MUX_split_0_flitLeft$write_1__VAL_1,
+	       MUX_split_1_flitLeft$write_1__VAL_1,
+	       MUX_split_2_flitLeft$write_1__VAL_1;
+  wire MUX_activeSource_0$write_1__SEL_1,
+       MUX_activeSource_0$write_1__VAL_1,
+       MUX_activeSource_1$write_1__VAL_1,
+       MUX_activeSource_1_1_0$write_1__SEL_1,
+       MUX_activeSource_1_1_0$write_1__SEL_2,
+       MUX_activeSource_1_1_0$write_1__SEL_3,
+       MUX_activeSource_1_1_0$write_1__VAL_1,
+       MUX_activeSource_1_1_1_1$write_1__VAL_1,
+       MUX_activeSource_1_1_2$write_1__VAL_1,
+       MUX_flitToSink_0$wset_1__SEL_1,
+       MUX_flitToSink_0$wset_1__SEL_3,
+       MUX_flitToSink_1$wset_1__SEL_1,
+       MUX_flitToSink_1$wset_1__SEL_3,
+       MUX_flitToSink_1_0$wset_1__SEL_1,
+       MUX_flitToSink_1_0$wset_1__SEL_2,
+       MUX_flitToSink_1_0$wset_1__SEL_3,
+       MUX_flitToSink_1_0$wset_1__SEL_4,
+       MUX_flitToSink_1_0$wset_1__SEL_5,
+       MUX_flitToSink_1_0$wset_1__SEL_6,
+       MUX_flitToSink_1_0_1$wset_1__SEL_1,
+       MUX_flitToSink_1_0_1$wset_1__SEL_3,
+       MUX_flitToSink_1_1$wset_1__SEL_1,
+       MUX_flitToSink_1_1$wset_1__SEL_2,
+       MUX_flitToSink_1_1$wset_1__SEL_3,
+       MUX_flitToSink_1_1$wset_1__SEL_4,
+       MUX_flitToSink_1_1$wset_1__SEL_5,
+       MUX_flitToSink_1_1$wset_1__SEL_6,
+       MUX_flitToSink_1_1_0$wset_1__SEL_1,
+       MUX_flitToSink_1_1_0$wset_1__SEL_2,
+       MUX_flitToSink_1_1_0$wset_1__SEL_3,
+       MUX_flitToSink_1_1_0$wset_1__SEL_4,
+       MUX_flitToSink_1_1_0$wset_1__SEL_5,
+       MUX_flitToSink_1_1_0$wset_1__SEL_6,
+       MUX_flitToSink_1_1_1$wset_1__SEL_1,
+       MUX_flitToSink_1_1_1$wset_1__SEL_3,
+       MUX_flitToSink_1_1_1_1$wset_1__SEL_1,
+       MUX_flitToSink_1_1_1_1$wset_1__SEL_2,
+       MUX_flitToSink_1_1_1_1$wset_1__SEL_3,
+       MUX_flitToSink_1_1_1_1$wset_1__SEL_4,
+       MUX_flitToSink_1_1_1_1$wset_1__SEL_5,
+       MUX_flitToSink_1_1_1_1$wset_1__SEL_6,
+       MUX_flitToSink_1_2$wset_1__SEL_1,
+       MUX_flitToSink_1_2$wset_1__SEL_3,
+       MUX_flitToSink_2$wset_1__SEL_1,
+       MUX_flitToSink_2$wset_1__SEL_3,
+       MUX_ifcs_0_1_state_1$write_1__SEL_1,
+       MUX_ifcs_0_state$write_1__PSEL_1,
+       MUX_ifcs_0_state$write_1__SEL_1,
+       MUX_ifcs_0_state$write_1__SEL_2,
+       MUX_ifcs_0_state$write_1__SEL_3,
+       MUX_ifcs_1_1_state_1$write_1__SEL_1,
+       MUX_ifcs_2_1_state$write_1__SEL_1,
+       MUX_split_0_flitLeft$write_1__SEL_1,
+       MUX_split_0_flitLeft$write_1__SEL_2,
+       MUX_split_1_flitLeft$write_1__SEL_1,
+       MUX_split_1_flitLeft$write_1__SEL_2,
+       MUX_split_2_flitLeft$write_1__SEL_1,
+       MUX_split_2_flitLeft$write_1__SEL_2,
+       MUX_state$write_1__SEL_1,
+       MUX_state$write_1__SEL_2,
+       MUX_state_1_1_1$write_1__SEL_1,
+       MUX_state_1_1_1$write_1__SEL_2,
+       MUX_state_1_1_1$write_1__SEL_3;
+
   // declarations used by system tasks
   // synopsys translate_off
-  reg [31 : 0] v__h4427;
-  reg [31 : 0] v__h4668;
-  reg [31 : 0] v__h4421;
-  reg [31 : 0] v__h4662;
+  reg [63 : 0] v__h47733;
+  reg [63 : 0] v__h47122;
+  reg [63 : 0] v__h51742;
+  reg [63 : 0] v__h51131;
+  reg [63 : 0] v__h81493;
+  reg [63 : 0] v__h80882;
+  reg [63 : 0] v__h84386;
+  reg [63 : 0] v__h83775;
+  reg [63 : 0] v__h62437;
+  reg [63 : 0] v__h62056;
+  reg [63 : 0] v__h64507;
+  reg [63 : 0] v__h64126;
+  reg [63 : 0] v__h66406;
+  reg [63 : 0] v__h66025;
+  reg [63 : 0] v__h93666;
+  reg [63 : 0] v__h93285;
+  reg [63 : 0] v__h96157;
+  reg [63 : 0] v__h95776;
+  reg [63 : 0] v__h98467;
+  reg [63 : 0] v__h98086;
+  reg [31 : 0] v__h20898;
+  reg [31 : 0] v__h21137;
+  reg [31 : 0] v__h20892;
+  reg [31 : 0] v__h21131;
   // synopsys translate_on
 
   // remaining internal signals
-  wire near_mem_io_RDY_server_reset_request_put_AND_p_ETC___d8;
+  wire [98 : 0] tagController_tmp_shimMaster_arff_rvport1__re_ETC__q4,
+		tagController_tmp_shimMaster_awff_rvport1__re_ETC__q2;
+  wire [72 : 0] tagController_tmp_shimMaster_wff_rvport1__rea_ETC__q3,
+		tagController_tmp_shimSlave_rff_rvport1__read_ETC__q1;
+  wire [63 : 0] araddr__h15733,
+		aw_awaddr__h11001,
+		tmp__h10784,
+		tmp__h8559,
+		v_araddr__h15750,
+		x__h34701,
+		x__h34726,
+		x__h68982,
+		x__h69007,
+		x__h8400;
+  wire [39 : 0] x__h11033;
+  wire [8 : 0] x_port1__read__h70111;
+  wire [7 : 0] arlen__h15734, v_arlen__h15751;
+  wire [5 : 0] v_arid__h15749;
+  wire [4 : 0] a_awid__h35861,
+	       fatReq_arid__h69550,
+	       tagController_tmp_ug_slave_u_b_peekWirewget_B_ETC__q26,
+	       tagController_tmp_ug_slave_u_r_peekWirewget_B_ETC__q25;
+  wire [3 : 0] _0_CONCAT_tagController_tmp_tagCon_memory_reque_ETC___d302,
+	       arcache__h15738,
+	       x__h11076,
+	       x__h12810,
+	       x__h12822,
+	       x__h12834,
+	       x__h12846,
+	       x__h12858,
+	       x__h12870,
+	       x__h12882,
+	       x__h14406,
+	       x__h15814,
+	       y__h12811,
+	       y__h12823,
+	       y__h12835,
+	       y__h12847,
+	       y__h12859,
+	       y__h12871,
+	       y__h12883;
+  wire [2 : 0] aw_awsize_val__h12740, v_arsize_val__h15796;
+  wire [1 : 0] IF_IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dm_ETC___d1039,
+	       IF_cpu_dmem_master_ar_araddr__582_BITS_63_TO_4_ETC___d1608,
+	       SEXT_SEXT_arbiter_1_1_firstHot_003_004_BIT_0_0_ETC__q22,
+	       SEXT_SEXT_arbiter_1_firstHot_1_818_819_BIT_0_8_ETC__q17,
+	       SEXT_SEXT_arbiter_1_firstHot_421_422_BIT_0_423_ETC__q12,
+	       SEXT_SEXT_arbiter_firstHot_226_227_BIT_0_228_A_ETC__q7,
+	       SEXT_arbiter_1_1_firstHot__q19,
+	       SEXT_arbiter_1_1_lastSelect_1__q21,
+	       SEXT_arbiter_1_1_lastSelect__q20,
+	       SEXT_arbiter_1_firstHot_1__q15,
+	       SEXT_arbiter_1_firstHot__q9,
+	       SEXT_arbiter_1_lastSelect_1__q11,
+	       SEXT_arbiter_1_lastSelect_2__q16,
+	       SEXT_arbiter_1_lastSelect__q10,
+	       SEXT_arbiter_firstHot__q5,
+	       SEXT_arbiter_lastSelect__q6,
+	       SEXT_x0018__q18,
+	       SEXT_x0738__q13,
+	       SEXT_x0772__q14,
+	       SEXT_x1963__q23,
+	       SEXT_x1997__q24,
+	       SEXT_x6252__q8;
+  wire IF_NOT_ifcs_0_1_innerRoute_first__764_BIT_1_77_ETC___d1786,
+       IF_NOT_ifcs_0_innerRoute_first__172_BIT_1_181__ETC___d1194,
+       IF_NOT_ifcs_1_1_innerRoute_first__793_BIT_1_79_ETC___d1802,
+       IF_NOT_ifcs_1_innerRoute_first__201_BIT_1_205__ETC___d1210,
+       IF_SEXT_arbiter_1_1_lastSelect_994_995_BIT_0_9_ETC___d2038,
+       IF_SEXT_arbiter_1_1_lastSelect_994_995_BIT_0_9_ETC___d2044,
+       IF_SEXT_arbiter_1_1_lastSelect_994_995_BIT_0_9_ETC___d2050,
+       IF_SEXT_arbiter_1_lastSelect_2_814_815_BIT_0_8_ETC___d1838,
+       IF_SEXT_arbiter_1_lastSelect_2_814_815_BIT_0_8_ETC___d1842,
+       IF_SEXT_arbiter_1_lastSelect_412_413_BIT_0_414_ETC___d1456,
+       IF_SEXT_arbiter_1_lastSelect_412_413_BIT_0_414_ETC___d1462,
+       IF_SEXT_arbiter_1_lastSelect_412_413_BIT_0_414_ETC___d1468,
+       IF_SEXT_arbiter_lastSelect_222_223_BIT_0_224_A_ETC___d1246,
+       IF_SEXT_arbiter_lastSelect_222_223_BIT_0_224_A_ETC___d1250,
+       IF_merged_0_flitLeft_94_EQ_0_95_THEN_NOT_cpu_d_ETC___d1004,
+       IF_merged_0_flitLeft_94_EQ_0_95_THEN_NOT_cpu_d_ETC___d1074,
+       IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d1016,
+       IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d1018,
+       IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d1021,
+       IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d1023,
+       IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d1027,
+       IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d1037,
+       IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d997,
+       IF_split_0_flitLeft_18_EQ_0_19_THEN_ssNoSynth__ETC___d1164,
+       IF_split_1_flitLeft_47_EQ_0_48_THEN_ssNoSynth__ETC___d1165,
+       IF_split_2_flitLeft_76_EQ_0_77_THEN_ssNoSynth__ETC___d1166,
+       SEXT_arbiter_1_1_firstHot_003_004_BIT_0_005_AN_ETC___d2019,
+       SEXT_arbiter_1_1_lastSelect_1_998_999_BIT_0_00_ETC___d2013,
+       SEXT_arbiter_1_1_lastSelect_994_995_BIT_0_996__ETC___d2007,
+       SEXT_arbiter_1_firstHot_1_818_819_BIT_0_820_AN_ETC___d1826,
+       SEXT_arbiter_1_firstHot_421_422_BIT_0_423_AND__ETC___d1437,
+       SEXT_arbiter_1_lastSelect_1_416_417_BIT_0_418__ETC___d1431,
+       SEXT_arbiter_1_lastSelect_2_814_815_BIT_0_816__ETC___d1822,
+       SEXT_arbiter_1_lastSelect_412_413_BIT_0_414_AN_ETC___d1425,
+       SEXT_arbiter_firstHot_226_227_BIT_0_228_AND_re_ETC___d1234,
+       SEXT_arbiter_lastSelect_222_223_BIT_0_224_AND__ETC___d1230,
+       cpu_dmem_master_ar_araddr__582_BITS_63_TO_40_5_ETC___d1596,
+       cpu_dmem_master_ar_araddr__582_BITS_63_TO_40_5_ETC___d1606,
+       cpu_dmem_master_ar_araddr__582_MINUS_soc_map_m_ETC___d1587,
+       cpu_dmem_master_ar_araddr__582_MINUS_soc_map_m_ETC___d1592,
+       cpu_dmem_master_ar_araddr__582_ULT_soc_map_m_n_ETC___d1585,
+       cpu_dmem_master_ar_araddr__582_ULT_soc_map_m_p_ETC___d1590,
+       reqWires_1_0_whas__398_AND_reqWires_1_0_wget___ETC___d1408,
+       reqWires_1_1_0_whas__980_AND_reqWires_1_1_0_wg_ETC___d1990,
+       split_0_doPut_whas__10_AND_split_0_doPut_wget__ETC___d917,
+       split_1_doPut_whas__39_AND_split_1_doPut_wget__ETC___d946,
+       split_2_doPut_whas__68_AND_split_2_doPut_wget__ETC___d975,
+       state_1_1_1_991_AND_activeSource_1_1_0_085_086_ETC___d2088,
+       state_1_1_1_991_AND_activeSource_1_1_1_1_121_1_ETC___d2124,
+       state_1_1_1_991_AND_activeSource_1_1_2_157_158_ETC___d2160,
+       state_1_1_811_AND_activeSource_1_0_1_878_879_A_ETC___d1881,
+       state_1_1_811_AND_activeSource_1_1_1_918_919_A_ETC___d1921,
+       state_1_409_AND_activeSource_1_0_497_498_AND_i_ETC___d1500,
+       state_1_409_AND_activeSource_1_1_530_531_AND_i_ETC___d1533,
+       state_1_409_AND_activeSource_1_2_564_565_AND_i_ETC___d1567,
+       state_219_AND_activeSource_0_292_293_AND_ifcs__ETC___d1295,
+       state_219_AND_activeSource_1_336_337_AND_ifcs__ETC___d1339,
+       x__h45725,
+       x__h45828,
+       x__h46193,
+       x__h46252,
+       x__h46334,
+       x__h59917,
+       x__h59919,
+       x__h60068,
+       x__h60070,
+       x__h60204,
+       x__h60206,
+       x__h60676,
+       x__h60678,
+       x__h60738,
+       x__h60772,
+       x__h60864,
+       x__h60866,
+       x__h61045,
+       x__h61047,
+       x__h79491,
+       x__h79594,
+       x__h79959,
+       x__h80018,
+       x__h80100,
+       x__h91142,
+       x__h91144,
+       x__h91293,
+       x__h91295,
+       x__h91429,
+       x__h91431,
+       x__h91901,
+       x__h91903,
+       x__h91963,
+       x__h91997,
+       x__h92089,
+       x__h92091,
+       x__h92270,
+       x__h92272,
+       y__h45726,
+       y__h45829,
+       y__h46194,
+       y__h46335,
+       y__h59918,
+       y__h59920,
+       y__h60069,
+       y__h60071,
+       y__h60205,
+       y__h60207,
+       y__h60677,
+       y__h60679,
+       y__h60865,
+       y__h60867,
+       y__h61046,
+       y__h61048,
+       y__h79492,
+       y__h79595,
+       y__h79960,
+       y__h80101,
+       y__h91143,
+       y__h91145,
+       y__h91294,
+       y__h91296,
+       y__h91430,
+       y__h91432,
+       y__h91902,
+       y__h91904,
+       y__h92090,
+       y__h92092,
+       y__h92271,
+       y__h92273;
 
   // action method set_verbosity
   assign RDY_set_verbosity = 1'd1 ;
@@ -1253,213 +2647,239 @@ module mkCore(CLK,
   assign WILL_FIRE_cpu_reset_server_response_get =
 	     EN_cpu_reset_server_response_get ;
 
-  // value method cpu_imem_master_m_awvalid
-  assign cpu_imem_master_awvalid = cpu$imem_master_awvalid ;
+  // value method cpu_imem_master_aw_awid
+  assign cpu_imem_master_awid = { 1'd0, delay_shim_awff$D_OUT[97:93] } ;
 
-  // value method cpu_imem_master_m_awid
-  assign cpu_imem_master_awid = cpu$imem_master_awid ;
+  // value method cpu_imem_master_aw_awaddr
+  assign cpu_imem_master_awaddr = delay_shim_awff$D_OUT[92:29] ;
 
-  // value method cpu_imem_master_m_awaddr
-  assign cpu_imem_master_awaddr = cpu$imem_master_awaddr ;
+  // value method cpu_imem_master_aw_awlen
+  assign cpu_imem_master_awlen = delay_shim_awff$D_OUT[28:21] ;
 
-  // value method cpu_imem_master_m_awlen
-  assign cpu_imem_master_awlen = cpu$imem_master_awlen ;
+  // value method cpu_imem_master_aw_awsize
+  assign cpu_imem_master_awsize = delay_shim_awff$D_OUT[20:18] ;
 
-  // value method cpu_imem_master_m_awsize
-  assign cpu_imem_master_awsize = cpu$imem_master_awsize ;
+  // value method cpu_imem_master_aw_awburst
+  assign cpu_imem_master_awburst = delay_shim_awff$D_OUT[17:16] ;
 
-  // value method cpu_imem_master_m_awburst
-  assign cpu_imem_master_awburst = cpu$imem_master_awburst ;
+  // value method cpu_imem_master_aw_awlock
+  assign cpu_imem_master_awlock = delay_shim_awff$D_OUT[15] ;
 
-  // value method cpu_imem_master_m_awlock
-  assign cpu_imem_master_awlock = cpu$imem_master_awlock ;
+  // value method cpu_imem_master_aw_awcache
+  assign cpu_imem_master_awcache = delay_shim_awff$D_OUT[14:11] ;
 
-  // value method cpu_imem_master_m_awcache
-  assign cpu_imem_master_awcache = cpu$imem_master_awcache ;
+  // value method cpu_imem_master_aw_awprot
+  assign cpu_imem_master_awprot = delay_shim_awff$D_OUT[10:8] ;
 
-  // value method cpu_imem_master_m_awprot
-  assign cpu_imem_master_awprot = cpu$imem_master_awprot ;
+  // value method cpu_imem_master_aw_awqos
+  assign cpu_imem_master_awqos = delay_shim_awff$D_OUT[7:4] ;
 
-  // value method cpu_imem_master_m_awqos
-  assign cpu_imem_master_awqos = cpu$imem_master_awqos ;
+  // value method cpu_imem_master_aw_awregion
+  assign cpu_imem_master_awregion = delay_shim_awff$D_OUT[3:0] ;
 
-  // value method cpu_imem_master_m_awregion
-  assign cpu_imem_master_awregion = cpu$imem_master_awregion ;
+  // value method cpu_imem_master_aw_awvalid
+  assign cpu_imem_master_awvalid = delay_shim_awff$EMPTY_N ;
 
-  // action method cpu_imem_master_m_awready
-  assign CAN_FIRE_cpu_imem_master_m_awready = 1'd1 ;
-  assign WILL_FIRE_cpu_imem_master_m_awready = 1'd1 ;
+  // action method cpu_imem_master_aw_awready
+  assign CAN_FIRE_cpu_imem_master_aw_awready = 1'd1 ;
+  assign WILL_FIRE_cpu_imem_master_aw_awready = 1'd1 ;
 
-  // value method cpu_imem_master_m_wvalid
-  assign cpu_imem_master_wvalid = cpu$imem_master_wvalid ;
+  // value method cpu_imem_master_w_wdata
+  assign cpu_imem_master_wdata = delay_shim_wff$D_OUT[73:10] ;
 
-  // value method cpu_imem_master_m_wdata
-  assign cpu_imem_master_wdata = cpu$imem_master_wdata ;
+  // value method cpu_imem_master_w_wstrb
+  assign cpu_imem_master_wstrb = delay_shim_wff$D_OUT[9:2] ;
 
-  // value method cpu_imem_master_m_wstrb
-  assign cpu_imem_master_wstrb = cpu$imem_master_wstrb ;
+  // value method cpu_imem_master_w_wlast
+  assign cpu_imem_master_wlast = delay_shim_wff$D_OUT[1] ;
 
-  // value method cpu_imem_master_m_wlast
-  assign cpu_imem_master_wlast = cpu$imem_master_wlast ;
+  // value method cpu_imem_master_w_wvalid
+  assign cpu_imem_master_wvalid = delay_shim_wff$EMPTY_N ;
 
-  // action method cpu_imem_master_m_wready
-  assign CAN_FIRE_cpu_imem_master_m_wready = 1'd1 ;
-  assign WILL_FIRE_cpu_imem_master_m_wready = 1'd1 ;
+  // action method cpu_imem_master_w_wready
+  assign CAN_FIRE_cpu_imem_master_w_wready = 1'd1 ;
+  assign WILL_FIRE_cpu_imem_master_w_wready = 1'd1 ;
 
-  // action method cpu_imem_master_m_bvalid
-  assign CAN_FIRE_cpu_imem_master_m_bvalid = 1'd1 ;
-  assign WILL_FIRE_cpu_imem_master_m_bvalid = 1'd1 ;
+  // action method cpu_imem_master_b_bflit
+  assign CAN_FIRE_cpu_imem_master_b_bflit = 1'd1 ;
+  assign WILL_FIRE_cpu_imem_master_b_bflit = cpu_imem_master_bvalid ;
 
-  // value method cpu_imem_master_m_bready
-  assign cpu_imem_master_bready = cpu$imem_master_bready ;
+  // value method cpu_imem_master_b_bready
+  assign cpu_imem_master_bready = delay_shim_bff$FULL_N ;
 
-  // value method cpu_imem_master_m_arvalid
-  assign cpu_imem_master_arvalid = cpu$imem_master_arvalid ;
+  // value method cpu_imem_master_ar_arid
+  assign cpu_imem_master_arid = { 1'd0, delay_shim_arff$D_OUT[97:93] } ;
 
-  // value method cpu_imem_master_m_arid
-  assign cpu_imem_master_arid = cpu$imem_master_arid ;
+  // value method cpu_imem_master_ar_araddr
+  assign cpu_imem_master_araddr = delay_shim_arff$D_OUT[92:29] ;
 
-  // value method cpu_imem_master_m_araddr
-  assign cpu_imem_master_araddr = cpu$imem_master_araddr ;
+  // value method cpu_imem_master_ar_arlen
+  assign cpu_imem_master_arlen = delay_shim_arff$D_OUT[28:21] ;
 
-  // value method cpu_imem_master_m_arlen
-  assign cpu_imem_master_arlen = cpu$imem_master_arlen ;
+  // value method cpu_imem_master_ar_arsize
+  assign cpu_imem_master_arsize = delay_shim_arff$D_OUT[20:18] ;
 
-  // value method cpu_imem_master_m_arsize
-  assign cpu_imem_master_arsize = cpu$imem_master_arsize ;
+  // value method cpu_imem_master_ar_arburst
+  assign cpu_imem_master_arburst = delay_shim_arff$D_OUT[17:16] ;
 
-  // value method cpu_imem_master_m_arburst
-  assign cpu_imem_master_arburst = cpu$imem_master_arburst ;
+  // value method cpu_imem_master_ar_arlock
+  assign cpu_imem_master_arlock = delay_shim_arff$D_OUT[15] ;
 
-  // value method cpu_imem_master_m_arlock
-  assign cpu_imem_master_arlock = cpu$imem_master_arlock ;
+  // value method cpu_imem_master_ar_arcache
+  assign cpu_imem_master_arcache = delay_shim_arff$D_OUT[14:11] ;
 
-  // value method cpu_imem_master_m_arcache
-  assign cpu_imem_master_arcache = cpu$imem_master_arcache ;
+  // value method cpu_imem_master_ar_arprot
+  assign cpu_imem_master_arprot = delay_shim_arff$D_OUT[10:8] ;
 
-  // value method cpu_imem_master_m_arprot
-  assign cpu_imem_master_arprot = cpu$imem_master_arprot ;
+  // value method cpu_imem_master_ar_arqos
+  assign cpu_imem_master_arqos = delay_shim_arff$D_OUT[7:4] ;
 
-  // value method cpu_imem_master_m_arqos
-  assign cpu_imem_master_arqos = cpu$imem_master_arqos ;
+  // value method cpu_imem_master_ar_arregion
+  assign cpu_imem_master_arregion = delay_shim_arff$D_OUT[3:0] ;
 
-  // value method cpu_imem_master_m_arregion
-  assign cpu_imem_master_arregion = cpu$imem_master_arregion ;
+  // value method cpu_imem_master_ar_arvalid
+  assign cpu_imem_master_arvalid = delay_shim_arff$EMPTY_N ;
 
-  // action method cpu_imem_master_m_arready
-  assign CAN_FIRE_cpu_imem_master_m_arready = 1'd1 ;
-  assign WILL_FIRE_cpu_imem_master_m_arready = 1'd1 ;
+  // action method cpu_imem_master_ar_arready
+  assign CAN_FIRE_cpu_imem_master_ar_arready = 1'd1 ;
+  assign WILL_FIRE_cpu_imem_master_ar_arready = 1'd1 ;
 
-  // action method cpu_imem_master_m_rvalid
-  assign CAN_FIRE_cpu_imem_master_m_rvalid = 1'd1 ;
-  assign WILL_FIRE_cpu_imem_master_m_rvalid = 1'd1 ;
+  // action method cpu_imem_master_r_rflit
+  assign CAN_FIRE_cpu_imem_master_r_rflit = 1'd1 ;
+  assign WILL_FIRE_cpu_imem_master_r_rflit = cpu_imem_master_rvalid ;
 
-  // value method cpu_imem_master_m_rready
-  assign cpu_imem_master_rready = cpu$imem_master_rready ;
+  // value method cpu_imem_master_r_rready
+  assign cpu_imem_master_rready = delay_shim_rff$FULL_N ;
 
-  // value method cpu_dmem_master_m_awvalid
-  assign cpu_dmem_master_awvalid = fabric_2x3$v_to_slaves_0_awvalid ;
+  // value method cpu_dmem_master_aw_awid
+  assign cpu_dmem_master_awid =
+	     tagController_tmp_shimMaster_awff_rvport1__re_ETC__q2[98:93] ;
 
-  // value method cpu_dmem_master_m_awid
-  assign cpu_dmem_master_awid = fabric_2x3$v_to_slaves_0_awid ;
+  // value method cpu_dmem_master_aw_awaddr
+  assign cpu_dmem_master_awaddr =
+	     tagController_tmp_shimMaster_awff_rvport1__re_ETC__q2[92:29] ;
 
-  // value method cpu_dmem_master_m_awaddr
-  assign cpu_dmem_master_awaddr = fabric_2x3$v_to_slaves_0_awaddr ;
+  // value method cpu_dmem_master_aw_awlen
+  assign cpu_dmem_master_awlen =
+	     tagController_tmp_shimMaster_awff_rvport1__re_ETC__q2[28:21] ;
 
-  // value method cpu_dmem_master_m_awlen
-  assign cpu_dmem_master_awlen = fabric_2x3$v_to_slaves_0_awlen ;
+  // value method cpu_dmem_master_aw_awsize
+  assign cpu_dmem_master_awsize =
+	     tagController_tmp_shimMaster_awff_rvport1__re_ETC__q2[20:18] ;
 
-  // value method cpu_dmem_master_m_awsize
-  assign cpu_dmem_master_awsize = fabric_2x3$v_to_slaves_0_awsize ;
+  // value method cpu_dmem_master_aw_awburst
+  assign cpu_dmem_master_awburst =
+	     tagController_tmp_shimMaster_awff_rvport1__re_ETC__q2[17:16] ;
 
-  // value method cpu_dmem_master_m_awburst
-  assign cpu_dmem_master_awburst = fabric_2x3$v_to_slaves_0_awburst ;
+  // value method cpu_dmem_master_aw_awlock
+  assign cpu_dmem_master_awlock =
+	     tagController_tmp_shimMaster_awff_rvport1__re_ETC__q2[15] ;
 
-  // value method cpu_dmem_master_m_awlock
-  assign cpu_dmem_master_awlock = fabric_2x3$v_to_slaves_0_awlock ;
+  // value method cpu_dmem_master_aw_awcache
+  assign cpu_dmem_master_awcache =
+	     tagController_tmp_shimMaster_awff_rvport1__re_ETC__q2[14:11] ;
 
-  // value method cpu_dmem_master_m_awcache
-  assign cpu_dmem_master_awcache = fabric_2x3$v_to_slaves_0_awcache ;
+  // value method cpu_dmem_master_aw_awprot
+  assign cpu_dmem_master_awprot =
+	     tagController_tmp_shimMaster_awff_rvport1__re_ETC__q2[10:8] ;
 
-  // value method cpu_dmem_master_m_awprot
-  assign cpu_dmem_master_awprot = fabric_2x3$v_to_slaves_0_awprot ;
+  // value method cpu_dmem_master_aw_awqos
+  assign cpu_dmem_master_awqos =
+	     tagController_tmp_shimMaster_awff_rvport1__re_ETC__q2[7:4] ;
 
-  // value method cpu_dmem_master_m_awqos
-  assign cpu_dmem_master_awqos = fabric_2x3$v_to_slaves_0_awqos ;
+  // value method cpu_dmem_master_aw_awregion
+  assign cpu_dmem_master_awregion =
+	     tagController_tmp_shimMaster_awff_rvport1__re_ETC__q2[3:0] ;
 
-  // value method cpu_dmem_master_m_awregion
-  assign cpu_dmem_master_awregion = fabric_2x3$v_to_slaves_0_awregion ;
+  // value method cpu_dmem_master_aw_awvalid
+  assign cpu_dmem_master_awvalid =
+	     CAN_FIRE_RL_tagController_tmp_ug_master_u_aw_setPeek ;
 
-  // action method cpu_dmem_master_m_awready
-  assign CAN_FIRE_cpu_dmem_master_m_awready = 1'd1 ;
-  assign WILL_FIRE_cpu_dmem_master_m_awready = 1'd1 ;
+  // action method cpu_dmem_master_aw_awready
+  assign CAN_FIRE_cpu_dmem_master_aw_awready = 1'd1 ;
+  assign WILL_FIRE_cpu_dmem_master_aw_awready = 1'd1 ;
 
-  // value method cpu_dmem_master_m_wvalid
-  assign cpu_dmem_master_wvalid = fabric_2x3$v_to_slaves_0_wvalid ;
+  // value method cpu_dmem_master_w_wdata
+  assign cpu_dmem_master_wdata =
+	     tagController_tmp_shimMaster_wff_rvport1__rea_ETC__q3[72:9] ;
 
-  // value method cpu_dmem_master_m_wdata
-  assign cpu_dmem_master_wdata = fabric_2x3$v_to_slaves_0_wdata ;
+  // value method cpu_dmem_master_w_wstrb
+  assign cpu_dmem_master_wstrb =
+	     tagController_tmp_shimMaster_wff_rvport1__rea_ETC__q3[8:1] ;
 
-  // value method cpu_dmem_master_m_wstrb
-  assign cpu_dmem_master_wstrb = fabric_2x3$v_to_slaves_0_wstrb ;
+  // value method cpu_dmem_master_w_wlast
+  assign cpu_dmem_master_wlast =
+	     tagController_tmp_shimMaster_wff_rvport1__rea_ETC__q3[0] ;
 
-  // value method cpu_dmem_master_m_wlast
-  assign cpu_dmem_master_wlast = fabric_2x3$v_to_slaves_0_wlast ;
+  // value method cpu_dmem_master_w_wvalid
+  assign cpu_dmem_master_wvalid =
+	     CAN_FIRE_RL_tagController_tmp_ug_master_u_w_setPeek ;
 
-  // action method cpu_dmem_master_m_wready
-  assign CAN_FIRE_cpu_dmem_master_m_wready = 1'd1 ;
-  assign WILL_FIRE_cpu_dmem_master_m_wready = 1'd1 ;
+  // action method cpu_dmem_master_w_wready
+  assign CAN_FIRE_cpu_dmem_master_w_wready = 1'd1 ;
+  assign WILL_FIRE_cpu_dmem_master_w_wready = 1'd1 ;
 
-  // action method cpu_dmem_master_m_bvalid
-  assign CAN_FIRE_cpu_dmem_master_m_bvalid = 1'd1 ;
-  assign WILL_FIRE_cpu_dmem_master_m_bvalid = 1'd1 ;
+  // action method cpu_dmem_master_b_bflit
+  assign CAN_FIRE_cpu_dmem_master_b_bflit = 1'd1 ;
+  assign WILL_FIRE_cpu_dmem_master_b_bflit = cpu_dmem_master_bvalid ;
 
-  // value method cpu_dmem_master_m_bready
-  assign cpu_dmem_master_bready = fabric_2x3$v_to_slaves_0_bready ;
+  // value method cpu_dmem_master_b_bready
+  assign cpu_dmem_master_bready = !tagController_tmp_shimMaster_bff_rv[8] ;
 
-  // value method cpu_dmem_master_m_arvalid
-  assign cpu_dmem_master_arvalid = fabric_2x3$v_to_slaves_0_arvalid ;
+  // value method cpu_dmem_master_ar_arid
+  assign cpu_dmem_master_arid =
+	     tagController_tmp_shimMaster_arff_rvport1__re_ETC__q4[98:93] ;
 
-  // value method cpu_dmem_master_m_arid
-  assign cpu_dmem_master_arid = fabric_2x3$v_to_slaves_0_arid ;
+  // value method cpu_dmem_master_ar_araddr
+  assign cpu_dmem_master_araddr =
+	     tagController_tmp_shimMaster_arff_rvport1__re_ETC__q4[92:29] ;
 
-  // value method cpu_dmem_master_m_araddr
-  assign cpu_dmem_master_araddr = fabric_2x3$v_to_slaves_0_araddr ;
+  // value method cpu_dmem_master_ar_arlen
+  assign cpu_dmem_master_arlen =
+	     tagController_tmp_shimMaster_arff_rvport1__re_ETC__q4[28:21] ;
 
-  // value method cpu_dmem_master_m_arlen
-  assign cpu_dmem_master_arlen = fabric_2x3$v_to_slaves_0_arlen ;
+  // value method cpu_dmem_master_ar_arsize
+  assign cpu_dmem_master_arsize =
+	     tagController_tmp_shimMaster_arff_rvport1__re_ETC__q4[20:18] ;
 
-  // value method cpu_dmem_master_m_arsize
-  assign cpu_dmem_master_arsize = fabric_2x3$v_to_slaves_0_arsize ;
+  // value method cpu_dmem_master_ar_arburst
+  assign cpu_dmem_master_arburst =
+	     tagController_tmp_shimMaster_arff_rvport1__re_ETC__q4[17:16] ;
 
-  // value method cpu_dmem_master_m_arburst
-  assign cpu_dmem_master_arburst = fabric_2x3$v_to_slaves_0_arburst ;
+  // value method cpu_dmem_master_ar_arlock
+  assign cpu_dmem_master_arlock =
+	     tagController_tmp_shimMaster_arff_rvport1__re_ETC__q4[15] ;
 
-  // value method cpu_dmem_master_m_arlock
-  assign cpu_dmem_master_arlock = fabric_2x3$v_to_slaves_0_arlock ;
+  // value method cpu_dmem_master_ar_arcache
+  assign cpu_dmem_master_arcache =
+	     tagController_tmp_shimMaster_arff_rvport1__re_ETC__q4[14:11] ;
 
-  // value method cpu_dmem_master_m_arcache
-  assign cpu_dmem_master_arcache = fabric_2x3$v_to_slaves_0_arcache ;
+  // value method cpu_dmem_master_ar_arprot
+  assign cpu_dmem_master_arprot =
+	     tagController_tmp_shimMaster_arff_rvport1__re_ETC__q4[10:8] ;
 
-  // value method cpu_dmem_master_m_arprot
-  assign cpu_dmem_master_arprot = fabric_2x3$v_to_slaves_0_arprot ;
+  // value method cpu_dmem_master_ar_arqos
+  assign cpu_dmem_master_arqos =
+	     tagController_tmp_shimMaster_arff_rvport1__re_ETC__q4[7:4] ;
 
-  // value method cpu_dmem_master_m_arqos
-  assign cpu_dmem_master_arqos = fabric_2x3$v_to_slaves_0_arqos ;
+  // value method cpu_dmem_master_ar_arregion
+  assign cpu_dmem_master_arregion =
+	     tagController_tmp_shimMaster_arff_rvport1__re_ETC__q4[3:0] ;
 
-  // value method cpu_dmem_master_m_arregion
-  assign cpu_dmem_master_arregion = fabric_2x3$v_to_slaves_0_arregion ;
+  // value method cpu_dmem_master_ar_arvalid
+  assign cpu_dmem_master_arvalid =
+	     CAN_FIRE_RL_tagController_tmp_ug_master_u_ar_setPeek ;
 
-  // action method cpu_dmem_master_m_arready
-  assign CAN_FIRE_cpu_dmem_master_m_arready = 1'd1 ;
-  assign WILL_FIRE_cpu_dmem_master_m_arready = 1'd1 ;
+  // action method cpu_dmem_master_ar_arready
+  assign CAN_FIRE_cpu_dmem_master_ar_arready = 1'd1 ;
+  assign WILL_FIRE_cpu_dmem_master_ar_arready = 1'd1 ;
 
-  // action method cpu_dmem_master_m_rvalid
-  assign CAN_FIRE_cpu_dmem_master_m_rvalid = 1'd1 ;
-  assign WILL_FIRE_cpu_dmem_master_m_rvalid = 1'd1 ;
+  // action method cpu_dmem_master_r_rflit
+  assign CAN_FIRE_cpu_dmem_master_r_rflit = 1'd1 ;
+  assign WILL_FIRE_cpu_dmem_master_r_rflit = cpu_dmem_master_rvalid ;
 
-  // value method cpu_dmem_master_m_rready
-  assign cpu_dmem_master_rready = fabric_2x3$v_to_slaves_0_rready ;
+  // value method cpu_dmem_master_r_rready
+  assign cpu_dmem_master_rready = !tagController_tmp_shimMaster_rff_rv[73] ;
 
   // action method core_external_interrupt_sources_0_m_interrupt_req
   assign CAN_FIRE_core_external_interrupt_sources_0_m_interrupt_req = 1'd1 ;
@@ -1536,24 +2956,22 @@ module mkCore(CLK,
 	    .dmem_master_awready(cpu$dmem_master_awready),
 	    .dmem_master_bid(cpu$dmem_master_bid),
 	    .dmem_master_bresp(cpu$dmem_master_bresp),
-	    .dmem_master_bvalid(cpu$dmem_master_bvalid),
 	    .dmem_master_rdata(cpu$dmem_master_rdata),
 	    .dmem_master_rid(cpu$dmem_master_rid),
 	    .dmem_master_rlast(cpu$dmem_master_rlast),
 	    .dmem_master_rresp(cpu$dmem_master_rresp),
-	    .dmem_master_rvalid(cpu$dmem_master_rvalid),
+	    .dmem_master_ruser(cpu$dmem_master_ruser),
 	    .dmem_master_wready(cpu$dmem_master_wready),
 	    .hart0_server_reset_request_put(cpu$hart0_server_reset_request_put),
 	    .imem_master_arready(cpu$imem_master_arready),
 	    .imem_master_awready(cpu$imem_master_awready),
 	    .imem_master_bid(cpu$imem_master_bid),
 	    .imem_master_bresp(cpu$imem_master_bresp),
-	    .imem_master_bvalid(cpu$imem_master_bvalid),
 	    .imem_master_rdata(cpu$imem_master_rdata),
 	    .imem_master_rid(cpu$imem_master_rid),
 	    .imem_master_rlast(cpu$imem_master_rlast),
 	    .imem_master_rresp(cpu$imem_master_rresp),
-	    .imem_master_rvalid(cpu$imem_master_rvalid),
+	    .imem_master_ruser(cpu$imem_master_ruser),
 	    .imem_master_wready(cpu$imem_master_wready),
 	    .m_external_interrupt_req_set_not_clear(cpu$m_external_interrupt_req_set_not_clear),
 	    .nmi_req_set_not_clear(cpu$nmi_req_set_not_clear),
@@ -1564,11 +2982,14 @@ module mkCore(CLK,
 	    .timer_interrupt_req_set_not_clear(cpu$timer_interrupt_req_set_not_clear),
 	    .EN_hart0_server_reset_request_put(cpu$EN_hart0_server_reset_request_put),
 	    .EN_hart0_server_reset_response_get(cpu$EN_hart0_server_reset_response_get),
+	    .imem_master_bvalid(cpu$imem_master_bvalid),
+	    .imem_master_rvalid(cpu$imem_master_rvalid),
+	    .dmem_master_bvalid(cpu$dmem_master_bvalid),
+	    .dmem_master_rvalid(cpu$dmem_master_rvalid),
 	    .EN_set_verbosity(cpu$EN_set_verbosity),
 	    .RDY_hart0_server_reset_request_put(cpu$RDY_hart0_server_reset_request_put),
 	    .hart0_server_reset_response_get(cpu$hart0_server_reset_response_get),
 	    .RDY_hart0_server_reset_response_get(cpu$RDY_hart0_server_reset_response_get),
-	    .imem_master_awvalid(cpu$imem_master_awvalid),
 	    .imem_master_awid(cpu$imem_master_awid),
 	    .imem_master_awaddr(cpu$imem_master_awaddr),
 	    .imem_master_awlen(cpu$imem_master_awlen),
@@ -1579,12 +3000,13 @@ module mkCore(CLK,
 	    .imem_master_awprot(cpu$imem_master_awprot),
 	    .imem_master_awqos(cpu$imem_master_awqos),
 	    .imem_master_awregion(cpu$imem_master_awregion),
-	    .imem_master_wvalid(cpu$imem_master_wvalid),
+	    .imem_master_awvalid(cpu$imem_master_awvalid),
 	    .imem_master_wdata(cpu$imem_master_wdata),
 	    .imem_master_wstrb(cpu$imem_master_wstrb),
 	    .imem_master_wlast(cpu$imem_master_wlast),
+	    .imem_master_wuser(cpu$imem_master_wuser),
+	    .imem_master_wvalid(cpu$imem_master_wvalid),
 	    .imem_master_bready(cpu$imem_master_bready),
-	    .imem_master_arvalid(cpu$imem_master_arvalid),
 	    .imem_master_arid(cpu$imem_master_arid),
 	    .imem_master_araddr(cpu$imem_master_araddr),
 	    .imem_master_arlen(cpu$imem_master_arlen),
@@ -1595,8 +3017,8 @@ module mkCore(CLK,
 	    .imem_master_arprot(cpu$imem_master_arprot),
 	    .imem_master_arqos(cpu$imem_master_arqos),
 	    .imem_master_arregion(cpu$imem_master_arregion),
+	    .imem_master_arvalid(cpu$imem_master_arvalid),
 	    .imem_master_rready(cpu$imem_master_rready),
-	    .dmem_master_awvalid(cpu$dmem_master_awvalid),
 	    .dmem_master_awid(cpu$dmem_master_awid),
 	    .dmem_master_awaddr(cpu$dmem_master_awaddr),
 	    .dmem_master_awlen(cpu$dmem_master_awlen),
@@ -1607,12 +3029,13 @@ module mkCore(CLK,
 	    .dmem_master_awprot(cpu$dmem_master_awprot),
 	    .dmem_master_awqos(cpu$dmem_master_awqos),
 	    .dmem_master_awregion(cpu$dmem_master_awregion),
-	    .dmem_master_wvalid(cpu$dmem_master_wvalid),
+	    .dmem_master_awvalid(cpu$dmem_master_awvalid),
 	    .dmem_master_wdata(cpu$dmem_master_wdata),
 	    .dmem_master_wstrb(cpu$dmem_master_wstrb),
 	    .dmem_master_wlast(cpu$dmem_master_wlast),
+	    .dmem_master_wuser(cpu$dmem_master_wuser),
+	    .dmem_master_wvalid(cpu$dmem_master_wvalid),
 	    .dmem_master_bready(cpu$dmem_master_bready),
-	    .dmem_master_arvalid(cpu$dmem_master_arvalid),
 	    .dmem_master_arid(cpu$dmem_master_arid),
 	    .dmem_master_araddr(cpu$dmem_master_araddr),
 	    .dmem_master_arlen(cpu$dmem_master_arlen),
@@ -1623,8 +3046,115 @@ module mkCore(CLK,
 	    .dmem_master_arprot(cpu$dmem_master_arprot),
 	    .dmem_master_arqos(cpu$dmem_master_arqos),
 	    .dmem_master_arregion(cpu$dmem_master_arregion),
+	    .dmem_master_arvalid(cpu$dmem_master_arvalid),
 	    .dmem_master_rready(cpu$dmem_master_rready),
 	    .RDY_set_verbosity());
+
+  // submodule cpu_imem_b_buffer_ff
+  FIFO1 #(.width(32'd7), .guarded(32'd0)) cpu_imem_b_buffer_ff(.RST(RST_N),
+							       .CLK(CLK),
+							       .D_IN(cpu_imem_b_buffer_ff$D_IN),
+							       .ENQ(cpu_imem_b_buffer_ff$ENQ),
+							       .DEQ(cpu_imem_b_buffer_ff$DEQ),
+							       .CLR(cpu_imem_b_buffer_ff$CLR),
+							       .D_OUT(cpu_imem_b_buffer_ff$D_OUT),
+							       .FULL_N(cpu_imem_b_buffer_ff$FULL_N),
+							       .EMPTY_N(cpu_imem_b_buffer_ff$EMPTY_N));
+
+  // submodule cpu_imem_b_buffer_firstValid
+  RevertReg #(.width(32'd1),
+	      .init(1'd1)) cpu_imem_b_buffer_firstValid(.CLK(CLK),
+							.D_IN(cpu_imem_b_buffer_firstValid$D_IN),
+							.EN(cpu_imem_b_buffer_firstValid$EN),
+							.Q_OUT(cpu_imem_b_buffer_firstValid$Q_OUT));
+
+  // submodule cpu_imem_r_buffer_ff
+  FIFO1 #(.width(32'd73), .guarded(32'd0)) cpu_imem_r_buffer_ff(.RST(RST_N),
+								.CLK(CLK),
+								.D_IN(cpu_imem_r_buffer_ff$D_IN),
+								.ENQ(cpu_imem_r_buffer_ff$ENQ),
+								.DEQ(cpu_imem_r_buffer_ff$DEQ),
+								.CLR(cpu_imem_r_buffer_ff$CLR),
+								.D_OUT(cpu_imem_r_buffer_ff$D_OUT),
+								.FULL_N(cpu_imem_r_buffer_ff$FULL_N),
+								.EMPTY_N(cpu_imem_r_buffer_ff$EMPTY_N));
+
+  // submodule cpu_imem_r_buffer_firstValid
+  RevertReg #(.width(32'd1),
+	      .init(1'd1)) cpu_imem_r_buffer_firstValid(.CLK(CLK),
+							.D_IN(cpu_imem_r_buffer_firstValid$D_IN),
+							.EN(cpu_imem_r_buffer_firstValid$EN),
+							.Q_OUT(cpu_imem_r_buffer_firstValid$Q_OUT));
+
+  // submodule delay_shim_arff
+  SizedFIFO #(.p1width(32'd98),
+	      .p2depth(32'd4),
+	      .p3cntr_width(32'd2),
+	      .guarded(32'd1)) delay_shim_arff(.RST(RST_N),
+					       .CLK(CLK),
+					       .D_IN(delay_shim_arff$D_IN),
+					       .ENQ(delay_shim_arff$ENQ),
+					       .DEQ(delay_shim_arff$DEQ),
+					       .CLR(delay_shim_arff$CLR),
+					       .D_OUT(delay_shim_arff$D_OUT),
+					       .FULL_N(delay_shim_arff$FULL_N),
+					       .EMPTY_N(delay_shim_arff$EMPTY_N));
+
+  // submodule delay_shim_awff
+  SizedFIFO #(.p1width(32'd98),
+	      .p2depth(32'd4),
+	      .p3cntr_width(32'd2),
+	      .guarded(32'd1)) delay_shim_awff(.RST(RST_N),
+					       .CLK(CLK),
+					       .D_IN(delay_shim_awff$D_IN),
+					       .ENQ(delay_shim_awff$ENQ),
+					       .DEQ(delay_shim_awff$DEQ),
+					       .CLR(delay_shim_awff$CLR),
+					       .D_OUT(delay_shim_awff$D_OUT),
+					       .FULL_N(delay_shim_awff$FULL_N),
+					       .EMPTY_N(delay_shim_awff$EMPTY_N));
+
+  // submodule delay_shim_bff
+  SizedFIFO #(.p1width(32'd7),
+	      .p2depth(32'd4),
+	      .p3cntr_width(32'd2),
+	      .guarded(32'd1)) delay_shim_bff(.RST(RST_N),
+					      .CLK(CLK),
+					      .D_IN(delay_shim_bff$D_IN),
+					      .ENQ(delay_shim_bff$ENQ),
+					      .DEQ(delay_shim_bff$DEQ),
+					      .CLR(delay_shim_bff$CLR),
+					      .D_OUT(delay_shim_bff$D_OUT),
+					      .FULL_N(delay_shim_bff$FULL_N),
+					      .EMPTY_N(delay_shim_bff$EMPTY_N));
+
+  // submodule delay_shim_rff
+  SizedFIFO #(.p1width(32'd73),
+	      .p2depth(32'd4),
+	      .p3cntr_width(32'd2),
+	      .guarded(32'd1)) delay_shim_rff(.RST(RST_N),
+					      .CLK(CLK),
+					      .D_IN(delay_shim_rff$D_IN),
+					      .ENQ(delay_shim_rff$ENQ),
+					      .DEQ(delay_shim_rff$DEQ),
+					      .CLR(delay_shim_rff$CLR),
+					      .D_OUT(delay_shim_rff$D_OUT),
+					      .FULL_N(delay_shim_rff$FULL_N),
+					      .EMPTY_N(delay_shim_rff$EMPTY_N));
+
+  // submodule delay_shim_wff
+  SizedFIFO #(.p1width(32'd74),
+	      .p2depth(32'd4),
+	      .p3cntr_width(32'd2),
+	      .guarded(32'd1)) delay_shim_wff(.RST(RST_N),
+					      .CLK(CLK),
+					      .D_IN(delay_shim_wff$D_IN),
+					      .ENQ(delay_shim_wff$ENQ),
+					      .DEQ(delay_shim_wff$DEQ),
+					      .CLR(delay_shim_wff$CLR),
+					      .D_OUT(delay_shim_wff$D_OUT),
+					      .FULL_N(delay_shim_wff$FULL_N),
+					      .EMPTY_N(delay_shim_wff$EMPTY_N));
 
   // submodule f_reset_reqs
   FIFO2 #(.width(32'd1), .guarded(32'd1)) f_reset_reqs(.RST(RST_N),
@@ -1648,209 +3178,343 @@ module mkCore(CLK,
 						       .FULL_N(f_reset_rsps$FULL_N),
 						       .EMPTY_N(f_reset_rsps$EMPTY_N));
 
-  // submodule fabric_2x3
-  mkFabric_2x3 fabric_2x3(.CLK(CLK),
-			  .RST_N(RST_N),
-			  .set_verbosity_verbosity(fabric_2x3$set_verbosity_verbosity),
-			  .v_from_masters_0_araddr(fabric_2x3$v_from_masters_0_araddr),
-			  .v_from_masters_0_arburst(fabric_2x3$v_from_masters_0_arburst),
-			  .v_from_masters_0_arcache(fabric_2x3$v_from_masters_0_arcache),
-			  .v_from_masters_0_arid(fabric_2x3$v_from_masters_0_arid),
-			  .v_from_masters_0_arlen(fabric_2x3$v_from_masters_0_arlen),
-			  .v_from_masters_0_arlock(fabric_2x3$v_from_masters_0_arlock),
-			  .v_from_masters_0_arprot(fabric_2x3$v_from_masters_0_arprot),
-			  .v_from_masters_0_arqos(fabric_2x3$v_from_masters_0_arqos),
-			  .v_from_masters_0_arregion(fabric_2x3$v_from_masters_0_arregion),
-			  .v_from_masters_0_arsize(fabric_2x3$v_from_masters_0_arsize),
-			  .v_from_masters_0_arvalid(fabric_2x3$v_from_masters_0_arvalid),
-			  .v_from_masters_0_awaddr(fabric_2x3$v_from_masters_0_awaddr),
-			  .v_from_masters_0_awburst(fabric_2x3$v_from_masters_0_awburst),
-			  .v_from_masters_0_awcache(fabric_2x3$v_from_masters_0_awcache),
-			  .v_from_masters_0_awid(fabric_2x3$v_from_masters_0_awid),
-			  .v_from_masters_0_awlen(fabric_2x3$v_from_masters_0_awlen),
-			  .v_from_masters_0_awlock(fabric_2x3$v_from_masters_0_awlock),
-			  .v_from_masters_0_awprot(fabric_2x3$v_from_masters_0_awprot),
-			  .v_from_masters_0_awqos(fabric_2x3$v_from_masters_0_awqos),
-			  .v_from_masters_0_awregion(fabric_2x3$v_from_masters_0_awregion),
-			  .v_from_masters_0_awsize(fabric_2x3$v_from_masters_0_awsize),
-			  .v_from_masters_0_awvalid(fabric_2x3$v_from_masters_0_awvalid),
-			  .v_from_masters_0_bready(fabric_2x3$v_from_masters_0_bready),
-			  .v_from_masters_0_rready(fabric_2x3$v_from_masters_0_rready),
-			  .v_from_masters_0_wdata(fabric_2x3$v_from_masters_0_wdata),
-			  .v_from_masters_0_wlast(fabric_2x3$v_from_masters_0_wlast),
-			  .v_from_masters_0_wstrb(fabric_2x3$v_from_masters_0_wstrb),
-			  .v_from_masters_0_wvalid(fabric_2x3$v_from_masters_0_wvalid),
-			  .v_from_masters_1_araddr(fabric_2x3$v_from_masters_1_araddr),
-			  .v_from_masters_1_arburst(fabric_2x3$v_from_masters_1_arburst),
-			  .v_from_masters_1_arcache(fabric_2x3$v_from_masters_1_arcache),
-			  .v_from_masters_1_arid(fabric_2x3$v_from_masters_1_arid),
-			  .v_from_masters_1_arlen(fabric_2x3$v_from_masters_1_arlen),
-			  .v_from_masters_1_arlock(fabric_2x3$v_from_masters_1_arlock),
-			  .v_from_masters_1_arprot(fabric_2x3$v_from_masters_1_arprot),
-			  .v_from_masters_1_arqos(fabric_2x3$v_from_masters_1_arqos),
-			  .v_from_masters_1_arregion(fabric_2x3$v_from_masters_1_arregion),
-			  .v_from_masters_1_arsize(fabric_2x3$v_from_masters_1_arsize),
-			  .v_from_masters_1_arvalid(fabric_2x3$v_from_masters_1_arvalid),
-			  .v_from_masters_1_awaddr(fabric_2x3$v_from_masters_1_awaddr),
-			  .v_from_masters_1_awburst(fabric_2x3$v_from_masters_1_awburst),
-			  .v_from_masters_1_awcache(fabric_2x3$v_from_masters_1_awcache),
-			  .v_from_masters_1_awid(fabric_2x3$v_from_masters_1_awid),
-			  .v_from_masters_1_awlen(fabric_2x3$v_from_masters_1_awlen),
-			  .v_from_masters_1_awlock(fabric_2x3$v_from_masters_1_awlock),
-			  .v_from_masters_1_awprot(fabric_2x3$v_from_masters_1_awprot),
-			  .v_from_masters_1_awqos(fabric_2x3$v_from_masters_1_awqos),
-			  .v_from_masters_1_awregion(fabric_2x3$v_from_masters_1_awregion),
-			  .v_from_masters_1_awsize(fabric_2x3$v_from_masters_1_awsize),
-			  .v_from_masters_1_awvalid(fabric_2x3$v_from_masters_1_awvalid),
-			  .v_from_masters_1_bready(fabric_2x3$v_from_masters_1_bready),
-			  .v_from_masters_1_rready(fabric_2x3$v_from_masters_1_rready),
-			  .v_from_masters_1_wdata(fabric_2x3$v_from_masters_1_wdata),
-			  .v_from_masters_1_wlast(fabric_2x3$v_from_masters_1_wlast),
-			  .v_from_masters_1_wstrb(fabric_2x3$v_from_masters_1_wstrb),
-			  .v_from_masters_1_wvalid(fabric_2x3$v_from_masters_1_wvalid),
-			  .v_to_slaves_0_arready(fabric_2x3$v_to_slaves_0_arready),
-			  .v_to_slaves_0_awready(fabric_2x3$v_to_slaves_0_awready),
-			  .v_to_slaves_0_bid(fabric_2x3$v_to_slaves_0_bid),
-			  .v_to_slaves_0_bresp(fabric_2x3$v_to_slaves_0_bresp),
-			  .v_to_slaves_0_bvalid(fabric_2x3$v_to_slaves_0_bvalid),
-			  .v_to_slaves_0_rdata(fabric_2x3$v_to_slaves_0_rdata),
-			  .v_to_slaves_0_rid(fabric_2x3$v_to_slaves_0_rid),
-			  .v_to_slaves_0_rlast(fabric_2x3$v_to_slaves_0_rlast),
-			  .v_to_slaves_0_rresp(fabric_2x3$v_to_slaves_0_rresp),
-			  .v_to_slaves_0_rvalid(fabric_2x3$v_to_slaves_0_rvalid),
-			  .v_to_slaves_0_wready(fabric_2x3$v_to_slaves_0_wready),
-			  .v_to_slaves_1_arready(fabric_2x3$v_to_slaves_1_arready),
-			  .v_to_slaves_1_awready(fabric_2x3$v_to_slaves_1_awready),
-			  .v_to_slaves_1_bid(fabric_2x3$v_to_slaves_1_bid),
-			  .v_to_slaves_1_bresp(fabric_2x3$v_to_slaves_1_bresp),
-			  .v_to_slaves_1_bvalid(fabric_2x3$v_to_slaves_1_bvalid),
-			  .v_to_slaves_1_rdata(fabric_2x3$v_to_slaves_1_rdata),
-			  .v_to_slaves_1_rid(fabric_2x3$v_to_slaves_1_rid),
-			  .v_to_slaves_1_rlast(fabric_2x3$v_to_slaves_1_rlast),
-			  .v_to_slaves_1_rresp(fabric_2x3$v_to_slaves_1_rresp),
-			  .v_to_slaves_1_rvalid(fabric_2x3$v_to_slaves_1_rvalid),
-			  .v_to_slaves_1_wready(fabric_2x3$v_to_slaves_1_wready),
-			  .v_to_slaves_2_arready(fabric_2x3$v_to_slaves_2_arready),
-			  .v_to_slaves_2_awready(fabric_2x3$v_to_slaves_2_awready),
-			  .v_to_slaves_2_bid(fabric_2x3$v_to_slaves_2_bid),
-			  .v_to_slaves_2_bresp(fabric_2x3$v_to_slaves_2_bresp),
-			  .v_to_slaves_2_bvalid(fabric_2x3$v_to_slaves_2_bvalid),
-			  .v_to_slaves_2_rdata(fabric_2x3$v_to_slaves_2_rdata),
-			  .v_to_slaves_2_rid(fabric_2x3$v_to_slaves_2_rid),
-			  .v_to_slaves_2_rlast(fabric_2x3$v_to_slaves_2_rlast),
-			  .v_to_slaves_2_rresp(fabric_2x3$v_to_slaves_2_rresp),
-			  .v_to_slaves_2_rvalid(fabric_2x3$v_to_slaves_2_rvalid),
-			  .v_to_slaves_2_wready(fabric_2x3$v_to_slaves_2_wready),
-			  .EN_reset(fabric_2x3$EN_reset),
-			  .EN_set_verbosity(fabric_2x3$EN_set_verbosity),
-			  .RDY_reset(fabric_2x3$RDY_reset),
-			  .RDY_set_verbosity(),
-			  .v_from_masters_0_awready(fabric_2x3$v_from_masters_0_awready),
-			  .v_from_masters_0_wready(fabric_2x3$v_from_masters_0_wready),
-			  .v_from_masters_0_bvalid(fabric_2x3$v_from_masters_0_bvalid),
-			  .v_from_masters_0_bid(fabric_2x3$v_from_masters_0_bid),
-			  .v_from_masters_0_bresp(fabric_2x3$v_from_masters_0_bresp),
-			  .v_from_masters_0_arready(fabric_2x3$v_from_masters_0_arready),
-			  .v_from_masters_0_rvalid(fabric_2x3$v_from_masters_0_rvalid),
-			  .v_from_masters_0_rid(fabric_2x3$v_from_masters_0_rid),
-			  .v_from_masters_0_rdata(fabric_2x3$v_from_masters_0_rdata),
-			  .v_from_masters_0_rresp(fabric_2x3$v_from_masters_0_rresp),
-			  .v_from_masters_0_rlast(fabric_2x3$v_from_masters_0_rlast),
-			  .v_from_masters_1_awready(),
-			  .v_from_masters_1_wready(),
-			  .v_from_masters_1_bvalid(),
-			  .v_from_masters_1_bid(),
-			  .v_from_masters_1_bresp(),
-			  .v_from_masters_1_arready(),
-			  .v_from_masters_1_rvalid(),
-			  .v_from_masters_1_rid(),
-			  .v_from_masters_1_rdata(),
-			  .v_from_masters_1_rresp(),
-			  .v_from_masters_1_rlast(),
-			  .v_to_slaves_0_awvalid(fabric_2x3$v_to_slaves_0_awvalid),
-			  .v_to_slaves_0_awid(fabric_2x3$v_to_slaves_0_awid),
-			  .v_to_slaves_0_awaddr(fabric_2x3$v_to_slaves_0_awaddr),
-			  .v_to_slaves_0_awlen(fabric_2x3$v_to_slaves_0_awlen),
-			  .v_to_slaves_0_awsize(fabric_2x3$v_to_slaves_0_awsize),
-			  .v_to_slaves_0_awburst(fabric_2x3$v_to_slaves_0_awburst),
-			  .v_to_slaves_0_awlock(fabric_2x3$v_to_slaves_0_awlock),
-			  .v_to_slaves_0_awcache(fabric_2x3$v_to_slaves_0_awcache),
-			  .v_to_slaves_0_awprot(fabric_2x3$v_to_slaves_0_awprot),
-			  .v_to_slaves_0_awqos(fabric_2x3$v_to_slaves_0_awqos),
-			  .v_to_slaves_0_awregion(fabric_2x3$v_to_slaves_0_awregion),
-			  .v_to_slaves_0_wvalid(fabric_2x3$v_to_slaves_0_wvalid),
-			  .v_to_slaves_0_wdata(fabric_2x3$v_to_slaves_0_wdata),
-			  .v_to_slaves_0_wstrb(fabric_2x3$v_to_slaves_0_wstrb),
-			  .v_to_slaves_0_wlast(fabric_2x3$v_to_slaves_0_wlast),
-			  .v_to_slaves_0_bready(fabric_2x3$v_to_slaves_0_bready),
-			  .v_to_slaves_0_arvalid(fabric_2x3$v_to_slaves_0_arvalid),
-			  .v_to_slaves_0_arid(fabric_2x3$v_to_slaves_0_arid),
-			  .v_to_slaves_0_araddr(fabric_2x3$v_to_slaves_0_araddr),
-			  .v_to_slaves_0_arlen(fabric_2x3$v_to_slaves_0_arlen),
-			  .v_to_slaves_0_arsize(fabric_2x3$v_to_slaves_0_arsize),
-			  .v_to_slaves_0_arburst(fabric_2x3$v_to_slaves_0_arburst),
-			  .v_to_slaves_0_arlock(fabric_2x3$v_to_slaves_0_arlock),
-			  .v_to_slaves_0_arcache(fabric_2x3$v_to_slaves_0_arcache),
-			  .v_to_slaves_0_arprot(fabric_2x3$v_to_slaves_0_arprot),
-			  .v_to_slaves_0_arqos(fabric_2x3$v_to_slaves_0_arqos),
-			  .v_to_slaves_0_arregion(fabric_2x3$v_to_slaves_0_arregion),
-			  .v_to_slaves_0_rready(fabric_2x3$v_to_slaves_0_rready),
-			  .v_to_slaves_1_awvalid(fabric_2x3$v_to_slaves_1_awvalid),
-			  .v_to_slaves_1_awid(fabric_2x3$v_to_slaves_1_awid),
-			  .v_to_slaves_1_awaddr(fabric_2x3$v_to_slaves_1_awaddr),
-			  .v_to_slaves_1_awlen(fabric_2x3$v_to_slaves_1_awlen),
-			  .v_to_slaves_1_awsize(fabric_2x3$v_to_slaves_1_awsize),
-			  .v_to_slaves_1_awburst(fabric_2x3$v_to_slaves_1_awburst),
-			  .v_to_slaves_1_awlock(fabric_2x3$v_to_slaves_1_awlock),
-			  .v_to_slaves_1_awcache(fabric_2x3$v_to_slaves_1_awcache),
-			  .v_to_slaves_1_awprot(fabric_2x3$v_to_slaves_1_awprot),
-			  .v_to_slaves_1_awqos(fabric_2x3$v_to_slaves_1_awqos),
-			  .v_to_slaves_1_awregion(fabric_2x3$v_to_slaves_1_awregion),
-			  .v_to_slaves_1_wvalid(fabric_2x3$v_to_slaves_1_wvalid),
-			  .v_to_slaves_1_wdata(fabric_2x3$v_to_slaves_1_wdata),
-			  .v_to_slaves_1_wstrb(fabric_2x3$v_to_slaves_1_wstrb),
-			  .v_to_slaves_1_wlast(fabric_2x3$v_to_slaves_1_wlast),
-			  .v_to_slaves_1_bready(fabric_2x3$v_to_slaves_1_bready),
-			  .v_to_slaves_1_arvalid(fabric_2x3$v_to_slaves_1_arvalid),
-			  .v_to_slaves_1_arid(fabric_2x3$v_to_slaves_1_arid),
-			  .v_to_slaves_1_araddr(fabric_2x3$v_to_slaves_1_araddr),
-			  .v_to_slaves_1_arlen(fabric_2x3$v_to_slaves_1_arlen),
-			  .v_to_slaves_1_arsize(fabric_2x3$v_to_slaves_1_arsize),
-			  .v_to_slaves_1_arburst(fabric_2x3$v_to_slaves_1_arburst),
-			  .v_to_slaves_1_arlock(fabric_2x3$v_to_slaves_1_arlock),
-			  .v_to_slaves_1_arcache(fabric_2x3$v_to_slaves_1_arcache),
-			  .v_to_slaves_1_arprot(fabric_2x3$v_to_slaves_1_arprot),
-			  .v_to_slaves_1_arqos(fabric_2x3$v_to_slaves_1_arqos),
-			  .v_to_slaves_1_arregion(fabric_2x3$v_to_slaves_1_arregion),
-			  .v_to_slaves_1_rready(fabric_2x3$v_to_slaves_1_rready),
-			  .v_to_slaves_2_awvalid(fabric_2x3$v_to_slaves_2_awvalid),
-			  .v_to_slaves_2_awid(fabric_2x3$v_to_slaves_2_awid),
-			  .v_to_slaves_2_awaddr(fabric_2x3$v_to_slaves_2_awaddr),
-			  .v_to_slaves_2_awlen(fabric_2x3$v_to_slaves_2_awlen),
-			  .v_to_slaves_2_awsize(fabric_2x3$v_to_slaves_2_awsize),
-			  .v_to_slaves_2_awburst(fabric_2x3$v_to_slaves_2_awburst),
-			  .v_to_slaves_2_awlock(fabric_2x3$v_to_slaves_2_awlock),
-			  .v_to_slaves_2_awcache(fabric_2x3$v_to_slaves_2_awcache),
-			  .v_to_slaves_2_awprot(fabric_2x3$v_to_slaves_2_awprot),
-			  .v_to_slaves_2_awqos(fabric_2x3$v_to_slaves_2_awqos),
-			  .v_to_slaves_2_awregion(fabric_2x3$v_to_slaves_2_awregion),
-			  .v_to_slaves_2_wvalid(fabric_2x3$v_to_slaves_2_wvalid),
-			  .v_to_slaves_2_wdata(fabric_2x3$v_to_slaves_2_wdata),
-			  .v_to_slaves_2_wstrb(fabric_2x3$v_to_slaves_2_wstrb),
-			  .v_to_slaves_2_wlast(fabric_2x3$v_to_slaves_2_wlast),
-			  .v_to_slaves_2_bready(fabric_2x3$v_to_slaves_2_bready),
-			  .v_to_slaves_2_arvalid(fabric_2x3$v_to_slaves_2_arvalid),
-			  .v_to_slaves_2_arid(fabric_2x3$v_to_slaves_2_arid),
-			  .v_to_slaves_2_araddr(fabric_2x3$v_to_slaves_2_araddr),
-			  .v_to_slaves_2_arlen(fabric_2x3$v_to_slaves_2_arlen),
-			  .v_to_slaves_2_arsize(fabric_2x3$v_to_slaves_2_arsize),
-			  .v_to_slaves_2_arburst(fabric_2x3$v_to_slaves_2_arburst),
-			  .v_to_slaves_2_arlock(fabric_2x3$v_to_slaves_2_arlock),
-			  .v_to_slaves_2_arcache(fabric_2x3$v_to_slaves_2_arcache),
-			  .v_to_slaves_2_arprot(fabric_2x3$v_to_slaves_2_arprot),
-			  .v_to_slaves_2_arqos(fabric_2x3$v_to_slaves_2_arqos),
-			  .v_to_slaves_2_arregion(fabric_2x3$v_to_slaves_2_arregion),
-			  .v_to_slaves_2_rready(fabric_2x3$v_to_slaves_2_rready));
+  // submodule ifcs_0_1_innerReq
+  FIFO2 #(.width(32'd98), .guarded(32'd1)) ifcs_0_1_innerReq(.RST(RST_N),
+							     .CLK(CLK),
+							     .D_IN(ifcs_0_1_innerReq$D_IN),
+							     .ENQ(ifcs_0_1_innerReq$ENQ),
+							     .DEQ(ifcs_0_1_innerReq$DEQ),
+							     .CLR(ifcs_0_1_innerReq$CLR),
+							     .D_OUT(ifcs_0_1_innerReq$D_OUT),
+							     .FULL_N(ifcs_0_1_innerReq$FULL_N),
+							     .EMPTY_N(ifcs_0_1_innerReq$EMPTY_N));
+
+  // submodule ifcs_0_1_innerRoute
+  FIFO2 #(.width(32'd3), .guarded(32'd1)) ifcs_0_1_innerRoute(.RST(RST_N),
+							      .CLK(CLK),
+							      .D_IN(ifcs_0_1_innerRoute$D_IN),
+							      .ENQ(ifcs_0_1_innerRoute$ENQ),
+							      .DEQ(ifcs_0_1_innerRoute$DEQ),
+							      .CLR(ifcs_0_1_innerRoute$CLR),
+							      .D_OUT(ifcs_0_1_innerRoute$D_OUT),
+							      .FULL_N(ifcs_0_1_innerRoute$FULL_N),
+							      .EMPTY_N(ifcs_0_1_innerRoute$EMPTY_N));
+
+  // submodule ifcs_0_1_noRouteRsp
+  FIFO2 #(.width(32'd72), .guarded(32'd1)) ifcs_0_1_noRouteRsp(.RST(RST_N),
+							       .CLK(CLK),
+							       .D_IN(ifcs_0_1_noRouteRsp$D_IN),
+							       .ENQ(ifcs_0_1_noRouteRsp$ENQ),
+							       .DEQ(ifcs_0_1_noRouteRsp$DEQ),
+							       .CLR(ifcs_0_1_noRouteRsp$CLR),
+							       .D_OUT(ifcs_0_1_noRouteRsp$D_OUT),
+							       .FULL_N(ifcs_0_1_noRouteRsp$FULL_N),
+							       .EMPTY_N(ifcs_0_1_noRouteRsp$EMPTY_N));
+
+  // submodule ifcs_0_1_routeBack
+  FIFO2 #(.width(32'd2), .guarded(32'd1)) ifcs_0_1_routeBack(.RST(RST_N),
+							     .CLK(CLK),
+							     .D_IN(ifcs_0_1_routeBack$D_IN),
+							     .ENQ(ifcs_0_1_routeBack$ENQ),
+							     .DEQ(ifcs_0_1_routeBack$DEQ),
+							     .CLR(ifcs_0_1_routeBack$CLR),
+							     .D_OUT(ifcs_0_1_routeBack$D_OUT),
+							     .FULL_N(ifcs_0_1_routeBack$FULL_N),
+							     .EMPTY_N(ifcs_0_1_routeBack$EMPTY_N));
+
+  // submodule ifcs_0_1_rspBack
+  FIFO2 #(.width(32'd72), .guarded(32'd1)) ifcs_0_1_rspBack(.RST(RST_N),
+							    .CLK(CLK),
+							    .D_IN(ifcs_0_1_rspBack$D_IN),
+							    .ENQ(ifcs_0_1_rspBack$ENQ),
+							    .DEQ(ifcs_0_1_rspBack$DEQ),
+							    .CLR(ifcs_0_1_rspBack$CLR),
+							    .D_OUT(ifcs_0_1_rspBack$D_OUT),
+							    .FULL_N(ifcs_0_1_rspBack$FULL_N),
+							    .EMPTY_N(ifcs_0_1_rspBack$EMPTY_N));
+
+  // submodule ifcs_0_innerReq
+  FIFO2 #(.width(32'd173), .guarded(32'd1)) ifcs_0_innerReq(.RST(RST_N),
+							    .CLK(CLK),
+							    .D_IN(ifcs_0_innerReq$D_IN),
+							    .ENQ(ifcs_0_innerReq$ENQ),
+							    .DEQ(ifcs_0_innerReq$DEQ),
+							    .CLR(ifcs_0_innerReq$CLR),
+							    .D_OUT(ifcs_0_innerReq$D_OUT),
+							    .FULL_N(ifcs_0_innerReq$FULL_N),
+							    .EMPTY_N(ifcs_0_innerReq$EMPTY_N));
+
+  // submodule ifcs_0_innerRoute
+  FIFO2 #(.width(32'd3), .guarded(32'd1)) ifcs_0_innerRoute(.RST(RST_N),
+							    .CLK(CLK),
+							    .D_IN(ifcs_0_innerRoute$D_IN),
+							    .ENQ(ifcs_0_innerRoute$ENQ),
+							    .DEQ(ifcs_0_innerRoute$DEQ),
+							    .CLR(ifcs_0_innerRoute$CLR),
+							    .D_OUT(ifcs_0_innerRoute$D_OUT),
+							    .FULL_N(ifcs_0_innerRoute$FULL_N),
+							    .EMPTY_N(ifcs_0_innerRoute$EMPTY_N));
+
+  // submodule ifcs_0_noRouteRsp
+  FIFO2 #(.width(32'd6), .guarded(32'd1)) ifcs_0_noRouteRsp(.RST(RST_N),
+							    .CLK(CLK),
+							    .D_IN(ifcs_0_noRouteRsp$D_IN),
+							    .ENQ(ifcs_0_noRouteRsp$ENQ),
+							    .DEQ(ifcs_0_noRouteRsp$DEQ),
+							    .CLR(ifcs_0_noRouteRsp$CLR),
+							    .D_OUT(ifcs_0_noRouteRsp$D_OUT),
+							    .FULL_N(ifcs_0_noRouteRsp$FULL_N),
+							    .EMPTY_N(ifcs_0_noRouteRsp$EMPTY_N));
+
+  // submodule ifcs_0_routeBack
+  FIFO2 #(.width(32'd2), .guarded(32'd1)) ifcs_0_routeBack(.RST(RST_N),
+							   .CLK(CLK),
+							   .D_IN(ifcs_0_routeBack$D_IN),
+							   .ENQ(ifcs_0_routeBack$ENQ),
+							   .DEQ(ifcs_0_routeBack$DEQ),
+							   .CLR(ifcs_0_routeBack$CLR),
+							   .D_OUT(ifcs_0_routeBack$D_OUT),
+							   .FULL_N(ifcs_0_routeBack$FULL_N),
+							   .EMPTY_N(ifcs_0_routeBack$EMPTY_N));
+
+  // submodule ifcs_0_rspBack
+  FIFO2 #(.width(32'd6), .guarded(32'd1)) ifcs_0_rspBack(.RST(RST_N),
+							 .CLK(CLK),
+							 .D_IN(ifcs_0_rspBack$D_IN),
+							 .ENQ(ifcs_0_rspBack$ENQ),
+							 .DEQ(ifcs_0_rspBack$DEQ),
+							 .CLR(ifcs_0_rspBack$CLR),
+							 .D_OUT(ifcs_0_rspBack$D_OUT),
+							 .FULL_N(ifcs_0_rspBack$FULL_N),
+							 .EMPTY_N(ifcs_0_rspBack$EMPTY_N));
+
+  // submodule ifcs_1_1_innerReq
+  FIFO2 #(.width(32'd98), .guarded(32'd1)) ifcs_1_1_innerReq(.RST(RST_N),
+							     .CLK(CLK),
+							     .D_IN(ifcs_1_1_innerReq$D_IN),
+							     .ENQ(ifcs_1_1_innerReq$ENQ),
+							     .DEQ(ifcs_1_1_innerReq$DEQ),
+							     .CLR(ifcs_1_1_innerReq$CLR),
+							     .D_OUT(ifcs_1_1_innerReq$D_OUT),
+							     .FULL_N(),
+							     .EMPTY_N(ifcs_1_1_innerReq$EMPTY_N));
+
+  // submodule ifcs_1_1_innerRoute
+  FIFO2 #(.width(32'd3), .guarded(32'd1)) ifcs_1_1_innerRoute(.RST(RST_N),
+							      .CLK(CLK),
+							      .D_IN(ifcs_1_1_innerRoute$D_IN),
+							      .ENQ(ifcs_1_1_innerRoute$ENQ),
+							      .DEQ(ifcs_1_1_innerRoute$DEQ),
+							      .CLR(ifcs_1_1_innerRoute$CLR),
+							      .D_OUT(ifcs_1_1_innerRoute$D_OUT),
+							      .FULL_N(),
+							      .EMPTY_N(ifcs_1_1_innerRoute$EMPTY_N));
+
+  // submodule ifcs_1_1_noRouteRsp
+  FIFO2 #(.width(32'd72), .guarded(32'd1)) ifcs_1_1_noRouteRsp(.RST(RST_N),
+							       .CLK(CLK),
+							       .D_IN(ifcs_1_1_noRouteRsp$D_IN),
+							       .ENQ(ifcs_1_1_noRouteRsp$ENQ),
+							       .DEQ(ifcs_1_1_noRouteRsp$DEQ),
+							       .CLR(ifcs_1_1_noRouteRsp$CLR),
+							       .D_OUT(ifcs_1_1_noRouteRsp$D_OUT),
+							       .FULL_N(ifcs_1_1_noRouteRsp$FULL_N),
+							       .EMPTY_N(ifcs_1_1_noRouteRsp$EMPTY_N));
+
+  // submodule ifcs_1_1_routeBack
+  FIFO2 #(.width(32'd2), .guarded(32'd1)) ifcs_1_1_routeBack(.RST(RST_N),
+							     .CLK(CLK),
+							     .D_IN(ifcs_1_1_routeBack$D_IN),
+							     .ENQ(ifcs_1_1_routeBack$ENQ),
+							     .DEQ(ifcs_1_1_routeBack$DEQ),
+							     .CLR(ifcs_1_1_routeBack$CLR),
+							     .D_OUT(ifcs_1_1_routeBack$D_OUT),
+							     .FULL_N(ifcs_1_1_routeBack$FULL_N),
+							     .EMPTY_N(ifcs_1_1_routeBack$EMPTY_N));
+
+  // submodule ifcs_1_1_rspBack
+  FIFO2 #(.width(32'd72), .guarded(32'd1)) ifcs_1_1_rspBack(.RST(RST_N),
+							    .CLK(CLK),
+							    .D_IN(ifcs_1_1_rspBack$D_IN),
+							    .ENQ(ifcs_1_1_rspBack$ENQ),
+							    .DEQ(ifcs_1_1_rspBack$DEQ),
+							    .CLR(ifcs_1_1_rspBack$CLR),
+							    .D_OUT(ifcs_1_1_rspBack$D_OUT),
+							    .FULL_N(ifcs_1_1_rspBack$FULL_N),
+							    .EMPTY_N(ifcs_1_1_rspBack$EMPTY_N));
+
+  // submodule ifcs_1_innerReq
+  FIFO2 #(.width(32'd173), .guarded(32'd1)) ifcs_1_innerReq(.RST(RST_N),
+							    .CLK(CLK),
+							    .D_IN(ifcs_1_innerReq$D_IN),
+							    .ENQ(ifcs_1_innerReq$ENQ),
+							    .DEQ(ifcs_1_innerReq$DEQ),
+							    .CLR(ifcs_1_innerReq$CLR),
+							    .D_OUT(ifcs_1_innerReq$D_OUT),
+							    .FULL_N(),
+							    .EMPTY_N(ifcs_1_innerReq$EMPTY_N));
+
+  // submodule ifcs_1_innerRoute
+  FIFO2 #(.width(32'd3), .guarded(32'd1)) ifcs_1_innerRoute(.RST(RST_N),
+							    .CLK(CLK),
+							    .D_IN(ifcs_1_innerRoute$D_IN),
+							    .ENQ(ifcs_1_innerRoute$ENQ),
+							    .DEQ(ifcs_1_innerRoute$DEQ),
+							    .CLR(ifcs_1_innerRoute$CLR),
+							    .D_OUT(ifcs_1_innerRoute$D_OUT),
+							    .FULL_N(),
+							    .EMPTY_N(ifcs_1_innerRoute$EMPTY_N));
+
+  // submodule ifcs_1_noRouteRsp
+  FIFO2 #(.width(32'd6), .guarded(32'd1)) ifcs_1_noRouteRsp(.RST(RST_N),
+							    .CLK(CLK),
+							    .D_IN(ifcs_1_noRouteRsp$D_IN),
+							    .ENQ(ifcs_1_noRouteRsp$ENQ),
+							    .DEQ(ifcs_1_noRouteRsp$DEQ),
+							    .CLR(ifcs_1_noRouteRsp$CLR),
+							    .D_OUT(ifcs_1_noRouteRsp$D_OUT),
+							    .FULL_N(),
+							    .EMPTY_N(ifcs_1_noRouteRsp$EMPTY_N));
+
+  // submodule ifcs_1_routeBack
+  FIFO2 #(.width(32'd2), .guarded(32'd1)) ifcs_1_routeBack(.RST(RST_N),
+							   .CLK(CLK),
+							   .D_IN(ifcs_1_routeBack$D_IN),
+							   .ENQ(ifcs_1_routeBack$ENQ),
+							   .DEQ(ifcs_1_routeBack$DEQ),
+							   .CLR(ifcs_1_routeBack$CLR),
+							   .D_OUT(ifcs_1_routeBack$D_OUT),
+							   .FULL_N(ifcs_1_routeBack$FULL_N),
+							   .EMPTY_N(ifcs_1_routeBack$EMPTY_N));
+
+  // submodule ifcs_1_rspBack
+  FIFO2 #(.width(32'd6), .guarded(32'd1)) ifcs_1_rspBack(.RST(RST_N),
+							 .CLK(CLK),
+							 .D_IN(ifcs_1_rspBack$D_IN),
+							 .ENQ(ifcs_1_rspBack$ENQ),
+							 .DEQ(ifcs_1_rspBack$DEQ),
+							 .CLR(ifcs_1_rspBack$CLR),
+							 .D_OUT(ifcs_1_rspBack$D_OUT),
+							 .FULL_N(ifcs_1_rspBack$FULL_N),
+							 .EMPTY_N(ifcs_1_rspBack$EMPTY_N));
+
+  // submodule ifcs_2_1_routeBack
+  FIFO2 #(.width(32'd2), .guarded(32'd1)) ifcs_2_1_routeBack(.RST(RST_N),
+							     .CLK(CLK),
+							     .D_IN(ifcs_2_1_routeBack$D_IN),
+							     .ENQ(ifcs_2_1_routeBack$ENQ),
+							     .DEQ(ifcs_2_1_routeBack$DEQ),
+							     .CLR(ifcs_2_1_routeBack$CLR),
+							     .D_OUT(ifcs_2_1_routeBack$D_OUT),
+							     .FULL_N(ifcs_2_1_routeBack$FULL_N),
+							     .EMPTY_N(ifcs_2_1_routeBack$EMPTY_N));
+
+  // submodule ifcs_2_1_rspBack
+  FIFO2 #(.width(32'd72), .guarded(32'd1)) ifcs_2_1_rspBack(.RST(RST_N),
+							    .CLK(CLK),
+							    .D_IN(ifcs_2_1_rspBack$D_IN),
+							    .ENQ(ifcs_2_1_rspBack$ENQ),
+							    .DEQ(ifcs_2_1_rspBack$DEQ),
+							    .CLR(ifcs_2_1_rspBack$CLR),
+							    .D_OUT(ifcs_2_1_rspBack$D_OUT),
+							    .FULL_N(ifcs_2_1_rspBack$FULL_N),
+							    .EMPTY_N(ifcs_2_1_rspBack$EMPTY_N));
+
+  // submodule ifcs_2_routeBack
+  FIFO2 #(.width(32'd2), .guarded(32'd1)) ifcs_2_routeBack(.RST(RST_N),
+							   .CLK(CLK),
+							   .D_IN(ifcs_2_routeBack$D_IN),
+							   .ENQ(ifcs_2_routeBack$ENQ),
+							   .DEQ(ifcs_2_routeBack$DEQ),
+							   .CLR(ifcs_2_routeBack$CLR),
+							   .D_OUT(ifcs_2_routeBack$D_OUT),
+							   .FULL_N(ifcs_2_routeBack$FULL_N),
+							   .EMPTY_N(ifcs_2_routeBack$EMPTY_N));
+
+  // submodule ifcs_2_rspBack
+  FIFO2 #(.width(32'd6), .guarded(32'd1)) ifcs_2_rspBack(.RST(RST_N),
+							 .CLK(CLK),
+							 .D_IN(ifcs_2_rspBack$D_IN),
+							 .ENQ(ifcs_2_rspBack$ENQ),
+							 .DEQ(ifcs_2_rspBack$DEQ),
+							 .CLR(ifcs_2_rspBack$CLR),
+							 .D_OUT(ifcs_2_rspBack$D_OUT),
+							 .FULL_N(ifcs_2_rspBack$FULL_N),
+							 .EMPTY_N(ifcs_2_rspBack$EMPTY_N));
+
+  // submodule msNoSynth_0_b_buffer_ff
+  FIFO1 #(.width(32'd6), .guarded(32'd0)) msNoSynth_0_b_buffer_ff(.RST(RST_N),
+								  .CLK(CLK),
+								  .D_IN(msNoSynth_0_b_buffer_ff$D_IN),
+								  .ENQ(msNoSynth_0_b_buffer_ff$ENQ),
+								  .DEQ(msNoSynth_0_b_buffer_ff$DEQ),
+								  .CLR(msNoSynth_0_b_buffer_ff$CLR),
+								  .D_OUT(msNoSynth_0_b_buffer_ff$D_OUT),
+								  .FULL_N(msNoSynth_0_b_buffer_ff$FULL_N),
+								  .EMPTY_N(msNoSynth_0_b_buffer_ff$EMPTY_N));
+
+  // submodule msNoSynth_0_b_buffer_firstValid
+  RevertReg #(.width(32'd1),
+	      .init(1'd1)) msNoSynth_0_b_buffer_firstValid(.CLK(CLK),
+							   .D_IN(msNoSynth_0_b_buffer_firstValid$D_IN),
+							   .EN(msNoSynth_0_b_buffer_firstValid$EN),
+							   .Q_OUT(msNoSynth_0_b_buffer_firstValid$Q_OUT));
+
+  // submodule msNoSynth_0_r_buffer_ff
+  FIFO1 #(.width(32'd72),
+	  .guarded(32'd0)) msNoSynth_0_r_buffer_ff(.RST(RST_N),
+						   .CLK(CLK),
+						   .D_IN(msNoSynth_0_r_buffer_ff$D_IN),
+						   .ENQ(msNoSynth_0_r_buffer_ff$ENQ),
+						   .DEQ(msNoSynth_0_r_buffer_ff$DEQ),
+						   .CLR(msNoSynth_0_r_buffer_ff$CLR),
+						   .D_OUT(msNoSynth_0_r_buffer_ff$D_OUT),
+						   .FULL_N(msNoSynth_0_r_buffer_ff$FULL_N),
+						   .EMPTY_N(msNoSynth_0_r_buffer_ff$EMPTY_N));
+
+  // submodule msNoSynth_0_r_buffer_firstValid
+  RevertReg #(.width(32'd1),
+	      .init(1'd1)) msNoSynth_0_r_buffer_firstValid(.CLK(CLK),
+							   .D_IN(msNoSynth_0_r_buffer_firstValid$D_IN),
+							   .EN(msNoSynth_0_r_buffer_firstValid$EN),
+							   .Q_OUT(msNoSynth_0_r_buffer_firstValid$Q_OUT));
+
+  // submodule msNoSynth_1_b_buffer_ff
+  FIFO1 #(.width(32'd6), .guarded(32'd0)) msNoSynth_1_b_buffer_ff(.RST(RST_N),
+								  .CLK(CLK),
+								  .D_IN(msNoSynth_1_b_buffer_ff$D_IN),
+								  .ENQ(msNoSynth_1_b_buffer_ff$ENQ),
+								  .DEQ(msNoSynth_1_b_buffer_ff$DEQ),
+								  .CLR(msNoSynth_1_b_buffer_ff$CLR),
+								  .D_OUT(),
+								  .FULL_N(msNoSynth_1_b_buffer_ff$FULL_N),
+								  .EMPTY_N());
+
+  // submodule msNoSynth_1_b_buffer_firstValid
+  RevertReg #(.width(32'd1),
+	      .init(1'd1)) msNoSynth_1_b_buffer_firstValid(.CLK(CLK),
+							   .D_IN(msNoSynth_1_b_buffer_firstValid$D_IN),
+							   .EN(msNoSynth_1_b_buffer_firstValid$EN),
+							   .Q_OUT());
+
+  // submodule msNoSynth_1_r_buffer_ff
+  FIFO1 #(.width(32'd72),
+	  .guarded(32'd0)) msNoSynth_1_r_buffer_ff(.RST(RST_N),
+						   .CLK(CLK),
+						   .D_IN(msNoSynth_1_r_buffer_ff$D_IN),
+						   .ENQ(msNoSynth_1_r_buffer_ff$ENQ),
+						   .DEQ(msNoSynth_1_r_buffer_ff$DEQ),
+						   .CLR(msNoSynth_1_r_buffer_ff$CLR),
+						   .D_OUT(),
+						   .FULL_N(msNoSynth_1_r_buffer_ff$FULL_N),
+						   .EMPTY_N());
+
+  // submodule msNoSynth_1_r_buffer_firstValid
+  RevertReg #(.width(32'd1),
+	      .init(1'd1)) msNoSynth_1_r_buffer_firstValid(.CLK(CLK),
+							   .D_IN(msNoSynth_1_r_buffer_firstValid$D_IN),
+							   .EN(msNoSynth_1_r_buffer_firstValid$EN),
+							   .Q_OUT());
 
   // submodule near_mem_io
   mkNear_Mem_IO_AXI4 near_mem_io(.CLK(CLK),
@@ -1865,7 +3529,6 @@ module mkCore(CLK,
 				 .axi4_slave_arqos(near_mem_io$axi4_slave_arqos),
 				 .axi4_slave_arregion(near_mem_io$axi4_slave_arregion),
 				 .axi4_slave_arsize(near_mem_io$axi4_slave_arsize),
-				 .axi4_slave_arvalid(near_mem_io$axi4_slave_arvalid),
 				 .axi4_slave_awaddr(near_mem_io$axi4_slave_awaddr),
 				 .axi4_slave_awburst(near_mem_io$axi4_slave_awburst),
 				 .axi4_slave_awcache(near_mem_io$axi4_slave_awcache),
@@ -1876,18 +3539,20 @@ module mkCore(CLK,
 				 .axi4_slave_awqos(near_mem_io$axi4_slave_awqos),
 				 .axi4_slave_awregion(near_mem_io$axi4_slave_awregion),
 				 .axi4_slave_awsize(near_mem_io$axi4_slave_awsize),
-				 .axi4_slave_awvalid(near_mem_io$axi4_slave_awvalid),
 				 .axi4_slave_bready(near_mem_io$axi4_slave_bready),
 				 .axi4_slave_rready(near_mem_io$axi4_slave_rready),
 				 .axi4_slave_wdata(near_mem_io$axi4_slave_wdata),
 				 .axi4_slave_wlast(near_mem_io$axi4_slave_wlast),
 				 .axi4_slave_wstrb(near_mem_io$axi4_slave_wstrb),
-				 .axi4_slave_wvalid(near_mem_io$axi4_slave_wvalid),
+				 .axi4_slave_wuser(near_mem_io$axi4_slave_wuser),
 				 .set_addr_map_addr_base(near_mem_io$set_addr_map_addr_base),
 				 .set_addr_map_addr_lim(near_mem_io$set_addr_map_addr_lim),
 				 .EN_server_reset_request_put(near_mem_io$EN_server_reset_request_put),
 				 .EN_server_reset_response_get(near_mem_io$EN_server_reset_response_get),
 				 .EN_set_addr_map(near_mem_io$EN_set_addr_map),
+				 .axi4_slave_awvalid(near_mem_io$axi4_slave_awvalid),
+				 .axi4_slave_wvalid(near_mem_io$axi4_slave_wvalid),
+				 .axi4_slave_arvalid(near_mem_io$axi4_slave_arvalid),
 				 .EN_get_timer_interrupt_req_get(near_mem_io$EN_get_timer_interrupt_req_get),
 				 .EN_get_sw_interrupt_req_get(near_mem_io$EN_get_sw_interrupt_req_get),
 				 .RDY_server_reset_request_put(near_mem_io$RDY_server_reset_request_put),
@@ -1895,15 +3560,16 @@ module mkCore(CLK,
 				 .RDY_set_addr_map(),
 				 .axi4_slave_awready(near_mem_io$axi4_slave_awready),
 				 .axi4_slave_wready(near_mem_io$axi4_slave_wready),
-				 .axi4_slave_bvalid(near_mem_io$axi4_slave_bvalid),
 				 .axi4_slave_bid(near_mem_io$axi4_slave_bid),
 				 .axi4_slave_bresp(near_mem_io$axi4_slave_bresp),
+				 .axi4_slave_bvalid(near_mem_io$axi4_slave_bvalid),
 				 .axi4_slave_arready(near_mem_io$axi4_slave_arready),
-				 .axi4_slave_rvalid(near_mem_io$axi4_slave_rvalid),
 				 .axi4_slave_rid(near_mem_io$axi4_slave_rid),
 				 .axi4_slave_rdata(near_mem_io$axi4_slave_rdata),
 				 .axi4_slave_rresp(near_mem_io$axi4_slave_rresp),
 				 .axi4_slave_rlast(near_mem_io$axi4_slave_rlast),
+				 .axi4_slave_ruser(near_mem_io$axi4_slave_ruser),
+				 .axi4_slave_rvalid(near_mem_io$axi4_slave_rvalid),
 				 .get_timer_interrupt_req_get(near_mem_io$get_timer_interrupt_req_get),
 				 .RDY_get_timer_interrupt_req_get(near_mem_io$RDY_get_timer_interrupt_req_get),
 				 .get_sw_interrupt_req_get(near_mem_io$get_sw_interrupt_req_get),
@@ -1922,7 +3588,6 @@ module mkCore(CLK,
 		     .axi4_slave_arqos(plic$axi4_slave_arqos),
 		     .axi4_slave_arregion(plic$axi4_slave_arregion),
 		     .axi4_slave_arsize(plic$axi4_slave_arsize),
-		     .axi4_slave_arvalid(plic$axi4_slave_arvalid),
 		     .axi4_slave_awaddr(plic$axi4_slave_awaddr),
 		     .axi4_slave_awburst(plic$axi4_slave_awburst),
 		     .axi4_slave_awcache(plic$axi4_slave_awcache),
@@ -1933,13 +3598,12 @@ module mkCore(CLK,
 		     .axi4_slave_awqos(plic$axi4_slave_awqos),
 		     .axi4_slave_awregion(plic$axi4_slave_awregion),
 		     .axi4_slave_awsize(plic$axi4_slave_awsize),
-		     .axi4_slave_awvalid(plic$axi4_slave_awvalid),
 		     .axi4_slave_bready(plic$axi4_slave_bready),
 		     .axi4_slave_rready(plic$axi4_slave_rready),
 		     .axi4_slave_wdata(plic$axi4_slave_wdata),
 		     .axi4_slave_wlast(plic$axi4_slave_wlast),
 		     .axi4_slave_wstrb(plic$axi4_slave_wstrb),
-		     .axi4_slave_wvalid(plic$axi4_slave_wvalid),
+		     .axi4_slave_wuser(plic$axi4_slave_wuser),
 		     .set_addr_map_addr_base(plic$set_addr_map_addr_base),
 		     .set_addr_map_addr_lim(plic$set_addr_map_addr_lim),
 		     .set_verbosity_verbosity(plic$set_verbosity_verbosity),
@@ -1964,6 +3628,9 @@ module mkCore(CLK,
 		     .EN_server_reset_request_put(plic$EN_server_reset_request_put),
 		     .EN_server_reset_response_get(plic$EN_server_reset_response_get),
 		     .EN_set_addr_map(plic$EN_set_addr_map),
+		     .axi4_slave_awvalid(plic$axi4_slave_awvalid),
+		     .axi4_slave_wvalid(plic$axi4_slave_wvalid),
+		     .axi4_slave_arvalid(plic$axi4_slave_arvalid),
 		     .RDY_set_verbosity(),
 		     .RDY_show_PLIC_state(),
 		     .RDY_server_reset_request_put(plic$RDY_server_reset_request_put),
@@ -1971,15 +3638,16 @@ module mkCore(CLK,
 		     .RDY_set_addr_map(),
 		     .axi4_slave_awready(plic$axi4_slave_awready),
 		     .axi4_slave_wready(plic$axi4_slave_wready),
-		     .axi4_slave_bvalid(plic$axi4_slave_bvalid),
 		     .axi4_slave_bid(plic$axi4_slave_bid),
 		     .axi4_slave_bresp(plic$axi4_slave_bresp),
+		     .axi4_slave_bvalid(plic$axi4_slave_bvalid),
 		     .axi4_slave_arready(plic$axi4_slave_arready),
-		     .axi4_slave_rvalid(plic$axi4_slave_rvalid),
 		     .axi4_slave_rid(plic$axi4_slave_rid),
 		     .axi4_slave_rdata(plic$axi4_slave_rdata),
 		     .axi4_slave_rresp(plic$axi4_slave_rresp),
 		     .axi4_slave_rlast(plic$axi4_slave_rlast),
+		     .axi4_slave_ruser(plic$axi4_slave_ruser),
+		     .axi4_slave_rvalid(plic$axi4_slave_rvalid),
 		     .v_targets_0_m_eip(plic$v_targets_0_m_eip),
 		     .v_targets_1_m_eip(plic$v_targets_1_m_eip));
 
@@ -1989,131 +3657,1558 @@ module mkCore(CLK,
 		    .m_is_IO_addr_addr(soc_map$m_is_IO_addr_addr),
 		    .m_is_mem_addr_addr(soc_map$m_is_mem_addr_addr),
 		    .m_is_near_mem_IO_addr_addr(soc_map$m_is_near_mem_IO_addr_addr),
-		    .m_plic_addr_base(soc_map$m_plic_addr_base),
-		    .m_plic_addr_size(),
-		    .m_plic_addr_lim(soc_map$m_plic_addr_lim),
-		    .m_debug_module_addr_base(),
-		    .m_debug_module_addr_size(),
-		    .m_debug_module_addr_lim(),
-		    .m_near_mem_io_addr_base(soc_map$m_near_mem_io_addr_base),
-		    .m_near_mem_io_addr_size(),
-		    .m_near_mem_io_addr_lim(soc_map$m_near_mem_io_addr_lim),
-		    .m_flash_mem_addr_base(),
-		    .m_flash_mem_addr_size(),
-		    .m_flash_mem_addr_lim(),
-		    .m_ethernet_0_addr_base(),
-		    .m_ethernet_0_addr_size(),
-		    .m_ethernet_0_addr_lim(),
-		    .m_dma_0_addr_base(),
-		    .m_dma_0_addr_size(),
-		    .m_dma_0_addr_lim(),
-		    .m_uart16550_0_addr_base(),
-		    .m_uart16550_0_addr_size(),
-		    .m_uart16550_0_addr_lim(),
-		    .m_gpio_0_addr_base(),
-		    .m_gpio_0_addr_size(),
-		    .m_gpio_0_addr_lim(),
-		    .m_boot_rom_addr_base(),
-		    .m_boot_rom_addr_size(),
-		    .m_boot_rom_addr_lim(),
-		    .m_ddr4_0_uncached_addr_base(),
-		    .m_ddr4_0_uncached_addr_size(),
-		    .m_ddr4_0_uncached_addr_lim(),
-		    .m_ddr4_0_cached_addr_base(),
-		    .m_ddr4_0_cached_addr_size(),
-		    .m_ddr4_0_cached_addr_lim(),
-		    .m_host_access_addr_base(),
-		    .m_host_access_addr_size(),
-		    .m_host_access_addr_lim(),
-		    .m_mem0_controller_addr_base(),
-		    .m_mem0_controller_addr_size(),
-		    .m_mem0_controller_addr_lim(),
+		    .m_plic_addr_range(soc_map$m_plic_addr_range),
+		    .m_debug_module_addr_range(),
+		    .m_near_mem_io_addr_range(soc_map$m_near_mem_io_addr_range),
+		    .m_flash_mem_addr_range(),
+		    .m_ethernet_0_addr_range(),
+		    .m_dma_0_addr_range(),
+		    .m_uart16550_0_addr_range(),
+		    .m_gpio_0_addr_range(),
+		    .m_boot_rom_addr_range(),
+		    .m_ddr4_0_uncached_addr_range(),
+		    .m_ddr4_0_cached_addr_range(),
+		    .m_host_access_addr_range(),
+		    .m_mem0_controller_addr_range(),
 		    .m_is_mem_addr(),
 		    .m_is_IO_addr(),
 		    .m_is_near_mem_IO_addr(),
 		    .m_pc_reset_value(),
 		    .m_mtvec_reset_value(),
-		    .m_nmivec_reset_value());
+		    .m_nmivec_reset_value(),
+		    .m_pcc_reset_value(),
+		    .m_ddc_reset_value(),
+		    .m_mtcc_reset_value(),
+		    .m_mepcc_reset_value());
 
-  // rule RL_rl_wr_addr_channel
-  assign CAN_FIRE_RL_rl_wr_addr_channel = 1'd1 ;
-  assign WILL_FIRE_RL_rl_wr_addr_channel = 1'd1 ;
+  // submodule ssNoSynth_0_ar_buffer_ff
+  FIFO1 #(.width(32'd98),
+	  .guarded(32'd0)) ssNoSynth_0_ar_buffer_ff(.RST(RST_N),
+						    .CLK(CLK),
+						    .D_IN(ssNoSynth_0_ar_buffer_ff$D_IN),
+						    .ENQ(ssNoSynth_0_ar_buffer_ff$ENQ),
+						    .DEQ(ssNoSynth_0_ar_buffer_ff$DEQ),
+						    .CLR(ssNoSynth_0_ar_buffer_ff$CLR),
+						    .D_OUT(ssNoSynth_0_ar_buffer_ff$D_OUT),
+						    .FULL_N(ssNoSynth_0_ar_buffer_ff$FULL_N),
+						    .EMPTY_N(ssNoSynth_0_ar_buffer_ff$EMPTY_N));
 
-  // rule RL_rl_wr_data_channel
-  assign CAN_FIRE_RL_rl_wr_data_channel = 1'd1 ;
-  assign WILL_FIRE_RL_rl_wr_data_channel = 1'd1 ;
+  // submodule ssNoSynth_0_ar_buffer_firstValid
+  RevertReg #(.width(32'd1),
+	      .init(1'd1)) ssNoSynth_0_ar_buffer_firstValid(.CLK(CLK),
+							    .D_IN(ssNoSynth_0_ar_buffer_firstValid$D_IN),
+							    .EN(ssNoSynth_0_ar_buffer_firstValid$EN),
+							    .Q_OUT(ssNoSynth_0_ar_buffer_firstValid$Q_OUT));
 
-  // rule RL_rl_wr_response_channel
-  assign CAN_FIRE_RL_rl_wr_response_channel = 1'd1 ;
-  assign WILL_FIRE_RL_rl_wr_response_channel = 1'd1 ;
+  // submodule ssNoSynth_0_aw_buffer_ff
+  FIFO1 #(.width(32'd98),
+	  .guarded(32'd0)) ssNoSynth_0_aw_buffer_ff(.RST(RST_N),
+						    .CLK(CLK),
+						    .D_IN(ssNoSynth_0_aw_buffer_ff$D_IN),
+						    .ENQ(ssNoSynth_0_aw_buffer_ff$ENQ),
+						    .DEQ(ssNoSynth_0_aw_buffer_ff$DEQ),
+						    .CLR(ssNoSynth_0_aw_buffer_ff$CLR),
+						    .D_OUT(ssNoSynth_0_aw_buffer_ff$D_OUT),
+						    .FULL_N(ssNoSynth_0_aw_buffer_ff$FULL_N),
+						    .EMPTY_N(ssNoSynth_0_aw_buffer_ff$EMPTY_N));
 
-  // rule RL_rl_rd_addr_channel
-  assign CAN_FIRE_RL_rl_rd_addr_channel = 1'd1 ;
-  assign WILL_FIRE_RL_rl_rd_addr_channel = 1'd1 ;
+  // submodule ssNoSynth_0_aw_buffer_firstValid
+  RevertReg #(.width(32'd1),
+	      .init(1'd1)) ssNoSynth_0_aw_buffer_firstValid(.CLK(CLK),
+							    .D_IN(ssNoSynth_0_aw_buffer_firstValid$D_IN),
+							    .EN(ssNoSynth_0_aw_buffer_firstValid$EN),
+							    .Q_OUT(ssNoSynth_0_aw_buffer_firstValid$Q_OUT));
 
-  // rule RL_rl_rd_data_channel
-  assign CAN_FIRE_RL_rl_rd_data_channel = 1'd1 ;
-  assign WILL_FIRE_RL_rl_rd_data_channel = 1'd1 ;
+  // submodule ssNoSynth_0_w_buffer_ff
+  FIFO1 #(.width(32'd74),
+	  .guarded(32'd0)) ssNoSynth_0_w_buffer_ff(.RST(RST_N),
+						   .CLK(CLK),
+						   .D_IN(ssNoSynth_0_w_buffer_ff$D_IN),
+						   .ENQ(ssNoSynth_0_w_buffer_ff$ENQ),
+						   .DEQ(ssNoSynth_0_w_buffer_ff$DEQ),
+						   .CLR(ssNoSynth_0_w_buffer_ff$CLR),
+						   .D_OUT(ssNoSynth_0_w_buffer_ff$D_OUT),
+						   .FULL_N(ssNoSynth_0_w_buffer_ff$FULL_N),
+						   .EMPTY_N(ssNoSynth_0_w_buffer_ff$EMPTY_N));
 
-  // rule RL_rl_wr_addr_channel_1
-  assign CAN_FIRE_RL_rl_wr_addr_channel_1 = 1'd1 ;
-  assign WILL_FIRE_RL_rl_wr_addr_channel_1 = 1'd1 ;
+  // submodule ssNoSynth_0_w_buffer_firstValid
+  RevertReg #(.width(32'd1),
+	      .init(1'd1)) ssNoSynth_0_w_buffer_firstValid(.CLK(CLK),
+							   .D_IN(ssNoSynth_0_w_buffer_firstValid$D_IN),
+							   .EN(ssNoSynth_0_w_buffer_firstValid$EN),
+							   .Q_OUT(ssNoSynth_0_w_buffer_firstValid$Q_OUT));
 
-  // rule RL_rl_wr_data_channel_1
-  assign CAN_FIRE_RL_rl_wr_data_channel_1 = 1'd1 ;
-  assign WILL_FIRE_RL_rl_wr_data_channel_1 = 1'd1 ;
+  // submodule ssNoSynth_1_ar_buffer_ff
+  FIFO1 #(.width(32'd98),
+	  .guarded(32'd0)) ssNoSynth_1_ar_buffer_ff(.RST(RST_N),
+						    .CLK(CLK),
+						    .D_IN(ssNoSynth_1_ar_buffer_ff$D_IN),
+						    .ENQ(ssNoSynth_1_ar_buffer_ff$ENQ),
+						    .DEQ(ssNoSynth_1_ar_buffer_ff$DEQ),
+						    .CLR(ssNoSynth_1_ar_buffer_ff$CLR),
+						    .D_OUT(ssNoSynth_1_ar_buffer_ff$D_OUT),
+						    .FULL_N(ssNoSynth_1_ar_buffer_ff$FULL_N),
+						    .EMPTY_N(ssNoSynth_1_ar_buffer_ff$EMPTY_N));
 
-  // rule RL_rl_wr_response_channel_1
-  assign CAN_FIRE_RL_rl_wr_response_channel_1 = 1'd1 ;
-  assign WILL_FIRE_RL_rl_wr_response_channel_1 = 1'd1 ;
+  // submodule ssNoSynth_1_ar_buffer_firstValid
+  RevertReg #(.width(32'd1),
+	      .init(1'd1)) ssNoSynth_1_ar_buffer_firstValid(.CLK(CLK),
+							    .D_IN(ssNoSynth_1_ar_buffer_firstValid$D_IN),
+							    .EN(ssNoSynth_1_ar_buffer_firstValid$EN),
+							    .Q_OUT(ssNoSynth_1_ar_buffer_firstValid$Q_OUT));
 
-  // rule RL_rl_rd_addr_channel_1
-  assign CAN_FIRE_RL_rl_rd_addr_channel_1 = 1'd1 ;
-  assign WILL_FIRE_RL_rl_rd_addr_channel_1 = 1'd1 ;
+  // submodule ssNoSynth_1_aw_buffer_ff
+  FIFO1 #(.width(32'd98),
+	  .guarded(32'd0)) ssNoSynth_1_aw_buffer_ff(.RST(RST_N),
+						    .CLK(CLK),
+						    .D_IN(ssNoSynth_1_aw_buffer_ff$D_IN),
+						    .ENQ(ssNoSynth_1_aw_buffer_ff$ENQ),
+						    .DEQ(ssNoSynth_1_aw_buffer_ff$DEQ),
+						    .CLR(ssNoSynth_1_aw_buffer_ff$CLR),
+						    .D_OUT(ssNoSynth_1_aw_buffer_ff$D_OUT),
+						    .FULL_N(ssNoSynth_1_aw_buffer_ff$FULL_N),
+						    .EMPTY_N(ssNoSynth_1_aw_buffer_ff$EMPTY_N));
 
-  // rule RL_rl_rd_data_channel_1
-  assign CAN_FIRE_RL_rl_rd_data_channel_1 = 1'd1 ;
-  assign WILL_FIRE_RL_rl_rd_data_channel_1 = 1'd1 ;
+  // submodule ssNoSynth_1_aw_buffer_firstValid
+  RevertReg #(.width(32'd1),
+	      .init(1'd1)) ssNoSynth_1_aw_buffer_firstValid(.CLK(CLK),
+							    .D_IN(ssNoSynth_1_aw_buffer_firstValid$D_IN),
+							    .EN(ssNoSynth_1_aw_buffer_firstValid$EN),
+							    .Q_OUT(ssNoSynth_1_aw_buffer_firstValid$Q_OUT));
 
-  // rule RL_rl_wr_addr_channel_2
-  assign CAN_FIRE_RL_rl_wr_addr_channel_2 = 1'd1 ;
-  assign WILL_FIRE_RL_rl_wr_addr_channel_2 = 1'd1 ;
+  // submodule ssNoSynth_1_w_buffer_ff
+  FIFO1 #(.width(32'd74),
+	  .guarded(32'd0)) ssNoSynth_1_w_buffer_ff(.RST(RST_N),
+						   .CLK(CLK),
+						   .D_IN(ssNoSynth_1_w_buffer_ff$D_IN),
+						   .ENQ(ssNoSynth_1_w_buffer_ff$ENQ),
+						   .DEQ(ssNoSynth_1_w_buffer_ff$DEQ),
+						   .CLR(ssNoSynth_1_w_buffer_ff$CLR),
+						   .D_OUT(ssNoSynth_1_w_buffer_ff$D_OUT),
+						   .FULL_N(ssNoSynth_1_w_buffer_ff$FULL_N),
+						   .EMPTY_N(ssNoSynth_1_w_buffer_ff$EMPTY_N));
 
-  // rule RL_rl_wr_data_channel_2
-  assign CAN_FIRE_RL_rl_wr_data_channel_2 = 1'd1 ;
-  assign WILL_FIRE_RL_rl_wr_data_channel_2 = 1'd1 ;
+  // submodule ssNoSynth_1_w_buffer_firstValid
+  RevertReg #(.width(32'd1),
+	      .init(1'd1)) ssNoSynth_1_w_buffer_firstValid(.CLK(CLK),
+							   .D_IN(ssNoSynth_1_w_buffer_firstValid$D_IN),
+							   .EN(ssNoSynth_1_w_buffer_firstValid$EN),
+							   .Q_OUT(ssNoSynth_1_w_buffer_firstValid$Q_OUT));
 
-  // rule RL_rl_wr_response_channel_2
-  assign CAN_FIRE_RL_rl_wr_response_channel_2 = 1'd1 ;
-  assign WILL_FIRE_RL_rl_wr_response_channel_2 = 1'd1 ;
+  // submodule ssNoSynth_2_ar_buffer_ff
+  FIFO1 #(.width(32'd98),
+	  .guarded(32'd0)) ssNoSynth_2_ar_buffer_ff(.RST(RST_N),
+						    .CLK(CLK),
+						    .D_IN(ssNoSynth_2_ar_buffer_ff$D_IN),
+						    .ENQ(ssNoSynth_2_ar_buffer_ff$ENQ),
+						    .DEQ(ssNoSynth_2_ar_buffer_ff$DEQ),
+						    .CLR(ssNoSynth_2_ar_buffer_ff$CLR),
+						    .D_OUT(ssNoSynth_2_ar_buffer_ff$D_OUT),
+						    .FULL_N(ssNoSynth_2_ar_buffer_ff$FULL_N),
+						    .EMPTY_N(ssNoSynth_2_ar_buffer_ff$EMPTY_N));
 
-  // rule RL_rl_rd_addr_channel_2
-  assign CAN_FIRE_RL_rl_rd_addr_channel_2 = 1'd1 ;
-  assign WILL_FIRE_RL_rl_rd_addr_channel_2 = 1'd1 ;
+  // submodule ssNoSynth_2_ar_buffer_firstValid
+  RevertReg #(.width(32'd1),
+	      .init(1'd1)) ssNoSynth_2_ar_buffer_firstValid(.CLK(CLK),
+							    .D_IN(ssNoSynth_2_ar_buffer_firstValid$D_IN),
+							    .EN(ssNoSynth_2_ar_buffer_firstValid$EN),
+							    .Q_OUT(ssNoSynth_2_ar_buffer_firstValid$Q_OUT));
 
-  // rule RL_rl_rd_data_channel_2
-  assign CAN_FIRE_RL_rl_rd_data_channel_2 = 1'd1 ;
-  assign WILL_FIRE_RL_rl_rd_data_channel_2 = 1'd1 ;
+  // submodule ssNoSynth_2_aw_buffer_ff
+  FIFO1 #(.width(32'd98),
+	  .guarded(32'd0)) ssNoSynth_2_aw_buffer_ff(.RST(RST_N),
+						    .CLK(CLK),
+						    .D_IN(ssNoSynth_2_aw_buffer_ff$D_IN),
+						    .ENQ(ssNoSynth_2_aw_buffer_ff$ENQ),
+						    .DEQ(ssNoSynth_2_aw_buffer_ff$DEQ),
+						    .CLR(ssNoSynth_2_aw_buffer_ff$CLR),
+						    .D_OUT(ssNoSynth_2_aw_buffer_ff$D_OUT),
+						    .FULL_N(ssNoSynth_2_aw_buffer_ff$FULL_N),
+						    .EMPTY_N(ssNoSynth_2_aw_buffer_ff$EMPTY_N));
 
-  // rule RL_rl_wr_addr_channel_3
-  assign CAN_FIRE_RL_rl_wr_addr_channel_3 = 1'd1 ;
-  assign WILL_FIRE_RL_rl_wr_addr_channel_3 = 1'd1 ;
+  // submodule ssNoSynth_2_aw_buffer_firstValid
+  RevertReg #(.width(32'd1),
+	      .init(1'd1)) ssNoSynth_2_aw_buffer_firstValid(.CLK(CLK),
+							    .D_IN(ssNoSynth_2_aw_buffer_firstValid$D_IN),
+							    .EN(ssNoSynth_2_aw_buffer_firstValid$EN),
+							    .Q_OUT(ssNoSynth_2_aw_buffer_firstValid$Q_OUT));
 
-  // rule RL_rl_wr_data_channel_3
-  assign CAN_FIRE_RL_rl_wr_data_channel_3 = 1'd1 ;
-  assign WILL_FIRE_RL_rl_wr_data_channel_3 = 1'd1 ;
+  // submodule ssNoSynth_2_w_buffer_ff
+  FIFO1 #(.width(32'd74),
+	  .guarded(32'd0)) ssNoSynth_2_w_buffer_ff(.RST(RST_N),
+						   .CLK(CLK),
+						   .D_IN(ssNoSynth_2_w_buffer_ff$D_IN),
+						   .ENQ(ssNoSynth_2_w_buffer_ff$ENQ),
+						   .DEQ(ssNoSynth_2_w_buffer_ff$DEQ),
+						   .CLR(ssNoSynth_2_w_buffer_ff$CLR),
+						   .D_OUT(ssNoSynth_2_w_buffer_ff$D_OUT),
+						   .FULL_N(ssNoSynth_2_w_buffer_ff$FULL_N),
+						   .EMPTY_N(ssNoSynth_2_w_buffer_ff$EMPTY_N));
 
-  // rule RL_rl_wr_response_channel_3
-  assign CAN_FIRE_RL_rl_wr_response_channel_3 = 1'd1 ;
-  assign WILL_FIRE_RL_rl_wr_response_channel_3 = 1'd1 ;
+  // submodule ssNoSynth_2_w_buffer_firstValid
+  RevertReg #(.width(32'd1),
+	      .init(1'd1)) ssNoSynth_2_w_buffer_firstValid(.CLK(CLK),
+							   .D_IN(ssNoSynth_2_w_buffer_firstValid$D_IN),
+							   .EN(ssNoSynth_2_w_buffer_firstValid$EN),
+							   .Q_OUT(ssNoSynth_2_w_buffer_firstValid$Q_OUT));
 
-  // rule RL_rl_rd_addr_channel_3
-  assign CAN_FIRE_RL_rl_rd_addr_channel_3 = 1'd1 ;
-  assign WILL_FIRE_RL_rl_rd_addr_channel_3 = 1'd1 ;
+  // submodule tagController_tmp_awreqff
+  FIFO2 #(.width(32'd98),
+	  .guarded(32'd1)) tagController_tmp_awreqff(.RST(RST_N),
+						     .CLK(CLK),
+						     .D_IN(tagController_tmp_awreqff$D_IN),
+						     .ENQ(tagController_tmp_awreqff$ENQ),
+						     .DEQ(tagController_tmp_awreqff$DEQ),
+						     .CLR(tagController_tmp_awreqff$CLR),
+						     .D_OUT(tagController_tmp_awreqff$D_OUT),
+						     .FULL_N(tagController_tmp_awreqff$FULL_N),
+						     .EMPTY_N(tagController_tmp_awreqff$EMPTY_N));
 
-  // rule RL_rl_rd_data_channel_3
-  assign CAN_FIRE_RL_rl_rd_data_channel_3 = 1'd1 ;
-  assign WILL_FIRE_RL_rl_rd_data_channel_3 = 1'd1 ;
+  // submodule tagController_tmp_newRst
+  MakeReset0 #(.init(1'd0)) tagController_tmp_newRst(.CLK(CLK),
+						     .RST(RST_N),
+						     .ASSERT_IN(tagController_tmp_newRst$ASSERT_IN),
+						     .ASSERT_OUT(),
+						     .OUT_RST(tagController_tmp_newRst$OUT_RST));
+
+  // submodule tagController_tmp_tagCon
+  mkTagController tagController_tmp_tagCon(.CLK(CLK),
+					   .RST_N(tagController_tmp_newRst$OUT_RST),
+					   .cache_request_put_val(tagController_tmp_tagCon$cache_request_put_val),
+					   .memory_response_put_val(tagController_tmp_tagCon$memory_response_put_val),
+					   .EN_cache_request_put(tagController_tmp_tagCon$EN_cache_request_put),
+					   .EN_cache_response_get(tagController_tmp_tagCon$EN_cache_response_get),
+					   .EN_memory_request_get(tagController_tmp_tagCon$EN_memory_request_get),
+					   .EN_memory_response_put(tagController_tmp_tagCon$EN_memory_response_put),
+					   .cache_request_canPut(),
+					   .RDY_cache_request_put(tagController_tmp_tagCon$RDY_cache_request_put),
+					   .cache_response_canGet(),
+					   .cache_response_peek(),
+					   .RDY_cache_response_peek(),
+					   .cache_response_get(tagController_tmp_tagCon$cache_response_get),
+					   .RDY_cache_response_get(tagController_tmp_tagCon$RDY_cache_response_get),
+					   .memory_request_canGet(),
+					   .memory_request_peek(),
+					   .RDY_memory_request_peek(),
+					   .memory_request_get(tagController_tmp_tagCon$memory_request_get),
+					   .RDY_memory_request_get(tagController_tmp_tagCon$RDY_memory_request_get),
+					   .memory_response_canPut(),
+					   .RDY_memory_response_put(tagController_tmp_tagCon$RDY_memory_response_put));
+
+  // rule RL_checkSinkReady
+  assign CAN_FIRE_RL_checkSinkReady = 1'd1 ;
+  assign WILL_FIRE_RL_checkSinkReady = 1'd1 ;
+
+  // rule RL_checkSinkReady_1
+  assign CAN_FIRE_RL_checkSinkReady_1 = 1'd1 ;
+  assign WILL_FIRE_RL_checkSinkReady_1 = 1'd1 ;
+
+  // rule RL_checkSinkReady_2
+  assign CAN_FIRE_RL_checkSinkReady_2 = 1'd1 ;
+  assign WILL_FIRE_RL_checkSinkReady_2 = 1'd1 ;
+
+  // rule RL_craftReq
+  assign CAN_FIRE_RL_craftReq =
+	     ifcs_0_innerRoute$EMPTY_N && ifcs_0_innerReq$EMPTY_N ;
+  assign WILL_FIRE_RL_craftReq = CAN_FIRE_RL_craftReq ;
+
+  // rule RL_craftReq_1
+  assign CAN_FIRE_RL_craftReq_1 =
+	     ifcs_1_innerRoute$EMPTY_N && ifcs_1_innerReq$EMPTY_N ;
+  assign WILL_FIRE_RL_craftReq_1 = CAN_FIRE_RL_craftReq_1 ;
+
+  // rule RL_arbitrate
+  assign CAN_FIRE_RL_arbitrate =
+	     (CAN_FIRE_RL_craftReq && reqWires_0$wget ||
+	      CAN_FIRE_RL_craftReq_1 && reqWires_1$wget) &&
+	     !state ;
+  assign WILL_FIRE_RL_arbitrate = CAN_FIRE_RL_arbitrate ;
+
+  // rule RL_source_selected
+  assign CAN_FIRE_RL_source_selected =
+	     (!ifcs_0_innerRoute$EMPTY_N || ifcs_0_innerReq$EMPTY_N) &&
+	     !state &&
+	     MUX_activeSource_0$write_1__VAL_1 ;
+  assign WILL_FIRE_RL_source_selected = CAN_FIRE_RL_source_selected ;
+
+  // rule RL_burst
+  assign CAN_FIRE_RL_burst =
+	     ifcs_0_innerReq$EMPTY_N && ifcs_0_innerRoute$EMPTY_N &&
+	     state_219_AND_activeSource_0_292_293_AND_ifcs__ETC___d1295 ;
+  assign WILL_FIRE_RL_burst = CAN_FIRE_RL_burst ;
+
+  // rule RL_source_selected_1
+  assign CAN_FIRE_RL_source_selected_1 =
+	     (!ifcs_1_innerRoute$EMPTY_N || ifcs_1_innerReq$EMPTY_N) &&
+	     !state &&
+	     MUX_activeSource_1$write_1__VAL_1 ;
+  assign WILL_FIRE_RL_source_selected_1 = CAN_FIRE_RL_source_selected_1 ;
+
+  // rule RL_burst_1
+  assign CAN_FIRE_RL_burst_1 =
+	     ifcs_1_innerReq$EMPTY_N && ifcs_1_innerRoute$EMPTY_N &&
+	     state_219_AND_activeSource_1_336_337_AND_ifcs__ETC___d1339 ;
+  assign WILL_FIRE_RL_burst_1 = CAN_FIRE_RL_burst_1 ;
+
+  // rule __me_check_150
+  assign CAN_FIRE___me_check_150 = 1'b1 ;
+  assign WILL_FIRE___me_check_150 = 1'b1 ;
+
+  // rule __me_check_152
+  assign CAN_FIRE___me_check_152 = 1'b1 ;
+  assign WILL_FIRE___me_check_152 = 1'b1 ;
+
+  // rule RL_sink_selected
+  assign CAN_FIRE_RL_sink_selected =
+	     IF_split_0_flitLeft_18_EQ_0_19_THEN_ssNoSynth__ETC___d1164 &&
+	     flitToSink_0$whas ;
+  assign WILL_FIRE_RL_sink_selected = CAN_FIRE_RL_sink_selected ;
+
+  // rule RL_sink_selected_1
+  assign CAN_FIRE_RL_sink_selected_1 =
+	     IF_split_1_flitLeft_47_EQ_0_48_THEN_ssNoSynth__ETC___d1165 &&
+	     flitToSink_1$whas ;
+  assign WILL_FIRE_RL_sink_selected_1 = CAN_FIRE_RL_sink_selected_1 ;
+
+  // rule RL_sink_selected_2
+  assign CAN_FIRE_RL_sink_selected_2 =
+	     IF_split_2_flitLeft_76_EQ_0_77_THEN_ssNoSynth__ETC___d1166 &&
+	     flitToSink_2$whas ;
+  assign WILL_FIRE_RL_sink_selected_2 = CAN_FIRE_RL_sink_selected_2 ;
+
+  // rule __me_check_154
+  assign CAN_FIRE___me_check_154 = 1'b1 ;
+  assign WILL_FIRE___me_check_154 = 1'b1 ;
+
+  // rule RL_checkSinkReady_5
+  assign CAN_FIRE_RL_checkSinkReady_5 = 1'd1 ;
+  assign WILL_FIRE_RL_checkSinkReady_5 = 1'd1 ;
+
+  // rule RL_checkSinkReady_6
+  assign CAN_FIRE_RL_checkSinkReady_6 = 1'd1 ;
+  assign WILL_FIRE_RL_checkSinkReady_6 = 1'd1 ;
+
+  // rule RL_checkSinkReady_7
+  assign CAN_FIRE_RL_checkSinkReady_7 = 1'd1 ;
+  assign WILL_FIRE_RL_checkSinkReady_7 = 1'd1 ;
+
+  // rule RL_craftReq_5
+  assign CAN_FIRE_RL_craftReq_5 =
+	     ifcs_0_1_innerRoute$EMPTY_N && ifcs_0_1_innerReq$EMPTY_N ;
+  assign WILL_FIRE_RL_craftReq_5 = CAN_FIRE_RL_craftReq_5 ;
+
+  // rule RL_craftReq_6
+  assign CAN_FIRE_RL_craftReq_6 =
+	     ifcs_1_1_innerRoute$EMPTY_N && ifcs_1_1_innerReq$EMPTY_N ;
+  assign WILL_FIRE_RL_craftReq_6 = CAN_FIRE_RL_craftReq_6 ;
+
+  // rule RL_arbitrate_2
+  assign CAN_FIRE_RL_arbitrate_2 =
+	     (CAN_FIRE_RL_craftReq_5 && reqWires_1_0_1$wget ||
+	      CAN_FIRE_RL_craftReq_6 && reqWires_1_1_1$wget) &&
+	     !state_1_1 ;
+  assign WILL_FIRE_RL_arbitrate_2 = CAN_FIRE_RL_arbitrate_2 ;
+
+  // rule RL_source_selected_5
+  assign CAN_FIRE_RL_source_selected_5 =
+	     (!ifcs_0_1_innerRoute$EMPTY_N || ifcs_0_1_innerReq$EMPTY_N) &&
+	     !state_1_1 &&
+	     sourceSelect_1_0_1$whas ;
+  assign WILL_FIRE_RL_source_selected_5 = CAN_FIRE_RL_source_selected_5 ;
+
+  // rule RL_burst_5
+  assign CAN_FIRE_RL_burst_5 =
+	     ifcs_0_1_innerReq$EMPTY_N && ifcs_0_1_innerRoute$EMPTY_N &&
+	     state_1_1_811_AND_activeSource_1_0_1_878_879_A_ETC___d1881 ;
+  assign WILL_FIRE_RL_burst_5 = CAN_FIRE_RL_burst_5 ;
+
+  // rule RL_source_selected_6
+  assign CAN_FIRE_RL_source_selected_6 =
+	     (!ifcs_1_1_innerRoute$EMPTY_N || ifcs_1_1_innerReq$EMPTY_N) &&
+	     !state_1_1 &&
+	     sourceSelect_1_1_1$whas ;
+  assign WILL_FIRE_RL_source_selected_6 = CAN_FIRE_RL_source_selected_6 ;
+
+  // rule RL_burst_6
+  assign CAN_FIRE_RL_burst_6 =
+	     ifcs_1_1_innerReq$EMPTY_N && ifcs_1_1_innerRoute$EMPTY_N &&
+	     state_1_1_811_AND_activeSource_1_1_1_918_919_A_ETC___d1921 ;
+  assign WILL_FIRE_RL_burst_6 = CAN_FIRE_RL_burst_6 ;
+
+  // rule __me_check_193
+  assign CAN_FIRE___me_check_193 = 1'b1 ;
+  assign WILL_FIRE___me_check_193 = 1'b1 ;
+
+  // rule __me_check_195
+  assign CAN_FIRE___me_check_195 = 1'b1 ;
+  assign WILL_FIRE___me_check_195 = 1'b1 ;
+
+  // rule RL_sink_selected_5
+  assign CAN_FIRE_RL_sink_selected_5 =
+	     ssNoSynth_0_ar_buffer_ff$FULL_N && flitToSink_1_0_1$whas ;
+  assign WILL_FIRE_RL_sink_selected_5 = CAN_FIRE_RL_sink_selected_5 ;
+
+  // rule RL_sink_selected_6
+  assign CAN_FIRE_RL_sink_selected_6 =
+	     ssNoSynth_1_ar_buffer_ff$FULL_N && flitToSink_1_1_1$whas ;
+  assign WILL_FIRE_RL_sink_selected_6 = CAN_FIRE_RL_sink_selected_6 ;
+
+  // rule RL_sink_selected_7
+  assign CAN_FIRE_RL_sink_selected_7 =
+	     ssNoSynth_2_ar_buffer_ff$FULL_N && flitToSink_1_2$whas ;
+  assign WILL_FIRE_RL_sink_selected_7 = CAN_FIRE_RL_sink_selected_7 ;
+
+  // rule __me_check_197
+  assign CAN_FIRE___me_check_197 = 1'b1 ;
+  assign WILL_FIRE___me_check_197 = 1'b1 ;
+
+  // rule RL_cpu_imem_ug_u_aw_setPeek
+  assign CAN_FIRE_RL_cpu_imem_ug_u_aw_setPeek = delay_shim_awff$EMPTY_N ;
+  assign WILL_FIRE_RL_cpu_imem_ug_u_aw_setPeek = delay_shim_awff$EMPTY_N ;
+
+  // rule RL_cpu_imem_ug_u_aw_warnDoDrop
+  assign CAN_FIRE_RL_cpu_imem_ug_u_aw_warnDoDrop =
+	     cpu_imem_ug_u_aw_dropWire$whas && !delay_shim_awff$EMPTY_N ;
+  assign WILL_FIRE_RL_cpu_imem_ug_u_aw_warnDoDrop =
+	     CAN_FIRE_RL_cpu_imem_ug_u_aw_warnDoDrop ;
+
+  // rule RL_mkConnectionGetPut
+  assign CAN_FIRE_RL_mkConnectionGetPut =
+	     cpu$imem_master_awvalid && delay_shim_awff$FULL_N ;
+  assign WILL_FIRE_RL_mkConnectionGetPut = CAN_FIRE_RL_mkConnectionGetPut ;
+
+  // rule RL_cpu_imem_aw_forwardReady
+  assign CAN_FIRE_RL_cpu_imem_aw_forwardReady = 1'd1 ;
+  assign WILL_FIRE_RL_cpu_imem_aw_forwardReady = 1'd1 ;
+
+  // rule RL_cpu_imem_ug_u_aw_doDrop
+  assign CAN_FIRE_RL_cpu_imem_ug_u_aw_doDrop =
+	     delay_shim_awff$EMPTY_N && cpu_imem_ug_u_aw_dropWire$whas ;
+  assign WILL_FIRE_RL_cpu_imem_ug_u_aw_doDrop =
+	     CAN_FIRE_RL_cpu_imem_ug_u_aw_doDrop &&
+	     !WILL_FIRE_RL_mkConnectionGetPut ;
+
+  // rule RL_cpu_imem_ug_u_w_setPeek
+  assign CAN_FIRE_RL_cpu_imem_ug_u_w_setPeek = delay_shim_wff$EMPTY_N ;
+  assign WILL_FIRE_RL_cpu_imem_ug_u_w_setPeek = delay_shim_wff$EMPTY_N ;
+
+  // rule RL_cpu_imem_ug_u_w_warnDoDrop
+  assign CAN_FIRE_RL_cpu_imem_ug_u_w_warnDoDrop =
+	     cpu_imem_ug_u_w_dropWire$whas && !delay_shim_wff$EMPTY_N ;
+  assign WILL_FIRE_RL_cpu_imem_ug_u_w_warnDoDrop =
+	     CAN_FIRE_RL_cpu_imem_ug_u_w_warnDoDrop ;
+
+  // rule RL_mkConnectionGetPut_1
+  assign CAN_FIRE_RL_mkConnectionGetPut_1 =
+	     cpu$imem_master_wvalid && delay_shim_wff$FULL_N ;
+  assign WILL_FIRE_RL_mkConnectionGetPut_1 =
+	     CAN_FIRE_RL_mkConnectionGetPut_1 ;
+
+  // rule RL_cpu_imem_w_forwardReady
+  assign CAN_FIRE_RL_cpu_imem_w_forwardReady = 1'd1 ;
+  assign WILL_FIRE_RL_cpu_imem_w_forwardReady = 1'd1 ;
+
+  // rule RL_cpu_imem_ug_u_w_doDrop
+  assign CAN_FIRE_RL_cpu_imem_ug_u_w_doDrop =
+	     delay_shim_wff$EMPTY_N && cpu_imem_ug_u_w_dropWire$whas ;
+  assign WILL_FIRE_RL_cpu_imem_ug_u_w_doDrop =
+	     CAN_FIRE_RL_cpu_imem_ug_u_w_doDrop &&
+	     !WILL_FIRE_RL_mkConnectionGetPut_1 ;
+
+  // rule RL_cpu_imem_ug_u_b_warnDoPut
+  assign CAN_FIRE_RL_cpu_imem_ug_u_b_warnDoPut =
+	     cpu_imem_ug_u_b_putWire$whas && !delay_shim_bff$FULL_N ;
+  assign WILL_FIRE_RL_cpu_imem_ug_u_b_warnDoPut =
+	     CAN_FIRE_RL_cpu_imem_ug_u_b_warnDoPut ;
+
+  // rule RL_mkConnectionGetPut_2
+  assign CAN_FIRE_RL_mkConnectionGetPut_2 =
+	     delay_shim_bff$EMPTY_N && cpu_imem_b_buffer_ff$FULL_N ;
+  assign WILL_FIRE_RL_mkConnectionGetPut_2 =
+	     CAN_FIRE_RL_mkConnectionGetPut_2 ;
+
+  // rule RL_cpu_imem_b_forwardFlit
+  assign CAN_FIRE_RL_cpu_imem_b_forwardFlit =
+	     cpu_imem_b_buffer_firstValid$Q_OUT &&
+	     (cpu_imem_b_buffer_ff$EMPTY_N ||
+	      CAN_FIRE_RL_mkConnectionGetPut_2) ;
+  assign WILL_FIRE_RL_cpu_imem_b_forwardFlit =
+	     CAN_FIRE_RL_cpu_imem_b_forwardFlit ;
+
+  // rule RL_cpu_imem_b_dropFlit
+  assign CAN_FIRE_RL_cpu_imem_b_dropFlit =
+	     (cpu_imem_b_buffer_ff$EMPTY_N ||
+	      CAN_FIRE_RL_mkConnectionGetPut_2) &&
+	     cpu$imem_master_bready ;
+  assign WILL_FIRE_RL_cpu_imem_b_dropFlit = CAN_FIRE_RL_cpu_imem_b_dropFlit ;
+
+  // rule RL_cpu_imem_b_buffer_enqueue
+  assign CAN_FIRE_RL_cpu_imem_b_buffer_enqueue =
+	     CAN_FIRE_RL_mkConnectionGetPut_2 &&
+	     (!CAN_FIRE_RL_cpu_imem_b_dropFlit ||
+	      cpu_imem_b_buffer_ff$EMPTY_N) ;
+  assign WILL_FIRE_RL_cpu_imem_b_buffer_enqueue =
+	     CAN_FIRE_RL_cpu_imem_b_buffer_enqueue ;
+
+  // rule RL_cpu_imem_b_buffer_dequeue
+  assign CAN_FIRE_RL_cpu_imem_b_buffer_dequeue =
+	     CAN_FIRE_RL_cpu_imem_b_dropFlit && cpu_imem_b_buffer_ff$EMPTY_N ;
+  assign WILL_FIRE_RL_cpu_imem_b_buffer_dequeue =
+	     CAN_FIRE_RL_cpu_imem_b_buffer_dequeue ;
+
+  // rule RL_cpu_imem_ug_u_b_doPut
+  assign CAN_FIRE_RL_cpu_imem_ug_u_b_doPut =
+	     delay_shim_bff$FULL_N && cpu_imem_ug_u_b_putWire$whas ;
+  assign WILL_FIRE_RL_cpu_imem_ug_u_b_doPut =
+	     CAN_FIRE_RL_cpu_imem_ug_u_b_doPut ;
+
+  // rule RL_cpu_imem_ug_u_ar_setPeek
+  assign CAN_FIRE_RL_cpu_imem_ug_u_ar_setPeek = delay_shim_arff$EMPTY_N ;
+  assign WILL_FIRE_RL_cpu_imem_ug_u_ar_setPeek = delay_shim_arff$EMPTY_N ;
+
+  // rule RL_cpu_imem_ug_u_ar_warnDoDrop
+  assign CAN_FIRE_RL_cpu_imem_ug_u_ar_warnDoDrop =
+	     cpu_imem_ug_u_ar_dropWire$whas && !delay_shim_arff$EMPTY_N ;
+  assign WILL_FIRE_RL_cpu_imem_ug_u_ar_warnDoDrop =
+	     CAN_FIRE_RL_cpu_imem_ug_u_ar_warnDoDrop ;
+
+  // rule RL_cpu_imem_ug_u_ar_doDrop
+  assign CAN_FIRE_RL_cpu_imem_ug_u_ar_doDrop =
+	     delay_shim_arff$EMPTY_N && cpu_imem_ug_u_ar_dropWire$whas ;
+  assign WILL_FIRE_RL_cpu_imem_ug_u_ar_doDrop =
+	     CAN_FIRE_RL_cpu_imem_ug_u_ar_doDrop ;
+
+  // rule RL_cpu_imem_ug_u_r_warnDoPut
+  assign CAN_FIRE_RL_cpu_imem_ug_u_r_warnDoPut =
+	     cpu_imem_ug_u_r_putWire$whas && !delay_shim_rff$FULL_N ;
+  assign WILL_FIRE_RL_cpu_imem_ug_u_r_warnDoPut =
+	     CAN_FIRE_RL_cpu_imem_ug_u_r_warnDoPut ;
+
+  // rule RL_mkConnectionGetPut_4
+  assign CAN_FIRE_RL_mkConnectionGetPut_4 =
+	     delay_shim_rff$EMPTY_N && cpu_imem_r_buffer_ff$FULL_N ;
+  assign WILL_FIRE_RL_mkConnectionGetPut_4 =
+	     CAN_FIRE_RL_mkConnectionGetPut_4 ;
+
+  // rule RL_cpu_imem_r_forwardFlit
+  assign CAN_FIRE_RL_cpu_imem_r_forwardFlit =
+	     cpu_imem_r_buffer_firstValid$Q_OUT &&
+	     (cpu_imem_r_buffer_ff$EMPTY_N ||
+	      CAN_FIRE_RL_mkConnectionGetPut_4) ;
+  assign WILL_FIRE_RL_cpu_imem_r_forwardFlit =
+	     CAN_FIRE_RL_cpu_imem_r_forwardFlit ;
+
+  // rule RL_cpu_imem_r_dropFlit
+  assign CAN_FIRE_RL_cpu_imem_r_dropFlit =
+	     (cpu_imem_r_buffer_ff$EMPTY_N ||
+	      CAN_FIRE_RL_mkConnectionGetPut_4) &&
+	     cpu$imem_master_rready ;
+  assign WILL_FIRE_RL_cpu_imem_r_dropFlit = CAN_FIRE_RL_cpu_imem_r_dropFlit ;
+
+  // rule RL_cpu_imem_r_buffer_enqueue
+  assign CAN_FIRE_RL_cpu_imem_r_buffer_enqueue =
+	     CAN_FIRE_RL_mkConnectionGetPut_4 &&
+	     (!CAN_FIRE_RL_cpu_imem_r_dropFlit ||
+	      cpu_imem_r_buffer_ff$EMPTY_N) ;
+  assign WILL_FIRE_RL_cpu_imem_r_buffer_enqueue =
+	     CAN_FIRE_RL_cpu_imem_r_buffer_enqueue ;
+
+  // rule RL_cpu_imem_r_buffer_dequeue
+  assign CAN_FIRE_RL_cpu_imem_r_buffer_dequeue =
+	     CAN_FIRE_RL_cpu_imem_r_dropFlit && cpu_imem_r_buffer_ff$EMPTY_N ;
+  assign WILL_FIRE_RL_cpu_imem_r_buffer_dequeue =
+	     CAN_FIRE_RL_cpu_imem_r_buffer_dequeue ;
+
+  // rule RL_cpu_imem_ug_u_r_doPut
+  assign CAN_FIRE_RL_cpu_imem_ug_u_r_doPut =
+	     delay_shim_rff$FULL_N && cpu_imem_ug_u_r_putWire$whas ;
+  assign WILL_FIRE_RL_cpu_imem_ug_u_r_doPut =
+	     CAN_FIRE_RL_cpu_imem_ug_u_r_doPut ;
+
+  // rule RL_tagController_tmp_passCacheResponse
+  assign CAN_FIRE_RL_tagController_tmp_passCacheResponse =
+	     tagController_tmp_tagCon$RDY_cache_response_get &&
+	     !tagController_tmp_shimSlave_bff_rv[7] &&
+	     !tagController_tmp_shimSlave_rff_rv[73] ;
+  assign WILL_FIRE_RL_tagController_tmp_passCacheResponse =
+	     CAN_FIRE_RL_tagController_tmp_passCacheResponse ;
+
+  // rule RL_tagController_tmp_passMemoryRequest
+  assign CAN_FIRE_RL_tagController_tmp_passMemoryRequest =
+	     tagController_tmp_tagCon$RDY_memory_request_get &&
+	     !tagController_tmp_shimMaster_wff_rv[73] &&
+	     (tagController_tmp_doneSendingAW ||
+	      !tagController_tmp_shimMaster_awff_rv[99]) &&
+	     !tagController_tmp_shimMaster_arff_rv[99] ;
+  assign WILL_FIRE_RL_tagController_tmp_passMemoryRequest =
+	     CAN_FIRE_RL_tagController_tmp_passMemoryRequest ;
+
+  // rule RL_tagController_tmp_ug_slave_u_b_setPeek
+  assign CAN_FIRE_RL_tagController_tmp_ug_slave_u_b_setPeek =
+	     tagController_tmp_shimSlave_bff_rv$port1__read[7] ;
+  assign WILL_FIRE_RL_tagController_tmp_ug_slave_u_b_setPeek =
+	     CAN_FIRE_RL_tagController_tmp_ug_slave_u_b_setPeek ;
+
+  // rule RL_tagController_tmp_ug_slave_u_r_setPeek
+  assign CAN_FIRE_RL_tagController_tmp_ug_slave_u_r_setPeek =
+	     tagController_tmp_shimSlave_rff_rv$port1__read[73] ;
+  assign WILL_FIRE_RL_tagController_tmp_ug_slave_u_r_setPeek =
+	     CAN_FIRE_RL_tagController_tmp_ug_slave_u_r_setPeek ;
+
+  // rule RL_tagController_tmp_ug_master_u_aw_setPeek
+  assign CAN_FIRE_RL_tagController_tmp_ug_master_u_aw_setPeek =
+	     tagController_tmp_shimMaster_awff_rv$port1__read[99] ;
+  assign WILL_FIRE_RL_tagController_tmp_ug_master_u_aw_setPeek =
+	     CAN_FIRE_RL_tagController_tmp_ug_master_u_aw_setPeek ;
+
+  // rule RL_tagController_tmp_ug_master_u_aw_warnDoDrop
+  assign CAN_FIRE_RL_tagController_tmp_ug_master_u_aw_warnDoDrop =
+	     tagController_tmp_ug_master_u_aw_dropWire$whas &&
+	     !tagController_tmp_shimMaster_awff_rv$port1__read[99] ;
+  assign WILL_FIRE_RL_tagController_tmp_ug_master_u_aw_warnDoDrop =
+	     CAN_FIRE_RL_tagController_tmp_ug_master_u_aw_warnDoDrop ;
+
+  // rule RL_tagController_tmp_ug_master_u_aw_doDrop
+  assign CAN_FIRE_RL_tagController_tmp_ug_master_u_aw_doDrop =
+	     tagController_tmp_shimMaster_awff_rv$port1__read[99] &&
+	     tagController_tmp_ug_master_u_aw_dropWire$whas ;
+  assign WILL_FIRE_RL_tagController_tmp_ug_master_u_aw_doDrop =
+	     CAN_FIRE_RL_tagController_tmp_ug_master_u_aw_doDrop ;
+
+  // rule RL_tagController_tmp_ug_master_u_w_setPeek
+  assign CAN_FIRE_RL_tagController_tmp_ug_master_u_w_setPeek =
+	     tagController_tmp_shimMaster_wff_rv$port1__read[73] ;
+  assign WILL_FIRE_RL_tagController_tmp_ug_master_u_w_setPeek =
+	     CAN_FIRE_RL_tagController_tmp_ug_master_u_w_setPeek ;
+
+  // rule RL_tagController_tmp_ug_master_u_w_warnDoDrop
+  assign CAN_FIRE_RL_tagController_tmp_ug_master_u_w_warnDoDrop =
+	     tagController_tmp_ug_master_u_w_dropWire$whas &&
+	     !tagController_tmp_shimMaster_wff_rv$port1__read[73] ;
+  assign WILL_FIRE_RL_tagController_tmp_ug_master_u_w_warnDoDrop =
+	     CAN_FIRE_RL_tagController_tmp_ug_master_u_w_warnDoDrop ;
+
+  // rule RL_tagController_tmp_ug_master_u_w_doDrop
+  assign CAN_FIRE_RL_tagController_tmp_ug_master_u_w_doDrop =
+	     tagController_tmp_shimMaster_wff_rv$port1__read[73] &&
+	     tagController_tmp_ug_master_u_w_dropWire$whas ;
+  assign WILL_FIRE_RL_tagController_tmp_ug_master_u_w_doDrop =
+	     CAN_FIRE_RL_tagController_tmp_ug_master_u_w_doDrop ;
+
+  // rule RL_tagController_tmp_ug_master_u_b_warnDoPut
+  assign CAN_FIRE_RL_tagController_tmp_ug_master_u_b_warnDoPut =
+	     tagController_tmp_ug_master_u_b_putWire$whas &&
+	     tagController_tmp_shimMaster_bff_rv[8] ;
+  assign WILL_FIRE_RL_tagController_tmp_ug_master_u_b_warnDoPut =
+	     CAN_FIRE_RL_tagController_tmp_ug_master_u_b_warnDoPut ;
+
+  // rule RL_tagController_tmp_ug_master_u_b_doPut
+  assign CAN_FIRE_RL_tagController_tmp_ug_master_u_b_doPut =
+	     !tagController_tmp_shimMaster_bff_rv[8] &&
+	     tagController_tmp_ug_master_u_b_putWire$whas ;
+  assign WILL_FIRE_RL_tagController_tmp_ug_master_u_b_doPut =
+	     CAN_FIRE_RL_tagController_tmp_ug_master_u_b_doPut ;
+
+  // rule RL_tagController_tmp_ug_master_u_ar_setPeek
+  assign CAN_FIRE_RL_tagController_tmp_ug_master_u_ar_setPeek =
+	     tagController_tmp_shimMaster_arff_rv$port1__read[99] ;
+  assign WILL_FIRE_RL_tagController_tmp_ug_master_u_ar_setPeek =
+	     CAN_FIRE_RL_tagController_tmp_ug_master_u_ar_setPeek ;
+
+  // rule RL_tagController_tmp_ug_master_u_ar_warnDoDrop
+  assign CAN_FIRE_RL_tagController_tmp_ug_master_u_ar_warnDoDrop =
+	     tagController_tmp_ug_master_u_ar_dropWire$whas &&
+	     !tagController_tmp_shimMaster_arff_rv$port1__read[99] ;
+  assign WILL_FIRE_RL_tagController_tmp_ug_master_u_ar_warnDoDrop =
+	     CAN_FIRE_RL_tagController_tmp_ug_master_u_ar_warnDoDrop ;
+
+  // rule RL_tagController_tmp_ug_master_u_ar_doDrop
+  assign CAN_FIRE_RL_tagController_tmp_ug_master_u_ar_doDrop =
+	     tagController_tmp_shimMaster_arff_rv$port1__read[99] &&
+	     tagController_tmp_ug_master_u_ar_dropWire$whas ;
+  assign WILL_FIRE_RL_tagController_tmp_ug_master_u_ar_doDrop =
+	     CAN_FIRE_RL_tagController_tmp_ug_master_u_ar_doDrop ;
+
+  // rule RL_tagController_tmp_ug_master_u_r_warnDoPut
+  assign CAN_FIRE_RL_tagController_tmp_ug_master_u_r_warnDoPut =
+	     tagController_tmp_ug_master_u_r_putWire$whas &&
+	     tagController_tmp_shimMaster_rff_rv[73] ;
+  assign WILL_FIRE_RL_tagController_tmp_ug_master_u_r_warnDoPut =
+	     CAN_FIRE_RL_tagController_tmp_ug_master_u_r_warnDoPut ;
+
+  // rule RL_tagController_tmp_ug_master_u_r_doPut
+  assign CAN_FIRE_RL_tagController_tmp_ug_master_u_r_doPut =
+	     !tagController_tmp_shimMaster_rff_rv[73] &&
+	     tagController_tmp_ug_master_u_r_putWire$whas ;
+  assign WILL_FIRE_RL_tagController_tmp_ug_master_u_r_doPut =
+	     CAN_FIRE_RL_tagController_tmp_ug_master_u_r_doPut ;
+
+  // rule RL_tagController_tmp_passMemoryResponseWrite
+  assign CAN_FIRE_RL_tagController_tmp_passMemoryResponseWrite =
+	     tagController_tmp_shimMaster_bff_rv$port1__read[8] &&
+	     tagController_tmp_tagCon$RDY_memory_response_put ;
+  assign WILL_FIRE_RL_tagController_tmp_passMemoryResponseWrite =
+	     CAN_FIRE_RL_tagController_tmp_passMemoryResponseWrite &&
+	     !WILL_FIRE_RL_tagController_tmp_passMemoryResponseRead ;
+
+  // rule RL_tagController_tmp_passMemoryResponseRead
+  assign CAN_FIRE_RL_tagController_tmp_passMemoryResponseRead =
+	     tagController_tmp_shimMaster_rff_rv$port1__read[73] &&
+	     tagController_tmp_tagCon$RDY_memory_response_put ;
+  assign WILL_FIRE_RL_tagController_tmp_passMemoryResponseRead =
+	     CAN_FIRE_RL_tagController_tmp_passMemoryResponseRead ;
+
+  // rule RL_msNoSynth_1_b_buffer_dequeue
+  assign CAN_FIRE_RL_msNoSynth_1_b_buffer_dequeue = 1'b0 ;
+  assign WILL_FIRE_RL_msNoSynth_1_b_buffer_dequeue = 1'b0 ;
+
+  // rule RL_msNoSynth_1_r_buffer_dequeue
+  assign CAN_FIRE_RL_msNoSynth_1_r_buffer_dequeue = 1'b0 ;
+  assign WILL_FIRE_RL_msNoSynth_1_r_buffer_dequeue = 1'b0 ;
+
+  // rule RL_ssNoSynth_0_ar_forwardFlit
+  assign CAN_FIRE_RL_ssNoSynth_0_ar_forwardFlit =
+	     tagController_tmp_shimSlave_arff_rv[98] ||
+	     ssNoSynth_0_ar_buffer_firstValid$Q_OUT &&
+	     (ssNoSynth_0_ar_buffer_ff$EMPTY_N ||
+	      CAN_FIRE_RL_sink_selected_5) ;
+  assign WILL_FIRE_RL_ssNoSynth_0_ar_forwardFlit =
+	     CAN_FIRE_RL_ssNoSynth_0_ar_forwardFlit ;
+
+  // rule RL_tagController_tmp_ug_slave_u_ar_warnDoPut
+  assign CAN_FIRE_RL_tagController_tmp_ug_slave_u_ar_warnDoPut =
+	     tagController_tmp_ug_slave_u_ar_putWire$whas &&
+	     tagController_tmp_shimSlave_arff_rv[98] ;
+  assign WILL_FIRE_RL_tagController_tmp_ug_slave_u_ar_warnDoPut =
+	     CAN_FIRE_RL_tagController_tmp_ug_slave_u_ar_warnDoPut ;
+
+  // rule RL_ssNoSynth_0_ar_dropFlit
+  assign CAN_FIRE_RL_ssNoSynth_0_ar_dropFlit =
+	     (ssNoSynth_0_ar_buffer_ff$EMPTY_N ||
+	      CAN_FIRE_RL_sink_selected_5) &&
+	     !tagController_tmp_shimSlave_arff_rv[98] ;
+  assign WILL_FIRE_RL_ssNoSynth_0_ar_dropFlit =
+	     CAN_FIRE_RL_ssNoSynth_0_ar_dropFlit ;
+
+  // rule RL_tagController_tmp_ug_slave_u_ar_doPut
+  assign CAN_FIRE_RL_tagController_tmp_ug_slave_u_ar_doPut =
+	     !tagController_tmp_shimSlave_arff_rv[98] &&
+	     tagController_tmp_ug_slave_u_ar_putWire$whas ;
+  assign WILL_FIRE_RL_tagController_tmp_ug_slave_u_ar_doPut =
+	     CAN_FIRE_RL_tagController_tmp_ug_slave_u_ar_doPut ;
+
+  // rule RL_tagController_tmp_passCacheRead
+  assign CAN_FIRE_RL_tagController_tmp_passCacheRead =
+	     tagController_tmp_shimSlave_arff_rv$port1__read[98] &&
+	     tagController_tmp_tagCon$RDY_cache_request_put ;
+  assign WILL_FIRE_RL_tagController_tmp_passCacheRead =
+	     CAN_FIRE_RL_tagController_tmp_passCacheRead ;
+
+  // rule RL_ssNoSynth_0_ar_buffer_enqueue
+  assign CAN_FIRE_RL_ssNoSynth_0_ar_buffer_enqueue =
+	     CAN_FIRE_RL_sink_selected_5 &&
+	     (!CAN_FIRE_RL_ssNoSynth_0_ar_dropFlit ||
+	      ssNoSynth_0_ar_buffer_ff$EMPTY_N) ;
+  assign WILL_FIRE_RL_ssNoSynth_0_ar_buffer_enqueue =
+	     CAN_FIRE_RL_ssNoSynth_0_ar_buffer_enqueue ;
+
+  // rule RL_ssNoSynth_0_ar_buffer_dequeue
+  assign CAN_FIRE_RL_ssNoSynth_0_ar_buffer_dequeue =
+	     CAN_FIRE_RL_ssNoSynth_0_ar_dropFlit &&
+	     ssNoSynth_0_ar_buffer_ff$EMPTY_N ;
+  assign WILL_FIRE_RL_ssNoSynth_0_ar_buffer_dequeue =
+	     CAN_FIRE_RL_ssNoSynth_0_ar_buffer_dequeue ;
+
+  // rule RL_ssNoSynth_1_ar_forwardFlit
+  assign CAN_FIRE_RL_ssNoSynth_1_ar_forwardFlit =
+	     ssNoSynth_1_ar_buffer_firstValid$Q_OUT &&
+	     (ssNoSynth_1_ar_buffer_ff$EMPTY_N ||
+	      CAN_FIRE_RL_sink_selected_6) ;
+  assign WILL_FIRE_RL_ssNoSynth_1_ar_forwardFlit =
+	     CAN_FIRE_RL_ssNoSynth_1_ar_forwardFlit ;
+
+  // rule RL_ssNoSynth_1_ar_dropFlit
+  assign CAN_FIRE_RL_ssNoSynth_1_ar_dropFlit =
+	     (ssNoSynth_1_ar_buffer_ff$EMPTY_N ||
+	      CAN_FIRE_RL_sink_selected_6) &&
+	     near_mem_io$axi4_slave_arready ;
+  assign WILL_FIRE_RL_ssNoSynth_1_ar_dropFlit =
+	     CAN_FIRE_RL_ssNoSynth_1_ar_dropFlit ;
+
+  // rule RL_ssNoSynth_1_ar_buffer_enqueue
+  assign CAN_FIRE_RL_ssNoSynth_1_ar_buffer_enqueue =
+	     CAN_FIRE_RL_sink_selected_6 &&
+	     (!CAN_FIRE_RL_ssNoSynth_1_ar_dropFlit ||
+	      ssNoSynth_1_ar_buffer_ff$EMPTY_N) ;
+  assign WILL_FIRE_RL_ssNoSynth_1_ar_buffer_enqueue =
+	     CAN_FIRE_RL_ssNoSynth_1_ar_buffer_enqueue ;
+
+  // rule RL_ssNoSynth_1_ar_buffer_dequeue
+  assign CAN_FIRE_RL_ssNoSynth_1_ar_buffer_dequeue =
+	     CAN_FIRE_RL_ssNoSynth_1_ar_dropFlit &&
+	     ssNoSynth_1_ar_buffer_ff$EMPTY_N ;
+  assign WILL_FIRE_RL_ssNoSynth_1_ar_buffer_dequeue =
+	     CAN_FIRE_RL_ssNoSynth_1_ar_buffer_dequeue ;
+
+  // rule RL_ssNoSynth_2_ar_forwardFlit
+  assign CAN_FIRE_RL_ssNoSynth_2_ar_forwardFlit =
+	     ssNoSynth_2_ar_buffer_firstValid$Q_OUT &&
+	     (ssNoSynth_2_ar_buffer_ff$EMPTY_N ||
+	      CAN_FIRE_RL_sink_selected_7) ;
+  assign WILL_FIRE_RL_ssNoSynth_2_ar_forwardFlit =
+	     CAN_FIRE_RL_ssNoSynth_2_ar_forwardFlit ;
+
+  // rule RL_ssNoSynth_2_ar_dropFlit
+  assign CAN_FIRE_RL_ssNoSynth_2_ar_dropFlit =
+	     (ssNoSynth_2_ar_buffer_ff$EMPTY_N ||
+	      CAN_FIRE_RL_sink_selected_7) &&
+	     plic$axi4_slave_arready ;
+  assign WILL_FIRE_RL_ssNoSynth_2_ar_dropFlit =
+	     CAN_FIRE_RL_ssNoSynth_2_ar_dropFlit ;
+
+  // rule RL_ssNoSynth_2_ar_buffer_enqueue
+  assign CAN_FIRE_RL_ssNoSynth_2_ar_buffer_enqueue =
+	     CAN_FIRE_RL_sink_selected_7 &&
+	     (!CAN_FIRE_RL_ssNoSynth_2_ar_dropFlit ||
+	      ssNoSynth_2_ar_buffer_ff$EMPTY_N) ;
+  assign WILL_FIRE_RL_ssNoSynth_2_ar_buffer_enqueue =
+	     CAN_FIRE_RL_ssNoSynth_2_ar_buffer_enqueue ;
+
+  // rule RL_ssNoSynth_2_ar_buffer_dequeue
+  assign CAN_FIRE_RL_ssNoSynth_2_ar_buffer_dequeue =
+	     CAN_FIRE_RL_ssNoSynth_2_ar_dropFlit &&
+	     ssNoSynth_2_ar_buffer_ff$EMPTY_N ;
+  assign WILL_FIRE_RL_ssNoSynth_2_ar_buffer_dequeue =
+	     CAN_FIRE_RL_ssNoSynth_2_ar_buffer_dequeue ;
+
+  // rule RL_split_0_putFirst
+  assign CAN_FIRE_RL_split_0_putFirst =
+	     split_0_doPut_whas__10_AND_split_0_doPut_wget__ETC___d917 &&
+	     split_0_flitLeft == 8'd0 ;
+  assign WILL_FIRE_RL_split_0_putFirst = CAN_FIRE_RL_split_0_putFirst ;
+
+  // rule RL_ssNoSynth_0_aw_forwardFlit
+  assign CAN_FIRE_RL_ssNoSynth_0_aw_forwardFlit =
+	     tagController_tmp_shimSlave_awff_rv[98] ||
+	     ssNoSynth_0_aw_buffer_firstValid$Q_OUT &&
+	     (ssNoSynth_0_aw_buffer_ff$EMPTY_N ||
+	      MUX_split_0_flitLeft$write_1__SEL_2) ;
+  assign WILL_FIRE_RL_ssNoSynth_0_aw_forwardFlit =
+	     CAN_FIRE_RL_ssNoSynth_0_aw_forwardFlit ;
+
+  // rule RL_tagController_tmp_ug_slave_u_aw_warnDoPut
+  assign CAN_FIRE_RL_tagController_tmp_ug_slave_u_aw_warnDoPut =
+	     tagController_tmp_ug_slave_u_aw_putWire$whas &&
+	     tagController_tmp_shimSlave_awff_rv[98] ;
+  assign WILL_FIRE_RL_tagController_tmp_ug_slave_u_aw_warnDoPut =
+	     CAN_FIRE_RL_tagController_tmp_ug_slave_u_aw_warnDoPut ;
+
+  // rule RL_ssNoSynth_0_aw_dropFlit
+  assign CAN_FIRE_RL_ssNoSynth_0_aw_dropFlit =
+	     (ssNoSynth_0_aw_buffer_ff$EMPTY_N ||
+	      MUX_split_0_flitLeft$write_1__SEL_2) &&
+	     !tagController_tmp_shimSlave_awff_rv[98] ;
+  assign WILL_FIRE_RL_ssNoSynth_0_aw_dropFlit =
+	     CAN_FIRE_RL_ssNoSynth_0_aw_dropFlit ;
+
+  // rule RL_tagController_tmp_ug_slave_u_aw_doPut
+  assign CAN_FIRE_RL_tagController_tmp_ug_slave_u_aw_doPut =
+	     !tagController_tmp_shimSlave_awff_rv[98] &&
+	     tagController_tmp_ug_slave_u_aw_putWire$whas ;
+  assign WILL_FIRE_RL_tagController_tmp_ug_slave_u_aw_doPut =
+	     CAN_FIRE_RL_tagController_tmp_ug_slave_u_aw_doPut ;
+
+  // rule RL_tagController_tmp_getCacheAW
+  assign CAN_FIRE_RL_tagController_tmp_getCacheAW =
+	     tagController_tmp_shimSlave_awff_rv$port1__read[98] &&
+	     tagController_tmp_awreqff$FULL_N ;
+  assign WILL_FIRE_RL_tagController_tmp_getCacheAW =
+	     CAN_FIRE_RL_tagController_tmp_getCacheAW ;
+
+  // rule RL_ssNoSynth_0_aw_buffer_enqueue
+  assign CAN_FIRE_RL_ssNoSynth_0_aw_buffer_enqueue =
+	     MUX_split_0_flitLeft$write_1__SEL_2 &&
+	     (!CAN_FIRE_RL_ssNoSynth_0_aw_dropFlit ||
+	      ssNoSynth_0_aw_buffer_ff$EMPTY_N) ;
+  assign WILL_FIRE_RL_ssNoSynth_0_aw_buffer_enqueue =
+	     CAN_FIRE_RL_ssNoSynth_0_aw_buffer_enqueue ;
+
+  // rule RL_ssNoSynth_0_aw_buffer_dequeue
+  assign CAN_FIRE_RL_ssNoSynth_0_aw_buffer_dequeue =
+	     CAN_FIRE_RL_ssNoSynth_0_aw_dropFlit &&
+	     ssNoSynth_0_aw_buffer_ff$EMPTY_N ;
+  assign WILL_FIRE_RL_ssNoSynth_0_aw_buffer_dequeue =
+	     CAN_FIRE_RL_ssNoSynth_0_aw_buffer_dequeue ;
+
+  // rule RL_split_0_putOther
+  assign CAN_FIRE_RL_split_0_putOther =
+	     CAN_FIRE_RL_sink_selected &&
+	     (!split_0_doPut$wget[172] || ssNoSynth_0_w_buffer_ff$FULL_N) &&
+	     split_0_flitLeft != 8'd0 ;
+  assign WILL_FIRE_RL_split_0_putOther = CAN_FIRE_RL_split_0_putOther ;
+
+  // rule RL_ssNoSynth_0_w_forwardFlit
+  assign CAN_FIRE_RL_ssNoSynth_0_w_forwardFlit =
+	     tagController_tmp_shimSlave_wff_rv[74] ||
+	     ssNoSynth_0_w_buffer_firstValid$Q_OUT &&
+	     (ssNoSynth_0_w_buffer_ff$EMPTY_N ||
+	      ssNoSynth_0_w_buffer_enqw$whas) ;
+  assign WILL_FIRE_RL_ssNoSynth_0_w_forwardFlit =
+	     CAN_FIRE_RL_ssNoSynth_0_w_forwardFlit ;
+
+  // rule RL_tagController_tmp_ug_slave_u_w_warnDoPut
+  assign CAN_FIRE_RL_tagController_tmp_ug_slave_u_w_warnDoPut =
+	     tagController_tmp_ug_slave_u_w_putWire$whas &&
+	     tagController_tmp_shimSlave_wff_rv[74] ;
+  assign WILL_FIRE_RL_tagController_tmp_ug_slave_u_w_warnDoPut =
+	     CAN_FIRE_RL_tagController_tmp_ug_slave_u_w_warnDoPut ;
+
+  // rule RL_ssNoSynth_0_w_dropFlit
+  assign CAN_FIRE_RL_ssNoSynth_0_w_dropFlit =
+	     (ssNoSynth_0_w_buffer_ff$EMPTY_N ||
+	      ssNoSynth_0_w_buffer_enqw$whas) &&
+	     !tagController_tmp_shimSlave_wff_rv[74] ;
+  assign WILL_FIRE_RL_ssNoSynth_0_w_dropFlit =
+	     CAN_FIRE_RL_ssNoSynth_0_w_dropFlit ;
+
+  // rule RL_tagController_tmp_ug_slave_u_w_doPut
+  assign CAN_FIRE_RL_tagController_tmp_ug_slave_u_w_doPut =
+	     !tagController_tmp_shimSlave_wff_rv[74] &&
+	     tagController_tmp_ug_slave_u_w_putWire$whas ;
+  assign WILL_FIRE_RL_tagController_tmp_ug_slave_u_w_doPut =
+	     CAN_FIRE_RL_tagController_tmp_ug_slave_u_w_doPut ;
+
+  // rule RL_tagController_tmp_passCacheWrite
+  assign CAN_FIRE_RL_tagController_tmp_passCacheWrite =
+	     tagController_tmp_shimSlave_wff_rv$port1__read[74] &&
+	     tagController_tmp_tagCon$RDY_cache_request_put &&
+	     tagController_tmp_awreqff$EMPTY_N ;
+  assign WILL_FIRE_RL_tagController_tmp_passCacheWrite =
+	     CAN_FIRE_RL_tagController_tmp_passCacheWrite &&
+	     !WILL_FIRE_RL_tagController_tmp_passCacheRead ;
+
+  // rule RL_ssNoSynth_0_w_buffer_enqueue
+  assign CAN_FIRE_RL_ssNoSynth_0_w_buffer_enqueue =
+	     ssNoSynth_0_w_buffer_enqw$whas &&
+	     (!CAN_FIRE_RL_ssNoSynth_0_w_dropFlit ||
+	      ssNoSynth_0_w_buffer_ff$EMPTY_N) ;
+  assign WILL_FIRE_RL_ssNoSynth_0_w_buffer_enqueue =
+	     CAN_FIRE_RL_ssNoSynth_0_w_buffer_enqueue ;
+
+  // rule RL_ssNoSynth_0_w_buffer_dequeue
+  assign CAN_FIRE_RL_ssNoSynth_0_w_buffer_dequeue =
+	     CAN_FIRE_RL_ssNoSynth_0_w_dropFlit &&
+	     ssNoSynth_0_w_buffer_ff$EMPTY_N ;
+  assign WILL_FIRE_RL_ssNoSynth_0_w_buffer_dequeue =
+	     CAN_FIRE_RL_ssNoSynth_0_w_buffer_dequeue ;
+
+  // rule RL_split_1_putFirst
+  assign CAN_FIRE_RL_split_1_putFirst =
+	     split_1_doPut_whas__39_AND_split_1_doPut_wget__ETC___d946 &&
+	     split_1_flitLeft == 8'd0 ;
+  assign WILL_FIRE_RL_split_1_putFirst = CAN_FIRE_RL_split_1_putFirst ;
+
+  // rule RL_ssNoSynth_1_aw_forwardFlit
+  assign CAN_FIRE_RL_ssNoSynth_1_aw_forwardFlit =
+	     ssNoSynth_1_aw_buffer_firstValid$Q_OUT &&
+	     (ssNoSynth_1_aw_buffer_ff$EMPTY_N ||
+	      MUX_split_1_flitLeft$write_1__SEL_2) ;
+  assign WILL_FIRE_RL_ssNoSynth_1_aw_forwardFlit =
+	     CAN_FIRE_RL_ssNoSynth_1_aw_forwardFlit ;
+
+  // rule RL_ssNoSynth_1_aw_dropFlit
+  assign CAN_FIRE_RL_ssNoSynth_1_aw_dropFlit =
+	     (ssNoSynth_1_aw_buffer_ff$EMPTY_N ||
+	      MUX_split_1_flitLeft$write_1__SEL_2) &&
+	     near_mem_io$axi4_slave_awready ;
+  assign WILL_FIRE_RL_ssNoSynth_1_aw_dropFlit =
+	     CAN_FIRE_RL_ssNoSynth_1_aw_dropFlit ;
+
+  // rule RL_ssNoSynth_1_aw_buffer_enqueue
+  assign CAN_FIRE_RL_ssNoSynth_1_aw_buffer_enqueue =
+	     MUX_split_1_flitLeft$write_1__SEL_2 &&
+	     (!CAN_FIRE_RL_ssNoSynth_1_aw_dropFlit ||
+	      ssNoSynth_1_aw_buffer_ff$EMPTY_N) ;
+  assign WILL_FIRE_RL_ssNoSynth_1_aw_buffer_enqueue =
+	     CAN_FIRE_RL_ssNoSynth_1_aw_buffer_enqueue ;
+
+  // rule RL_ssNoSynth_1_aw_buffer_dequeue
+  assign CAN_FIRE_RL_ssNoSynth_1_aw_buffer_dequeue =
+	     CAN_FIRE_RL_ssNoSynth_1_aw_dropFlit &&
+	     ssNoSynth_1_aw_buffer_ff$EMPTY_N ;
+  assign WILL_FIRE_RL_ssNoSynth_1_aw_buffer_dequeue =
+	     CAN_FIRE_RL_ssNoSynth_1_aw_buffer_dequeue ;
+
+  // rule RL_split_1_putOther
+  assign CAN_FIRE_RL_split_1_putOther =
+	     CAN_FIRE_RL_sink_selected_1 &&
+	     (!split_1_doPut$wget[172] || ssNoSynth_1_w_buffer_ff$FULL_N) &&
+	     split_1_flitLeft != 8'd0 ;
+  assign WILL_FIRE_RL_split_1_putOther = CAN_FIRE_RL_split_1_putOther ;
+
+  // rule RL_ssNoSynth_1_w_forwardFlit
+  assign CAN_FIRE_RL_ssNoSynth_1_w_forwardFlit =
+	     ssNoSynth_1_w_buffer_firstValid$Q_OUT &&
+	     (ssNoSynth_1_w_buffer_ff$EMPTY_N ||
+	      ssNoSynth_1_w_buffer_enqw$whas) ;
+  assign WILL_FIRE_RL_ssNoSynth_1_w_forwardFlit =
+	     CAN_FIRE_RL_ssNoSynth_1_w_forwardFlit ;
+
+  // rule RL_ssNoSynth_1_w_dropFlit
+  assign CAN_FIRE_RL_ssNoSynth_1_w_dropFlit =
+	     (ssNoSynth_1_w_buffer_ff$EMPTY_N ||
+	      ssNoSynth_1_w_buffer_enqw$whas) &&
+	     near_mem_io$axi4_slave_wready ;
+  assign WILL_FIRE_RL_ssNoSynth_1_w_dropFlit =
+	     CAN_FIRE_RL_ssNoSynth_1_w_dropFlit ;
+
+  // rule RL_ssNoSynth_1_w_buffer_enqueue
+  assign CAN_FIRE_RL_ssNoSynth_1_w_buffer_enqueue =
+	     ssNoSynth_1_w_buffer_enqw$whas &&
+	     (!CAN_FIRE_RL_ssNoSynth_1_w_dropFlit ||
+	      ssNoSynth_1_w_buffer_ff$EMPTY_N) ;
+  assign WILL_FIRE_RL_ssNoSynth_1_w_buffer_enqueue =
+	     CAN_FIRE_RL_ssNoSynth_1_w_buffer_enqueue ;
+
+  // rule RL_ssNoSynth_1_w_buffer_dequeue
+  assign CAN_FIRE_RL_ssNoSynth_1_w_buffer_dequeue =
+	     CAN_FIRE_RL_ssNoSynth_1_w_dropFlit &&
+	     ssNoSynth_1_w_buffer_ff$EMPTY_N ;
+  assign WILL_FIRE_RL_ssNoSynth_1_w_buffer_dequeue =
+	     CAN_FIRE_RL_ssNoSynth_1_w_buffer_dequeue ;
+
+  // rule RL_split_2_putFirst
+  assign CAN_FIRE_RL_split_2_putFirst =
+	     split_2_doPut_whas__68_AND_split_2_doPut_wget__ETC___d975 &&
+	     split_2_flitLeft == 8'd0 ;
+  assign WILL_FIRE_RL_split_2_putFirst = CAN_FIRE_RL_split_2_putFirst ;
+
+  // rule RL_ssNoSynth_2_aw_forwardFlit
+  assign CAN_FIRE_RL_ssNoSynth_2_aw_forwardFlit =
+	     ssNoSynth_2_aw_buffer_firstValid$Q_OUT &&
+	     (ssNoSynth_2_aw_buffer_ff$EMPTY_N ||
+	      MUX_split_2_flitLeft$write_1__SEL_2) ;
+  assign WILL_FIRE_RL_ssNoSynth_2_aw_forwardFlit =
+	     CAN_FIRE_RL_ssNoSynth_2_aw_forwardFlit ;
+
+  // rule RL_ssNoSynth_2_aw_dropFlit
+  assign CAN_FIRE_RL_ssNoSynth_2_aw_dropFlit =
+	     (ssNoSynth_2_aw_buffer_ff$EMPTY_N ||
+	      MUX_split_2_flitLeft$write_1__SEL_2) &&
+	     plic$axi4_slave_awready ;
+  assign WILL_FIRE_RL_ssNoSynth_2_aw_dropFlit =
+	     CAN_FIRE_RL_ssNoSynth_2_aw_dropFlit ;
+
+  // rule RL_ssNoSynth_2_aw_buffer_enqueue
+  assign CAN_FIRE_RL_ssNoSynth_2_aw_buffer_enqueue =
+	     MUX_split_2_flitLeft$write_1__SEL_2 &&
+	     (!CAN_FIRE_RL_ssNoSynth_2_aw_dropFlit ||
+	      ssNoSynth_2_aw_buffer_ff$EMPTY_N) ;
+  assign WILL_FIRE_RL_ssNoSynth_2_aw_buffer_enqueue =
+	     CAN_FIRE_RL_ssNoSynth_2_aw_buffer_enqueue ;
+
+  // rule RL_ssNoSynth_2_aw_buffer_dequeue
+  assign CAN_FIRE_RL_ssNoSynth_2_aw_buffer_dequeue =
+	     CAN_FIRE_RL_ssNoSynth_2_aw_dropFlit &&
+	     ssNoSynth_2_aw_buffer_ff$EMPTY_N ;
+  assign WILL_FIRE_RL_ssNoSynth_2_aw_buffer_dequeue =
+	     CAN_FIRE_RL_ssNoSynth_2_aw_buffer_dequeue ;
+
+  // rule RL_split_2_putOther
+  assign CAN_FIRE_RL_split_2_putOther =
+	     CAN_FIRE_RL_sink_selected_2 &&
+	     (!split_2_doPut$wget[172] || ssNoSynth_2_w_buffer_ff$FULL_N) &&
+	     split_2_flitLeft != 8'd0 ;
+  assign WILL_FIRE_RL_split_2_putOther = CAN_FIRE_RL_split_2_putOther ;
+
+  // rule RL_ssNoSynth_2_w_forwardFlit
+  assign CAN_FIRE_RL_ssNoSynth_2_w_forwardFlit =
+	     ssNoSynth_2_w_buffer_firstValid$Q_OUT &&
+	     (ssNoSynth_2_w_buffer_ff$EMPTY_N ||
+	      ssNoSynth_2_w_buffer_enqw$whas) ;
+  assign WILL_FIRE_RL_ssNoSynth_2_w_forwardFlit =
+	     CAN_FIRE_RL_ssNoSynth_2_w_forwardFlit ;
+
+  // rule RL_ssNoSynth_2_w_dropFlit
+  assign CAN_FIRE_RL_ssNoSynth_2_w_dropFlit =
+	     (ssNoSynth_2_w_buffer_ff$EMPTY_N ||
+	      ssNoSynth_2_w_buffer_enqw$whas) &&
+	     plic$axi4_slave_wready ;
+  assign WILL_FIRE_RL_ssNoSynth_2_w_dropFlit =
+	     CAN_FIRE_RL_ssNoSynth_2_w_dropFlit ;
+
+  // rule RL_ssNoSynth_2_w_buffer_enqueue
+  assign CAN_FIRE_RL_ssNoSynth_2_w_buffer_enqueue =
+	     ssNoSynth_2_w_buffer_enqw$whas &&
+	     (!CAN_FIRE_RL_ssNoSynth_2_w_dropFlit ||
+	      ssNoSynth_2_w_buffer_ff$EMPTY_N) ;
+  assign WILL_FIRE_RL_ssNoSynth_2_w_buffer_enqueue =
+	     CAN_FIRE_RL_ssNoSynth_2_w_buffer_enqueue ;
+
+  // rule RL_ssNoSynth_2_w_buffer_dequeue
+  assign CAN_FIRE_RL_ssNoSynth_2_w_buffer_dequeue =
+	     CAN_FIRE_RL_ssNoSynth_2_w_dropFlit &&
+	     ssNoSynth_2_w_buffer_ff$EMPTY_N ;
+  assign WILL_FIRE_RL_ssNoSynth_2_w_buffer_dequeue =
+	     CAN_FIRE_RL_ssNoSynth_2_w_buffer_dequeue ;
+
+  // rule RL_ifcs_0_firstFlit
+  assign CAN_FIRE_RL_ifcs_0_firstFlit =
+	     cpu$dmem_master_wvalid &&
+	     IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d997 &&
+	     ifcs_0_innerReq$FULL_N &&
+	     ifcs_0_innerRoute$FULL_N &&
+	     (IF_merged_0_flitLeft_94_EQ_0_95_THEN_NOT_cpu_d_ETC___d1004 ||
+	      cpu$dmem_master_awvalid) &&
+	     ifcs_0_state == 2'd0 &&
+	     IF_IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dm_ETC___d1039 ==
+	     2'd1 ;
+  assign WILL_FIRE_RL_ifcs_0_firstFlit = CAN_FIRE_RL_ifcs_0_firstFlit ;
+
+  // rule RL_ifcs_0_followFlits
+  assign CAN_FIRE_RL_ifcs_0_followFlits =
+	     cpu$dmem_master_wvalid &&
+	     IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d997 &&
+	     ifcs_0_innerReq$FULL_N &&
+	     (IF_merged_0_flitLeft_94_EQ_0_95_THEN_NOT_cpu_d_ETC___d1004 ||
+	      cpu$dmem_master_awvalid) &&
+	     ifcs_0_state == 2'd1 ;
+  assign WILL_FIRE_RL_ifcs_0_followFlits = CAN_FIRE_RL_ifcs_0_followFlits ;
+
+  // rule RL_ifcs_0_nonRoutableFlit
+  assign CAN_FIRE_RL_ifcs_0_nonRoutableFlit =
+	     IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d997 &&
+	     IF_merged_0_flitLeft_94_EQ_0_95_THEN_NOT_cpu_d_ETC___d1074 &&
+	     ifcs_0_state == 2'd0 &&
+	     IF_IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dm_ETC___d1039 !=
+	     2'd1 ;
+  assign WILL_FIRE_RL_ifcs_0_nonRoutableFlit =
+	     CAN_FIRE_RL_ifcs_0_nonRoutableFlit ;
+
+  // rule RL_ifcs_0_drainFlits
+  assign CAN_FIRE_RL_ifcs_0_drainFlits =
+	     IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d997 &&
+	     cpu$dmem_master_wvalid &&
+	     ifcs_0_state == 2'd2 ;
+  assign WILL_FIRE_RL_ifcs_0_drainFlits = CAN_FIRE_RL_ifcs_0_drainFlits ;
+
+  // rule __me_check_131
+  assign CAN_FIRE___me_check_131 = 1'b1 ;
+  assign WILL_FIRE___me_check_131 = 1'b1 ;
+
+  // rule RL_ifcs_0_drainNoRouteResponse
+  assign CAN_FIRE_RL_ifcs_0_drainNoRouteResponse =
+	     msNoSynth_0_b_buffer_ff$FULL_N && ifcs_0_noRouteRsp$EMPTY_N ;
+  assign WILL_FIRE_RL_ifcs_0_drainNoRouteResponse =
+	     CAN_FIRE_RL_ifcs_0_drainNoRouteResponse ;
+
+  // rule RL_checkSinkReady_3
+  assign CAN_FIRE_RL_checkSinkReady_3 = 1'd1 ;
+  assign WILL_FIRE_RL_checkSinkReady_3 = 1'd1 ;
+
+  // rule RL_ifcs_1_drainNoRouteResponse
+  assign CAN_FIRE_RL_ifcs_1_drainNoRouteResponse =
+	     msNoSynth_1_b_buffer_ff$FULL_N && ifcs_1_noRouteRsp$EMPTY_N ;
+  assign WILL_FIRE_RL_ifcs_1_drainNoRouteResponse =
+	     CAN_FIRE_RL_ifcs_1_drainNoRouteResponse ;
+
+  // rule RL_checkSinkReady_4
+  assign CAN_FIRE_RL_checkSinkReady_4 = 1'd1 ;
+  assign WILL_FIRE_RL_checkSinkReady_4 = 1'd1 ;
+
+  // rule RL_craftReq_2
+  assign CAN_FIRE_RL_craftReq_2 =
+	     ifcs_0_routeBack$EMPTY_N && ifcs_0_rspBack$EMPTY_N ;
+  assign WILL_FIRE_RL_craftReq_2 = CAN_FIRE_RL_craftReq_2 ;
+
+  // rule RL_craftReq_3
+  assign CAN_FIRE_RL_craftReq_3 =
+	     ifcs_1_routeBack$EMPTY_N && ifcs_1_rspBack$EMPTY_N ;
+  assign WILL_FIRE_RL_craftReq_3 = CAN_FIRE_RL_craftReq_3 ;
+
+  // rule RL_craftReq_4
+  assign CAN_FIRE_RL_craftReq_4 =
+	     ifcs_2_routeBack$EMPTY_N && ifcs_2_rspBack$EMPTY_N ;
+  assign WILL_FIRE_RL_craftReq_4 = CAN_FIRE_RL_craftReq_4 ;
+
+  // rule RL_arbitrate_1
+  assign CAN_FIRE_RL_arbitrate_1 =
+	     reqWires_1_0_whas__398_AND_reqWires_1_0_wget___ETC___d1408 &&
+	     !state_1 ;
+  assign WILL_FIRE_RL_arbitrate_1 = CAN_FIRE_RL_arbitrate_1 ;
+
+  // rule RL_source_selected_2
+  assign CAN_FIRE_RL_source_selected_2 =
+	     (!ifcs_0_routeBack$EMPTY_N || ifcs_0_rspBack$EMPTY_N) &&
+	     !state_1 &&
+	     sourceSelect_1_0$whas ;
+  assign WILL_FIRE_RL_source_selected_2 = CAN_FIRE_RL_source_selected_2 ;
+
+  // rule RL_burst_2
+  assign CAN_FIRE_RL_burst_2 =
+	     ifcs_0_rspBack$EMPTY_N && ifcs_0_routeBack$EMPTY_N &&
+	     state_1_409_AND_activeSource_1_0_497_498_AND_i_ETC___d1500 ;
+  assign WILL_FIRE_RL_burst_2 = CAN_FIRE_RL_burst_2 ;
+
+  // rule RL_source_selected_3
+  assign CAN_FIRE_RL_source_selected_3 =
+	     (!ifcs_1_routeBack$EMPTY_N || ifcs_1_rspBack$EMPTY_N) &&
+	     !state_1 &&
+	     sourceSelect_1_1$whas ;
+  assign WILL_FIRE_RL_source_selected_3 = CAN_FIRE_RL_source_selected_3 ;
+
+  // rule RL_burst_3
+  assign CAN_FIRE_RL_burst_3 =
+	     ifcs_1_rspBack$EMPTY_N && ifcs_1_routeBack$EMPTY_N &&
+	     state_1_409_AND_activeSource_1_1_530_531_AND_i_ETC___d1533 ;
+  assign WILL_FIRE_RL_burst_3 = CAN_FIRE_RL_burst_3 ;
+
+  // rule __me_check_165
+  assign CAN_FIRE___me_check_165 = 1'b1 ;
+  assign WILL_FIRE___me_check_165 = 1'b1 ;
+
+  // rule RL_source_selected_4
+  assign CAN_FIRE_RL_source_selected_4 =
+	     (!ifcs_2_routeBack$EMPTY_N || ifcs_2_rspBack$EMPTY_N) &&
+	     !state_1 &&
+	     sourceSelect_1_2$whas ;
+  assign WILL_FIRE_RL_source_selected_4 = CAN_FIRE_RL_source_selected_4 ;
+
+  // rule RL_burst_4
+  assign CAN_FIRE_RL_burst_4 =
+	     ifcs_2_rspBack$EMPTY_N && ifcs_2_routeBack$EMPTY_N &&
+	     state_1_409_AND_activeSource_1_2_564_565_AND_i_ETC___d1567 ;
+  assign WILL_FIRE_RL_burst_4 = CAN_FIRE_RL_burst_4 ;
+
+  // rule __me_check_163
+  assign CAN_FIRE___me_check_163 = 1'b1 ;
+  assign WILL_FIRE___me_check_163 = 1'b1 ;
+
+  // rule __me_check_167
+  assign CAN_FIRE___me_check_167 = 1'b1 ;
+  assign WILL_FIRE___me_check_167 = 1'b1 ;
+
+  // rule RL_sink_selected_3
+  assign CAN_FIRE_RL_sink_selected_3 =
+	     !CAN_FIRE_RL_ifcs_0_drainNoRouteResponse && flitToSink_1_0$whas ;
+  assign WILL_FIRE_RL_sink_selected_3 = CAN_FIRE_RL_sink_selected_3 ;
+
+  // rule RL_sink_selected_4
+  assign CAN_FIRE_RL_sink_selected_4 =
+	     !CAN_FIRE_RL_ifcs_1_drainNoRouteResponse && flitToSink_1_1$whas ;
+  assign WILL_FIRE_RL_sink_selected_4 = CAN_FIRE_RL_sink_selected_4 ;
+
+  // rule __me_check_169
+  assign CAN_FIRE___me_check_169 = 1'b1 ;
+  assign WILL_FIRE___me_check_169 = 1'b1 ;
+
+  // rule RL_ifcs_0_forwardRsp
+  assign CAN_FIRE_RL_ifcs_0_forwardRsp =
+	     msNoSynth_0_b_buffer_ff$FULL_N && CAN_FIRE_RL_sink_selected_3 &&
+	     !ifcs_0_noRouteRsp$EMPTY_N ;
+  assign WILL_FIRE_RL_ifcs_0_forwardRsp = CAN_FIRE_RL_ifcs_0_forwardRsp ;
+
+  // rule RL_msNoSynth_0_b_forwardFlit
+  assign CAN_FIRE_RL_msNoSynth_0_b_forwardFlit =
+	     msNoSynth_0_b_buffer_firstValid$Q_OUT &&
+	     (msNoSynth_0_b_buffer_ff$EMPTY_N ||
+	      msNoSynth_0_b_buffer_enqw$whas) ;
+  assign WILL_FIRE_RL_msNoSynth_0_b_forwardFlit =
+	     CAN_FIRE_RL_msNoSynth_0_b_forwardFlit ;
+
+  // rule RL_msNoSynth_0_b_dropFlit
+  assign CAN_FIRE_RL_msNoSynth_0_b_dropFlit =
+	     (msNoSynth_0_b_buffer_ff$EMPTY_N ||
+	      msNoSynth_0_b_buffer_enqw$whas) &&
+	     cpu$dmem_master_bready ;
+  assign WILL_FIRE_RL_msNoSynth_0_b_dropFlit =
+	     CAN_FIRE_RL_msNoSynth_0_b_dropFlit ;
+
+  // rule RL_msNoSynth_0_b_buffer_enqueue
+  assign CAN_FIRE_RL_msNoSynth_0_b_buffer_enqueue =
+	     msNoSynth_0_b_buffer_enqw$whas &&
+	     (!CAN_FIRE_RL_msNoSynth_0_b_dropFlit ||
+	      msNoSynth_0_b_buffer_ff$EMPTY_N) ;
+  assign WILL_FIRE_RL_msNoSynth_0_b_buffer_enqueue =
+	     CAN_FIRE_RL_msNoSynth_0_b_buffer_enqueue ;
+
+  // rule RL_msNoSynth_0_b_buffer_dequeue
+  assign CAN_FIRE_RL_msNoSynth_0_b_buffer_dequeue =
+	     CAN_FIRE_RL_msNoSynth_0_b_dropFlit &&
+	     msNoSynth_0_b_buffer_ff$EMPTY_N ;
+  assign WILL_FIRE_RL_msNoSynth_0_b_buffer_dequeue =
+	     CAN_FIRE_RL_msNoSynth_0_b_buffer_dequeue ;
+
+  // rule RL_ifcs_0_nonRoutableGenRsp
+  assign CAN_FIRE_RL_ifcs_0_nonRoutableGenRsp =
+	     IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d997 &&
+	     ifcs_0_noRoute_inner_pendingReq$port1__read &&
+	     ifcs_0_noRouteRsp$FULL_N &&
+	     cpu$dmem_master_wvalid ;
+  assign WILL_FIRE_RL_ifcs_0_nonRoutableGenRsp =
+	     CAN_FIRE_RL_ifcs_0_nonRoutableGenRsp ;
+
+  // rule __me_check_129
+  assign CAN_FIRE___me_check_129 = 1'b1 ;
+  assign WILL_FIRE___me_check_129 = 1'b1 ;
+
+  // rule __me_check_130
+  assign CAN_FIRE___me_check_130 = 1'b1 ;
+  assign WILL_FIRE___me_check_130 = 1'b1 ;
+
+  // rule __me_check_133
+  assign CAN_FIRE___me_check_133 = 1'b1 ;
+  assign WILL_FIRE___me_check_133 = 1'b1 ;
+
+  // rule RL_merged_0_genFirst
+  assign CAN_FIRE_RL_merged_0_genFirst =
+	     cpu$dmem_master_awvalid && cpu$dmem_master_wvalid &&
+	     merged_0_doDrop$whas &&
+	     merged_0_flitLeft == 8'd0 ;
+  assign WILL_FIRE_RL_merged_0_genFirst = CAN_FIRE_RL_merged_0_genFirst ;
+
+  // rule RL_msNoSynth_0_aw_forwardReady
+  assign CAN_FIRE_RL_msNoSynth_0_aw_forwardReady = 1'd1 ;
+  assign WILL_FIRE_RL_msNoSynth_0_aw_forwardReady = 1'd1 ;
+
+  // rule RL_merged_0_genOther
+  assign CAN_FIRE_RL_merged_0_genOther =
+	     cpu$dmem_master_wvalid && merged_0_doDrop$whas &&
+	     merged_0_flitLeft != 8'd0 ;
+  assign WILL_FIRE_RL_merged_0_genOther = CAN_FIRE_RL_merged_0_genOther ;
+
+  // rule RL_msNoSynth_0_w_forwardReady
+  assign CAN_FIRE_RL_msNoSynth_0_w_forwardReady = 1'd1 ;
+  assign WILL_FIRE_RL_msNoSynth_0_w_forwardReady = 1'd1 ;
+
+  // rule RL_ifcs_1_forwardRsp
+  assign CAN_FIRE_RL_ifcs_1_forwardRsp =
+	     msNoSynth_1_b_buffer_ff$FULL_N && CAN_FIRE_RL_sink_selected_4 &&
+	     !ifcs_1_noRouteRsp$EMPTY_N ;
+  assign WILL_FIRE_RL_ifcs_1_forwardRsp = CAN_FIRE_RL_ifcs_1_forwardRsp ;
+
+  // rule RL_msNoSynth_1_b_buffer_enqueue
+  assign CAN_FIRE_RL_msNoSynth_1_b_buffer_enqueue =
+	     msNoSynth_1_b_buffer_enqw$whas ;
+  assign WILL_FIRE_RL_msNoSynth_1_b_buffer_enqueue =
+	     msNoSynth_1_b_buffer_enqw$whas ;
+
+  // rule RL_ifcs_0_firstFlit_1
+  assign CAN_FIRE_RL_ifcs_0_firstFlit_1 =
+	     tagController_tmp_shimSlave_bff_rv$port1__read[7] &&
+	     ifcs_0_rspBack$FULL_N &&
+	     ifcs_0_routeBack$FULL_N &&
+	     !ifcs_0_state_1 ;
+  assign WILL_FIRE_RL_ifcs_0_firstFlit_1 = CAN_FIRE_RL_ifcs_0_firstFlit_1 ;
+
+  // rule RL_ifcs_0_followFlits_1
+  assign CAN_FIRE_RL_ifcs_0_followFlits_1 =
+	     tagController_tmp_shimSlave_bff_rv$port1__read[7] &&
+	     ifcs_0_rspBack$FULL_N &&
+	     ifcs_0_state_1 ;
+  assign WILL_FIRE_RL_ifcs_0_followFlits_1 =
+	     CAN_FIRE_RL_ifcs_0_followFlits_1 ;
+
+  // rule __me_check_138
+  assign CAN_FIRE___me_check_138 = 1'b1 ;
+  assign WILL_FIRE___me_check_138 = 1'b1 ;
+
+  // rule RL_ssNoSynth_0_b_forwardReady
+  assign CAN_FIRE_RL_ssNoSynth_0_b_forwardReady = 1'd1 ;
+  assign WILL_FIRE_RL_ssNoSynth_0_b_forwardReady = 1'd1 ;
+
+  // rule RL_tagController_tmp_ug_slave_u_b_warnDoDrop
+  assign CAN_FIRE_RL_tagController_tmp_ug_slave_u_b_warnDoDrop =
+	     tagController_tmp_ug_slave_u_b_dropWire$whas &&
+	     !tagController_tmp_shimSlave_bff_rv$port1__read[7] ;
+  assign WILL_FIRE_RL_tagController_tmp_ug_slave_u_b_warnDoDrop =
+	     CAN_FIRE_RL_tagController_tmp_ug_slave_u_b_warnDoDrop ;
+
+  // rule RL_tagController_tmp_ug_slave_u_b_doDrop
+  assign CAN_FIRE_RL_tagController_tmp_ug_slave_u_b_doDrop =
+	     tagController_tmp_shimSlave_bff_rv$port1__read[7] &&
+	     tagController_tmp_ug_slave_u_b_dropWire$whas ;
+  assign WILL_FIRE_RL_tagController_tmp_ug_slave_u_b_doDrop =
+	     CAN_FIRE_RL_tagController_tmp_ug_slave_u_b_doDrop ;
+
+  // rule RL_ifcs_1_firstFlit_1
+  assign CAN_FIRE_RL_ifcs_1_firstFlit_1 =
+	     near_mem_io$axi4_slave_bvalid && ifcs_1_rspBack$FULL_N &&
+	     ifcs_1_routeBack$FULL_N &&
+	     !ifcs_1_state_1 ;
+  assign WILL_FIRE_RL_ifcs_1_firstFlit_1 = CAN_FIRE_RL_ifcs_1_firstFlit_1 ;
+
+  // rule RL_ifcs_1_followFlits_1
+  assign CAN_FIRE_RL_ifcs_1_followFlits_1 =
+	     near_mem_io$axi4_slave_bvalid && ifcs_1_rspBack$FULL_N &&
+	     ifcs_1_state_1 ;
+  assign WILL_FIRE_RL_ifcs_1_followFlits_1 =
+	     CAN_FIRE_RL_ifcs_1_followFlits_1 ;
+
+  // rule __me_check_140
+  assign CAN_FIRE___me_check_140 = 1'b1 ;
+  assign WILL_FIRE___me_check_140 = 1'b1 ;
+
+  // rule RL_ssNoSynth_1_b_forwardReady
+  assign CAN_FIRE_RL_ssNoSynth_1_b_forwardReady = 1'd1 ;
+  assign WILL_FIRE_RL_ssNoSynth_1_b_forwardReady = 1'd1 ;
+
+  // rule RL_ifcs_2_firstFlit
+  assign CAN_FIRE_RL_ifcs_2_firstFlit =
+	     plic$axi4_slave_bvalid && ifcs_2_rspBack$FULL_N &&
+	     ifcs_2_routeBack$FULL_N &&
+	     !ifcs_2_state ;
+  assign WILL_FIRE_RL_ifcs_2_firstFlit = CAN_FIRE_RL_ifcs_2_firstFlit ;
+
+  // rule RL_ifcs_2_followFlits
+  assign CAN_FIRE_RL_ifcs_2_followFlits =
+	     plic$axi4_slave_bvalid && ifcs_2_rspBack$FULL_N && ifcs_2_state ;
+  assign WILL_FIRE_RL_ifcs_2_followFlits = CAN_FIRE_RL_ifcs_2_followFlits ;
+
+  // rule __me_check_142
+  assign CAN_FIRE___me_check_142 = 1'b1 ;
+  assign WILL_FIRE___me_check_142 = 1'b1 ;
+
+  // rule RL_ssNoSynth_2_b_forwardReady
+  assign CAN_FIRE_RL_ssNoSynth_2_b_forwardReady = 1'd1 ;
+  assign WILL_FIRE_RL_ssNoSynth_2_b_forwardReady = 1'd1 ;
+
+  // rule RL_ifcs_0_1_drainNoRouteResponse
+  assign CAN_FIRE_RL_ifcs_0_1_drainNoRouteResponse =
+	     msNoSynth_0_r_buffer_ff$FULL_N && ifcs_0_1_noRouteRsp$EMPTY_N ;
+  assign WILL_FIRE_RL_ifcs_0_1_drainNoRouteResponse =
+	     CAN_FIRE_RL_ifcs_0_1_drainNoRouteResponse ;
+
+  // rule RL_checkSinkReady_8
+  assign CAN_FIRE_RL_checkSinkReady_8 = 1'd1 ;
+  assign WILL_FIRE_RL_checkSinkReady_8 = 1'd1 ;
+
+  // rule RL_ifcs_1_1_drainNoRouteResponse
+  assign CAN_FIRE_RL_ifcs_1_1_drainNoRouteResponse =
+	     msNoSynth_1_r_buffer_ff$FULL_N && ifcs_1_1_noRouteRsp$EMPTY_N ;
+  assign WILL_FIRE_RL_ifcs_1_1_drainNoRouteResponse =
+	     CAN_FIRE_RL_ifcs_1_1_drainNoRouteResponse ;
+
+  // rule RL_checkSinkReady_9
+  assign CAN_FIRE_RL_checkSinkReady_9 = 1'd1 ;
+  assign WILL_FIRE_RL_checkSinkReady_9 = 1'd1 ;
+
+  // rule RL_craftReq_7
+  assign CAN_FIRE_RL_craftReq_7 =
+	     ifcs_0_1_routeBack$EMPTY_N && ifcs_0_1_rspBack$EMPTY_N ;
+  assign WILL_FIRE_RL_craftReq_7 = CAN_FIRE_RL_craftReq_7 ;
+
+  // rule RL_craftReq_8
+  assign CAN_FIRE_RL_craftReq_8 =
+	     ifcs_1_1_routeBack$EMPTY_N && ifcs_1_1_rspBack$EMPTY_N ;
+  assign WILL_FIRE_RL_craftReq_8 = CAN_FIRE_RL_craftReq_8 ;
+
+  // rule RL_craftReq_9
+  assign CAN_FIRE_RL_craftReq_9 =
+	     ifcs_2_1_routeBack$EMPTY_N && ifcs_2_1_rspBack$EMPTY_N ;
+  assign WILL_FIRE_RL_craftReq_9 = CAN_FIRE_RL_craftReq_9 ;
+
+  // rule RL_arbitrate_3
+  assign CAN_FIRE_RL_arbitrate_3 =
+	     reqWires_1_1_0_whas__980_AND_reqWires_1_1_0_wg_ETC___d1990 &&
+	     !state_1_1_1 ;
+  assign WILL_FIRE_RL_arbitrate_3 = CAN_FIRE_RL_arbitrate_3 ;
+
+  // rule RL_source_selected_7
+  assign CAN_FIRE_RL_source_selected_7 =
+	     (!ifcs_0_1_routeBack$EMPTY_N || ifcs_0_1_rspBack$EMPTY_N) &&
+	     !state_1_1_1 &&
+	     MUX_activeSource_1_1_0$write_1__VAL_1 ;
+  assign WILL_FIRE_RL_source_selected_7 = CAN_FIRE_RL_source_selected_7 ;
+
+  // rule RL_burst_7
+  assign CAN_FIRE_RL_burst_7 =
+	     ifcs_0_1_rspBack$EMPTY_N && ifcs_0_1_routeBack$EMPTY_N &&
+	     state_1_1_1_991_AND_activeSource_1_1_0_085_086_ETC___d2088 ;
+  assign WILL_FIRE_RL_burst_7 = CAN_FIRE_RL_burst_7 ;
+
+  // rule RL_source_selected_8
+  assign CAN_FIRE_RL_source_selected_8 =
+	     (!ifcs_1_1_routeBack$EMPTY_N || ifcs_1_1_rspBack$EMPTY_N) &&
+	     !state_1_1_1 &&
+	     MUX_activeSource_1_1_1_1$write_1__VAL_1 ;
+  assign WILL_FIRE_RL_source_selected_8 = CAN_FIRE_RL_source_selected_8 ;
+
+  // rule RL_burst_8
+  assign CAN_FIRE_RL_burst_8 =
+	     ifcs_1_1_rspBack$EMPTY_N && ifcs_1_1_routeBack$EMPTY_N &&
+	     state_1_1_1_991_AND_activeSource_1_1_1_1_121_1_ETC___d2124 ;
+  assign WILL_FIRE_RL_burst_8 = CAN_FIRE_RL_burst_8 ;
+
+  // rule __me_check_208
+  assign CAN_FIRE___me_check_208 = 1'b1 ;
+  assign WILL_FIRE___me_check_208 = 1'b1 ;
+
+  // rule RL_source_selected_9
+  assign CAN_FIRE_RL_source_selected_9 =
+	     (!ifcs_2_1_routeBack$EMPTY_N || ifcs_2_1_rspBack$EMPTY_N) &&
+	     !state_1_1_1 &&
+	     MUX_activeSource_1_1_2$write_1__VAL_1 ;
+  assign WILL_FIRE_RL_source_selected_9 = CAN_FIRE_RL_source_selected_9 ;
+
+  // rule RL_burst_9
+  assign CAN_FIRE_RL_burst_9 =
+	     ifcs_2_1_rspBack$EMPTY_N && ifcs_2_1_routeBack$EMPTY_N &&
+	     state_1_1_1_991_AND_activeSource_1_1_2_157_158_ETC___d2160 ;
+  assign WILL_FIRE_RL_burst_9 = CAN_FIRE_RL_burst_9 ;
+
+  // rule __me_check_206
+  assign CAN_FIRE___me_check_206 = 1'b1 ;
+  assign WILL_FIRE___me_check_206 = 1'b1 ;
+
+  // rule __me_check_210
+  assign CAN_FIRE___me_check_210 = 1'b1 ;
+  assign WILL_FIRE___me_check_210 = 1'b1 ;
+
+  // rule RL_sink_selected_8
+  assign CAN_FIRE_RL_sink_selected_8 =
+	     !CAN_FIRE_RL_ifcs_0_1_drainNoRouteResponse &&
+	     flitToSink_1_1_0$whas ;
+  assign WILL_FIRE_RL_sink_selected_8 = CAN_FIRE_RL_sink_selected_8 ;
+
+  // rule RL_sink_selected_9
+  assign CAN_FIRE_RL_sink_selected_9 =
+	     !CAN_FIRE_RL_ifcs_1_1_drainNoRouteResponse &&
+	     flitToSink_1_1_1_1$whas ;
+  assign WILL_FIRE_RL_sink_selected_9 = CAN_FIRE_RL_sink_selected_9 ;
+
+  // rule __me_check_212
+  assign CAN_FIRE___me_check_212 = 1'b1 ;
+  assign WILL_FIRE___me_check_212 = 1'b1 ;
+
+  // rule RL_ifcs_0_1_forwardRsp
+  assign CAN_FIRE_RL_ifcs_0_1_forwardRsp =
+	     msNoSynth_0_r_buffer_ff$FULL_N && CAN_FIRE_RL_sink_selected_8 &&
+	     !ifcs_0_1_noRouteRsp$EMPTY_N ;
+  assign WILL_FIRE_RL_ifcs_0_1_forwardRsp = CAN_FIRE_RL_ifcs_0_1_forwardRsp ;
+
+  // rule RL_msNoSynth_0_r_forwardFlit
+  assign CAN_FIRE_RL_msNoSynth_0_r_forwardFlit =
+	     msNoSynth_0_r_buffer_firstValid$Q_OUT &&
+	     (msNoSynth_0_r_buffer_ff$EMPTY_N ||
+	      msNoSynth_0_r_buffer_enqw$whas) ;
+  assign WILL_FIRE_RL_msNoSynth_0_r_forwardFlit =
+	     CAN_FIRE_RL_msNoSynth_0_r_forwardFlit ;
+
+  // rule RL_msNoSynth_0_r_dropFlit
+  assign CAN_FIRE_RL_msNoSynth_0_r_dropFlit =
+	     (msNoSynth_0_r_buffer_ff$EMPTY_N ||
+	      msNoSynth_0_r_buffer_enqw$whas) &&
+	     cpu$dmem_master_rready ;
+  assign WILL_FIRE_RL_msNoSynth_0_r_dropFlit =
+	     CAN_FIRE_RL_msNoSynth_0_r_dropFlit ;
+
+  // rule RL_mkConnectionGetPut_3
+  assign CAN_FIRE_RL_mkConnectionGetPut_3 =
+	     cpu$imem_master_arvalid && delay_shim_arff$FULL_N ;
+  assign WILL_FIRE_RL_mkConnectionGetPut_3 =
+	     CAN_FIRE_RL_mkConnectionGetPut_3 &&
+	     !WILL_FIRE_RL_cpu_imem_ug_u_ar_doDrop ;
 
   // rule RL_rl_relay_sw_interrupts
   assign CAN_FIRE_RL_rl_relay_sw_interrupts =
@@ -2131,10 +5226,198 @@ module mkCore(CLK,
   assign CAN_FIRE_RL_rl_relay_external_interrupts = 1'd1 ;
   assign WILL_FIRE_RL_rl_relay_external_interrupts = 1'd1 ;
 
+  // rule RL_cpu_imem_ar_forwardReady
+  assign CAN_FIRE_RL_cpu_imem_ar_forwardReady = 1'd1 ;
+  assign WILL_FIRE_RL_cpu_imem_ar_forwardReady = 1'd1 ;
+
+  // rule RL_msNoSynth_0_r_buffer_enqueue
+  assign CAN_FIRE_RL_msNoSynth_0_r_buffer_enqueue =
+	     msNoSynth_0_r_buffer_enqw$whas &&
+	     (!CAN_FIRE_RL_msNoSynth_0_r_dropFlit ||
+	      msNoSynth_0_r_buffer_ff$EMPTY_N) ;
+  assign WILL_FIRE_RL_msNoSynth_0_r_buffer_enqueue =
+	     CAN_FIRE_RL_msNoSynth_0_r_buffer_enqueue ;
+
+  // rule RL_msNoSynth_0_r_buffer_dequeue
+  assign CAN_FIRE_RL_msNoSynth_0_r_buffer_dequeue =
+	     CAN_FIRE_RL_msNoSynth_0_r_dropFlit &&
+	     msNoSynth_0_r_buffer_ff$EMPTY_N ;
+  assign WILL_FIRE_RL_msNoSynth_0_r_buffer_dequeue =
+	     CAN_FIRE_RL_msNoSynth_0_r_buffer_dequeue ;
+
+  // rule RL_ifcs_0_1_firstFlit
+  assign CAN_FIRE_RL_ifcs_0_1_firstFlit =
+	     cpu$dmem_master_arvalid && ifcs_0_1_innerReq$FULL_N &&
+	     ifcs_0_1_innerRoute$FULL_N &&
+	     ifcs_0_1_state == 2'd0 &&
+	     IF_cpu_dmem_master_ar_araddr__582_BITS_63_TO_4_ETC___d1608 ==
+	     2'd1 ;
+  assign WILL_FIRE_RL_ifcs_0_1_firstFlit = CAN_FIRE_RL_ifcs_0_1_firstFlit ;
+
+  // rule RL_ifcs_0_1_followFlits
+  assign CAN_FIRE_RL_ifcs_0_1_followFlits =
+	     cpu$dmem_master_arvalid && ifcs_0_1_innerReq$FULL_N &&
+	     ifcs_0_1_state == 2'd1 ;
+  assign WILL_FIRE_RL_ifcs_0_1_followFlits =
+	     CAN_FIRE_RL_ifcs_0_1_followFlits ;
+
+  // rule RL_ifcs_0_1_nonRoutableFlit
+  assign CAN_FIRE_RL_ifcs_0_1_nonRoutableFlit =
+	     ifcs_0_1_noRoute_flitCount == 9'd0 && cpu$dmem_master_arvalid &&
+	     ifcs_0_1_state == 2'd0 &&
+	     IF_cpu_dmem_master_ar_araddr__582_BITS_63_TO_4_ETC___d1608 !=
+	     2'd1 ;
+  assign WILL_FIRE_RL_ifcs_0_1_nonRoutableFlit =
+	     CAN_FIRE_RL_ifcs_0_1_nonRoutableFlit ;
+
+  // rule RL_ifcs_0_1_nonRoutableGenRsp
+  assign CAN_FIRE_RL_ifcs_0_1_nonRoutableGenRsp =
+	     x_port1__read__h70111 != 9'd0 && ifcs_0_1_noRouteRsp$FULL_N &&
+	     (x_port1__read__h70111 != 9'd1 || cpu$dmem_master_arvalid) ;
+  assign WILL_FIRE_RL_ifcs_0_1_nonRoutableGenRsp =
+	     CAN_FIRE_RL_ifcs_0_1_nonRoutableGenRsp ;
+
+  // rule RL_ifcs_0_1_drainFlits
+  assign CAN_FIRE_RL_ifcs_0_1_drainFlits =
+	     cpu$dmem_master_arvalid && ifcs_0_1_state == 2'd2 ;
+  assign WILL_FIRE_RL_ifcs_0_1_drainFlits = CAN_FIRE_RL_ifcs_0_1_drainFlits ;
+
+  // rule __me_check_171
+  assign CAN_FIRE___me_check_171 = 1'b1 ;
+  assign WILL_FIRE___me_check_171 = 1'b1 ;
+
+  // rule __me_check_172
+  assign CAN_FIRE___me_check_172 = 1'b1 ;
+  assign WILL_FIRE___me_check_172 = 1'b1 ;
+
+  // rule __me_check_173
+  assign CAN_FIRE___me_check_173 = 1'b1 ;
+  assign WILL_FIRE___me_check_173 = 1'b1 ;
+
+  // rule __me_check_175
+  assign CAN_FIRE___me_check_175 = 1'b1 ;
+  assign WILL_FIRE___me_check_175 = 1'b1 ;
+
+  // rule RL_msNoSynth_0_ar_forwardReady
+  assign CAN_FIRE_RL_msNoSynth_0_ar_forwardReady = 1'd1 ;
+  assign WILL_FIRE_RL_msNoSynth_0_ar_forwardReady = 1'd1 ;
+
+  // rule RL_ifcs_1_1_forwardRsp
+  assign CAN_FIRE_RL_ifcs_1_1_forwardRsp =
+	     msNoSynth_1_r_buffer_ff$FULL_N && CAN_FIRE_RL_sink_selected_9 &&
+	     !ifcs_1_1_noRouteRsp$EMPTY_N ;
+  assign WILL_FIRE_RL_ifcs_1_1_forwardRsp = CAN_FIRE_RL_ifcs_1_1_forwardRsp ;
+
+  // rule RL_msNoSynth_1_r_buffer_enqueue
+  assign CAN_FIRE_RL_msNoSynth_1_r_buffer_enqueue =
+	     msNoSynth_1_r_buffer_enqw$whas ;
+  assign WILL_FIRE_RL_msNoSynth_1_r_buffer_enqueue =
+	     msNoSynth_1_r_buffer_enqw$whas ;
+
+  // rule RL_ifcs_1_1_nonRoutableGenRsp
+  assign CAN_FIRE_RL_ifcs_1_1_nonRoutableGenRsp =
+	     ifcs_1_1_noRoute_flitCount != 9'd0 &&
+	     ifcs_1_1_noRouteRsp$FULL_N &&
+	     ifcs_1_1_noRoute_flitCount != 9'd1 ;
+  assign WILL_FIRE_RL_ifcs_1_1_nonRoutableGenRsp =
+	     CAN_FIRE_RL_ifcs_1_1_nonRoutableGenRsp ;
+
+  // rule RL_ifcs_0_1_firstFlit_1
+  assign CAN_FIRE_RL_ifcs_0_1_firstFlit_1 =
+	     tagController_tmp_shimSlave_rff_rv$port1__read[73] &&
+	     ifcs_0_1_rspBack$FULL_N &&
+	     ifcs_0_1_routeBack$FULL_N &&
+	     !ifcs_0_1_state_1 ;
+  assign WILL_FIRE_RL_ifcs_0_1_firstFlit_1 =
+	     CAN_FIRE_RL_ifcs_0_1_firstFlit_1 ;
+
+  // rule RL_ifcs_0_1_followFlits_1
+  assign CAN_FIRE_RL_ifcs_0_1_followFlits_1 =
+	     tagController_tmp_shimSlave_rff_rv$port1__read[73] &&
+	     ifcs_0_1_rspBack$FULL_N &&
+	     ifcs_0_1_state_1 ;
+  assign WILL_FIRE_RL_ifcs_0_1_followFlits_1 =
+	     CAN_FIRE_RL_ifcs_0_1_followFlits_1 ;
+
+  // rule __me_check_181
+  assign CAN_FIRE___me_check_181 = 1'b1 ;
+  assign WILL_FIRE___me_check_181 = 1'b1 ;
+
+  // rule RL_ssNoSynth_0_r_forwardReady
+  assign CAN_FIRE_RL_ssNoSynth_0_r_forwardReady = 1'd1 ;
+  assign WILL_FIRE_RL_ssNoSynth_0_r_forwardReady = 1'd1 ;
+
+  // rule RL_tagController_tmp_ug_slave_u_r_warnDoDrop
+  assign CAN_FIRE_RL_tagController_tmp_ug_slave_u_r_warnDoDrop =
+	     tagController_tmp_ug_slave_u_r_dropWire$whas &&
+	     !tagController_tmp_shimSlave_rff_rv$port1__read[73] ;
+  assign WILL_FIRE_RL_tagController_tmp_ug_slave_u_r_warnDoDrop =
+	     CAN_FIRE_RL_tagController_tmp_ug_slave_u_r_warnDoDrop ;
+
+  // rule RL_tagController_tmp_ug_slave_u_r_doDrop
+  assign CAN_FIRE_RL_tagController_tmp_ug_slave_u_r_doDrop =
+	     tagController_tmp_shimSlave_rff_rv$port1__read[73] &&
+	     tagController_tmp_ug_slave_u_r_dropWire$whas ;
+  assign WILL_FIRE_RL_tagController_tmp_ug_slave_u_r_doDrop =
+	     CAN_FIRE_RL_tagController_tmp_ug_slave_u_r_doDrop ;
+
+  // rule RL_tagController_tmp_propagateReset
+  assign CAN_FIRE_RL_tagController_tmp_propagateReset =
+	     !tagController_tmp_reset_done ;
+  assign WILL_FIRE_RL_tagController_tmp_propagateReset =
+	     CAN_FIRE_RL_tagController_tmp_propagateReset ;
+
+  // rule RL_ifcs_1_1_firstFlit_1
+  assign CAN_FIRE_RL_ifcs_1_1_firstFlit_1 =
+	     near_mem_io$axi4_slave_rvalid && ifcs_1_1_rspBack$FULL_N &&
+	     ifcs_1_1_routeBack$FULL_N &&
+	     !ifcs_1_1_state_1 ;
+  assign WILL_FIRE_RL_ifcs_1_1_firstFlit_1 =
+	     CAN_FIRE_RL_ifcs_1_1_firstFlit_1 ;
+
+  // rule RL_ifcs_1_1_followFlits_1
+  assign CAN_FIRE_RL_ifcs_1_1_followFlits_1 =
+	     near_mem_io$axi4_slave_rvalid && ifcs_1_1_rspBack$FULL_N &&
+	     ifcs_1_1_state_1 ;
+  assign WILL_FIRE_RL_ifcs_1_1_followFlits_1 =
+	     CAN_FIRE_RL_ifcs_1_1_followFlits_1 ;
+
+  // rule __me_check_183
+  assign CAN_FIRE___me_check_183 = 1'b1 ;
+  assign WILL_FIRE___me_check_183 = 1'b1 ;
+
+  // rule RL_ssNoSynth_1_r_forwardReady
+  assign CAN_FIRE_RL_ssNoSynth_1_r_forwardReady = 1'd1 ;
+  assign WILL_FIRE_RL_ssNoSynth_1_r_forwardReady = 1'd1 ;
+
+  // rule RL_ifcs_2_1_firstFlit
+  assign CAN_FIRE_RL_ifcs_2_1_firstFlit =
+	     plic$axi4_slave_rvalid && ifcs_2_1_rspBack$FULL_N &&
+	     ifcs_2_1_routeBack$FULL_N &&
+	     !ifcs_2_1_state ;
+  assign WILL_FIRE_RL_ifcs_2_1_firstFlit = CAN_FIRE_RL_ifcs_2_1_firstFlit ;
+
+  // rule RL_ifcs_2_1_followFlits
+  assign CAN_FIRE_RL_ifcs_2_1_followFlits =
+	     plic$axi4_slave_rvalid && ifcs_2_1_rspBack$FULL_N &&
+	     ifcs_2_1_state ;
+  assign WILL_FIRE_RL_ifcs_2_1_followFlits =
+	     CAN_FIRE_RL_ifcs_2_1_followFlits ;
+
+  // rule __me_check_185
+  assign CAN_FIRE___me_check_185 = 1'b1 ;
+  assign WILL_FIRE___me_check_185 = 1'b1 ;
+
+  // rule RL_ssNoSynth_2_r_forwardReady
+  assign CAN_FIRE_RL_ssNoSynth_2_r_forwardReady = 1'd1 ;
+  assign WILL_FIRE_RL_ssNoSynth_2_r_forwardReady = 1'd1 ;
+
   // rule RL_rl_cpu_hart0_reset_from_soc_start
   assign CAN_FIRE_RL_rl_cpu_hart0_reset_from_soc_start =
-	     fabric_2x3$RDY_reset &&
-	     near_mem_io_RDY_server_reset_request_put_AND_p_ETC___d8 ;
+	     near_mem_io$RDY_server_reset_request_put &&
+	     plic$RDY_server_reset_request_put &&
+	     cpu$RDY_hart0_server_reset_request_put &&
+	     f_reset_reqs$EMPTY_N ;
   assign WILL_FIRE_RL_rl_cpu_hart0_reset_from_soc_start =
 	     CAN_FIRE_RL_rl_cpu_hart0_reset_from_soc_start ;
 
@@ -2147,30 +5430,1328 @@ module mkCore(CLK,
   assign WILL_FIRE_RL_rl_cpu_hart0_reset_complete =
 	     CAN_FIRE_RL_rl_cpu_hart0_reset_complete ;
 
+  // inputs to muxes for submodule ports
+  assign MUX_activeSource_0$write_1__SEL_1 =
+	     WILL_FIRE_RL_source_selected && ifcs_0_innerRoute$EMPTY_N &&
+	     !ifcs_0_innerReq$D_OUT[1] ;
+  assign MUX_activeSource_1_1_0$write_1__SEL_1 =
+	     WILL_FIRE_RL_source_selected_7 && ifcs_0_1_routeBack$EMPTY_N &&
+	     !ifcs_0_1_rspBack$D_OUT[1] ;
+  assign MUX_activeSource_1_1_0$write_1__SEL_2 =
+	     WILL_FIRE_RL_source_selected_8 && ifcs_1_1_routeBack$EMPTY_N &&
+	     !ifcs_1_1_rspBack$D_OUT[1] ;
+  assign MUX_activeSource_1_1_0$write_1__SEL_3 =
+	     WILL_FIRE_RL_source_selected_9 && ifcs_2_1_routeBack$EMPTY_N &&
+	     !ifcs_2_1_rspBack$D_OUT[1] ;
+  assign MUX_flitToSink_0$wset_1__SEL_1 =
+	     WILL_FIRE_RL_burst && ifcs_0_innerRoute$D_OUT[0] ;
+  assign MUX_flitToSink_0$wset_1__SEL_3 =
+	     WILL_FIRE_RL_source_selected && ifcs_0_innerRoute$EMPTY_N &&
+	     ifcs_0_innerRoute$D_OUT[0] ;
+  assign MUX_flitToSink_1$wset_1__SEL_1 =
+	     WILL_FIRE_RL_burst && ifcs_0_innerRoute$D_OUT[1] ;
+  assign MUX_flitToSink_1$wset_1__SEL_3 =
+	     WILL_FIRE_RL_source_selected && ifcs_0_innerRoute$EMPTY_N &&
+	     ifcs_0_innerRoute$D_OUT[1] ;
+  assign MUX_flitToSink_1_0$wset_1__SEL_1 =
+	     WILL_FIRE_RL_burst_2 && ifcs_0_routeBack$D_OUT[0] ;
+  assign MUX_flitToSink_1_0$wset_1__SEL_2 =
+	     WILL_FIRE_RL_burst_3 && ifcs_1_routeBack$D_OUT[0] ;
+  assign MUX_flitToSink_1_0$wset_1__SEL_3 =
+	     WILL_FIRE_RL_burst_4 && ifcs_2_routeBack$D_OUT[0] ;
+  assign MUX_flitToSink_1_0$wset_1__SEL_4 =
+	     WILL_FIRE_RL_source_selected_2 && ifcs_0_routeBack$EMPTY_N &&
+	     ifcs_0_routeBack$D_OUT[0] ;
+  assign MUX_flitToSink_1_0$wset_1__SEL_5 =
+	     WILL_FIRE_RL_source_selected_3 && ifcs_1_routeBack$EMPTY_N &&
+	     ifcs_1_routeBack$D_OUT[0] ;
+  assign MUX_flitToSink_1_0$wset_1__SEL_6 =
+	     WILL_FIRE_RL_source_selected_4 && ifcs_2_routeBack$EMPTY_N &&
+	     ifcs_2_routeBack$D_OUT[0] ;
+  assign MUX_flitToSink_1_0_1$wset_1__SEL_1 =
+	     WILL_FIRE_RL_burst_5 && ifcs_0_1_innerRoute$D_OUT[0] ;
+  assign MUX_flitToSink_1_0_1$wset_1__SEL_3 =
+	     WILL_FIRE_RL_source_selected_5 && ifcs_0_1_innerRoute$EMPTY_N &&
+	     ifcs_0_1_innerRoute$D_OUT[0] ;
+  assign MUX_flitToSink_1_1$wset_1__SEL_1 =
+	     WILL_FIRE_RL_burst_2 && ifcs_0_routeBack$D_OUT[1] ;
+  assign MUX_flitToSink_1_1$wset_1__SEL_2 =
+	     WILL_FIRE_RL_burst_3 && ifcs_1_routeBack$D_OUT[1] ;
+  assign MUX_flitToSink_1_1$wset_1__SEL_3 =
+	     WILL_FIRE_RL_burst_4 && ifcs_2_routeBack$D_OUT[1] ;
+  assign MUX_flitToSink_1_1$wset_1__SEL_4 =
+	     WILL_FIRE_RL_source_selected_2 && ifcs_0_routeBack$EMPTY_N &&
+	     ifcs_0_routeBack$D_OUT[1] ;
+  assign MUX_flitToSink_1_1$wset_1__SEL_5 =
+	     WILL_FIRE_RL_source_selected_3 && ifcs_1_routeBack$EMPTY_N &&
+	     ifcs_1_routeBack$D_OUT[1] ;
+  assign MUX_flitToSink_1_1$wset_1__SEL_6 =
+	     WILL_FIRE_RL_source_selected_4 && ifcs_2_routeBack$EMPTY_N &&
+	     ifcs_2_routeBack$D_OUT[1] ;
+  assign MUX_flitToSink_1_1_0$wset_1__SEL_1 =
+	     WILL_FIRE_RL_burst_7 && ifcs_0_1_routeBack$D_OUT[0] ;
+  assign MUX_flitToSink_1_1_0$wset_1__SEL_2 =
+	     WILL_FIRE_RL_burst_8 && ifcs_1_1_routeBack$D_OUT[0] ;
+  assign MUX_flitToSink_1_1_0$wset_1__SEL_3 =
+	     WILL_FIRE_RL_burst_9 && ifcs_2_1_routeBack$D_OUT[0] ;
+  assign MUX_flitToSink_1_1_0$wset_1__SEL_4 =
+	     WILL_FIRE_RL_source_selected_7 && ifcs_0_1_routeBack$EMPTY_N &&
+	     ifcs_0_1_routeBack$D_OUT[0] ;
+  assign MUX_flitToSink_1_1_0$wset_1__SEL_5 =
+	     WILL_FIRE_RL_source_selected_8 && ifcs_1_1_routeBack$EMPTY_N &&
+	     ifcs_1_1_routeBack$D_OUT[0] ;
+  assign MUX_flitToSink_1_1_0$wset_1__SEL_6 =
+	     WILL_FIRE_RL_source_selected_9 && ifcs_2_1_routeBack$EMPTY_N &&
+	     ifcs_2_1_routeBack$D_OUT[0] ;
+  assign MUX_flitToSink_1_1_1$wset_1__SEL_1 =
+	     WILL_FIRE_RL_burst_5 && ifcs_0_1_innerRoute$D_OUT[1] ;
+  assign MUX_flitToSink_1_1_1$wset_1__SEL_3 =
+	     WILL_FIRE_RL_source_selected_5 && ifcs_0_1_innerRoute$EMPTY_N &&
+	     ifcs_0_1_innerRoute$D_OUT[1] ;
+  assign MUX_flitToSink_1_1_1_1$wset_1__SEL_1 =
+	     WILL_FIRE_RL_burst_7 && ifcs_0_1_routeBack$D_OUT[1] ;
+  assign MUX_flitToSink_1_1_1_1$wset_1__SEL_2 =
+	     WILL_FIRE_RL_burst_8 && ifcs_1_1_routeBack$D_OUT[1] ;
+  assign MUX_flitToSink_1_1_1_1$wset_1__SEL_3 =
+	     WILL_FIRE_RL_burst_9 && ifcs_2_1_routeBack$D_OUT[1] ;
+  assign MUX_flitToSink_1_1_1_1$wset_1__SEL_4 =
+	     WILL_FIRE_RL_source_selected_7 && ifcs_0_1_routeBack$EMPTY_N &&
+	     ifcs_0_1_routeBack$D_OUT[1] ;
+  assign MUX_flitToSink_1_1_1_1$wset_1__SEL_5 =
+	     WILL_FIRE_RL_source_selected_8 && ifcs_1_1_routeBack$EMPTY_N &&
+	     ifcs_1_1_routeBack$D_OUT[1] ;
+  assign MUX_flitToSink_1_1_1_1$wset_1__SEL_6 =
+	     WILL_FIRE_RL_source_selected_9 && ifcs_2_1_routeBack$EMPTY_N &&
+	     ifcs_2_1_routeBack$D_OUT[1] ;
+  assign MUX_flitToSink_1_2$wset_1__SEL_1 =
+	     WILL_FIRE_RL_burst_5 && ifcs_0_1_innerRoute$D_OUT[2] ;
+  assign MUX_flitToSink_1_2$wset_1__SEL_3 =
+	     WILL_FIRE_RL_source_selected_5 && ifcs_0_1_innerRoute$EMPTY_N &&
+	     ifcs_0_1_innerRoute$D_OUT[2] ;
+  assign MUX_flitToSink_2$wset_1__SEL_1 =
+	     WILL_FIRE_RL_burst && ifcs_0_innerRoute$D_OUT[2] ;
+  assign MUX_flitToSink_2$wset_1__SEL_3 =
+	     WILL_FIRE_RL_source_selected && ifcs_0_innerRoute$EMPTY_N &&
+	     ifcs_0_innerRoute$D_OUT[2] ;
+  assign MUX_ifcs_0_1_state_1$write_1__SEL_1 =
+	     WILL_FIRE_RL_ifcs_0_1_firstFlit_1 &&
+	     !tagController_tmp_shimSlave_rff_rvport1__read_ETC__q1[1] ;
+  assign MUX_ifcs_0_state$write_1__PSEL_1 =
+	     WILL_FIRE_RL_ifcs_0_drainFlits ||
+	     WILL_FIRE_RL_ifcs_0_followFlits ;
+  assign MUX_ifcs_0_state$write_1__SEL_1 =
+	     MUX_ifcs_0_state$write_1__PSEL_1 && cpu$dmem_master_wlast ;
+  assign MUX_ifcs_0_state$write_1__SEL_2 =
+	     WILL_FIRE_RL_ifcs_0_firstFlit && !cpu$dmem_master_wlast ;
+  assign MUX_ifcs_0_state$write_1__SEL_3 =
+	     WILL_FIRE_RL_ifcs_0_nonRoutableGenRsp && !cpu$dmem_master_wlast ;
+  assign MUX_ifcs_1_1_state_1$write_1__SEL_1 =
+	     WILL_FIRE_RL_ifcs_1_1_followFlits_1 &&
+	     near_mem_io$axi4_slave_rlast ;
+  assign MUX_ifcs_2_1_state$write_1__SEL_1 =
+	     WILL_FIRE_RL_ifcs_2_1_followFlits && plic$axi4_slave_rlast ;
+  assign MUX_split_0_flitLeft$write_1__SEL_1 =
+	     WILL_FIRE_RL_split_0_putOther && split_0_doPut$wget[172] ;
+  assign MUX_split_0_flitLeft$write_1__SEL_2 =
+	     WILL_FIRE_RL_split_0_putFirst && !split_0_doPut$wget[172] ;
+  assign MUX_split_1_flitLeft$write_1__SEL_1 =
+	     WILL_FIRE_RL_split_1_putOther && split_1_doPut$wget[172] ;
+  assign MUX_split_1_flitLeft$write_1__SEL_2 =
+	     WILL_FIRE_RL_split_1_putFirst && !split_1_doPut$wget[172] ;
+  assign MUX_split_2_flitLeft$write_1__SEL_1 =
+	     WILL_FIRE_RL_split_2_putOther && split_2_doPut$wget[172] ;
+  assign MUX_split_2_flitLeft$write_1__SEL_2 =
+	     WILL_FIRE_RL_split_2_putFirst && !split_2_doPut$wget[172] ;
+  assign MUX_state$write_1__SEL_1 =
+	     WILL_FIRE_RL_burst && ifcs_0_innerReq$D_OUT[1] ;
+  assign MUX_state$write_1__SEL_2 =
+	     WILL_FIRE_RL_burst_1 && ifcs_1_innerReq$D_OUT[1] ;
+  assign MUX_state_1_1_1$write_1__SEL_1 =
+	     WILL_FIRE_RL_burst_7 && ifcs_0_1_rspBack$D_OUT[1] ;
+  assign MUX_state_1_1_1$write_1__SEL_2 =
+	     WILL_FIRE_RL_burst_8 && ifcs_1_1_rspBack$D_OUT[1] ;
+  assign MUX_state_1_1_1$write_1__SEL_3 =
+	     WILL_FIRE_RL_burst_9 && ifcs_2_1_rspBack$D_OUT[1] ;
+  assign MUX_activeSource_0$write_1__VAL_1 =
+	     WILL_FIRE_RL_arbitrate &&
+	     IF_SEXT_arbiter_lastSelect_222_223_BIT_0_224_A_ETC___d1246 ;
+  assign MUX_activeSource_1$write_1__VAL_1 =
+	     WILL_FIRE_RL_arbitrate &&
+	     IF_SEXT_arbiter_lastSelect_222_223_BIT_0_224_A_ETC___d1250 ;
+  assign MUX_activeSource_1_1_0$write_1__VAL_1 =
+	     WILL_FIRE_RL_arbitrate_3 &&
+	     IF_SEXT_arbiter_1_1_lastSelect_994_995_BIT_0_9_ETC___d2038 ;
+  assign MUX_activeSource_1_1_1_1$write_1__VAL_1 =
+	     WILL_FIRE_RL_arbitrate_3 &&
+	     IF_SEXT_arbiter_1_1_lastSelect_994_995_BIT_0_9_ETC___d2044 ;
+  assign MUX_activeSource_1_1_2$write_1__VAL_1 =
+	     WILL_FIRE_RL_arbitrate_3 &&
+	     IF_SEXT_arbiter_1_1_lastSelect_994_995_BIT_0_9_ETC___d2050 ;
+  assign MUX_merged_0_flitLeft$write_1__VAL_1 = merged_0_flitLeft - 8'd1 ;
+  always@(MUX_flitToSink_1_0$wset_1__SEL_1 or
+	  MUX_flitToSink_1_0$wset_1__SEL_4 or
+	  ifcs_0_rspBack$D_OUT or
+	  MUX_flitToSink_1_0$wset_1__SEL_2 or
+	  MUX_flitToSink_1_0$wset_1__SEL_5 or
+	  ifcs_1_rspBack$D_OUT or
+	  MUX_flitToSink_1_0$wset_1__SEL_3 or
+	  MUX_flitToSink_1_0$wset_1__SEL_6 or ifcs_2_rspBack$D_OUT)
+  begin
+    case (1'b1) // synopsys parallel_case
+      MUX_flitToSink_1_0$wset_1__SEL_1 || MUX_flitToSink_1_0$wset_1__SEL_4:
+	  MUX_msNoSynth_0_b_buffer_enqw$wset_1__VAL_2 = ifcs_0_rspBack$D_OUT;
+      MUX_flitToSink_1_0$wset_1__SEL_2 || MUX_flitToSink_1_0$wset_1__SEL_5:
+	  MUX_msNoSynth_0_b_buffer_enqw$wset_1__VAL_2 = ifcs_1_rspBack$D_OUT;
+      MUX_flitToSink_1_0$wset_1__SEL_3 || MUX_flitToSink_1_0$wset_1__SEL_6:
+	  MUX_msNoSynth_0_b_buffer_enqw$wset_1__VAL_2 = ifcs_2_rspBack$D_OUT;
+      default: MUX_msNoSynth_0_b_buffer_enqw$wset_1__VAL_2 =
+		   6'b101010 /* unspecified value */ ;
+    endcase
+  end
+  always@(MUX_flitToSink_1_1_0$wset_1__SEL_1 or
+	  MUX_flitToSink_1_1_0$wset_1__SEL_4 or
+	  ifcs_0_1_rspBack$D_OUT or
+	  MUX_flitToSink_1_1_0$wset_1__SEL_2 or
+	  MUX_flitToSink_1_1_0$wset_1__SEL_5 or
+	  ifcs_1_1_rspBack$D_OUT or
+	  MUX_flitToSink_1_1_0$wset_1__SEL_3 or
+	  MUX_flitToSink_1_1_0$wset_1__SEL_6 or ifcs_2_1_rspBack$D_OUT)
+  begin
+    case (1'b1) // synopsys parallel_case
+      MUX_flitToSink_1_1_0$wset_1__SEL_1 ||
+      MUX_flitToSink_1_1_0$wset_1__SEL_4:
+	  MUX_msNoSynth_0_r_buffer_enqw$wset_1__VAL_2 =
+	      ifcs_0_1_rspBack$D_OUT;
+      MUX_flitToSink_1_1_0$wset_1__SEL_2 ||
+      MUX_flitToSink_1_1_0$wset_1__SEL_5:
+	  MUX_msNoSynth_0_r_buffer_enqw$wset_1__VAL_2 =
+	      ifcs_1_1_rspBack$D_OUT;
+      MUX_flitToSink_1_1_0$wset_1__SEL_3 ||
+      MUX_flitToSink_1_1_0$wset_1__SEL_6:
+	  MUX_msNoSynth_0_r_buffer_enqw$wset_1__VAL_2 =
+	      ifcs_2_1_rspBack$D_OUT;
+      default: MUX_msNoSynth_0_r_buffer_enqw$wset_1__VAL_2 =
+		   72'hAAAAAAAAAAAAAAAAAA /* unspecified value */ ;
+    endcase
+  end
+  always@(MUX_flitToSink_1_1$wset_1__SEL_1 or
+	  MUX_flitToSink_1_1$wset_1__SEL_4 or
+	  ifcs_0_rspBack$D_OUT or
+	  MUX_flitToSink_1_1$wset_1__SEL_2 or
+	  MUX_flitToSink_1_1$wset_1__SEL_5 or
+	  ifcs_1_rspBack$D_OUT or
+	  MUX_flitToSink_1_1$wset_1__SEL_3 or
+	  MUX_flitToSink_1_1$wset_1__SEL_6 or ifcs_2_rspBack$D_OUT)
+  begin
+    case (1'b1) // synopsys parallel_case
+      MUX_flitToSink_1_1$wset_1__SEL_1 || MUX_flitToSink_1_1$wset_1__SEL_4:
+	  MUX_msNoSynth_1_b_buffer_enqw$wset_1__VAL_2 = ifcs_0_rspBack$D_OUT;
+      MUX_flitToSink_1_1$wset_1__SEL_2 || MUX_flitToSink_1_1$wset_1__SEL_5:
+	  MUX_msNoSynth_1_b_buffer_enqw$wset_1__VAL_2 = ifcs_1_rspBack$D_OUT;
+      MUX_flitToSink_1_1$wset_1__SEL_3 || MUX_flitToSink_1_1$wset_1__SEL_6:
+	  MUX_msNoSynth_1_b_buffer_enqw$wset_1__VAL_2 = ifcs_2_rspBack$D_OUT;
+      default: MUX_msNoSynth_1_b_buffer_enqw$wset_1__VAL_2 =
+		   6'b101010 /* unspecified value */ ;
+    endcase
+  end
+  always@(MUX_flitToSink_1_1_1_1$wset_1__SEL_1 or
+	  MUX_flitToSink_1_1_1_1$wset_1__SEL_4 or
+	  ifcs_0_1_rspBack$D_OUT or
+	  MUX_flitToSink_1_1_1_1$wset_1__SEL_2 or
+	  MUX_flitToSink_1_1_1_1$wset_1__SEL_5 or
+	  ifcs_1_1_rspBack$D_OUT or
+	  MUX_flitToSink_1_1_1_1$wset_1__SEL_3 or
+	  MUX_flitToSink_1_1_1_1$wset_1__SEL_6 or ifcs_2_1_rspBack$D_OUT)
+  begin
+    case (1'b1) // synopsys parallel_case
+      MUX_flitToSink_1_1_1_1$wset_1__SEL_1 ||
+      MUX_flitToSink_1_1_1_1$wset_1__SEL_4:
+	  MUX_msNoSynth_1_r_buffer_enqw$wset_1__VAL_2 =
+	      ifcs_0_1_rspBack$D_OUT;
+      MUX_flitToSink_1_1_1_1$wset_1__SEL_2 ||
+      MUX_flitToSink_1_1_1_1$wset_1__SEL_5:
+	  MUX_msNoSynth_1_r_buffer_enqw$wset_1__VAL_2 =
+	      ifcs_1_1_rspBack$D_OUT;
+      MUX_flitToSink_1_1_1_1$wset_1__SEL_3 ||
+      MUX_flitToSink_1_1_1_1$wset_1__SEL_6:
+	  MUX_msNoSynth_1_r_buffer_enqw$wset_1__VAL_2 =
+	      ifcs_2_1_rspBack$D_OUT;
+      default: MUX_msNoSynth_1_r_buffer_enqw$wset_1__VAL_2 =
+		   72'hAAAAAAAAAAAAAAAAAA /* unspecified value */ ;
+    endcase
+  end
+  assign MUX_split_0_flitLeft$write_1__VAL_1 = split_0_flitLeft - 8'd1 ;
+  assign MUX_split_1_flitLeft$write_1__VAL_1 = split_1_flitLeft - 8'd1 ;
+  assign MUX_split_2_flitLeft$write_1__VAL_1 = split_2_flitLeft - 8'd1 ;
+  assign MUX_tagController_tmp_tagCon$cache_request_put_1__VAL_1 =
+	     { tmp__h8559[39:3],
+	       4'd0,
+	       tagController_tmp_awreqff$D_OUT[97:93],
+	       3'd1,
+	       tagController_tmp_shimSlave_wff_rv$port1__read[1],
+	       tagController_tmp_awreqff$D_OUT[14:11] < 4'd4,
+	       1'd0,
+	       tagController_tmp_shimSlave_wff_rv$port1__read[9:2],
+	       8'd255,
+	       tagController_tmp_shimSlave_wff_rv$port1__read[0],
+	       tagController_tmp_shimSlave_wff_rv$port1__read[73:10],
+	       tagController_tmp_awreqff$D_OUT[28:21] } ;
+  assign MUX_tagController_tmp_tagCon$cache_request_put_1__VAL_2 =
+	     { tagController_tmp_shimSlave_arff_rv$port1__read[68:29],
+	       1'b0,
+	       tagController_tmp_shimSlave_arff_rv$port1__read[97:93],
+	       86'h02AAAAAAAAAAAAAAAAAAAA,
+	       tagController_tmp_shimSlave_arff_rv$port1__read[14:11] < 4'd4,
+	       2'd0,
+	       tagController_tmp_shimSlave_arff_rv$port1__read[23:18] } ;
+  assign MUX_tagController_tmp_tagCon$memory_response_put_1__VAL_1 =
+	     { tagController_tmp_shimMaster_bff_rv$port1__read[7:2],
+	       71'h0CAAAAAAAAAAAAAAAA } ;
+  assign MUX_tagController_tmp_tagCon$memory_response_put_1__VAL_2 =
+	     { tagController_tmp_shimMaster_rff_rv$port1__read[72:67],
+	       4'd0,
+	       tagController_tmp_shimMaster_rff_rv$port1__read[0],
+	       1'd0,
+	       tagController_tmp_shimMaster_rff_rv$port1__read[67:3] } ;
+
+  // inlined wires
+  assign cpu_imem_ug_u_b_putWire$wget =
+	     { cpu_imem_master_bid[4:0], cpu_imem_master_bresp } ;
+  assign cpu_imem_ug_u_b_putWire$whas =
+	     cpu_imem_master_bvalid && delay_shim_bff$FULL_N ;
+  assign cpu_imem_ug_u_r_putWire$wget =
+	     { cpu_imem_master_rid[4:0],
+	       cpu_imem_master_rdata,
+	       cpu_imem_master_rresp,
+	       cpu_imem_master_rlast,
+	       1'd0 } ;
+  assign cpu_imem_ug_u_r_putWire$whas =
+	     cpu_imem_master_rvalid && delay_shim_rff$FULL_N ;
+  assign tagController_tmp_ug_slave_u_aw_putWire$wget =
+	     ssNoSynth_0_aw_buffer_ff$EMPTY_N ?
+	       ssNoSynth_0_aw_buffer_ff$D_OUT :
+	       split_0_doPut$wget[171:74] ;
+  assign tagController_tmp_ug_slave_u_aw_putWire$whas =
+	     WILL_FIRE_RL_ssNoSynth_0_aw_forwardFlit &&
+	     !tagController_tmp_shimSlave_awff_rv[98] ;
+  assign tagController_tmp_ug_slave_u_w_putWire$wget =
+	     ssNoSynth_0_w_buffer_ff$EMPTY_N ?
+	       ssNoSynth_0_w_buffer_ff$D_OUT :
+	       split_0_doPut$wget[73:0] ;
+  assign tagController_tmp_ug_slave_u_w_putWire$whas =
+	     WILL_FIRE_RL_ssNoSynth_0_w_forwardFlit &&
+	     !tagController_tmp_shimSlave_wff_rv[74] ;
+  assign tagController_tmp_ug_slave_u_b_peekWire$wget =
+	     tagController_tmp_shimSlave_bff_rv$port1__read[6:0] ;
+  assign tagController_tmp_ug_slave_u_ar_putWire$wget =
+	     ssNoSynth_0_ar_buffer_ff$EMPTY_N ?
+	       ssNoSynth_0_ar_buffer_ff$D_OUT :
+	       ssNoSynth_0_ar_buffer_enqw$wget ;
+  assign tagController_tmp_ug_slave_u_ar_putWire$whas =
+	     WILL_FIRE_RL_ssNoSynth_0_ar_forwardFlit &&
+	     !tagController_tmp_shimSlave_arff_rv[98] ;
+  assign tagController_tmp_ug_slave_u_r_peekWire$wget =
+	     tagController_tmp_shimSlave_rff_rv$port1__read[72:0] ;
+  assign tagController_tmp_ug_master_u_b_putWire$wget =
+	     { cpu_dmem_master_bid, cpu_dmem_master_bresp } ;
+  assign tagController_tmp_ug_master_u_b_putWire$whas =
+	     cpu_dmem_master_bvalid &&
+	     !tagController_tmp_shimMaster_bff_rv[8] ;
+  assign tagController_tmp_ug_master_u_r_putWire$wget =
+	     { cpu_dmem_master_rid,
+	       cpu_dmem_master_rdata,
+	       cpu_dmem_master_rresp,
+	       cpu_dmem_master_rlast } ;
+  assign tagController_tmp_ug_master_u_r_putWire$whas =
+	     cpu_dmem_master_rvalid &&
+	     !tagController_tmp_shimMaster_rff_rv[73] ;
+  assign msNoSynth_0_w_dwReady$whas =
+	     WILL_FIRE_RL_merged_0_genOther ||
+	     WILL_FIRE_RL_merged_0_genFirst ;
+  assign msNoSynth_0_b_buffer_enqw$wget =
+	     WILL_FIRE_RL_ifcs_0_drainNoRouteResponse ?
+	       ifcs_0_noRouteRsp$D_OUT :
+	       MUX_msNoSynth_0_b_buffer_enqw$wset_1__VAL_2 ;
+  assign msNoSynth_0_b_buffer_enqw$whas =
+	     WILL_FIRE_RL_ifcs_0_drainNoRouteResponse ||
+	     WILL_FIRE_RL_ifcs_0_forwardRsp ;
+  assign msNoSynth_0_ar_dwReady$whas =
+	     WILL_FIRE_RL_ifcs_0_1_nonRoutableGenRsp &&
+	     x_port1__read__h70111 == 9'd1 ||
+	     WILL_FIRE_RL_ifcs_0_1_drainFlits ||
+	     WILL_FIRE_RL_ifcs_0_1_followFlits ||
+	     WILL_FIRE_RL_ifcs_0_1_firstFlit ;
+  assign msNoSynth_0_r_buffer_enqw$wget =
+	     WILL_FIRE_RL_ifcs_0_1_drainNoRouteResponse ?
+	       ifcs_0_1_noRouteRsp$D_OUT :
+	       MUX_msNoSynth_0_r_buffer_enqw$wset_1__VAL_2 ;
+  assign msNoSynth_0_r_buffer_enqw$whas =
+	     WILL_FIRE_RL_ifcs_0_1_drainNoRouteResponse ||
+	     WILL_FIRE_RL_ifcs_0_1_forwardRsp ;
+  assign msNoSynth_1_b_buffer_enqw$wget =
+	     WILL_FIRE_RL_ifcs_1_drainNoRouteResponse ?
+	       ifcs_1_noRouteRsp$D_OUT :
+	       MUX_msNoSynth_1_b_buffer_enqw$wset_1__VAL_2 ;
+  assign msNoSynth_1_b_buffer_enqw$whas =
+	     WILL_FIRE_RL_ifcs_1_drainNoRouteResponse ||
+	     WILL_FIRE_RL_ifcs_1_forwardRsp ;
+  assign msNoSynth_1_r_buffer_enqw$wget =
+	     WILL_FIRE_RL_ifcs_1_1_drainNoRouteResponse ?
+	       ifcs_1_1_noRouteRsp$D_OUT :
+	       MUX_msNoSynth_1_r_buffer_enqw$wset_1__VAL_2 ;
+  assign msNoSynth_1_r_buffer_enqw$whas =
+	     WILL_FIRE_RL_ifcs_1_1_drainNoRouteResponse ||
+	     WILL_FIRE_RL_ifcs_1_1_forwardRsp ;
+  assign ssNoSynth_0_w_buffer_enqw$whas =
+	     WILL_FIRE_RL_split_0_putOther && split_0_doPut$wget[172] ||
+	     WILL_FIRE_RL_split_0_putFirst && !split_0_doPut$wget[172] ;
+  assign ssNoSynth_0_b_dwReady$whas =
+	     WILL_FIRE_RL_ifcs_0_followFlits_1 ||
+	     WILL_FIRE_RL_ifcs_0_firstFlit_1 ;
+  assign ssNoSynth_0_ar_buffer_enqw$wget =
+	     (MUX_flitToSink_1_0_1$wset_1__SEL_1 ||
+	      MUX_flitToSink_1_0_1$wset_1__SEL_3) ?
+	       ifcs_0_1_innerReq$D_OUT :
+	       ifcs_1_1_innerReq$D_OUT ;
+  assign ssNoSynth_0_r_dwReady$whas =
+	     WILL_FIRE_RL_ifcs_0_1_followFlits_1 ||
+	     WILL_FIRE_RL_ifcs_0_1_firstFlit_1 ;
+  assign ssNoSynth_1_aw_buffer_enqw$wget = split_1_doPut$wget[171:74] ;
+  assign ssNoSynth_1_w_buffer_enqw$wget = split_1_doPut$wget[73:0] ;
+  assign ssNoSynth_1_w_buffer_enqw$whas =
+	     WILL_FIRE_RL_split_1_putOther && split_1_doPut$wget[172] ||
+	     WILL_FIRE_RL_split_1_putFirst && !split_1_doPut$wget[172] ;
+  assign ssNoSynth_1_b_dwReady$whas =
+	     WILL_FIRE_RL_ifcs_1_followFlits_1 ||
+	     WILL_FIRE_RL_ifcs_1_firstFlit_1 ;
+  assign ssNoSynth_1_ar_buffer_enqw$wget =
+	     (MUX_flitToSink_1_1_1$wset_1__SEL_1 ||
+	      MUX_flitToSink_1_1_1$wset_1__SEL_3) ?
+	       ifcs_0_1_innerReq$D_OUT :
+	       ifcs_1_1_innerReq$D_OUT ;
+  assign ssNoSynth_1_r_dwReady$whas =
+	     WILL_FIRE_RL_ifcs_1_1_followFlits_1 ||
+	     WILL_FIRE_RL_ifcs_1_1_firstFlit_1 ;
+  assign ssNoSynth_2_aw_buffer_enqw$wget = split_2_doPut$wget[171:74] ;
+  assign ssNoSynth_2_w_buffer_enqw$wget = split_2_doPut$wget[73:0] ;
+  assign ssNoSynth_2_w_buffer_enqw$whas =
+	     WILL_FIRE_RL_split_2_putOther && split_2_doPut$wget[172] ||
+	     WILL_FIRE_RL_split_2_putFirst && !split_2_doPut$wget[172] ;
+  assign ssNoSynth_2_b_dwReady$whas =
+	     WILL_FIRE_RL_ifcs_2_followFlits ||
+	     WILL_FIRE_RL_ifcs_2_firstFlit ;
+  assign ssNoSynth_2_ar_buffer_enqw$wget =
+	     (MUX_flitToSink_1_2$wset_1__SEL_1 ||
+	      MUX_flitToSink_1_2$wset_1__SEL_3) ?
+	       ifcs_0_1_innerReq$D_OUT :
+	       ifcs_1_1_innerReq$D_OUT ;
+  assign ssNoSynth_2_r_dwReady$whas =
+	     WILL_FIRE_RL_ifcs_2_1_followFlits ||
+	     WILL_FIRE_RL_ifcs_2_1_firstFlit ;
+  assign split_0_doPut$wget =
+	     (MUX_flitToSink_0$wset_1__SEL_1 ||
+	      MUX_flitToSink_0$wset_1__SEL_3) ?
+	       ifcs_0_innerReq$D_OUT :
+	       ifcs_1_innerReq$D_OUT ;
+  assign split_1_doPut$wget =
+	     (MUX_flitToSink_1$wset_1__SEL_1 ||
+	      MUX_flitToSink_1$wset_1__SEL_3) ?
+	       ifcs_0_innerReq$D_OUT :
+	       ifcs_1_innerReq$D_OUT ;
+  assign split_2_doPut$wget =
+	     (MUX_flitToSink_2$wset_1__SEL_1 ||
+	      MUX_flitToSink_2$wset_1__SEL_3) ?
+	       ifcs_0_innerReq$D_OUT :
+	       ifcs_1_innerReq$D_OUT ;
+  assign reqWires_0$wget =
+	     (!ifcs_0_innerRoute$D_OUT[0] ||
+	      !IF_split_0_flitLeft_18_EQ_0_19_THEN_ssNoSynth__ETC___d1164) ?
+	       IF_NOT_ifcs_0_innerRoute_first__172_BIT_1_181__ETC___d1194 :
+	       ifcs_0_innerRoute$D_OUT[0] ;
+  assign reqWires_1$wget =
+	     (!ifcs_1_innerRoute$D_OUT[0] ||
+	      !IF_split_0_flitLeft_18_EQ_0_19_THEN_ssNoSynth__ETC___d1164) ?
+	       IF_NOT_ifcs_1_innerRoute_first__201_BIT_1_205__ETC___d1210 :
+	       ifcs_1_innerRoute$D_OUT[0] ;
+  assign flitToSink_0$whas =
+	     WILL_FIRE_RL_burst && ifcs_0_innerRoute$D_OUT[0] ||
+	     WILL_FIRE_RL_burst_1 && ifcs_1_innerRoute$D_OUT[0] ||
+	     WILL_FIRE_RL_source_selected && ifcs_0_innerRoute$EMPTY_N &&
+	     ifcs_0_innerRoute$D_OUT[0] ||
+	     WILL_FIRE_RL_source_selected_1 && ifcs_1_innerRoute$EMPTY_N &&
+	     ifcs_1_innerRoute$D_OUT[0] ;
+  assign flitToSink_1$whas =
+	     WILL_FIRE_RL_burst && ifcs_0_innerRoute$D_OUT[1] ||
+	     WILL_FIRE_RL_burst_1 && ifcs_1_innerRoute$D_OUT[1] ||
+	     WILL_FIRE_RL_source_selected && ifcs_0_innerRoute$EMPTY_N &&
+	     ifcs_0_innerRoute$D_OUT[1] ||
+	     WILL_FIRE_RL_source_selected_1 && ifcs_1_innerRoute$EMPTY_N &&
+	     ifcs_1_innerRoute$D_OUT[1] ;
+  assign flitToSink_2$whas =
+	     WILL_FIRE_RL_burst && ifcs_0_innerRoute$D_OUT[2] ||
+	     WILL_FIRE_RL_burst_1 && ifcs_1_innerRoute$D_OUT[2] ||
+	     WILL_FIRE_RL_source_selected && ifcs_0_innerRoute$EMPTY_N &&
+	     ifcs_0_innerRoute$D_OUT[2] ||
+	     WILL_FIRE_RL_source_selected_1 && ifcs_1_innerRoute$EMPTY_N &&
+	     ifcs_1_innerRoute$D_OUT[2] ;
+  assign reqWires_1_0$wget =
+	     (!ifcs_0_routeBack$D_OUT[0] ||
+	      !(!CAN_FIRE_RL_ifcs_0_drainNoRouteResponse)) ?
+	       ifcs_0_routeBack$D_OUT[1] &&
+	       !CAN_FIRE_RL_ifcs_1_drainNoRouteResponse :
+	       ifcs_0_routeBack$D_OUT[0] ;
+  assign reqWires_1_1$wget =
+	     (!ifcs_1_routeBack$D_OUT[0] ||
+	      !(!CAN_FIRE_RL_ifcs_0_drainNoRouteResponse)) ?
+	       ifcs_1_routeBack$D_OUT[1] &&
+	       !CAN_FIRE_RL_ifcs_1_drainNoRouteResponse :
+	       ifcs_1_routeBack$D_OUT[0] ;
+  assign reqWires_1_2$wget =
+	     (!ifcs_2_routeBack$D_OUT[0] ||
+	      !(!CAN_FIRE_RL_ifcs_0_drainNoRouteResponse)) ?
+	       ifcs_2_routeBack$D_OUT[1] &&
+	       !CAN_FIRE_RL_ifcs_1_drainNoRouteResponse :
+	       ifcs_2_routeBack$D_OUT[0] ;
+  assign flitToSink_1_0$whas =
+	     WILL_FIRE_RL_burst_2 && ifcs_0_routeBack$D_OUT[0] ||
+	     WILL_FIRE_RL_burst_3 && ifcs_1_routeBack$D_OUT[0] ||
+	     WILL_FIRE_RL_burst_4 && ifcs_2_routeBack$D_OUT[0] ||
+	     WILL_FIRE_RL_source_selected_2 && ifcs_0_routeBack$EMPTY_N &&
+	     ifcs_0_routeBack$D_OUT[0] ||
+	     WILL_FIRE_RL_source_selected_3 && ifcs_1_routeBack$EMPTY_N &&
+	     ifcs_1_routeBack$D_OUT[0] ||
+	     WILL_FIRE_RL_source_selected_4 && ifcs_2_routeBack$EMPTY_N &&
+	     ifcs_2_routeBack$D_OUT[0] ;
+  assign flitToSink_1_1$whas =
+	     WILL_FIRE_RL_burst_2 && ifcs_0_routeBack$D_OUT[1] ||
+	     WILL_FIRE_RL_burst_3 && ifcs_1_routeBack$D_OUT[1] ||
+	     WILL_FIRE_RL_burst_4 && ifcs_2_routeBack$D_OUT[1] ||
+	     WILL_FIRE_RL_source_selected_2 && ifcs_0_routeBack$EMPTY_N &&
+	     ifcs_0_routeBack$D_OUT[1] ||
+	     WILL_FIRE_RL_source_selected_3 && ifcs_1_routeBack$EMPTY_N &&
+	     ifcs_1_routeBack$D_OUT[1] ||
+	     WILL_FIRE_RL_source_selected_4 && ifcs_2_routeBack$EMPTY_N &&
+	     ifcs_2_routeBack$D_OUT[1] ;
+  assign reqWires_1_0_1$wget =
+	     (!ifcs_0_1_innerRoute$D_OUT[0] ||
+	      !ssNoSynth_0_ar_buffer_ff$FULL_N) ?
+	       IF_NOT_ifcs_0_1_innerRoute_first__764_BIT_1_77_ETC___d1786 :
+	       ifcs_0_1_innerRoute$D_OUT[0] ;
+  assign reqWires_1_1_1$wget =
+	     (!ifcs_1_1_innerRoute$D_OUT[0] ||
+	      !ssNoSynth_0_ar_buffer_ff$FULL_N) ?
+	       IF_NOT_ifcs_1_1_innerRoute_first__793_BIT_1_79_ETC___d1802 :
+	       ifcs_1_1_innerRoute$D_OUT[0] ;
+  assign flitToSink_1_0_1$whas =
+	     WILL_FIRE_RL_burst_5 && ifcs_0_1_innerRoute$D_OUT[0] ||
+	     WILL_FIRE_RL_burst_6 && ifcs_1_1_innerRoute$D_OUT[0] ||
+	     WILL_FIRE_RL_source_selected_5 && ifcs_0_1_innerRoute$EMPTY_N &&
+	     ifcs_0_1_innerRoute$D_OUT[0] ||
+	     WILL_FIRE_RL_source_selected_6 && ifcs_1_1_innerRoute$EMPTY_N &&
+	     ifcs_1_1_innerRoute$D_OUT[0] ;
+  assign flitToSink_1_1_1$whas =
+	     WILL_FIRE_RL_burst_5 && ifcs_0_1_innerRoute$D_OUT[1] ||
+	     WILL_FIRE_RL_burst_6 && ifcs_1_1_innerRoute$D_OUT[1] ||
+	     WILL_FIRE_RL_source_selected_5 && ifcs_0_1_innerRoute$EMPTY_N &&
+	     ifcs_0_1_innerRoute$D_OUT[1] ||
+	     WILL_FIRE_RL_source_selected_6 && ifcs_1_1_innerRoute$EMPTY_N &&
+	     ifcs_1_1_innerRoute$D_OUT[1] ;
+  assign flitToSink_1_2$whas =
+	     WILL_FIRE_RL_burst_5 && ifcs_0_1_innerRoute$D_OUT[2] ||
+	     WILL_FIRE_RL_burst_6 && ifcs_1_1_innerRoute$D_OUT[2] ||
+	     WILL_FIRE_RL_source_selected_5 && ifcs_0_1_innerRoute$EMPTY_N &&
+	     ifcs_0_1_innerRoute$D_OUT[2] ||
+	     WILL_FIRE_RL_source_selected_6 && ifcs_1_1_innerRoute$EMPTY_N &&
+	     ifcs_1_1_innerRoute$D_OUT[2] ;
+  assign reqWires_1_1_0$wget =
+	     (!ifcs_0_1_routeBack$D_OUT[0] ||
+	      !(!CAN_FIRE_RL_ifcs_0_1_drainNoRouteResponse)) ?
+	       ifcs_0_1_routeBack$D_OUT[1] &&
+	       !CAN_FIRE_RL_ifcs_1_1_drainNoRouteResponse :
+	       ifcs_0_1_routeBack$D_OUT[0] ;
+  assign reqWires_1_1_1_1$wget =
+	     (!ifcs_1_1_routeBack$D_OUT[0] ||
+	      !(!CAN_FIRE_RL_ifcs_0_1_drainNoRouteResponse)) ?
+	       ifcs_1_1_routeBack$D_OUT[1] &&
+	       !CAN_FIRE_RL_ifcs_1_1_drainNoRouteResponse :
+	       ifcs_1_1_routeBack$D_OUT[0] ;
+  assign reqWires_1_1_2$wget =
+	     (!ifcs_2_1_routeBack$D_OUT[0] ||
+	      !(!CAN_FIRE_RL_ifcs_0_1_drainNoRouteResponse)) ?
+	       ifcs_2_1_routeBack$D_OUT[1] &&
+	       !CAN_FIRE_RL_ifcs_1_1_drainNoRouteResponse :
+	       ifcs_2_1_routeBack$D_OUT[0] ;
+  assign flitToSink_1_1_0$whas =
+	     WILL_FIRE_RL_burst_7 && ifcs_0_1_routeBack$D_OUT[0] ||
+	     WILL_FIRE_RL_burst_8 && ifcs_1_1_routeBack$D_OUT[0] ||
+	     WILL_FIRE_RL_burst_9 && ifcs_2_1_routeBack$D_OUT[0] ||
+	     WILL_FIRE_RL_source_selected_7 && ifcs_0_1_routeBack$EMPTY_N &&
+	     ifcs_0_1_routeBack$D_OUT[0] ||
+	     WILL_FIRE_RL_source_selected_8 && ifcs_1_1_routeBack$EMPTY_N &&
+	     ifcs_1_1_routeBack$D_OUT[0] ||
+	     WILL_FIRE_RL_source_selected_9 && ifcs_2_1_routeBack$EMPTY_N &&
+	     ifcs_2_1_routeBack$D_OUT[0] ;
+  assign flitToSink_1_1_1_1$whas =
+	     WILL_FIRE_RL_burst_7 && ifcs_0_1_routeBack$D_OUT[1] ||
+	     WILL_FIRE_RL_burst_8 && ifcs_1_1_routeBack$D_OUT[1] ||
+	     WILL_FIRE_RL_burst_9 && ifcs_2_1_routeBack$D_OUT[1] ||
+	     WILL_FIRE_RL_source_selected_7 && ifcs_0_1_routeBack$EMPTY_N &&
+	     ifcs_0_1_routeBack$D_OUT[1] ||
+	     WILL_FIRE_RL_source_selected_8 && ifcs_1_1_routeBack$EMPTY_N &&
+	     ifcs_1_1_routeBack$D_OUT[1] ||
+	     WILL_FIRE_RL_source_selected_9 && ifcs_2_1_routeBack$EMPTY_N &&
+	     ifcs_2_1_routeBack$D_OUT[1] ;
+  assign cpu_imem_ug_u_aw_dropWire$whas =
+	     delay_shim_awff$EMPTY_N && cpu_imem_master_awready ;
+  assign cpu_imem_ug_u_w_dropWire$whas =
+	     delay_shim_wff$EMPTY_N && cpu_imem_master_wready ;
+  assign cpu_imem_ug_u_ar_dropWire$whas =
+	     delay_shim_arff$EMPTY_N && cpu_imem_master_arready ;
+  assign tagController_tmp_ug_slave_u_b_dropWire$whas =
+	     tagController_tmp_shimSlave_bff_rv$port1__read[7] &&
+	     ssNoSynth_0_b_dwReady$whas ;
+  assign tagController_tmp_ug_slave_u_r_dropWire$whas =
+	     tagController_tmp_shimSlave_rff_rv$port1__read[73] &&
+	     ssNoSynth_0_r_dwReady$whas ;
+  assign tagController_tmp_ug_master_u_aw_dropWire$whas =
+	     tagController_tmp_shimMaster_awff_rv$port1__read[99] &&
+	     cpu_dmem_master_awready ;
+  assign tagController_tmp_ug_master_u_w_dropWire$whas =
+	     tagController_tmp_shimMaster_wff_rv$port1__read[73] &&
+	     cpu_dmem_master_wready ;
+  assign tagController_tmp_ug_master_u_ar_dropWire$whas =
+	     tagController_tmp_shimMaster_arff_rv$port1__read[99] &&
+	     cpu_dmem_master_arready ;
+  assign merged_0_doDrop$whas =
+	     WILL_FIRE_RL_ifcs_0_nonRoutableGenRsp ||
+	     WILL_FIRE_RL_ifcs_0_drainFlits ||
+	     WILL_FIRE_RL_ifcs_0_followFlits ||
+	     WILL_FIRE_RL_ifcs_0_firstFlit ;
+  assign sourceSelect_1_0$whas =
+	     WILL_FIRE_RL_arbitrate_1 &&
+	     IF_SEXT_arbiter_1_lastSelect_412_413_BIT_0_414_ETC___d1456 ;
+  assign sourceSelect_1_1$whas =
+	     WILL_FIRE_RL_arbitrate_1 &&
+	     IF_SEXT_arbiter_1_lastSelect_412_413_BIT_0_414_ETC___d1462 ;
+  assign sourceSelect_1_2$whas =
+	     WILL_FIRE_RL_arbitrate_1 &&
+	     IF_SEXT_arbiter_1_lastSelect_412_413_BIT_0_414_ETC___d1468 ;
+  assign sourceSelect_1_0_1$whas =
+	     WILL_FIRE_RL_arbitrate_2 &&
+	     IF_SEXT_arbiter_1_lastSelect_2_814_815_BIT_0_8_ETC___d1838 ;
+  assign sourceSelect_1_1_1$whas =
+	     WILL_FIRE_RL_arbitrate_2 &&
+	     IF_SEXT_arbiter_1_lastSelect_2_814_815_BIT_0_8_ETC___d1842 ;
+  assign tagController_tmp_shimSlave_awff_rv$port0__write_1 =
+	     { 1'd1, tagController_tmp_ug_slave_u_aw_putWire$wget } ;
+  assign tagController_tmp_shimSlave_awff_rv$port1__read =
+	     CAN_FIRE_RL_tagController_tmp_ug_slave_u_aw_doPut ?
+	       tagController_tmp_shimSlave_awff_rv$port0__write_1 :
+	       tagController_tmp_shimSlave_awff_rv ;
+  assign tagController_tmp_shimSlave_awff_rv$port2__read =
+	     CAN_FIRE_RL_tagController_tmp_getCacheAW ?
+	       99'h2AAAAAAAAAAAAAAAAAAAAAAAA :
+	       tagController_tmp_shimSlave_awff_rv$port1__read ;
+  assign tagController_tmp_shimSlave_awff_rv$port3__read =
+	     (!tagController_tmp_reset_done) ?
+	       99'h2AAAAAAAAAAAAAAAAAAAAAAAA :
+	       tagController_tmp_shimSlave_awff_rv$port2__read ;
+  assign tagController_tmp_shimSlave_wff_rv$port0__write_1 =
+	     { 1'd1, tagController_tmp_ug_slave_u_w_putWire$wget } ;
+  assign tagController_tmp_shimSlave_wff_rv$port1__read =
+	     CAN_FIRE_RL_tagController_tmp_ug_slave_u_w_doPut ?
+	       tagController_tmp_shimSlave_wff_rv$port0__write_1 :
+	       tagController_tmp_shimSlave_wff_rv ;
+  assign tagController_tmp_shimSlave_wff_rv$port2__read =
+	     WILL_FIRE_RL_tagController_tmp_passCacheWrite ?
+	       75'h2AAAAAAAAAAAAAAAAAA :
+	       tagController_tmp_shimSlave_wff_rv$port1__read ;
+  assign tagController_tmp_shimSlave_wff_rv$port3__read =
+	     (!tagController_tmp_reset_done) ?
+	       75'h2AAAAAAAAAAAAAAAAAA :
+	       tagController_tmp_shimSlave_wff_rv$port2__read ;
+  assign tagController_tmp_shimSlave_bff_rv$EN_port0__write =
+	     WILL_FIRE_RL_tagController_tmp_passCacheResponse &&
+	     tagController_tmp_tagCon$cache_response_get[68:67] != 2'd0 ;
+  assign tagController_tmp_shimSlave_bff_rv$port0__write_1 =
+	     { 1'd1,
+	       (tagController_tmp_tagCon$cache_response_get[68:67] == 2'd1) ?
+		 tagController_tmp_tagCon$cache_response_get[75:71] :
+		 5'd0,
+	       2'd0 } ;
+  assign tagController_tmp_shimSlave_bff_rv$port1__read =
+	     tagController_tmp_shimSlave_bff_rv$EN_port0__write ?
+	       tagController_tmp_shimSlave_bff_rv$port0__write_1 :
+	       tagController_tmp_shimSlave_bff_rv ;
+  assign tagController_tmp_shimSlave_bff_rv$port2__read =
+	     CAN_FIRE_RL_tagController_tmp_ug_slave_u_b_doDrop ?
+	       8'd42 :
+	       tagController_tmp_shimSlave_bff_rv$port1__read ;
+  assign tagController_tmp_shimSlave_bff_rv$port3__read =
+	     (!tagController_tmp_reset_done) ?
+	       8'd42 :
+	       tagController_tmp_shimSlave_bff_rv$port2__read ;
+  assign tagController_tmp_shimSlave_arff_rv$port0__write_1 =
+	     { 1'd1, tagController_tmp_ug_slave_u_ar_putWire$wget } ;
+  assign tagController_tmp_shimSlave_arff_rv$port1__read =
+	     CAN_FIRE_RL_tagController_tmp_ug_slave_u_ar_doPut ?
+	       tagController_tmp_shimSlave_arff_rv$port0__write_1 :
+	       tagController_tmp_shimSlave_arff_rv ;
+  assign tagController_tmp_shimSlave_arff_rv$port2__read =
+	     CAN_FIRE_RL_tagController_tmp_passCacheRead ?
+	       99'h2AAAAAAAAAAAAAAAAAAAAAAAA :
+	       tagController_tmp_shimSlave_arff_rv$port1__read ;
+  assign tagController_tmp_shimSlave_arff_rv$port3__read =
+	     (!tagController_tmp_reset_done) ?
+	       99'h2AAAAAAAAAAAAAAAAAAAAAAAA :
+	       tagController_tmp_shimSlave_arff_rv$port2__read ;
+  assign tagController_tmp_shimSlave_rff_rv$EN_port0__write =
+	     WILL_FIRE_RL_tagController_tmp_passCacheResponse &&
+	     tagController_tmp_tagCon$cache_response_get[68:67] == 2'd0 ;
+  assign tagController_tmp_shimSlave_rff_rv$port0__write_1 =
+	     { 1'd1,
+	       tagController_tmp_tagCon$cache_response_get[75:71],
+	       tagController_tmp_tagCon$cache_response_get[63:0],
+	       2'd0,
+	       tagController_tmp_tagCon$cache_response_get[66],
+	       tagController_tmp_tagCon$cache_response_get[64] } ;
+  assign tagController_tmp_shimSlave_rff_rv$port1__read =
+	     tagController_tmp_shimSlave_rff_rv$EN_port0__write ?
+	       tagController_tmp_shimSlave_rff_rv$port0__write_1 :
+	       tagController_tmp_shimSlave_rff_rv ;
+  assign tagController_tmp_shimSlave_rff_rv$port2__read =
+	     CAN_FIRE_RL_tagController_tmp_ug_slave_u_r_doDrop ?
+	       74'h0AAAAAAAAAAAAAAAAAA :
+	       tagController_tmp_shimSlave_rff_rv$port1__read ;
+  assign tagController_tmp_shimSlave_rff_rv$port3__read =
+	     (!tagController_tmp_reset_done) ?
+	       74'h0AAAAAAAAAAAAAAAAAA :
+	       tagController_tmp_shimSlave_rff_rv$port2__read ;
+  assign tagController_tmp_shimMaster_awff_rv$EN_port0__write =
+	     WILL_FIRE_RL_tagController_tmp_passMemoryRequest &&
+	     tagController_tmp_tagCon$memory_request_get[93:92] == 2'd1 &&
+	     !tagController_tmp_doneSendingAW ;
+  assign tagController_tmp_shimMaster_awff_rv$port0__write_1 =
+	     { 1'd1,
+	       tagController_tmp_tagCon$memory_request_get[100:95],
+	       aw_awaddr__h11001,
+	       tagController_tmp_tagCon$memory_request_get[7:0],
+	       aw_awsize_val__h12740,
+	       3'd2,
+	       x__h14406,
+	       11'd0 } ;
+  assign tagController_tmp_shimMaster_awff_rv$port1__read =
+	     tagController_tmp_shimMaster_awff_rv$EN_port0__write ?
+	       tagController_tmp_shimMaster_awff_rv$port0__write_1 :
+	       tagController_tmp_shimMaster_awff_rv ;
+  assign tagController_tmp_shimMaster_awff_rv$port2__read =
+	     CAN_FIRE_RL_tagController_tmp_ug_master_u_aw_doDrop ?
+	       100'h2AAAAAAAAAAAAAAAAAAAAAAAA :
+	       tagController_tmp_shimMaster_awff_rv$port1__read ;
+  assign tagController_tmp_shimMaster_awff_rv$port3__read =
+	     (!tagController_tmp_reset_done) ?
+	       100'h2AAAAAAAAAAAAAAAAAAAAAAAA :
+	       tagController_tmp_shimMaster_awff_rv$port2__read ;
+  assign tagController_tmp_shimMaster_wff_rv$EN_port0__write =
+	     WILL_FIRE_RL_tagController_tmp_passMemoryRequest &&
+	     tagController_tmp_tagCon$memory_request_get[93:92] == 2'd1 ;
+  assign tagController_tmp_shimMaster_wff_rv$port0__write_1 =
+	     { 1'd1,
+	       tagController_tmp_tagCon$memory_request_get[71:8],
+	       tagController_tmp_tagCon$memory_request_get[88:81],
+	       tagController_tmp_tagCon$memory_request_get[91] } ;
+  assign tagController_tmp_shimMaster_wff_rv$port1__read =
+	     tagController_tmp_shimMaster_wff_rv$EN_port0__write ?
+	       tagController_tmp_shimMaster_wff_rv$port0__write_1 :
+	       tagController_tmp_shimMaster_wff_rv ;
+  assign tagController_tmp_shimMaster_wff_rv$port2__read =
+	     CAN_FIRE_RL_tagController_tmp_ug_master_u_w_doDrop ?
+	       74'h0AAAAAAAAAAAAAAAAAA :
+	       tagController_tmp_shimMaster_wff_rv$port1__read ;
+  assign tagController_tmp_shimMaster_wff_rv$port3__read =
+	     (!tagController_tmp_reset_done) ?
+	       74'h0AAAAAAAAAAAAAAAAAA :
+	       tagController_tmp_shimMaster_wff_rv$port2__read ;
+  assign tagController_tmp_shimMaster_bff_rv$port0__write_1 =
+	     { 1'd1, tagController_tmp_ug_master_u_b_putWire$wget } ;
+  assign tagController_tmp_shimMaster_bff_rv$port1__read =
+	     CAN_FIRE_RL_tagController_tmp_ug_master_u_b_doPut ?
+	       tagController_tmp_shimMaster_bff_rv$port0__write_1 :
+	       tagController_tmp_shimMaster_bff_rv ;
+  assign tagController_tmp_shimMaster_bff_rv$port2__read =
+	     WILL_FIRE_RL_tagController_tmp_passMemoryResponseWrite ?
+	       9'd170 :
+	       tagController_tmp_shimMaster_bff_rv$port1__read ;
+  assign tagController_tmp_shimMaster_bff_rv$port3__read =
+	     (!tagController_tmp_reset_done) ?
+	       9'd170 :
+	       tagController_tmp_shimMaster_bff_rv$port2__read ;
+  assign tagController_tmp_shimMaster_arff_rv$EN_port0__write =
+	     WILL_FIRE_RL_tagController_tmp_passMemoryRequest &&
+	     tagController_tmp_tagCon$memory_request_get[93:92] != 2'd1 ;
+  assign tagController_tmp_shimMaster_arff_rv$port0__write_1 =
+	     { 1'd1,
+	       v_arid__h15749,
+	       v_araddr__h15750,
+	       v_arlen__h15751,
+	       v_arsize_val__h15796,
+	       3'd2,
+	       x__h15814,
+	       11'd0 } ;
+  assign tagController_tmp_shimMaster_arff_rv$port1__read =
+	     tagController_tmp_shimMaster_arff_rv$EN_port0__write ?
+	       tagController_tmp_shimMaster_arff_rv$port0__write_1 :
+	       tagController_tmp_shimMaster_arff_rv ;
+  assign tagController_tmp_shimMaster_arff_rv$port2__read =
+	     CAN_FIRE_RL_tagController_tmp_ug_master_u_ar_doDrop ?
+	       100'h2AAAAAAAAAAAAAAAAAAAAAAAA :
+	       tagController_tmp_shimMaster_arff_rv$port1__read ;
+  assign tagController_tmp_shimMaster_arff_rv$port3__read =
+	     (!tagController_tmp_reset_done) ?
+	       100'h2AAAAAAAAAAAAAAAAAAAAAAAA :
+	       tagController_tmp_shimMaster_arff_rv$port2__read ;
+  assign tagController_tmp_shimMaster_rff_rv$port0__write_1 =
+	     { 1'd1, tagController_tmp_ug_master_u_r_putWire$wget } ;
+  assign tagController_tmp_shimMaster_rff_rv$port1__read =
+	     CAN_FIRE_RL_tagController_tmp_ug_master_u_r_doPut ?
+	       tagController_tmp_shimMaster_rff_rv$port0__write_1 :
+	       tagController_tmp_shimMaster_rff_rv ;
+  assign tagController_tmp_shimMaster_rff_rv$port2__read =
+	     CAN_FIRE_RL_tagController_tmp_passMemoryResponseRead ?
+	       74'h0AAAAAAAAAAAAAAAAAA :
+	       tagController_tmp_shimMaster_rff_rv$port1__read ;
+  assign tagController_tmp_shimMaster_rff_rv$port3__read =
+	     (!tagController_tmp_reset_done) ?
+	       74'h0AAAAAAAAAAAAAAAAAA :
+	       tagController_tmp_shimMaster_rff_rv$port2__read ;
+  assign ifcs_0_noRoute_inner_currentReq$EN_port0__write =
+	     WILL_FIRE_RL_ifcs_0_nonRoutableFlit &&
+	     merged_0_flitLeft == 8'd0 ;
+  assign ifcs_0_noRoute_inner_currentReq$port0__write_1 =
+	     { cpu$dmem_master_awid,
+	       cpu$dmem_master_awaddr,
+	       cpu$dmem_master_awlen,
+	       cpu$dmem_master_awsize,
+	       cpu$dmem_master_awburst,
+	       cpu$dmem_master_awlock,
+	       cpu$dmem_master_awcache,
+	       cpu$dmem_master_awprot,
+	       cpu$dmem_master_awqos,
+	       cpu$dmem_master_awregion } ;
+  assign ifcs_0_noRoute_inner_currentReq$port1__read =
+	     ifcs_0_noRoute_inner_currentReq$EN_port0__write ?
+	       ifcs_0_noRoute_inner_currentReq$port0__write_1 :
+	       ifcs_0_noRoute_inner_currentReq ;
+  assign ifcs_0_noRoute_inner_pendingReq$EN_port0__write =
+	     WILL_FIRE_RL_ifcs_0_nonRoutableFlit &&
+	     merged_0_flitLeft == 8'd0 ;
+  assign ifcs_0_noRoute_inner_pendingReq$port1__read =
+	     ifcs_0_noRoute_inner_pendingReq$EN_port0__write ||
+	     ifcs_0_noRoute_inner_pendingReq ;
+  assign ifcs_0_noRoute_inner_pendingReq$port2__read =
+	     !CAN_FIRE_RL_ifcs_0_nonRoutableGenRsp &&
+	     ifcs_0_noRoute_inner_pendingReq$port1__read ;
+  assign ifcs_0_1_noRoute_currentReq$port0__write_1 =
+	     { cpu$dmem_master_arid,
+	       cpu$dmem_master_araddr,
+	       cpu$dmem_master_arlen,
+	       cpu$dmem_master_arsize,
+	       cpu$dmem_master_arburst,
+	       cpu$dmem_master_arlock,
+	       cpu$dmem_master_arcache,
+	       cpu$dmem_master_arprot,
+	       cpu$dmem_master_arqos,
+	       cpu$dmem_master_arregion } ;
+  assign ifcs_0_1_noRoute_currentReq$port1__read =
+	     CAN_FIRE_RL_ifcs_0_1_nonRoutableFlit ?
+	       ifcs_0_1_noRoute_currentReq$port0__write_1 :
+	       ifcs_0_1_noRoute_currentReq ;
+  assign ifcs_0_1_noRoute_flitCount$port0__write_1 =
+	     { 1'd0, cpu$dmem_master_arlen } + 9'd1 ;
+  assign ifcs_0_1_noRoute_flitCount$port1__write_1 =
+	     x_port1__read__h70111 - 9'd1 ;
+  assign ifcs_0_1_noRoute_flitCount$port2__read =
+	     CAN_FIRE_RL_ifcs_0_1_nonRoutableGenRsp ?
+	       ifcs_0_1_noRoute_flitCount$port1__write_1 :
+	       x_port1__read__h70111 ;
+  assign ifcs_1_1_noRoute_flitCount$port1__write_1 =
+	     ifcs_1_1_noRoute_flitCount - 9'd1 ;
+  assign ifcs_1_1_noRoute_flitCount$port2__read =
+	     CAN_FIRE_RL_ifcs_1_1_nonRoutableGenRsp ?
+	       ifcs_1_1_noRoute_flitCount$port1__write_1 :
+	       ifcs_1_1_noRoute_flitCount ;
+
+  // register activeSource_0
+  assign activeSource_0$D_IN =
+	     MUX_activeSource_0$write_1__SEL_1 ?
+	       MUX_activeSource_0$write_1__VAL_1 :
+	       MUX_activeSource_0$write_1__VAL_1 ;
+  assign activeSource_0$EN =
+	     WILL_FIRE_RL_source_selected && ifcs_0_innerRoute$EMPTY_N &&
+	     !ifcs_0_innerReq$D_OUT[1] ||
+	     WILL_FIRE_RL_source_selected_1 && ifcs_1_innerRoute$EMPTY_N &&
+	     !ifcs_1_innerReq$D_OUT[1] ;
+
+  // register activeSource_1
+  assign activeSource_1$D_IN =
+	     MUX_activeSource_0$write_1__SEL_1 ?
+	       MUX_activeSource_1$write_1__VAL_1 :
+	       MUX_activeSource_1$write_1__VAL_1 ;
+  assign activeSource_1$EN =
+	     WILL_FIRE_RL_source_selected && ifcs_0_innerRoute$EMPTY_N &&
+	     !ifcs_0_innerReq$D_OUT[1] ||
+	     WILL_FIRE_RL_source_selected_1 && ifcs_1_innerRoute$EMPTY_N &&
+	     !ifcs_1_innerReq$D_OUT[1] ;
+
+  // register activeSource_1_0
+  assign activeSource_1_0$D_IN = 1'b0 ;
+  assign activeSource_1_0$EN = 1'b0 ;
+
+  // register activeSource_1_0_1
+  assign activeSource_1_0_1$D_IN = 1'b0 ;
+  assign activeSource_1_0_1$EN = 1'b0 ;
+
+  // register activeSource_1_1
+  assign activeSource_1_1$D_IN = 1'b0 ;
+  assign activeSource_1_1$EN = 1'b0 ;
+
+  // register activeSource_1_1_0
+  always@(MUX_activeSource_1_1_0$write_1__SEL_1 or
+	  MUX_activeSource_1_1_0$write_1__VAL_1 or
+	  MUX_activeSource_1_1_0$write_1__SEL_2 or
+	  MUX_activeSource_1_1_0$write_1__SEL_3)
+  begin
+    case (1'b1) // synopsys parallel_case
+      MUX_activeSource_1_1_0$write_1__SEL_1:
+	  activeSource_1_1_0$D_IN = MUX_activeSource_1_1_0$write_1__VAL_1;
+      MUX_activeSource_1_1_0$write_1__SEL_2:
+	  activeSource_1_1_0$D_IN = MUX_activeSource_1_1_0$write_1__VAL_1;
+      MUX_activeSource_1_1_0$write_1__SEL_3:
+	  activeSource_1_1_0$D_IN = MUX_activeSource_1_1_0$write_1__VAL_1;
+      default: activeSource_1_1_0$D_IN = 1'b0 /* unspecified value */ ;
+    endcase
+  end
+  assign activeSource_1_1_0$EN =
+	     WILL_FIRE_RL_source_selected_7 && ifcs_0_1_routeBack$EMPTY_N &&
+	     !ifcs_0_1_rspBack$D_OUT[1] ||
+	     WILL_FIRE_RL_source_selected_8 && ifcs_1_1_routeBack$EMPTY_N &&
+	     !ifcs_1_1_rspBack$D_OUT[1] ||
+	     WILL_FIRE_RL_source_selected_9 && ifcs_2_1_routeBack$EMPTY_N &&
+	     !ifcs_2_1_rspBack$D_OUT[1] ;
+
+  // register activeSource_1_1_1
+  assign activeSource_1_1_1$D_IN = 1'b0 ;
+  assign activeSource_1_1_1$EN = 1'b0 ;
+
+  // register activeSource_1_1_1_1
+  always@(MUX_activeSource_1_1_0$write_1__SEL_1 or
+	  MUX_activeSource_1_1_1_1$write_1__VAL_1 or
+	  MUX_activeSource_1_1_0$write_1__SEL_2 or
+	  MUX_activeSource_1_1_0$write_1__SEL_3)
+  begin
+    case (1'b1) // synopsys parallel_case
+      MUX_activeSource_1_1_0$write_1__SEL_1:
+	  activeSource_1_1_1_1$D_IN = MUX_activeSource_1_1_1_1$write_1__VAL_1;
+      MUX_activeSource_1_1_0$write_1__SEL_2:
+	  activeSource_1_1_1_1$D_IN = MUX_activeSource_1_1_1_1$write_1__VAL_1;
+      MUX_activeSource_1_1_0$write_1__SEL_3:
+	  activeSource_1_1_1_1$D_IN = MUX_activeSource_1_1_1_1$write_1__VAL_1;
+      default: activeSource_1_1_1_1$D_IN = 1'b0 /* unspecified value */ ;
+    endcase
+  end
+  assign activeSource_1_1_1_1$EN =
+	     WILL_FIRE_RL_source_selected_7 && ifcs_0_1_routeBack$EMPTY_N &&
+	     !ifcs_0_1_rspBack$D_OUT[1] ||
+	     WILL_FIRE_RL_source_selected_8 && ifcs_1_1_routeBack$EMPTY_N &&
+	     !ifcs_1_1_rspBack$D_OUT[1] ||
+	     WILL_FIRE_RL_source_selected_9 && ifcs_2_1_routeBack$EMPTY_N &&
+	     !ifcs_2_1_rspBack$D_OUT[1] ;
+
+  // register activeSource_1_1_2
+  always@(MUX_activeSource_1_1_0$write_1__SEL_1 or
+	  MUX_activeSource_1_1_2$write_1__VAL_1 or
+	  MUX_activeSource_1_1_0$write_1__SEL_2 or
+	  MUX_activeSource_1_1_0$write_1__SEL_3)
+  begin
+    case (1'b1) // synopsys parallel_case
+      MUX_activeSource_1_1_0$write_1__SEL_1:
+	  activeSource_1_1_2$D_IN = MUX_activeSource_1_1_2$write_1__VAL_1;
+      MUX_activeSource_1_1_0$write_1__SEL_2:
+	  activeSource_1_1_2$D_IN = MUX_activeSource_1_1_2$write_1__VAL_1;
+      MUX_activeSource_1_1_0$write_1__SEL_3:
+	  activeSource_1_1_2$D_IN = MUX_activeSource_1_1_2$write_1__VAL_1;
+      default: activeSource_1_1_2$D_IN = 1'b0 /* unspecified value */ ;
+    endcase
+  end
+  assign activeSource_1_1_2$EN =
+	     WILL_FIRE_RL_source_selected_7 && ifcs_0_1_routeBack$EMPTY_N &&
+	     !ifcs_0_1_rspBack$D_OUT[1] ||
+	     WILL_FIRE_RL_source_selected_8 && ifcs_1_1_routeBack$EMPTY_N &&
+	     !ifcs_1_1_rspBack$D_OUT[1] ||
+	     WILL_FIRE_RL_source_selected_9 && ifcs_2_1_routeBack$EMPTY_N &&
+	     !ifcs_2_1_rspBack$D_OUT[1] ;
+
+  // register activeSource_1_2
+  assign activeSource_1_2$D_IN = 1'b0 ;
+  assign activeSource_1_2$EN = 1'b0 ;
+
+  // register arbiter_1_1_firstHot
+  assign arbiter_1_1_firstHot$D_IN =
+	     IF_SEXT_arbiter_1_1_lastSelect_994_995_BIT_0_9_ETC___d2050 ;
+  assign arbiter_1_1_firstHot$EN = CAN_FIRE_RL_arbitrate_3 ;
+
+  // register arbiter_1_1_lastSelect
+  assign arbiter_1_1_lastSelect$D_IN =
+	     IF_SEXT_arbiter_1_1_lastSelect_994_995_BIT_0_9_ETC___d2038 ;
+  assign arbiter_1_1_lastSelect$EN = CAN_FIRE_RL_arbitrate_3 ;
+
+  // register arbiter_1_1_lastSelect_1
+  assign arbiter_1_1_lastSelect_1$D_IN =
+	     IF_SEXT_arbiter_1_1_lastSelect_994_995_BIT_0_9_ETC___d2044 ;
+  assign arbiter_1_1_lastSelect_1$EN = CAN_FIRE_RL_arbitrate_3 ;
+
+  // register arbiter_1_firstHot
+  assign arbiter_1_firstHot$D_IN =
+	     IF_SEXT_arbiter_1_lastSelect_412_413_BIT_0_414_ETC___d1468 ;
+  assign arbiter_1_firstHot$EN = CAN_FIRE_RL_arbitrate_1 ;
+
+  // register arbiter_1_firstHot_1
+  assign arbiter_1_firstHot_1$D_IN =
+	     IF_SEXT_arbiter_1_lastSelect_2_814_815_BIT_0_8_ETC___d1842 ;
+  assign arbiter_1_firstHot_1$EN = CAN_FIRE_RL_arbitrate_2 ;
+
+  // register arbiter_1_lastSelect
+  assign arbiter_1_lastSelect$D_IN =
+	     IF_SEXT_arbiter_1_lastSelect_412_413_BIT_0_414_ETC___d1456 ;
+  assign arbiter_1_lastSelect$EN = CAN_FIRE_RL_arbitrate_1 ;
+
+  // register arbiter_1_lastSelect_1
+  assign arbiter_1_lastSelect_1$D_IN =
+	     IF_SEXT_arbiter_1_lastSelect_412_413_BIT_0_414_ETC___d1462 ;
+  assign arbiter_1_lastSelect_1$EN = CAN_FIRE_RL_arbitrate_1 ;
+
+  // register arbiter_1_lastSelect_2
+  assign arbiter_1_lastSelect_2$D_IN =
+	     IF_SEXT_arbiter_1_lastSelect_2_814_815_BIT_0_8_ETC___d1838 ;
+  assign arbiter_1_lastSelect_2$EN = CAN_FIRE_RL_arbitrate_2 ;
+
+  // register arbiter_firstHot
+  assign arbiter_firstHot$D_IN =
+	     IF_SEXT_arbiter_lastSelect_222_223_BIT_0_224_A_ETC___d1250 ;
+  assign arbiter_firstHot$EN = CAN_FIRE_RL_arbitrate ;
+
+  // register arbiter_lastSelect
+  assign arbiter_lastSelect$D_IN =
+	     IF_SEXT_arbiter_lastSelect_222_223_BIT_0_224_A_ETC___d1246 ;
+  assign arbiter_lastSelect$EN = CAN_FIRE_RL_arbitrate ;
+
+  // register ifcs_0_1_noRoute_currentReq
+  assign ifcs_0_1_noRoute_currentReq$D_IN =
+	     ifcs_0_1_noRoute_currentReq$port1__read ;
+  assign ifcs_0_1_noRoute_currentReq$EN = 1'b1 ;
+
+  // register ifcs_0_1_noRoute_flitCount
+  assign ifcs_0_1_noRoute_flitCount$D_IN =
+	     ifcs_0_1_noRoute_flitCount$port2__read ;
+  assign ifcs_0_1_noRoute_flitCount$EN = 1'b1 ;
+
+  // register ifcs_0_1_state
+  assign ifcs_0_1_state$D_IN = 2'd0 ;
+  assign ifcs_0_1_state$EN =
+	     WILL_FIRE_RL_ifcs_0_1_drainFlits ||
+	     WILL_FIRE_RL_ifcs_0_1_followFlits ;
+
+  // register ifcs_0_1_state_1
+  assign ifcs_0_1_state_1$D_IN = MUX_ifcs_0_1_state_1$write_1__SEL_1 ;
+  assign ifcs_0_1_state_1$EN =
+	     WILL_FIRE_RL_ifcs_0_1_firstFlit_1 &&
+	     !tagController_tmp_ug_slave_u_r_peekWire$wget[1] ||
+	     WILL_FIRE_RL_ifcs_0_1_followFlits_1 &&
+	     tagController_tmp_ug_slave_u_r_peekWire$wget[1] ;
+
+  // register ifcs_0_noRoute_inner_currentReq
+  assign ifcs_0_noRoute_inner_currentReq$D_IN =
+	     ifcs_0_noRoute_inner_currentReq$port1__read ;
+  assign ifcs_0_noRoute_inner_currentReq$EN = 1'b1 ;
+
+  // register ifcs_0_noRoute_inner_pendingReq
+  assign ifcs_0_noRoute_inner_pendingReq$D_IN =
+	     ifcs_0_noRoute_inner_pendingReq$port2__read ;
+  assign ifcs_0_noRoute_inner_pendingReq$EN = 1'b1 ;
+
+  // register ifcs_0_state
+  always@(MUX_ifcs_0_state$write_1__SEL_1 or
+	  MUX_ifcs_0_state$write_1__SEL_2 or MUX_ifcs_0_state$write_1__SEL_3)
+  begin
+    case (1'b1) // synopsys parallel_case
+      MUX_ifcs_0_state$write_1__SEL_1: ifcs_0_state$D_IN = 2'd0;
+      MUX_ifcs_0_state$write_1__SEL_2: ifcs_0_state$D_IN = 2'd1;
+      MUX_ifcs_0_state$write_1__SEL_3: ifcs_0_state$D_IN = 2'd2;
+      default: ifcs_0_state$D_IN = 2'b10 /* unspecified value */ ;
+    endcase
+  end
+  assign ifcs_0_state$EN =
+	     (WILL_FIRE_RL_ifcs_0_drainFlits ||
+	      WILL_FIRE_RL_ifcs_0_followFlits) &&
+	     cpu$dmem_master_wlast ||
+	     WILL_FIRE_RL_ifcs_0_firstFlit && !cpu$dmem_master_wlast ||
+	     WILL_FIRE_RL_ifcs_0_nonRoutableGenRsp && !cpu$dmem_master_wlast ;
+
+  // register ifcs_0_state_1
+  assign ifcs_0_state_1$D_IN = 1'd0 ;
+  assign ifcs_0_state_1$EN = CAN_FIRE_RL_ifcs_0_followFlits_1 ;
+
+  // register ifcs_1_1_noRoute_currentReq
+  assign ifcs_1_1_noRoute_currentReq$D_IN = ifcs_1_1_noRoute_currentReq ;
+  assign ifcs_1_1_noRoute_currentReq$EN = 1'b1 ;
+
+  // register ifcs_1_1_noRoute_flitCount
+  assign ifcs_1_1_noRoute_flitCount$D_IN =
+	     ifcs_1_1_noRoute_flitCount$port2__read ;
+  assign ifcs_1_1_noRoute_flitCount$EN = 1'b1 ;
+
+  // register ifcs_1_1_state
+  assign ifcs_1_1_state$D_IN = 2'h0 ;
+  assign ifcs_1_1_state$EN = 1'b0 ;
+
+  // register ifcs_1_1_state_1
+  assign ifcs_1_1_state_1$D_IN = !MUX_ifcs_1_1_state_1$write_1__SEL_1 ;
+  assign ifcs_1_1_state_1$EN =
+	     WILL_FIRE_RL_ifcs_1_1_followFlits_1 &&
+	     near_mem_io$axi4_slave_rlast ||
+	     WILL_FIRE_RL_ifcs_1_1_firstFlit_1 &&
+	     !near_mem_io$axi4_slave_rlast ;
+
+  // register ifcs_1_noRoute_inner_currentReq
+  assign ifcs_1_noRoute_inner_currentReq$D_IN =
+	     ifcs_1_noRoute_inner_currentReq ;
+  assign ifcs_1_noRoute_inner_currentReq$EN = 1'b1 ;
+
+  // register ifcs_1_noRoute_inner_pendingReq
+  assign ifcs_1_noRoute_inner_pendingReq$D_IN =
+	     ifcs_1_noRoute_inner_pendingReq ;
+  assign ifcs_1_noRoute_inner_pendingReq$EN = 1'b1 ;
+
+  // register ifcs_1_state
+  assign ifcs_1_state$D_IN = 2'h0 ;
+  assign ifcs_1_state$EN = 1'b0 ;
+
+  // register ifcs_1_state_1
+  assign ifcs_1_state_1$D_IN = 1'd0 ;
+  assign ifcs_1_state_1$EN = CAN_FIRE_RL_ifcs_1_followFlits_1 ;
+
+  // register ifcs_2_1_state
+  assign ifcs_2_1_state$D_IN = !MUX_ifcs_2_1_state$write_1__SEL_1 ;
+  assign ifcs_2_1_state$EN =
+	     WILL_FIRE_RL_ifcs_2_1_followFlits && plic$axi4_slave_rlast ||
+	     WILL_FIRE_RL_ifcs_2_1_firstFlit && !plic$axi4_slave_rlast ;
+
+  // register ifcs_2_state
+  assign ifcs_2_state$D_IN = 1'd0 ;
+  assign ifcs_2_state$EN = CAN_FIRE_RL_ifcs_2_followFlits ;
+
+  // register merged_0_flitLeft
+  assign merged_0_flitLeft$D_IN =
+	     WILL_FIRE_RL_merged_0_genOther ?
+	       MUX_merged_0_flitLeft$write_1__VAL_1 :
+	       cpu$dmem_master_awlen ;
+  assign merged_0_flitLeft$EN = msNoSynth_0_w_dwReady$whas ;
+
+  // register merged_1_flitLeft
+  assign merged_1_flitLeft$D_IN = 8'h0 ;
+  assign merged_1_flitLeft$EN = 1'b0 ;
+
+  // register split_0_flitLeft
+  assign split_0_flitLeft$D_IN =
+	     MUX_split_0_flitLeft$write_1__SEL_1 ?
+	       MUX_split_0_flitLeft$write_1__VAL_1 :
+	       split_0_doPut$wget[102:95] ;
+  assign split_0_flitLeft$EN = ssNoSynth_0_w_buffer_enqw$whas ;
+
+  // register split_1_flitLeft
+  assign split_1_flitLeft$D_IN =
+	     MUX_split_1_flitLeft$write_1__SEL_1 ?
+	       MUX_split_1_flitLeft$write_1__VAL_1 :
+	       split_1_doPut$wget[102:95] ;
+  assign split_1_flitLeft$EN = ssNoSynth_1_w_buffer_enqw$whas ;
+
+  // register split_2_flitLeft
+  assign split_2_flitLeft$D_IN =
+	     MUX_split_2_flitLeft$write_1__SEL_1 ?
+	       MUX_split_2_flitLeft$write_1__VAL_1 :
+	       split_2_doPut$wget[102:95] ;
+  assign split_2_flitLeft$EN = ssNoSynth_2_w_buffer_enqw$whas ;
+
+  // register state
+  assign state$D_IN = !MUX_state$write_1__SEL_1 && !MUX_state$write_1__SEL_2 ;
+  assign state$EN =
+	     WILL_FIRE_RL_burst && ifcs_0_innerReq$D_OUT[1] ||
+	     WILL_FIRE_RL_burst_1 && ifcs_1_innerReq$D_OUT[1] ||
+	     WILL_FIRE_RL_source_selected && ifcs_0_innerRoute$EMPTY_N &&
+	     !ifcs_0_innerReq$D_OUT[1] ||
+	     WILL_FIRE_RL_source_selected_1 && ifcs_1_innerRoute$EMPTY_N &&
+	     !ifcs_1_innerReq$D_OUT[1] ;
+
+  // register state_1
+  assign state_1$D_IN = 1'd0 ;
+  assign state_1$EN =
+	     WILL_FIRE_RL_burst_4 || WILL_FIRE_RL_burst_3 ||
+	     WILL_FIRE_RL_burst_2 ;
+
+  // register state_1_1
+  assign state_1_1$D_IN = 1'd0 ;
+  assign state_1_1$EN = WILL_FIRE_RL_burst_6 || WILL_FIRE_RL_burst_5 ;
+
+  // register state_1_1_1
+  assign state_1_1_1$D_IN =
+	     !MUX_state_1_1_1$write_1__SEL_1 &&
+	     !MUX_state_1_1_1$write_1__SEL_2 &&
+	     !MUX_state_1_1_1$write_1__SEL_3 ;
+  assign state_1_1_1$EN =
+	     WILL_FIRE_RL_burst_7 && ifcs_0_1_rspBack$D_OUT[1] ||
+	     WILL_FIRE_RL_burst_8 && ifcs_1_1_rspBack$D_OUT[1] ||
+	     WILL_FIRE_RL_burst_9 && ifcs_2_1_rspBack$D_OUT[1] ||
+	     WILL_FIRE_RL_source_selected_7 && ifcs_0_1_routeBack$EMPTY_N &&
+	     !ifcs_0_1_rspBack$D_OUT[1] ||
+	     WILL_FIRE_RL_source_selected_8 && ifcs_1_1_routeBack$EMPTY_N &&
+	     !ifcs_1_1_rspBack$D_OUT[1] ||
+	     WILL_FIRE_RL_source_selected_9 && ifcs_2_1_routeBack$EMPTY_N &&
+	     !ifcs_2_1_rspBack$D_OUT[1] ;
+
+  // register tagController_tmp_addrOffset
+  assign tagController_tmp_addrOffset$D_IN =
+	     tagController_tmp_shimSlave_wff_rv$port1__read[1] ?
+	       64'd0 :
+	       x__h8400 ;
+  assign tagController_tmp_addrOffset$EN =
+	     WILL_FIRE_RL_tagController_tmp_passCacheWrite ;
+
+  // register tagController_tmp_doneSendingAW
+  assign tagController_tmp_doneSendingAW$D_IN =
+	     !tagController_tmp_tagCon$memory_request_get[91] ;
+  assign tagController_tmp_doneSendingAW$EN =
+	     WILL_FIRE_RL_tagController_tmp_passMemoryRequest &&
+	     tagController_tmp_tagCon$memory_request_get[93:92] == 2'd1 ;
+
+  // register tagController_tmp_reset_done
+  assign tagController_tmp_reset_done$D_IN = 1'd1 ;
+  assign tagController_tmp_reset_done$EN =
+	     CAN_FIRE_RL_tagController_tmp_propagateReset ;
+
+  // register tagController_tmp_shimMaster_arff_rv
+  assign tagController_tmp_shimMaster_arff_rv$D_IN =
+	     tagController_tmp_shimMaster_arff_rv$port3__read ;
+  assign tagController_tmp_shimMaster_arff_rv$EN = 1'b1 ;
+
+  // register tagController_tmp_shimMaster_awff_rv
+  assign tagController_tmp_shimMaster_awff_rv$D_IN =
+	     tagController_tmp_shimMaster_awff_rv$port3__read ;
+  assign tagController_tmp_shimMaster_awff_rv$EN = 1'b1 ;
+
+  // register tagController_tmp_shimMaster_bff_rv
+  assign tagController_tmp_shimMaster_bff_rv$D_IN =
+	     tagController_tmp_shimMaster_bff_rv$port3__read ;
+  assign tagController_tmp_shimMaster_bff_rv$EN = 1'b1 ;
+
+  // register tagController_tmp_shimMaster_rff_rv
+  assign tagController_tmp_shimMaster_rff_rv$D_IN =
+	     tagController_tmp_shimMaster_rff_rv$port3__read ;
+  assign tagController_tmp_shimMaster_rff_rv$EN = 1'b1 ;
+
+  // register tagController_tmp_shimMaster_wff_rv
+  assign tagController_tmp_shimMaster_wff_rv$D_IN =
+	     tagController_tmp_shimMaster_wff_rv$port3__read ;
+  assign tagController_tmp_shimMaster_wff_rv$EN = 1'b1 ;
+
+  // register tagController_tmp_shimSlave_arff_rv
+  assign tagController_tmp_shimSlave_arff_rv$D_IN =
+	     tagController_tmp_shimSlave_arff_rv$port3__read ;
+  assign tagController_tmp_shimSlave_arff_rv$EN = 1'b1 ;
+
+  // register tagController_tmp_shimSlave_awff_rv
+  assign tagController_tmp_shimSlave_awff_rv$D_IN =
+	     tagController_tmp_shimSlave_awff_rv$port3__read ;
+  assign tagController_tmp_shimSlave_awff_rv$EN = 1'b1 ;
+
+  // register tagController_tmp_shimSlave_bff_rv
+  assign tagController_tmp_shimSlave_bff_rv$D_IN =
+	     tagController_tmp_shimSlave_bff_rv$port3__read ;
+  assign tagController_tmp_shimSlave_bff_rv$EN = 1'b1 ;
+
+  // register tagController_tmp_shimSlave_rff_rv
+  assign tagController_tmp_shimSlave_rff_rv$D_IN =
+	     tagController_tmp_shimSlave_rff_rv$port3__read ;
+  assign tagController_tmp_shimSlave_rff_rv$EN = 1'b1 ;
+
+  // register tagController_tmp_shimSlave_wff_rv
+  assign tagController_tmp_shimSlave_wff_rv$D_IN =
+	     tagController_tmp_shimSlave_wff_rv$port3__read ;
+  assign tagController_tmp_shimSlave_wff_rv$EN = 1'b1 ;
+
   // submodule cpu
-  assign cpu$dmem_master_arready = fabric_2x3$v_from_masters_0_arready ;
-  assign cpu$dmem_master_awready = fabric_2x3$v_from_masters_0_awready ;
-  assign cpu$dmem_master_bid = fabric_2x3$v_from_masters_0_bid ;
-  assign cpu$dmem_master_bresp = fabric_2x3$v_from_masters_0_bresp ;
-  assign cpu$dmem_master_bvalid = fabric_2x3$v_from_masters_0_bvalid ;
-  assign cpu$dmem_master_rdata = fabric_2x3$v_from_masters_0_rdata ;
-  assign cpu$dmem_master_rid = fabric_2x3$v_from_masters_0_rid ;
-  assign cpu$dmem_master_rlast = fabric_2x3$v_from_masters_0_rlast ;
-  assign cpu$dmem_master_rresp = fabric_2x3$v_from_masters_0_rresp ;
-  assign cpu$dmem_master_rvalid = fabric_2x3$v_from_masters_0_rvalid ;
-  assign cpu$dmem_master_wready = fabric_2x3$v_from_masters_0_wready ;
+  assign cpu$dmem_master_arready = msNoSynth_0_ar_dwReady$whas ;
+  assign cpu$dmem_master_awready = CAN_FIRE_RL_merged_0_genFirst ;
+  assign cpu$dmem_master_bid =
+	     msNoSynth_0_b_buffer_ff$EMPTY_N ?
+	       msNoSynth_0_b_buffer_ff$D_OUT[5:2] :
+	       msNoSynth_0_b_buffer_enqw$wget[5:2] ;
+  assign cpu$dmem_master_bresp =
+	     msNoSynth_0_b_buffer_ff$EMPTY_N ?
+	       msNoSynth_0_b_buffer_ff$D_OUT[1:0] :
+	       msNoSynth_0_b_buffer_enqw$wget[1:0] ;
+  assign cpu$dmem_master_rdata =
+	     msNoSynth_0_r_buffer_ff$EMPTY_N ?
+	       msNoSynth_0_r_buffer_ff$D_OUT[67:4] :
+	       msNoSynth_0_r_buffer_enqw$wget[67:4] ;
+  assign cpu$dmem_master_rid =
+	     msNoSynth_0_r_buffer_ff$EMPTY_N ?
+	       msNoSynth_0_r_buffer_ff$D_OUT[71:68] :
+	       msNoSynth_0_r_buffer_enqw$wget[71:68] ;
+  assign cpu$dmem_master_rlast =
+	     msNoSynth_0_r_buffer_ff$EMPTY_N ?
+	       msNoSynth_0_r_buffer_ff$D_OUT[1] :
+	       msNoSynth_0_r_buffer_enqw$wget[1] ;
+  assign cpu$dmem_master_rresp =
+	     msNoSynth_0_r_buffer_ff$EMPTY_N ?
+	       msNoSynth_0_r_buffer_ff$D_OUT[3:2] :
+	       msNoSynth_0_r_buffer_enqw$wget[3:2] ;
+  assign cpu$dmem_master_ruser =
+	     msNoSynth_0_r_buffer_ff$EMPTY_N ?
+	       msNoSynth_0_r_buffer_ff$D_OUT[0] :
+	       msNoSynth_0_r_buffer_enqw$wget[0] ;
+  assign cpu$dmem_master_wready = msNoSynth_0_w_dwReady$whas ;
   assign cpu$hart0_server_reset_request_put = f_reset_reqs$D_OUT ;
-  assign cpu$imem_master_arready = cpu_imem_master_arready ;
-  assign cpu$imem_master_awready = cpu_imem_master_awready ;
-  assign cpu$imem_master_bid = cpu_imem_master_bid ;
-  assign cpu$imem_master_bresp = cpu_imem_master_bresp ;
-  assign cpu$imem_master_bvalid = cpu_imem_master_bvalid ;
-  assign cpu$imem_master_rdata = cpu_imem_master_rdata ;
-  assign cpu$imem_master_rid = cpu_imem_master_rid ;
-  assign cpu$imem_master_rlast = cpu_imem_master_rlast ;
-  assign cpu$imem_master_rresp = cpu_imem_master_rresp ;
-  assign cpu$imem_master_rvalid = cpu_imem_master_rvalid ;
-  assign cpu$imem_master_wready = cpu_imem_master_wready ;
+  assign cpu$imem_master_arready = WILL_FIRE_RL_mkConnectionGetPut_3 ;
+  assign cpu$imem_master_awready = CAN_FIRE_RL_mkConnectionGetPut ;
+  assign cpu$imem_master_bid =
+	     cpu_imem_b_buffer_ff$EMPTY_N ?
+	       cpu_imem_b_buffer_ff$D_OUT[6:2] :
+	       delay_shim_bff$D_OUT[6:2] ;
+  assign cpu$imem_master_bresp =
+	     cpu_imem_b_buffer_ff$EMPTY_N ?
+	       cpu_imem_b_buffer_ff$D_OUT[1:0] :
+	       delay_shim_bff$D_OUT[1:0] ;
+  assign cpu$imem_master_rdata =
+	     cpu_imem_r_buffer_ff$EMPTY_N ?
+	       cpu_imem_r_buffer_ff$D_OUT[67:4] :
+	       delay_shim_rff$D_OUT[67:4] ;
+  assign cpu$imem_master_rid =
+	     cpu_imem_r_buffer_ff$EMPTY_N ?
+	       cpu_imem_r_buffer_ff$D_OUT[72:68] :
+	       delay_shim_rff$D_OUT[72:68] ;
+  assign cpu$imem_master_rlast =
+	     cpu_imem_r_buffer_ff$EMPTY_N ?
+	       cpu_imem_r_buffer_ff$D_OUT[1] :
+	       delay_shim_rff$D_OUT[1] ;
+  assign cpu$imem_master_rresp =
+	     cpu_imem_r_buffer_ff$EMPTY_N ?
+	       cpu_imem_r_buffer_ff$D_OUT[3:2] :
+	       delay_shim_rff$D_OUT[3:2] ;
+  assign cpu$imem_master_ruser =
+	     cpu_imem_r_buffer_ff$EMPTY_N ?
+	       cpu_imem_r_buffer_ff$D_OUT[0] :
+	       delay_shim_rff$D_OUT[0] ;
+  assign cpu$imem_master_wready = CAN_FIRE_RL_mkConnectionGetPut_1 ;
   assign cpu$m_external_interrupt_req_set_not_clear = plic$v_targets_0_m_eip ;
   assign cpu$nmi_req_set_not_clear = nmi_req_set_not_clear ;
   assign cpu$s_external_interrupt_req_set_not_clear = plic$v_targets_1_m_eip ;
@@ -2184,14 +6765,94 @@ module mkCore(CLK,
 	     CAN_FIRE_RL_rl_cpu_hart0_reset_from_soc_start ;
   assign cpu$EN_hart0_server_reset_response_get =
 	     CAN_FIRE_RL_rl_cpu_hart0_reset_complete ;
+  assign cpu$imem_master_bvalid = CAN_FIRE_RL_cpu_imem_b_forwardFlit ;
+  assign cpu$imem_master_rvalid = CAN_FIRE_RL_cpu_imem_r_forwardFlit ;
+  assign cpu$dmem_master_bvalid = CAN_FIRE_RL_msNoSynth_0_b_forwardFlit ;
+  assign cpu$dmem_master_rvalid = CAN_FIRE_RL_msNoSynth_0_r_forwardFlit ;
   assign cpu$EN_set_verbosity = EN_set_verbosity ;
+
+  // submodule cpu_imem_b_buffer_ff
+  assign cpu_imem_b_buffer_ff$D_IN = delay_shim_bff$D_OUT ;
+  assign cpu_imem_b_buffer_ff$ENQ = CAN_FIRE_RL_cpu_imem_b_buffer_enqueue ;
+  assign cpu_imem_b_buffer_ff$DEQ = CAN_FIRE_RL_cpu_imem_b_buffer_dequeue ;
+  assign cpu_imem_b_buffer_ff$CLR = 1'b0 ;
+
+  // submodule cpu_imem_b_buffer_firstValid
+  assign cpu_imem_b_buffer_firstValid$D_IN = 1'd1 ;
+  assign cpu_imem_b_buffer_firstValid$EN = CAN_FIRE_RL_cpu_imem_b_dropFlit ;
+
+  // submodule cpu_imem_r_buffer_ff
+  assign cpu_imem_r_buffer_ff$D_IN = delay_shim_rff$D_OUT ;
+  assign cpu_imem_r_buffer_ff$ENQ = CAN_FIRE_RL_cpu_imem_r_buffer_enqueue ;
+  assign cpu_imem_r_buffer_ff$DEQ = CAN_FIRE_RL_cpu_imem_r_buffer_dequeue ;
+  assign cpu_imem_r_buffer_ff$CLR = 1'b0 ;
+
+  // submodule cpu_imem_r_buffer_firstValid
+  assign cpu_imem_r_buffer_firstValid$D_IN = 1'd1 ;
+  assign cpu_imem_r_buffer_firstValid$EN = CAN_FIRE_RL_cpu_imem_r_dropFlit ;
+
+  // submodule delay_shim_arff
+  assign delay_shim_arff$D_IN =
+	     { cpu$imem_master_arid,
+	       cpu$imem_master_araddr,
+	       cpu$imem_master_arlen,
+	       cpu$imem_master_arsize,
+	       cpu$imem_master_arburst,
+	       cpu$imem_master_arlock,
+	       cpu$imem_master_arcache,
+	       cpu$imem_master_arprot,
+	       cpu$imem_master_arqos,
+	       cpu$imem_master_arregion } ;
+  assign delay_shim_arff$ENQ = WILL_FIRE_RL_mkConnectionGetPut_3 ;
+  assign delay_shim_arff$DEQ = CAN_FIRE_RL_cpu_imem_ug_u_ar_doDrop ;
+  assign delay_shim_arff$CLR = 1'b0 ;
+
+  // submodule delay_shim_awff
+  assign delay_shim_awff$D_IN =
+	     { cpu$imem_master_awid,
+	       cpu$imem_master_awaddr,
+	       cpu$imem_master_awlen,
+	       cpu$imem_master_awsize,
+	       cpu$imem_master_awburst,
+	       cpu$imem_master_awlock,
+	       cpu$imem_master_awcache,
+	       cpu$imem_master_awprot,
+	       cpu$imem_master_awqos,
+	       cpu$imem_master_awregion } ;
+  assign delay_shim_awff$ENQ = CAN_FIRE_RL_mkConnectionGetPut ;
+  assign delay_shim_awff$DEQ = WILL_FIRE_RL_cpu_imem_ug_u_aw_doDrop ;
+  assign delay_shim_awff$CLR = 1'b0 ;
+
+  // submodule delay_shim_bff
+  assign delay_shim_bff$D_IN = cpu_imem_ug_u_b_putWire$wget ;
+  assign delay_shim_bff$ENQ = CAN_FIRE_RL_cpu_imem_ug_u_b_doPut ;
+  assign delay_shim_bff$DEQ = CAN_FIRE_RL_mkConnectionGetPut_2 ;
+  assign delay_shim_bff$CLR = 1'b0 ;
+
+  // submodule delay_shim_rff
+  assign delay_shim_rff$D_IN = cpu_imem_ug_u_r_putWire$wget ;
+  assign delay_shim_rff$ENQ = CAN_FIRE_RL_cpu_imem_ug_u_r_doPut ;
+  assign delay_shim_rff$DEQ = CAN_FIRE_RL_mkConnectionGetPut_4 ;
+  assign delay_shim_rff$CLR = 1'b0 ;
+
+  // submodule delay_shim_wff
+  assign delay_shim_wff$D_IN =
+	     { cpu$imem_master_wdata,
+	       cpu$imem_master_wstrb,
+	       cpu$imem_master_wlast,
+	       cpu$imem_master_wuser } ;
+  assign delay_shim_wff$ENQ = CAN_FIRE_RL_mkConnectionGetPut_1 ;
+  assign delay_shim_wff$DEQ = WILL_FIRE_RL_cpu_imem_ug_u_w_doDrop ;
+  assign delay_shim_wff$CLR = 1'b0 ;
 
   // submodule f_reset_reqs
   assign f_reset_reqs$D_IN = cpu_reset_server_request_put ;
   assign f_reset_reqs$ENQ = EN_cpu_reset_server_request_put ;
   assign f_reset_reqs$DEQ =
-	     fabric_2x3$RDY_reset &&
-	     near_mem_io_RDY_server_reset_request_put_AND_p_ETC___d8 ;
+	     near_mem_io$RDY_server_reset_request_put &&
+	     plic$RDY_server_reset_request_put &&
+	     cpu$RDY_hart0_server_reset_request_put &&
+	     f_reset_reqs$EMPTY_N ;
   assign f_reset_reqs$CLR = 1'b0 ;
 
   // submodule f_reset_rsps
@@ -2204,192 +6865,531 @@ module mkCore(CLK,
   assign f_reset_rsps$DEQ = EN_cpu_reset_server_response_get ;
   assign f_reset_rsps$CLR = 1'b0 ;
 
-  // submodule fabric_2x3
-  assign fabric_2x3$set_verbosity_verbosity = 4'h0 ;
-  assign fabric_2x3$v_from_masters_0_araddr = cpu$dmem_master_araddr ;
-  assign fabric_2x3$v_from_masters_0_arburst = cpu$dmem_master_arburst ;
-  assign fabric_2x3$v_from_masters_0_arcache = cpu$dmem_master_arcache ;
-  assign fabric_2x3$v_from_masters_0_arid = cpu$dmem_master_arid ;
-  assign fabric_2x3$v_from_masters_0_arlen = cpu$dmem_master_arlen ;
-  assign fabric_2x3$v_from_masters_0_arlock = cpu$dmem_master_arlock ;
-  assign fabric_2x3$v_from_masters_0_arprot = cpu$dmem_master_arprot ;
-  assign fabric_2x3$v_from_masters_0_arqos = cpu$dmem_master_arqos ;
-  assign fabric_2x3$v_from_masters_0_arregion = cpu$dmem_master_arregion ;
-  assign fabric_2x3$v_from_masters_0_arsize = cpu$dmem_master_arsize ;
-  assign fabric_2x3$v_from_masters_0_arvalid = cpu$dmem_master_arvalid ;
-  assign fabric_2x3$v_from_masters_0_awaddr = cpu$dmem_master_awaddr ;
-  assign fabric_2x3$v_from_masters_0_awburst = cpu$dmem_master_awburst ;
-  assign fabric_2x3$v_from_masters_0_awcache = cpu$dmem_master_awcache ;
-  assign fabric_2x3$v_from_masters_0_awid = cpu$dmem_master_awid ;
-  assign fabric_2x3$v_from_masters_0_awlen = cpu$dmem_master_awlen ;
-  assign fabric_2x3$v_from_masters_0_awlock = cpu$dmem_master_awlock ;
-  assign fabric_2x3$v_from_masters_0_awprot = cpu$dmem_master_awprot ;
-  assign fabric_2x3$v_from_masters_0_awqos = cpu$dmem_master_awqos ;
-  assign fabric_2x3$v_from_masters_0_awregion = cpu$dmem_master_awregion ;
-  assign fabric_2x3$v_from_masters_0_awsize = cpu$dmem_master_awsize ;
-  assign fabric_2x3$v_from_masters_0_awvalid = cpu$dmem_master_awvalid ;
-  assign fabric_2x3$v_from_masters_0_bready = cpu$dmem_master_bready ;
-  assign fabric_2x3$v_from_masters_0_rready = cpu$dmem_master_rready ;
-  assign fabric_2x3$v_from_masters_0_wdata = cpu$dmem_master_wdata ;
-  assign fabric_2x3$v_from_masters_0_wlast = cpu$dmem_master_wlast ;
-  assign fabric_2x3$v_from_masters_0_wstrb = cpu$dmem_master_wstrb ;
-  assign fabric_2x3$v_from_masters_0_wvalid = cpu$dmem_master_wvalid ;
-  assign fabric_2x3$v_from_masters_1_araddr =
-	     64'hAAAAAAAAAAAAAAAA /* unspecified value */  ;
-  assign fabric_2x3$v_from_masters_1_arburst =
-	     2'b10 /* unspecified value */  ;
-  assign fabric_2x3$v_from_masters_1_arcache =
-	     4'b1010 /* unspecified value */  ;
-  assign fabric_2x3$v_from_masters_1_arid = 4'b1010 /* unspecified value */  ;
-  assign fabric_2x3$v_from_masters_1_arlen =
-	     8'b10101010 /* unspecified value */  ;
-  assign fabric_2x3$v_from_masters_1_arlock = 1'b0 /* unspecified value */  ;
-  assign fabric_2x3$v_from_masters_1_arprot =
-	     3'b010 /* unspecified value */  ;
-  assign fabric_2x3$v_from_masters_1_arqos =
-	     4'b1010 /* unspecified value */  ;
-  assign fabric_2x3$v_from_masters_1_arregion =
-	     4'b1010 /* unspecified value */  ;
-  assign fabric_2x3$v_from_masters_1_arsize =
-	     3'b010 /* unspecified value */  ;
-  assign fabric_2x3$v_from_masters_1_arvalid = 1'd0 ;
-  assign fabric_2x3$v_from_masters_1_awaddr =
-	     64'hAAAAAAAAAAAAAAAA /* unspecified value */  ;
-  assign fabric_2x3$v_from_masters_1_awburst =
-	     2'b10 /* unspecified value */  ;
-  assign fabric_2x3$v_from_masters_1_awcache =
-	     4'b1010 /* unspecified value */  ;
-  assign fabric_2x3$v_from_masters_1_awid = 4'b1010 /* unspecified value */  ;
-  assign fabric_2x3$v_from_masters_1_awlen =
-	     8'b10101010 /* unspecified value */  ;
-  assign fabric_2x3$v_from_masters_1_awlock = 1'b0 /* unspecified value */  ;
-  assign fabric_2x3$v_from_masters_1_awprot =
-	     3'b010 /* unspecified value */  ;
-  assign fabric_2x3$v_from_masters_1_awqos =
-	     4'b1010 /* unspecified value */  ;
-  assign fabric_2x3$v_from_masters_1_awregion =
-	     4'b1010 /* unspecified value */  ;
-  assign fabric_2x3$v_from_masters_1_awsize =
-	     3'b010 /* unspecified value */  ;
-  assign fabric_2x3$v_from_masters_1_awvalid = 1'd0 ;
-  assign fabric_2x3$v_from_masters_1_bready = 1'd0 ;
-  assign fabric_2x3$v_from_masters_1_rready = 1'd0 ;
-  assign fabric_2x3$v_from_masters_1_wdata =
-	     64'hAAAAAAAAAAAAAAAA /* unspecified value */  ;
-  assign fabric_2x3$v_from_masters_1_wlast = 1'b0 /* unspecified value */  ;
-  assign fabric_2x3$v_from_masters_1_wstrb =
-	     8'b10101010 /* unspecified value */  ;
-  assign fabric_2x3$v_from_masters_1_wvalid = 1'd0 ;
-  assign fabric_2x3$v_to_slaves_0_arready = cpu_dmem_master_arready ;
-  assign fabric_2x3$v_to_slaves_0_awready = cpu_dmem_master_awready ;
-  assign fabric_2x3$v_to_slaves_0_bid = cpu_dmem_master_bid ;
-  assign fabric_2x3$v_to_slaves_0_bresp = cpu_dmem_master_bresp ;
-  assign fabric_2x3$v_to_slaves_0_bvalid = cpu_dmem_master_bvalid ;
-  assign fabric_2x3$v_to_slaves_0_rdata = cpu_dmem_master_rdata ;
-  assign fabric_2x3$v_to_slaves_0_rid = cpu_dmem_master_rid ;
-  assign fabric_2x3$v_to_slaves_0_rlast = cpu_dmem_master_rlast ;
-  assign fabric_2x3$v_to_slaves_0_rresp = cpu_dmem_master_rresp ;
-  assign fabric_2x3$v_to_slaves_0_rvalid = cpu_dmem_master_rvalid ;
-  assign fabric_2x3$v_to_slaves_0_wready = cpu_dmem_master_wready ;
-  assign fabric_2x3$v_to_slaves_1_arready = near_mem_io$axi4_slave_arready ;
-  assign fabric_2x3$v_to_slaves_1_awready = near_mem_io$axi4_slave_awready ;
-  assign fabric_2x3$v_to_slaves_1_bid = near_mem_io$axi4_slave_bid ;
-  assign fabric_2x3$v_to_slaves_1_bresp = near_mem_io$axi4_slave_bresp ;
-  assign fabric_2x3$v_to_slaves_1_bvalid = near_mem_io$axi4_slave_bvalid ;
-  assign fabric_2x3$v_to_slaves_1_rdata = near_mem_io$axi4_slave_rdata ;
-  assign fabric_2x3$v_to_slaves_1_rid = near_mem_io$axi4_slave_rid ;
-  assign fabric_2x3$v_to_slaves_1_rlast = near_mem_io$axi4_slave_rlast ;
-  assign fabric_2x3$v_to_slaves_1_rresp = near_mem_io$axi4_slave_rresp ;
-  assign fabric_2x3$v_to_slaves_1_rvalid = near_mem_io$axi4_slave_rvalid ;
-  assign fabric_2x3$v_to_slaves_1_wready = near_mem_io$axi4_slave_wready ;
-  assign fabric_2x3$v_to_slaves_2_arready = plic$axi4_slave_arready ;
-  assign fabric_2x3$v_to_slaves_2_awready = plic$axi4_slave_awready ;
-  assign fabric_2x3$v_to_slaves_2_bid = plic$axi4_slave_bid ;
-  assign fabric_2x3$v_to_slaves_2_bresp = plic$axi4_slave_bresp ;
-  assign fabric_2x3$v_to_slaves_2_bvalid = plic$axi4_slave_bvalid ;
-  assign fabric_2x3$v_to_slaves_2_rdata = plic$axi4_slave_rdata ;
-  assign fabric_2x3$v_to_slaves_2_rid = plic$axi4_slave_rid ;
-  assign fabric_2x3$v_to_slaves_2_rlast = plic$axi4_slave_rlast ;
-  assign fabric_2x3$v_to_slaves_2_rresp = plic$axi4_slave_rresp ;
-  assign fabric_2x3$v_to_slaves_2_rvalid = plic$axi4_slave_rvalid ;
-  assign fabric_2x3$v_to_slaves_2_wready = plic$axi4_slave_wready ;
-  assign fabric_2x3$EN_reset = CAN_FIRE_RL_rl_cpu_hart0_reset_from_soc_start ;
-  assign fabric_2x3$EN_set_verbosity = 1'b0 ;
+  // submodule ifcs_0_1_innerReq
+  assign ifcs_0_1_innerReq$D_IN =
+	     { fatReq_arid__h69550,
+	       cpu$dmem_master_araddr,
+	       cpu$dmem_master_arlen,
+	       cpu$dmem_master_arsize,
+	       cpu$dmem_master_arburst,
+	       cpu$dmem_master_arlock,
+	       cpu$dmem_master_arcache,
+	       cpu$dmem_master_arprot,
+	       cpu$dmem_master_arqos,
+	       cpu$dmem_master_arregion } ;
+  assign ifcs_0_1_innerReq$ENQ =
+	     WILL_FIRE_RL_ifcs_0_1_followFlits ||
+	     WILL_FIRE_RL_ifcs_0_1_firstFlit ;
+  assign ifcs_0_1_innerReq$DEQ =
+	     WILL_FIRE_RL_source_selected_5 && ifcs_0_1_innerRoute$EMPTY_N ||
+	     WILL_FIRE_RL_burst_5 ;
+  assign ifcs_0_1_innerReq$CLR = 1'b0 ;
+
+  // submodule ifcs_0_1_innerRoute
+  assign ifcs_0_1_innerRoute$D_IN =
+	     { cpu_dmem_master_ar_araddr__582_BITS_63_TO_40_5_ETC___d1606,
+	       cpu$dmem_master_araddr[63:40] == 24'd0 &&
+	       !cpu_dmem_master_ar_araddr__582_ULT_soc_map_m_n_ETC___d1585 &&
+	       cpu_dmem_master_ar_araddr__582_MINUS_soc_map_m_ETC___d1587,
+	       cpu_dmem_master_ar_araddr__582_BITS_63_TO_40_5_ETC___d1596 } ;
+  assign ifcs_0_1_innerRoute$ENQ = CAN_FIRE_RL_ifcs_0_1_firstFlit ;
+  assign ifcs_0_1_innerRoute$DEQ =
+	     WILL_FIRE_RL_source_selected_5 && ifcs_0_1_innerRoute$EMPTY_N ||
+	     WILL_FIRE_RL_burst_5 ;
+  assign ifcs_0_1_innerRoute$CLR = 1'b0 ;
+
+  // submodule ifcs_0_1_noRouteRsp
+  assign ifcs_0_1_noRouteRsp$D_IN =
+	     { ifcs_0_1_noRoute_currentReq$port1__read[96:93],
+	       66'h2AAAAAAAAAAAAAAAB,
+	       x_port1__read__h70111 == 9'd1,
+	       1'h0 } ;
+  assign ifcs_0_1_noRouteRsp$ENQ = CAN_FIRE_RL_ifcs_0_1_nonRoutableGenRsp ;
+  assign ifcs_0_1_noRouteRsp$DEQ = CAN_FIRE_RL_ifcs_0_1_drainNoRouteResponse ;
+  assign ifcs_0_1_noRouteRsp$CLR = 1'b0 ;
+
+  // submodule ifcs_0_1_routeBack
+  assign ifcs_0_1_routeBack$D_IN =
+	     2'd1 <<
+	     tagController_tmp_ug_slave_u_r_peekWirewget_B_ETC__q25[4] ;
+  assign ifcs_0_1_routeBack$ENQ = CAN_FIRE_RL_ifcs_0_1_firstFlit_1 ;
+  assign ifcs_0_1_routeBack$DEQ =
+	     WILL_FIRE_RL_burst_7 && ifcs_0_1_rspBack$D_OUT[1] ||
+	     WILL_FIRE_RL_source_selected_7 && ifcs_0_1_routeBack$EMPTY_N &&
+	     ifcs_0_1_rspBack$D_OUT[1] ;
+  assign ifcs_0_1_routeBack$CLR = 1'b0 ;
+
+  // submodule ifcs_0_1_rspBack
+  assign ifcs_0_1_rspBack$D_IN =
+	     { tagController_tmp_ug_slave_u_r_peekWirewget_B_ETC__q25[3:0],
+	       tagController_tmp_ug_slave_u_r_peekWire$wget[67:0] } ;
+  assign ifcs_0_1_rspBack$ENQ = ssNoSynth_0_r_dwReady$whas ;
+  assign ifcs_0_1_rspBack$DEQ =
+	     WILL_FIRE_RL_source_selected_7 && ifcs_0_1_routeBack$EMPTY_N ||
+	     WILL_FIRE_RL_burst_7 ;
+  assign ifcs_0_1_rspBack$CLR = 1'b0 ;
+
+  // submodule ifcs_0_innerReq
+  assign ifcs_0_innerReq$D_IN =
+	     { merged_0_flitLeft != 8'd0,
+	       a_awid__h35861,
+	       cpu$dmem_master_awaddr,
+	       cpu$dmem_master_awlen,
+	       cpu$dmem_master_awsize,
+	       cpu$dmem_master_awburst,
+	       cpu$dmem_master_awlock,
+	       cpu$dmem_master_awcache,
+	       cpu$dmem_master_awprot,
+	       cpu$dmem_master_awqos,
+	       cpu$dmem_master_awregion,
+	       cpu$dmem_master_wdata,
+	       cpu$dmem_master_wstrb,
+	       cpu$dmem_master_wlast,
+	       cpu$dmem_master_wuser } ;
+  assign ifcs_0_innerReq$ENQ =
+	     WILL_FIRE_RL_ifcs_0_followFlits ||
+	     WILL_FIRE_RL_ifcs_0_firstFlit ;
+  assign ifcs_0_innerReq$DEQ =
+	     WILL_FIRE_RL_source_selected && ifcs_0_innerRoute$EMPTY_N ||
+	     WILL_FIRE_RL_burst ;
+  assign ifcs_0_innerReq$CLR = 1'b0 ;
+
+  // submodule ifcs_0_innerRoute
+  assign ifcs_0_innerRoute$D_IN =
+	     { IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d1037,
+	       cpu$dmem_master_awaddr[63:40] == 24'd0 &&
+	       !IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d1016 &&
+	       IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d1018,
+	       IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d1027 } ;
+  assign ifcs_0_innerRoute$ENQ = CAN_FIRE_RL_ifcs_0_firstFlit ;
+  assign ifcs_0_innerRoute$DEQ =
+	     WILL_FIRE_RL_burst && ifcs_0_innerReq$D_OUT[1] ||
+	     WILL_FIRE_RL_source_selected && ifcs_0_innerRoute$EMPTY_N &&
+	     ifcs_0_innerReq$D_OUT[1] ;
+  assign ifcs_0_innerRoute$CLR = 1'b0 ;
+
+  // submodule ifcs_0_noRouteRsp
+  assign ifcs_0_noRouteRsp$D_IN =
+	     { ifcs_0_noRoute_inner_currentReq$port1__read[96:93], 2'd3 } ;
+  assign ifcs_0_noRouteRsp$ENQ = CAN_FIRE_RL_ifcs_0_nonRoutableGenRsp ;
+  assign ifcs_0_noRouteRsp$DEQ = CAN_FIRE_RL_ifcs_0_drainNoRouteResponse ;
+  assign ifcs_0_noRouteRsp$CLR = 1'b0 ;
+
+  // submodule ifcs_0_routeBack
+  assign ifcs_0_routeBack$D_IN =
+	     2'd1 <<
+	     tagController_tmp_ug_slave_u_b_peekWirewget_B_ETC__q26[4] ;
+  assign ifcs_0_routeBack$ENQ = CAN_FIRE_RL_ifcs_0_firstFlit_1 ;
+  assign ifcs_0_routeBack$DEQ =
+	     WILL_FIRE_RL_source_selected_2 && ifcs_0_routeBack$EMPTY_N ||
+	     WILL_FIRE_RL_burst_2 ;
+  assign ifcs_0_routeBack$CLR = 1'b0 ;
+
+  // submodule ifcs_0_rspBack
+  assign ifcs_0_rspBack$D_IN =
+	     { tagController_tmp_ug_slave_u_b_peekWirewget_B_ETC__q26[3:0],
+	       tagController_tmp_ug_slave_u_b_peekWire$wget[1:0] } ;
+  assign ifcs_0_rspBack$ENQ = ssNoSynth_0_b_dwReady$whas ;
+  assign ifcs_0_rspBack$DEQ =
+	     WILL_FIRE_RL_source_selected_2 && ifcs_0_routeBack$EMPTY_N ||
+	     WILL_FIRE_RL_burst_2 ;
+  assign ifcs_0_rspBack$CLR = 1'b0 ;
+
+  // submodule ifcs_1_1_innerReq
+  assign ifcs_1_1_innerReq$D_IN = 98'h0 ;
+  assign ifcs_1_1_innerReq$ENQ = 1'b0 ;
+  assign ifcs_1_1_innerReq$DEQ =
+	     WILL_FIRE_RL_source_selected_6 && ifcs_1_1_innerRoute$EMPTY_N ||
+	     WILL_FIRE_RL_burst_6 ;
+  assign ifcs_1_1_innerReq$CLR = 1'b0 ;
+
+  // submodule ifcs_1_1_innerRoute
+  assign ifcs_1_1_innerRoute$D_IN = 3'h0 ;
+  assign ifcs_1_1_innerRoute$ENQ = 1'b0 ;
+  assign ifcs_1_1_innerRoute$DEQ =
+	     WILL_FIRE_RL_source_selected_6 && ifcs_1_1_innerRoute$EMPTY_N ||
+	     WILL_FIRE_RL_burst_6 ;
+  assign ifcs_1_1_innerRoute$CLR = 1'b0 ;
+
+  // submodule ifcs_1_1_noRouteRsp
+  assign ifcs_1_1_noRouteRsp$D_IN =
+	     { ifcs_1_1_noRoute_currentReq[96:93], 68'hAAAAAAAAAAAAAAAAC } ;
+  assign ifcs_1_1_noRouteRsp$ENQ = CAN_FIRE_RL_ifcs_1_1_nonRoutableGenRsp ;
+  assign ifcs_1_1_noRouteRsp$DEQ = CAN_FIRE_RL_ifcs_1_1_drainNoRouteResponse ;
+  assign ifcs_1_1_noRouteRsp$CLR = 1'b0 ;
+
+  // submodule ifcs_1_1_routeBack
+  assign ifcs_1_1_routeBack$D_IN = 2'd1 << near_mem_io$axi4_slave_rid[4] ;
+  assign ifcs_1_1_routeBack$ENQ = CAN_FIRE_RL_ifcs_1_1_firstFlit_1 ;
+  assign ifcs_1_1_routeBack$DEQ =
+	     WILL_FIRE_RL_burst_8 && ifcs_1_1_rspBack$D_OUT[1] ||
+	     WILL_FIRE_RL_source_selected_8 && ifcs_1_1_routeBack$EMPTY_N &&
+	     ifcs_1_1_rspBack$D_OUT[1] ;
+  assign ifcs_1_1_routeBack$CLR = 1'b0 ;
+
+  // submodule ifcs_1_1_rspBack
+  assign ifcs_1_1_rspBack$D_IN =
+	     { near_mem_io$axi4_slave_rid[3:0],
+	       near_mem_io$axi4_slave_rdata,
+	       near_mem_io$axi4_slave_rresp,
+	       near_mem_io$axi4_slave_rlast,
+	       near_mem_io$axi4_slave_ruser } ;
+  assign ifcs_1_1_rspBack$ENQ = ssNoSynth_1_r_dwReady$whas ;
+  assign ifcs_1_1_rspBack$DEQ =
+	     WILL_FIRE_RL_source_selected_8 && ifcs_1_1_routeBack$EMPTY_N ||
+	     WILL_FIRE_RL_burst_8 ;
+  assign ifcs_1_1_rspBack$CLR = 1'b0 ;
+
+  // submodule ifcs_1_innerReq
+  assign ifcs_1_innerReq$D_IN = 173'h0 ;
+  assign ifcs_1_innerReq$ENQ = 1'b0 ;
+  assign ifcs_1_innerReq$DEQ =
+	     WILL_FIRE_RL_source_selected_1 && ifcs_1_innerRoute$EMPTY_N ||
+	     WILL_FIRE_RL_burst_1 ;
+  assign ifcs_1_innerReq$CLR = 1'b0 ;
+
+  // submodule ifcs_1_innerRoute
+  assign ifcs_1_innerRoute$D_IN = 3'h0 ;
+  assign ifcs_1_innerRoute$ENQ = 1'b0 ;
+  assign ifcs_1_innerRoute$DEQ =
+	     WILL_FIRE_RL_burst_1 && ifcs_1_innerReq$D_OUT[1] ||
+	     WILL_FIRE_RL_source_selected_1 && ifcs_1_innerRoute$EMPTY_N &&
+	     ifcs_1_innerReq$D_OUT[1] ;
+  assign ifcs_1_innerRoute$CLR = 1'b0 ;
+
+  // submodule ifcs_1_noRouteRsp
+  assign ifcs_1_noRouteRsp$D_IN = 6'h0 ;
+  assign ifcs_1_noRouteRsp$ENQ = 1'b0 ;
+  assign ifcs_1_noRouteRsp$DEQ = CAN_FIRE_RL_ifcs_1_drainNoRouteResponse ;
+  assign ifcs_1_noRouteRsp$CLR = 1'b0 ;
+
+  // submodule ifcs_1_routeBack
+  assign ifcs_1_routeBack$D_IN = 2'd1 << near_mem_io$axi4_slave_bid[4] ;
+  assign ifcs_1_routeBack$ENQ = CAN_FIRE_RL_ifcs_1_firstFlit_1 ;
+  assign ifcs_1_routeBack$DEQ =
+	     WILL_FIRE_RL_source_selected_3 && ifcs_1_routeBack$EMPTY_N ||
+	     WILL_FIRE_RL_burst_3 ;
+  assign ifcs_1_routeBack$CLR = 1'b0 ;
+
+  // submodule ifcs_1_rspBack
+  assign ifcs_1_rspBack$D_IN =
+	     { near_mem_io$axi4_slave_bid[3:0],
+	       near_mem_io$axi4_slave_bresp } ;
+  assign ifcs_1_rspBack$ENQ = ssNoSynth_1_b_dwReady$whas ;
+  assign ifcs_1_rspBack$DEQ =
+	     WILL_FIRE_RL_source_selected_3 && ifcs_1_routeBack$EMPTY_N ||
+	     WILL_FIRE_RL_burst_3 ;
+  assign ifcs_1_rspBack$CLR = 1'b0 ;
+
+  // submodule ifcs_2_1_routeBack
+  assign ifcs_2_1_routeBack$D_IN = 2'd1 << plic$axi4_slave_rid[4] ;
+  assign ifcs_2_1_routeBack$ENQ = CAN_FIRE_RL_ifcs_2_1_firstFlit ;
+  assign ifcs_2_1_routeBack$DEQ =
+	     WILL_FIRE_RL_burst_9 && ifcs_2_1_rspBack$D_OUT[1] ||
+	     WILL_FIRE_RL_source_selected_9 && ifcs_2_1_routeBack$EMPTY_N &&
+	     ifcs_2_1_rspBack$D_OUT[1] ;
+  assign ifcs_2_1_routeBack$CLR = 1'b0 ;
+
+  // submodule ifcs_2_1_rspBack
+  assign ifcs_2_1_rspBack$D_IN =
+	     { plic$axi4_slave_rid[3:0],
+	       plic$axi4_slave_rdata,
+	       plic$axi4_slave_rresp,
+	       plic$axi4_slave_rlast,
+	       plic$axi4_slave_ruser } ;
+  assign ifcs_2_1_rspBack$ENQ = ssNoSynth_2_r_dwReady$whas ;
+  assign ifcs_2_1_rspBack$DEQ =
+	     WILL_FIRE_RL_source_selected_9 && ifcs_2_1_routeBack$EMPTY_N ||
+	     WILL_FIRE_RL_burst_9 ;
+  assign ifcs_2_1_rspBack$CLR = 1'b0 ;
+
+  // submodule ifcs_2_routeBack
+  assign ifcs_2_routeBack$D_IN = 2'd1 << plic$axi4_slave_bid[4] ;
+  assign ifcs_2_routeBack$ENQ = CAN_FIRE_RL_ifcs_2_firstFlit ;
+  assign ifcs_2_routeBack$DEQ =
+	     WILL_FIRE_RL_source_selected_4 && ifcs_2_routeBack$EMPTY_N ||
+	     WILL_FIRE_RL_burst_4 ;
+  assign ifcs_2_routeBack$CLR = 1'b0 ;
+
+  // submodule ifcs_2_rspBack
+  assign ifcs_2_rspBack$D_IN =
+	     { plic$axi4_slave_bid[3:0], plic$axi4_slave_bresp } ;
+  assign ifcs_2_rspBack$ENQ = ssNoSynth_2_b_dwReady$whas ;
+  assign ifcs_2_rspBack$DEQ =
+	     WILL_FIRE_RL_source_selected_4 && ifcs_2_routeBack$EMPTY_N ||
+	     WILL_FIRE_RL_burst_4 ;
+  assign ifcs_2_rspBack$CLR = 1'b0 ;
+
+  // submodule msNoSynth_0_b_buffer_ff
+  assign msNoSynth_0_b_buffer_ff$D_IN = msNoSynth_0_b_buffer_enqw$wget ;
+  assign msNoSynth_0_b_buffer_ff$ENQ =
+	     CAN_FIRE_RL_msNoSynth_0_b_buffer_enqueue ;
+  assign msNoSynth_0_b_buffer_ff$DEQ =
+	     CAN_FIRE_RL_msNoSynth_0_b_buffer_dequeue ;
+  assign msNoSynth_0_b_buffer_ff$CLR = 1'b0 ;
+
+  // submodule msNoSynth_0_b_buffer_firstValid
+  assign msNoSynth_0_b_buffer_firstValid$D_IN = 1'd1 ;
+  assign msNoSynth_0_b_buffer_firstValid$EN =
+	     CAN_FIRE_RL_msNoSynth_0_b_dropFlit ;
+
+  // submodule msNoSynth_0_r_buffer_ff
+  assign msNoSynth_0_r_buffer_ff$D_IN = msNoSynth_0_r_buffer_enqw$wget ;
+  assign msNoSynth_0_r_buffer_ff$ENQ =
+	     CAN_FIRE_RL_msNoSynth_0_r_buffer_enqueue ;
+  assign msNoSynth_0_r_buffer_ff$DEQ =
+	     CAN_FIRE_RL_msNoSynth_0_r_buffer_dequeue ;
+  assign msNoSynth_0_r_buffer_ff$CLR = 1'b0 ;
+
+  // submodule msNoSynth_0_r_buffer_firstValid
+  assign msNoSynth_0_r_buffer_firstValid$D_IN = 1'd1 ;
+  assign msNoSynth_0_r_buffer_firstValid$EN =
+	     CAN_FIRE_RL_msNoSynth_0_r_dropFlit ;
+
+  // submodule msNoSynth_1_b_buffer_ff
+  assign msNoSynth_1_b_buffer_ff$D_IN = msNoSynth_1_b_buffer_enqw$wget ;
+  assign msNoSynth_1_b_buffer_ff$ENQ = msNoSynth_1_b_buffer_enqw$whas ;
+  assign msNoSynth_1_b_buffer_ff$DEQ = 1'b0 ;
+  assign msNoSynth_1_b_buffer_ff$CLR = 1'b0 ;
+
+  // submodule msNoSynth_1_b_buffer_firstValid
+  assign msNoSynth_1_b_buffer_firstValid$D_IN = 1'b0 ;
+  assign msNoSynth_1_b_buffer_firstValid$EN = 1'b0 ;
+
+  // submodule msNoSynth_1_r_buffer_ff
+  assign msNoSynth_1_r_buffer_ff$D_IN = msNoSynth_1_r_buffer_enqw$wget ;
+  assign msNoSynth_1_r_buffer_ff$ENQ = msNoSynth_1_r_buffer_enqw$whas ;
+  assign msNoSynth_1_r_buffer_ff$DEQ = 1'b0 ;
+  assign msNoSynth_1_r_buffer_ff$CLR = 1'b0 ;
+
+  // submodule msNoSynth_1_r_buffer_firstValid
+  assign msNoSynth_1_r_buffer_firstValid$D_IN = 1'b0 ;
+  assign msNoSynth_1_r_buffer_firstValid$EN = 1'b0 ;
 
   // submodule near_mem_io
-  assign near_mem_io$axi4_slave_araddr = fabric_2x3$v_to_slaves_1_araddr ;
-  assign near_mem_io$axi4_slave_arburst = fabric_2x3$v_to_slaves_1_arburst ;
-  assign near_mem_io$axi4_slave_arcache = fabric_2x3$v_to_slaves_1_arcache ;
-  assign near_mem_io$axi4_slave_arid = fabric_2x3$v_to_slaves_1_arid ;
-  assign near_mem_io$axi4_slave_arlen = fabric_2x3$v_to_slaves_1_arlen ;
-  assign near_mem_io$axi4_slave_arlock = fabric_2x3$v_to_slaves_1_arlock ;
-  assign near_mem_io$axi4_slave_arprot = fabric_2x3$v_to_slaves_1_arprot ;
-  assign near_mem_io$axi4_slave_arqos = fabric_2x3$v_to_slaves_1_arqos ;
-  assign near_mem_io$axi4_slave_arregion = fabric_2x3$v_to_slaves_1_arregion ;
-  assign near_mem_io$axi4_slave_arsize = fabric_2x3$v_to_slaves_1_arsize ;
-  assign near_mem_io$axi4_slave_arvalid = fabric_2x3$v_to_slaves_1_arvalid ;
-  assign near_mem_io$axi4_slave_awaddr = fabric_2x3$v_to_slaves_1_awaddr ;
-  assign near_mem_io$axi4_slave_awburst = fabric_2x3$v_to_slaves_1_awburst ;
-  assign near_mem_io$axi4_slave_awcache = fabric_2x3$v_to_slaves_1_awcache ;
-  assign near_mem_io$axi4_slave_awid = fabric_2x3$v_to_slaves_1_awid ;
-  assign near_mem_io$axi4_slave_awlen = fabric_2x3$v_to_slaves_1_awlen ;
-  assign near_mem_io$axi4_slave_awlock = fabric_2x3$v_to_slaves_1_awlock ;
-  assign near_mem_io$axi4_slave_awprot = fabric_2x3$v_to_slaves_1_awprot ;
-  assign near_mem_io$axi4_slave_awqos = fabric_2x3$v_to_slaves_1_awqos ;
-  assign near_mem_io$axi4_slave_awregion = fabric_2x3$v_to_slaves_1_awregion ;
-  assign near_mem_io$axi4_slave_awsize = fabric_2x3$v_to_slaves_1_awsize ;
-  assign near_mem_io$axi4_slave_awvalid = fabric_2x3$v_to_slaves_1_awvalid ;
-  assign near_mem_io$axi4_slave_bready = fabric_2x3$v_to_slaves_1_bready ;
-  assign near_mem_io$axi4_slave_rready = fabric_2x3$v_to_slaves_1_rready ;
-  assign near_mem_io$axi4_slave_wdata = fabric_2x3$v_to_slaves_1_wdata ;
-  assign near_mem_io$axi4_slave_wlast = fabric_2x3$v_to_slaves_1_wlast ;
-  assign near_mem_io$axi4_slave_wstrb = fabric_2x3$v_to_slaves_1_wstrb ;
-  assign near_mem_io$axi4_slave_wvalid = fabric_2x3$v_to_slaves_1_wvalid ;
+  assign near_mem_io$axi4_slave_araddr =
+	     ssNoSynth_1_ar_buffer_ff$EMPTY_N ?
+	       ssNoSynth_1_ar_buffer_ff$D_OUT[92:29] :
+	       ssNoSynth_1_ar_buffer_enqw$wget[92:29] ;
+  assign near_mem_io$axi4_slave_arburst =
+	     ssNoSynth_1_ar_buffer_ff$EMPTY_N ?
+	       ssNoSynth_1_ar_buffer_ff$D_OUT[17:16] :
+	       ssNoSynth_1_ar_buffer_enqw$wget[17:16] ;
+  assign near_mem_io$axi4_slave_arcache =
+	     ssNoSynth_1_ar_buffer_ff$EMPTY_N ?
+	       ssNoSynth_1_ar_buffer_ff$D_OUT[14:11] :
+	       ssNoSynth_1_ar_buffer_enqw$wget[14:11] ;
+  assign near_mem_io$axi4_slave_arid =
+	     ssNoSynth_1_ar_buffer_ff$EMPTY_N ?
+	       ssNoSynth_1_ar_buffer_ff$D_OUT[97:93] :
+	       ssNoSynth_1_ar_buffer_enqw$wget[97:93] ;
+  assign near_mem_io$axi4_slave_arlen =
+	     ssNoSynth_1_ar_buffer_ff$EMPTY_N ?
+	       ssNoSynth_1_ar_buffer_ff$D_OUT[28:21] :
+	       ssNoSynth_1_ar_buffer_enqw$wget[28:21] ;
+  assign near_mem_io$axi4_slave_arlock =
+	     ssNoSynth_1_ar_buffer_ff$EMPTY_N ?
+	       ssNoSynth_1_ar_buffer_ff$D_OUT[15] :
+	       ssNoSynth_1_ar_buffer_enqw$wget[15] ;
+  assign near_mem_io$axi4_slave_arprot =
+	     ssNoSynth_1_ar_buffer_ff$EMPTY_N ?
+	       ssNoSynth_1_ar_buffer_ff$D_OUT[10:8] :
+	       ssNoSynth_1_ar_buffer_enqw$wget[10:8] ;
+  assign near_mem_io$axi4_slave_arqos =
+	     ssNoSynth_1_ar_buffer_ff$EMPTY_N ?
+	       ssNoSynth_1_ar_buffer_ff$D_OUT[7:4] :
+	       ssNoSynth_1_ar_buffer_enqw$wget[7:4] ;
+  assign near_mem_io$axi4_slave_arregion =
+	     ssNoSynth_1_ar_buffer_ff$EMPTY_N ?
+	       ssNoSynth_1_ar_buffer_ff$D_OUT[3:0] :
+	       ssNoSynth_1_ar_buffer_enqw$wget[3:0] ;
+  assign near_mem_io$axi4_slave_arsize =
+	     ssNoSynth_1_ar_buffer_ff$EMPTY_N ?
+	       ssNoSynth_1_ar_buffer_ff$D_OUT[20:18] :
+	       ssNoSynth_1_ar_buffer_enqw$wget[20:18] ;
+  assign near_mem_io$axi4_slave_awaddr =
+	     ssNoSynth_1_aw_buffer_ff$EMPTY_N ?
+	       ssNoSynth_1_aw_buffer_ff$D_OUT[92:29] :
+	       ssNoSynth_1_aw_buffer_enqw$wget[92:29] ;
+  assign near_mem_io$axi4_slave_awburst =
+	     ssNoSynth_1_aw_buffer_ff$EMPTY_N ?
+	       ssNoSynth_1_aw_buffer_ff$D_OUT[17:16] :
+	       ssNoSynth_1_aw_buffer_enqw$wget[17:16] ;
+  assign near_mem_io$axi4_slave_awcache =
+	     ssNoSynth_1_aw_buffer_ff$EMPTY_N ?
+	       ssNoSynth_1_aw_buffer_ff$D_OUT[14:11] :
+	       ssNoSynth_1_aw_buffer_enqw$wget[14:11] ;
+  assign near_mem_io$axi4_slave_awid =
+	     ssNoSynth_1_aw_buffer_ff$EMPTY_N ?
+	       ssNoSynth_1_aw_buffer_ff$D_OUT[97:93] :
+	       ssNoSynth_1_aw_buffer_enqw$wget[97:93] ;
+  assign near_mem_io$axi4_slave_awlen =
+	     ssNoSynth_1_aw_buffer_ff$EMPTY_N ?
+	       ssNoSynth_1_aw_buffer_ff$D_OUT[28:21] :
+	       ssNoSynth_1_aw_buffer_enqw$wget[28:21] ;
+  assign near_mem_io$axi4_slave_awlock =
+	     ssNoSynth_1_aw_buffer_ff$EMPTY_N ?
+	       ssNoSynth_1_aw_buffer_ff$D_OUT[15] :
+	       ssNoSynth_1_aw_buffer_enqw$wget[15] ;
+  assign near_mem_io$axi4_slave_awprot =
+	     ssNoSynth_1_aw_buffer_ff$EMPTY_N ?
+	       ssNoSynth_1_aw_buffer_ff$D_OUT[10:8] :
+	       ssNoSynth_1_aw_buffer_enqw$wget[10:8] ;
+  assign near_mem_io$axi4_slave_awqos =
+	     ssNoSynth_1_aw_buffer_ff$EMPTY_N ?
+	       ssNoSynth_1_aw_buffer_ff$D_OUT[7:4] :
+	       ssNoSynth_1_aw_buffer_enqw$wget[7:4] ;
+  assign near_mem_io$axi4_slave_awregion =
+	     ssNoSynth_1_aw_buffer_ff$EMPTY_N ?
+	       ssNoSynth_1_aw_buffer_ff$D_OUT[3:0] :
+	       ssNoSynth_1_aw_buffer_enqw$wget[3:0] ;
+  assign near_mem_io$axi4_slave_awsize =
+	     ssNoSynth_1_aw_buffer_ff$EMPTY_N ?
+	       ssNoSynth_1_aw_buffer_ff$D_OUT[20:18] :
+	       ssNoSynth_1_aw_buffer_enqw$wget[20:18] ;
+  assign near_mem_io$axi4_slave_bready = ssNoSynth_1_b_dwReady$whas ;
+  assign near_mem_io$axi4_slave_rready = ssNoSynth_1_r_dwReady$whas ;
+  assign near_mem_io$axi4_slave_wdata =
+	     ssNoSynth_1_w_buffer_ff$EMPTY_N ?
+	       ssNoSynth_1_w_buffer_ff$D_OUT[73:10] :
+	       ssNoSynth_1_w_buffer_enqw$wget[73:10] ;
+  assign near_mem_io$axi4_slave_wlast =
+	     ssNoSynth_1_w_buffer_ff$EMPTY_N ?
+	       ssNoSynth_1_w_buffer_ff$D_OUT[1] :
+	       ssNoSynth_1_w_buffer_enqw$wget[1] ;
+  assign near_mem_io$axi4_slave_wstrb =
+	     ssNoSynth_1_w_buffer_ff$EMPTY_N ?
+	       ssNoSynth_1_w_buffer_ff$D_OUT[9:2] :
+	       ssNoSynth_1_w_buffer_enqw$wget[9:2] ;
+  assign near_mem_io$axi4_slave_wuser =
+	     ssNoSynth_1_w_buffer_ff$EMPTY_N ?
+	       ssNoSynth_1_w_buffer_ff$D_OUT[0] :
+	       ssNoSynth_1_w_buffer_enqw$wget[0] ;
   assign near_mem_io$set_addr_map_addr_base =
-	     soc_map$m_near_mem_io_addr_base ;
-  assign near_mem_io$set_addr_map_addr_lim = soc_map$m_near_mem_io_addr_lim ;
+	     soc_map$m_near_mem_io_addr_range[127:64] ;
+  assign near_mem_io$set_addr_map_addr_lim =
+	     soc_map$m_near_mem_io_addr_range[127:64] +
+	     soc_map$m_near_mem_io_addr_range[63:0] ;
   assign near_mem_io$EN_server_reset_request_put =
 	     CAN_FIRE_RL_rl_cpu_hart0_reset_from_soc_start ;
   assign near_mem_io$EN_server_reset_response_get =
 	     CAN_FIRE_RL_rl_cpu_hart0_reset_complete ;
   assign near_mem_io$EN_set_addr_map =
 	     CAN_FIRE_RL_rl_cpu_hart0_reset_complete ;
+  assign near_mem_io$axi4_slave_awvalid =
+	     CAN_FIRE_RL_ssNoSynth_1_aw_forwardFlit ;
+  assign near_mem_io$axi4_slave_wvalid =
+	     CAN_FIRE_RL_ssNoSynth_1_w_forwardFlit ;
+  assign near_mem_io$axi4_slave_arvalid =
+	     CAN_FIRE_RL_ssNoSynth_1_ar_forwardFlit ;
   assign near_mem_io$EN_get_timer_interrupt_req_get =
 	     near_mem_io$RDY_get_timer_interrupt_req_get ;
   assign near_mem_io$EN_get_sw_interrupt_req_get =
 	     near_mem_io$RDY_get_sw_interrupt_req_get ;
 
   // submodule plic
-  assign plic$axi4_slave_araddr = fabric_2x3$v_to_slaves_2_araddr ;
-  assign plic$axi4_slave_arburst = fabric_2x3$v_to_slaves_2_arburst ;
-  assign plic$axi4_slave_arcache = fabric_2x3$v_to_slaves_2_arcache ;
-  assign plic$axi4_slave_arid = fabric_2x3$v_to_slaves_2_arid ;
-  assign plic$axi4_slave_arlen = fabric_2x3$v_to_slaves_2_arlen ;
-  assign plic$axi4_slave_arlock = fabric_2x3$v_to_slaves_2_arlock ;
-  assign plic$axi4_slave_arprot = fabric_2x3$v_to_slaves_2_arprot ;
-  assign plic$axi4_slave_arqos = fabric_2x3$v_to_slaves_2_arqos ;
-  assign plic$axi4_slave_arregion = fabric_2x3$v_to_slaves_2_arregion ;
-  assign plic$axi4_slave_arsize = fabric_2x3$v_to_slaves_2_arsize ;
-  assign plic$axi4_slave_arvalid = fabric_2x3$v_to_slaves_2_arvalid ;
-  assign plic$axi4_slave_awaddr = fabric_2x3$v_to_slaves_2_awaddr ;
-  assign plic$axi4_slave_awburst = fabric_2x3$v_to_slaves_2_awburst ;
-  assign plic$axi4_slave_awcache = fabric_2x3$v_to_slaves_2_awcache ;
-  assign plic$axi4_slave_awid = fabric_2x3$v_to_slaves_2_awid ;
-  assign plic$axi4_slave_awlen = fabric_2x3$v_to_slaves_2_awlen ;
-  assign plic$axi4_slave_awlock = fabric_2x3$v_to_slaves_2_awlock ;
-  assign plic$axi4_slave_awprot = fabric_2x3$v_to_slaves_2_awprot ;
-  assign plic$axi4_slave_awqos = fabric_2x3$v_to_slaves_2_awqos ;
-  assign plic$axi4_slave_awregion = fabric_2x3$v_to_slaves_2_awregion ;
-  assign plic$axi4_slave_awsize = fabric_2x3$v_to_slaves_2_awsize ;
-  assign plic$axi4_slave_awvalid = fabric_2x3$v_to_slaves_2_awvalid ;
-  assign plic$axi4_slave_bready = fabric_2x3$v_to_slaves_2_bready ;
-  assign plic$axi4_slave_rready = fabric_2x3$v_to_slaves_2_rready ;
-  assign plic$axi4_slave_wdata = fabric_2x3$v_to_slaves_2_wdata ;
-  assign plic$axi4_slave_wlast = fabric_2x3$v_to_slaves_2_wlast ;
-  assign plic$axi4_slave_wstrb = fabric_2x3$v_to_slaves_2_wstrb ;
-  assign plic$axi4_slave_wvalid = fabric_2x3$v_to_slaves_2_wvalid ;
-  assign plic$set_addr_map_addr_base = soc_map$m_plic_addr_base ;
-  assign plic$set_addr_map_addr_lim = soc_map$m_plic_addr_lim ;
+  assign plic$axi4_slave_araddr =
+	     ssNoSynth_2_ar_buffer_ff$EMPTY_N ?
+	       ssNoSynth_2_ar_buffer_ff$D_OUT[92:29] :
+	       ssNoSynth_2_ar_buffer_enqw$wget[92:29] ;
+  assign plic$axi4_slave_arburst =
+	     ssNoSynth_2_ar_buffer_ff$EMPTY_N ?
+	       ssNoSynth_2_ar_buffer_ff$D_OUT[17:16] :
+	       ssNoSynth_2_ar_buffer_enqw$wget[17:16] ;
+  assign plic$axi4_slave_arcache =
+	     ssNoSynth_2_ar_buffer_ff$EMPTY_N ?
+	       ssNoSynth_2_ar_buffer_ff$D_OUT[14:11] :
+	       ssNoSynth_2_ar_buffer_enqw$wget[14:11] ;
+  assign plic$axi4_slave_arid =
+	     ssNoSynth_2_ar_buffer_ff$EMPTY_N ?
+	       ssNoSynth_2_ar_buffer_ff$D_OUT[97:93] :
+	       ssNoSynth_2_ar_buffer_enqw$wget[97:93] ;
+  assign plic$axi4_slave_arlen =
+	     ssNoSynth_2_ar_buffer_ff$EMPTY_N ?
+	       ssNoSynth_2_ar_buffer_ff$D_OUT[28:21] :
+	       ssNoSynth_2_ar_buffer_enqw$wget[28:21] ;
+  assign plic$axi4_slave_arlock =
+	     ssNoSynth_2_ar_buffer_ff$EMPTY_N ?
+	       ssNoSynth_2_ar_buffer_ff$D_OUT[15] :
+	       ssNoSynth_2_ar_buffer_enqw$wget[15] ;
+  assign plic$axi4_slave_arprot =
+	     ssNoSynth_2_ar_buffer_ff$EMPTY_N ?
+	       ssNoSynth_2_ar_buffer_ff$D_OUT[10:8] :
+	       ssNoSynth_2_ar_buffer_enqw$wget[10:8] ;
+  assign plic$axi4_slave_arqos =
+	     ssNoSynth_2_ar_buffer_ff$EMPTY_N ?
+	       ssNoSynth_2_ar_buffer_ff$D_OUT[7:4] :
+	       ssNoSynth_2_ar_buffer_enqw$wget[7:4] ;
+  assign plic$axi4_slave_arregion =
+	     ssNoSynth_2_ar_buffer_ff$EMPTY_N ?
+	       ssNoSynth_2_ar_buffer_ff$D_OUT[3:0] :
+	       ssNoSynth_2_ar_buffer_enqw$wget[3:0] ;
+  assign plic$axi4_slave_arsize =
+	     ssNoSynth_2_ar_buffer_ff$EMPTY_N ?
+	       ssNoSynth_2_ar_buffer_ff$D_OUT[20:18] :
+	       ssNoSynth_2_ar_buffer_enqw$wget[20:18] ;
+  assign plic$axi4_slave_awaddr =
+	     ssNoSynth_2_aw_buffer_ff$EMPTY_N ?
+	       ssNoSynth_2_aw_buffer_ff$D_OUT[92:29] :
+	       ssNoSynth_2_aw_buffer_enqw$wget[92:29] ;
+  assign plic$axi4_slave_awburst =
+	     ssNoSynth_2_aw_buffer_ff$EMPTY_N ?
+	       ssNoSynth_2_aw_buffer_ff$D_OUT[17:16] :
+	       ssNoSynth_2_aw_buffer_enqw$wget[17:16] ;
+  assign plic$axi4_slave_awcache =
+	     ssNoSynth_2_aw_buffer_ff$EMPTY_N ?
+	       ssNoSynth_2_aw_buffer_ff$D_OUT[14:11] :
+	       ssNoSynth_2_aw_buffer_enqw$wget[14:11] ;
+  assign plic$axi4_slave_awid =
+	     ssNoSynth_2_aw_buffer_ff$EMPTY_N ?
+	       ssNoSynth_2_aw_buffer_ff$D_OUT[97:93] :
+	       ssNoSynth_2_aw_buffer_enqw$wget[97:93] ;
+  assign plic$axi4_slave_awlen =
+	     ssNoSynth_2_aw_buffer_ff$EMPTY_N ?
+	       ssNoSynth_2_aw_buffer_ff$D_OUT[28:21] :
+	       ssNoSynth_2_aw_buffer_enqw$wget[28:21] ;
+  assign plic$axi4_slave_awlock =
+	     ssNoSynth_2_aw_buffer_ff$EMPTY_N ?
+	       ssNoSynth_2_aw_buffer_ff$D_OUT[15] :
+	       ssNoSynth_2_aw_buffer_enqw$wget[15] ;
+  assign plic$axi4_slave_awprot =
+	     ssNoSynth_2_aw_buffer_ff$EMPTY_N ?
+	       ssNoSynth_2_aw_buffer_ff$D_OUT[10:8] :
+	       ssNoSynth_2_aw_buffer_enqw$wget[10:8] ;
+  assign plic$axi4_slave_awqos =
+	     ssNoSynth_2_aw_buffer_ff$EMPTY_N ?
+	       ssNoSynth_2_aw_buffer_ff$D_OUT[7:4] :
+	       ssNoSynth_2_aw_buffer_enqw$wget[7:4] ;
+  assign plic$axi4_slave_awregion =
+	     ssNoSynth_2_aw_buffer_ff$EMPTY_N ?
+	       ssNoSynth_2_aw_buffer_ff$D_OUT[3:0] :
+	       ssNoSynth_2_aw_buffer_enqw$wget[3:0] ;
+  assign plic$axi4_slave_awsize =
+	     ssNoSynth_2_aw_buffer_ff$EMPTY_N ?
+	       ssNoSynth_2_aw_buffer_ff$D_OUT[20:18] :
+	       ssNoSynth_2_aw_buffer_enqw$wget[20:18] ;
+  assign plic$axi4_slave_bready = ssNoSynth_2_b_dwReady$whas ;
+  assign plic$axi4_slave_rready = ssNoSynth_2_r_dwReady$whas ;
+  assign plic$axi4_slave_wdata =
+	     ssNoSynth_2_w_buffer_ff$EMPTY_N ?
+	       ssNoSynth_2_w_buffer_ff$D_OUT[73:10] :
+	       ssNoSynth_2_w_buffer_enqw$wget[73:10] ;
+  assign plic$axi4_slave_wlast =
+	     ssNoSynth_2_w_buffer_ff$EMPTY_N ?
+	       ssNoSynth_2_w_buffer_ff$D_OUT[1] :
+	       ssNoSynth_2_w_buffer_enqw$wget[1] ;
+  assign plic$axi4_slave_wstrb =
+	     ssNoSynth_2_w_buffer_ff$EMPTY_N ?
+	       ssNoSynth_2_w_buffer_ff$D_OUT[9:2] :
+	       ssNoSynth_2_w_buffer_enqw$wget[9:2] ;
+  assign plic$axi4_slave_wuser =
+	     ssNoSynth_2_w_buffer_ff$EMPTY_N ?
+	       ssNoSynth_2_w_buffer_ff$D_OUT[0] :
+	       ssNoSynth_2_w_buffer_enqw$wget[0] ;
+  assign plic$set_addr_map_addr_base = soc_map$m_plic_addr_range[127:64] ;
+  assign plic$set_addr_map_addr_lim =
+	     soc_map$m_plic_addr_range[127:64] +
+	     soc_map$m_plic_addr_range[63:0] ;
   assign plic$set_verbosity_verbosity = 4'h0 ;
   assign plic$v_sources_0_m_interrupt_req_set_not_clear =
 	     core_external_interrupt_sources_0_m_interrupt_req_set_not_clear ;
@@ -2430,18 +7430,1051 @@ module mkCore(CLK,
   assign plic$EN_server_reset_response_get =
 	     CAN_FIRE_RL_rl_cpu_hart0_reset_complete ;
   assign plic$EN_set_addr_map = CAN_FIRE_RL_rl_cpu_hart0_reset_complete ;
+  assign plic$axi4_slave_awvalid = CAN_FIRE_RL_ssNoSynth_2_aw_forwardFlit ;
+  assign plic$axi4_slave_wvalid = CAN_FIRE_RL_ssNoSynth_2_w_forwardFlit ;
+  assign plic$axi4_slave_arvalid = CAN_FIRE_RL_ssNoSynth_2_ar_forwardFlit ;
 
   // submodule soc_map
   assign soc_map$m_is_IO_addr_addr = 64'h0 ;
   assign soc_map$m_is_mem_addr_addr = 64'h0 ;
   assign soc_map$m_is_near_mem_IO_addr_addr = 64'h0 ;
 
+  // submodule ssNoSynth_0_ar_buffer_ff
+  assign ssNoSynth_0_ar_buffer_ff$D_IN = ssNoSynth_0_ar_buffer_enqw$wget ;
+  assign ssNoSynth_0_ar_buffer_ff$ENQ =
+	     CAN_FIRE_RL_ssNoSynth_0_ar_buffer_enqueue ;
+  assign ssNoSynth_0_ar_buffer_ff$DEQ =
+	     CAN_FIRE_RL_ssNoSynth_0_ar_buffer_dequeue ;
+  assign ssNoSynth_0_ar_buffer_ff$CLR = 1'b0 ;
+
+  // submodule ssNoSynth_0_ar_buffer_firstValid
+  assign ssNoSynth_0_ar_buffer_firstValid$D_IN = 1'd1 ;
+  assign ssNoSynth_0_ar_buffer_firstValid$EN =
+	     CAN_FIRE_RL_ssNoSynth_0_ar_dropFlit ;
+
+  // submodule ssNoSynth_0_aw_buffer_ff
+  assign ssNoSynth_0_aw_buffer_ff$D_IN = split_0_doPut$wget[171:74] ;
+  assign ssNoSynth_0_aw_buffer_ff$ENQ =
+	     CAN_FIRE_RL_ssNoSynth_0_aw_buffer_enqueue ;
+  assign ssNoSynth_0_aw_buffer_ff$DEQ =
+	     CAN_FIRE_RL_ssNoSynth_0_aw_buffer_dequeue ;
+  assign ssNoSynth_0_aw_buffer_ff$CLR = 1'b0 ;
+
+  // submodule ssNoSynth_0_aw_buffer_firstValid
+  assign ssNoSynth_0_aw_buffer_firstValid$D_IN = 1'd1 ;
+  assign ssNoSynth_0_aw_buffer_firstValid$EN =
+	     CAN_FIRE_RL_ssNoSynth_0_aw_dropFlit ;
+
+  // submodule ssNoSynth_0_w_buffer_ff
+  assign ssNoSynth_0_w_buffer_ff$D_IN = split_0_doPut$wget[73:0] ;
+  assign ssNoSynth_0_w_buffer_ff$ENQ =
+	     CAN_FIRE_RL_ssNoSynth_0_w_buffer_enqueue ;
+  assign ssNoSynth_0_w_buffer_ff$DEQ =
+	     CAN_FIRE_RL_ssNoSynth_0_w_buffer_dequeue ;
+  assign ssNoSynth_0_w_buffer_ff$CLR = 1'b0 ;
+
+  // submodule ssNoSynth_0_w_buffer_firstValid
+  assign ssNoSynth_0_w_buffer_firstValid$D_IN = 1'd1 ;
+  assign ssNoSynth_0_w_buffer_firstValid$EN =
+	     CAN_FIRE_RL_ssNoSynth_0_w_dropFlit ;
+
+  // submodule ssNoSynth_1_ar_buffer_ff
+  assign ssNoSynth_1_ar_buffer_ff$D_IN = ssNoSynth_1_ar_buffer_enqw$wget ;
+  assign ssNoSynth_1_ar_buffer_ff$ENQ =
+	     CAN_FIRE_RL_ssNoSynth_1_ar_buffer_enqueue ;
+  assign ssNoSynth_1_ar_buffer_ff$DEQ =
+	     CAN_FIRE_RL_ssNoSynth_1_ar_buffer_dequeue ;
+  assign ssNoSynth_1_ar_buffer_ff$CLR = 1'b0 ;
+
+  // submodule ssNoSynth_1_ar_buffer_firstValid
+  assign ssNoSynth_1_ar_buffer_firstValid$D_IN = 1'd1 ;
+  assign ssNoSynth_1_ar_buffer_firstValid$EN =
+	     CAN_FIRE_RL_ssNoSynth_1_ar_dropFlit ;
+
+  // submodule ssNoSynth_1_aw_buffer_ff
+  assign ssNoSynth_1_aw_buffer_ff$D_IN = split_1_doPut$wget[171:74] ;
+  assign ssNoSynth_1_aw_buffer_ff$ENQ =
+	     CAN_FIRE_RL_ssNoSynth_1_aw_buffer_enqueue ;
+  assign ssNoSynth_1_aw_buffer_ff$DEQ =
+	     CAN_FIRE_RL_ssNoSynth_1_aw_buffer_dequeue ;
+  assign ssNoSynth_1_aw_buffer_ff$CLR = 1'b0 ;
+
+  // submodule ssNoSynth_1_aw_buffer_firstValid
+  assign ssNoSynth_1_aw_buffer_firstValid$D_IN = 1'd1 ;
+  assign ssNoSynth_1_aw_buffer_firstValid$EN =
+	     CAN_FIRE_RL_ssNoSynth_1_aw_dropFlit ;
+
+  // submodule ssNoSynth_1_w_buffer_ff
+  assign ssNoSynth_1_w_buffer_ff$D_IN = split_1_doPut$wget[73:0] ;
+  assign ssNoSynth_1_w_buffer_ff$ENQ =
+	     CAN_FIRE_RL_ssNoSynth_1_w_buffer_enqueue ;
+  assign ssNoSynth_1_w_buffer_ff$DEQ =
+	     CAN_FIRE_RL_ssNoSynth_1_w_buffer_dequeue ;
+  assign ssNoSynth_1_w_buffer_ff$CLR = 1'b0 ;
+
+  // submodule ssNoSynth_1_w_buffer_firstValid
+  assign ssNoSynth_1_w_buffer_firstValid$D_IN = 1'd1 ;
+  assign ssNoSynth_1_w_buffer_firstValid$EN =
+	     CAN_FIRE_RL_ssNoSynth_1_w_dropFlit ;
+
+  // submodule ssNoSynth_2_ar_buffer_ff
+  assign ssNoSynth_2_ar_buffer_ff$D_IN = ssNoSynth_2_ar_buffer_enqw$wget ;
+  assign ssNoSynth_2_ar_buffer_ff$ENQ =
+	     CAN_FIRE_RL_ssNoSynth_2_ar_buffer_enqueue ;
+  assign ssNoSynth_2_ar_buffer_ff$DEQ =
+	     CAN_FIRE_RL_ssNoSynth_2_ar_buffer_dequeue ;
+  assign ssNoSynth_2_ar_buffer_ff$CLR = 1'b0 ;
+
+  // submodule ssNoSynth_2_ar_buffer_firstValid
+  assign ssNoSynth_2_ar_buffer_firstValid$D_IN = 1'd1 ;
+  assign ssNoSynth_2_ar_buffer_firstValid$EN =
+	     CAN_FIRE_RL_ssNoSynth_2_ar_dropFlit ;
+
+  // submodule ssNoSynth_2_aw_buffer_ff
+  assign ssNoSynth_2_aw_buffer_ff$D_IN = split_2_doPut$wget[171:74] ;
+  assign ssNoSynth_2_aw_buffer_ff$ENQ =
+	     CAN_FIRE_RL_ssNoSynth_2_aw_buffer_enqueue ;
+  assign ssNoSynth_2_aw_buffer_ff$DEQ =
+	     CAN_FIRE_RL_ssNoSynth_2_aw_buffer_dequeue ;
+  assign ssNoSynth_2_aw_buffer_ff$CLR = 1'b0 ;
+
+  // submodule ssNoSynth_2_aw_buffer_firstValid
+  assign ssNoSynth_2_aw_buffer_firstValid$D_IN = 1'd1 ;
+  assign ssNoSynth_2_aw_buffer_firstValid$EN =
+	     CAN_FIRE_RL_ssNoSynth_2_aw_dropFlit ;
+
+  // submodule ssNoSynth_2_w_buffer_ff
+  assign ssNoSynth_2_w_buffer_ff$D_IN = split_2_doPut$wget[73:0] ;
+  assign ssNoSynth_2_w_buffer_ff$ENQ =
+	     CAN_FIRE_RL_ssNoSynth_2_w_buffer_enqueue ;
+  assign ssNoSynth_2_w_buffer_ff$DEQ =
+	     CAN_FIRE_RL_ssNoSynth_2_w_buffer_dequeue ;
+  assign ssNoSynth_2_w_buffer_ff$CLR = 1'b0 ;
+
+  // submodule ssNoSynth_2_w_buffer_firstValid
+  assign ssNoSynth_2_w_buffer_firstValid$D_IN = 1'd1 ;
+  assign ssNoSynth_2_w_buffer_firstValid$EN =
+	     CAN_FIRE_RL_ssNoSynth_2_w_dropFlit ;
+
+  // submodule tagController_tmp_awreqff
+  assign tagController_tmp_awreqff$D_IN =
+	     tagController_tmp_shimSlave_awff_rv$port1__read[97:0] ;
+  assign tagController_tmp_awreqff$ENQ =
+	     CAN_FIRE_RL_tagController_tmp_getCacheAW ;
+  assign tagController_tmp_awreqff$DEQ =
+	     WILL_FIRE_RL_tagController_tmp_passCacheWrite &&
+	     tagController_tmp_shimSlave_wff_rv$port1__read[1] ;
+  assign tagController_tmp_awreqff$CLR = 1'b0 ;
+
+  // submodule tagController_tmp_newRst
+  assign tagController_tmp_newRst$ASSERT_IN =
+	     CAN_FIRE_RL_tagController_tmp_propagateReset ;
+
+  // submodule tagController_tmp_tagCon
+  assign tagController_tmp_tagCon$cache_request_put_val =
+	     WILL_FIRE_RL_tagController_tmp_passCacheWrite ?
+	       MUX_tagController_tmp_tagCon$cache_request_put_1__VAL_1 :
+	       MUX_tagController_tmp_tagCon$cache_request_put_1__VAL_2 ;
+  assign tagController_tmp_tagCon$memory_response_put_val =
+	     WILL_FIRE_RL_tagController_tmp_passMemoryResponseWrite ?
+	       MUX_tagController_tmp_tagCon$memory_response_put_1__VAL_1 :
+	       MUX_tagController_tmp_tagCon$memory_response_put_1__VAL_2 ;
+  assign tagController_tmp_tagCon$EN_cache_request_put =
+	     WILL_FIRE_RL_tagController_tmp_passCacheWrite ||
+	     WILL_FIRE_RL_tagController_tmp_passCacheRead ;
+  assign tagController_tmp_tagCon$EN_cache_response_get =
+	     CAN_FIRE_RL_tagController_tmp_passCacheResponse ;
+  assign tagController_tmp_tagCon$EN_memory_request_get =
+	     CAN_FIRE_RL_tagController_tmp_passMemoryRequest ;
+  assign tagController_tmp_tagCon$EN_memory_response_put =
+	     WILL_FIRE_RL_tagController_tmp_passMemoryResponseWrite ||
+	     WILL_FIRE_RL_tagController_tmp_passMemoryResponseRead ;
+
   // remaining internal signals
-  assign near_mem_io_RDY_server_reset_request_put_AND_p_ETC___d8 =
-	     near_mem_io$RDY_server_reset_request_put &&
-	     plic$RDY_server_reset_request_put &&
-	     cpu$RDY_hart0_server_reset_request_put &&
-	     f_reset_reqs$EMPTY_N ;
+  assign IF_IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dm_ETC___d1039 =
+	     (IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d1027 ?
+		2'd1 :
+		2'd0) +
+	     ((cpu$dmem_master_awaddr[63:40] == 24'd0 &&
+	       !IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d1016 &&
+	       IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d1018) ?
+		2'd1 :
+		2'd0) +
+	     (IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d1037 ?
+		2'd1 :
+		2'd0) ;
+  assign IF_NOT_ifcs_0_1_innerRoute_first__764_BIT_1_77_ETC___d1786 =
+	     (!ifcs_0_1_innerRoute$D_OUT[1] ||
+	      !ssNoSynth_1_ar_buffer_ff$FULL_N) ?
+	       ifcs_0_1_innerRoute$D_OUT[2] &&
+	       ssNoSynth_2_ar_buffer_ff$FULL_N :
+	       ifcs_0_1_innerRoute$D_OUT[1] ;
+  assign IF_NOT_ifcs_0_innerRoute_first__172_BIT_1_181__ETC___d1194 =
+	     (!ifcs_0_innerRoute$D_OUT[1] ||
+	      !IF_split_1_flitLeft_47_EQ_0_48_THEN_ssNoSynth__ETC___d1165) ?
+	       ifcs_0_innerRoute$D_OUT[2] &&
+	       IF_split_2_flitLeft_76_EQ_0_77_THEN_ssNoSynth__ETC___d1166 :
+	       ifcs_0_innerRoute$D_OUT[1] ;
+  assign IF_NOT_ifcs_1_1_innerRoute_first__793_BIT_1_79_ETC___d1802 =
+	     (!ifcs_1_1_innerRoute$D_OUT[1] ||
+	      !ssNoSynth_1_ar_buffer_ff$FULL_N) ?
+	       ifcs_1_1_innerRoute$D_OUT[2] &&
+	       ssNoSynth_2_ar_buffer_ff$FULL_N :
+	       ifcs_1_1_innerRoute$D_OUT[1] ;
+  assign IF_NOT_ifcs_1_innerRoute_first__201_BIT_1_205__ETC___d1210 =
+	     (!ifcs_1_innerRoute$D_OUT[1] ||
+	      !IF_split_1_flitLeft_47_EQ_0_48_THEN_ssNoSynth__ETC___d1165) ?
+	       ifcs_1_innerRoute$D_OUT[2] &&
+	       IF_split_2_flitLeft_76_EQ_0_77_THEN_ssNoSynth__ETC___d1166 :
+	       ifcs_1_innerRoute$D_OUT[1] ;
+  assign IF_SEXT_arbiter_1_1_lastSelect_994_995_BIT_0_9_ETC___d2038 =
+	     (SEXT_arbiter_1_1_lastSelect_994_995_BIT_0_996__ETC___d2007 ||
+	      SEXT_arbiter_1_1_lastSelect_1_998_999_BIT_0_00_ETC___d2013 ||
+	      SEXT_arbiter_1_1_firstHot_003_004_BIT_0_005_AN_ETC___d2019) ?
+	       x__h91901 | y__h91902 :
+	       arbiter_1_1_lastSelect ;
+  assign IF_SEXT_arbiter_1_1_lastSelect_994_995_BIT_0_9_ETC___d2044 =
+	     (SEXT_arbiter_1_1_lastSelect_994_995_BIT_0_996__ETC___d2007 ||
+	      SEXT_arbiter_1_1_lastSelect_1_998_999_BIT_0_00_ETC___d2013 ||
+	      SEXT_arbiter_1_1_firstHot_003_004_BIT_0_005_AN_ETC___d2019) ?
+	       x__h92089 | y__h92090 :
+	       arbiter_1_1_lastSelect_1 ;
+  assign IF_SEXT_arbiter_1_1_lastSelect_994_995_BIT_0_9_ETC___d2050 =
+	     (SEXT_arbiter_1_1_lastSelect_994_995_BIT_0_996__ETC___d2007 ||
+	      SEXT_arbiter_1_1_lastSelect_1_998_999_BIT_0_00_ETC___d2013 ||
+	      SEXT_arbiter_1_1_firstHot_003_004_BIT_0_005_AN_ETC___d2019) ?
+	       x__h92270 | y__h92271 :
+	       arbiter_1_1_firstHot ;
+  assign IF_SEXT_arbiter_1_lastSelect_2_814_815_BIT_0_8_ETC___d1838 =
+	     (SEXT_arbiter_1_lastSelect_2_814_815_BIT_0_816__ETC___d1822 ||
+	      SEXT_arbiter_1_firstHot_1_818_819_BIT_0_820_AN_ETC___d1826) ?
+	       x__h79959 | y__h79960 :
+	       arbiter_1_lastSelect_2 ;
+  assign IF_SEXT_arbiter_1_lastSelect_2_814_815_BIT_0_8_ETC___d1842 =
+	     (SEXT_arbiter_1_lastSelect_2_814_815_BIT_0_816__ETC___d1822 ||
+	      SEXT_arbiter_1_firstHot_1_818_819_BIT_0_820_AN_ETC___d1826) ?
+	       x__h80100 | y__h80101 :
+	       arbiter_1_firstHot_1 ;
+  assign IF_SEXT_arbiter_1_lastSelect_412_413_BIT_0_414_ETC___d1456 =
+	     (SEXT_arbiter_1_lastSelect_412_413_BIT_0_414_AN_ETC___d1425 ||
+	      SEXT_arbiter_1_lastSelect_1_416_417_BIT_0_418__ETC___d1431 ||
+	      SEXT_arbiter_1_firstHot_421_422_BIT_0_423_AND__ETC___d1437) ?
+	       x__h60676 | y__h60677 :
+	       arbiter_1_lastSelect ;
+  assign IF_SEXT_arbiter_1_lastSelect_412_413_BIT_0_414_ETC___d1462 =
+	     (SEXT_arbiter_1_lastSelect_412_413_BIT_0_414_AN_ETC___d1425 ||
+	      SEXT_arbiter_1_lastSelect_1_416_417_BIT_0_418__ETC___d1431 ||
+	      SEXT_arbiter_1_firstHot_421_422_BIT_0_423_AND__ETC___d1437) ?
+	       x__h60864 | y__h60865 :
+	       arbiter_1_lastSelect_1 ;
+  assign IF_SEXT_arbiter_1_lastSelect_412_413_BIT_0_414_ETC___d1468 =
+	     (SEXT_arbiter_1_lastSelect_412_413_BIT_0_414_AN_ETC___d1425 ||
+	      SEXT_arbiter_1_lastSelect_1_416_417_BIT_0_418__ETC___d1431 ||
+	      SEXT_arbiter_1_firstHot_421_422_BIT_0_423_AND__ETC___d1437) ?
+	       x__h61045 | y__h61046 :
+	       arbiter_1_firstHot ;
+  assign IF_SEXT_arbiter_lastSelect_222_223_BIT_0_224_A_ETC___d1246 =
+	     (SEXT_arbiter_lastSelect_222_223_BIT_0_224_AND__ETC___d1230 ||
+	      SEXT_arbiter_firstHot_226_227_BIT_0_228_AND_re_ETC___d1234) ?
+	       x__h46193 | y__h46194 :
+	       arbiter_lastSelect ;
+  assign IF_SEXT_arbiter_lastSelect_222_223_BIT_0_224_A_ETC___d1250 =
+	     (SEXT_arbiter_lastSelect_222_223_BIT_0_224_AND__ETC___d1230 ||
+	      SEXT_arbiter_firstHot_226_227_BIT_0_228_AND_re_ETC___d1234) ?
+	       x__h46334 | y__h46335 :
+	       arbiter_firstHot ;
+  assign IF_cpu_dmem_master_ar_araddr__582_BITS_63_TO_4_ETC___d1608 =
+	     (cpu_dmem_master_ar_araddr__582_BITS_63_TO_40_5_ETC___d1596 ?
+		2'd1 :
+		2'd0) +
+	     ((cpu$dmem_master_araddr[63:40] == 24'd0 &&
+	       !cpu_dmem_master_ar_araddr__582_ULT_soc_map_m_n_ETC___d1585 &&
+	       cpu_dmem_master_ar_araddr__582_MINUS_soc_map_m_ETC___d1587) ?
+		2'd1 :
+		2'd0) +
+	     (cpu_dmem_master_ar_araddr__582_BITS_63_TO_40_5_ETC___d1606 ?
+		2'd1 :
+		2'd0) ;
+  assign IF_merged_0_flitLeft_94_EQ_0_95_THEN_NOT_cpu_d_ETC___d1004 =
+	     ((merged_0_flitLeft == 8'd0) ?
+		!cpu$dmem_master_awvalid || !cpu$dmem_master_wvalid :
+		!cpu$dmem_master_wvalid) ||
+	     merged_0_flitLeft != 8'd0 ;
+  assign IF_merged_0_flitLeft_94_EQ_0_95_THEN_NOT_cpu_d_ETC___d1074 =
+	     (IF_merged_0_flitLeft_94_EQ_0_95_THEN_NOT_cpu_d_ETC___d1004 ||
+	      cpu$dmem_master_awvalid) &&
+	     (merged_0_flitLeft != 8'd0 ||
+	      !ifcs_0_noRoute_inner_pendingReq && cpu$dmem_master_awvalid) ;
+  assign IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d1016 =
+	     cpu$dmem_master_awaddr <
+	     soc_map$m_near_mem_io_addr_range[127:64] ;
+  assign IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d1018 =
+	     x__h34701 < soc_map$m_near_mem_io_addr_range[63:0] ;
+  assign IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d1021 =
+	     cpu$dmem_master_awaddr < soc_map$m_plic_addr_range[127:64] ;
+  assign IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d1023 =
+	     x__h34726 < soc_map$m_plic_addr_range[63:0] ;
+  assign IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d1027 =
+	     cpu$dmem_master_awaddr[63:40] == 24'd0 &&
+	     (IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d1016 ||
+	      !IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d1018) &&
+	     (IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d1021 ||
+	      !IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d1023) ;
+  assign IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d1037 =
+	     cpu$dmem_master_awaddr[63:40] == 24'd0 &&
+	     (IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d1016 ||
+	      !IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d1018) &&
+	     !IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d1021 &&
+	     IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d1023 ;
+  assign IF_merged_0_flitLeft_94_EQ_0_95_THEN_cpu_dmem__ETC___d997 =
+	     (merged_0_flitLeft == 8'd0) ?
+	       cpu$dmem_master_awvalid && cpu$dmem_master_wvalid :
+	       cpu$dmem_master_wvalid ;
+  assign IF_split_0_flitLeft_18_EQ_0_19_THEN_ssNoSynth__ETC___d1164 =
+	     (split_0_flitLeft == 8'd0) ?
+	       ssNoSynth_0_aw_buffer_ff$FULL_N &&
+	       ssNoSynth_0_w_buffer_ff$FULL_N :
+	       ssNoSynth_0_w_buffer_ff$FULL_N ;
+  assign IF_split_1_flitLeft_47_EQ_0_48_THEN_ssNoSynth__ETC___d1165 =
+	     (split_1_flitLeft == 8'd0) ?
+	       ssNoSynth_1_aw_buffer_ff$FULL_N &&
+	       ssNoSynth_1_w_buffer_ff$FULL_N :
+	       ssNoSynth_1_w_buffer_ff$FULL_N ;
+  assign IF_split_2_flitLeft_76_EQ_0_77_THEN_ssNoSynth__ETC___d1166 =
+	     (split_2_flitLeft == 8'd0) ?
+	       ssNoSynth_2_aw_buffer_ff$FULL_N &&
+	       ssNoSynth_2_w_buffer_ff$FULL_N :
+	       ssNoSynth_2_w_buffer_ff$FULL_N ;
+  assign SEXT_SEXT_arbiter_1_1_firstHot_003_004_BIT_0_0_ETC__q22 =
+	     {2{SEXT_arbiter_1_1_firstHot_003_004_BIT_0_005_AN_ETC___d2019}} ;
+  assign SEXT_SEXT_arbiter_1_firstHot_1_818_819_BIT_0_8_ETC__q17 =
+	     {2{SEXT_arbiter_1_firstHot_1_818_819_BIT_0_820_AN_ETC___d1826}} ;
+  assign SEXT_SEXT_arbiter_1_firstHot_421_422_BIT_0_423_ETC__q12 =
+	     {2{SEXT_arbiter_1_firstHot_421_422_BIT_0_423_AND__ETC___d1437}} ;
+  assign SEXT_SEXT_arbiter_firstHot_226_227_BIT_0_228_A_ETC__q7 =
+	     {2{SEXT_arbiter_firstHot_226_227_BIT_0_228_AND_re_ETC___d1234}} ;
+  assign SEXT_arbiter_1_1_firstHot_003_004_BIT_0_005_AN_ETC___d2019 =
+	     x__h91429 | y__h91430 ;
+  assign SEXT_arbiter_1_1_firstHot__q19 = {2{arbiter_1_1_firstHot}} ;
+  assign SEXT_arbiter_1_1_lastSelect_1_998_999_BIT_0_00_ETC___d2013 =
+	     x__h91293 | y__h91294 ;
+  assign SEXT_arbiter_1_1_lastSelect_1__q21 = {2{arbiter_1_1_lastSelect_1}} ;
+  assign SEXT_arbiter_1_1_lastSelect_994_995_BIT_0_996__ETC___d2007 =
+	     x__h91142 | y__h91143 ;
+  assign SEXT_arbiter_1_1_lastSelect__q20 = {2{arbiter_1_1_lastSelect}} ;
+  assign SEXT_arbiter_1_firstHot_1_818_819_BIT_0_820_AN_ETC___d1826 =
+	     x__h79594 | y__h79595 ;
+  assign SEXT_arbiter_1_firstHot_1__q15 = {2{arbiter_1_firstHot_1}} ;
+  assign SEXT_arbiter_1_firstHot_421_422_BIT_0_423_AND__ETC___d1437 =
+	     x__h60204 | y__h60205 ;
+  assign SEXT_arbiter_1_firstHot__q9 = {2{arbiter_1_firstHot}} ;
+  assign SEXT_arbiter_1_lastSelect_1_416_417_BIT_0_418__ETC___d1431 =
+	     x__h60068 | y__h60069 ;
+  assign SEXT_arbiter_1_lastSelect_1__q11 = {2{arbiter_1_lastSelect_1}} ;
+  assign SEXT_arbiter_1_lastSelect_2_814_815_BIT_0_816__ETC___d1822 =
+	     x__h79491 | y__h79492 ;
+  assign SEXT_arbiter_1_lastSelect_2__q16 = {2{arbiter_1_lastSelect_2}} ;
+  assign SEXT_arbiter_1_lastSelect_412_413_BIT_0_414_AN_ETC___d1425 =
+	     x__h59917 | y__h59918 ;
+  assign SEXT_arbiter_1_lastSelect__q10 = {2{arbiter_1_lastSelect}} ;
+  assign SEXT_arbiter_firstHot_226_227_BIT_0_228_AND_re_ETC___d1234 =
+	     x__h45828 | y__h45829 ;
+  assign SEXT_arbiter_firstHot__q5 = {2{arbiter_firstHot}} ;
+  assign SEXT_arbiter_lastSelect_222_223_BIT_0_224_AND__ETC___d1230 =
+	     x__h45725 | y__h45726 ;
+  assign SEXT_arbiter_lastSelect__q6 = {2{arbiter_lastSelect}} ;
+  assign SEXT_x0018__q18 = {2{x__h80018}} ;
+  assign SEXT_x0738__q13 = {2{x__h60738}} ;
+  assign SEXT_x0772__q14 = {2{x__h60772}} ;
+  assign SEXT_x1963__q23 = {2{x__h91963}} ;
+  assign SEXT_x1997__q24 = {2{x__h91997}} ;
+  assign SEXT_x6252__q8 = {2{x__h46252}} ;
+  assign _0_CONCAT_tagController_tmp_tagCon_memory_reque_ETC___d302 =
+	     x__h12810 + y__h12811 ;
+  assign a_awid__h35861 = { 1'd0, cpu$dmem_master_awid } ;
+  assign araddr__h15733 =
+	     { 24'd0, tagController_tmp_tagCon$memory_request_get[140:101] } ;
+  assign arcache__h15738 =
+	     tagController_tmp_tagCon$memory_request_get[8] ? 4'd0 : 4'd15 ;
+  assign arlen__h15734 =
+	     { 5'd0, tagController_tmp_tagCon$memory_request_get[5:3] } ;
+  assign aw_awaddr__h11001 = tmp__h10784 + { 60'd0, x__h11076 } ;
+  assign aw_awsize_val__h12740 =
+	     _0_CONCAT_tagController_tmp_tagCon_memory_reque_ETC___d302[0] ?
+	       3'd0 :
+	       (_0_CONCAT_tagController_tmp_tagCon_memory_reque_ETC___d302[1] ?
+		  3'd1 :
+		  (_0_CONCAT_tagController_tmp_tagCon_memory_reque_ETC___d302[2] ?
+		     3'd2 :
+		     (_0_CONCAT_tagController_tmp_tagCon_memory_reque_ETC___d302[3] ?
+			3'd3 :
+			3'd4))) ;
+  assign cpu_dmem_master_ar_araddr__582_BITS_63_TO_40_5_ETC___d1596 =
+	     cpu$dmem_master_araddr[63:40] == 24'd0 &&
+	     (cpu_dmem_master_ar_araddr__582_ULT_soc_map_m_n_ETC___d1585 ||
+	      !cpu_dmem_master_ar_araddr__582_MINUS_soc_map_m_ETC___d1587) &&
+	     (cpu_dmem_master_ar_araddr__582_ULT_soc_map_m_p_ETC___d1590 ||
+	      !cpu_dmem_master_ar_araddr__582_MINUS_soc_map_m_ETC___d1592) ;
+  assign cpu_dmem_master_ar_araddr__582_BITS_63_TO_40_5_ETC___d1606 =
+	     cpu$dmem_master_araddr[63:40] == 24'd0 &&
+	     (cpu_dmem_master_ar_araddr__582_ULT_soc_map_m_n_ETC___d1585 ||
+	      !cpu_dmem_master_ar_araddr__582_MINUS_soc_map_m_ETC___d1587) &&
+	     !cpu_dmem_master_ar_araddr__582_ULT_soc_map_m_p_ETC___d1590 &&
+	     cpu_dmem_master_ar_araddr__582_MINUS_soc_map_m_ETC___d1592 ;
+  assign cpu_dmem_master_ar_araddr__582_MINUS_soc_map_m_ETC___d1587 =
+	     x__h68982 < soc_map$m_near_mem_io_addr_range[63:0] ;
+  assign cpu_dmem_master_ar_araddr__582_MINUS_soc_map_m_ETC___d1592 =
+	     x__h69007 < soc_map$m_plic_addr_range[63:0] ;
+  assign cpu_dmem_master_ar_araddr__582_ULT_soc_map_m_n_ETC___d1585 =
+	     cpu$dmem_master_araddr <
+	     soc_map$m_near_mem_io_addr_range[127:64] ;
+  assign cpu_dmem_master_ar_araddr__582_ULT_soc_map_m_p_ETC___d1590 =
+	     cpu$dmem_master_araddr < soc_map$m_plic_addr_range[127:64] ;
+  assign fatReq_arid__h69550 = { 1'd0, cpu$dmem_master_arid } ;
+  assign reqWires_1_0_whas__398_AND_reqWires_1_0_wget___ETC___d1408 =
+	     CAN_FIRE_RL_craftReq_2 && reqWires_1_0$wget ||
+	     CAN_FIRE_RL_craftReq_3 && reqWires_1_1$wget ||
+	     CAN_FIRE_RL_craftReq_4 && reqWires_1_2$wget ;
+  assign reqWires_1_1_0_whas__980_AND_reqWires_1_1_0_wg_ETC___d1990 =
+	     CAN_FIRE_RL_craftReq_7 && reqWires_1_1_0$wget ||
+	     CAN_FIRE_RL_craftReq_8 && reqWires_1_1_1_1$wget ||
+	     CAN_FIRE_RL_craftReq_9 && reqWires_1_1_2$wget ;
+  assign split_0_doPut_whas__10_AND_split_0_doPut_wget__ETC___d917 =
+	     CAN_FIRE_RL_sink_selected &&
+	     (split_0_doPut$wget[172] ||
+	      ssNoSynth_0_aw_buffer_ff$FULL_N &&
+	      ssNoSynth_0_w_buffer_ff$FULL_N) ;
+  assign split_1_doPut_whas__39_AND_split_1_doPut_wget__ETC___d946 =
+	     CAN_FIRE_RL_sink_selected_1 &&
+	     (split_1_doPut$wget[172] ||
+	      ssNoSynth_1_aw_buffer_ff$FULL_N &&
+	      ssNoSynth_1_w_buffer_ff$FULL_N) ;
+  assign split_2_doPut_whas__68_AND_split_2_doPut_wget__ETC___d975 =
+	     CAN_FIRE_RL_sink_selected_2 &&
+	     (split_2_doPut$wget[172] ||
+	      ssNoSynth_2_aw_buffer_ff$FULL_N &&
+	      ssNoSynth_2_w_buffer_ff$FULL_N) ;
+  assign state_1_1_1_991_AND_activeSource_1_1_0_085_086_ETC___d2088 =
+	     state_1_1_1 && activeSource_1_1_0 &&
+	     ifcs_0_1_routeBack$EMPTY_N &&
+	     ((!ifcs_0_1_routeBack$D_OUT[0] ||
+	       !(!CAN_FIRE_RL_ifcs_0_1_drainNoRouteResponse)) ?
+		ifcs_0_1_routeBack$D_OUT[1] &&
+		!CAN_FIRE_RL_ifcs_1_1_drainNoRouteResponse :
+		ifcs_0_1_routeBack$D_OUT[0]) ;
+  assign state_1_1_1_991_AND_activeSource_1_1_1_1_121_1_ETC___d2124 =
+	     state_1_1_1 && activeSource_1_1_1_1 &&
+	     ifcs_1_1_routeBack$EMPTY_N &&
+	     ((!ifcs_1_1_routeBack$D_OUT[0] ||
+	       !(!CAN_FIRE_RL_ifcs_0_1_drainNoRouteResponse)) ?
+		ifcs_1_1_routeBack$D_OUT[1] &&
+		!CAN_FIRE_RL_ifcs_1_1_drainNoRouteResponse :
+		ifcs_1_1_routeBack$D_OUT[0]) ;
+  assign state_1_1_1_991_AND_activeSource_1_1_2_157_158_ETC___d2160 =
+	     state_1_1_1 && activeSource_1_1_2 &&
+	     ifcs_2_1_routeBack$EMPTY_N &&
+	     ((!ifcs_2_1_routeBack$D_OUT[0] ||
+	       !(!CAN_FIRE_RL_ifcs_0_1_drainNoRouteResponse)) ?
+		ifcs_2_1_routeBack$D_OUT[1] &&
+		!CAN_FIRE_RL_ifcs_1_1_drainNoRouteResponse :
+		ifcs_2_1_routeBack$D_OUT[0]) ;
+  assign state_1_1_811_AND_activeSource_1_0_1_878_879_A_ETC___d1881 =
+	     state_1_1 && activeSource_1_0_1 && ifcs_0_1_innerRoute$EMPTY_N &&
+	     ((!ifcs_0_1_innerRoute$D_OUT[0] ||
+	       !ssNoSynth_0_ar_buffer_ff$FULL_N) ?
+		IF_NOT_ifcs_0_1_innerRoute_first__764_BIT_1_77_ETC___d1786 :
+		ifcs_0_1_innerRoute$D_OUT[0]) ;
+  assign state_1_1_811_AND_activeSource_1_1_1_918_919_A_ETC___d1921 =
+	     state_1_1 && activeSource_1_1_1 && ifcs_1_1_innerRoute$EMPTY_N &&
+	     ((!ifcs_1_1_innerRoute$D_OUT[0] ||
+	       !ssNoSynth_0_ar_buffer_ff$FULL_N) ?
+		IF_NOT_ifcs_1_1_innerRoute_first__793_BIT_1_79_ETC___d1802 :
+		ifcs_1_1_innerRoute$D_OUT[0]) ;
+  assign state_1_409_AND_activeSource_1_0_497_498_AND_i_ETC___d1500 =
+	     state_1 && activeSource_1_0 && ifcs_0_routeBack$EMPTY_N &&
+	     ((!ifcs_0_routeBack$D_OUT[0] ||
+	       !(!CAN_FIRE_RL_ifcs_0_drainNoRouteResponse)) ?
+		ifcs_0_routeBack$D_OUT[1] &&
+		!CAN_FIRE_RL_ifcs_1_drainNoRouteResponse :
+		ifcs_0_routeBack$D_OUT[0]) ;
+  assign state_1_409_AND_activeSource_1_1_530_531_AND_i_ETC___d1533 =
+	     state_1 && activeSource_1_1 && ifcs_1_routeBack$EMPTY_N &&
+	     ((!ifcs_1_routeBack$D_OUT[0] ||
+	       !(!CAN_FIRE_RL_ifcs_0_drainNoRouteResponse)) ?
+		ifcs_1_routeBack$D_OUT[1] &&
+		!CAN_FIRE_RL_ifcs_1_drainNoRouteResponse :
+		ifcs_1_routeBack$D_OUT[0]) ;
+  assign state_1_409_AND_activeSource_1_2_564_565_AND_i_ETC___d1567 =
+	     state_1 && activeSource_1_2 && ifcs_2_routeBack$EMPTY_N &&
+	     ((!ifcs_2_routeBack$D_OUT[0] ||
+	       !(!CAN_FIRE_RL_ifcs_0_drainNoRouteResponse)) ?
+		ifcs_2_routeBack$D_OUT[1] &&
+		!CAN_FIRE_RL_ifcs_1_drainNoRouteResponse :
+		ifcs_2_routeBack$D_OUT[0]) ;
+  assign state_219_AND_activeSource_0_292_293_AND_ifcs__ETC___d1295 =
+	     state && activeSource_0 && ifcs_0_innerRoute$EMPTY_N &&
+	     ((!ifcs_0_innerRoute$D_OUT[0] ||
+	       !IF_split_0_flitLeft_18_EQ_0_19_THEN_ssNoSynth__ETC___d1164) ?
+		IF_NOT_ifcs_0_innerRoute_first__172_BIT_1_181__ETC___d1194 :
+		ifcs_0_innerRoute$D_OUT[0]) ;
+  assign state_219_AND_activeSource_1_336_337_AND_ifcs__ETC___d1339 =
+	     state && activeSource_1 && ifcs_1_innerRoute$EMPTY_N &&
+	     ((!ifcs_1_innerRoute$D_OUT[0] ||
+	       !IF_split_0_flitLeft_18_EQ_0_19_THEN_ssNoSynth__ETC___d1164) ?
+		IF_NOT_ifcs_1_innerRoute_first__201_BIT_1_205__ETC___d1210 :
+		ifcs_1_innerRoute$D_OUT[0]) ;
+  assign tagController_tmp_shimMaster_arff_rvport1__re_ETC__q4 =
+	     tagController_tmp_shimMaster_arff_rv$port1__read[98:0] ;
+  assign tagController_tmp_shimMaster_awff_rvport1__re_ETC__q2 =
+	     tagController_tmp_shimMaster_awff_rv$port1__read[98:0] ;
+  assign tagController_tmp_shimMaster_wff_rvport1__rea_ETC__q3 =
+	     tagController_tmp_shimMaster_wff_rv$port1__read[72:0] ;
+  assign tagController_tmp_shimSlave_rff_rvport1__read_ETC__q1 =
+	     tagController_tmp_shimSlave_rff_rv$port1__read[72:0] ;
+  assign tagController_tmp_ug_slave_u_b_peekWirewget_B_ETC__q26 =
+	     tagController_tmp_ug_slave_u_b_peekWire$wget[6:2] ;
+  assign tagController_tmp_ug_slave_u_r_peekWirewget_B_ETC__q25 =
+	     tagController_tmp_ug_slave_u_r_peekWire$wget[72:68] ;
+  assign tmp__h10784 = { 24'd0, x__h11033 } ;
+  assign tmp__h8559 =
+	     tagController_tmp_awreqff$D_OUT[92:29] +
+	     tagController_tmp_addrOffset ;
+  assign v_araddr__h15750 =
+	     (tagController_tmp_tagCon$memory_request_get[93:92] == 2'd0) ?
+	       araddr__h15733 :
+	       64'hAAAAAAAAAAAAAAAA ;
+  assign v_arid__h15749 =
+	     (tagController_tmp_tagCon$memory_request_get[93:92] == 2'd0) ?
+	       tagController_tmp_tagCon$memory_request_get[100:95] :
+	       6'd0 ;
+  assign v_arlen__h15751 =
+	     (tagController_tmp_tagCon$memory_request_get[93:92] == 2'd0) ?
+	       arlen__h15734 :
+	       8'd0 ;
+  assign v_arsize_val__h15796 =
+	     (tagController_tmp_tagCon$memory_request_get[93:92] == 2'd0) ?
+	       tagController_tmp_tagCon$memory_request_get[2:0] :
+	       3'b0 ;
+  assign x__h11033 =
+	     { tagController_tmp_tagCon$memory_request_get[140:104], 3'd0 } ;
+  assign x__h11076 =
+	     tagController_tmp_tagCon$memory_request_get[81] ?
+	       4'd0 :
+	       (tagController_tmp_tagCon$memory_request_get[82] ?
+		  4'd1 :
+		  (tagController_tmp_tagCon$memory_request_get[83] ?
+		     4'd2 :
+		     (tagController_tmp_tagCon$memory_request_get[84] ?
+			4'd3 :
+			(tagController_tmp_tagCon$memory_request_get[85] ?
+			   4'd4 :
+			   (tagController_tmp_tagCon$memory_request_get[86] ?
+			      4'd5 :
+			      (tagController_tmp_tagCon$memory_request_get[87] ?
+				 4'd6 :
+				 (tagController_tmp_tagCon$memory_request_get[88] ?
+				    4'd7 :
+				    4'd8))))))) ;
+  assign x__h12810 = x__h12822 + y__h12823 ;
+  assign x__h12822 = x__h12834 + y__h12835 ;
+  assign x__h12834 = x__h12846 + y__h12847 ;
+  assign x__h12846 = x__h12858 + y__h12859 ;
+  assign x__h12858 = x__h12870 + y__h12871 ;
+  assign x__h12870 = x__h12882 + y__h12883 ;
+  assign x__h12882 =
+	     { 3'd0, tagController_tmp_tagCon$memory_request_get[88] } ;
+  assign x__h14406 =
+	     tagController_tmp_tagCon$memory_request_get[90] ? 4'd0 : 4'd15 ;
+  assign x__h15814 =
+	     (tagController_tmp_tagCon$memory_request_get[93:92] == 2'd0) ?
+	       arcache__h15738 :
+	       4'd0 ;
+  assign x__h34701 =
+	     cpu$dmem_master_awaddr -
+	     soc_map$m_near_mem_io_addr_range[127:64] ;
+  assign x__h34726 =
+	     cpu$dmem_master_awaddr - soc_map$m_plic_addr_range[127:64] ;
+  assign x__h45725 =
+	     SEXT_arbiter_lastSelect__q6[0] &
+	     (CAN_FIRE_RL_craftReq && reqWires_0$wget) ;
+  assign x__h45828 =
+	     SEXT_arbiter_firstHot__q5[0] &
+	     (CAN_FIRE_RL_craftReq && reqWires_0$wget) ;
+  assign x__h46193 =
+	     SEXT_SEXT_arbiter_firstHot_226_227_BIT_0_228_A_ETC__q7[0] &
+	     arbiter_firstHot ;
+  assign x__h46252 =
+	     !SEXT_arbiter_firstHot_226_227_BIT_0_228_AND_re_ETC___d1234 &&
+	     SEXT_arbiter_lastSelect_222_223_BIT_0_224_AND__ETC___d1230 ;
+  assign x__h46334 = SEXT_x6252__q8[0] & arbiter_firstHot ;
+  assign x__h59917 = x__h59919 | y__h59920 ;
+  assign x__h59919 =
+	     SEXT_arbiter_1_lastSelect__q10[0] &
+	     (CAN_FIRE_RL_craftReq_2 && reqWires_1_0$wget) ;
+  assign x__h60068 = x__h60070 | y__h60071 ;
+  assign x__h60070 =
+	     SEXT_arbiter_1_lastSelect_1__q11[0] &
+	     (CAN_FIRE_RL_craftReq_2 && reqWires_1_0$wget) ;
+  assign x__h60204 = x__h60206 | y__h60207 ;
+  assign x__h60206 =
+	     SEXT_arbiter_1_firstHot__q9[0] &
+	     (CAN_FIRE_RL_craftReq_2 && reqWires_1_0$wget) ;
+  assign x__h60676 = x__h60678 | y__h60679 ;
+  assign x__h60678 =
+	     SEXT_SEXT_arbiter_1_firstHot_421_422_BIT_0_423_ETC__q12[0] &
+	     arbiter_1_firstHot ;
+  assign x__h60738 =
+	     !SEXT_arbiter_1_firstHot_421_422_BIT_0_423_AND__ETC___d1437 &&
+	     SEXT_arbiter_1_lastSelect_1_416_417_BIT_0_418__ETC___d1431 ;
+  assign x__h60772 =
+	     !SEXT_arbiter_1_lastSelect_1_416_417_BIT_0_418__ETC___d1431 &&
+	     !SEXT_arbiter_1_firstHot_421_422_BIT_0_423_AND__ETC___d1437 &&
+	     SEXT_arbiter_1_lastSelect_412_413_BIT_0_414_AN_ETC___d1425 ;
+  assign x__h60864 = x__h60866 | y__h60867 ;
+  assign x__h60866 = SEXT_x0738__q13[0] & arbiter_1_firstHot ;
+  assign x__h61045 = x__h61047 | y__h61048 ;
+  assign x__h61047 = SEXT_x0772__q14[0] & arbiter_1_firstHot ;
+  assign x__h68982 =
+	     cpu$dmem_master_araddr -
+	     soc_map$m_near_mem_io_addr_range[127:64] ;
+  assign x__h69007 =
+	     cpu$dmem_master_araddr - soc_map$m_plic_addr_range[127:64] ;
+  assign x__h79491 =
+	     SEXT_arbiter_1_lastSelect_2__q16[0] &
+	     (CAN_FIRE_RL_craftReq_5 && reqWires_1_0_1$wget) ;
+  assign x__h79594 =
+	     SEXT_arbiter_1_firstHot_1__q15[0] &
+	     (CAN_FIRE_RL_craftReq_5 && reqWires_1_0_1$wget) ;
+  assign x__h79959 =
+	     SEXT_SEXT_arbiter_1_firstHot_1_818_819_BIT_0_8_ETC__q17[0] &
+	     arbiter_1_firstHot_1 ;
+  assign x__h80018 =
+	     !SEXT_arbiter_1_firstHot_1_818_819_BIT_0_820_AN_ETC___d1826 &&
+	     SEXT_arbiter_1_lastSelect_2_814_815_BIT_0_816__ETC___d1822 ;
+  assign x__h80100 = SEXT_x0018__q18[0] & arbiter_1_firstHot_1 ;
+  assign x__h8400 =
+	     tagController_tmp_addrOffset +
+	     (64'd1 << tagController_tmp_awreqff$D_OUT[20:18]) ;
+  assign x__h91142 = x__h91144 | y__h91145 ;
+  assign x__h91144 =
+	     SEXT_arbiter_1_1_lastSelect__q20[0] &
+	     (CAN_FIRE_RL_craftReq_7 && reqWires_1_1_0$wget) ;
+  assign x__h91293 = x__h91295 | y__h91296 ;
+  assign x__h91295 =
+	     SEXT_arbiter_1_1_lastSelect_1__q21[0] &
+	     (CAN_FIRE_RL_craftReq_7 && reqWires_1_1_0$wget) ;
+  assign x__h91429 = x__h91431 | y__h91432 ;
+  assign x__h91431 =
+	     SEXT_arbiter_1_1_firstHot__q19[0] &
+	     (CAN_FIRE_RL_craftReq_7 && reqWires_1_1_0$wget) ;
+  assign x__h91901 = x__h91903 | y__h91904 ;
+  assign x__h91903 =
+	     SEXT_SEXT_arbiter_1_1_firstHot_003_004_BIT_0_0_ETC__q22[0] &
+	     arbiter_1_1_firstHot ;
+  assign x__h91963 =
+	     !SEXT_arbiter_1_1_firstHot_003_004_BIT_0_005_AN_ETC___d2019 &&
+	     SEXT_arbiter_1_1_lastSelect_1_998_999_BIT_0_00_ETC___d2013 ;
+  assign x__h91997 =
+	     !SEXT_arbiter_1_1_lastSelect_1_998_999_BIT_0_00_ETC___d2013 &&
+	     !SEXT_arbiter_1_1_firstHot_003_004_BIT_0_005_AN_ETC___d2019 &&
+	     SEXT_arbiter_1_1_lastSelect_994_995_BIT_0_996__ETC___d2007 ;
+  assign x__h92089 = x__h92091 | y__h92092 ;
+  assign x__h92091 = SEXT_x1963__q23[0] & arbiter_1_1_firstHot ;
+  assign x__h92270 = x__h92272 | y__h92273 ;
+  assign x__h92272 = SEXT_x1997__q24[0] & arbiter_1_1_firstHot ;
+  assign x_port1__read__h70111 =
+	     CAN_FIRE_RL_ifcs_0_1_nonRoutableFlit ?
+	       ifcs_0_1_noRoute_flitCount$port0__write_1 :
+	       ifcs_0_1_noRoute_flitCount ;
+  assign y__h12811 =
+	     { 3'd0, tagController_tmp_tagCon$memory_request_get[81] } ;
+  assign y__h12823 =
+	     { 3'd0, tagController_tmp_tagCon$memory_request_get[82] } ;
+  assign y__h12835 =
+	     { 3'd0, tagController_tmp_tagCon$memory_request_get[83] } ;
+  assign y__h12847 =
+	     { 3'd0, tagController_tmp_tagCon$memory_request_get[84] } ;
+  assign y__h12859 =
+	     { 3'd0, tagController_tmp_tagCon$memory_request_get[85] } ;
+  assign y__h12871 =
+	     { 3'd0, tagController_tmp_tagCon$memory_request_get[86] } ;
+  assign y__h12883 =
+	     { 3'd0, tagController_tmp_tagCon$memory_request_get[87] } ;
+  assign y__h45726 =
+	     SEXT_arbiter_firstHot__q5[0] &
+	     (CAN_FIRE_RL_craftReq_1 && reqWires_1$wget) ;
+  assign y__h45829 =
+	     SEXT_arbiter_lastSelect__q6[0] &
+	     (CAN_FIRE_RL_craftReq_1 && reqWires_1$wget) ;
+  assign y__h46194 = SEXT_x6252__q8[0] & arbiter_lastSelect ;
+  assign y__h46335 =
+	     SEXT_SEXT_arbiter_firstHot_226_227_BIT_0_228_A_ETC__q7[0] &
+	     arbiter_lastSelect ;
+  assign y__h59918 =
+	     SEXT_arbiter_1_firstHot__q9[0] &
+	     (CAN_FIRE_RL_craftReq_4 && reqWires_1_2$wget) ;
+  assign y__h59920 =
+	     SEXT_arbiter_1_lastSelect_1__q11[0] &
+	     (CAN_FIRE_RL_craftReq_3 && reqWires_1_1$wget) ;
+  assign y__h60069 =
+	     SEXT_arbiter_1_lastSelect__q10[0] &
+	     (CAN_FIRE_RL_craftReq_4 && reqWires_1_2$wget) ;
+  assign y__h60071 =
+	     SEXT_arbiter_1_firstHot__q9[0] &
+	     (CAN_FIRE_RL_craftReq_3 && reqWires_1_1$wget) ;
+  assign y__h60205 =
+	     SEXT_arbiter_1_lastSelect_1__q11[0] &
+	     (CAN_FIRE_RL_craftReq_4 && reqWires_1_2$wget) ;
+  assign y__h60207 =
+	     SEXT_arbiter_1_lastSelect__q10[0] &
+	     (CAN_FIRE_RL_craftReq_3 && reqWires_1_1$wget) ;
+  assign y__h60677 = SEXT_x0772__q14[0] & arbiter_1_lastSelect ;
+  assign y__h60679 = SEXT_x0738__q13[0] & arbiter_1_lastSelect_1 ;
+  assign y__h60865 =
+	     SEXT_SEXT_arbiter_1_firstHot_421_422_BIT_0_423_ETC__q12[0] &
+	     arbiter_1_lastSelect ;
+  assign y__h60867 = SEXT_x0772__q14[0] & arbiter_1_lastSelect_1 ;
+  assign y__h61046 = SEXT_x0738__q13[0] & arbiter_1_lastSelect ;
+  assign y__h61048 =
+	     SEXT_SEXT_arbiter_1_firstHot_421_422_BIT_0_423_ETC__q12[0] &
+	     arbiter_1_lastSelect_1 ;
+  assign y__h79492 =
+	     SEXT_arbiter_1_firstHot_1__q15[0] &
+	     (CAN_FIRE_RL_craftReq_6 && reqWires_1_1_1$wget) ;
+  assign y__h79595 =
+	     SEXT_arbiter_1_lastSelect_2__q16[0] &
+	     (CAN_FIRE_RL_craftReq_6 && reqWires_1_1_1$wget) ;
+  assign y__h79960 = SEXT_x0018__q18[0] & arbiter_1_lastSelect_2 ;
+  assign y__h80101 =
+	     SEXT_SEXT_arbiter_1_firstHot_1_818_819_BIT_0_8_ETC__q17[0] &
+	     arbiter_1_lastSelect_2 ;
+  assign y__h91143 =
+	     SEXT_arbiter_1_1_firstHot__q19[0] &
+	     (CAN_FIRE_RL_craftReq_9 && reqWires_1_1_2$wget) ;
+  assign y__h91145 =
+	     SEXT_arbiter_1_1_lastSelect_1__q21[0] &
+	     (CAN_FIRE_RL_craftReq_8 && reqWires_1_1_1_1$wget) ;
+  assign y__h91294 =
+	     SEXT_arbiter_1_1_lastSelect__q20[0] &
+	     (CAN_FIRE_RL_craftReq_9 && reqWires_1_1_2$wget) ;
+  assign y__h91296 =
+	     SEXT_arbiter_1_1_firstHot__q19[0] &
+	     (CAN_FIRE_RL_craftReq_8 && reqWires_1_1_1_1$wget) ;
+  assign y__h91430 =
+	     SEXT_arbiter_1_1_lastSelect_1__q21[0] &
+	     (CAN_FIRE_RL_craftReq_9 && reqWires_1_1_2$wget) ;
+  assign y__h91432 =
+	     SEXT_arbiter_1_1_lastSelect__q20[0] &
+	     (CAN_FIRE_RL_craftReq_8 && reqWires_1_1_1_1$wget) ;
+  assign y__h91902 = SEXT_x1997__q24[0] & arbiter_1_1_lastSelect ;
+  assign y__h91904 = SEXT_x1963__q23[0] & arbiter_1_1_lastSelect_1 ;
+  assign y__h92090 =
+	     SEXT_SEXT_arbiter_1_1_firstHot_003_004_BIT_0_0_ETC__q22[0] &
+	     arbiter_1_1_lastSelect ;
+  assign y__h92092 = SEXT_x1997__q24[0] & arbiter_1_1_lastSelect_1 ;
+  assign y__h92271 = SEXT_x1963__q23[0] & arbiter_1_1_lastSelect ;
+  assign y__h92273 =
+	     SEXT_SEXT_arbiter_1_1_firstHot_003_004_BIT_0_0_ETC__q22[0] &
+	     arbiter_1_1_lastSelect_1 ;
+
+  // handling of inlined registers
+
+  always@(posedge CLK)
+  begin
+    if (RST_N == `BSV_RESET_VALUE)
+      begin
+        activeSource_0 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	activeSource_1 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	activeSource_1_0 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	activeSource_1_0_1 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	activeSource_1_1 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	activeSource_1_1_0 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	activeSource_1_1_1 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	activeSource_1_1_1_1 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	activeSource_1_1_2 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	activeSource_1_2 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	arbiter_1_1_firstHot <= `BSV_ASSIGNMENT_DELAY 1'd1;
+	arbiter_1_1_lastSelect <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	arbiter_1_1_lastSelect_1 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	arbiter_1_firstHot <= `BSV_ASSIGNMENT_DELAY 1'd1;
+	arbiter_1_firstHot_1 <= `BSV_ASSIGNMENT_DELAY 1'd1;
+	arbiter_1_lastSelect <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	arbiter_1_lastSelect_1 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	arbiter_1_lastSelect_2 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	arbiter_firstHot <= `BSV_ASSIGNMENT_DELAY 1'd1;
+	arbiter_lastSelect <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	ifcs_0_1_noRoute_currentReq <= `BSV_ASSIGNMENT_DELAY
+	    97'h0AAAAAAAAAAAAAAAAAAAAAAAA;
+	ifcs_0_1_noRoute_flitCount <= `BSV_ASSIGNMENT_DELAY 9'd0;
+	ifcs_0_1_state <= `BSV_ASSIGNMENT_DELAY 2'd0;
+	ifcs_0_1_state_1 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	ifcs_0_noRoute_inner_currentReq <= `BSV_ASSIGNMENT_DELAY
+	    97'h0AAAAAAAAAAAAAAAAAAAAAAAA;
+	ifcs_0_noRoute_inner_pendingReq <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	ifcs_0_state <= `BSV_ASSIGNMENT_DELAY 2'd0;
+	ifcs_0_state_1 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	ifcs_1_1_noRoute_currentReq <= `BSV_ASSIGNMENT_DELAY
+	    97'h0AAAAAAAAAAAAAAAAAAAAAAAA;
+	ifcs_1_1_noRoute_flitCount <= `BSV_ASSIGNMENT_DELAY 9'd0;
+	ifcs_1_1_state <= `BSV_ASSIGNMENT_DELAY 2'd0;
+	ifcs_1_1_state_1 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	ifcs_1_noRoute_inner_currentReq <= `BSV_ASSIGNMENT_DELAY
+	    97'h0AAAAAAAAAAAAAAAAAAAAAAAA;
+	ifcs_1_noRoute_inner_pendingReq <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	ifcs_1_state <= `BSV_ASSIGNMENT_DELAY 2'd0;
+	ifcs_1_state_1 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	ifcs_2_1_state <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	ifcs_2_state <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	merged_0_flitLeft <= `BSV_ASSIGNMENT_DELAY 8'd0;
+	merged_1_flitLeft <= `BSV_ASSIGNMENT_DELAY 8'd0;
+	split_0_flitLeft <= `BSV_ASSIGNMENT_DELAY 8'd0;
+	split_1_flitLeft <= `BSV_ASSIGNMENT_DELAY 8'd0;
+	split_2_flitLeft <= `BSV_ASSIGNMENT_DELAY 8'd0;
+	state <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	state_1 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	state_1_1 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	state_1_1_1 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	tagController_tmp_addrOffset <= `BSV_ASSIGNMENT_DELAY 64'd0;
+	tagController_tmp_doneSendingAW <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	tagController_tmp_reset_done <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	tagController_tmp_shimMaster_arff_rv <= `BSV_ASSIGNMENT_DELAY
+	    100'h2AAAAAAAAAAAAAAAAAAAAAAAA;
+	tagController_tmp_shimMaster_awff_rv <= `BSV_ASSIGNMENT_DELAY
+	    100'h2AAAAAAAAAAAAAAAAAAAAAAAA;
+	tagController_tmp_shimMaster_bff_rv <= `BSV_ASSIGNMENT_DELAY 9'd170;
+	tagController_tmp_shimMaster_rff_rv <= `BSV_ASSIGNMENT_DELAY
+	    74'h0AAAAAAAAAAAAAAAAAA;
+	tagController_tmp_shimMaster_wff_rv <= `BSV_ASSIGNMENT_DELAY
+	    74'h0AAAAAAAAAAAAAAAAAA;
+	tagController_tmp_shimSlave_arff_rv <= `BSV_ASSIGNMENT_DELAY
+	    99'h2AAAAAAAAAAAAAAAAAAAAAAAA;
+	tagController_tmp_shimSlave_awff_rv <= `BSV_ASSIGNMENT_DELAY
+	    99'h2AAAAAAAAAAAAAAAAAAAAAAAA;
+	tagController_tmp_shimSlave_bff_rv <= `BSV_ASSIGNMENT_DELAY 8'd42;
+	tagController_tmp_shimSlave_rff_rv <= `BSV_ASSIGNMENT_DELAY
+	    74'h0AAAAAAAAAAAAAAAAAA;
+	tagController_tmp_shimSlave_wff_rv <= `BSV_ASSIGNMENT_DELAY
+	    75'h2AAAAAAAAAAAAAAAAAA;
+      end
+    else
+      begin
+        if (activeSource_0$EN)
+	  activeSource_0 <= `BSV_ASSIGNMENT_DELAY activeSource_0$D_IN;
+	if (activeSource_1$EN)
+	  activeSource_1 <= `BSV_ASSIGNMENT_DELAY activeSource_1$D_IN;
+	if (activeSource_1_0$EN)
+	  activeSource_1_0 <= `BSV_ASSIGNMENT_DELAY activeSource_1_0$D_IN;
+	if (activeSource_1_0_1$EN)
+	  activeSource_1_0_1 <= `BSV_ASSIGNMENT_DELAY activeSource_1_0_1$D_IN;
+	if (activeSource_1_1$EN)
+	  activeSource_1_1 <= `BSV_ASSIGNMENT_DELAY activeSource_1_1$D_IN;
+	if (activeSource_1_1_0$EN)
+	  activeSource_1_1_0 <= `BSV_ASSIGNMENT_DELAY activeSource_1_1_0$D_IN;
+	if (activeSource_1_1_1$EN)
+	  activeSource_1_1_1 <= `BSV_ASSIGNMENT_DELAY activeSource_1_1_1$D_IN;
+	if (activeSource_1_1_1_1$EN)
+	  activeSource_1_1_1_1 <= `BSV_ASSIGNMENT_DELAY
+	      activeSource_1_1_1_1$D_IN;
+	if (activeSource_1_1_2$EN)
+	  activeSource_1_1_2 <= `BSV_ASSIGNMENT_DELAY activeSource_1_1_2$D_IN;
+	if (activeSource_1_2$EN)
+	  activeSource_1_2 <= `BSV_ASSIGNMENT_DELAY activeSource_1_2$D_IN;
+	if (arbiter_1_1_firstHot$EN)
+	  arbiter_1_1_firstHot <= `BSV_ASSIGNMENT_DELAY
+	      arbiter_1_1_firstHot$D_IN;
+	if (arbiter_1_1_lastSelect$EN)
+	  arbiter_1_1_lastSelect <= `BSV_ASSIGNMENT_DELAY
+	      arbiter_1_1_lastSelect$D_IN;
+	if (arbiter_1_1_lastSelect_1$EN)
+	  arbiter_1_1_lastSelect_1 <= `BSV_ASSIGNMENT_DELAY
+	      arbiter_1_1_lastSelect_1$D_IN;
+	if (arbiter_1_firstHot$EN)
+	  arbiter_1_firstHot <= `BSV_ASSIGNMENT_DELAY arbiter_1_firstHot$D_IN;
+	if (arbiter_1_firstHot_1$EN)
+	  arbiter_1_firstHot_1 <= `BSV_ASSIGNMENT_DELAY
+	      arbiter_1_firstHot_1$D_IN;
+	if (arbiter_1_lastSelect$EN)
+	  arbiter_1_lastSelect <= `BSV_ASSIGNMENT_DELAY
+	      arbiter_1_lastSelect$D_IN;
+	if (arbiter_1_lastSelect_1$EN)
+	  arbiter_1_lastSelect_1 <= `BSV_ASSIGNMENT_DELAY
+	      arbiter_1_lastSelect_1$D_IN;
+	if (arbiter_1_lastSelect_2$EN)
+	  arbiter_1_lastSelect_2 <= `BSV_ASSIGNMENT_DELAY
+	      arbiter_1_lastSelect_2$D_IN;
+	if (arbiter_firstHot$EN)
+	  arbiter_firstHot <= `BSV_ASSIGNMENT_DELAY arbiter_firstHot$D_IN;
+	if (arbiter_lastSelect$EN)
+	  arbiter_lastSelect <= `BSV_ASSIGNMENT_DELAY arbiter_lastSelect$D_IN;
+	if (ifcs_0_1_noRoute_currentReq$EN)
+	  ifcs_0_1_noRoute_currentReq <= `BSV_ASSIGNMENT_DELAY
+	      ifcs_0_1_noRoute_currentReq$D_IN;
+	if (ifcs_0_1_noRoute_flitCount$EN)
+	  ifcs_0_1_noRoute_flitCount <= `BSV_ASSIGNMENT_DELAY
+	      ifcs_0_1_noRoute_flitCount$D_IN;
+	if (ifcs_0_1_state$EN)
+	  ifcs_0_1_state <= `BSV_ASSIGNMENT_DELAY ifcs_0_1_state$D_IN;
+	if (ifcs_0_1_state_1$EN)
+	  ifcs_0_1_state_1 <= `BSV_ASSIGNMENT_DELAY ifcs_0_1_state_1$D_IN;
+	if (ifcs_0_noRoute_inner_currentReq$EN)
+	  ifcs_0_noRoute_inner_currentReq <= `BSV_ASSIGNMENT_DELAY
+	      ifcs_0_noRoute_inner_currentReq$D_IN;
+	if (ifcs_0_noRoute_inner_pendingReq$EN)
+	  ifcs_0_noRoute_inner_pendingReq <= `BSV_ASSIGNMENT_DELAY
+	      ifcs_0_noRoute_inner_pendingReq$D_IN;
+	if (ifcs_0_state$EN)
+	  ifcs_0_state <= `BSV_ASSIGNMENT_DELAY ifcs_0_state$D_IN;
+	if (ifcs_0_state_1$EN)
+	  ifcs_0_state_1 <= `BSV_ASSIGNMENT_DELAY ifcs_0_state_1$D_IN;
+	if (ifcs_1_1_noRoute_currentReq$EN)
+	  ifcs_1_1_noRoute_currentReq <= `BSV_ASSIGNMENT_DELAY
+	      ifcs_1_1_noRoute_currentReq$D_IN;
+	if (ifcs_1_1_noRoute_flitCount$EN)
+	  ifcs_1_1_noRoute_flitCount <= `BSV_ASSIGNMENT_DELAY
+	      ifcs_1_1_noRoute_flitCount$D_IN;
+	if (ifcs_1_1_state$EN)
+	  ifcs_1_1_state <= `BSV_ASSIGNMENT_DELAY ifcs_1_1_state$D_IN;
+	if (ifcs_1_1_state_1$EN)
+	  ifcs_1_1_state_1 <= `BSV_ASSIGNMENT_DELAY ifcs_1_1_state_1$D_IN;
+	if (ifcs_1_noRoute_inner_currentReq$EN)
+	  ifcs_1_noRoute_inner_currentReq <= `BSV_ASSIGNMENT_DELAY
+	      ifcs_1_noRoute_inner_currentReq$D_IN;
+	if (ifcs_1_noRoute_inner_pendingReq$EN)
+	  ifcs_1_noRoute_inner_pendingReq <= `BSV_ASSIGNMENT_DELAY
+	      ifcs_1_noRoute_inner_pendingReq$D_IN;
+	if (ifcs_1_state$EN)
+	  ifcs_1_state <= `BSV_ASSIGNMENT_DELAY ifcs_1_state$D_IN;
+	if (ifcs_1_state_1$EN)
+	  ifcs_1_state_1 <= `BSV_ASSIGNMENT_DELAY ifcs_1_state_1$D_IN;
+	if (ifcs_2_1_state$EN)
+	  ifcs_2_1_state <= `BSV_ASSIGNMENT_DELAY ifcs_2_1_state$D_IN;
+	if (ifcs_2_state$EN)
+	  ifcs_2_state <= `BSV_ASSIGNMENT_DELAY ifcs_2_state$D_IN;
+	if (merged_0_flitLeft$EN)
+	  merged_0_flitLeft <= `BSV_ASSIGNMENT_DELAY merged_0_flitLeft$D_IN;
+	if (merged_1_flitLeft$EN)
+	  merged_1_flitLeft <= `BSV_ASSIGNMENT_DELAY merged_1_flitLeft$D_IN;
+	if (split_0_flitLeft$EN)
+	  split_0_flitLeft <= `BSV_ASSIGNMENT_DELAY split_0_flitLeft$D_IN;
+	if (split_1_flitLeft$EN)
+	  split_1_flitLeft <= `BSV_ASSIGNMENT_DELAY split_1_flitLeft$D_IN;
+	if (split_2_flitLeft$EN)
+	  split_2_flitLeft <= `BSV_ASSIGNMENT_DELAY split_2_flitLeft$D_IN;
+	if (state$EN) state <= `BSV_ASSIGNMENT_DELAY state$D_IN;
+	if (state_1$EN) state_1 <= `BSV_ASSIGNMENT_DELAY state_1$D_IN;
+	if (state_1_1$EN) state_1_1 <= `BSV_ASSIGNMENT_DELAY state_1_1$D_IN;
+	if (state_1_1_1$EN)
+	  state_1_1_1 <= `BSV_ASSIGNMENT_DELAY state_1_1_1$D_IN;
+	if (tagController_tmp_addrOffset$EN)
+	  tagController_tmp_addrOffset <= `BSV_ASSIGNMENT_DELAY
+	      tagController_tmp_addrOffset$D_IN;
+	if (tagController_tmp_doneSendingAW$EN)
+	  tagController_tmp_doneSendingAW <= `BSV_ASSIGNMENT_DELAY
+	      tagController_tmp_doneSendingAW$D_IN;
+	if (tagController_tmp_reset_done$EN)
+	  tagController_tmp_reset_done <= `BSV_ASSIGNMENT_DELAY
+	      tagController_tmp_reset_done$D_IN;
+	if (tagController_tmp_shimMaster_arff_rv$EN)
+	  tagController_tmp_shimMaster_arff_rv <= `BSV_ASSIGNMENT_DELAY
+	      tagController_tmp_shimMaster_arff_rv$D_IN;
+	if (tagController_tmp_shimMaster_awff_rv$EN)
+	  tagController_tmp_shimMaster_awff_rv <= `BSV_ASSIGNMENT_DELAY
+	      tagController_tmp_shimMaster_awff_rv$D_IN;
+	if (tagController_tmp_shimMaster_bff_rv$EN)
+	  tagController_tmp_shimMaster_bff_rv <= `BSV_ASSIGNMENT_DELAY
+	      tagController_tmp_shimMaster_bff_rv$D_IN;
+	if (tagController_tmp_shimMaster_rff_rv$EN)
+	  tagController_tmp_shimMaster_rff_rv <= `BSV_ASSIGNMENT_DELAY
+	      tagController_tmp_shimMaster_rff_rv$D_IN;
+	if (tagController_tmp_shimMaster_wff_rv$EN)
+	  tagController_tmp_shimMaster_wff_rv <= `BSV_ASSIGNMENT_DELAY
+	      tagController_tmp_shimMaster_wff_rv$D_IN;
+	if (tagController_tmp_shimSlave_arff_rv$EN)
+	  tagController_tmp_shimSlave_arff_rv <= `BSV_ASSIGNMENT_DELAY
+	      tagController_tmp_shimSlave_arff_rv$D_IN;
+	if (tagController_tmp_shimSlave_awff_rv$EN)
+	  tagController_tmp_shimSlave_awff_rv <= `BSV_ASSIGNMENT_DELAY
+	      tagController_tmp_shimSlave_awff_rv$D_IN;
+	if (tagController_tmp_shimSlave_bff_rv$EN)
+	  tagController_tmp_shimSlave_bff_rv <= `BSV_ASSIGNMENT_DELAY
+	      tagController_tmp_shimSlave_bff_rv$D_IN;
+	if (tagController_tmp_shimSlave_rff_rv$EN)
+	  tagController_tmp_shimSlave_rff_rv <= `BSV_ASSIGNMENT_DELAY
+	      tagController_tmp_shimSlave_rff_rv$D_IN;
+	if (tagController_tmp_shimSlave_wff_rv$EN)
+	  tagController_tmp_shimSlave_wff_rv <= `BSV_ASSIGNMENT_DELAY
+	      tagController_tmp_shimSlave_wff_rv$D_IN;
+      end
+  end
+
+  // synopsys translate_off
+  `ifdef BSV_NO_INITIAL_BLOCKS
+  `else // not BSV_NO_INITIAL_BLOCKS
+  initial
+  begin
+    activeSource_0 = 1'h0;
+    activeSource_1 = 1'h0;
+    activeSource_1_0 = 1'h0;
+    activeSource_1_0_1 = 1'h0;
+    activeSource_1_1 = 1'h0;
+    activeSource_1_1_0 = 1'h0;
+    activeSource_1_1_1 = 1'h0;
+    activeSource_1_1_1_1 = 1'h0;
+    activeSource_1_1_2 = 1'h0;
+    activeSource_1_2 = 1'h0;
+    arbiter_1_1_firstHot = 1'h0;
+    arbiter_1_1_lastSelect = 1'h0;
+    arbiter_1_1_lastSelect_1 = 1'h0;
+    arbiter_1_firstHot = 1'h0;
+    arbiter_1_firstHot_1 = 1'h0;
+    arbiter_1_lastSelect = 1'h0;
+    arbiter_1_lastSelect_1 = 1'h0;
+    arbiter_1_lastSelect_2 = 1'h0;
+    arbiter_firstHot = 1'h0;
+    arbiter_lastSelect = 1'h0;
+    ifcs_0_1_noRoute_currentReq = 97'h0AAAAAAAAAAAAAAAAAAAAAAAA;
+    ifcs_0_1_noRoute_flitCount = 9'h0AA;
+    ifcs_0_1_state = 2'h2;
+    ifcs_0_1_state_1 = 1'h0;
+    ifcs_0_noRoute_inner_currentReq = 97'h0AAAAAAAAAAAAAAAAAAAAAAAA;
+    ifcs_0_noRoute_inner_pendingReq = 1'h0;
+    ifcs_0_state = 2'h2;
+    ifcs_0_state_1 = 1'h0;
+    ifcs_1_1_noRoute_currentReq = 97'h0AAAAAAAAAAAAAAAAAAAAAAAA;
+    ifcs_1_1_noRoute_flitCount = 9'h0AA;
+    ifcs_1_1_state = 2'h2;
+    ifcs_1_1_state_1 = 1'h0;
+    ifcs_1_noRoute_inner_currentReq = 97'h0AAAAAAAAAAAAAAAAAAAAAAAA;
+    ifcs_1_noRoute_inner_pendingReq = 1'h0;
+    ifcs_1_state = 2'h2;
+    ifcs_1_state_1 = 1'h0;
+    ifcs_2_1_state = 1'h0;
+    ifcs_2_state = 1'h0;
+    merged_0_flitLeft = 8'hAA;
+    merged_1_flitLeft = 8'hAA;
+    split_0_flitLeft = 8'hAA;
+    split_1_flitLeft = 8'hAA;
+    split_2_flitLeft = 8'hAA;
+    state = 1'h0;
+    state_1 = 1'h0;
+    state_1_1 = 1'h0;
+    state_1_1_1 = 1'h0;
+    tagController_tmp_addrOffset = 64'hAAAAAAAAAAAAAAAA;
+    tagController_tmp_doneSendingAW = 1'h0;
+    tagController_tmp_reset_done = 1'h0;
+    tagController_tmp_shimMaster_arff_rv = 100'hAAAAAAAAAAAAAAAAAAAAAAAAA;
+    tagController_tmp_shimMaster_awff_rv = 100'hAAAAAAAAAAAAAAAAAAAAAAAAA;
+    tagController_tmp_shimMaster_bff_rv = 9'h0AA;
+    tagController_tmp_shimMaster_rff_rv = 74'h2AAAAAAAAAAAAAAAAAA;
+    tagController_tmp_shimMaster_wff_rv = 74'h2AAAAAAAAAAAAAAAAAA;
+    tagController_tmp_shimSlave_arff_rv = 99'h2AAAAAAAAAAAAAAAAAAAAAAAA;
+    tagController_tmp_shimSlave_awff_rv = 99'h2AAAAAAAAAAAAAAAAAAAAAAAA;
+    tagController_tmp_shimSlave_bff_rv = 8'hAA;
+    tagController_tmp_shimSlave_rff_rv = 74'h2AAAAAAAAAAAAAAAAAA;
+    tagController_tmp_shimSlave_wff_rv = 75'h2AAAAAAAAAAAAAAAAAA;
+  end
+  `endif // BSV_NO_INITIAL_BLOCKS
+  // synopsys translate_on
 
   // handling of system tasks
 
@@ -2450,25 +8483,1549 @@ module mkCore(CLK,
   begin
     #0;
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_rl_cpu_hart0_reset_from_soc_start)
+      if (WILL_FIRE_RL_arbitrate &&
+	  !SEXT_arbiter_lastSelect_222_223_BIT_0_224_AND__ETC___d1230 &&
+	  !SEXT_arbiter_firstHot_226_227_BIT_0_228_AND_re_ETC___d1234)
+	$display("mkOneHotArbiter: next method should not be run with no pending request");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_arbitrate &&
+	  !SEXT_arbiter_lastSelect_222_223_BIT_0_224_AND__ETC___d1230 &&
+	  !SEXT_arbiter_firstHot_226_227_BIT_0_228_AND_re_ETC___d1234)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected && ifcs_0_innerRoute$EMPTY_N &&
+	  (ifcs_0_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
 	begin
-	  v__h4427 = $stime;
+	  v__h47733 = $time;
 	  #0;
 	end
-    v__h4421 = v__h4427 / 32'd10;
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected && ifcs_0_innerRoute$EMPTY_N &&
+	  (ifcs_0_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write("%0t -- mkOneWayBus error: input %0d was selected but the requested path ",
+	       v__h47733,
+	       $signed(32'd0));
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected && ifcs_0_innerRoute$EMPTY_N &&
+	  (ifcs_0_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write("<V ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected && ifcs_0_innerRoute$EMPTY_N &&
+	  (ifcs_0_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  ifcs_0_innerRoute$D_OUT[0])
+	$write("True");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected && ifcs_0_innerRoute$EMPTY_N &&
+	  (ifcs_0_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  !ifcs_0_innerRoute$D_OUT[0])
+	$write("False");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected && ifcs_0_innerRoute$EMPTY_N &&
+	  (ifcs_0_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected && ifcs_0_innerRoute$EMPTY_N &&
+	  (ifcs_0_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  ifcs_0_innerRoute$D_OUT[1])
+	$write("True");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected && ifcs_0_innerRoute$EMPTY_N &&
+	  (ifcs_0_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  !ifcs_0_innerRoute$D_OUT[1])
+	$write("False");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected && ifcs_0_innerRoute$EMPTY_N &&
+	  (ifcs_0_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected && ifcs_0_innerRoute$EMPTY_N &&
+	  (ifcs_0_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  ifcs_0_innerRoute$D_OUT[2])
+	$write("True");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected && ifcs_0_innerRoute$EMPTY_N &&
+	  (ifcs_0_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  !ifcs_0_innerRoute$D_OUT[2])
+	$write("False");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected && ifcs_0_innerRoute$EMPTY_N &&
+	  (ifcs_0_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected && ifcs_0_innerRoute$EMPTY_N &&
+	  (ifcs_0_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write("");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected && ifcs_0_innerRoute$EMPTY_N &&
+	  (ifcs_0_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" >");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected && ifcs_0_innerRoute$EMPTY_N &&
+	  (ifcs_0_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" is not a valid one-hot path.", "\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected && ifcs_0_innerRoute$EMPTY_N &&
+	  (ifcs_0_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected && !ifcs_0_innerRoute$EMPTY_N)
+	begin
+	  v__h47122 = $time;
+	  #0;
+	end
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected && !ifcs_0_innerRoute$EMPTY_N)
+	$display("%0t -- mkOneWayBus error: input %0d was selected but there was no requested path.",
+		 v__h47122,
+		 $signed(32'd0));
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected && !ifcs_0_innerRoute$EMPTY_N)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_1 && ifcs_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	begin
+	  v__h51742 = $time;
+	  #0;
+	end
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_1 && ifcs_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write("%0t -- mkOneWayBus error: input %0d was selected but the requested path ",
+	       v__h51742,
+	       $signed(32'd1));
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_1 && ifcs_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write("<V ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_1 && ifcs_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  ifcs_1_innerRoute$D_OUT[0])
+	$write("True");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_1 && ifcs_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  !ifcs_1_innerRoute$D_OUT[0])
+	$write("False");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_1 && ifcs_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_1 && ifcs_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  ifcs_1_innerRoute$D_OUT[1])
+	$write("True");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_1 && ifcs_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  !ifcs_1_innerRoute$D_OUT[1])
+	$write("False");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_1 && ifcs_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_1 && ifcs_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  ifcs_1_innerRoute$D_OUT[2])
+	$write("True");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_1 && ifcs_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  !ifcs_1_innerRoute$D_OUT[2])
+	$write("False");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_1 && ifcs_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_1 && ifcs_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write("");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_1 && ifcs_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" >");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_1 && ifcs_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" is not a valid one-hot path.", "\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_1 && ifcs_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_1 && !ifcs_1_innerRoute$EMPTY_N)
+	begin
+	  v__h51131 = $time;
+	  #0;
+	end
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_1 && !ifcs_1_innerRoute$EMPTY_N)
+	$display("%0t -- mkOneWayBus error: input %0d was selected but there was no requested path.",
+		 v__h51131,
+		 $signed(32'd1));
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_1 && !ifcs_1_innerRoute$EMPTY_N)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected && WILL_FIRE_RL_burst)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 113, column 32: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_source_selected] and\n  [RL_burst] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if ((WILL_FIRE_RL_source_selected || WILL_FIRE_RL_burst) &&
+	  (WILL_FIRE_RL_source_selected_1 || WILL_FIRE_RL_burst_1))
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 114, column 12: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_source_selected, RL_burst]\n  and [RL_source_selected_1, RL_burst_1] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_1 && WILL_FIRE_RL_burst_1)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 114, column 12: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_source_selected_1] and\n  [RL_burst_1] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_sink_selected && WILL_FIRE_RL_sink_selected_1)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 154, column 12: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_sink_selected] and\n  [RL_sink_selected_1] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if ((WILL_FIRE_RL_sink_selected || WILL_FIRE_RL_sink_selected_1) &&
+	  WILL_FIRE_RL_sink_selected_2)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 154, column 12: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_sink_selected,\n  RL_sink_selected_1] and [RL_sink_selected_2] ) fired in the same clock\n  cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_arbitrate_2 &&
+	  !SEXT_arbiter_1_lastSelect_2_814_815_BIT_0_816__ETC___d1822 &&
+	  !SEXT_arbiter_1_firstHot_1_818_819_BIT_0_820_AN_ETC___d1826)
+	$display("mkOneHotArbiter: next method should not be run with no pending request");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_arbitrate_2 &&
+	  !SEXT_arbiter_1_lastSelect_2_814_815_BIT_0_816__ETC___d1822 &&
+	  !SEXT_arbiter_1_firstHot_1_818_819_BIT_0_820_AN_ETC___d1826)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_5 && ifcs_0_1_innerRoute$EMPTY_N &&
+	  (ifcs_0_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	begin
+	  v__h81493 = $time;
+	  #0;
+	end
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_5 && ifcs_0_1_innerRoute$EMPTY_N &&
+	  (ifcs_0_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write("%0t -- mkOneWayBus error: input %0d was selected but the requested path ",
+	       v__h81493,
+	       $signed(32'd0));
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_5 && ifcs_0_1_innerRoute$EMPTY_N &&
+	  (ifcs_0_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write("<V ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_5 && ifcs_0_1_innerRoute$EMPTY_N &&
+	  (ifcs_0_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  ifcs_0_1_innerRoute$D_OUT[0])
+	$write("True");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_5 && ifcs_0_1_innerRoute$EMPTY_N &&
+	  (ifcs_0_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  !ifcs_0_1_innerRoute$D_OUT[0])
+	$write("False");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_5 && ifcs_0_1_innerRoute$EMPTY_N &&
+	  (ifcs_0_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_5 && ifcs_0_1_innerRoute$EMPTY_N &&
+	  (ifcs_0_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  ifcs_0_1_innerRoute$D_OUT[1])
+	$write("True");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_5 && ifcs_0_1_innerRoute$EMPTY_N &&
+	  (ifcs_0_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  !ifcs_0_1_innerRoute$D_OUT[1])
+	$write("False");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_5 && ifcs_0_1_innerRoute$EMPTY_N &&
+	  (ifcs_0_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_5 && ifcs_0_1_innerRoute$EMPTY_N &&
+	  (ifcs_0_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  ifcs_0_1_innerRoute$D_OUT[2])
+	$write("True");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_5 && ifcs_0_1_innerRoute$EMPTY_N &&
+	  (ifcs_0_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  !ifcs_0_1_innerRoute$D_OUT[2])
+	$write("False");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_5 && ifcs_0_1_innerRoute$EMPTY_N &&
+	  (ifcs_0_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_5 && ifcs_0_1_innerRoute$EMPTY_N &&
+	  (ifcs_0_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write("");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_5 && ifcs_0_1_innerRoute$EMPTY_N &&
+	  (ifcs_0_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" >");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_5 && ifcs_0_1_innerRoute$EMPTY_N &&
+	  (ifcs_0_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" is not a valid one-hot path.", "\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_5 && ifcs_0_1_innerRoute$EMPTY_N &&
+	  (ifcs_0_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_5 && !ifcs_0_1_innerRoute$EMPTY_N)
+	begin
+	  v__h80882 = $time;
+	  #0;
+	end
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_5 && !ifcs_0_1_innerRoute$EMPTY_N)
+	$display("%0t -- mkOneWayBus error: input %0d was selected but there was no requested path.",
+		 v__h80882,
+		 $signed(32'd0));
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_5 && !ifcs_0_1_innerRoute$EMPTY_N)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_6 && ifcs_1_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	begin
+	  v__h84386 = $time;
+	  #0;
+	end
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_6 && ifcs_1_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write("%0t -- mkOneWayBus error: input %0d was selected but the requested path ",
+	       v__h84386,
+	       $signed(32'd1));
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_6 && ifcs_1_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write("<V ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_6 && ifcs_1_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  ifcs_1_1_innerRoute$D_OUT[0])
+	$write("True");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_6 && ifcs_1_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  !ifcs_1_1_innerRoute$D_OUT[0])
+	$write("False");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_6 && ifcs_1_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_6 && ifcs_1_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  ifcs_1_1_innerRoute$D_OUT[1])
+	$write("True");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_6 && ifcs_1_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  !ifcs_1_1_innerRoute$D_OUT[1])
+	$write("False");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_6 && ifcs_1_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_6 && ifcs_1_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  ifcs_1_1_innerRoute$D_OUT[2])
+	$write("True");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_6 && ifcs_1_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  !ifcs_1_1_innerRoute$D_OUT[2])
+	$write("False");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_6 && ifcs_1_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_6 && ifcs_1_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write("");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_6 && ifcs_1_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" >");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_6 && ifcs_1_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" is not a valid one-hot path.", "\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_6 && ifcs_1_1_innerRoute$EMPTY_N &&
+	  (ifcs_1_1_innerRoute$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[1] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_innerRoute$D_OUT[2] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_6 && !ifcs_1_1_innerRoute$EMPTY_N)
+	begin
+	  v__h83775 = $time;
+	  #0;
+	end
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_6 && !ifcs_1_1_innerRoute$EMPTY_N)
+	$display("%0t -- mkOneWayBus error: input %0d was selected but there was no requested path.",
+		 v__h83775,
+		 $signed(32'd1));
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_6 && !ifcs_1_1_innerRoute$EMPTY_N)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_5 && WILL_FIRE_RL_burst_5)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 114, column 12: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_source_selected_5] and\n  [RL_burst_5] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if ((WILL_FIRE_RL_source_selected_5 || WILL_FIRE_RL_burst_5) &&
+	  (WILL_FIRE_RL_source_selected_6 || WILL_FIRE_RL_burst_6))
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 114, column 12: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_source_selected_5,\n  RL_burst_5] and [RL_source_selected_6, RL_burst_6] ) fired in the same clock\n  cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_6 && WILL_FIRE_RL_burst_6)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 114, column 12: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_source_selected_6] and\n  [RL_burst_6] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_sink_selected_5 && WILL_FIRE_RL_sink_selected_6)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 154, column 12: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_sink_selected_5] and\n  [RL_sink_selected_6] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if ((WILL_FIRE_RL_sink_selected_5 || WILL_FIRE_RL_sink_selected_6) &&
+	  WILL_FIRE_RL_sink_selected_7)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 154, column 12: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_sink_selected_5,\n  RL_sink_selected_6] and [RL_sink_selected_7] ) fired in the same clock\n  cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_cpu_imem_ug_u_aw_warnDoDrop)
+	$display("WARNING: dropping from Source that can't be dropped from");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_cpu_imem_ug_u_w_warnDoDrop)
+	$display("WARNING: dropping from Source that can't be dropped from");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_cpu_imem_ug_u_b_warnDoPut)
+	$display("WARNING: putting into a Sink that can't be put into");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_cpu_imem_ug_u_ar_warnDoDrop)
+	$display("WARNING: dropping from Source that can't be dropped from");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_cpu_imem_ug_u_r_warnDoPut)
+	$display("WARNING: putting into a Sink that can't be put into");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_tagController_tmp_ug_master_u_aw_warnDoDrop)
+	$display("WARNING: dropping from Source that can't be dropped from");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_tagController_tmp_ug_master_u_w_warnDoDrop)
+	$display("WARNING: dropping from Source that can't be dropped from");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_tagController_tmp_ug_master_u_b_warnDoPut)
+	$display("WARNING: putting into a Sink that can't be put into");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_tagController_tmp_ug_master_u_ar_warnDoDrop)
+	$display("WARNING: dropping from Source that can't be dropped from");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_tagController_tmp_ug_master_u_r_warnDoPut)
+	$display("WARNING: putting into a Sink that can't be put into");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_tagController_tmp_ug_slave_u_ar_warnDoPut)
+	$display("WARNING: putting into a Sink that can't be put into");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_split_0_putFirst && split_0_doPut$wget[172])
+	$display("Expecting FirstFlit of merged write");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_split_0_putFirst && split_0_doPut$wget[172])
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_tagController_tmp_ug_slave_u_aw_warnDoPut)
+	$display("WARNING: putting into a Sink that can't be put into");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_split_0_putOther && split_0_doPut$wget[172] &&
+	  split_0_doPut$wget[1] &&
+	  split_0_flitLeft > 8'd1)
+	$display("Expecting more write data flits");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_split_0_putOther && split_0_doPut$wget[172] &&
+	  split_0_doPut$wget[1] &&
+	  split_0_flitLeft > 8'd1)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_split_0_putOther && split_0_doPut$wget[172] &&
+	  !split_0_doPut$wget[1] &&
+	  split_0_flitLeft == 8'd1)
+	$display("Expecting last write data flit");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_split_0_putOther && split_0_doPut$wget[172] &&
+	  !split_0_doPut$wget[1] &&
+	  split_0_flitLeft == 8'd1)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_split_0_putOther && !split_0_doPut$wget[172])
+	$display("Expecting OtherFlit of merged write");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_split_0_putOther && !split_0_doPut$wget[172])
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_tagController_tmp_ug_slave_u_w_warnDoPut)
+	$display("WARNING: putting into a Sink that can't be put into");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_split_1_putFirst && split_1_doPut$wget[172])
+	$display("Expecting FirstFlit of merged write");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_split_1_putFirst && split_1_doPut$wget[172])
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_split_1_putOther && split_1_doPut$wget[172] &&
+	  split_1_doPut$wget[1] &&
+	  split_1_flitLeft > 8'd1)
+	$display("Expecting more write data flits");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_split_1_putOther && split_1_doPut$wget[172] &&
+	  split_1_doPut$wget[1] &&
+	  split_1_flitLeft > 8'd1)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_split_1_putOther && split_1_doPut$wget[172] &&
+	  !split_1_doPut$wget[1] &&
+	  split_1_flitLeft == 8'd1)
+	$display("Expecting last write data flit");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_split_1_putOther && split_1_doPut$wget[172] &&
+	  !split_1_doPut$wget[1] &&
+	  split_1_flitLeft == 8'd1)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_split_1_putOther && !split_1_doPut$wget[172])
+	$display("Expecting OtherFlit of merged write");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_split_1_putOther && !split_1_doPut$wget[172])
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_split_2_putFirst && split_2_doPut$wget[172])
+	$display("Expecting FirstFlit of merged write");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_split_2_putFirst && split_2_doPut$wget[172])
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_split_2_putOther && split_2_doPut$wget[172] &&
+	  split_2_doPut$wget[1] &&
+	  split_2_flitLeft > 8'd1)
+	$display("Expecting more write data flits");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_split_2_putOther && split_2_doPut$wget[172] &&
+	  split_2_doPut$wget[1] &&
+	  split_2_flitLeft > 8'd1)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_split_2_putOther && split_2_doPut$wget[172] &&
+	  !split_2_doPut$wget[1] &&
+	  split_2_flitLeft == 8'd1)
+	$display("Expecting last write data flit");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_split_2_putOther && split_2_doPut$wget[172] &&
+	  !split_2_doPut$wget[1] &&
+	  split_2_flitLeft == 8'd1)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_split_2_putOther && !split_2_doPut$wget[172])
+	$display("Expecting OtherFlit of merged write");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_split_2_putOther && !split_2_doPut$wget[172])
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_ifcs_0_nonRoutableFlit &&
+	  WILL_FIRE_RL_ifcs_0_drainFlits)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 215, column 54: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_ifcs_0_nonRoutableFlit] and\n  [RL_ifcs_0_drainFlits] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_arbitrate_1 &&
+	  !SEXT_arbiter_1_lastSelect_412_413_BIT_0_414_AN_ETC___d1425 &&
+	  !SEXT_arbiter_1_lastSelect_1_416_417_BIT_0_418__ETC___d1431 &&
+	  !SEXT_arbiter_1_firstHot_421_422_BIT_0_423_AND__ETC___d1437)
+	$display("mkOneHotArbiter: next method should not be run with no pending request");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_arbitrate_1 &&
+	  !SEXT_arbiter_1_lastSelect_412_413_BIT_0_414_AN_ETC___d1425 &&
+	  !SEXT_arbiter_1_lastSelect_1_416_417_BIT_0_418__ETC___d1431 &&
+	  !SEXT_arbiter_1_firstHot_421_422_BIT_0_423_AND__ETC___d1437)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_2 && ifcs_0_routeBack$EMPTY_N &&
+	  (ifcs_0_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	begin
+	  v__h62437 = $time;
+	  #0;
+	end
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_2 && ifcs_0_routeBack$EMPTY_N &&
+	  (ifcs_0_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write("%0t -- mkOneWayBus error: input %0d was selected but the requested path ",
+	       v__h62437,
+	       $signed(32'd0));
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_2 && ifcs_0_routeBack$EMPTY_N &&
+	  (ifcs_0_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write("<V ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_2 && ifcs_0_routeBack$EMPTY_N &&
+	  (ifcs_0_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  ifcs_0_routeBack$D_OUT[0])
+	$write("True");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_2 && ifcs_0_routeBack$EMPTY_N &&
+	  (ifcs_0_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  !ifcs_0_routeBack$D_OUT[0])
+	$write("False");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_2 && ifcs_0_routeBack$EMPTY_N &&
+	  (ifcs_0_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_2 && ifcs_0_routeBack$EMPTY_N &&
+	  (ifcs_0_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  ifcs_0_routeBack$D_OUT[1])
+	$write("True");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_2 && ifcs_0_routeBack$EMPTY_N &&
+	  (ifcs_0_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  !ifcs_0_routeBack$D_OUT[1])
+	$write("False");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_2 && ifcs_0_routeBack$EMPTY_N &&
+	  (ifcs_0_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_2 && ifcs_0_routeBack$EMPTY_N &&
+	  (ifcs_0_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write("");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_2 && ifcs_0_routeBack$EMPTY_N &&
+	  (ifcs_0_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" >");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_2 && ifcs_0_routeBack$EMPTY_N &&
+	  (ifcs_0_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" is not a valid one-hot path.", "\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_2 && ifcs_0_routeBack$EMPTY_N &&
+	  (ifcs_0_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_2 && !ifcs_0_routeBack$EMPTY_N)
+	begin
+	  v__h62056 = $time;
+	  #0;
+	end
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_2 && !ifcs_0_routeBack$EMPTY_N)
+	$display("%0t -- mkOneWayBus error: input %0d was selected but there was no requested path.",
+		 v__h62056,
+		 $signed(32'd0));
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_2 && !ifcs_0_routeBack$EMPTY_N)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_3 && ifcs_1_routeBack$EMPTY_N &&
+	  (ifcs_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	begin
+	  v__h64507 = $time;
+	  #0;
+	end
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_3 && ifcs_1_routeBack$EMPTY_N &&
+	  (ifcs_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write("%0t -- mkOneWayBus error: input %0d was selected but the requested path ",
+	       v__h64507,
+	       $signed(32'd1));
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_3 && ifcs_1_routeBack$EMPTY_N &&
+	  (ifcs_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write("<V ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_3 && ifcs_1_routeBack$EMPTY_N &&
+	  (ifcs_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  ifcs_1_routeBack$D_OUT[0])
+	$write("True");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_3 && ifcs_1_routeBack$EMPTY_N &&
+	  (ifcs_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  !ifcs_1_routeBack$D_OUT[0])
+	$write("False");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_3 && ifcs_1_routeBack$EMPTY_N &&
+	  (ifcs_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_3 && ifcs_1_routeBack$EMPTY_N &&
+	  (ifcs_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  ifcs_1_routeBack$D_OUT[1])
+	$write("True");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_3 && ifcs_1_routeBack$EMPTY_N &&
+	  (ifcs_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  !ifcs_1_routeBack$D_OUT[1])
+	$write("False");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_3 && ifcs_1_routeBack$EMPTY_N &&
+	  (ifcs_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_3 && ifcs_1_routeBack$EMPTY_N &&
+	  (ifcs_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write("");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_3 && ifcs_1_routeBack$EMPTY_N &&
+	  (ifcs_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" >");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_3 && ifcs_1_routeBack$EMPTY_N &&
+	  (ifcs_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" is not a valid one-hot path.", "\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_3 && ifcs_1_routeBack$EMPTY_N &&
+	  (ifcs_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_3 && !ifcs_1_routeBack$EMPTY_N)
+	begin
+	  v__h64126 = $time;
+	  #0;
+	end
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_3 && !ifcs_1_routeBack$EMPTY_N)
+	$display("%0t -- mkOneWayBus error: input %0d was selected but there was no requested path.",
+		 v__h64126,
+		 $signed(32'd1));
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_3 && !ifcs_1_routeBack$EMPTY_N)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_3 && WILL_FIRE_RL_burst_3)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 114, column 12: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_source_selected_3] and\n  [RL_burst_3] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_4 && ifcs_2_routeBack$EMPTY_N &&
+	  (ifcs_2_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_2_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	begin
+	  v__h66406 = $time;
+	  #0;
+	end
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_4 && ifcs_2_routeBack$EMPTY_N &&
+	  (ifcs_2_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_2_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write("%0t -- mkOneWayBus error: input %0d was selected but the requested path ",
+	       v__h66406,
+	       $signed(32'd2));
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_4 && ifcs_2_routeBack$EMPTY_N &&
+	  (ifcs_2_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_2_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write("<V ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_4 && ifcs_2_routeBack$EMPTY_N &&
+	  (ifcs_2_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_2_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  ifcs_2_routeBack$D_OUT[0])
+	$write("True");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_4 && ifcs_2_routeBack$EMPTY_N &&
+	  (ifcs_2_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_2_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  !ifcs_2_routeBack$D_OUT[0])
+	$write("False");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_4 && ifcs_2_routeBack$EMPTY_N &&
+	  (ifcs_2_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_2_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_4 && ifcs_2_routeBack$EMPTY_N &&
+	  (ifcs_2_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_2_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  ifcs_2_routeBack$D_OUT[1])
+	$write("True");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_4 && ifcs_2_routeBack$EMPTY_N &&
+	  (ifcs_2_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_2_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  !ifcs_2_routeBack$D_OUT[1])
+	$write("False");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_4 && ifcs_2_routeBack$EMPTY_N &&
+	  (ifcs_2_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_2_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_4 && ifcs_2_routeBack$EMPTY_N &&
+	  (ifcs_2_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_2_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write("");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_4 && ifcs_2_routeBack$EMPTY_N &&
+	  (ifcs_2_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_2_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" >");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_4 && ifcs_2_routeBack$EMPTY_N &&
+	  (ifcs_2_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_2_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" is not a valid one-hot path.", "\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_4 && ifcs_2_routeBack$EMPTY_N &&
+	  (ifcs_2_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_2_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_4 && !ifcs_2_routeBack$EMPTY_N)
+	begin
+	  v__h66025 = $time;
+	  #0;
+	end
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_4 && !ifcs_2_routeBack$EMPTY_N)
+	$display("%0t -- mkOneWayBus error: input %0d was selected but there was no requested path.",
+		 v__h66025,
+		 $signed(32'd2));
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_4 && !ifcs_2_routeBack$EMPTY_N)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_2 && WILL_FIRE_RL_burst_2)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 114, column 12: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_source_selected_2] and\n  [RL_burst_2] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if ((WILL_FIRE_RL_source_selected_2 || WILL_FIRE_RL_burst_2) &&
+	  (WILL_FIRE_RL_source_selected_3 || WILL_FIRE_RL_burst_3))
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 114, column 12: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_source_selected_2,\n  RL_burst_2] and [RL_source_selected_3, RL_burst_3] ) fired in the same clock\n  cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if ((WILL_FIRE_RL_source_selected_2 || WILL_FIRE_RL_burst_2 ||
+	   WILL_FIRE_RL_source_selected_3 ||
+	   WILL_FIRE_RL_burst_3) &&
+	  (WILL_FIRE_RL_source_selected_4 || WILL_FIRE_RL_burst_4))
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 114, column 12: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_source_selected_2,\n  RL_burst_2, RL_source_selected_3, RL_burst_3] and [RL_source_selected_4,\n  RL_burst_4] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_4 && WILL_FIRE_RL_burst_4)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 114, column 12: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_source_selected_4] and\n  [RL_burst_4] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_sink_selected_3 && WILL_FIRE_RL_sink_selected_4)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 154, column 12: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_sink_selected_3] and\n  [RL_sink_selected_4] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_ifcs_0_firstFlit &&
+	  WILL_FIRE_RL_ifcs_0_nonRoutableGenRsp)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 216, column 30: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_ifcs_0_firstFlit] and\n  [RL_ifcs_0_nonRoutableGenRsp] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_ifcs_0_firstFlit && WILL_FIRE_RL_ifcs_0_drainFlits)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 215, column 30: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_ifcs_0_firstFlit] and\n  [RL_ifcs_0_drainFlits] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_ifcs_0_firstFlit &&
+	  WILL_FIRE_RL_ifcs_0_nonRoutableFlit)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 215, column 30: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_ifcs_0_firstFlit] and\n  [RL_ifcs_0_nonRoutableFlit] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_ifcs_0_firstFlit && WILL_FIRE_RL_ifcs_0_followFlits)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 215, column 30: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_ifcs_0_firstFlit] and\n  [RL_ifcs_0_followFlits] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_ifcs_0_followFlits &&
+	  WILL_FIRE_RL_ifcs_0_nonRoutableGenRsp)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 216, column 41: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_ifcs_0_followFlits] and\n  [RL_ifcs_0_nonRoutableGenRsp] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_ifcs_0_followFlits && WILL_FIRE_RL_ifcs_0_drainFlits)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 215, column 41: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_ifcs_0_followFlits] and\n  [RL_ifcs_0_drainFlits] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_ifcs_0_followFlits &&
+	  WILL_FIRE_RL_ifcs_0_nonRoutableFlit)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 215, column 41: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_ifcs_0_followFlits] and\n  [RL_ifcs_0_nonRoutableFlit] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_ifcs_0_drainFlits &&
+	  WILL_FIRE_RL_ifcs_0_nonRoutableGenRsp)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 216, column 73: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_ifcs_0_drainFlits] and\n  [RL_ifcs_0_nonRoutableGenRsp] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_merged_0_genOther && cpu$dmem_master_wlast &&
+	  merged_0_flitLeft > 8'd1)
+	$display("Expecting more write data flits");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_merged_0_genOther && cpu$dmem_master_wlast &&
+	  merged_0_flitLeft > 8'd1)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_merged_0_genOther && !cpu$dmem_master_wlast &&
+	  merged_0_flitLeft == 8'd1)
+	$display("Expecting last write data flit");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_merged_0_genOther && !cpu$dmem_master_wlast &&
+	  merged_0_flitLeft == 8'd1)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_ifcs_0_firstFlit_1 &&
+	  WILL_FIRE_RL_ifcs_0_followFlits_1)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 283, column 10: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_ifcs_0_firstFlit_1] and\n  [RL_ifcs_0_followFlits_1] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_tagController_tmp_ug_slave_u_b_warnDoDrop)
+	$display("WARNING: dropping from Source that can't be dropped from");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_ifcs_1_firstFlit_1 &&
+	  WILL_FIRE_RL_ifcs_1_followFlits_1)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 283, column 10: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_ifcs_1_firstFlit_1] and\n  [RL_ifcs_1_followFlits_1] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_ifcs_2_firstFlit && WILL_FIRE_RL_ifcs_2_followFlits)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 282, column 30: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_ifcs_2_firstFlit] and\n  [RL_ifcs_2_followFlits] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_arbitrate_3 &&
+	  !SEXT_arbiter_1_1_lastSelect_994_995_BIT_0_996__ETC___d2007 &&
+	  !SEXT_arbiter_1_1_lastSelect_1_998_999_BIT_0_00_ETC___d2013 &&
+	  !SEXT_arbiter_1_1_firstHot_003_004_BIT_0_005_AN_ETC___d2019)
+	$display("mkOneHotArbiter: next method should not be run with no pending request");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_arbitrate_3 &&
+	  !SEXT_arbiter_1_1_lastSelect_994_995_BIT_0_996__ETC___d2007 &&
+	  !SEXT_arbiter_1_1_lastSelect_1_998_999_BIT_0_00_ETC___d2013 &&
+	  !SEXT_arbiter_1_1_firstHot_003_004_BIT_0_005_AN_ETC___d2019)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_7 && ifcs_0_1_routeBack$EMPTY_N &&
+	  (ifcs_0_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	begin
+	  v__h93666 = $time;
+	  #0;
+	end
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_7 && ifcs_0_1_routeBack$EMPTY_N &&
+	  (ifcs_0_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write("%0t -- mkOneWayBus error: input %0d was selected but the requested path ",
+	       v__h93666,
+	       $signed(32'd0));
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_7 && ifcs_0_1_routeBack$EMPTY_N &&
+	  (ifcs_0_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write("<V ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_7 && ifcs_0_1_routeBack$EMPTY_N &&
+	  (ifcs_0_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  ifcs_0_1_routeBack$D_OUT[0])
+	$write("True");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_7 && ifcs_0_1_routeBack$EMPTY_N &&
+	  (ifcs_0_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  !ifcs_0_1_routeBack$D_OUT[0])
+	$write("False");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_7 && ifcs_0_1_routeBack$EMPTY_N &&
+	  (ifcs_0_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_7 && ifcs_0_1_routeBack$EMPTY_N &&
+	  (ifcs_0_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  ifcs_0_1_routeBack$D_OUT[1])
+	$write("True");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_7 && ifcs_0_1_routeBack$EMPTY_N &&
+	  (ifcs_0_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  !ifcs_0_1_routeBack$D_OUT[1])
+	$write("False");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_7 && ifcs_0_1_routeBack$EMPTY_N &&
+	  (ifcs_0_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_7 && ifcs_0_1_routeBack$EMPTY_N &&
+	  (ifcs_0_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write("");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_7 && ifcs_0_1_routeBack$EMPTY_N &&
+	  (ifcs_0_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" >");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_7 && ifcs_0_1_routeBack$EMPTY_N &&
+	  (ifcs_0_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" is not a valid one-hot path.", "\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_7 && ifcs_0_1_routeBack$EMPTY_N &&
+	  (ifcs_0_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_0_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_7 && !ifcs_0_1_routeBack$EMPTY_N)
+	begin
+	  v__h93285 = $time;
+	  #0;
+	end
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_7 && !ifcs_0_1_routeBack$EMPTY_N)
+	$display("%0t -- mkOneWayBus error: input %0d was selected but there was no requested path.",
+		 v__h93285,
+		 $signed(32'd0));
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_7 && !ifcs_0_1_routeBack$EMPTY_N)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_8 && ifcs_1_1_routeBack$EMPTY_N &&
+	  (ifcs_1_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	begin
+	  v__h96157 = $time;
+	  #0;
+	end
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_8 && ifcs_1_1_routeBack$EMPTY_N &&
+	  (ifcs_1_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write("%0t -- mkOneWayBus error: input %0d was selected but the requested path ",
+	       v__h96157,
+	       $signed(32'd1));
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_8 && ifcs_1_1_routeBack$EMPTY_N &&
+	  (ifcs_1_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write("<V ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_8 && ifcs_1_1_routeBack$EMPTY_N &&
+	  (ifcs_1_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  ifcs_1_1_routeBack$D_OUT[0])
+	$write("True");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_8 && ifcs_1_1_routeBack$EMPTY_N &&
+	  (ifcs_1_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  !ifcs_1_1_routeBack$D_OUT[0])
+	$write("False");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_8 && ifcs_1_1_routeBack$EMPTY_N &&
+	  (ifcs_1_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_8 && ifcs_1_1_routeBack$EMPTY_N &&
+	  (ifcs_1_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  ifcs_1_1_routeBack$D_OUT[1])
+	$write("True");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_8 && ifcs_1_1_routeBack$EMPTY_N &&
+	  (ifcs_1_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  !ifcs_1_1_routeBack$D_OUT[1])
+	$write("False");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_8 && ifcs_1_1_routeBack$EMPTY_N &&
+	  (ifcs_1_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_8 && ifcs_1_1_routeBack$EMPTY_N &&
+	  (ifcs_1_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write("");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_8 && ifcs_1_1_routeBack$EMPTY_N &&
+	  (ifcs_1_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" >");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_8 && ifcs_1_1_routeBack$EMPTY_N &&
+	  (ifcs_1_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" is not a valid one-hot path.", "\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_8 && ifcs_1_1_routeBack$EMPTY_N &&
+	  (ifcs_1_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_1_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_8 && !ifcs_1_1_routeBack$EMPTY_N)
+	begin
+	  v__h95776 = $time;
+	  #0;
+	end
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_8 && !ifcs_1_1_routeBack$EMPTY_N)
+	$display("%0t -- mkOneWayBus error: input %0d was selected but there was no requested path.",
+		 v__h95776,
+		 $signed(32'd1));
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_8 && !ifcs_1_1_routeBack$EMPTY_N)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_8 && WILL_FIRE_RL_burst_8)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 114, column 12: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_source_selected_8] and\n  [RL_burst_8] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_9 && ifcs_2_1_routeBack$EMPTY_N &&
+	  (ifcs_2_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_2_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	begin
+	  v__h98467 = $time;
+	  #0;
+	end
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_9 && ifcs_2_1_routeBack$EMPTY_N &&
+	  (ifcs_2_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_2_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write("%0t -- mkOneWayBus error: input %0d was selected but the requested path ",
+	       v__h98467,
+	       $signed(32'd2));
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_9 && ifcs_2_1_routeBack$EMPTY_N &&
+	  (ifcs_2_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_2_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write("<V ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_9 && ifcs_2_1_routeBack$EMPTY_N &&
+	  (ifcs_2_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_2_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  ifcs_2_1_routeBack$D_OUT[0])
+	$write("True");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_9 && ifcs_2_1_routeBack$EMPTY_N &&
+	  (ifcs_2_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_2_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  !ifcs_2_1_routeBack$D_OUT[0])
+	$write("False");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_9 && ifcs_2_1_routeBack$EMPTY_N &&
+	  (ifcs_2_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_2_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_9 && ifcs_2_1_routeBack$EMPTY_N &&
+	  (ifcs_2_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_2_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  ifcs_2_1_routeBack$D_OUT[1])
+	$write("True");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_9 && ifcs_2_1_routeBack$EMPTY_N &&
+	  (ifcs_2_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_2_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1 &&
+	  !ifcs_2_1_routeBack$D_OUT[1])
+	$write("False");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_9 && ifcs_2_1_routeBack$EMPTY_N &&
+	  (ifcs_2_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_2_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" ");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_9 && ifcs_2_1_routeBack$EMPTY_N &&
+	  (ifcs_2_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_2_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write("");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_9 && ifcs_2_1_routeBack$EMPTY_N &&
+	  (ifcs_2_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_2_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" >");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_9 && ifcs_2_1_routeBack$EMPTY_N &&
+	  (ifcs_2_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_2_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$write(" is not a valid one-hot path.", "\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_9 && ifcs_2_1_routeBack$EMPTY_N &&
+	  (ifcs_2_1_routeBack$D_OUT[0] ? 2'd1 : 2'd0) +
+	  (ifcs_2_1_routeBack$D_OUT[1] ? 2'd1 : 2'd0) !=
+	  2'd1)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_9 && !ifcs_2_1_routeBack$EMPTY_N)
+	begin
+	  v__h98086 = $time;
+	  #0;
+	end
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_9 && !ifcs_2_1_routeBack$EMPTY_N)
+	$display("%0t -- mkOneWayBus error: input %0d was selected but there was no requested path.",
+		 v__h98086,
+		 $signed(32'd2));
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_9 && !ifcs_2_1_routeBack$EMPTY_N)
+	$finish(32'd0);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_7 && WILL_FIRE_RL_burst_7)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 114, column 12: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_source_selected_7] and\n  [RL_burst_7] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if ((WILL_FIRE_RL_source_selected_7 || WILL_FIRE_RL_burst_7) &&
+	  (WILL_FIRE_RL_source_selected_8 || WILL_FIRE_RL_burst_8))
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 114, column 12: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_source_selected_7,\n  RL_burst_7] and [RL_source_selected_8, RL_burst_8] ) fired in the same clock\n  cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if ((WILL_FIRE_RL_source_selected_7 || WILL_FIRE_RL_burst_7 ||
+	   WILL_FIRE_RL_source_selected_8 ||
+	   WILL_FIRE_RL_burst_8) &&
+	  (WILL_FIRE_RL_source_selected_9 || WILL_FIRE_RL_burst_9))
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 114, column 12: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_source_selected_7,\n  RL_burst_7, RL_source_selected_8, RL_burst_8] and [RL_source_selected_9,\n  RL_burst_9] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_source_selected_9 && WILL_FIRE_RL_burst_9)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 114, column 12: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_source_selected_9] and\n  [RL_burst_9] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_sink_selected_8 && WILL_FIRE_RL_sink_selected_9)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 154, column 12: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_sink_selected_8] and\n  [RL_sink_selected_9] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_ifcs_0_1_firstFlit &&
+	  WILL_FIRE_RL_ifcs_0_1_nonRoutableGenRsp)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 216, column 30: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_ifcs_0_1_firstFlit] and\n  [RL_ifcs_0_1_nonRoutableGenRsp] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_ifcs_0_1_firstFlit && WILL_FIRE_RL_ifcs_0_1_drainFlits)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 215, column 30: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_ifcs_0_1_firstFlit] and\n  [RL_ifcs_0_1_drainFlits] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_ifcs_0_1_firstFlit &&
+	  WILL_FIRE_RL_ifcs_0_1_nonRoutableFlit)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 215, column 30: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_ifcs_0_1_firstFlit] and\n  [RL_ifcs_0_1_nonRoutableFlit] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_ifcs_0_1_firstFlit &&
+	  WILL_FIRE_RL_ifcs_0_1_followFlits)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 215, column 30: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_ifcs_0_1_firstFlit] and\n  [RL_ifcs_0_1_followFlits] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_ifcs_0_1_followFlits &&
+	  WILL_FIRE_RL_ifcs_0_1_nonRoutableGenRsp)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 216, column 41: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_ifcs_0_1_followFlits] and\n  [RL_ifcs_0_1_nonRoutableGenRsp] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_ifcs_0_1_followFlits &&
+	  WILL_FIRE_RL_ifcs_0_1_drainFlits)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 215, column 41: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_ifcs_0_1_followFlits] and\n  [RL_ifcs_0_1_drainFlits] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_ifcs_0_1_followFlits &&
+	  WILL_FIRE_RL_ifcs_0_1_nonRoutableFlit)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 215, column 41: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_ifcs_0_1_followFlits] and\n  [RL_ifcs_0_1_nonRoutableFlit] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_ifcs_0_1_nonRoutableFlit &&
+	  WILL_FIRE_RL_ifcs_0_1_drainFlits)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 215, column 54: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_ifcs_0_1_nonRoutableFlit] and\n  [RL_ifcs_0_1_drainFlits] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_ifcs_0_1_drainFlits &&
+	  WILL_FIRE_RL_ifcs_0_1_nonRoutableGenRsp)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 216, column 73: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_ifcs_0_1_drainFlits] and\n  [RL_ifcs_0_1_nonRoutableGenRsp] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_ifcs_0_1_firstFlit_1 &&
+	  WILL_FIRE_RL_ifcs_0_1_followFlits_1)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 283, column 10: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_ifcs_0_1_firstFlit_1] and\n  [RL_ifcs_0_1_followFlits_1] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_tagController_tmp_ug_slave_u_r_warnDoDrop)
+	$display("WARNING: dropping from Source that can't be dropped from");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_ifcs_1_1_firstFlit_1 &&
+	  WILL_FIRE_RL_ifcs_1_1_followFlits_1)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 283, column 10: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_ifcs_1_1_firstFlit_1] and\n  [RL_ifcs_1_1_followFlits_1] ) fired in the same clock cycle.\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_ifcs_2_1_firstFlit &&
+	  WILL_FIRE_RL_ifcs_2_1_followFlits)
+	$display("Error: \"/home/nikhil/git_clones/CHERI_Flute/libs/BlueStuff/Interconnect.bsv\", line 282, column 30: (R0001)\n  Mutually exclusive rules (from the ME sets [RL_ifcs_2_1_firstFlit] and\n  [RL_ifcs_2_1_followFlits] ) fired in the same clock cycle.\n");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_cpu_hart0_reset_from_soc_start)
-	$display("%0d: Core.rl_cpu_hart0_reset_from_soc_start", v__h4421);
+	begin
+	  v__h20898 = $stime;
+	  #0;
+	end
+    v__h20892 = v__h20898 / 32'd10;
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_rl_cpu_hart0_reset_from_soc_start)
+	$display("%0d: Core.rl_cpu_hart0_reset_from_soc_start", v__h20892);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_cpu_hart0_reset_complete)
 	begin
-	  v__h4668 = $stime;
+	  v__h21137 = $stime;
 	  #0;
 	end
-    v__h4662 = v__h4668 / 32'd10;
+    v__h21131 = v__h21137 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_cpu_hart0_reset_complete)
-	$display("%0d: Core.rl_cpu_hart0_reset_complete", v__h4662);
+	$display("%0d: Core.rl_cpu_hart0_reset_complete", v__h21131);
   end
   // synopsys translate_on
 endmodule  // mkCore

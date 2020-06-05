@@ -6,51 +6,29 @@
 //
 // Ports:
 // Name                         I/O  size props
-// m_plic_addr_base               O    64 const
-// m_plic_addr_size               O    64 const
-// m_plic_addr_lim                O    64 const
-// m_debug_module_addr_base       O    64 const
-// m_debug_module_addr_size       O    64 const
-// m_debug_module_addr_lim        O    64 const
-// m_near_mem_io_addr_base        O    64 const
-// m_near_mem_io_addr_size        O    64 const
-// m_near_mem_io_addr_lim         O    64 const
-// m_flash_mem_addr_base          O    64 const
-// m_flash_mem_addr_size          O    64 const
-// m_flash_mem_addr_lim           O    64 const
-// m_ethernet_0_addr_base         O    64 const
-// m_ethernet_0_addr_size         O    64 const
-// m_ethernet_0_addr_lim          O    64 const
-// m_dma_0_addr_base              O    64 const
-// m_dma_0_addr_size              O    64 const
-// m_dma_0_addr_lim               O    64 const
-// m_uart16550_0_addr_base        O    64 const
-// m_uart16550_0_addr_size        O    64 const
-// m_uart16550_0_addr_lim         O    64 const
-// m_gpio_0_addr_base             O    64 const
-// m_gpio_0_addr_size             O    64 const
-// m_gpio_0_addr_lim              O    64 const
-// m_boot_rom_addr_base           O    64 const
-// m_boot_rom_addr_size           O    64 const
-// m_boot_rom_addr_lim            O    64 const
-// m_ddr4_0_uncached_addr_base    O    64 const
-// m_ddr4_0_uncached_addr_size    O    64 const
-// m_ddr4_0_uncached_addr_lim     O    64 const
-// m_ddr4_0_cached_addr_base      O    64 const
-// m_ddr4_0_cached_addr_size      O    64 const
-// m_ddr4_0_cached_addr_lim       O    64 const
-// m_host_access_addr_base        O    64 const
-// m_host_access_addr_size        O    64 const
-// m_host_access_addr_lim         O    64 const
-// m_mem0_controller_addr_base    O    64 const
-// m_mem0_controller_addr_size    O    64 const
-// m_mem0_controller_addr_lim     O    64 const
+// m_plic_addr_range              O   128 const
+// m_debug_module_addr_range      O   128 const
+// m_near_mem_io_addr_range       O   128 const
+// m_flash_mem_addr_range         O   128 const
+// m_ethernet_0_addr_range        O   128 const
+// m_dma_0_addr_range             O   128 const
+// m_uart16550_0_addr_range       O   128 const
+// m_gpio_0_addr_range            O   128 const
+// m_boot_rom_addr_range          O   128 const
+// m_ddr4_0_uncached_addr_range   O   128 const
+// m_ddr4_0_cached_addr_range     O   128 const
+// m_host_access_addr_range       O   128 const
+// m_mem0_controller_addr_range   O   128 const
 // m_is_mem_addr                  O     1
 // m_is_IO_addr                   O     1
 // m_is_near_mem_IO_addr          O     1
 // m_pc_reset_value               O    64 const
 // m_mtvec_reset_value            O    64 const
 // m_nmivec_reset_value           O    64 const
+// m_pcc_reset_value              O   153 const
+// m_ddc_reset_value              O   153 const
+// m_mtcc_reset_value             O   153 const
+// m_mepcc_reset_value            O   153 const
 // CLK                            I     1 unused
 // RST_N                          I     1 unused
 // m_is_mem_addr_addr             I    64
@@ -80,83 +58,31 @@
 module mkSoC_Map(CLK,
 		 RST_N,
 
-		 m_plic_addr_base,
+		 m_plic_addr_range,
 
-		 m_plic_addr_size,
+		 m_debug_module_addr_range,
 
-		 m_plic_addr_lim,
+		 m_near_mem_io_addr_range,
 
-		 m_debug_module_addr_base,
+		 m_flash_mem_addr_range,
 
-		 m_debug_module_addr_size,
+		 m_ethernet_0_addr_range,
 
-		 m_debug_module_addr_lim,
+		 m_dma_0_addr_range,
 
-		 m_near_mem_io_addr_base,
+		 m_uart16550_0_addr_range,
 
-		 m_near_mem_io_addr_size,
+		 m_gpio_0_addr_range,
 
-		 m_near_mem_io_addr_lim,
+		 m_boot_rom_addr_range,
 
-		 m_flash_mem_addr_base,
+		 m_ddr4_0_uncached_addr_range,
 
-		 m_flash_mem_addr_size,
+		 m_ddr4_0_cached_addr_range,
 
-		 m_flash_mem_addr_lim,
+		 m_host_access_addr_range,
 
-		 m_ethernet_0_addr_base,
-
-		 m_ethernet_0_addr_size,
-
-		 m_ethernet_0_addr_lim,
-
-		 m_dma_0_addr_base,
-
-		 m_dma_0_addr_size,
-
-		 m_dma_0_addr_lim,
-
-		 m_uart16550_0_addr_base,
-
-		 m_uart16550_0_addr_size,
-
-		 m_uart16550_0_addr_lim,
-
-		 m_gpio_0_addr_base,
-
-		 m_gpio_0_addr_size,
-
-		 m_gpio_0_addr_lim,
-
-		 m_boot_rom_addr_base,
-
-		 m_boot_rom_addr_size,
-
-		 m_boot_rom_addr_lim,
-
-		 m_ddr4_0_uncached_addr_base,
-
-		 m_ddr4_0_uncached_addr_size,
-
-		 m_ddr4_0_uncached_addr_lim,
-
-		 m_ddr4_0_cached_addr_base,
-
-		 m_ddr4_0_cached_addr_size,
-
-		 m_ddr4_0_cached_addr_lim,
-
-		 m_host_access_addr_base,
-
-		 m_host_access_addr_size,
-
-		 m_host_access_addr_lim,
-
-		 m_mem0_controller_addr_base,
-
-		 m_mem0_controller_addr_size,
-
-		 m_mem0_controller_addr_lim,
+		 m_mem0_controller_addr_range,
 
 		 m_is_mem_addr_addr,
 		 m_is_mem_addr,
@@ -171,126 +97,56 @@ module mkSoC_Map(CLK,
 
 		 m_mtvec_reset_value,
 
-		 m_nmivec_reset_value);
+		 m_nmivec_reset_value,
+
+		 m_pcc_reset_value,
+
+		 m_ddc_reset_value,
+
+		 m_mtcc_reset_value,
+
+		 m_mepcc_reset_value);
   input  CLK;
   input  RST_N;
 
-  // value method m_plic_addr_base
-  output [63 : 0] m_plic_addr_base;
+  // value method m_plic_addr_range
+  output [127 : 0] m_plic_addr_range;
 
-  // value method m_plic_addr_size
-  output [63 : 0] m_plic_addr_size;
+  // value method m_debug_module_addr_range
+  output [127 : 0] m_debug_module_addr_range;
 
-  // value method m_plic_addr_lim
-  output [63 : 0] m_plic_addr_lim;
+  // value method m_near_mem_io_addr_range
+  output [127 : 0] m_near_mem_io_addr_range;
 
-  // value method m_debug_module_addr_base
-  output [63 : 0] m_debug_module_addr_base;
+  // value method m_flash_mem_addr_range
+  output [127 : 0] m_flash_mem_addr_range;
 
-  // value method m_debug_module_addr_size
-  output [63 : 0] m_debug_module_addr_size;
+  // value method m_ethernet_0_addr_range
+  output [127 : 0] m_ethernet_0_addr_range;
 
-  // value method m_debug_module_addr_lim
-  output [63 : 0] m_debug_module_addr_lim;
+  // value method m_dma_0_addr_range
+  output [127 : 0] m_dma_0_addr_range;
 
-  // value method m_near_mem_io_addr_base
-  output [63 : 0] m_near_mem_io_addr_base;
+  // value method m_uart16550_0_addr_range
+  output [127 : 0] m_uart16550_0_addr_range;
 
-  // value method m_near_mem_io_addr_size
-  output [63 : 0] m_near_mem_io_addr_size;
+  // value method m_gpio_0_addr_range
+  output [127 : 0] m_gpio_0_addr_range;
 
-  // value method m_near_mem_io_addr_lim
-  output [63 : 0] m_near_mem_io_addr_lim;
+  // value method m_boot_rom_addr_range
+  output [127 : 0] m_boot_rom_addr_range;
 
-  // value method m_flash_mem_addr_base
-  output [63 : 0] m_flash_mem_addr_base;
+  // value method m_ddr4_0_uncached_addr_range
+  output [127 : 0] m_ddr4_0_uncached_addr_range;
 
-  // value method m_flash_mem_addr_size
-  output [63 : 0] m_flash_mem_addr_size;
+  // value method m_ddr4_0_cached_addr_range
+  output [127 : 0] m_ddr4_0_cached_addr_range;
 
-  // value method m_flash_mem_addr_lim
-  output [63 : 0] m_flash_mem_addr_lim;
+  // value method m_host_access_addr_range
+  output [127 : 0] m_host_access_addr_range;
 
-  // value method m_ethernet_0_addr_base
-  output [63 : 0] m_ethernet_0_addr_base;
-
-  // value method m_ethernet_0_addr_size
-  output [63 : 0] m_ethernet_0_addr_size;
-
-  // value method m_ethernet_0_addr_lim
-  output [63 : 0] m_ethernet_0_addr_lim;
-
-  // value method m_dma_0_addr_base
-  output [63 : 0] m_dma_0_addr_base;
-
-  // value method m_dma_0_addr_size
-  output [63 : 0] m_dma_0_addr_size;
-
-  // value method m_dma_0_addr_lim
-  output [63 : 0] m_dma_0_addr_lim;
-
-  // value method m_uart16550_0_addr_base
-  output [63 : 0] m_uart16550_0_addr_base;
-
-  // value method m_uart16550_0_addr_size
-  output [63 : 0] m_uart16550_0_addr_size;
-
-  // value method m_uart16550_0_addr_lim
-  output [63 : 0] m_uart16550_0_addr_lim;
-
-  // value method m_gpio_0_addr_base
-  output [63 : 0] m_gpio_0_addr_base;
-
-  // value method m_gpio_0_addr_size
-  output [63 : 0] m_gpio_0_addr_size;
-
-  // value method m_gpio_0_addr_lim
-  output [63 : 0] m_gpio_0_addr_lim;
-
-  // value method m_boot_rom_addr_base
-  output [63 : 0] m_boot_rom_addr_base;
-
-  // value method m_boot_rom_addr_size
-  output [63 : 0] m_boot_rom_addr_size;
-
-  // value method m_boot_rom_addr_lim
-  output [63 : 0] m_boot_rom_addr_lim;
-
-  // value method m_ddr4_0_uncached_addr_base
-  output [63 : 0] m_ddr4_0_uncached_addr_base;
-
-  // value method m_ddr4_0_uncached_addr_size
-  output [63 : 0] m_ddr4_0_uncached_addr_size;
-
-  // value method m_ddr4_0_uncached_addr_lim
-  output [63 : 0] m_ddr4_0_uncached_addr_lim;
-
-  // value method m_ddr4_0_cached_addr_base
-  output [63 : 0] m_ddr4_0_cached_addr_base;
-
-  // value method m_ddr4_0_cached_addr_size
-  output [63 : 0] m_ddr4_0_cached_addr_size;
-
-  // value method m_ddr4_0_cached_addr_lim
-  output [63 : 0] m_ddr4_0_cached_addr_lim;
-
-  // value method m_host_access_addr_base
-  output [63 : 0] m_host_access_addr_base;
-
-  // value method m_host_access_addr_size
-  output [63 : 0] m_host_access_addr_size;
-
-  // value method m_host_access_addr_lim
-  output [63 : 0] m_host_access_addr_lim;
-
-  // value method m_mem0_controller_addr_base
-  output [63 : 0] m_mem0_controller_addr_base;
-
-  // value method m_mem0_controller_addr_size
-  output [63 : 0] m_mem0_controller_addr_size;
-
-  // value method m_mem0_controller_addr_lim
-  output [63 : 0] m_mem0_controller_addr_lim;
+  // value method m_mem0_controller_addr_range
+  output [127 : 0] m_mem0_controller_addr_range;
 
   // value method m_is_mem_addr
   input  [63 : 0] m_is_mem_addr_addr;
@@ -313,190 +169,113 @@ module mkSoC_Map(CLK,
   // value method m_nmivec_reset_value
   output [63 : 0] m_nmivec_reset_value;
 
+  // value method m_pcc_reset_value
+  output [152 : 0] m_pcc_reset_value;
+
+  // value method m_ddc_reset_value
+  output [152 : 0] m_ddc_reset_value;
+
+  // value method m_mtcc_reset_value
+  output [152 : 0] m_mtcc_reset_value;
+
+  // value method m_mepcc_reset_value
+  output [152 : 0] m_mepcc_reset_value;
+
   // signals for module outputs
-  wire [63 : 0] m_boot_rom_addr_base,
-		m_boot_rom_addr_lim,
-		m_boot_rom_addr_size,
-		m_ddr4_0_cached_addr_base,
-		m_ddr4_0_cached_addr_lim,
-		m_ddr4_0_cached_addr_size,
-		m_ddr4_0_uncached_addr_base,
-		m_ddr4_0_uncached_addr_lim,
-		m_ddr4_0_uncached_addr_size,
-		m_debug_module_addr_base,
-		m_debug_module_addr_lim,
-		m_debug_module_addr_size,
-		m_dma_0_addr_base,
-		m_dma_0_addr_lim,
-		m_dma_0_addr_size,
-		m_ethernet_0_addr_base,
-		m_ethernet_0_addr_lim,
-		m_ethernet_0_addr_size,
-		m_flash_mem_addr_base,
-		m_flash_mem_addr_lim,
-		m_flash_mem_addr_size,
-		m_gpio_0_addr_base,
-		m_gpio_0_addr_lim,
-		m_gpio_0_addr_size,
-		m_host_access_addr_base,
-		m_host_access_addr_lim,
-		m_host_access_addr_size,
-		m_mem0_controller_addr_base,
-		m_mem0_controller_addr_lim,
-		m_mem0_controller_addr_size,
-		m_mtvec_reset_value,
-		m_near_mem_io_addr_base,
-		m_near_mem_io_addr_lim,
-		m_near_mem_io_addr_size,
-		m_nmivec_reset_value,
-		m_pc_reset_value,
-		m_plic_addr_base,
-		m_plic_addr_lim,
-		m_plic_addr_size,
-		m_uart16550_0_addr_base,
-		m_uart16550_0_addr_lim,
-		m_uart16550_0_addr_size;
+  wire [152 : 0] m_ddc_reset_value,
+		 m_mepcc_reset_value,
+		 m_mtcc_reset_value,
+		 m_pcc_reset_value;
+  wire [127 : 0] m_boot_rom_addr_range,
+		 m_ddr4_0_cached_addr_range,
+		 m_ddr4_0_uncached_addr_range,
+		 m_debug_module_addr_range,
+		 m_dma_0_addr_range,
+		 m_ethernet_0_addr_range,
+		 m_flash_mem_addr_range,
+		 m_gpio_0_addr_range,
+		 m_host_access_addr_range,
+		 m_mem0_controller_addr_range,
+		 m_near_mem_io_addr_range,
+		 m_plic_addr_range,
+		 m_uart16550_0_addr_range;
+  wire [63 : 0] m_mtvec_reset_value, m_nmivec_reset_value, m_pc_reset_value;
   wire m_is_IO_addr, m_is_mem_addr, m_is_near_mem_IO_addr;
 
   // remaining internal signals
-  wire NOT_m_is_IO_addr_addr_ULT_0xC000000_AND_m_is_I_ETC___d41,
-       m_is_IO_addr_addr_ULT_0x70000000___d39,
-       m_is_IO_addr_addr_ULT_268500992___d8;
+  wire [63 : 0] x__h226,
+		x__h250,
+		x__h274,
+		x__h299,
+		x__h324,
+		x__h349,
+		x__h374,
+		x__h399,
+		x__h424,
+		x__h449,
+		x__h474,
+		x__h501;
+  wire NOT_m_is_IO_addr_addr_ULT_0xC000000_AND_m_is_I_ETC___d21,
+       NOT_m_is_IO_addr_addr_ULT_0xC000000_AND_m_is_I_ETC___d33,
+       NOT_m_is_IO_addr_addr_ULT_0xC000000_AND_m_is_I_ETC___d45,
+       NOT_m_is_IO_addr_addr_ULT_0xC000000_AND_m_is_I_ETC___d57;
 
-  // value method m_plic_addr_base
-  assign m_plic_addr_base = 64'h000000000C000000 ;
+  // value method m_plic_addr_range
+  assign m_plic_addr_range = 128'h000000000C0000000000000000400000 ;
 
-  // value method m_plic_addr_size
-  assign m_plic_addr_size = 64'h0000000000400000 ;
+  // value method m_debug_module_addr_range
+  assign m_debug_module_addr_range = 128'h00000000100100000000000000010000 ;
 
-  // value method m_plic_addr_lim
-  assign m_plic_addr_lim = 64'd205520896 ;
+  // value method m_near_mem_io_addr_range
+  assign m_near_mem_io_addr_range = 128'h00000000100000000000000000010000 ;
 
-  // value method m_debug_module_addr_base
-  assign m_debug_module_addr_base = 64'h0000000010010000 ;
+  // value method m_flash_mem_addr_range
+  assign m_flash_mem_addr_range = 128'h00000000400000000000000008000000 ;
 
-  // value method m_debug_module_addr_size
-  assign m_debug_module_addr_size = 64'h0000000000010000 ;
+  // value method m_ethernet_0_addr_range
+  assign m_ethernet_0_addr_range = 128'h00000000621000000000000000040000 ;
 
-  // value method m_debug_module_addr_lim
-  assign m_debug_module_addr_lim = 64'd268566528 ;
+  // value method m_dma_0_addr_range
+  assign m_dma_0_addr_range = 128'h00000000622000000000000000010000 ;
 
-  // value method m_near_mem_io_addr_base
-  assign m_near_mem_io_addr_base = 64'h0000000010000000 ;
+  // value method m_uart16550_0_addr_range
+  assign m_uart16550_0_addr_range = 128'h00000000623000000000000000001000 ;
 
-  // value method m_near_mem_io_addr_size
-  assign m_near_mem_io_addr_size = 64'h0000000000010000 ;
+  // value method m_gpio_0_addr_range
+  assign m_gpio_0_addr_range = 128'h000000006FFF00000000000000010000 ;
 
-  // value method m_near_mem_io_addr_lim
-  assign m_near_mem_io_addr_lim = 64'd268500992 ;
+  // value method m_boot_rom_addr_range
+  assign m_boot_rom_addr_range = 128'h00000000700000000000000000001000 ;
 
-  // value method m_flash_mem_addr_base
-  assign m_flash_mem_addr_base = 64'h0000000040000000 ;
+  // value method m_ddr4_0_uncached_addr_range
+  assign m_ddr4_0_uncached_addr_range =
+	     128'h00000000800000000000000040000000 ;
 
-  // value method m_flash_mem_addr_size
-  assign m_flash_mem_addr_size = 64'h0000000008000000 ;
+  // value method m_ddr4_0_cached_addr_range
+  assign m_ddr4_0_cached_addr_range = 128'h00000000C00000000000000040000000 ;
 
-  // value method m_flash_mem_addr_lim
-  assign m_flash_mem_addr_lim = 64'd1207959552 ;
+  // value method m_host_access_addr_range
+  assign m_host_access_addr_range = 128'h00000000625000000000000000000080 ;
 
-  // value method m_ethernet_0_addr_base
-  assign m_ethernet_0_addr_base = 64'h0000000062100000 ;
-
-  // value method m_ethernet_0_addr_size
-  assign m_ethernet_0_addr_size = 64'h0000000000040000 ;
-
-  // value method m_ethernet_0_addr_lim
-  assign m_ethernet_0_addr_lim = 64'd1645477888 ;
-
-  // value method m_dma_0_addr_base
-  assign m_dma_0_addr_base = 64'h0000000062200000 ;
-
-  // value method m_dma_0_addr_size
-  assign m_dma_0_addr_size = 64'h0000000000010000 ;
-
-  // value method m_dma_0_addr_lim
-  assign m_dma_0_addr_lim = 64'd1646329856 ;
-
-  // value method m_uart16550_0_addr_base
-  assign m_uart16550_0_addr_base = 64'h0000000062300000 ;
-
-  // value method m_uart16550_0_addr_size
-  assign m_uart16550_0_addr_size = 64'h0000000000001000 ;
-
-  // value method m_uart16550_0_addr_lim
-  assign m_uart16550_0_addr_lim = 64'd1647316992 ;
-
-  // value method m_gpio_0_addr_base
-  assign m_gpio_0_addr_base = 64'h000000006FFF0000 ;
-
-  // value method m_gpio_0_addr_size
-  assign m_gpio_0_addr_size = 64'h0000000000010000 ;
-
-  // value method m_gpio_0_addr_lim
-  assign m_gpio_0_addr_lim = 64'd1879048192 ;
-
-  // value method m_boot_rom_addr_base
-  assign m_boot_rom_addr_base = 64'h0000000070000000 ;
-
-  // value method m_boot_rom_addr_size
-  assign m_boot_rom_addr_size = 64'h0000000000001000 ;
-
-  // value method m_boot_rom_addr_lim
-  assign m_boot_rom_addr_lim = 64'd1879052288 ;
-
-  // value method m_ddr4_0_uncached_addr_base
-  assign m_ddr4_0_uncached_addr_base = 64'h0000000080000000 ;
-
-  // value method m_ddr4_0_uncached_addr_size
-  assign m_ddr4_0_uncached_addr_size = 64'h0000000040000000 ;
-
-  // value method m_ddr4_0_uncached_addr_lim
-  assign m_ddr4_0_uncached_addr_lim = 64'h00000000C0000000 ;
-
-  // value method m_ddr4_0_cached_addr_base
-  assign m_ddr4_0_cached_addr_base = 64'h00000000C0000000 ;
-
-  // value method m_ddr4_0_cached_addr_size
-  assign m_ddr4_0_cached_addr_size = 64'h0000000040000000 ;
-
-  // value method m_ddr4_0_cached_addr_lim
-  assign m_ddr4_0_cached_addr_lim = 64'h0000000100000000 ;
-
-  // value method m_host_access_addr_base
-  assign m_host_access_addr_base = 64'h0000000062500000 ;
-
-  // value method m_host_access_addr_size
-  assign m_host_access_addr_size = 64'h0000000000000080 ;
-
-  // value method m_host_access_addr_lim
-  assign m_host_access_addr_lim = 64'd1649410176 ;
-
-  // value method m_mem0_controller_addr_base
-  assign m_mem0_controller_addr_base = 64'h0000000080000000 ;
-
-  // value method m_mem0_controller_addr_size
-  assign m_mem0_controller_addr_size = 64'h0000000080000000 ;
-
-  // value method m_mem0_controller_addr_lim
-  assign m_mem0_controller_addr_lim = 64'h0000000100000000 ;
+  // value method m_mem0_controller_addr_range
+  assign m_mem0_controller_addr_range =
+	     128'h00000000800000000000000080000000 ;
 
   // value method m_is_mem_addr
   assign m_is_mem_addr =
 	     m_is_mem_addr_addr >= 64'h00000000C0000000 &&
-	     m_is_mem_addr_addr < 64'h0000000100000000 ;
+	     x__h226 < 64'h0000000040000000 ;
 
   // value method m_is_IO_addr
   assign m_is_IO_addr =
-	     NOT_m_is_IO_addr_addr_ULT_0xC000000_AND_m_is_I_ETC___d41 ||
-	     !m_is_IO_addr_addr_ULT_0x70000000___d39 &&
-	     m_is_IO_addr_addr < 64'd1879052288 ||
+	     NOT_m_is_IO_addr_addr_ULT_0xC000000_AND_m_is_I_ETC___d57 ||
 	     m_is_IO_addr_addr >= 64'h0000000080000000 &&
-	     m_is_IO_addr_addr < 64'h00000000C0000000 ;
+	     x__h474 < 64'h0000000040000000 ;
 
   // value method m_is_near_mem_IO_addr
   assign m_is_near_mem_IO_addr =
 	     m_is_near_mem_IO_addr_addr >= 64'h0000000010000000 &&
-	     m_is_near_mem_IO_addr_addr < 64'd268500992 ;
+	     x__h501 < 64'h0000000000010000 ;
 
   // value method m_pc_reset_value
   assign m_pc_reset_value = 64'h0000000070000000 ;
@@ -507,27 +286,55 @@ module mkSoC_Map(CLK,
   // value method m_nmivec_reset_value
   assign m_nmivec_reset_value = 64'hAAAAAAAAAAAAAAAA ;
 
+  // value method m_pcc_reset_value
+  assign m_pcc_reset_value = 153'h1000000001C0000000000FFFF1FFFFF44000000 ;
+
+  // value method m_ddc_reset_value
+  assign m_ddc_reset_value = 153'h100000000000000000000FFFF1FFFFF44000000 ;
+
+  // value method m_mtcc_reset_value
+  assign m_mtcc_reset_value = 153'h100000000000004000000FFFF1FFFFF44000000 ;
+
+  // value method m_mepcc_reset_value
+  assign m_mepcc_reset_value = 153'h100000000000000000000FFFF1FFFFF44000000 ;
+
   // remaining internal signals
-  assign NOT_m_is_IO_addr_addr_ULT_0xC000000_AND_m_is_I_ETC___d41 =
+  assign NOT_m_is_IO_addr_addr_ULT_0xC000000_AND_m_is_I_ETC___d21 =
 	     m_is_IO_addr_addr >= 64'h000000000C000000 &&
-	     m_is_IO_addr_addr < 64'd205520896 ||
-	     !m_is_IO_addr_addr_ULT_268500992___d8 &&
-	     m_is_IO_addr_addr < 64'd268566528 ||
+	     x__h250 < 64'h0000000000400000 ||
+	     m_is_IO_addr_addr >= 64'h0000000010010000 &&
+	     x__h274 < 64'h0000000000010000 ||
 	     m_is_IO_addr_addr >= 64'h0000000010000000 &&
-	     m_is_IO_addr_addr_ULT_268500992___d8 ||
+	     x__h299 < 64'h0000000000010000 ;
+  assign NOT_m_is_IO_addr_addr_ULT_0xC000000_AND_m_is_I_ETC___d33 =
+	     NOT_m_is_IO_addr_addr_ULT_0xC000000_AND_m_is_I_ETC___d21 ||
 	     m_is_IO_addr_addr >= 64'h0000000040000000 &&
-	     m_is_IO_addr_addr < 64'd1207959552 ||
+	     x__h324 < 64'h0000000008000000 ||
 	     m_is_IO_addr_addr >= 64'h0000000062100000 &&
-	     m_is_IO_addr_addr < 64'd1645477888 ||
+	     x__h349 < 64'h0000000000040000 ;
+  assign NOT_m_is_IO_addr_addr_ULT_0xC000000_AND_m_is_I_ETC___d45 =
+	     NOT_m_is_IO_addr_addr_ULT_0xC000000_AND_m_is_I_ETC___d33 ||
 	     m_is_IO_addr_addr >= 64'h0000000062200000 &&
-	     m_is_IO_addr_addr < 64'd1646329856 ||
+	     x__h374 < 64'h0000000000010000 ||
 	     m_is_IO_addr_addr >= 64'h0000000062300000 &&
-	     m_is_IO_addr_addr < 64'd1647316992 ||
+	     x__h399 < 64'h0000000000001000 ;
+  assign NOT_m_is_IO_addr_addr_ULT_0xC000000_AND_m_is_I_ETC___d57 =
+	     NOT_m_is_IO_addr_addr_ULT_0xC000000_AND_m_is_I_ETC___d45 ||
 	     m_is_IO_addr_addr >= 64'h000000006FFF0000 &&
-	     m_is_IO_addr_addr_ULT_0x70000000___d39 ;
-  assign m_is_IO_addr_addr_ULT_0x70000000___d39 =
-	     m_is_IO_addr_addr < 64'h0000000070000000 ;
-  assign m_is_IO_addr_addr_ULT_268500992___d8 =
-	     m_is_IO_addr_addr < 64'd268500992 ;
+	     x__h424 < 64'h0000000000010000 ||
+	     m_is_IO_addr_addr >= 64'h0000000070000000 &&
+	     x__h449 < 64'h0000000000001000 ;
+  assign x__h226 = m_is_mem_addr_addr - 64'h00000000C0000000 ;
+  assign x__h250 = m_is_IO_addr_addr - 64'h000000000C000000 ;
+  assign x__h274 = m_is_IO_addr_addr - 64'h0000000010010000 ;
+  assign x__h299 = m_is_IO_addr_addr - 64'h0000000010000000 ;
+  assign x__h324 = m_is_IO_addr_addr - 64'h0000000040000000 ;
+  assign x__h349 = m_is_IO_addr_addr - 64'h0000000062100000 ;
+  assign x__h374 = m_is_IO_addr_addr - 64'h0000000062200000 ;
+  assign x__h399 = m_is_IO_addr_addr - 64'h0000000062300000 ;
+  assign x__h424 = m_is_IO_addr_addr - 64'h000000006FFF0000 ;
+  assign x__h449 = m_is_IO_addr_addr - 64'h0000000070000000 ;
+  assign x__h474 = m_is_IO_addr_addr - 64'h0000000080000000 ;
+  assign x__h501 = m_is_near_mem_IO_addr_addr - 64'h0000000010000000 ;
 endmodule  // mkSoC_Map
 

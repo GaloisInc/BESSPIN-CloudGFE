@@ -583,17 +583,26 @@ module mkBytevec(CLK,
 		 MUX_f_BSV_to_C_bytevec$enq_1__VAL_4,
 		 MUX_f_BSV_to_C_bytevec$enq_1__VAL_5;
   wire [7 : 0] MUX_rg_credits_AXI4L_Rd_Addr_a32_u0$write_1__VAL_1,
+	       MUX_rg_credits_AXI4L_Rd_Data_d32_u0$write_1__VAL_1,
+	       MUX_rg_credits_AXI4L_Rd_Data_d32_u0$write_1__VAL_2,
 	       MUX_rg_credits_AXI4L_Wr_Addr_a32_u0$write_1__VAL_1,
 	       MUX_rg_credits_AXI4L_Wr_Data_d32$write_1__VAL_1,
+	       MUX_rg_credits_AXI4L_Wr_Resp_u0$write_1__VAL_1,
+	       MUX_rg_credits_AXI4L_Wr_Resp_u0$write_1__VAL_2,
 	       MUX_rg_credits_AXI4_Rd_Addr_i16_a64_u0$write_1__VAL_1,
+	       MUX_rg_credits_AXI4_Rd_Data_i16_d512_u0$write_1__VAL_1,
+	       MUX_rg_credits_AXI4_Rd_Data_i16_d512_u0$write_1__VAL_2,
 	       MUX_rg_credits_AXI4_Wr_Addr_i16_a64_u0$write_1__VAL_1,
-	       MUX_rg_credits_AXI4_Wr_Data_d512_u0$write_1__VAL_1;
-  wire MUX_f_BSV_to_C_bytevec$enq_1__SEL_1;
+	       MUX_rg_credits_AXI4_Wr_Data_d512_u0$write_1__VAL_1,
+	       MUX_rg_credits_AXI4_Wr_Resp_i16_u0$write_1__VAL_1,
+	       MUX_rg_credits_AXI4_Wr_Resp_i16_u0$write_1__VAL_2;
+  wire MUX_f_BSV_to_C_bytevec$enq_1__SEL_1,
+       MUX_rg_credits_AXI4L_Rd_Data_d32_u0$write_1__SEL_1;
 
   // remaining internal signals
-  wire NOT_f_AXI4_Wr_Resp_i16_u0_notEmpty__9_56_OR_rg_ETC___d163,
-       NOT_rg_credits_AXI4_Wr_Addr_i16_a64_u0_6_EQ_0__ETC___d174,
-       rg_credits_AXI4_Wr_Addr_i16_a64_u0_6_EQ_0_44_A_ETC___d155;
+  wire NOT_f_AXI4_Wr_Resp_i16_u0_notEmpty__9_60_OR_rg_ETC___d167,
+       NOT_rg_credits_AXI4_Wr_Addr_i16_a64_u0_6_EQ_0__ETC___d178,
+       rg_credits_AXI4_Wr_Addr_i16_a64_u0_6_EQ_0_48_A_ETC___d159;
 
   // value method fo_AXI4_Wr_Addr_i16_a64_u0_first
   assign fo_AXI4_Wr_Addr_i16_a64_u0_first = f_AXI4_Wr_Addr_i16_a64_u0$D_OUT ;
@@ -911,6 +920,13 @@ module mkBytevec(CLK,
 	     rg_credits_AXI4_Wr_Resp_i16_u0 != 8'd0 ;
   assign WILL_FIRE_RL_rl_BSV_to_C_AXI4_Wr_Resp_i16_u0 =
 	     CAN_FIRE_RL_rl_BSV_to_C_AXI4_Wr_Resp_i16_u0 &&
+	     !WILL_FIRE_RL_rl_C_to_BSV_AXI4L_Rd_Addr_a32_u0 &&
+	     !WILL_FIRE_RL_rl_C_to_BSV_AXI4L_Wr_Data_d32 &&
+	     !WILL_FIRE_RL_rl_C_to_BSV_AXI4L_Wr_Addr_a32_u0 &&
+	     !WILL_FIRE_RL_rl_C_to_BSV_AXI4_Rd_Addr_i16_a64_u0 &&
+	     !WILL_FIRE_RL_rl_C_to_BSV_AXI4_Wr_Data_d512_u0 &&
+	     !WILL_FIRE_RL_rl_C_to_BSV_AXI4_Wr_Addr_i16_a64_u0 &&
+	     !WILL_FIRE_RL_rl_C_to_BSV_credits_only &&
 	     !EN_fo_AXI4L_Rd_Addr_a32_u0_deq &&
 	     !EN_fo_AXI4L_Wr_Data_d32_deq &&
 	     !EN_fo_AXI4L_Wr_Addr_a32_u0_deq &&
@@ -926,6 +942,13 @@ module mkBytevec(CLK,
   assign WILL_FIRE_RL_rl_BSV_to_C_AXI4_Rd_Data_i16_d512_u0 =
 	     CAN_FIRE_RL_rl_BSV_to_C_AXI4_Rd_Data_i16_d512_u0 &&
 	     !WILL_FIRE_RL_rl_BSV_to_C_AXI4_Wr_Resp_i16_u0 &&
+	     !WILL_FIRE_RL_rl_C_to_BSV_AXI4L_Rd_Addr_a32_u0 &&
+	     !WILL_FIRE_RL_rl_C_to_BSV_AXI4L_Wr_Data_d32 &&
+	     !WILL_FIRE_RL_rl_C_to_BSV_AXI4L_Wr_Addr_a32_u0 &&
+	     !WILL_FIRE_RL_rl_C_to_BSV_AXI4_Rd_Addr_i16_a64_u0 &&
+	     !WILL_FIRE_RL_rl_C_to_BSV_AXI4_Wr_Data_d512_u0 &&
+	     !WILL_FIRE_RL_rl_C_to_BSV_AXI4_Wr_Addr_i16_a64_u0 &&
+	     !WILL_FIRE_RL_rl_C_to_BSV_credits_only &&
 	     !EN_fo_AXI4L_Rd_Addr_a32_u0_deq &&
 	     !EN_fo_AXI4L_Wr_Data_d32_deq &&
 	     !EN_fo_AXI4L_Wr_Addr_a32_u0_deq &&
@@ -941,6 +964,13 @@ module mkBytevec(CLK,
 	     CAN_FIRE_RL_rl_BSV_to_C_AXI4L_Wr_Resp_u0 &&
 	     !WILL_FIRE_RL_rl_BSV_to_C_AXI4_Rd_Data_i16_d512_u0 &&
 	     !WILL_FIRE_RL_rl_BSV_to_C_AXI4_Wr_Resp_i16_u0 &&
+	     !WILL_FIRE_RL_rl_C_to_BSV_AXI4L_Rd_Addr_a32_u0 &&
+	     !WILL_FIRE_RL_rl_C_to_BSV_AXI4L_Wr_Data_d32 &&
+	     !WILL_FIRE_RL_rl_C_to_BSV_AXI4L_Wr_Addr_a32_u0 &&
+	     !WILL_FIRE_RL_rl_C_to_BSV_AXI4_Rd_Addr_i16_a64_u0 &&
+	     !WILL_FIRE_RL_rl_C_to_BSV_AXI4_Wr_Data_d512_u0 &&
+	     !WILL_FIRE_RL_rl_C_to_BSV_AXI4_Wr_Addr_i16_a64_u0 &&
+	     !WILL_FIRE_RL_rl_C_to_BSV_credits_only &&
 	     !EN_fo_AXI4L_Rd_Addr_a32_u0_deq &&
 	     !EN_fo_AXI4L_Wr_Data_d32_deq &&
 	     !EN_fo_AXI4L_Wr_Addr_a32_u0_deq &&
@@ -957,6 +987,13 @@ module mkBytevec(CLK,
 	     !WILL_FIRE_RL_rl_BSV_to_C_AXI4L_Wr_Resp_u0 &&
 	     !WILL_FIRE_RL_rl_BSV_to_C_AXI4_Rd_Data_i16_d512_u0 &&
 	     !WILL_FIRE_RL_rl_BSV_to_C_AXI4_Wr_Resp_i16_u0 &&
+	     !WILL_FIRE_RL_rl_C_to_BSV_AXI4L_Rd_Addr_a32_u0 &&
+	     !WILL_FIRE_RL_rl_C_to_BSV_AXI4L_Wr_Data_d32 &&
+	     !WILL_FIRE_RL_rl_C_to_BSV_AXI4L_Wr_Addr_a32_u0 &&
+	     !WILL_FIRE_RL_rl_C_to_BSV_AXI4_Rd_Addr_i16_a64_u0 &&
+	     !WILL_FIRE_RL_rl_C_to_BSV_AXI4_Wr_Data_d512_u0 &&
+	     !WILL_FIRE_RL_rl_C_to_BSV_AXI4_Wr_Addr_i16_a64_u0 &&
+	     !WILL_FIRE_RL_rl_C_to_BSV_credits_only &&
 	     !EN_fo_AXI4L_Rd_Addr_a32_u0_deq &&
 	     !EN_fo_AXI4L_Wr_Data_d32_deq &&
 	     !EN_fo_AXI4L_Wr_Addr_a32_u0_deq &&
@@ -966,8 +1003,8 @@ module mkBytevec(CLK,
 
   // rule RL_rl_BSV_to_C_credits_only
   assign CAN_FIRE_RL_rl_BSV_to_C_credits_only =
-	     rg_credits_AXI4_Wr_Addr_i16_a64_u0_6_EQ_0_44_A_ETC___d155 &&
-	     NOT_f_AXI4_Wr_Resp_i16_u0_notEmpty__9_56_OR_rg_ETC___d163 &&
+	     rg_credits_AXI4_Wr_Addr_i16_a64_u0_6_EQ_0_48_A_ETC___d159 &&
+	     NOT_f_AXI4_Wr_Resp_i16_u0_notEmpty__9_60_OR_rg_ETC___d167 &&
 	     (!f_AXI4L_Rd_Data_d32_u0$EMPTY_N ||
 	      rg_credits_AXI4L_Rd_Data_d32_u0 == 8'd0) ;
   assign WILL_FIRE_RL_rl_BSV_to_C_credits_only =
@@ -1031,9 +1068,17 @@ module mkBytevec(CLK,
   // inputs to muxes for submodule ports
   assign MUX_f_BSV_to_C_bytevec$enq_1__SEL_1 =
 	     WILL_FIRE_RL_rl_BSV_to_C_credits_only &&
-	     (NOT_rg_credits_AXI4_Wr_Addr_i16_a64_u0_6_EQ_0__ETC___d174 ||
+	     (NOT_rg_credits_AXI4_Wr_Addr_i16_a64_u0_6_EQ_0__ETC___d178 ||
 	      rg_credits_AXI4L_Wr_Data_d32 != 8'd0 ||
 	      rg_credits_AXI4L_Rd_Addr_a32_u0 != 8'd0) ;
+  assign MUX_rg_credits_AXI4L_Rd_Data_d32_u0$write_1__SEL_1 =
+	     WILL_FIRE_RL_rl_C_to_BSV_credits_only ||
+	     WILL_FIRE_RL_rl_C_to_BSV_AXI4L_Rd_Addr_a32_u0 ||
+	     WILL_FIRE_RL_rl_C_to_BSV_AXI4L_Wr_Data_d32 ||
+	     WILL_FIRE_RL_rl_C_to_BSV_AXI4L_Wr_Addr_a32_u0 ||
+	     WILL_FIRE_RL_rl_C_to_BSV_AXI4_Rd_Addr_i16_a64_u0 ||
+	     WILL_FIRE_RL_rl_C_to_BSV_AXI4_Wr_Data_d512_u0 ||
+	     WILL_FIRE_RL_rl_C_to_BSV_AXI4_Wr_Addr_i16_a64_u0 ;
   assign MUX_f_BSV_to_C_bytevec$enq_1__VAL_1 =
 	     { 552'd0,
 	       rg_credits_AXI4L_Rd_Addr_a32_u0,
@@ -1095,16 +1140,34 @@ module mkBytevec(CLK,
 	       8'd13 } ;
   assign MUX_rg_credits_AXI4L_Rd_Addr_a32_u0$write_1__VAL_1 =
 	     rg_credits_AXI4L_Rd_Addr_a32_u0 + 8'd1 ;
+  assign MUX_rg_credits_AXI4L_Rd_Data_d32_u0$write_1__VAL_1 =
+	     rg_credits_AXI4L_Rd_Data_d32_u0 +
+	     f_C_to_BSV_bytevec$D_OUT[39:32] ;
+  assign MUX_rg_credits_AXI4L_Rd_Data_d32_u0$write_1__VAL_2 =
+	     rg_credits_AXI4L_Rd_Data_d32_u0 - 8'd1 ;
   assign MUX_rg_credits_AXI4L_Wr_Addr_a32_u0$write_1__VAL_1 =
 	     rg_credits_AXI4L_Wr_Addr_a32_u0 + 8'd1 ;
   assign MUX_rg_credits_AXI4L_Wr_Data_d32$write_1__VAL_1 =
 	     rg_credits_AXI4L_Wr_Data_d32 + 8'd1 ;
+  assign MUX_rg_credits_AXI4L_Wr_Resp_u0$write_1__VAL_1 =
+	     rg_credits_AXI4L_Wr_Resp_u0 + f_C_to_BSV_bytevec$D_OUT[31:24] ;
+  assign MUX_rg_credits_AXI4L_Wr_Resp_u0$write_1__VAL_2 =
+	     rg_credits_AXI4L_Wr_Resp_u0 - 8'd1 ;
   assign MUX_rg_credits_AXI4_Rd_Addr_i16_a64_u0$write_1__VAL_1 =
 	     rg_credits_AXI4_Rd_Addr_i16_a64_u0 + 8'd1 ;
+  assign MUX_rg_credits_AXI4_Rd_Data_i16_d512_u0$write_1__VAL_1 =
+	     rg_credits_AXI4_Rd_Data_i16_d512_u0 +
+	     f_C_to_BSV_bytevec$D_OUT[23:16] ;
+  assign MUX_rg_credits_AXI4_Rd_Data_i16_d512_u0$write_1__VAL_2 =
+	     rg_credits_AXI4_Rd_Data_i16_d512_u0 - 8'd1 ;
   assign MUX_rg_credits_AXI4_Wr_Addr_i16_a64_u0$write_1__VAL_1 =
 	     rg_credits_AXI4_Wr_Addr_i16_a64_u0 + 8'd1 ;
   assign MUX_rg_credits_AXI4_Wr_Data_d512_u0$write_1__VAL_1 =
 	     rg_credits_AXI4_Wr_Data_d512_u0 + 8'd1 ;
+  assign MUX_rg_credits_AXI4_Wr_Resp_i16_u0$write_1__VAL_1 =
+	     rg_credits_AXI4_Wr_Resp_i16_u0 + f_C_to_BSV_bytevec$D_OUT[15:8] ;
+  assign MUX_rg_credits_AXI4_Wr_Resp_i16_u0$write_1__VAL_2 =
+	     rg_credits_AXI4_Wr_Resp_i16_u0 - 8'd1 ;
 
   // register rg_credits_AXI4L_Rd_Addr_a32_u0
   assign rg_credits_AXI4L_Rd_Addr_a32_u0$D_IN =
@@ -1121,8 +1184,9 @@ module mkBytevec(CLK,
 
   // register rg_credits_AXI4L_Rd_Data_d32_u0
   assign rg_credits_AXI4L_Rd_Data_d32_u0$D_IN =
-	     rg_credits_AXI4L_Rd_Data_d32_u0 +
-	     f_C_to_BSV_bytevec$D_OUT[39:32] ;
+	     MUX_rg_credits_AXI4L_Rd_Data_d32_u0$write_1__SEL_1 ?
+	       MUX_rg_credits_AXI4L_Rd_Data_d32_u0$write_1__VAL_1 :
+	       MUX_rg_credits_AXI4L_Rd_Data_d32_u0$write_1__VAL_2 ;
   assign rg_credits_AXI4L_Rd_Data_d32_u0$EN =
 	     WILL_FIRE_RL_rl_C_to_BSV_credits_only ||
 	     WILL_FIRE_RL_rl_C_to_BSV_AXI4L_Rd_Addr_a32_u0 ||
@@ -1130,7 +1194,8 @@ module mkBytevec(CLK,
 	     WILL_FIRE_RL_rl_C_to_BSV_AXI4L_Wr_Addr_a32_u0 ||
 	     WILL_FIRE_RL_rl_C_to_BSV_AXI4_Rd_Addr_i16_a64_u0 ||
 	     WILL_FIRE_RL_rl_C_to_BSV_AXI4_Wr_Data_d512_u0 ||
-	     WILL_FIRE_RL_rl_C_to_BSV_AXI4_Wr_Addr_i16_a64_u0 ;
+	     WILL_FIRE_RL_rl_C_to_BSV_AXI4_Wr_Addr_i16_a64_u0 ||
+	     WILL_FIRE_RL_rl_BSV_to_C_AXI4L_Rd_Data_d32_u0 ;
 
   // register rg_credits_AXI4L_Wr_Addr_a32_u0
   assign rg_credits_AXI4L_Wr_Addr_a32_u0$D_IN =
@@ -1160,7 +1225,9 @@ module mkBytevec(CLK,
 
   // register rg_credits_AXI4L_Wr_Resp_u0
   assign rg_credits_AXI4L_Wr_Resp_u0$D_IN =
-	     rg_credits_AXI4L_Wr_Resp_u0 + f_C_to_BSV_bytevec$D_OUT[31:24] ;
+	     MUX_rg_credits_AXI4L_Rd_Data_d32_u0$write_1__SEL_1 ?
+	       MUX_rg_credits_AXI4L_Wr_Resp_u0$write_1__VAL_1 :
+	       MUX_rg_credits_AXI4L_Wr_Resp_u0$write_1__VAL_2 ;
   assign rg_credits_AXI4L_Wr_Resp_u0$EN =
 	     WILL_FIRE_RL_rl_C_to_BSV_credits_only ||
 	     WILL_FIRE_RL_rl_C_to_BSV_AXI4L_Rd_Addr_a32_u0 ||
@@ -1168,7 +1235,8 @@ module mkBytevec(CLK,
 	     WILL_FIRE_RL_rl_C_to_BSV_AXI4L_Wr_Addr_a32_u0 ||
 	     WILL_FIRE_RL_rl_C_to_BSV_AXI4_Rd_Addr_i16_a64_u0 ||
 	     WILL_FIRE_RL_rl_C_to_BSV_AXI4_Wr_Data_d512_u0 ||
-	     WILL_FIRE_RL_rl_C_to_BSV_AXI4_Wr_Addr_i16_a64_u0 ;
+	     WILL_FIRE_RL_rl_C_to_BSV_AXI4_Wr_Addr_i16_a64_u0 ||
+	     WILL_FIRE_RL_rl_BSV_to_C_AXI4L_Wr_Resp_u0 ;
 
   // register rg_credits_AXI4_Rd_Addr_i16_a64_u0
   assign rg_credits_AXI4_Rd_Addr_i16_a64_u0$D_IN =
@@ -1185,8 +1253,9 @@ module mkBytevec(CLK,
 
   // register rg_credits_AXI4_Rd_Data_i16_d512_u0
   assign rg_credits_AXI4_Rd_Data_i16_d512_u0$D_IN =
-	     rg_credits_AXI4_Rd_Data_i16_d512_u0 +
-	     f_C_to_BSV_bytevec$D_OUT[23:16] ;
+	     MUX_rg_credits_AXI4L_Rd_Data_d32_u0$write_1__SEL_1 ?
+	       MUX_rg_credits_AXI4_Rd_Data_i16_d512_u0$write_1__VAL_1 :
+	       MUX_rg_credits_AXI4_Rd_Data_i16_d512_u0$write_1__VAL_2 ;
   assign rg_credits_AXI4_Rd_Data_i16_d512_u0$EN =
 	     WILL_FIRE_RL_rl_C_to_BSV_credits_only ||
 	     WILL_FIRE_RL_rl_C_to_BSV_AXI4L_Rd_Addr_a32_u0 ||
@@ -1194,7 +1263,8 @@ module mkBytevec(CLK,
 	     WILL_FIRE_RL_rl_C_to_BSV_AXI4L_Wr_Addr_a32_u0 ||
 	     WILL_FIRE_RL_rl_C_to_BSV_AXI4_Rd_Addr_i16_a64_u0 ||
 	     WILL_FIRE_RL_rl_C_to_BSV_AXI4_Wr_Data_d512_u0 ||
-	     WILL_FIRE_RL_rl_C_to_BSV_AXI4_Wr_Addr_i16_a64_u0 ;
+	     WILL_FIRE_RL_rl_C_to_BSV_AXI4_Wr_Addr_i16_a64_u0 ||
+	     WILL_FIRE_RL_rl_BSV_to_C_AXI4_Rd_Data_i16_d512_u0 ;
 
   // register rg_credits_AXI4_Wr_Addr_i16_a64_u0
   assign rg_credits_AXI4_Wr_Addr_i16_a64_u0$D_IN =
@@ -1224,7 +1294,9 @@ module mkBytevec(CLK,
 
   // register rg_credits_AXI4_Wr_Resp_i16_u0
   assign rg_credits_AXI4_Wr_Resp_i16_u0$D_IN =
-	     rg_credits_AXI4_Wr_Resp_i16_u0 + f_C_to_BSV_bytevec$D_OUT[15:8] ;
+	     MUX_rg_credits_AXI4L_Rd_Data_d32_u0$write_1__SEL_1 ?
+	       MUX_rg_credits_AXI4_Wr_Resp_i16_u0$write_1__VAL_1 :
+	       MUX_rg_credits_AXI4_Wr_Resp_i16_u0$write_1__VAL_2 ;
   assign rg_credits_AXI4_Wr_Resp_i16_u0$EN =
 	     WILL_FIRE_RL_rl_C_to_BSV_credits_only ||
 	     WILL_FIRE_RL_rl_C_to_BSV_AXI4L_Rd_Addr_a32_u0 ||
@@ -1232,7 +1304,8 @@ module mkBytevec(CLK,
 	     WILL_FIRE_RL_rl_C_to_BSV_AXI4L_Wr_Addr_a32_u0 ||
 	     WILL_FIRE_RL_rl_C_to_BSV_AXI4_Rd_Addr_i16_a64_u0 ||
 	     WILL_FIRE_RL_rl_C_to_BSV_AXI4_Wr_Data_d512_u0 ||
-	     WILL_FIRE_RL_rl_C_to_BSV_AXI4_Wr_Addr_i16_a64_u0 ;
+	     WILL_FIRE_RL_rl_C_to_BSV_AXI4_Wr_Addr_i16_a64_u0 ||
+	     WILL_FIRE_RL_rl_BSV_to_C_AXI4_Wr_Resp_i16_u0 ;
 
   // submodule f_AXI4L_Rd_Addr_a32_u0
   assign f_AXI4L_Rd_Addr_a32_u0$D_IN =
@@ -1360,7 +1433,7 @@ module mkBytevec(CLK,
   end
   assign f_BSV_to_C_bytevec$ENQ =
 	     WILL_FIRE_RL_rl_BSV_to_C_credits_only &&
-	     (NOT_rg_credits_AXI4_Wr_Addr_i16_a64_u0_6_EQ_0__ETC___d174 ||
+	     (NOT_rg_credits_AXI4_Wr_Addr_i16_a64_u0_6_EQ_0__ETC___d178 ||
 	      rg_credits_AXI4L_Wr_Data_d32 != 8'd0 ||
 	      rg_credits_AXI4L_Rd_Addr_a32_u0 != 8'd0) ||
 	     WILL_FIRE_RL_rl_BSV_to_C_AXI4_Wr_Resp_i16_u0 ||
@@ -1374,29 +1447,23 @@ module mkBytevec(CLK,
   assign f_C_to_BSV_bytevec$D_IN = fi_C_to_BSV_bytevec_enq_x ;
   assign f_C_to_BSV_bytevec$ENQ = EN_fi_C_to_BSV_bytevec_enq ;
   assign f_C_to_BSV_bytevec$DEQ =
-	     WILL_FIRE_RL_rl_C_to_BSV_credits_only ||
-	     WILL_FIRE_RL_rl_C_to_BSV_AXI4L_Rd_Addr_a32_u0 ||
-	     WILL_FIRE_RL_rl_C_to_BSV_AXI4L_Wr_Data_d32 ||
-	     WILL_FIRE_RL_rl_C_to_BSV_AXI4L_Wr_Addr_a32_u0 ||
-	     WILL_FIRE_RL_rl_C_to_BSV_AXI4_Rd_Addr_i16_a64_u0 ||
-	     WILL_FIRE_RL_rl_C_to_BSV_AXI4_Wr_Data_d512_u0 ||
-	     WILL_FIRE_RL_rl_C_to_BSV_AXI4_Wr_Addr_i16_a64_u0 ;
+	     MUX_rg_credits_AXI4L_Rd_Data_d32_u0$write_1__SEL_1 ;
   assign f_C_to_BSV_bytevec$CLR = 1'b0 ;
 
   // remaining internal signals
-  assign NOT_f_AXI4_Wr_Resp_i16_u0_notEmpty__9_56_OR_rg_ETC___d163 =
+  assign NOT_f_AXI4_Wr_Resp_i16_u0_notEmpty__9_60_OR_rg_ETC___d167 =
 	     (!f_AXI4_Wr_Resp_i16_u0$EMPTY_N ||
 	      rg_credits_AXI4_Wr_Resp_i16_u0 == 8'd0) &&
 	     (!f_AXI4_Rd_Data_i16_d512_u0$EMPTY_N ||
 	      rg_credits_AXI4_Rd_Data_i16_d512_u0 == 8'd0) &&
 	     (!f_AXI4L_Wr_Resp_u0$EMPTY_N ||
 	      rg_credits_AXI4L_Wr_Resp_u0 == 8'd0) ;
-  assign NOT_rg_credits_AXI4_Wr_Addr_i16_a64_u0_6_EQ_0__ETC___d174 =
+  assign NOT_rg_credits_AXI4_Wr_Addr_i16_a64_u0_6_EQ_0__ETC___d178 =
 	     rg_credits_AXI4_Wr_Addr_i16_a64_u0 != 8'd0 ||
 	     rg_credits_AXI4_Wr_Data_d512_u0 != 8'd0 ||
 	     rg_credits_AXI4_Rd_Addr_i16_a64_u0 != 8'd0 ||
 	     rg_credits_AXI4L_Wr_Addr_a32_u0 != 8'd0 ;
-  assign rg_credits_AXI4_Wr_Addr_i16_a64_u0_6_EQ_0_44_A_ETC___d155 =
+  assign rg_credits_AXI4_Wr_Addr_i16_a64_u0_6_EQ_0_48_A_ETC___d159 =
 	     rg_credits_AXI4_Wr_Addr_i16_a64_u0 == 8'd0 &&
 	     rg_credits_AXI4_Wr_Data_d512_u0 == 8'd0 &&
 	     rg_credits_AXI4_Rd_Addr_i16_a64_u0 == 8'd0 &&

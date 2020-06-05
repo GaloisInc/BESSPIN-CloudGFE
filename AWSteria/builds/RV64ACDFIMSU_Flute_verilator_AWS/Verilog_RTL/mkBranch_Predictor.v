@@ -101,8 +101,8 @@ module mkBranch_Predictor(CLK,
   wire rg_pc$EN;
 
   // register rg_ras
-  reg [1023 : 0] rg_ras;
-  wire [1023 : 0] rg_ras$D_IN;
+  reg [1039 : 0] rg_ras;
+  wire [1039 : 0] rg_ras$D_IN;
   wire rg_ras$EN;
 
   // register rg_resetting
@@ -144,47 +144,111 @@ module mkBranch_Predictor(CLK,
   wire MUX_btb_bramcore2$b_put_1__SEL_1;
 
   // remaining internal signals
-  reg [63 : 0] _theResult_____1_fst__h7499,
-	       _theResult_____1_fst__h7543,
-	       pred_PC__h7404;
-  reg [1 : 0] _theResult_____1_snd__h7500, _theResult_____1_snd__h7544;
-  wire [1023 : 0] IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d208,
-		  IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d210;
-  wire [959 : 0] IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d204;
-  wire [63 : 0] _theResult_____1__h2386,
-		_theResult_____1_fst__h7432,
-		_theResult____h2385,
-		pred_pc__h3341,
-		pred_pc__h3343,
-		ret_pc___1__h4094,
-		ret_pc__h4056;
-  wire [1 : 0] _theResult_____1_snd__h7433;
-  wire IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d173,
-       IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d176,
-       IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d197,
-       IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d189,
-       IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d190,
-       IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d199,
-       IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d148,
-       IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d149,
+  reg [63 : 0] _theResult_____1_fst__h8913;
+  reg [1 : 0] _theResult_____1_snd__h8872, _theResult_____1_snd__h8914;
+  wire [63 : 0] IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d256,
+		IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d266,
+		IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d277,
+		IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d288,
+		IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d299,
+		IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d310,
+		IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d321,
+		IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d332,
+		IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d343,
+		IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d354,
+		IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d365,
+		IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d376,
+		IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d387,
+		IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d398,
+		IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d407,
+		IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d257,
+		IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d267,
+		IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d278,
+		IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d289,
+		IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d300,
+		IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d311,
+		IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d322,
+		IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d333,
+		IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d344,
+		IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d355,
+		IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d366,
+		IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d377,
+		IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d388,
+		IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d399,
+		IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d408,
+		IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d428,
+		IF_bp_train_cf_info_BITS_194_TO_193_EQ_0_THEN__ETC__q1,
+		IF_btb_bramcore2_a_read__03_BIT_117_04_AND_btb_ETC___d114,
+		_theResult_____1_fst__h8757,
+		_theResult_____1_fst__h8871,
+		pred_pc___1__h3690,
+		pred_pc__h2576,
+		ret_pc___1__h4443,
+		ret_pc__h4404;
+  wire [1 : 0] _theResult_____1_snd_snd__h8759;
+  wire IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d224,
+       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d260,
+       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d271,
+       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d282,
+       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d293,
+       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d304,
+       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d315,
+       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d326,
+       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d337,
+       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d348,
+       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d359,
+       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d370,
+       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d381,
+       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d392,
+       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d402,
+       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d248,
+       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d261,
+       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d272,
+       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d283,
+       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d294,
+       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d305,
+       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d316,
+       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d327,
+       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d338,
+       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d349,
+       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d360,
+       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d371,
+       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d382,
+       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d393,
+       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d403,
+       IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d193,
+       IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d196,
+       IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d217,
+       IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d242,
+       IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d209,
+       IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210,
+       IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219,
+       IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d245,
        IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d157,
-       IF_predict_rsp_is_i32_not_i16_OR_predict_rsp_i_ETC___d68,
-       IF_predict_rsp_is_i32_not_i16_OR_predict_rsp_i_ETC___d83,
+       IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158,
+       IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177,
+       IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199,
+       IF_predict_rsp_is_i32_not_i16_OR_predict_rsp_i_ETC___d79,
+       IF_predict_rsp_is_i32_not_i16_OR_predict_rsp_i_ETC___d94,
        IF_predict_rsp_is_i32_not_i16_THEN_NOT_predict_ETC___d50,
        IF_predict_rsp_is_i32_not_i16_THEN_NOT_predict_ETC___d51,
-       IF_predict_rsp_is_i32_not_i16_THEN_predict_rsp_ETC___d78,
-       IF_predict_rsp_is_i32_not_i16_THEN_predict_rsp_ETC___d86,
-       NOT_bp_train_instr_BITS_11_TO_7_16_EQ_bp_train_ETC___d194,
-       NOT_bp_train_instr_BITS_15_TO_12_13_EQ_0b1000__ETC___d125,
-       NOT_bp_train_instr_BITS_15_TO_12_13_EQ_0b1001__ETC___d130,
-       NOT_predict_rsp_instr_BITS_11_TO_7_8_EQ_predic_ETC___d80,
-       bp_train_instr_BITS_15_TO_12_13_EQ_0b1000_14_A_ETC___d153,
-       bp_train_instr_BITS_15_TO_12_13_EQ_0b1000_14_A_ETC___d196,
-       bp_train_instr_BITS_15_TO_12_13_EQ_0b1000_14_O_ETC___d168,
-       bp_train_instr_BITS_15_TO_12_13_EQ_0b1001_26_A_ETC___d144,
+       IF_predict_rsp_is_i32_not_i16_THEN_predict_rsp_ETC___d89,
+       IF_predict_rsp_is_i32_not_i16_THEN_predict_rsp_ETC___d97,
+       NOT_bp_train_instr_BITS_15_TO_12_22_EQ_0b1000__ETC___d134,
+       NOT_bp_train_instr_BITS_15_TO_12_22_EQ_0b1000__ETC___d241,
+       NOT_bp_train_instr_BITS_15_TO_12_22_EQ_0b1001__ETC___d139,
+       NOT_bp_train_instr_BITS_6_TO_0_15_EQ_0b1100111_ETC___d233,
+       NOT_predict_rsp_instr_BITS_11_TO_7_8_EQ_predic_ETC___d91,
+       bp_train_instr_BITS_11_TO_7_25_EQ_bp_train_ins_ETC___d213,
+       bp_train_instr_BITS_15_TO_12_22_EQ_0b1000_23_A_ETC___d173,
+       bp_train_instr_BITS_15_TO_12_22_EQ_0b1000_23_A_ETC___d216,
+       bp_train_instr_BITS_15_TO_12_22_EQ_0b1000_23_O_ETC___d188,
+       bp_train_instr_BITS_15_TO_12_22_EQ_0b1001_35_A_ETC___d153,
+       bp_train_instr_BITS_6_TO_0_15_EQ_0b1100111_59__ETC___d170,
        predict_rsp_instr_BITS_15_TO_12_6_EQ_0b1000_7__ETC___d26,
-       predict_rsp_instr_BITS_15_TO_12_6_EQ_0b1000_7__ETC___d82,
-       predict_rsp_instr_BITS_15_TO_12_6_EQ_0b1001_7__ETC___d30;
+       predict_rsp_instr_BITS_15_TO_12_6_EQ_0b1000_7__ETC___d93,
+       predict_rsp_instr_BITS_15_TO_12_6_EQ_0b1001_7__ETC___d30,
+       predict_rsp_instr_BITS_6_TO_0_EQ_0b1100111_2_O_ETC___d63;
 
   // action method reset
   assign RDY_reset = 1'd1 ;
@@ -198,9 +262,11 @@ module mkBranch_Predictor(CLK,
 
   // value method predict_rsp
   assign predict_rsp =
-	     (_theResult_____1__h2386 == 64'hFFFFFFFFFFFFFFFF) ?
-	       pred_pc__h3343 :
-	       _theResult_____1__h2386 ;
+	     (IF_predict_rsp_is_i32_not_i16_THEN_NOT_predict_ETC___d51 &&
+	      IF_predict_rsp_is_i32_not_i16_THEN_predict_rsp_ETC___d97 &&
+	      rg_ras[64]) ?
+	       rg_ras[63:0] :
+	       IF_btb_bramcore2_a_read__03_BIT_117_04_AND_btb_ETC___d114 ;
 
   // action method bp_train
   assign RDY_bp_train = 1'd1 ;
@@ -249,14 +315,19 @@ module mkBranch_Predictor(CLK,
 
   // inputs to muxes for submodule ports
   assign MUX_btb_bramcore2$b_put_1__SEL_1 =
-	     EN_bp_train && pred_PC__h7404 != 64'hFFFFFFFFFFFFFFFF ;
+	     EN_bp_train &&
+	     (bp_train_cf_info[194:193] == 2'd0 ||
+	      bp_train_cf_info[194:193] == 2'd1 ||
+	      bp_train_cf_info[194:193] == 2'd2) ;
   assign MUX_btb_bramcore2$b_put_3__VAL_1 =
-	     { 1'd1, bp_train_cf_info[192:139], pred_PC__h7404[63:1] } ;
+	     { 1'd1,
+	       bp_train_cf_info[192:139],
+	       IF_bp_train_cf_info_BITS_194_TO_193_EQ_0_THEN__ETC__q1[63:1] } ;
   always@(bp_train_cf_info or
-	  rf_btb_fsms$D_OUT_1 or _theResult_____1_snd__h7433)
+	  rf_btb_fsms$D_OUT_1 or _theResult_____1_snd_snd__h8759)
   begin
     case (bp_train_cf_info[194:193])
-      2'd0: MUX_rf_btb_fsms$upd_2__VAL_1 = _theResult_____1_snd__h7433;
+      2'd0: MUX_rf_btb_fsms$upd_2__VAL_1 = _theResult_____1_snd_snd__h8759;
       2'd1, 2'd2: MUX_rf_btb_fsms$upd_2__VAL_1 = 2'b11;
       2'd3: MUX_rf_btb_fsms$upd_2__VAL_1 = rf_btb_fsms$D_OUT_1;
     endcase
@@ -273,13 +344,46 @@ module mkBranch_Predictor(CLK,
 
   // register rg_ras
   assign rg_ras$D_IN =
-	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d149 ||
-	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d157 &&
-	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d148 &&
-	      (IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d173 ||
-	       IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d176)) ?
-	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d208 :
-	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d210 ;
+	     { IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d248,
+	       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d257,
+	       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d261,
+	       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d267,
+	       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d272,
+	       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d278,
+	       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d283,
+	       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d289,
+	       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d294,
+	       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d300,
+	       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d305,
+	       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d311,
+	       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d316,
+	       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d322,
+	       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d327,
+	       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d333,
+	       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d338,
+	       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d344,
+	       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d349,
+	       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d355,
+	       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d360,
+	       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d366,
+	       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d371,
+	       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d377,
+	       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d382,
+	       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d388,
+	       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d393,
+	       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d399,
+	       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d403,
+	       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d408,
+	       IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	       IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	       IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d157 &&
+	       (IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d193 ||
+		IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d196) ||
+	       ((IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+		 IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219) ?
+		  rg_ras[129] :
+		  rg_ras[64]),
+	       IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d428 } ;
   assign rg_ras$EN = EN_bp_train ;
 
   // register rg_resetting
@@ -303,7 +407,10 @@ module mkBranch_Predictor(CLK,
   assign btb_bramcore2$WEB = 1'd1 ;
   assign btb_bramcore2$ENA = EN_predict_req ;
   assign btb_bramcore2$ENB =
-	     EN_bp_train && pred_PC__h7404 != 64'hFFFFFFFFFFFFFFFF ||
+	     EN_bp_train &&
+	     (bp_train_cf_info[194:193] == 2'd0 ||
+	      bp_train_cf_info[194:193] == 2'd1 ||
+	      bp_train_cf_info[194:193] == 2'd2) ||
 	     WILL_FIRE_RL_rl_reset ;
 
   // submodule rf_btb_fsms
@@ -321,104 +428,461 @@ module mkBranch_Predictor(CLK,
 	       MUX_rf_btb_fsms$upd_2__VAL_1 :
 	       2'b0 ;
   assign rf_btb_fsms$WE =
-	     EN_bp_train && pred_PC__h7404 != 64'hFFFFFFFFFFFFFFFF ||
+	     EN_bp_train &&
+	     (bp_train_cf_info[194:193] == 2'd0 ||
+	      bp_train_cf_info[194:193] == 2'd1 ||
+	      bp_train_cf_info[194:193] == 2'd2) ||
 	     WILL_FIRE_RL_rl_reset ;
 
   // remaining internal signals
-  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d204 =
-	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d190 &&
-	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d157 &&
-	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d199) ?
-	       rg_ras[1023:64] :
-	       rg_ras[959:0] ;
-  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d208 =
-	     { IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d204,
-	       bp_train_is_i32_not_i16 ? ret_pc__h4056 : ret_pc___1__h4094 } ;
-  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d210 =
-	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d190 &&
-	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d157 &&
-	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d199) ?
-	       { 64'hFFFFFFFFFFFFFFFF, rg_ras[1023:64] } :
-	       rg_ras ;
-  assign IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d173 =
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d224 =
+	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210 &&
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219) ?
+	       rg_ras[1039] :
+	       rg_ras[974] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d256 =
+	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210 &&
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219) ?
+	       rg_ras[1038:975] :
+	       rg_ras[973:910] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d260 =
+	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210 &&
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219) ?
+	       rg_ras[974] :
+	       rg_ras[909] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d266 =
+	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210 &&
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219) ?
+	       rg_ras[973:910] :
+	       rg_ras[908:845] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d271 =
+	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210 &&
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219) ?
+	       rg_ras[909] :
+	       rg_ras[844] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d277 =
+	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210 &&
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219) ?
+	       rg_ras[908:845] :
+	       rg_ras[843:780] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d282 =
+	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210 &&
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219) ?
+	       rg_ras[844] :
+	       rg_ras[779] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d288 =
+	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210 &&
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219) ?
+	       rg_ras[843:780] :
+	       rg_ras[778:715] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d293 =
+	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210 &&
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219) ?
+	       rg_ras[779] :
+	       rg_ras[714] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d299 =
+	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210 &&
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219) ?
+	       rg_ras[778:715] :
+	       rg_ras[713:650] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d304 =
+	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210 &&
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219) ?
+	       rg_ras[714] :
+	       rg_ras[649] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d310 =
+	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210 &&
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219) ?
+	       rg_ras[713:650] :
+	       rg_ras[648:585] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d315 =
+	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210 &&
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219) ?
+	       rg_ras[649] :
+	       rg_ras[584] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d321 =
+	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210 &&
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219) ?
+	       rg_ras[648:585] :
+	       rg_ras[583:520] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d326 =
+	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210 &&
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219) ?
+	       rg_ras[584] :
+	       rg_ras[519] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d332 =
+	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210 &&
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219) ?
+	       rg_ras[583:520] :
+	       rg_ras[518:455] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d337 =
+	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210 &&
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219) ?
+	       rg_ras[519] :
+	       rg_ras[454] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d343 =
+	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210 &&
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219) ?
+	       rg_ras[518:455] :
+	       rg_ras[453:390] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d348 =
+	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210 &&
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219) ?
+	       rg_ras[454] :
+	       rg_ras[389] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d354 =
+	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210 &&
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219) ?
+	       rg_ras[453:390] :
+	       rg_ras[388:325] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d359 =
+	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210 &&
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219) ?
+	       rg_ras[389] :
+	       rg_ras[324] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d365 =
+	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210 &&
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219) ?
+	       rg_ras[388:325] :
+	       rg_ras[323:260] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d370 =
+	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210 &&
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219) ?
+	       rg_ras[324] :
+	       rg_ras[259] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d376 =
+	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210 &&
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219) ?
+	       rg_ras[323:260] :
+	       rg_ras[258:195] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d381 =
+	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210 &&
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219) ?
+	       rg_ras[259] :
+	       rg_ras[194] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d387 =
+	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210 &&
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219) ?
+	       rg_ras[258:195] :
+	       rg_ras[193:130] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d392 =
+	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210 &&
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219) ?
+	       rg_ras[194] :
+	       rg_ras[129] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d398 =
+	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210 &&
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219) ?
+	       rg_ras[193:130] :
+	       rg_ras[128:65] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d402 =
+	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210 &&
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219) ?
+	       rg_ras[129] :
+	       rg_ras[64] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d407 =
+	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210 &&
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	      IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219) ?
+	       rg_ras[128:65] :
+	       rg_ras[63:0] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d248 =
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199) ?
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d224 :
+	       IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d245 &&
+	       rg_ras[1039] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d257 =
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199) ?
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d256 :
+	       rg_ras[1038:975] ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d261 =
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199) ?
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d260 :
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d224 ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d267 =
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199) ?
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d266 :
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d256 ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d272 =
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199) ?
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d271 :
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d260 ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d278 =
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199) ?
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d277 :
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d266 ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d283 =
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199) ?
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d282 :
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d271 ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d289 =
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199) ?
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d288 :
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d277 ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d294 =
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199) ?
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d293 :
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d282 ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d300 =
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199) ?
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d299 :
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d288 ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d305 =
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199) ?
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d304 :
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d293 ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d311 =
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199) ?
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d310 :
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d299 ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d316 =
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199) ?
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d315 :
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d304 ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d322 =
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199) ?
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d321 :
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d310 ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d327 =
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199) ?
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d326 :
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d315 ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d333 =
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199) ?
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d332 :
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d321 ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d338 =
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199) ?
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d337 :
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d326 ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d344 =
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199) ?
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d343 :
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d332 ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d349 =
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199) ?
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d348 :
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d337 ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d355 =
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199) ?
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d354 :
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d343 ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d360 =
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199) ?
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d359 :
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d348 ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d366 =
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199) ?
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d365 :
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d354 ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d371 =
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199) ?
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d370 :
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d359 ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d377 =
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199) ?
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d376 :
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d365 ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d382 =
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199) ?
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d381 :
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d370 ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d388 =
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199) ?
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d387 :
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d376 ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d393 =
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199) ?
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d392 :
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d381 ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d399 =
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199) ?
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d398 :
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d387 ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d403 =
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199) ?
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d402 :
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d392 ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d408 =
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199) ?
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d407 :
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d398 ;
+  assign IF_IF_bp_train_is_i32_not_i16_THEN_bp_train_in_ETC___d428 =
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 ||
+	      IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199) ?
+	       (bp_train_is_i32_not_i16 ? ret_pc__h4404 : ret_pc___1__h4443) :
+	       IF_IF_bp_train_is_i32_not_i16_THEN_NOT_bp_trai_ETC___d407 ;
+  assign IF_bp_train_cf_info_BITS_194_TO_193_EQ_0_THEN__ETC__q1 =
+	     (bp_train_cf_info[194:193] == 2'd0) ?
+	       _theResult_____1_fst__h8757 :
+	       bp_train_cf_info[63:0] ;
+  assign IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d193 =
 	     (bp_train_is_i32_not_i16 ||
 	      bp_train_instr[15:13] == 3'b101 &&
 	      bp_train_instr[1:0] == 2'b01) ?
 	       bp_train_instr[19:15] != 5'd1 &&
 	       bp_train_instr[19:15] != 5'd5 :
-	       (bp_train_instr_BITS_15_TO_12_13_EQ_0b1000_14_O_ETC___d168 ?
+	       (bp_train_instr_BITS_15_TO_12_22_EQ_0b1000_23_O_ETC___d188 ?
 		  bp_train_instr[11:7] != 5'd1 &&
 		  bp_train_instr[11:7] != 5'd5 :
 		  bp_train_instr[19:15] != 5'd1 &&
 		  bp_train_instr[19:15] != 5'd5) ;
-  assign IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d176 =
+  assign IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d196 =
 	     (bp_train_is_i32_not_i16 ||
 	      bp_train_instr[15:13] == 3'b101 &&
 	      bp_train_instr[1:0] == 2'b01) ?
 	       bp_train_instr[19:15] == 5'd1 ||
 	       bp_train_instr[19:15] == 5'd5 :
-	       (bp_train_instr_BITS_15_TO_12_13_EQ_0b1000_14_O_ETC___d168 ?
+	       (bp_train_instr_BITS_15_TO_12_22_EQ_0b1000_23_O_ETC___d188 ?
 		  bp_train_instr[11:7] == 5'd1 ||
 		  bp_train_instr[11:7] == 5'd5 :
 		  bp_train_instr[19:15] == 5'd1 ||
 		  bp_train_instr[19:15] == 5'd5) ;
-  assign IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d197 =
+  assign IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d217 =
 	     (bp_train_is_i32_not_i16 ||
 	      bp_train_instr[15:13] == 3'b101 &&
 	      bp_train_instr[1:0] == 2'b01) ?
-	       NOT_bp_train_instr_BITS_11_TO_7_16_EQ_bp_train_ETC___d194 :
-	       bp_train_instr_BITS_15_TO_12_13_EQ_0b1000_14_A_ETC___d196 ;
-  assign IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d189 =
+	       !bp_train_instr_BITS_11_TO_7_25_EQ_bp_train_ins_ETC___d213 :
+	       bp_train_instr_BITS_15_TO_12_22_EQ_0b1000_23_A_ETC___d216 ;
+  assign IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d242 =
+	     (bp_train_is_i32_not_i16 ||
+	      bp_train_instr[15:13] == 3'b101 &&
+	      bp_train_instr[1:0] == 2'b01) ?
+	       bp_train_instr_BITS_11_TO_7_25_EQ_bp_train_ins_ETC___d213 :
+	       NOT_bp_train_instr_BITS_15_TO_12_22_EQ_0b1000__ETC___d241 ;
+  assign IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d209 =
 	     bp_train_is_i32_not_i16 ?
 	       bp_train_instr[11:7] != 5'd1 && bp_train_instr[11:7] != 5'd5 :
 	       bp_train_instr[15:13] == 3'b101 &&
 	       bp_train_instr[1:0] == 2'b01 ||
-	       bp_train_instr_BITS_15_TO_12_13_EQ_0b1000_14_A_ETC___d153 ||
-	       NOT_bp_train_instr_BITS_15_TO_12_13_EQ_0b1001__ETC___d130 &&
+	       bp_train_instr_BITS_15_TO_12_22_EQ_0b1000_23_A_ETC___d173 ||
+	       NOT_bp_train_instr_BITS_15_TO_12_22_EQ_0b1001__ETC___d139 &&
 	       bp_train_instr[11:7] != 5'd1 &&
 	       bp_train_instr[11:7] != 5'd5 ;
-  assign IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d190 =
+  assign IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d210 =
 	     (bp_train_is_i32_not_i16 ?
 		bp_train_instr[6:0] != 7'b1101111 :
 		(bp_train_instr[15:13] != 3'b101 ||
 		 bp_train_instr[1:0] != 2'b01) &&
-		(bp_train_instr_BITS_15_TO_12_13_EQ_0b1000_14_A_ETC___d153 ||
-		 bp_train_instr_BITS_15_TO_12_13_EQ_0b1001_26_A_ETC___d144 ||
+		(bp_train_instr_BITS_15_TO_12_22_EQ_0b1000_23_A_ETC___d173 ||
+		 bp_train_instr_BITS_15_TO_12_22_EQ_0b1001_35_A_ETC___d153 ||
 		 bp_train_instr[6:0] != 7'b1101111)) ||
-	     IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d189 ;
-  assign IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d199 =
-	     IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d189 &&
-	     IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d176 ||
-	     IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d148 &&
-	     IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d176 &&
-	     IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d197 ;
-  assign IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d148 =
+	     IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d209 ;
+  assign IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d219 =
+	     IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d209 &&
+	     IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d196 ||
+	     IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d157 &&
+	     IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d196 &&
+	     IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d217 ;
+  assign IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d245 =
+	     (bp_train_is_i32_not_i16 ?
+		NOT_bp_train_instr_BITS_6_TO_0_15_EQ_0b1100111_ETC___d233 :
+		bp_train_instr[15:13] == 3'b101 &&
+		bp_train_instr[1:0] == 2'b01 ||
+		NOT_bp_train_instr_BITS_15_TO_12_22_EQ_0b1000__ETC___d134 &&
+		NOT_bp_train_instr_BITS_15_TO_12_22_EQ_0b1001__ETC___d139 &&
+		NOT_bp_train_instr_BITS_6_TO_0_15_EQ_0b1100111_ETC___d233) ||
+	     (IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d157 ||
+	      IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d193) &&
+	     (IF_bp_train_is_i32_not_i16_THEN_NOT_bp_train_i_ETC___d209 ||
+	      IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d193 ||
+	      IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d242) ;
+  assign IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d157 =
 	     bp_train_is_i32_not_i16 ?
 	       bp_train_instr[11:7] == 5'd1 || bp_train_instr[11:7] == 5'd5 :
 	       (bp_train_instr[15:13] != 3'b101 ||
 		bp_train_instr[1:0] != 2'b01) &&
-	       NOT_bp_train_instr_BITS_15_TO_12_13_EQ_0b1000__ETC___d125 &&
-	       (bp_train_instr_BITS_15_TO_12_13_EQ_0b1001_26_A_ETC___d144 ||
+	       NOT_bp_train_instr_BITS_15_TO_12_22_EQ_0b1000__ETC___d134 &&
+	       (bp_train_instr_BITS_15_TO_12_22_EQ_0b1001_35_A_ETC___d153 ||
 		bp_train_instr[11:7] == 5'd1 ||
 		bp_train_instr[11:7] == 5'd5) ;
-  assign IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d149 =
+  assign IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d158 =
 	     (bp_train_is_i32_not_i16 ?
 		bp_train_instr[6:0] == 7'b1101111 :
 		bp_train_instr[15:13] == 3'b101 &&
 		bp_train_instr[1:0] == 2'b01 ||
-		NOT_bp_train_instr_BITS_15_TO_12_13_EQ_0b1000__ETC___d125 &&
-		NOT_bp_train_instr_BITS_15_TO_12_13_EQ_0b1001__ETC___d130 &&
+		NOT_bp_train_instr_BITS_15_TO_12_22_EQ_0b1000__ETC___d134 &&
+		NOT_bp_train_instr_BITS_15_TO_12_22_EQ_0b1001__ETC___d139 &&
 		bp_train_instr[6:0] == 7'b1101111) &&
-	     IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d148 ;
-  assign IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d157 =
+	     IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d157 ;
+  assign IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 =
 	     bp_train_is_i32_not_i16 ?
-	       bp_train_instr[6:0] == 7'b1100111 :
+	       bp_train_instr_BITS_6_TO_0_15_EQ_0b1100111_59__ETC___d170 :
 	       (bp_train_instr[15:13] != 3'b101 ||
 		bp_train_instr[1:0] != 2'b01) &&
-	       (bp_train_instr_BITS_15_TO_12_13_EQ_0b1000_14_A_ETC___d153 ||
-		bp_train_instr_BITS_15_TO_12_13_EQ_0b1001_26_A_ETC___d144 ||
-		bp_train_instr[6:0] == 7'b1100111) ;
-  assign IF_predict_rsp_is_i32_not_i16_OR_predict_rsp_i_ETC___d68 =
+	       (bp_train_instr_BITS_15_TO_12_22_EQ_0b1000_23_A_ETC___d173 ||
+		bp_train_instr_BITS_15_TO_12_22_EQ_0b1001_35_A_ETC___d153 ||
+		bp_train_instr_BITS_6_TO_0_15_EQ_0b1100111_59__ETC___d170) ;
+  assign IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d199 =
+	     IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d177 &&
+	     IF_bp_train_is_i32_not_i16_THEN_bp_train_instr_ETC___d157 &&
+	     (IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d193 ||
+	      IF_bp_train_is_i32_not_i16_OR_bp_train_instr_B_ETC___d196) ;
+  assign IF_btb_bramcore2_a_read__03_BIT_117_04_AND_btb_ETC___d114 =
+	     (btb_bramcore2$DOA[117] &&
+	      btb_bramcore2$DOA[116:63] == rg_pc[63:10]) ?
+	       pred_pc___1__h3690 :
+	       pred_pc__h2576 ;
+  assign IF_predict_rsp_is_i32_not_i16_OR_predict_rsp_i_ETC___d79 =
 	     (predict_rsp_is_i32_not_i16 ||
 	      predict_rsp_instr[15:13] == 3'b101 &&
 	      predict_rsp_instr[1:0] == 2'b01) ?
@@ -433,12 +897,12 @@ module mkBranch_Predictor(CLK,
 		  predict_rsp_instr[11:7] == 5'd5 :
 		  predict_rsp_instr[19:15] == 5'd1 ||
 		  predict_rsp_instr[19:15] == 5'd5) ;
-  assign IF_predict_rsp_is_i32_not_i16_OR_predict_rsp_i_ETC___d83 =
+  assign IF_predict_rsp_is_i32_not_i16_OR_predict_rsp_i_ETC___d94 =
 	     (predict_rsp_is_i32_not_i16 ||
 	      predict_rsp_instr[15:13] == 3'b101 &&
 	      predict_rsp_instr[1:0] == 2'b01) ?
-	       NOT_predict_rsp_instr_BITS_11_TO_7_8_EQ_predic_ETC___d80 :
-	       predict_rsp_instr_BITS_15_TO_12_6_EQ_0b1000_7__ETC___d82 ;
+	       NOT_predict_rsp_instr_BITS_11_TO_7_8_EQ_predic_ETC___d91 :
+	       predict_rsp_instr_BITS_15_TO_12_6_EQ_0b1000_7__ETC___d93 ;
   assign IF_predict_rsp_is_i32_not_i16_THEN_NOT_predict_ETC___d50 =
 	     predict_rsp_is_i32_not_i16 ?
 	       predict_rsp_instr[11:7] != 5'd1 &&
@@ -461,7 +925,7 @@ module mkBranch_Predictor(CLK,
 		 predict_rsp_instr_BITS_15_TO_12_6_EQ_0b1001_7__ETC___d30 ||
 		 predict_rsp_instr[6:0] != 7'b1101111)) ||
 	     IF_predict_rsp_is_i32_not_i16_THEN_NOT_predict_ETC___d50 ;
-  assign IF_predict_rsp_is_i32_not_i16_THEN_predict_rsp_ETC___d78 =
+  assign IF_predict_rsp_is_i32_not_i16_THEN_predict_rsp_ETC___d89 =
 	     (predict_rsp_is_i32_not_i16 ?
 		predict_rsp_instr[11:7] == 5'd1 ||
 		predict_rsp_instr[11:7] == 5'd5 :
@@ -474,131 +938,129 @@ module mkBranch_Predictor(CLK,
 		(predict_rsp_instr_BITS_15_TO_12_6_EQ_0b1001_7__ETC___d30 ||
 		 predict_rsp_instr[11:7] == 5'd1 ||
 		 predict_rsp_instr[11:7] == 5'd5)) &&
-	     IF_predict_rsp_is_i32_not_i16_OR_predict_rsp_i_ETC___d68 ;
-  assign IF_predict_rsp_is_i32_not_i16_THEN_predict_rsp_ETC___d86 =
+	     IF_predict_rsp_is_i32_not_i16_OR_predict_rsp_i_ETC___d79 ;
+  assign IF_predict_rsp_is_i32_not_i16_THEN_predict_rsp_ETC___d97 =
 	     (predict_rsp_is_i32_not_i16 ?
-		predict_rsp_instr[6:0] == 7'b1100111 :
+		predict_rsp_instr_BITS_6_TO_0_EQ_0b1100111_2_O_ETC___d63 :
 		(predict_rsp_instr[15:13] != 3'b101 ||
 		 predict_rsp_instr[1:0] != 2'b01) &&
 		(predict_rsp_instr_BITS_15_TO_12_6_EQ_0b1000_7__ETC___d26 ||
 		 predict_rsp_instr_BITS_15_TO_12_6_EQ_0b1001_7__ETC___d30 ||
-		 predict_rsp_instr[6:0] == 7'b1100111)) &&
+		 predict_rsp_instr_BITS_6_TO_0_EQ_0b1100111_2_O_ETC___d63)) &&
 	     (IF_predict_rsp_is_i32_not_i16_THEN_NOT_predict_ETC___d50 &&
-	      IF_predict_rsp_is_i32_not_i16_OR_predict_rsp_i_ETC___d68 ||
-	      IF_predict_rsp_is_i32_not_i16_THEN_predict_rsp_ETC___d78 &&
-	      IF_predict_rsp_is_i32_not_i16_OR_predict_rsp_i_ETC___d83) ;
-  assign NOT_bp_train_instr_BITS_11_TO_7_16_EQ_bp_train_ETC___d194 =
-	     bp_train_instr[11:7] != bp_train_instr[19:15] ;
-  assign NOT_bp_train_instr_BITS_15_TO_12_13_EQ_0b1000__ETC___d125 =
+	      IF_predict_rsp_is_i32_not_i16_OR_predict_rsp_i_ETC___d79 ||
+	      IF_predict_rsp_is_i32_not_i16_THEN_predict_rsp_ETC___d89 &&
+	      IF_predict_rsp_is_i32_not_i16_OR_predict_rsp_i_ETC___d94) ;
+  assign NOT_bp_train_instr_BITS_15_TO_12_22_EQ_0b1000__ETC___d134 =
 	     bp_train_instr[15:12] != 4'b1000 ||
 	     bp_train_instr[11:7] == 5'd0 ||
 	     bp_train_instr[6:2] != 5'd0 ||
 	     bp_train_instr[1:0] != 2'b10 ;
-  assign NOT_bp_train_instr_BITS_15_TO_12_13_EQ_0b1001__ETC___d130 =
+  assign NOT_bp_train_instr_BITS_15_TO_12_22_EQ_0b1000__ETC___d241 =
+	     NOT_bp_train_instr_BITS_15_TO_12_22_EQ_0b1000__ETC___d134 &&
+	     (bp_train_instr_BITS_15_TO_12_22_EQ_0b1001_35_A_ETC___d153 ?
+		bp_train_instr[11:7] == 5'd1 :
+		bp_train_instr_BITS_11_TO_7_25_EQ_bp_train_ins_ETC___d213) ;
+  assign NOT_bp_train_instr_BITS_15_TO_12_22_EQ_0b1001__ETC___d139 =
 	     bp_train_instr[15:12] != 4'b1001 ||
 	     bp_train_instr[11:7] == 5'd0 ||
 	     bp_train_instr[6:2] != 5'd0 ||
 	     bp_train_instr[1:0] != 2'b10 ;
-  assign NOT_predict_rsp_instr_BITS_11_TO_7_8_EQ_predic_ETC___d80 =
+  assign NOT_bp_train_instr_BITS_6_TO_0_15_EQ_0b1100111_ETC___d233 =
+	     bp_train_instr[6:0] != 7'b1100111 &&
+	     (bp_train_instr[6:0] != 7'h5B || bp_train_instr[14:12] != 3'h0 ||
+	      bp_train_instr[31:25] != 7'h7F ||
+	      bp_train_instr[24:20] != 5'h0C) ;
+  assign NOT_predict_rsp_instr_BITS_11_TO_7_8_EQ_predic_ETC___d91 =
 	     predict_rsp_instr[11:7] != predict_rsp_instr[19:15] ;
-  assign _theResult_____1__h2386 =
-	     (_theResult____h2385 == 64'hFFFFFFFFFFFFFFFF &&
-	      btb_bramcore2$DOA[117] &&
-	      btb_bramcore2$DOA[116:63] == rg_pc[63:10]) ?
-	       pred_pc__h3341 :
-	       _theResult____h2385 ;
-  assign _theResult_____1_fst__h7432 =
+  assign _theResult_____1_fst__h8757 =
 	     bp_train_cf_info[128] ?
-	       _theResult_____1_fst__h7499 :
-	       _theResult_____1_fst__h7543 ;
-  assign _theResult_____1_snd__h7433 =
+	       _theResult_____1_fst__h8871 :
+	       _theResult_____1_fst__h8913 ;
+  assign _theResult_____1_fst__h8871 =
+	     (rf_btb_fsms$D_OUT_1 == 2'b0) ?
+	       bp_train_cf_info[127:64] :
+	       bp_train_cf_info[63:0] ;
+  assign _theResult_____1_snd_snd__h8759 =
 	     bp_train_cf_info[128] ?
-	       _theResult_____1_snd__h7500 :
-	       _theResult_____1_snd__h7544 ;
-  assign _theResult____h2385 =
-	     (IF_predict_rsp_is_i32_not_i16_THEN_NOT_predict_ETC___d51 &&
-	      IF_predict_rsp_is_i32_not_i16_THEN_predict_rsp_ETC___d86) ?
-	       rg_ras[63:0] :
-	       64'hFFFFFFFFFFFFFFFF ;
-  assign bp_train_instr_BITS_15_TO_12_13_EQ_0b1000_14_A_ETC___d153 =
+	       _theResult_____1_snd__h8872 :
+	       _theResult_____1_snd__h8914 ;
+  assign bp_train_instr_BITS_11_TO_7_25_EQ_bp_train_ins_ETC___d213 =
+	     bp_train_instr[11:7] == bp_train_instr[19:15] ;
+  assign bp_train_instr_BITS_15_TO_12_22_EQ_0b1000_23_A_ETC___d173 =
 	     bp_train_instr[15:12] == 4'b1000 &&
 	     bp_train_instr[11:7] != 5'd0 &&
 	     bp_train_instr[6:2] == 5'd0 &&
 	     bp_train_instr[1:0] == 2'b10 ;
-  assign bp_train_instr_BITS_15_TO_12_13_EQ_0b1000_14_A_ETC___d196 =
-	     bp_train_instr_BITS_15_TO_12_13_EQ_0b1000_14_A_ETC___d153 ||
-	     (bp_train_instr_BITS_15_TO_12_13_EQ_0b1001_26_A_ETC___d144 ?
+  assign bp_train_instr_BITS_15_TO_12_22_EQ_0b1000_23_A_ETC___d216 =
+	     bp_train_instr_BITS_15_TO_12_22_EQ_0b1000_23_A_ETC___d173 ||
+	     (bp_train_instr_BITS_15_TO_12_22_EQ_0b1001_35_A_ETC___d153 ?
 		bp_train_instr[11:7] != 5'd1 :
-		NOT_bp_train_instr_BITS_11_TO_7_16_EQ_bp_train_ETC___d194) ;
-  assign bp_train_instr_BITS_15_TO_12_13_EQ_0b1000_14_O_ETC___d168 =
+		!bp_train_instr_BITS_11_TO_7_25_EQ_bp_train_ins_ETC___d213) ;
+  assign bp_train_instr_BITS_15_TO_12_22_EQ_0b1000_23_O_ETC___d188 =
 	     (bp_train_instr[15:12] == 4'b1000 ||
 	      bp_train_instr[15:12] == 4'b1001) &&
 	     bp_train_instr[11:7] != 5'd0 &&
 	     bp_train_instr[6:2] == 5'd0 &&
 	     bp_train_instr[1:0] == 2'b10 ;
-  assign bp_train_instr_BITS_15_TO_12_13_EQ_0b1001_26_A_ETC___d144 =
+  assign bp_train_instr_BITS_15_TO_12_22_EQ_0b1001_35_A_ETC___d153 =
 	     bp_train_instr[15:12] == 4'b1001 &&
 	     bp_train_instr[11:7] != 5'd0 &&
 	     bp_train_instr[6:2] == 5'd0 &&
 	     bp_train_instr[1:0] == 2'b10 ;
-  assign pred_pc__h3341 = { btb_bramcore2$DOA[62:0], 1'b0 } ;
-  assign pred_pc__h3343 =
+  assign bp_train_instr_BITS_6_TO_0_15_EQ_0b1100111_59__ETC___d170 =
+	     bp_train_instr[6:0] == 7'b1100111 ||
+	     bp_train_instr[6:0] == 7'h5B && bp_train_instr[14:12] == 3'h0 &&
+	     bp_train_instr[31:25] == 7'h7F &&
+	     bp_train_instr[24:20] == 5'h0C ;
+  assign pred_pc___1__h3690 = { btb_bramcore2$DOA[62:0], 1'b0 } ;
+  assign pred_pc__h2576 =
 	     rg_pc + (predict_rsp_is_i32_not_i16 ? 64'd4 : 64'd2) ;
   assign predict_rsp_instr_BITS_15_TO_12_6_EQ_0b1000_7__ETC___d26 =
 	     predict_rsp_instr[15:12] == 4'b1000 &&
 	     predict_rsp_instr[11:7] != 5'd0 &&
 	     predict_rsp_instr[6:2] == 5'd0 &&
 	     predict_rsp_instr[1:0] == 2'b10 ;
-  assign predict_rsp_instr_BITS_15_TO_12_6_EQ_0b1000_7__ETC___d82 =
+  assign predict_rsp_instr_BITS_15_TO_12_6_EQ_0b1000_7__ETC___d93 =
 	     predict_rsp_instr_BITS_15_TO_12_6_EQ_0b1000_7__ETC___d26 ||
 	     (predict_rsp_instr_BITS_15_TO_12_6_EQ_0b1001_7__ETC___d30 ?
 		predict_rsp_instr[11:7] != 5'd1 :
-		NOT_predict_rsp_instr_BITS_11_TO_7_8_EQ_predic_ETC___d80) ;
+		NOT_predict_rsp_instr_BITS_11_TO_7_8_EQ_predic_ETC___d91) ;
   assign predict_rsp_instr_BITS_15_TO_12_6_EQ_0b1001_7__ETC___d30 =
 	     predict_rsp_instr[15:12] == 4'b1001 &&
 	     predict_rsp_instr[11:7] != 5'd0 &&
 	     predict_rsp_instr[6:2] == 5'd0 &&
 	     predict_rsp_instr[1:0] == 2'b10 ;
-  assign ret_pc___1__h4094 = bp_train_pc + 64'd2 ;
-  assign ret_pc__h4056 = bp_train_pc + 64'd4 ;
-  always@(rf_btb_fsms$D_OUT_1 or bp_train_cf_info)
-  begin
-    case (rf_btb_fsms$D_OUT_1)
-      2'b0: _theResult_____1_fst__h7499 = bp_train_cf_info[127:64];
-      2'b01, 2'b10, 2'b11:
-	  _theResult_____1_fst__h7499 = bp_train_cf_info[63:0];
-    endcase
-  end
+  assign predict_rsp_instr_BITS_6_TO_0_EQ_0b1100111_2_O_ETC___d63 =
+	     predict_rsp_instr[6:0] == 7'b1100111 ||
+	     predict_rsp_instr[6:0] == 7'h5B &&
+	     predict_rsp_instr[14:12] == 3'h0 &&
+	     predict_rsp_instr[31:25] == 7'h7F &&
+	     predict_rsp_instr[24:20] == 5'h0C ;
+  assign ret_pc___1__h4443 = bp_train_pc + 64'd2 ;
+  assign ret_pc__h4404 = bp_train_pc + 64'd4 ;
   always@(rf_btb_fsms$D_OUT_1 or bp_train_cf_info)
   begin
     case (rf_btb_fsms$D_OUT_1)
       2'b0, 2'b01, 2'b10:
-	  _theResult_____1_fst__h7543 = bp_train_cf_info[127:64];
-      2'b11: _theResult_____1_fst__h7543 = bp_train_cf_info[63:0];
-    endcase
-  end
-  always@(bp_train_cf_info or _theResult_____1_fst__h7432)
-  begin
-    case (bp_train_cf_info[194:193])
-      2'd0: pred_PC__h7404 = _theResult_____1_fst__h7432;
-      2'd1, 2'd2: pred_PC__h7404 = bp_train_cf_info[63:0];
-      2'd3: pred_PC__h7404 = 64'hFFFFFFFFFFFFFFFF;
+	  _theResult_____1_fst__h8913 = bp_train_cf_info[127:64];
+      2'd3: _theResult_____1_fst__h8913 = bp_train_cf_info[63:0];
     endcase
   end
   always@(rf_btb_fsms$D_OUT_1)
   begin
     case (rf_btb_fsms$D_OUT_1)
-      2'b0: _theResult_____1_snd__h7500 = 2'b01;
-      2'b01: _theResult_____1_snd__h7500 = 2'b10;
-      2'b10, 2'b11: _theResult_____1_snd__h7500 = 2'b11;
+      2'b0: _theResult_____1_snd__h8872 = 2'b01;
+      2'b01: _theResult_____1_snd__h8872 = 2'b10;
+      2'b10, 2'b11: _theResult_____1_snd__h8872 = 2'b11;
     endcase
   end
   always@(rf_btb_fsms$D_OUT_1)
   begin
     case (rf_btb_fsms$D_OUT_1)
-      2'b0, 2'b01: _theResult_____1_snd__h7544 = 2'b0;
-      2'b10: _theResult_____1_snd__h7544 = 2'b01;
-      2'b11: _theResult_____1_snd__h7544 = 2'b10;
+      2'b0, 2'b01: _theResult_____1_snd__h8914 = 2'b0;
+      2'b10: _theResult_____1_snd__h8914 = 2'b01;
+      2'b11: _theResult_____1_snd__h8914 = 2'b10;
     endcase
   end
 
@@ -610,7 +1072,7 @@ module mkBranch_Predictor(CLK,
       begin
         rg_index <= `BSV_ASSIGNMENT_DELAY 9'd0;
 	rg_ras <= `BSV_ASSIGNMENT_DELAY
-	    1024'hFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
+	    1040'h55555555555555552AAAAAAAAAAAAAAA95555555555555554AAAAAAAAAAAAAAAA55555555555555552AAAAAAAAAAAAAAA95555555555555554AAAAAAAAAAAAAAAA55555555555555552AAAAAAAAAAAAAAA95555555555555554AAAAAAAAAAAAAAAA55555555555555552AAAAAAAAAAAAAAA95555555555555554AAAAAAAAAAAAAAAA;
 	rg_resetting <= `BSV_ASSIGNMENT_DELAY 1'd1;
       end
     else
@@ -631,7 +1093,7 @@ module mkBranch_Predictor(CLK,
     rg_index = 9'h0AA;
     rg_pc = 64'hAAAAAAAAAAAAAAAA;
     rg_ras =
-	1024'hAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+	1040'hAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
     rg_resetting = 1'h0;
   end
   `endif // BSV_NO_INITIAL_BLOCKS

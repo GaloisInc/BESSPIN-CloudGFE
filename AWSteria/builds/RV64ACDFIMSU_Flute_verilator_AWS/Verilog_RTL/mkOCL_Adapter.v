@@ -6,14 +6,14 @@
 //
 // Ports:
 // Name                         I/O  size props
-// ocl_slave_awready              O     1 reg
-// ocl_slave_wready               O     1 reg
-// ocl_slave_bvalid               O     1 reg
-// ocl_slave_bresp                O     2 reg
-// ocl_slave_arready              O     1 reg
-// ocl_slave_rvalid               O     1 reg
-// ocl_slave_rresp                O     2 reg
-// ocl_slave_rdata                O    32 reg
+// ocl_slave_aw_awready           O     1 reg
+// ocl_slave_w_wready             O     1 reg
+// ocl_slave_b_bresp              O     2 reg
+// ocl_slave_b_bvalid             O     1 reg
+// ocl_slave_ar_arready           O     1 reg
+// ocl_slave_r_rdata              O    32 reg
+// ocl_slave_r_rresp              O     2 reg
+// ocl_slave_r_rvalid             O     1 reg
 // v_from_host_0_first            O    32 reg
 // RDY_v_from_host_0_first        O     1 reg
 // RDY_v_from_host_0_deq          O     1 reg
@@ -53,21 +53,21 @@
 // RDY_v_to_host_3_notFull        O     1 const
 // CLK                            I     1 clock
 // RST_N                          I     1 reset
-// ocl_slave_awvalid              I     1
-// ocl_slave_awaddr               I    32 reg
-// ocl_slave_awprot               I     3 reg
-// ocl_slave_wvalid               I     1
-// ocl_slave_wdata                I    32 reg
-// ocl_slave_wstrb                I     4 reg
-// ocl_slave_bready               I     1
-// ocl_slave_arvalid              I     1
-// ocl_slave_araddr               I    32 reg
-// ocl_slave_arprot               I     3 reg
-// ocl_slave_rready               I     1
+// ocl_slave_aw_awaddr            I    32 reg
+// ocl_slave_aw_awprot            I     3 reg
+// ocl_slave_w_wdata              I    32 reg
+// ocl_slave_w_wstrb              I     4 reg
+// ocl_slave_b_bready             I     1
+// ocl_slave_ar_araddr            I    32 reg
+// ocl_slave_ar_arprot            I     3 reg
+// ocl_slave_r_rready             I     1
 // v_to_host_0_enq_x              I    32 reg
 // v_to_host_1_enq_x              I    32 reg
 // v_to_host_2_enq_x              I    32 reg
 // v_to_host_3_enq_x              I    32 reg
+// ocl_slave_aw_awvalid           I     1
+// ocl_slave_w_wvalid             I     1
+// ocl_slave_ar_arvalid           I     1
 // EN_v_from_host_0_deq           I     1
 // EN_v_from_host_1_deq           I     1
 // EN_v_from_host_2_deq           I     1
@@ -98,37 +98,37 @@
 module mkOCL_Adapter(CLK,
 		     RST_N,
 
-		     ocl_slave_awvalid,
-		     ocl_slave_awaddr,
-		     ocl_slave_awprot,
+		     ocl_slave_aw_awaddr,
+		     ocl_slave_aw_awprot,
+		     ocl_slave_aw_awvalid,
 
-		     ocl_slave_awready,
+		     ocl_slave_aw_awready,
 
-		     ocl_slave_wvalid,
-		     ocl_slave_wdata,
-		     ocl_slave_wstrb,
+		     ocl_slave_w_wdata,
+		     ocl_slave_w_wstrb,
+		     ocl_slave_w_wvalid,
 
-		     ocl_slave_wready,
+		     ocl_slave_w_wready,
 
-		     ocl_slave_bvalid,
+		     ocl_slave_b_bresp,
 
-		     ocl_slave_bresp,
+		     ocl_slave_b_bvalid,
 
-		     ocl_slave_bready,
+		     ocl_slave_b_bready,
 
-		     ocl_slave_arvalid,
-		     ocl_slave_araddr,
-		     ocl_slave_arprot,
+		     ocl_slave_ar_araddr,
+		     ocl_slave_ar_arprot,
+		     ocl_slave_ar_arvalid,
 
-		     ocl_slave_arready,
+		     ocl_slave_ar_arready,
 
-		     ocl_slave_rvalid,
+		     ocl_slave_r_rdata,
 
-		     ocl_slave_rresp,
+		     ocl_slave_r_rresp,
 
-		     ocl_slave_rdata,
+		     ocl_slave_r_rvalid,
 
-		     ocl_slave_rready,
+		     ocl_slave_r_rready,
 
 		     v_from_host_0_first,
 		     RDY_v_from_host_0_first,
@@ -205,54 +205,54 @@ module mkOCL_Adapter(CLK,
   input  CLK;
   input  RST_N;
 
-  // action method ocl_slave_m_awvalid
-  input  ocl_slave_awvalid;
-  input  [31 : 0] ocl_slave_awaddr;
-  input  [2 : 0] ocl_slave_awprot;
+  // action method ocl_slave_aw_awflit
+  input  [31 : 0] ocl_slave_aw_awaddr;
+  input  [2 : 0] ocl_slave_aw_awprot;
+  input  ocl_slave_aw_awvalid;
 
-  // value method ocl_slave_m_awready
-  output ocl_slave_awready;
+  // value method ocl_slave_aw_awready
+  output ocl_slave_aw_awready;
 
-  // action method ocl_slave_m_wvalid
-  input  ocl_slave_wvalid;
-  input  [31 : 0] ocl_slave_wdata;
-  input  [3 : 0] ocl_slave_wstrb;
+  // action method ocl_slave_w_wflit
+  input  [31 : 0] ocl_slave_w_wdata;
+  input  [3 : 0] ocl_slave_w_wstrb;
+  input  ocl_slave_w_wvalid;
 
-  // value method ocl_slave_m_wready
-  output ocl_slave_wready;
+  // value method ocl_slave_w_wready
+  output ocl_slave_w_wready;
 
-  // value method ocl_slave_m_bvalid
-  output ocl_slave_bvalid;
+  // value method ocl_slave_b_bresp
+  output [1 : 0] ocl_slave_b_bresp;
 
-  // value method ocl_slave_m_bresp
-  output [1 : 0] ocl_slave_bresp;
+  // value method ocl_slave_b_buser
 
-  // value method ocl_slave_m_buser
+  // value method ocl_slave_b_bvalid
+  output ocl_slave_b_bvalid;
 
-  // action method ocl_slave_m_bready
-  input  ocl_slave_bready;
+  // action method ocl_slave_b_bready
+  input  ocl_slave_b_bready;
 
-  // action method ocl_slave_m_arvalid
-  input  ocl_slave_arvalid;
-  input  [31 : 0] ocl_slave_araddr;
-  input  [2 : 0] ocl_slave_arprot;
+  // action method ocl_slave_ar_arflit
+  input  [31 : 0] ocl_slave_ar_araddr;
+  input  [2 : 0] ocl_slave_ar_arprot;
+  input  ocl_slave_ar_arvalid;
 
-  // value method ocl_slave_m_arready
-  output ocl_slave_arready;
+  // value method ocl_slave_ar_arready
+  output ocl_slave_ar_arready;
 
-  // value method ocl_slave_m_rvalid
-  output ocl_slave_rvalid;
+  // value method ocl_slave_r_rdata
+  output [31 : 0] ocl_slave_r_rdata;
 
-  // value method ocl_slave_m_rresp
-  output [1 : 0] ocl_slave_rresp;
+  // value method ocl_slave_r_rresp
+  output [1 : 0] ocl_slave_r_rresp;
 
-  // value method ocl_slave_m_rdata
-  output [31 : 0] ocl_slave_rdata;
+  // value method ocl_slave_r_ruser
 
-  // value method ocl_slave_m_ruser
+  // value method ocl_slave_r_rvalid
+  output ocl_slave_r_rvalid;
 
-  // action method ocl_slave_m_rready
-  input  ocl_slave_rready;
+  // action method ocl_slave_r_rready
+  input  ocl_slave_r_rready;
 
   // value method v_from_host_0_first
   output [31 : 0] v_from_host_0_first;
@@ -351,13 +351,13 @@ module mkOCL_Adapter(CLK,
   output RDY_v_to_host_3_notFull;
 
   // signals for module outputs
-  wire [31 : 0] ocl_slave_rdata,
+  wire [31 : 0] ocl_slave_r_rdata,
 		v_from_host_0_first,
 		v_from_host_1_first,
 		v_from_host_2_first,
 		v_from_host_3_first,
 		v_from_host_4_first;
-  wire [1 : 0] ocl_slave_bresp, ocl_slave_rresp;
+  wire [1 : 0] ocl_slave_b_bresp, ocl_slave_r_rresp;
   wire RDY_v_from_host_0_deq,
        RDY_v_from_host_0_first,
        RDY_v_from_host_0_notEmpty,
@@ -381,11 +381,11 @@ module mkOCL_Adapter(CLK,
        RDY_v_to_host_2_notFull,
        RDY_v_to_host_3_enq,
        RDY_v_to_host_3_notFull,
-       ocl_slave_arready,
-       ocl_slave_awready,
-       ocl_slave_bvalid,
-       ocl_slave_rvalid,
-       ocl_slave_wready,
+       ocl_slave_ar_arready,
+       ocl_slave_aw_awready,
+       ocl_slave_b_bvalid,
+       ocl_slave_r_rvalid,
+       ocl_slave_w_wready,
        v_from_host_0_notEmpty,
        v_from_host_1_notEmpty,
        v_from_host_2_notEmpty,
@@ -396,45 +396,52 @@ module mkOCL_Adapter(CLK,
        v_to_host_2_notFull,
        v_to_host_3_notFull;
 
-  // ports of submodule ocl_xactor_f_rd_addr
-  wire [34 : 0] ocl_xactor_f_rd_addr$D_IN, ocl_xactor_f_rd_addr$D_OUT;
-  wire ocl_xactor_f_rd_addr$CLR,
-       ocl_xactor_f_rd_addr$DEQ,
-       ocl_xactor_f_rd_addr$EMPTY_N,
-       ocl_xactor_f_rd_addr$ENQ,
-       ocl_xactor_f_rd_addr$FULL_N;
+  // inlined wires
+  wire [35 : 0] ocl_xactor_u_slave_u_w_putWire$wget;
+  wire [34 : 0] ocl_xactor_u_slave_u_ar_putWire$wget,
+		ocl_xactor_u_slave_u_aw_putWire$wget;
+  wire ocl_xactor_u_slave_u_b_dropWire$whas,
+       ocl_xactor_u_slave_u_r_dropWire$whas;
 
-  // ports of submodule ocl_xactor_f_rd_data
-  wire [33 : 0] ocl_xactor_f_rd_data$D_IN, ocl_xactor_f_rd_data$D_OUT;
-  wire ocl_xactor_f_rd_data$CLR,
-       ocl_xactor_f_rd_data$DEQ,
-       ocl_xactor_f_rd_data$EMPTY_N,
-       ocl_xactor_f_rd_data$ENQ,
-       ocl_xactor_f_rd_data$FULL_N;
+  // ports of submodule ocl_xactor_shim_arff
+  wire [34 : 0] ocl_xactor_shim_arff$D_IN, ocl_xactor_shim_arff$D_OUT;
+  wire ocl_xactor_shim_arff$CLR,
+       ocl_xactor_shim_arff$DEQ,
+       ocl_xactor_shim_arff$EMPTY_N,
+       ocl_xactor_shim_arff$ENQ,
+       ocl_xactor_shim_arff$FULL_N;
 
-  // ports of submodule ocl_xactor_f_wr_addr
-  wire [34 : 0] ocl_xactor_f_wr_addr$D_IN, ocl_xactor_f_wr_addr$D_OUT;
-  wire ocl_xactor_f_wr_addr$CLR,
-       ocl_xactor_f_wr_addr$DEQ,
-       ocl_xactor_f_wr_addr$EMPTY_N,
-       ocl_xactor_f_wr_addr$ENQ,
-       ocl_xactor_f_wr_addr$FULL_N;
+  // ports of submodule ocl_xactor_shim_awff
+  wire [34 : 0] ocl_xactor_shim_awff$D_IN, ocl_xactor_shim_awff$D_OUT;
+  wire ocl_xactor_shim_awff$CLR,
+       ocl_xactor_shim_awff$DEQ,
+       ocl_xactor_shim_awff$EMPTY_N,
+       ocl_xactor_shim_awff$ENQ,
+       ocl_xactor_shim_awff$FULL_N;
 
-  // ports of submodule ocl_xactor_f_wr_data
-  wire [35 : 0] ocl_xactor_f_wr_data$D_IN, ocl_xactor_f_wr_data$D_OUT;
-  wire ocl_xactor_f_wr_data$CLR,
-       ocl_xactor_f_wr_data$DEQ,
-       ocl_xactor_f_wr_data$EMPTY_N,
-       ocl_xactor_f_wr_data$ENQ,
-       ocl_xactor_f_wr_data$FULL_N;
+  // ports of submodule ocl_xactor_shim_bff
+  wire [1 : 0] ocl_xactor_shim_bff$D_IN, ocl_xactor_shim_bff$D_OUT;
+  wire ocl_xactor_shim_bff$CLR,
+       ocl_xactor_shim_bff$DEQ,
+       ocl_xactor_shim_bff$EMPTY_N,
+       ocl_xactor_shim_bff$ENQ,
+       ocl_xactor_shim_bff$FULL_N;
 
-  // ports of submodule ocl_xactor_f_wr_resp
-  wire [1 : 0] ocl_xactor_f_wr_resp$D_IN, ocl_xactor_f_wr_resp$D_OUT;
-  wire ocl_xactor_f_wr_resp$CLR,
-       ocl_xactor_f_wr_resp$DEQ,
-       ocl_xactor_f_wr_resp$EMPTY_N,
-       ocl_xactor_f_wr_resp$ENQ,
-       ocl_xactor_f_wr_resp$FULL_N;
+  // ports of submodule ocl_xactor_shim_rff
+  wire [33 : 0] ocl_xactor_shim_rff$D_IN, ocl_xactor_shim_rff$D_OUT;
+  wire ocl_xactor_shim_rff$CLR,
+       ocl_xactor_shim_rff$DEQ,
+       ocl_xactor_shim_rff$EMPTY_N,
+       ocl_xactor_shim_rff$ENQ,
+       ocl_xactor_shim_rff$FULL_N;
+
+  // ports of submodule ocl_xactor_shim_wff
+  wire [35 : 0] ocl_xactor_shim_wff$D_IN, ocl_xactor_shim_wff$D_OUT;
+  wire ocl_xactor_shim_wff$CLR,
+       ocl_xactor_shim_wff$DEQ,
+       ocl_xactor_shim_wff$EMPTY_N,
+       ocl_xactor_shim_wff$ENQ,
+       ocl_xactor_shim_wff$FULL_N;
 
   // ports of submodule v_f_from_host_0
   wire [31 : 0] v_f_from_host_0$D_IN, v_f_from_host_0$D_OUT;
@@ -509,13 +516,25 @@ module mkOCL_Adapter(CLK,
        v_f_to_host_3$FULL_N;
 
   // rule scheduling signals
-  wire CAN_FIRE_RL_rl_AXI4L_rd,
+  wire CAN_FIRE_RL_ocl_xactor_u_slave_u_ar_doPut,
+       CAN_FIRE_RL_ocl_xactor_u_slave_u_ar_warnDoPut,
+       CAN_FIRE_RL_ocl_xactor_u_slave_u_aw_doPut,
+       CAN_FIRE_RL_ocl_xactor_u_slave_u_aw_warnDoPut,
+       CAN_FIRE_RL_ocl_xactor_u_slave_u_b_doDrop,
+       CAN_FIRE_RL_ocl_xactor_u_slave_u_b_setPeek,
+       CAN_FIRE_RL_ocl_xactor_u_slave_u_b_warnDoDrop,
+       CAN_FIRE_RL_ocl_xactor_u_slave_u_r_doDrop,
+       CAN_FIRE_RL_ocl_xactor_u_slave_u_r_setPeek,
+       CAN_FIRE_RL_ocl_xactor_u_slave_u_r_warnDoDrop,
+       CAN_FIRE_RL_ocl_xactor_u_slave_u_w_doPut,
+       CAN_FIRE_RL_ocl_xactor_u_slave_u_w_warnDoPut,
+       CAN_FIRE_RL_rl_AXI4L_rd,
        CAN_FIRE_RL_rl_AXI4L_wr,
-       CAN_FIRE_ocl_slave_m_arvalid,
-       CAN_FIRE_ocl_slave_m_awvalid,
-       CAN_FIRE_ocl_slave_m_bready,
-       CAN_FIRE_ocl_slave_m_rready,
-       CAN_FIRE_ocl_slave_m_wvalid,
+       CAN_FIRE_ocl_slave_ar_arflit,
+       CAN_FIRE_ocl_slave_aw_awflit,
+       CAN_FIRE_ocl_slave_b_bready,
+       CAN_FIRE_ocl_slave_r_rready,
+       CAN_FIRE_ocl_slave_w_wflit,
        CAN_FIRE_v_from_host_0_deq,
        CAN_FIRE_v_from_host_1_deq,
        CAN_FIRE_v_from_host_2_deq,
@@ -525,13 +544,25 @@ module mkOCL_Adapter(CLK,
        CAN_FIRE_v_to_host_1_enq,
        CAN_FIRE_v_to_host_2_enq,
        CAN_FIRE_v_to_host_3_enq,
+       WILL_FIRE_RL_ocl_xactor_u_slave_u_ar_doPut,
+       WILL_FIRE_RL_ocl_xactor_u_slave_u_ar_warnDoPut,
+       WILL_FIRE_RL_ocl_xactor_u_slave_u_aw_doPut,
+       WILL_FIRE_RL_ocl_xactor_u_slave_u_aw_warnDoPut,
+       WILL_FIRE_RL_ocl_xactor_u_slave_u_b_doDrop,
+       WILL_FIRE_RL_ocl_xactor_u_slave_u_b_setPeek,
+       WILL_FIRE_RL_ocl_xactor_u_slave_u_b_warnDoDrop,
+       WILL_FIRE_RL_ocl_xactor_u_slave_u_r_doDrop,
+       WILL_FIRE_RL_ocl_xactor_u_slave_u_r_setPeek,
+       WILL_FIRE_RL_ocl_xactor_u_slave_u_r_warnDoDrop,
+       WILL_FIRE_RL_ocl_xactor_u_slave_u_w_doPut,
+       WILL_FIRE_RL_ocl_xactor_u_slave_u_w_warnDoPut,
        WILL_FIRE_RL_rl_AXI4L_rd,
        WILL_FIRE_RL_rl_AXI4L_wr,
-       WILL_FIRE_ocl_slave_m_arvalid,
-       WILL_FIRE_ocl_slave_m_awvalid,
-       WILL_FIRE_ocl_slave_m_bready,
-       WILL_FIRE_ocl_slave_m_rready,
-       WILL_FIRE_ocl_slave_m_wvalid,
+       WILL_FIRE_ocl_slave_ar_arflit,
+       WILL_FIRE_ocl_slave_aw_awflit,
+       WILL_FIRE_ocl_slave_b_bready,
+       WILL_FIRE_ocl_slave_r_rready,
+       WILL_FIRE_ocl_slave_w_wflit,
        WILL_FIRE_v_from_host_0_deq,
        WILL_FIRE_v_from_host_1_deq,
        WILL_FIRE_v_from_host_2_deq,
@@ -543,74 +574,75 @@ module mkOCL_Adapter(CLK,
        WILL_FIRE_v_to_host_3_enq;
 
   // remaining internal signals
-  reg [31 : 0] rdr___1_rdata__h2910;
-  reg CASE_0_CONCAT_ocl_xactor_f_rd_addr_first__2_BI_ETC___d78,
-      CASE_0_CONCAT_ocl_xactor_f_wr_addr_first_BITS__ETC___d26,
-      SEL_ARR_v_f_from_host_0_notFull__3_v_f_from_ho_ETC___d19,
-      SEL_ARR_v_f_to_host_0_notEmpty__7_v_f_to_host__ETC___d72,
-      x__h3069;
-  wire [33 : 0] IF_ocl_xactor_f_rd_addr_first__2_BITS_5_TO_3_5_ETC___d118;
-  wire [31 : 0] ocl_xactor_f_rd_addrD_OUT_BITS_34_TO_3_MINUS__ETC__q2,
-		ocl_xactor_f_wr_addrD_OUT_BITS_34_TO_3_MINUS__ETC__q1,
-		rdr___1_rdata__h2631,
-		x1_avValue_rdata__h2955,
-		x1_avValue_rdata__h2966,
-		x__h1777,
-		x__h2400,
-		x__h2548;
-  wire _0_CONCAT_ocl_xactor_f_rd_addr_first__2_BITS_34_ETC___d59,
-       _0_CONCAT_ocl_xactor_f_rd_addr_first__2_BITS_34_ETC___d63,
-       _0_CONCAT_ocl_xactor_f_wr_addr_first_BITS_34_TO_ETC___d10,
-       ocl_xactor_f_rd_addr_first__2_BITS_34_TO_3_3_U_ETC___d102,
-       ocl_xactor_f_rd_addr_first__2_BITS_34_TO_3_3_U_ETC___d54,
-       ocl_xactor_f_rd_addr_first__2_BITS_34_TO_3_3_U_ETC___d92,
-       ocl_xactor_f_rd_data_i_notFull__1_AND_NOT_ocl__ETC___d83,
-       ocl_xactor_f_wr_addr_first_BITS_34_TO_3_ULT_0x_ETC___d6,
-       ocl_xactor_f_wr_resp_i_notFull_AND_ocl_xactor__ETC___d29;
+  reg [31 : 0] rdr___1_rdata__h3864;
+  reg CASE_0_CONCAT_ocl_xactor_shim_arff_first__4_BI_ETC___d120,
+      CASE_0_CONCAT_ocl_xactor_shim_awff_first__3_BI_ETC___d65,
+      SEL_ARR_v_f_from_host_0_notFull__2_v_f_from_ho_ETC___d58,
+      SEL_ARR_v_f_to_host_0_notEmpty__09_v_f_to_host_ETC___d114,
+      x__h4014;
+  wire [33 : 0] IF_ocl_xactor_shim_arff_first__4_BITS_5_TO_3_0_ETC___d162;
+  wire [31 : 0] ocl_xactor_shim_arffD_OUT_BITS_34_TO_3_MINUS__ETC__q1,
+		ocl_xactor_shim_awffD_OUT_BITS_34_TO_3_MINUS__ETC__q2,
+		rdr___1_rdata__h3440,
+		rdr___1_rdata__h3585,
+		x1_avValue_rdata__h3909,
+		x1_avValue_rdata__h3920,
+		x__h2733,
+		x__h3355,
+		x__h3503;
+  wire _0_CONCAT_ocl_xactor_shim_arff_first__4_BITS_34_ETC___d101,
+       _0_CONCAT_ocl_xactor_shim_arff_first__4_BITS_34_ETC___d105,
+       _0_CONCAT_ocl_xactor_shim_awff_first__3_BITS_34_ETC___d49,
+       ocl_xactor_shim_arff_first__4_BITS_34_TO_3_5_U_ETC___d135,
+       ocl_xactor_shim_arff_first__4_BITS_34_TO_3_5_U_ETC___d145,
+       ocl_xactor_shim_arff_first__4_BITS_34_TO_3_5_U_ETC___d96,
+       ocl_xactor_shim_awff_first__3_BITS_34_TO_3_4_U_ETC___d45,
+       ocl_xactor_shim_bff_i_notFull__2_AND_ocl_xacto_ETC___d68,
+       ocl_xactor_shim_rff_i_notFull__3_AND_NOT_ocl_x_ETC___d125;
 
-  // action method ocl_slave_m_awvalid
-  assign CAN_FIRE_ocl_slave_m_awvalid = 1'd1 ;
-  assign WILL_FIRE_ocl_slave_m_awvalid = 1'd1 ;
+  // action method ocl_slave_aw_awflit
+  assign CAN_FIRE_ocl_slave_aw_awflit = 1'd1 ;
+  assign WILL_FIRE_ocl_slave_aw_awflit = ocl_slave_aw_awvalid ;
 
-  // value method ocl_slave_m_awready
-  assign ocl_slave_awready = ocl_xactor_f_wr_addr$FULL_N ;
+  // value method ocl_slave_aw_awready
+  assign ocl_slave_aw_awready = ocl_xactor_shim_awff$FULL_N ;
 
-  // action method ocl_slave_m_wvalid
-  assign CAN_FIRE_ocl_slave_m_wvalid = 1'd1 ;
-  assign WILL_FIRE_ocl_slave_m_wvalid = 1'd1 ;
+  // action method ocl_slave_w_wflit
+  assign CAN_FIRE_ocl_slave_w_wflit = 1'd1 ;
+  assign WILL_FIRE_ocl_slave_w_wflit = ocl_slave_w_wvalid ;
 
-  // value method ocl_slave_m_wready
-  assign ocl_slave_wready = ocl_xactor_f_wr_data$FULL_N ;
+  // value method ocl_slave_w_wready
+  assign ocl_slave_w_wready = ocl_xactor_shim_wff$FULL_N ;
 
-  // value method ocl_slave_m_bvalid
-  assign ocl_slave_bvalid = ocl_xactor_f_wr_resp$EMPTY_N ;
+  // value method ocl_slave_b_bresp
+  assign ocl_slave_b_bresp = ocl_xactor_shim_bff$D_OUT ;
 
-  // value method ocl_slave_m_bresp
-  assign ocl_slave_bresp = ocl_xactor_f_wr_resp$D_OUT ;
+  // value method ocl_slave_b_bvalid
+  assign ocl_slave_b_bvalid = ocl_xactor_shim_bff$EMPTY_N ;
 
-  // action method ocl_slave_m_bready
-  assign CAN_FIRE_ocl_slave_m_bready = 1'd1 ;
-  assign WILL_FIRE_ocl_slave_m_bready = 1'd1 ;
+  // action method ocl_slave_b_bready
+  assign CAN_FIRE_ocl_slave_b_bready = 1'd1 ;
+  assign WILL_FIRE_ocl_slave_b_bready = 1'd1 ;
 
-  // action method ocl_slave_m_arvalid
-  assign CAN_FIRE_ocl_slave_m_arvalid = 1'd1 ;
-  assign WILL_FIRE_ocl_slave_m_arvalid = 1'd1 ;
+  // action method ocl_slave_ar_arflit
+  assign CAN_FIRE_ocl_slave_ar_arflit = 1'd1 ;
+  assign WILL_FIRE_ocl_slave_ar_arflit = ocl_slave_ar_arvalid ;
 
-  // value method ocl_slave_m_arready
-  assign ocl_slave_arready = ocl_xactor_f_rd_addr$FULL_N ;
+  // value method ocl_slave_ar_arready
+  assign ocl_slave_ar_arready = ocl_xactor_shim_arff$FULL_N ;
 
-  // value method ocl_slave_m_rvalid
-  assign ocl_slave_rvalid = ocl_xactor_f_rd_data$EMPTY_N ;
+  // value method ocl_slave_r_rdata
+  assign ocl_slave_r_rdata = ocl_xactor_shim_rff$D_OUT[33:2] ;
 
-  // value method ocl_slave_m_rresp
-  assign ocl_slave_rresp = ocl_xactor_f_rd_data$D_OUT[33:32] ;
+  // value method ocl_slave_r_rresp
+  assign ocl_slave_r_rresp = ocl_xactor_shim_rff$D_OUT[1:0] ;
 
-  // value method ocl_slave_m_rdata
-  assign ocl_slave_rdata = ocl_xactor_f_rd_data$D_OUT[31:0] ;
+  // value method ocl_slave_r_rvalid
+  assign ocl_slave_r_rvalid = ocl_xactor_shim_rff$EMPTY_N ;
 
-  // action method ocl_slave_m_rready
-  assign CAN_FIRE_ocl_slave_m_rready = 1'd1 ;
-  assign WILL_FIRE_ocl_slave_m_rready = 1'd1 ;
+  // action method ocl_slave_r_rready
+  assign CAN_FIRE_ocl_slave_r_rready = 1'd1 ;
+  assign WILL_FIRE_ocl_slave_r_rready = 1'd1 ;
 
   // value method v_from_host_0_first
   assign v_from_host_0_first = v_f_from_host_0$D_OUT ;
@@ -713,60 +745,75 @@ module mkOCL_Adapter(CLK,
   assign v_to_host_3_notFull = v_f_to_host_3$FULL_N ;
   assign RDY_v_to_host_3_notFull = 1'd1 ;
 
-  // submodule ocl_xactor_f_rd_addr
-  FIFO2 #(.width(32'd35), .guarded(32'd1)) ocl_xactor_f_rd_addr(.RST(RST_N),
-								.CLK(CLK),
-								.D_IN(ocl_xactor_f_rd_addr$D_IN),
-								.ENQ(ocl_xactor_f_rd_addr$ENQ),
-								.DEQ(ocl_xactor_f_rd_addr$DEQ),
-								.CLR(ocl_xactor_f_rd_addr$CLR),
-								.D_OUT(ocl_xactor_f_rd_addr$D_OUT),
-								.FULL_N(ocl_xactor_f_rd_addr$FULL_N),
-								.EMPTY_N(ocl_xactor_f_rd_addr$EMPTY_N));
+  // submodule ocl_xactor_shim_arff
+  SizedFIFO #(.p1width(32'd35),
+	      .p2depth(32'd4),
+	      .p3cntr_width(32'd2),
+	      .guarded(32'd1)) ocl_xactor_shim_arff(.RST(RST_N),
+						    .CLK(CLK),
+						    .D_IN(ocl_xactor_shim_arff$D_IN),
+						    .ENQ(ocl_xactor_shim_arff$ENQ),
+						    .DEQ(ocl_xactor_shim_arff$DEQ),
+						    .CLR(ocl_xactor_shim_arff$CLR),
+						    .D_OUT(ocl_xactor_shim_arff$D_OUT),
+						    .FULL_N(ocl_xactor_shim_arff$FULL_N),
+						    .EMPTY_N(ocl_xactor_shim_arff$EMPTY_N));
 
-  // submodule ocl_xactor_f_rd_data
-  FIFO2 #(.width(32'd34), .guarded(32'd1)) ocl_xactor_f_rd_data(.RST(RST_N),
-								.CLK(CLK),
-								.D_IN(ocl_xactor_f_rd_data$D_IN),
-								.ENQ(ocl_xactor_f_rd_data$ENQ),
-								.DEQ(ocl_xactor_f_rd_data$DEQ),
-								.CLR(ocl_xactor_f_rd_data$CLR),
-								.D_OUT(ocl_xactor_f_rd_data$D_OUT),
-								.FULL_N(ocl_xactor_f_rd_data$FULL_N),
-								.EMPTY_N(ocl_xactor_f_rd_data$EMPTY_N));
+  // submodule ocl_xactor_shim_awff
+  SizedFIFO #(.p1width(32'd35),
+	      .p2depth(32'd4),
+	      .p3cntr_width(32'd2),
+	      .guarded(32'd1)) ocl_xactor_shim_awff(.RST(RST_N),
+						    .CLK(CLK),
+						    .D_IN(ocl_xactor_shim_awff$D_IN),
+						    .ENQ(ocl_xactor_shim_awff$ENQ),
+						    .DEQ(ocl_xactor_shim_awff$DEQ),
+						    .CLR(ocl_xactor_shim_awff$CLR),
+						    .D_OUT(ocl_xactor_shim_awff$D_OUT),
+						    .FULL_N(ocl_xactor_shim_awff$FULL_N),
+						    .EMPTY_N(ocl_xactor_shim_awff$EMPTY_N));
 
-  // submodule ocl_xactor_f_wr_addr
-  FIFO2 #(.width(32'd35), .guarded(32'd1)) ocl_xactor_f_wr_addr(.RST(RST_N),
-								.CLK(CLK),
-								.D_IN(ocl_xactor_f_wr_addr$D_IN),
-								.ENQ(ocl_xactor_f_wr_addr$ENQ),
-								.DEQ(ocl_xactor_f_wr_addr$DEQ),
-								.CLR(ocl_xactor_f_wr_addr$CLR),
-								.D_OUT(ocl_xactor_f_wr_addr$D_OUT),
-								.FULL_N(ocl_xactor_f_wr_addr$FULL_N),
-								.EMPTY_N(ocl_xactor_f_wr_addr$EMPTY_N));
+  // submodule ocl_xactor_shim_bff
+  SizedFIFO #(.p1width(32'd2),
+	      .p2depth(32'd4),
+	      .p3cntr_width(32'd2),
+	      .guarded(32'd1)) ocl_xactor_shim_bff(.RST(RST_N),
+						   .CLK(CLK),
+						   .D_IN(ocl_xactor_shim_bff$D_IN),
+						   .ENQ(ocl_xactor_shim_bff$ENQ),
+						   .DEQ(ocl_xactor_shim_bff$DEQ),
+						   .CLR(ocl_xactor_shim_bff$CLR),
+						   .D_OUT(ocl_xactor_shim_bff$D_OUT),
+						   .FULL_N(ocl_xactor_shim_bff$FULL_N),
+						   .EMPTY_N(ocl_xactor_shim_bff$EMPTY_N));
 
-  // submodule ocl_xactor_f_wr_data
-  FIFO2 #(.width(32'd36), .guarded(32'd1)) ocl_xactor_f_wr_data(.RST(RST_N),
-								.CLK(CLK),
-								.D_IN(ocl_xactor_f_wr_data$D_IN),
-								.ENQ(ocl_xactor_f_wr_data$ENQ),
-								.DEQ(ocl_xactor_f_wr_data$DEQ),
-								.CLR(ocl_xactor_f_wr_data$CLR),
-								.D_OUT(ocl_xactor_f_wr_data$D_OUT),
-								.FULL_N(ocl_xactor_f_wr_data$FULL_N),
-								.EMPTY_N(ocl_xactor_f_wr_data$EMPTY_N));
+  // submodule ocl_xactor_shim_rff
+  SizedFIFO #(.p1width(32'd34),
+	      .p2depth(32'd4),
+	      .p3cntr_width(32'd2),
+	      .guarded(32'd1)) ocl_xactor_shim_rff(.RST(RST_N),
+						   .CLK(CLK),
+						   .D_IN(ocl_xactor_shim_rff$D_IN),
+						   .ENQ(ocl_xactor_shim_rff$ENQ),
+						   .DEQ(ocl_xactor_shim_rff$DEQ),
+						   .CLR(ocl_xactor_shim_rff$CLR),
+						   .D_OUT(ocl_xactor_shim_rff$D_OUT),
+						   .FULL_N(ocl_xactor_shim_rff$FULL_N),
+						   .EMPTY_N(ocl_xactor_shim_rff$EMPTY_N));
 
-  // submodule ocl_xactor_f_wr_resp
-  FIFO2 #(.width(32'd2), .guarded(32'd1)) ocl_xactor_f_wr_resp(.RST(RST_N),
-							       .CLK(CLK),
-							       .D_IN(ocl_xactor_f_wr_resp$D_IN),
-							       .ENQ(ocl_xactor_f_wr_resp$ENQ),
-							       .DEQ(ocl_xactor_f_wr_resp$DEQ),
-							       .CLR(ocl_xactor_f_wr_resp$CLR),
-							       .D_OUT(ocl_xactor_f_wr_resp$D_OUT),
-							       .FULL_N(ocl_xactor_f_wr_resp$FULL_N),
-							       .EMPTY_N(ocl_xactor_f_wr_resp$EMPTY_N));
+  // submodule ocl_xactor_shim_wff
+  SizedFIFO #(.p1width(32'd36),
+	      .p2depth(32'd4),
+	      .p3cntr_width(32'd2),
+	      .guarded(32'd1)) ocl_xactor_shim_wff(.RST(RST_N),
+						   .CLK(CLK),
+						   .D_IN(ocl_xactor_shim_wff$D_IN),
+						   .ENQ(ocl_xactor_shim_wff$ENQ),
+						   .DEQ(ocl_xactor_shim_wff$DEQ),
+						   .CLR(ocl_xactor_shim_wff$CLR),
+						   .D_OUT(ocl_xactor_shim_wff$D_OUT),
+						   .FULL_N(ocl_xactor_shim_wff$FULL_N),
+						   .EMPTY_N(ocl_xactor_shim_wff$EMPTY_N));
 
   // submodule v_f_from_host_0
   FIFO2 #(.width(32'd32), .guarded(32'd1)) v_f_from_host_0(.RST(RST_N),
@@ -867,114 +914,199 @@ module mkOCL_Adapter(CLK,
 							 .FULL_N(v_f_to_host_3$FULL_N),
 							 .EMPTY_N(v_f_to_host_3$EMPTY_N));
 
+  // rule RL_ocl_xactor_u_slave_u_aw_warnDoPut
+  assign CAN_FIRE_RL_ocl_xactor_u_slave_u_aw_warnDoPut =
+	     ocl_slave_aw_awvalid && !ocl_xactor_shim_awff$FULL_N ;
+  assign WILL_FIRE_RL_ocl_xactor_u_slave_u_aw_warnDoPut =
+	     CAN_FIRE_RL_ocl_xactor_u_slave_u_aw_warnDoPut ;
+
+  // rule RL_ocl_xactor_u_slave_u_w_warnDoPut
+  assign CAN_FIRE_RL_ocl_xactor_u_slave_u_w_warnDoPut =
+	     ocl_slave_w_wvalid && !ocl_xactor_shim_wff$FULL_N ;
+  assign WILL_FIRE_RL_ocl_xactor_u_slave_u_w_warnDoPut =
+	     CAN_FIRE_RL_ocl_xactor_u_slave_u_w_warnDoPut ;
+
+  // rule RL_ocl_xactor_u_slave_u_b_setPeek
+  assign CAN_FIRE_RL_ocl_xactor_u_slave_u_b_setPeek =
+	     ocl_xactor_shim_bff$EMPTY_N ;
+  assign WILL_FIRE_RL_ocl_xactor_u_slave_u_b_setPeek =
+	     ocl_xactor_shim_bff$EMPTY_N ;
+
+  // rule RL_ocl_xactor_u_slave_u_b_warnDoDrop
+  assign CAN_FIRE_RL_ocl_xactor_u_slave_u_b_warnDoDrop =
+	     ocl_xactor_u_slave_u_b_dropWire$whas &&
+	     !ocl_xactor_shim_bff$EMPTY_N ;
+  assign WILL_FIRE_RL_ocl_xactor_u_slave_u_b_warnDoDrop =
+	     CAN_FIRE_RL_ocl_xactor_u_slave_u_b_warnDoDrop ;
+
+  // rule RL_ocl_xactor_u_slave_u_b_doDrop
+  assign CAN_FIRE_RL_ocl_xactor_u_slave_u_b_doDrop =
+	     ocl_xactor_shim_bff$EMPTY_N &&
+	     ocl_xactor_u_slave_u_b_dropWire$whas ;
+  assign WILL_FIRE_RL_ocl_xactor_u_slave_u_b_doDrop =
+	     CAN_FIRE_RL_ocl_xactor_u_slave_u_b_doDrop ;
+
+  // rule RL_ocl_xactor_u_slave_u_ar_warnDoPut
+  assign CAN_FIRE_RL_ocl_xactor_u_slave_u_ar_warnDoPut =
+	     ocl_slave_ar_arvalid && !ocl_xactor_shim_arff$FULL_N ;
+  assign WILL_FIRE_RL_ocl_xactor_u_slave_u_ar_warnDoPut =
+	     CAN_FIRE_RL_ocl_xactor_u_slave_u_ar_warnDoPut ;
+
+  // rule RL_ocl_xactor_u_slave_u_r_setPeek
+  assign CAN_FIRE_RL_ocl_xactor_u_slave_u_r_setPeek =
+	     ocl_xactor_shim_rff$EMPTY_N ;
+  assign WILL_FIRE_RL_ocl_xactor_u_slave_u_r_setPeek =
+	     ocl_xactor_shim_rff$EMPTY_N ;
+
+  // rule RL_ocl_xactor_u_slave_u_r_warnDoDrop
+  assign CAN_FIRE_RL_ocl_xactor_u_slave_u_r_warnDoDrop =
+	     ocl_xactor_u_slave_u_r_dropWire$whas &&
+	     !ocl_xactor_shim_rff$EMPTY_N ;
+  assign WILL_FIRE_RL_ocl_xactor_u_slave_u_r_warnDoDrop =
+	     CAN_FIRE_RL_ocl_xactor_u_slave_u_r_warnDoDrop ;
+
+  // rule RL_ocl_xactor_u_slave_u_r_doDrop
+  assign CAN_FIRE_RL_ocl_xactor_u_slave_u_r_doDrop =
+	     ocl_xactor_shim_rff$EMPTY_N &&
+	     ocl_xactor_u_slave_u_r_dropWire$whas ;
+  assign WILL_FIRE_RL_ocl_xactor_u_slave_u_r_doDrop =
+	     CAN_FIRE_RL_ocl_xactor_u_slave_u_r_doDrop ;
+
   // rule RL_rl_AXI4L_rd
   assign CAN_FIRE_RL_rl_AXI4L_rd =
-	     ocl_xactor_f_rd_addr$EMPTY_N &&
-	     ocl_xactor_f_rd_data_i_notFull__1_AND_NOT_ocl__ETC___d83 ;
+	     ocl_xactor_shim_arff$EMPTY_N &&
+	     ocl_xactor_shim_rff_i_notFull__3_AND_NOT_ocl_x_ETC___d125 ;
   assign WILL_FIRE_RL_rl_AXI4L_rd = CAN_FIRE_RL_rl_AXI4L_rd ;
 
   // rule RL_rl_AXI4L_wr
   assign CAN_FIRE_RL_rl_AXI4L_wr =
-	     ocl_xactor_f_wr_addr$EMPTY_N && ocl_xactor_f_wr_data$EMPTY_N &&
-	     ocl_xactor_f_wr_resp_i_notFull_AND_ocl_xactor__ETC___d29 ;
+	     ocl_xactor_shim_awff$EMPTY_N && ocl_xactor_shim_wff$EMPTY_N &&
+	     ocl_xactor_shim_bff_i_notFull__2_AND_ocl_xacto_ETC___d68 ;
   assign WILL_FIRE_RL_rl_AXI4L_wr = CAN_FIRE_RL_rl_AXI4L_wr ;
 
-  // submodule ocl_xactor_f_rd_addr
-  assign ocl_xactor_f_rd_addr$D_IN = { ocl_slave_araddr, ocl_slave_arprot } ;
-  assign ocl_xactor_f_rd_addr$ENQ =
-	     ocl_slave_arvalid && ocl_xactor_f_rd_addr$FULL_N ;
-  assign ocl_xactor_f_rd_addr$DEQ = CAN_FIRE_RL_rl_AXI4L_rd ;
-  assign ocl_xactor_f_rd_addr$CLR = 1'b0 ;
+  // rule RL_ocl_xactor_u_slave_u_aw_doPut
+  assign CAN_FIRE_RL_ocl_xactor_u_slave_u_aw_doPut =
+	     ocl_xactor_shim_awff$FULL_N && ocl_slave_aw_awvalid ;
+  assign WILL_FIRE_RL_ocl_xactor_u_slave_u_aw_doPut =
+	     CAN_FIRE_RL_ocl_xactor_u_slave_u_aw_doPut ;
 
-  // submodule ocl_xactor_f_rd_data
-  assign ocl_xactor_f_rd_data$D_IN =
-	     (!ocl_xactor_f_rd_addr_first__2_BITS_34_TO_3_3_U_ETC___d54 &&
-	      _0_CONCAT_ocl_xactor_f_rd_addr_first__2_BITS_34_ETC___d59) ?
-	       ((ocl_xactor_f_rd_addr$D_OUT[5:3] == 3'b100) ?
-		  { 33'd0, x__h3069 } :
-		  34'h2FFFFFFFF) :
-	       (_0_CONCAT_ocl_xactor_f_rd_addr_first__2_BITS_34_ETC___d63 ?
-		  IF_ocl_xactor_f_rd_addr_first__2_BITS_5_TO_3_5_ETC___d118 :
-		  34'h3FFFFFFFF) ;
-  assign ocl_xactor_f_rd_data$ENQ = CAN_FIRE_RL_rl_AXI4L_rd ;
-  assign ocl_xactor_f_rd_data$DEQ =
-	     ocl_slave_rready && ocl_xactor_f_rd_data$EMPTY_N ;
-  assign ocl_xactor_f_rd_data$CLR = 1'b0 ;
+  // rule RL_ocl_xactor_u_slave_u_w_doPut
+  assign CAN_FIRE_RL_ocl_xactor_u_slave_u_w_doPut =
+	     ocl_xactor_shim_wff$FULL_N && ocl_slave_w_wvalid ;
+  assign WILL_FIRE_RL_ocl_xactor_u_slave_u_w_doPut =
+	     CAN_FIRE_RL_ocl_xactor_u_slave_u_w_doPut ;
 
-  // submodule ocl_xactor_f_wr_addr
-  assign ocl_xactor_f_wr_addr$D_IN = { ocl_slave_awaddr, ocl_slave_awprot } ;
-  assign ocl_xactor_f_wr_addr$ENQ =
-	     ocl_slave_awvalid && ocl_xactor_f_wr_addr$FULL_N ;
-  assign ocl_xactor_f_wr_addr$DEQ = CAN_FIRE_RL_rl_AXI4L_wr ;
-  assign ocl_xactor_f_wr_addr$CLR = 1'b0 ;
+  // rule RL_ocl_xactor_u_slave_u_ar_doPut
+  assign CAN_FIRE_RL_ocl_xactor_u_slave_u_ar_doPut =
+	     ocl_xactor_shim_arff$FULL_N && ocl_slave_ar_arvalid ;
+  assign WILL_FIRE_RL_ocl_xactor_u_slave_u_ar_doPut =
+	     CAN_FIRE_RL_ocl_xactor_u_slave_u_ar_doPut ;
 
-  // submodule ocl_xactor_f_wr_data
-  assign ocl_xactor_f_wr_data$D_IN = { ocl_slave_wdata, ocl_slave_wstrb } ;
-  assign ocl_xactor_f_wr_data$ENQ =
-	     ocl_slave_wvalid && ocl_xactor_f_wr_data$FULL_N ;
-  assign ocl_xactor_f_wr_data$DEQ = CAN_FIRE_RL_rl_AXI4L_wr ;
-  assign ocl_xactor_f_wr_data$CLR = 1'b0 ;
+  // inlined wires
+  assign ocl_xactor_u_slave_u_aw_putWire$wget =
+	     { ocl_slave_aw_awaddr, ocl_slave_aw_awprot } ;
+  assign ocl_xactor_u_slave_u_w_putWire$wget =
+	     { ocl_slave_w_wdata, ocl_slave_w_wstrb } ;
+  assign ocl_xactor_u_slave_u_ar_putWire$wget =
+	     { ocl_slave_ar_araddr, ocl_slave_ar_arprot } ;
+  assign ocl_xactor_u_slave_u_b_dropWire$whas =
+	     ocl_xactor_shim_bff$EMPTY_N && ocl_slave_b_bready ;
+  assign ocl_xactor_u_slave_u_r_dropWire$whas =
+	     ocl_xactor_shim_rff$EMPTY_N && ocl_slave_r_rready ;
 
-  // submodule ocl_xactor_f_wr_resp
-  assign ocl_xactor_f_wr_resp$D_IN =
-	     (!ocl_xactor_f_wr_addr_first_BITS_34_TO_3_ULT_0x_ETC___d6 &&
-	      _0_CONCAT_ocl_xactor_f_wr_addr_first_BITS_34_TO_ETC___d10) ?
-	       (SEL_ARR_v_f_from_host_0_notFull__3_v_f_from_ho_ETC___d19 ?
+  // submodule ocl_xactor_shim_arff
+  assign ocl_xactor_shim_arff$D_IN = ocl_xactor_u_slave_u_ar_putWire$wget ;
+  assign ocl_xactor_shim_arff$ENQ =
+	     CAN_FIRE_RL_ocl_xactor_u_slave_u_ar_doPut ;
+  assign ocl_xactor_shim_arff$DEQ = CAN_FIRE_RL_rl_AXI4L_rd ;
+  assign ocl_xactor_shim_arff$CLR = 1'b0 ;
+
+  // submodule ocl_xactor_shim_awff
+  assign ocl_xactor_shim_awff$D_IN = ocl_xactor_u_slave_u_aw_putWire$wget ;
+  assign ocl_xactor_shim_awff$ENQ =
+	     CAN_FIRE_RL_ocl_xactor_u_slave_u_aw_doPut ;
+  assign ocl_xactor_shim_awff$DEQ = CAN_FIRE_RL_rl_AXI4L_wr ;
+  assign ocl_xactor_shim_awff$CLR = 1'b0 ;
+
+  // submodule ocl_xactor_shim_bff
+  assign ocl_xactor_shim_bff$D_IN =
+	     (!ocl_xactor_shim_awff_first__3_BITS_34_TO_3_4_U_ETC___d45 &&
+	      _0_CONCAT_ocl_xactor_shim_awff_first__3_BITS_34_ETC___d49) ?
+	       (SEL_ARR_v_f_from_host_0_notFull__2_v_f_from_ho_ETC___d58 ?
 		  2'd0 :
 		  2'd2) :
 	       2'd3 ;
-  assign ocl_xactor_f_wr_resp$ENQ = CAN_FIRE_RL_rl_AXI4L_wr ;
-  assign ocl_xactor_f_wr_resp$DEQ =
-	     ocl_slave_bready && ocl_xactor_f_wr_resp$EMPTY_N ;
-  assign ocl_xactor_f_wr_resp$CLR = 1'b0 ;
+  assign ocl_xactor_shim_bff$ENQ = CAN_FIRE_RL_rl_AXI4L_wr ;
+  assign ocl_xactor_shim_bff$DEQ = CAN_FIRE_RL_ocl_xactor_u_slave_u_b_doDrop ;
+  assign ocl_xactor_shim_bff$CLR = 1'b0 ;
+
+  // submodule ocl_xactor_shim_rff
+  assign ocl_xactor_shim_rff$D_IN =
+	     (!ocl_xactor_shim_arff_first__4_BITS_34_TO_3_5_U_ETC___d96 &&
+	      _0_CONCAT_ocl_xactor_shim_arff_first__4_BITS_34_ETC___d101) ?
+	       ((ocl_xactor_shim_arff$D_OUT[5:3] == 3'b100) ?
+		  { rdr___1_rdata__h3440, 2'd0 } :
+		  34'h3FFFFFFFE) :
+	       (_0_CONCAT_ocl_xactor_shim_arff_first__4_BITS_34_ETC___d105 ?
+		  IF_ocl_xactor_shim_arff_first__4_BITS_5_TO_3_0_ETC___d162 :
+		  34'h3FFFFFFFF) ;
+  assign ocl_xactor_shim_rff$ENQ = CAN_FIRE_RL_rl_AXI4L_rd ;
+  assign ocl_xactor_shim_rff$DEQ = CAN_FIRE_RL_ocl_xactor_u_slave_u_r_doDrop ;
+  assign ocl_xactor_shim_rff$CLR = 1'b0 ;
+
+  // submodule ocl_xactor_shim_wff
+  assign ocl_xactor_shim_wff$D_IN = ocl_xactor_u_slave_u_w_putWire$wget ;
+  assign ocl_xactor_shim_wff$ENQ = CAN_FIRE_RL_ocl_xactor_u_slave_u_w_doPut ;
+  assign ocl_xactor_shim_wff$DEQ = CAN_FIRE_RL_rl_AXI4L_wr ;
+  assign ocl_xactor_shim_wff$CLR = 1'b0 ;
 
   // submodule v_f_from_host_0
-  assign v_f_from_host_0$D_IN = ocl_xactor_f_wr_data$D_OUT[35:4] ;
+  assign v_f_from_host_0$D_IN = ocl_xactor_shim_wff$D_OUT[35:4] ;
   assign v_f_from_host_0$ENQ =
-	     WILL_FIRE_RL_rl_AXI4L_wr && x__h1777 == 32'd0 &&
-	     !ocl_xactor_f_wr_addr_first_BITS_34_TO_3_ULT_0x_ETC___d6 &&
-	     _0_CONCAT_ocl_xactor_f_wr_addr_first_BITS_34_TO_ETC___d10 &&
-	     SEL_ARR_v_f_from_host_0_notFull__3_v_f_from_ho_ETC___d19 ;
+	     WILL_FIRE_RL_rl_AXI4L_wr && x__h2733 == 32'd0 &&
+	     !ocl_xactor_shim_awff_first__3_BITS_34_TO_3_4_U_ETC___d45 &&
+	     _0_CONCAT_ocl_xactor_shim_awff_first__3_BITS_34_ETC___d49 &&
+	     SEL_ARR_v_f_from_host_0_notFull__2_v_f_from_ho_ETC___d58 ;
   assign v_f_from_host_0$DEQ = EN_v_from_host_0_deq ;
   assign v_f_from_host_0$CLR = 1'b0 ;
 
   // submodule v_f_from_host_1
-  assign v_f_from_host_1$D_IN = ocl_xactor_f_wr_data$D_OUT[35:4] ;
+  assign v_f_from_host_1$D_IN = ocl_xactor_shim_wff$D_OUT[35:4] ;
   assign v_f_from_host_1$ENQ =
-	     WILL_FIRE_RL_rl_AXI4L_wr && x__h1777 == 32'd1 &&
-	     !ocl_xactor_f_wr_addr_first_BITS_34_TO_3_ULT_0x_ETC___d6 &&
-	     _0_CONCAT_ocl_xactor_f_wr_addr_first_BITS_34_TO_ETC___d10 &&
-	     SEL_ARR_v_f_from_host_0_notFull__3_v_f_from_ho_ETC___d19 ;
+	     WILL_FIRE_RL_rl_AXI4L_wr && x__h2733 == 32'd1 &&
+	     !ocl_xactor_shim_awff_first__3_BITS_34_TO_3_4_U_ETC___d45 &&
+	     _0_CONCAT_ocl_xactor_shim_awff_first__3_BITS_34_ETC___d49 &&
+	     SEL_ARR_v_f_from_host_0_notFull__2_v_f_from_ho_ETC___d58 ;
   assign v_f_from_host_1$DEQ = EN_v_from_host_1_deq ;
   assign v_f_from_host_1$CLR = 1'b0 ;
 
   // submodule v_f_from_host_2
-  assign v_f_from_host_2$D_IN = ocl_xactor_f_wr_data$D_OUT[35:4] ;
+  assign v_f_from_host_2$D_IN = ocl_xactor_shim_wff$D_OUT[35:4] ;
   assign v_f_from_host_2$ENQ =
-	     WILL_FIRE_RL_rl_AXI4L_wr && x__h1777 == 32'd2 &&
-	     !ocl_xactor_f_wr_addr_first_BITS_34_TO_3_ULT_0x_ETC___d6 &&
-	     _0_CONCAT_ocl_xactor_f_wr_addr_first_BITS_34_TO_ETC___d10 &&
-	     SEL_ARR_v_f_from_host_0_notFull__3_v_f_from_ho_ETC___d19 ;
+	     WILL_FIRE_RL_rl_AXI4L_wr && x__h2733 == 32'd2 &&
+	     !ocl_xactor_shim_awff_first__3_BITS_34_TO_3_4_U_ETC___d45 &&
+	     _0_CONCAT_ocl_xactor_shim_awff_first__3_BITS_34_ETC___d49 &&
+	     SEL_ARR_v_f_from_host_0_notFull__2_v_f_from_ho_ETC___d58 ;
   assign v_f_from_host_2$DEQ = EN_v_from_host_2_deq ;
   assign v_f_from_host_2$CLR = 1'b0 ;
 
   // submodule v_f_from_host_3
-  assign v_f_from_host_3$D_IN = ocl_xactor_f_wr_data$D_OUT[35:4] ;
+  assign v_f_from_host_3$D_IN = ocl_xactor_shim_wff$D_OUT[35:4] ;
   assign v_f_from_host_3$ENQ =
-	     WILL_FIRE_RL_rl_AXI4L_wr && x__h1777 == 32'd3 &&
-	     !ocl_xactor_f_wr_addr_first_BITS_34_TO_3_ULT_0x_ETC___d6 &&
-	     _0_CONCAT_ocl_xactor_f_wr_addr_first_BITS_34_TO_ETC___d10 &&
-	     SEL_ARR_v_f_from_host_0_notFull__3_v_f_from_ho_ETC___d19 ;
+	     WILL_FIRE_RL_rl_AXI4L_wr && x__h2733 == 32'd3 &&
+	     !ocl_xactor_shim_awff_first__3_BITS_34_TO_3_4_U_ETC___d45 &&
+	     _0_CONCAT_ocl_xactor_shim_awff_first__3_BITS_34_ETC___d49 &&
+	     SEL_ARR_v_f_from_host_0_notFull__2_v_f_from_ho_ETC___d58 ;
   assign v_f_from_host_3$DEQ = EN_v_from_host_3_deq ;
   assign v_f_from_host_3$CLR = 1'b0 ;
 
   // submodule v_f_from_host_4
-  assign v_f_from_host_4$D_IN = ocl_xactor_f_wr_data$D_OUT[35:4] ;
+  assign v_f_from_host_4$D_IN = ocl_xactor_shim_wff$D_OUT[35:4] ;
   assign v_f_from_host_4$ENQ =
-	     WILL_FIRE_RL_rl_AXI4L_wr && x__h1777 == 32'd4 &&
-	     !ocl_xactor_f_wr_addr_first_BITS_34_TO_3_ULT_0x_ETC___d6 &&
-	     _0_CONCAT_ocl_xactor_f_wr_addr_first_BITS_34_TO_ETC___d10 &&
-	     SEL_ARR_v_f_from_host_0_notFull__3_v_f_from_ho_ETC___d19 ;
+	     WILL_FIRE_RL_rl_AXI4L_wr && x__h2733 == 32'd4 &&
+	     !ocl_xactor_shim_awff_first__3_BITS_34_TO_3_4_U_ETC___d45 &&
+	     _0_CONCAT_ocl_xactor_shim_awff_first__3_BITS_34_ETC___d49 &&
+	     SEL_ARR_v_f_from_host_0_notFull__2_v_f_from_ho_ETC___d58 ;
   assign v_f_from_host_4$DEQ = EN_v_from_host_4_deq ;
   assign v_f_from_host_4$CLR = 1'b0 ;
 
@@ -982,219 +1114,220 @@ module mkOCL_Adapter(CLK,
   assign v_f_to_host_0$D_IN = v_to_host_0_enq_x ;
   assign v_f_to_host_0$ENQ = EN_v_to_host_0_enq ;
   assign v_f_to_host_0$DEQ =
-	     WILL_FIRE_RL_rl_AXI4L_rd && x__h2548 == 32'd0 &&
-	     ocl_xactor_f_rd_addr_first__2_BITS_34_TO_3_3_U_ETC___d92 ;
+	     WILL_FIRE_RL_rl_AXI4L_rd && x__h3503 == 32'd0 &&
+	     ocl_xactor_shim_arff_first__4_BITS_34_TO_3_5_U_ETC___d135 ;
   assign v_f_to_host_0$CLR = 1'b0 ;
 
   // submodule v_f_to_host_1
   assign v_f_to_host_1$D_IN = v_to_host_1_enq_x ;
   assign v_f_to_host_1$ENQ = EN_v_to_host_1_enq ;
   assign v_f_to_host_1$DEQ =
-	     WILL_FIRE_RL_rl_AXI4L_rd && x__h2548 == 32'd1 &&
-	     ocl_xactor_f_rd_addr_first__2_BITS_34_TO_3_3_U_ETC___d92 ;
+	     WILL_FIRE_RL_rl_AXI4L_rd && x__h3503 == 32'd1 &&
+	     ocl_xactor_shim_arff_first__4_BITS_34_TO_3_5_U_ETC___d135 ;
   assign v_f_to_host_1$CLR = 1'b0 ;
 
   // submodule v_f_to_host_2
   assign v_f_to_host_2$D_IN = v_to_host_2_enq_x ;
   assign v_f_to_host_2$ENQ = EN_v_to_host_2_enq ;
   assign v_f_to_host_2$DEQ =
-	     WILL_FIRE_RL_rl_AXI4L_rd && x__h2548 == 32'd2 &&
-	     ocl_xactor_f_rd_addr_first__2_BITS_34_TO_3_3_U_ETC___d92 ;
+	     WILL_FIRE_RL_rl_AXI4L_rd && x__h3503 == 32'd2 &&
+	     ocl_xactor_shim_arff_first__4_BITS_34_TO_3_5_U_ETC___d135 ;
   assign v_f_to_host_2$CLR = 1'b0 ;
 
   // submodule v_f_to_host_3
   assign v_f_to_host_3$D_IN = v_to_host_3_enq_x ;
   assign v_f_to_host_3$ENQ = EN_v_to_host_3_enq ;
   assign v_f_to_host_3$DEQ =
-	     WILL_FIRE_RL_rl_AXI4L_rd && x__h2548 == 32'd3 &&
-	     ocl_xactor_f_rd_addr_first__2_BITS_34_TO_3_3_U_ETC___d92 ;
+	     WILL_FIRE_RL_rl_AXI4L_rd && x__h3503 == 32'd3 &&
+	     ocl_xactor_shim_arff_first__4_BITS_34_TO_3_5_U_ETC___d135 ;
   assign v_f_to_host_3$CLR = 1'b0 ;
 
   // remaining internal signals
-  assign IF_ocl_xactor_f_rd_addr_first__2_BITS_5_TO_3_5_ETC___d118 =
-	     { (ocl_xactor_f_rd_addr$D_OUT[5:3] == 3'b100 ||
-		SEL_ARR_v_f_to_host_0_notEmpty__7_v_f_to_host__ETC___d72) ?
+  assign IF_ocl_xactor_shim_arff_first__4_BITS_5_TO_3_0_ETC___d162 =
+	     { x1_avValue_rdata__h3920,
+	       (ocl_xactor_shim_arff$D_OUT[5:3] == 3'b100 ||
+		SEL_ARR_v_f_to_host_0_notEmpty__09_v_f_to_host_ETC___d114) ?
 		 2'd0 :
-		 2'd2,
-	       x1_avValue_rdata__h2966 } ;
-  assign _0_CONCAT_ocl_xactor_f_rd_addr_first__2_BITS_34_ETC___d59 =
-	     x__h2400 < 32'd5 ;
-  assign _0_CONCAT_ocl_xactor_f_rd_addr_first__2_BITS_34_ETC___d63 =
-	     x__h2548 < 32'd4 ;
-  assign _0_CONCAT_ocl_xactor_f_wr_addr_first_BITS_34_TO_ETC___d10 =
-	     x__h1777 < 32'd5 ;
-  assign ocl_xactor_f_rd_addrD_OUT_BITS_34_TO_3_MINUS__ETC__q2 =
-	     ocl_xactor_f_rd_addr$D_OUT[34:3] - 32'h00001000 ;
-  assign ocl_xactor_f_rd_addr_first__2_BITS_34_TO_3_3_U_ETC___d102 =
-	     (ocl_xactor_f_rd_addr_first__2_BITS_34_TO_3_3_U_ETC___d54 ||
-	      !_0_CONCAT_ocl_xactor_f_rd_addr_first__2_BITS_34_ETC___d59) &&
-	     _0_CONCAT_ocl_xactor_f_rd_addr_first__2_BITS_34_ETC___d63 &&
-	     ocl_xactor_f_rd_addr$D_OUT[5:3] != 3'b100 &&
-	     !SEL_ARR_v_f_to_host_0_notEmpty__7_v_f_to_host__ETC___d72 ;
-  assign ocl_xactor_f_rd_addr_first__2_BITS_34_TO_3_3_U_ETC___d54 =
-	     ocl_xactor_f_rd_addr$D_OUT[34:3] < 32'h00001000 ;
-  assign ocl_xactor_f_rd_addr_first__2_BITS_34_TO_3_3_U_ETC___d92 =
-	     (ocl_xactor_f_rd_addr_first__2_BITS_34_TO_3_3_U_ETC___d54 ||
-	      !_0_CONCAT_ocl_xactor_f_rd_addr_first__2_BITS_34_ETC___d59) &&
-	     _0_CONCAT_ocl_xactor_f_rd_addr_first__2_BITS_34_ETC___d63 &&
-	     ocl_xactor_f_rd_addr$D_OUT[5:3] != 3'b100 &&
-	     SEL_ARR_v_f_to_host_0_notEmpty__7_v_f_to_host__ETC___d72 ;
-  assign ocl_xactor_f_rd_data_i_notFull__1_AND_NOT_ocl__ETC___d83 =
-	     ocl_xactor_f_rd_data$FULL_N &&
-	     (!ocl_xactor_f_rd_addr_first__2_BITS_34_TO_3_3_U_ETC___d54 &&
-	      _0_CONCAT_ocl_xactor_f_rd_addr_first__2_BITS_34_ETC___d59 ||
-	      !_0_CONCAT_ocl_xactor_f_rd_addr_first__2_BITS_34_ETC___d63 ||
-	      ocl_xactor_f_rd_addr$D_OUT[5:3] == 3'b100 ||
-	      !SEL_ARR_v_f_to_host_0_notEmpty__7_v_f_to_host__ETC___d72 ||
-	      CASE_0_CONCAT_ocl_xactor_f_rd_addr_first__2_BI_ETC___d78) ;
-  assign ocl_xactor_f_wr_addrD_OUT_BITS_34_TO_3_MINUS__ETC__q1 =
-	     ocl_xactor_f_wr_addr$D_OUT[34:3] - 32'h00001000 ;
-  assign ocl_xactor_f_wr_addr_first_BITS_34_TO_3_ULT_0x_ETC___d6 =
-	     ocl_xactor_f_wr_addr$D_OUT[34:3] < 32'h00001000 ;
-  assign ocl_xactor_f_wr_resp_i_notFull_AND_ocl_xactor__ETC___d29 =
-	     ocl_xactor_f_wr_resp$FULL_N &&
-	     (ocl_xactor_f_wr_addr_first_BITS_34_TO_3_ULT_0x_ETC___d6 ||
-	      !_0_CONCAT_ocl_xactor_f_wr_addr_first_BITS_34_TO_ETC___d10 ||
-	      !SEL_ARR_v_f_from_host_0_notFull__3_v_f_from_ho_ETC___d19 ||
-	      CASE_0_CONCAT_ocl_xactor_f_wr_addr_first_BITS__ETC___d26) ;
-  assign rdr___1_rdata__h2631 =
+		 2'd2 } ;
+  assign _0_CONCAT_ocl_xactor_shim_arff_first__4_BITS_34_ETC___d101 =
+	     x__h3355 < 32'd5 ;
+  assign _0_CONCAT_ocl_xactor_shim_arff_first__4_BITS_34_ETC___d105 =
+	     x__h3503 < 32'd4 ;
+  assign _0_CONCAT_ocl_xactor_shim_awff_first__3_BITS_34_ETC___d49 =
+	     x__h2733 < 32'd5 ;
+  assign ocl_xactor_shim_arffD_OUT_BITS_34_TO_3_MINUS__ETC__q1 =
+	     ocl_xactor_shim_arff$D_OUT[34:3] - 32'h00001000 ;
+  assign ocl_xactor_shim_arff_first__4_BITS_34_TO_3_5_U_ETC___d135 =
+	     (ocl_xactor_shim_arff_first__4_BITS_34_TO_3_5_U_ETC___d96 ||
+	      !_0_CONCAT_ocl_xactor_shim_arff_first__4_BITS_34_ETC___d101) &&
+	     _0_CONCAT_ocl_xactor_shim_arff_first__4_BITS_34_ETC___d105 &&
+	     ocl_xactor_shim_arff$D_OUT[5:3] != 3'b100 &&
+	     SEL_ARR_v_f_to_host_0_notEmpty__09_v_f_to_host_ETC___d114 ;
+  assign ocl_xactor_shim_arff_first__4_BITS_34_TO_3_5_U_ETC___d145 =
+	     (ocl_xactor_shim_arff_first__4_BITS_34_TO_3_5_U_ETC___d96 ||
+	      !_0_CONCAT_ocl_xactor_shim_arff_first__4_BITS_34_ETC___d101) &&
+	     _0_CONCAT_ocl_xactor_shim_arff_first__4_BITS_34_ETC___d105 &&
+	     ocl_xactor_shim_arff$D_OUT[5:3] != 3'b100 &&
+	     !SEL_ARR_v_f_to_host_0_notEmpty__09_v_f_to_host_ETC___d114 ;
+  assign ocl_xactor_shim_arff_first__4_BITS_34_TO_3_5_U_ETC___d96 =
+	     ocl_xactor_shim_arff$D_OUT[34:3] < 32'h00001000 ;
+  assign ocl_xactor_shim_awffD_OUT_BITS_34_TO_3_MINUS__ETC__q2 =
+	     ocl_xactor_shim_awff$D_OUT[34:3] - 32'h00001000 ;
+  assign ocl_xactor_shim_awff_first__3_BITS_34_TO_3_4_U_ETC___d45 =
+	     ocl_xactor_shim_awff$D_OUT[34:3] < 32'h00001000 ;
+  assign ocl_xactor_shim_bff_i_notFull__2_AND_ocl_xacto_ETC___d68 =
+	     ocl_xactor_shim_bff$FULL_N &&
+	     (ocl_xactor_shim_awff_first__3_BITS_34_TO_3_4_U_ETC___d45 ||
+	      !_0_CONCAT_ocl_xactor_shim_awff_first__3_BITS_34_ETC___d49 ||
+	      !SEL_ARR_v_f_from_host_0_notFull__2_v_f_from_ho_ETC___d58 ||
+	      CASE_0_CONCAT_ocl_xactor_shim_awff_first__3_BI_ETC___d65) ;
+  assign ocl_xactor_shim_rff_i_notFull__3_AND_NOT_ocl_x_ETC___d125 =
+	     ocl_xactor_shim_rff$FULL_N &&
+	     (!ocl_xactor_shim_arff_first__4_BITS_34_TO_3_5_U_ETC___d96 &&
+	      _0_CONCAT_ocl_xactor_shim_arff_first__4_BITS_34_ETC___d101 ||
+	      !_0_CONCAT_ocl_xactor_shim_arff_first__4_BITS_34_ETC___d105 ||
+	      ocl_xactor_shim_arff$D_OUT[5:3] == 3'b100 ||
+	      !SEL_ARR_v_f_to_host_0_notEmpty__09_v_f_to_host_ETC___d114 ||
+	      CASE_0_CONCAT_ocl_xactor_shim_arff_first__4_BI_ETC___d120) ;
+  assign rdr___1_rdata__h3440 = { 31'd0, x__h4014 } ;
+  assign rdr___1_rdata__h3585 =
 	     { 31'd0,
-	       SEL_ARR_v_f_to_host_0_notEmpty__7_v_f_to_host__ETC___d72 } ;
-  assign x1_avValue_rdata__h2955 =
-	     SEL_ARR_v_f_to_host_0_notEmpty__7_v_f_to_host__ETC___d72 ?
-	       rdr___1_rdata__h2910 :
+	       SEL_ARR_v_f_to_host_0_notEmpty__09_v_f_to_host_ETC___d114 } ;
+  assign x1_avValue_rdata__h3909 =
+	     SEL_ARR_v_f_to_host_0_notEmpty__09_v_f_to_host_ETC___d114 ?
+	       rdr___1_rdata__h3864 :
 	       32'hFFFFFFFF ;
-  assign x1_avValue_rdata__h2966 =
-	     (ocl_xactor_f_rd_addr$D_OUT[5:3] == 3'b100) ?
-	       rdr___1_rdata__h2631 :
-	       x1_avValue_rdata__h2955 ;
-  assign x__h1777 =
+  assign x1_avValue_rdata__h3920 =
+	     (ocl_xactor_shim_arff$D_OUT[5:3] == 3'b100) ?
+	       rdr___1_rdata__h3585 :
+	       x1_avValue_rdata__h3909 ;
+  assign x__h2733 =
 	     { 3'd0,
-	       ocl_xactor_f_wr_addrD_OUT_BITS_34_TO_3_MINUS__ETC__q1[31:3] } ;
-  assign x__h2400 =
+	       ocl_xactor_shim_awffD_OUT_BITS_34_TO_3_MINUS__ETC__q2[31:3] } ;
+  assign x__h3355 =
 	     { 3'd0,
-	       ocl_xactor_f_rd_addrD_OUT_BITS_34_TO_3_MINUS__ETC__q2[31:3] } ;
-  assign x__h2548 = { 3'd0, ocl_xactor_f_rd_addr$D_OUT[34:6] } ;
-  always@(x__h2548 or
+	       ocl_xactor_shim_arffD_OUT_BITS_34_TO_3_MINUS__ETC__q1[31:3] } ;
+  assign x__h3503 = { 3'd0, ocl_xactor_shim_arff$D_OUT[34:6] } ;
+  always@(x__h3503 or
 	  v_f_to_host_0$D_OUT or
 	  v_f_to_host_1$D_OUT or v_f_to_host_2$D_OUT or v_f_to_host_3$D_OUT)
   begin
-    case (x__h2548)
-      32'd0: rdr___1_rdata__h2910 = v_f_to_host_0$D_OUT;
-      32'd1: rdr___1_rdata__h2910 = v_f_to_host_1$D_OUT;
-      32'd2: rdr___1_rdata__h2910 = v_f_to_host_2$D_OUT;
-      32'd3: rdr___1_rdata__h2910 = v_f_to_host_3$D_OUT;
-      default: rdr___1_rdata__h2910 = 32'hAAAAAAAA /* unspecified value */ ;
+    case (x__h3503)
+      32'd0: rdr___1_rdata__h3864 = v_f_to_host_0$D_OUT;
+      32'd1: rdr___1_rdata__h3864 = v_f_to_host_1$D_OUT;
+      32'd2: rdr___1_rdata__h3864 = v_f_to_host_2$D_OUT;
+      32'd3: rdr___1_rdata__h3864 = v_f_to_host_3$D_OUT;
+      default: rdr___1_rdata__h3864 = 32'hAAAAAAAA /* unspecified value */ ;
     endcase
   end
-  always@(x__h2400 or
+  always@(x__h3355 or
 	  v_f_from_host_0$FULL_N or
 	  v_f_from_host_1$FULL_N or
 	  v_f_from_host_2$FULL_N or
 	  v_f_from_host_3$FULL_N or v_f_from_host_4$FULL_N)
   begin
-    case (x__h2400)
-      32'd0: x__h3069 = v_f_from_host_0$FULL_N;
-      32'd1: x__h3069 = v_f_from_host_1$FULL_N;
-      32'd2: x__h3069 = v_f_from_host_2$FULL_N;
-      32'd3: x__h3069 = v_f_from_host_3$FULL_N;
-      32'd4: x__h3069 = v_f_from_host_4$FULL_N;
-      default: x__h3069 = 1'b0 /* unspecified value */ ;
+    case (x__h3355)
+      32'd0: x__h4014 = v_f_from_host_0$FULL_N;
+      32'd1: x__h4014 = v_f_from_host_1$FULL_N;
+      32'd2: x__h4014 = v_f_from_host_2$FULL_N;
+      32'd3: x__h4014 = v_f_from_host_3$FULL_N;
+      32'd4: x__h4014 = v_f_from_host_4$FULL_N;
+      default: x__h4014 = 1'b0 /* unspecified value */ ;
     endcase
   end
-  always@(x__h1777 or
+  always@(x__h2733 or
 	  v_f_from_host_0$FULL_N or
 	  v_f_from_host_1$FULL_N or
 	  v_f_from_host_2$FULL_N or
 	  v_f_from_host_3$FULL_N or v_f_from_host_4$FULL_N)
   begin
-    case (x__h1777)
+    case (x__h2733)
       32'd0:
-	  SEL_ARR_v_f_from_host_0_notFull__3_v_f_from_ho_ETC___d19 =
+	  SEL_ARR_v_f_from_host_0_notFull__2_v_f_from_ho_ETC___d58 =
 	      v_f_from_host_0$FULL_N;
       32'd1:
-	  SEL_ARR_v_f_from_host_0_notFull__3_v_f_from_ho_ETC___d19 =
+	  SEL_ARR_v_f_from_host_0_notFull__2_v_f_from_ho_ETC___d58 =
 	      v_f_from_host_1$FULL_N;
       32'd2:
-	  SEL_ARR_v_f_from_host_0_notFull__3_v_f_from_ho_ETC___d19 =
+	  SEL_ARR_v_f_from_host_0_notFull__2_v_f_from_ho_ETC___d58 =
 	      v_f_from_host_2$FULL_N;
       32'd3:
-	  SEL_ARR_v_f_from_host_0_notFull__3_v_f_from_ho_ETC___d19 =
+	  SEL_ARR_v_f_from_host_0_notFull__2_v_f_from_ho_ETC___d58 =
 	      v_f_from_host_3$FULL_N;
       32'd4:
-	  SEL_ARR_v_f_from_host_0_notFull__3_v_f_from_ho_ETC___d19 =
+	  SEL_ARR_v_f_from_host_0_notFull__2_v_f_from_ho_ETC___d58 =
 	      v_f_from_host_4$FULL_N;
-      default: SEL_ARR_v_f_from_host_0_notFull__3_v_f_from_ho_ETC___d19 =
+      default: SEL_ARR_v_f_from_host_0_notFull__2_v_f_from_ho_ETC___d58 =
 		   1'b0 /* unspecified value */ ;
     endcase
   end
-  always@(x__h2548 or
+  always@(x__h3503 or
 	  v_f_to_host_0$EMPTY_N or
 	  v_f_to_host_1$EMPTY_N or
 	  v_f_to_host_2$EMPTY_N or v_f_to_host_3$EMPTY_N)
   begin
-    case (x__h2548)
+    case (x__h3503)
       32'd0:
-	  SEL_ARR_v_f_to_host_0_notEmpty__7_v_f_to_host__ETC___d72 =
+	  SEL_ARR_v_f_to_host_0_notEmpty__09_v_f_to_host_ETC___d114 =
 	      v_f_to_host_0$EMPTY_N;
       32'd1:
-	  SEL_ARR_v_f_to_host_0_notEmpty__7_v_f_to_host__ETC___d72 =
+	  SEL_ARR_v_f_to_host_0_notEmpty__09_v_f_to_host_ETC___d114 =
 	      v_f_to_host_1$EMPTY_N;
       32'd2:
-	  SEL_ARR_v_f_to_host_0_notEmpty__7_v_f_to_host__ETC___d72 =
+	  SEL_ARR_v_f_to_host_0_notEmpty__09_v_f_to_host_ETC___d114 =
 	      v_f_to_host_2$EMPTY_N;
       32'd3:
-	  SEL_ARR_v_f_to_host_0_notEmpty__7_v_f_to_host__ETC___d72 =
+	  SEL_ARR_v_f_to_host_0_notEmpty__09_v_f_to_host_ETC___d114 =
 	      v_f_to_host_3$EMPTY_N;
-      default: SEL_ARR_v_f_to_host_0_notEmpty__7_v_f_to_host__ETC___d72 =
+      default: SEL_ARR_v_f_to_host_0_notEmpty__09_v_f_to_host_ETC___d114 =
 		   1'b0 /* unspecified value */ ;
     endcase
   end
-  always@(x__h2548 or
+  always@(x__h3503 or
 	  v_f_to_host_0$EMPTY_N or
 	  v_f_to_host_1$EMPTY_N or
 	  v_f_to_host_2$EMPTY_N or v_f_to_host_3$EMPTY_N)
   begin
-    case (x__h2548)
+    case (x__h3503)
       32'd0:
-	  CASE_0_CONCAT_ocl_xactor_f_rd_addr_first__2_BI_ETC___d78 =
+	  CASE_0_CONCAT_ocl_xactor_shim_arff_first__4_BI_ETC___d120 =
 	      v_f_to_host_0$EMPTY_N;
       32'd1:
-	  CASE_0_CONCAT_ocl_xactor_f_rd_addr_first__2_BI_ETC___d78 =
+	  CASE_0_CONCAT_ocl_xactor_shim_arff_first__4_BI_ETC___d120 =
 	      v_f_to_host_1$EMPTY_N;
       32'd2:
-	  CASE_0_CONCAT_ocl_xactor_f_rd_addr_first__2_BI_ETC___d78 =
+	  CASE_0_CONCAT_ocl_xactor_shim_arff_first__4_BI_ETC___d120 =
 	      v_f_to_host_2$EMPTY_N;
       32'd3:
-	  CASE_0_CONCAT_ocl_xactor_f_rd_addr_first__2_BI_ETC___d78 =
+	  CASE_0_CONCAT_ocl_xactor_shim_arff_first__4_BI_ETC___d120 =
 	      v_f_to_host_3$EMPTY_N;
-      default: CASE_0_CONCAT_ocl_xactor_f_rd_addr_first__2_BI_ETC___d78 =
+      default: CASE_0_CONCAT_ocl_xactor_shim_arff_first__4_BI_ETC___d120 =
 		   1'd1;
     endcase
   end
-  always@(x__h1777 or
+  always@(x__h2733 or
 	  v_f_from_host_0$FULL_N or
 	  v_f_from_host_1$FULL_N or
 	  v_f_from_host_2$FULL_N or
 	  v_f_from_host_3$FULL_N or v_f_from_host_4$FULL_N)
   begin
-    case (x__h1777)
+    case (x__h2733)
       32'd0:
-	  CASE_0_CONCAT_ocl_xactor_f_wr_addr_first_BITS__ETC___d26 =
+	  CASE_0_CONCAT_ocl_xactor_shim_awff_first__3_BI_ETC___d65 =
 	      v_f_from_host_0$FULL_N;
       32'd1:
-	  CASE_0_CONCAT_ocl_xactor_f_wr_addr_first_BITS__ETC___d26 =
+	  CASE_0_CONCAT_ocl_xactor_shim_awff_first__3_BI_ETC___d65 =
 	      v_f_from_host_1$FULL_N;
       32'd2:
-	  CASE_0_CONCAT_ocl_xactor_f_wr_addr_first_BITS__ETC___d26 =
+	  CASE_0_CONCAT_ocl_xactor_shim_awff_first__3_BI_ETC___d65 =
 	      v_f_from_host_2$FULL_N;
       32'd3:
-	  CASE_0_CONCAT_ocl_xactor_f_wr_addr_first_BITS__ETC___d26 =
+	  CASE_0_CONCAT_ocl_xactor_shim_awff_first__3_BI_ETC___d65 =
 	      v_f_from_host_3$FULL_N;
       32'd4:
-	  CASE_0_CONCAT_ocl_xactor_f_wr_addr_first_BITS__ETC___d26 =
+	  CASE_0_CONCAT_ocl_xactor_shim_awff_first__3_BI_ETC___d65 =
 	      v_f_from_host_4$FULL_N;
-      default: CASE_0_CONCAT_ocl_xactor_f_wr_addr_first_BITS__ETC___d26 =
+      default: CASE_0_CONCAT_ocl_xactor_shim_awff_first__3_BI_ETC___d65 =
 		   1'd1;
     endcase
   end
@@ -1206,41 +1339,56 @@ module mkOCL_Adapter(CLK,
   begin
     #0;
     if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_ocl_xactor_u_slave_u_aw_warnDoPut)
+	$display("WARNING: putting into a Sink that can't be put into");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_ocl_xactor_u_slave_u_w_warnDoPut)
+	$display("WARNING: putting into a Sink that can't be put into");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_ocl_xactor_u_slave_u_b_warnDoDrop)
+	$display("WARNING: dropping from Source that can't be dropped from");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_ocl_xactor_u_slave_u_ar_warnDoPut)
+	$display("WARNING: putting into a Sink that can't be put into");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_ocl_xactor_u_slave_u_r_warnDoDrop)
+	$display("WARNING: dropping from Source that can't be dropped from");
+    if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_AXI4L_rd &&
-	  !ocl_xactor_f_rd_addr_first__2_BITS_34_TO_3_3_U_ETC___d54 &&
-	  _0_CONCAT_ocl_xactor_f_rd_addr_first__2_BITS_34_ETC___d59 &&
-	  ocl_xactor_f_rd_addr$D_OUT[5:3] != 3'b100)
+	  !ocl_xactor_shim_arff_first__4_BITS_34_TO_3_5_U_ETC___d96 &&
+	  _0_CONCAT_ocl_xactor_shim_arff_first__4_BITS_34_ETC___d101 &&
+	  ocl_xactor_shim_arff$D_OUT[5:3] != 3'b100)
 	$display("ERROR: AWS_OCL_Adapter.rl_AXI4L_rd: ERROR: unknown rd addr %0h",
-		 ocl_xactor_f_rd_addr$D_OUT[34:3]);
+		 ocl_xactor_shim_arff$D_OUT[34:3]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_AXI4L_rd &&
-	  ocl_xactor_f_rd_addr_first__2_BITS_34_TO_3_3_U_ETC___d102)
+	  ocl_xactor_shim_arff_first__4_BITS_34_TO_3_5_U_ETC___d145)
 	$display("ERROR: AWS_OCL_Adapter.rl_AXI4L_rd: addr %0h; ERROR: data read on empty chan [%0d]",
-		 ocl_xactor_f_rd_addr$D_OUT[34:3],
-		 x__h2548);
+		 ocl_xactor_shim_arff$D_OUT[34:3],
+		 x__h3503);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_AXI4L_rd &&
-	  (ocl_xactor_f_rd_addr_first__2_BITS_34_TO_3_3_U_ETC___d54 ||
-	   !_0_CONCAT_ocl_xactor_f_rd_addr_first__2_BITS_34_ETC___d59) &&
-	  !_0_CONCAT_ocl_xactor_f_rd_addr_first__2_BITS_34_ETC___d63)
+	  (ocl_xactor_shim_arff_first__4_BITS_34_TO_3_5_U_ETC___d96 ||
+	   !_0_CONCAT_ocl_xactor_shim_arff_first__4_BITS_34_ETC___d101) &&
+	  !_0_CONCAT_ocl_xactor_shim_arff_first__4_BITS_34_ETC___d105)
 	$display("ERROR: AWS_OCL_Adapter.rl_AXI4L_rd: unknown read addr %0h",
-		 ocl_xactor_f_rd_addr$D_OUT[34:3]);
+		 ocl_xactor_shim_arff$D_OUT[34:3]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_AXI4L_wr &&
-	  !ocl_xactor_f_wr_addr_first_BITS_34_TO_3_ULT_0x_ETC___d6 &&
-	  _0_CONCAT_ocl_xactor_f_wr_addr_first_BITS_34_TO_ETC___d10 &&
-	  !SEL_ARR_v_f_from_host_0_notFull__3_v_f_from_ho_ETC___d19)
+	  !ocl_xactor_shim_awff_first__3_BITS_34_TO_3_4_U_ETC___d45 &&
+	  _0_CONCAT_ocl_xactor_shim_awff_first__3_BITS_34_ETC___d49 &&
+	  !SEL_ARR_v_f_from_host_0_notFull__2_v_f_from_ho_ETC___d58)
 	$display("ERROR: AWS_OCL_Adapter.rl_AXI4L_wr: addr %0h data %0h; chan [%0d] overflow",
-		 ocl_xactor_f_wr_addr$D_OUT[34:3],
-		 ocl_xactor_f_wr_data$D_OUT[35:4],
-		 x__h1777);
+		 ocl_xactor_shim_awff$D_OUT[34:3],
+		 ocl_xactor_shim_wff$D_OUT[35:4],
+		 x__h2733);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_AXI4L_wr &&
-	  (ocl_xactor_f_wr_addr_first_BITS_34_TO_3_ULT_0x_ETC___d6 ||
-	   !_0_CONCAT_ocl_xactor_f_wr_addr_first_BITS_34_TO_ETC___d10))
+	  (ocl_xactor_shim_awff_first__3_BITS_34_TO_3_4_U_ETC___d45 ||
+	   !_0_CONCAT_ocl_xactor_shim_awff_first__3_BITS_34_ETC___d49))
 	$display("ERROR: AWS_OCL_Adapter.rl_AXI4L_wr: addr %0h data %0h; unknown addr",
-		 ocl_xactor_f_wr_addr$D_OUT[34:3],
-		 ocl_xactor_f_wr_data$D_OUT[35:4]);
+		 ocl_xactor_shim_awff$D_OUT[34:3],
+		 ocl_xactor_shim_wff$D_OUT[35:4]);
   end
   // synopsys translate_on
 endmodule  // mkOCL_Adapter

@@ -6,99 +6,111 @@
 //
 // Ports:
 // Name                         I/O  size props
-// slave_awready                  O     1 reg
-// slave_wready                   O     1 reg
-// slave_bvalid                   O     1 reg
-// slave_bid                      O     4 reg
-// slave_bresp                    O     2 reg
-// slave_arready                  O     1 reg
-// slave_rvalid                   O     1 reg
-// slave_rid                      O     4 reg
-// slave_rdata                    O    64 reg
-// slave_rresp                    O     2 reg
-// slave_rlast                    O     1 reg
-// to_ddr4_awvalid                O     1 reg
-// to_ddr4_awid                   O    16 reg
-// to_ddr4_awaddr                 O    64 reg
-// to_ddr4_awlen                  O     8 reg
-// to_ddr4_awsize                 O     3 reg
-// to_ddr4_awburst                O     2 reg
-// to_ddr4_awlock                 O     1 reg
-// to_ddr4_awcache                O     4 reg
-// to_ddr4_awprot                 O     3 reg
-// to_ddr4_awqos                  O     4 reg
-// to_ddr4_awregion               O     4 reg
-// to_ddr4_wvalid                 O     1 reg
-// to_ddr4_wdata                  O   512 reg
-// to_ddr4_wstrb                  O    64 reg
-// to_ddr4_wlast                  O     1 reg
-// to_ddr4_bready                 O     1 reg
-// to_ddr4_arvalid                O     1 reg
-// to_ddr4_arid                   O    16 reg
-// to_ddr4_araddr                 O    64 reg
-// to_ddr4_arlen                  O     8 reg
-// to_ddr4_arsize                 O     3 reg
-// to_ddr4_arburst                O     2 reg
-// to_ddr4_arlock                 O     1 reg
-// to_ddr4_arcache                O     4 reg
-// to_ddr4_arprot                 O     3 reg
-// to_ddr4_arqos                  O     4 reg
-// to_ddr4_arregion               O     4 reg
-// to_ddr4_rready                 O     1 reg
+// slave_awready                  O     1
+// slave_wready                   O     1
+// slave_bid                      O    15
+// slave_bresp                    O     2
+// slave_bvalid                   O     1
+// slave_arready                  O     1
+// slave_rid                      O    15
+// slave_rdata                    O    64
+// slave_rresp                    O     2
+// slave_rlast                    O     1
+// slave_rvalid                   O     1
+// to_ddr4_awid                   O    15
+// to_ddr4_awaddr                 O    64
+// to_ddr4_awlen                  O     8
+// to_ddr4_awsize                 O     3
+// to_ddr4_awburst                O     2
+// to_ddr4_awlock                 O     1
+// to_ddr4_awcache                O     4
+// to_ddr4_awprot                 O     3
+// to_ddr4_awqos                  O     4
+// to_ddr4_awregion               O     4
+// to_ddr4_awvalid                O     1
+// to_ddr4_wdata                  O   512
+// to_ddr4_wstrb                  O    64
+// to_ddr4_wlast                  O     1
+// to_ddr4_wvalid                 O     1
+// to_ddr4_bready                 O     1
+// to_ddr4_arid                   O    15
+// to_ddr4_araddr                 O    64
+// to_ddr4_arlen                  O     8
+// to_ddr4_arsize                 O     3
+// to_ddr4_arburst                O     2
+// to_ddr4_arlock                 O     1
+// to_ddr4_arcache                O     4
+// to_ddr4_arprot                 O     3
+// to_ddr4_arqos                  O     4
+// to_ddr4_arregion               O     4
+// to_ddr4_arvalid                O     1
+// to_ddr4_rready                 O     1
 // RDY_ma_set_addr_map            O     1
 // RDY_ma_set_watch_tohost        O     1
 // RDY_ma_ddr4_ready              O     1
 // mv_status                      O     8 reg
 // CLK                            I     1 clock
 // RST_N                          I     1 reset
-// slave_awvalid                  I     1
-// slave_awid                     I     4 reg
-// slave_awaddr                   I    64 reg
-// slave_awlen                    I     8 reg
-// slave_awsize                   I     3 reg
-// slave_awburst                  I     2 reg
-// slave_awlock                   I     1 reg
-// slave_awcache                  I     4 reg
-// slave_awprot                   I     3 reg
-// slave_awqos                    I     4 reg
-// slave_awregion                 I     4 reg
-// slave_wvalid                   I     1
-// slave_wdata                    I    64 reg
-// slave_wstrb                    I     8 reg
-// slave_wlast                    I     1 reg
+// slave_awid                     I    15
+// slave_awaddr                   I    64
+// slave_awlen                    I     8
+// slave_awsize                   I     3
+// slave_awburst                  I     2
+// slave_awlock                   I     1
+// slave_awcache                  I     4
+// slave_awprot                   I     3
+// slave_awqos                    I     4
+// slave_awregion                 I     4
+// slave_wdata                    I    64
+// slave_wstrb                    I     8
+// slave_wlast                    I     1
 // slave_bready                   I     1
-// slave_arvalid                  I     1
-// slave_arid                     I     4 reg
-// slave_araddr                   I    64 reg
-// slave_arlen                    I     8 reg
-// slave_arsize                   I     3 reg
-// slave_arburst                  I     2 reg
-// slave_arlock                   I     1 reg
-// slave_arcache                  I     4 reg
-// slave_arprot                   I     3 reg
-// slave_arqos                    I     4 reg
-// slave_arregion                 I     4 reg
+// slave_arid                     I    15
+// slave_araddr                   I    64
+// slave_arlen                    I     8
+// slave_arsize                   I     3
+// slave_arburst                  I     2
+// slave_arlock                   I     1
+// slave_arcache                  I     4
+// slave_arprot                   I     3
+// slave_arqos                    I     4
+// slave_arregion                 I     4
 // slave_rready                   I     1
 // to_ddr4_awready                I     1
 // to_ddr4_wready                 I     1
-// to_ddr4_bvalid                 I     1
-// to_ddr4_bid                    I    16 reg
-// to_ddr4_bresp                  I     2 reg
+// to_ddr4_bid                    I    15
+// to_ddr4_bresp                  I     2
 // to_ddr4_arready                I     1
-// to_ddr4_rvalid                 I     1
-// to_ddr4_rid                    I    16 reg
-// to_ddr4_rdata                  I   512 reg
-// to_ddr4_rresp                  I     2 reg
-// to_ddr4_rlast                  I     1 reg
+// to_ddr4_rid                    I    15
+// to_ddr4_rdata                  I   512
+// to_ddr4_rresp                  I     2
+// to_ddr4_rlast                  I     1
 // ma_set_addr_map_addr_base      I    64 reg
 // ma_set_addr_map_addr_lim       I    64 reg
 // ma_set_watch_tohost_watch_tohost  I     1 reg
 // ma_set_watch_tohost_tohost_addr  I    64 reg
+// slave_awvalid                  I     1
+// slave_wvalid                   I     1
+// slave_arvalid                  I     1
+// to_ddr4_bvalid                 I     1
+// to_ddr4_rvalid                 I     1
 // EN_ma_set_addr_map             I     1
 // EN_ma_set_watch_tohost         I     1
 // EN_ma_ddr4_ready               I     1
 //
-// No combinational paths from inputs to outputs
+// Combinational paths from inputs to outputs:
+//   EN_ma_ddr4_ready -> to_ddr4_arid
+//   EN_ma_ddr4_ready -> to_ddr4_araddr
+//   EN_ma_ddr4_ready -> to_ddr4_arlen
+//   EN_ma_ddr4_ready -> to_ddr4_arsize
+//   EN_ma_ddr4_ready -> to_ddr4_arburst
+//   EN_ma_ddr4_ready -> to_ddr4_arlock
+//   EN_ma_ddr4_ready -> to_ddr4_arcache
+//   EN_ma_ddr4_ready -> to_ddr4_arprot
+//   EN_ma_ddr4_ready -> to_ddr4_arqos
+//   EN_ma_ddr4_ready -> to_ddr4_arregion
+//   EN_ma_ddr4_ready -> to_ddr4_aruser
+//   EN_ma_ddr4_ready -> to_ddr4_arvalid
 //
 //
 
@@ -118,7 +130,6 @@
 module mkAWS_DDR4_Adapter(CLK,
 			  RST_N,
 
-			  slave_awvalid,
 			  slave_awid,
 			  slave_awaddr,
 			  slave_awlen,
@@ -129,25 +140,25 @@ module mkAWS_DDR4_Adapter(CLK,
 			  slave_awprot,
 			  slave_awqos,
 			  slave_awregion,
+			  slave_awvalid,
 
 			  slave_awready,
 
-			  slave_wvalid,
 			  slave_wdata,
 			  slave_wstrb,
 			  slave_wlast,
+			  slave_wvalid,
 
 			  slave_wready,
-
-			  slave_bvalid,
 
 			  slave_bid,
 
 			  slave_bresp,
 
+			  slave_bvalid,
+
 			  slave_bready,
 
-			  slave_arvalid,
 			  slave_arid,
 			  slave_araddr,
 			  slave_arlen,
@@ -158,10 +169,9 @@ module mkAWS_DDR4_Adapter(CLK,
 			  slave_arprot,
 			  slave_arqos,
 			  slave_arregion,
+			  slave_arvalid,
 
 			  slave_arready,
-
-			  slave_rvalid,
 
 			  slave_rid,
 
@@ -171,9 +181,9 @@ module mkAWS_DDR4_Adapter(CLK,
 
 			  slave_rlast,
 
-			  slave_rready,
+			  slave_rvalid,
 
-			  to_ddr4_awvalid,
+			  slave_rready,
 
 			  to_ddr4_awid,
 
@@ -195,9 +205,9 @@ module mkAWS_DDR4_Adapter(CLK,
 
 			  to_ddr4_awregion,
 
-			  to_ddr4_awready,
+			  to_ddr4_awvalid,
 
-			  to_ddr4_wvalid,
+			  to_ddr4_awready,
 
 			  to_ddr4_wdata,
 
@@ -205,15 +215,15 @@ module mkAWS_DDR4_Adapter(CLK,
 
 			  to_ddr4_wlast,
 
+			  to_ddr4_wvalid,
+
 			  to_ddr4_wready,
 
-			  to_ddr4_bvalid,
 			  to_ddr4_bid,
 			  to_ddr4_bresp,
+			  to_ddr4_bvalid,
 
 			  to_ddr4_bready,
-
-			  to_ddr4_arvalid,
 
 			  to_ddr4_arid,
 
@@ -235,13 +245,15 @@ module mkAWS_DDR4_Adapter(CLK,
 
 			  to_ddr4_arregion,
 
+			  to_ddr4_arvalid,
+
 			  to_ddr4_arready,
 
-			  to_ddr4_rvalid,
 			  to_ddr4_rid,
 			  to_ddr4_rdata,
 			  to_ddr4_rresp,
 			  to_ddr4_rlast,
+			  to_ddr4_rvalid,
 
 			  to_ddr4_rready,
 
@@ -262,9 +274,8 @@ module mkAWS_DDR4_Adapter(CLK,
   input  CLK;
   input  RST_N;
 
-  // action method slave_m_awvalid
-  input  slave_awvalid;
-  input  [3 : 0] slave_awid;
+  // action method slave_aw_awflit
+  input  [14 : 0] slave_awid;
   input  [63 : 0] slave_awaddr;
   input  [7 : 0] slave_awlen;
   input  [2 : 0] slave_awsize;
@@ -274,36 +285,36 @@ module mkAWS_DDR4_Adapter(CLK,
   input  [2 : 0] slave_awprot;
   input  [3 : 0] slave_awqos;
   input  [3 : 0] slave_awregion;
+  input  slave_awvalid;
 
-  // value method slave_m_awready
+  // value method slave_aw_awready
   output slave_awready;
 
-  // action method slave_m_wvalid
-  input  slave_wvalid;
+  // action method slave_w_wflit
   input  [63 : 0] slave_wdata;
   input  [7 : 0] slave_wstrb;
   input  slave_wlast;
+  input  slave_wvalid;
 
-  // value method slave_m_wready
+  // value method slave_w_wready
   output slave_wready;
 
-  // value method slave_m_bvalid
-  output slave_bvalid;
+  // value method slave_b_bid
+  output [14 : 0] slave_bid;
 
-  // value method slave_m_bid
-  output [3 : 0] slave_bid;
-
-  // value method slave_m_bresp
+  // value method slave_b_bresp
   output [1 : 0] slave_bresp;
 
-  // value method slave_m_buser
+  // value method slave_b_buser
 
-  // action method slave_m_bready
+  // value method slave_b_bvalid
+  output slave_bvalid;
+
+  // action method slave_b_bready
   input  slave_bready;
 
-  // action method slave_m_arvalid
-  input  slave_arvalid;
-  input  [3 : 0] slave_arid;
+  // action method slave_ar_arflit
+  input  [14 : 0] slave_arid;
   input  [63 : 0] slave_araddr;
   input  [7 : 0] slave_arlen;
   input  [2 : 0] slave_arsize;
@@ -313,139 +324,140 @@ module mkAWS_DDR4_Adapter(CLK,
   input  [2 : 0] slave_arprot;
   input  [3 : 0] slave_arqos;
   input  [3 : 0] slave_arregion;
+  input  slave_arvalid;
 
-  // value method slave_m_arready
+  // value method slave_ar_arready
   output slave_arready;
 
-  // value method slave_m_rvalid
-  output slave_rvalid;
+  // value method slave_r_rid
+  output [14 : 0] slave_rid;
 
-  // value method slave_m_rid
-  output [3 : 0] slave_rid;
-
-  // value method slave_m_rdata
+  // value method slave_r_rdata
   output [63 : 0] slave_rdata;
 
-  // value method slave_m_rresp
+  // value method slave_r_rresp
   output [1 : 0] slave_rresp;
 
-  // value method slave_m_rlast
+  // value method slave_r_rlast
   output slave_rlast;
 
-  // value method slave_m_ruser
+  // value method slave_r_ruser
 
-  // action method slave_m_rready
+  // value method slave_r_rvalid
+  output slave_rvalid;
+
+  // action method slave_r_rready
   input  slave_rready;
 
-  // value method to_ddr4_m_awvalid
-  output to_ddr4_awvalid;
+  // value method to_ddr4_aw_awid
+  output [14 : 0] to_ddr4_awid;
 
-  // value method to_ddr4_m_awid
-  output [15 : 0] to_ddr4_awid;
-
-  // value method to_ddr4_m_awaddr
+  // value method to_ddr4_aw_awaddr
   output [63 : 0] to_ddr4_awaddr;
 
-  // value method to_ddr4_m_awlen
+  // value method to_ddr4_aw_awlen
   output [7 : 0] to_ddr4_awlen;
 
-  // value method to_ddr4_m_awsize
+  // value method to_ddr4_aw_awsize
   output [2 : 0] to_ddr4_awsize;
 
-  // value method to_ddr4_m_awburst
+  // value method to_ddr4_aw_awburst
   output [1 : 0] to_ddr4_awburst;
 
-  // value method to_ddr4_m_awlock
+  // value method to_ddr4_aw_awlock
   output to_ddr4_awlock;
 
-  // value method to_ddr4_m_awcache
+  // value method to_ddr4_aw_awcache
   output [3 : 0] to_ddr4_awcache;
 
-  // value method to_ddr4_m_awprot
+  // value method to_ddr4_aw_awprot
   output [2 : 0] to_ddr4_awprot;
 
-  // value method to_ddr4_m_awqos
+  // value method to_ddr4_aw_awqos
   output [3 : 0] to_ddr4_awqos;
 
-  // value method to_ddr4_m_awregion
+  // value method to_ddr4_aw_awregion
   output [3 : 0] to_ddr4_awregion;
 
-  // value method to_ddr4_m_awuser
+  // value method to_ddr4_aw_awuser
 
-  // action method to_ddr4_m_awready
+  // value method to_ddr4_aw_awvalid
+  output to_ddr4_awvalid;
+
+  // action method to_ddr4_aw_awready
   input  to_ddr4_awready;
 
-  // value method to_ddr4_m_wvalid
-  output to_ddr4_wvalid;
-
-  // value method to_ddr4_m_wdata
+  // value method to_ddr4_w_wdata
   output [511 : 0] to_ddr4_wdata;
 
-  // value method to_ddr4_m_wstrb
+  // value method to_ddr4_w_wstrb
   output [63 : 0] to_ddr4_wstrb;
 
-  // value method to_ddr4_m_wlast
+  // value method to_ddr4_w_wlast
   output to_ddr4_wlast;
 
-  // value method to_ddr4_m_wuser
+  // value method to_ddr4_w_wuser
 
-  // action method to_ddr4_m_wready
+  // value method to_ddr4_w_wvalid
+  output to_ddr4_wvalid;
+
+  // action method to_ddr4_w_wready
   input  to_ddr4_wready;
 
-  // action method to_ddr4_m_bvalid
-  input  to_ddr4_bvalid;
-  input  [15 : 0] to_ddr4_bid;
+  // action method to_ddr4_b_bflit
+  input  [14 : 0] to_ddr4_bid;
   input  [1 : 0] to_ddr4_bresp;
+  input  to_ddr4_bvalid;
 
-  // value method to_ddr4_m_bready
+  // value method to_ddr4_b_bready
   output to_ddr4_bready;
 
-  // value method to_ddr4_m_arvalid
-  output to_ddr4_arvalid;
+  // value method to_ddr4_ar_arid
+  output [14 : 0] to_ddr4_arid;
 
-  // value method to_ddr4_m_arid
-  output [15 : 0] to_ddr4_arid;
-
-  // value method to_ddr4_m_araddr
+  // value method to_ddr4_ar_araddr
   output [63 : 0] to_ddr4_araddr;
 
-  // value method to_ddr4_m_arlen
+  // value method to_ddr4_ar_arlen
   output [7 : 0] to_ddr4_arlen;
 
-  // value method to_ddr4_m_arsize
+  // value method to_ddr4_ar_arsize
   output [2 : 0] to_ddr4_arsize;
 
-  // value method to_ddr4_m_arburst
+  // value method to_ddr4_ar_arburst
   output [1 : 0] to_ddr4_arburst;
 
-  // value method to_ddr4_m_arlock
+  // value method to_ddr4_ar_arlock
   output to_ddr4_arlock;
 
-  // value method to_ddr4_m_arcache
+  // value method to_ddr4_ar_arcache
   output [3 : 0] to_ddr4_arcache;
 
-  // value method to_ddr4_m_arprot
+  // value method to_ddr4_ar_arprot
   output [2 : 0] to_ddr4_arprot;
 
-  // value method to_ddr4_m_arqos
+  // value method to_ddr4_ar_arqos
   output [3 : 0] to_ddr4_arqos;
 
-  // value method to_ddr4_m_arregion
+  // value method to_ddr4_ar_arregion
   output [3 : 0] to_ddr4_arregion;
 
-  // value method to_ddr4_m_aruser
+  // value method to_ddr4_ar_aruser
 
-  // action method to_ddr4_m_arready
+  // value method to_ddr4_ar_arvalid
+  output to_ddr4_arvalid;
+
+  // action method to_ddr4_ar_arready
   input  to_ddr4_arready;
 
-  // action method to_ddr4_m_rvalid
-  input  to_ddr4_rvalid;
-  input  [15 : 0] to_ddr4_rid;
+  // action method to_ddr4_r_rflit
+  input  [14 : 0] to_ddr4_rid;
   input  [511 : 0] to_ddr4_rdata;
   input  [1 : 0] to_ddr4_rresp;
   input  to_ddr4_rlast;
+  input  to_ddr4_rvalid;
 
-  // value method to_ddr4_m_rready
+  // value method to_ddr4_r_rready
   output to_ddr4_rready;
 
   // action method ma_set_addr_map
@@ -470,11 +482,9 @@ module mkAWS_DDR4_Adapter(CLK,
   // signals for module outputs
   wire [511 : 0] to_ddr4_wdata;
   wire [63 : 0] slave_rdata, to_ddr4_araddr, to_ddr4_awaddr, to_ddr4_wstrb;
-  wire [15 : 0] to_ddr4_arid, to_ddr4_awid;
+  wire [14 : 0] slave_bid, slave_rid, to_ddr4_arid, to_ddr4_awid;
   wire [7 : 0] mv_status, to_ddr4_arlen, to_ddr4_awlen;
-  wire [3 : 0] slave_bid,
-	       slave_rid,
-	       to_ddr4_arcache,
+  wire [3 : 0] to_ddr4_arcache,
 	       to_ddr4_arqos,
 	       to_ddr4_arregion,
 	       to_ddr4_awcache,
@@ -501,15 +511,102 @@ module mkAWS_DDR4_Adapter(CLK,
        to_ddr4_wvalid;
 
   // inlined wires
-  wire [170 : 0] f_reqs_rv$port1__read,
+  wire [577 : 0] master_xactor_shim_wff_rv$port0__write_1,
+		 master_xactor_shim_wff_rv$port1__read,
+		 master_xactor_shim_wff_rv$port2__read,
+		 master_xactor_shim_wff_rv$port3__read;
+  wire [530 : 0] master_xactor_shim_rff_rv$port0__write_1,
+		 master_xactor_shim_rff_rv$port1__read,
+		 master_xactor_shim_rff_rv$port2__read,
+		 master_xactor_shim_rff_rv$port3__read;
+  wire [529 : 0] master_xactor_ug_master_u_r_putWire$wget;
+  wire [181 : 0] f_reqs_rv$port1__read,
 		 f_reqs_rv$port1__write_1,
 		 f_reqs_rv$port2__read;
-  wire f_reqs_rv$EN_port0__write, f_reqs_rv$EN_port1__write;
+  wire [108 : 0] master_xactor_shim_arff_rv$port0__write_1,
+		 master_xactor_shim_arff_rv$port1__read,
+		 master_xactor_shim_arff_rv$port2__read,
+		 master_xactor_shim_arff_rv$port3__read,
+		 master_xactor_shim_awff_rv$port0__write_1,
+		 master_xactor_shim_awff_rv$port1__read,
+		 master_xactor_shim_awff_rv$port2__read,
+		 master_xactor_shim_awff_rv$port3__read,
+		 slave_xactor_shim_arff_rv$port0__write_1,
+		 slave_xactor_shim_arff_rv$port1__read,
+		 slave_xactor_shim_arff_rv$port2__read,
+		 slave_xactor_shim_arff_rv$port3__read,
+		 slave_xactor_shim_awff_rv$port0__write_1,
+		 slave_xactor_shim_awff_rv$port1__read,
+		 slave_xactor_shim_awff_rv$port2__read,
+		 slave_xactor_shim_awff_rv$port3__read;
+  wire [107 : 0] slave_xactor_ug_slave_u_ar_putWire$wget,
+		 slave_xactor_ug_slave_u_aw_putWire$wget;
+  wire [82 : 0] slave_xactor_shim_rff_rv$port0__write_1,
+		slave_xactor_shim_rff_rv$port1__read,
+		slave_xactor_shim_rff_rv$port2__read,
+		slave_xactor_shim_rff_rv$port3__read;
+  wire [73 : 0] slave_xactor_shim_wff_rv$port0__write_1,
+		slave_xactor_shim_wff_rv$port1__read,
+		slave_xactor_shim_wff_rv$port2__read,
+		slave_xactor_shim_wff_rv$port3__read;
+  wire [72 : 0] slave_xactor_ug_slave_u_w_putWire$wget;
+  wire [17 : 0] master_xactor_shim_bff_rv$port0__write_1,
+		master_xactor_shim_bff_rv$port1__read,
+		master_xactor_shim_bff_rv$port2__read,
+		master_xactor_shim_bff_rv$port3__read,
+		slave_xactor_shim_bff_rv$port0__write_1,
+		slave_xactor_shim_bff_rv$port1__read,
+		slave_xactor_shim_bff_rv$port2__read,
+		slave_xactor_shim_bff_rv$port3__read;
+  wire [16 : 0] master_xactor_ug_master_u_b_putWire$wget;
+  wire f_reqs_rv$EN_port0__write,
+       f_reqs_rv$EN_port1__write,
+       master_xactor_ug_master_u_ar_dropWire$whas,
+       master_xactor_ug_master_u_aw_dropWire$whas,
+       master_xactor_ug_master_u_b_putWire$whas,
+       master_xactor_ug_master_u_r_putWire$whas,
+       master_xactor_ug_master_u_w_dropWire$whas,
+       slave_xactor_shim_bff_rv$EN_port0__write,
+       slave_xactor_shim_rff_rv$EN_port0__write,
+       slave_xactor_ug_slave_u_ar_putWire$whas,
+       slave_xactor_ug_slave_u_aw_putWire$whas,
+       slave_xactor_ug_slave_u_b_dropWire$whas,
+       slave_xactor_ug_slave_u_r_dropWire$whas,
+       slave_xactor_ug_slave_u_w_putWire$whas;
 
   // register f_reqs_rv
-  reg [170 : 0] f_reqs_rv;
-  wire [170 : 0] f_reqs_rv$D_IN;
+  reg [181 : 0] f_reqs_rv;
+  wire [181 : 0] f_reqs_rv$D_IN;
   wire f_reqs_rv$EN;
+
+  // register master_xactor_clearing
+  reg master_xactor_clearing;
+  wire master_xactor_clearing$D_IN, master_xactor_clearing$EN;
+
+  // register master_xactor_shim_arff_rv
+  reg [108 : 0] master_xactor_shim_arff_rv;
+  wire [108 : 0] master_xactor_shim_arff_rv$D_IN;
+  wire master_xactor_shim_arff_rv$EN;
+
+  // register master_xactor_shim_awff_rv
+  reg [108 : 0] master_xactor_shim_awff_rv;
+  wire [108 : 0] master_xactor_shim_awff_rv$D_IN;
+  wire master_xactor_shim_awff_rv$EN;
+
+  // register master_xactor_shim_bff_rv
+  reg [17 : 0] master_xactor_shim_bff_rv;
+  wire [17 : 0] master_xactor_shim_bff_rv$D_IN;
+  wire master_xactor_shim_bff_rv$EN;
+
+  // register master_xactor_shim_rff_rv
+  reg [530 : 0] master_xactor_shim_rff_rv;
+  wire [530 : 0] master_xactor_shim_rff_rv$D_IN;
+  wire master_xactor_shim_rff_rv$EN;
+
+  // register master_xactor_shim_wff_rv
+  reg [577 : 0] master_xactor_shim_wff_rv;
+  wire [577 : 0] master_xactor_shim_wff_rv$D_IN;
+  wire master_xactor_shim_wff_rv$EN;
 
   // register rg_addr_base
   reg [63 : 0] rg_addr_base;
@@ -554,88 +651,51 @@ module mkAWS_DDR4_Adapter(CLK,
   reg rg_watch_tohost;
   wire rg_watch_tohost$D_IN, rg_watch_tohost$EN;
 
-  // ports of submodule master_xactor_f_rd_addr
-  wire [108 : 0] master_xactor_f_rd_addr$D_IN, master_xactor_f_rd_addr$D_OUT;
-  wire master_xactor_f_rd_addr$CLR,
-       master_xactor_f_rd_addr$DEQ,
-       master_xactor_f_rd_addr$EMPTY_N,
-       master_xactor_f_rd_addr$ENQ,
-       master_xactor_f_rd_addr$FULL_N;
+  // register slave_xactor_clearing
+  reg slave_xactor_clearing;
+  wire slave_xactor_clearing$D_IN, slave_xactor_clearing$EN;
 
-  // ports of submodule master_xactor_f_rd_data
-  wire [530 : 0] master_xactor_f_rd_data$D_IN, master_xactor_f_rd_data$D_OUT;
-  wire master_xactor_f_rd_data$CLR,
-       master_xactor_f_rd_data$DEQ,
-       master_xactor_f_rd_data$EMPTY_N,
-       master_xactor_f_rd_data$ENQ,
-       master_xactor_f_rd_data$FULL_N;
+  // register slave_xactor_shim_arff_rv
+  reg [108 : 0] slave_xactor_shim_arff_rv;
+  wire [108 : 0] slave_xactor_shim_arff_rv$D_IN;
+  wire slave_xactor_shim_arff_rv$EN;
 
-  // ports of submodule master_xactor_f_wr_addr
-  wire [108 : 0] master_xactor_f_wr_addr$D_IN, master_xactor_f_wr_addr$D_OUT;
-  wire master_xactor_f_wr_addr$CLR,
-       master_xactor_f_wr_addr$DEQ,
-       master_xactor_f_wr_addr$EMPTY_N,
-       master_xactor_f_wr_addr$ENQ,
-       master_xactor_f_wr_addr$FULL_N;
+  // register slave_xactor_shim_awff_rv
+  reg [108 : 0] slave_xactor_shim_awff_rv;
+  wire [108 : 0] slave_xactor_shim_awff_rv$D_IN;
+  wire slave_xactor_shim_awff_rv$EN;
 
-  // ports of submodule master_xactor_f_wr_data
-  wire [576 : 0] master_xactor_f_wr_data$D_IN, master_xactor_f_wr_data$D_OUT;
-  wire master_xactor_f_wr_data$CLR,
-       master_xactor_f_wr_data$DEQ,
-       master_xactor_f_wr_data$EMPTY_N,
-       master_xactor_f_wr_data$ENQ,
-       master_xactor_f_wr_data$FULL_N;
+  // register slave_xactor_shim_bff_rv
+  reg [17 : 0] slave_xactor_shim_bff_rv;
+  wire [17 : 0] slave_xactor_shim_bff_rv$D_IN;
+  wire slave_xactor_shim_bff_rv$EN;
 
-  // ports of submodule master_xactor_f_wr_resp
-  wire [17 : 0] master_xactor_f_wr_resp$D_IN, master_xactor_f_wr_resp$D_OUT;
-  wire master_xactor_f_wr_resp$CLR,
-       master_xactor_f_wr_resp$DEQ,
-       master_xactor_f_wr_resp$EMPTY_N,
-       master_xactor_f_wr_resp$ENQ,
-       master_xactor_f_wr_resp$FULL_N;
+  // register slave_xactor_shim_rff_rv
+  reg [82 : 0] slave_xactor_shim_rff_rv;
+  wire [82 : 0] slave_xactor_shim_rff_rv$D_IN;
+  wire slave_xactor_shim_rff_rv$EN;
 
-  // ports of submodule slave_xactor_f_rd_addr
-  wire [96 : 0] slave_xactor_f_rd_addr$D_IN, slave_xactor_f_rd_addr$D_OUT;
-  wire slave_xactor_f_rd_addr$CLR,
-       slave_xactor_f_rd_addr$DEQ,
-       slave_xactor_f_rd_addr$EMPTY_N,
-       slave_xactor_f_rd_addr$ENQ,
-       slave_xactor_f_rd_addr$FULL_N;
-
-  // ports of submodule slave_xactor_f_rd_data
-  wire [70 : 0] slave_xactor_f_rd_data$D_IN, slave_xactor_f_rd_data$D_OUT;
-  wire slave_xactor_f_rd_data$CLR,
-       slave_xactor_f_rd_data$DEQ,
-       slave_xactor_f_rd_data$EMPTY_N,
-       slave_xactor_f_rd_data$ENQ,
-       slave_xactor_f_rd_data$FULL_N;
-
-  // ports of submodule slave_xactor_f_wr_addr
-  wire [96 : 0] slave_xactor_f_wr_addr$D_IN, slave_xactor_f_wr_addr$D_OUT;
-  wire slave_xactor_f_wr_addr$CLR,
-       slave_xactor_f_wr_addr$DEQ,
-       slave_xactor_f_wr_addr$EMPTY_N,
-       slave_xactor_f_wr_addr$ENQ,
-       slave_xactor_f_wr_addr$FULL_N;
-
-  // ports of submodule slave_xactor_f_wr_data
-  wire [72 : 0] slave_xactor_f_wr_data$D_IN, slave_xactor_f_wr_data$D_OUT;
-  wire slave_xactor_f_wr_data$CLR,
-       slave_xactor_f_wr_data$DEQ,
-       slave_xactor_f_wr_data$EMPTY_N,
-       slave_xactor_f_wr_data$ENQ,
-       slave_xactor_f_wr_data$FULL_N;
-
-  // ports of submodule slave_xactor_f_wr_resp
-  wire [5 : 0] slave_xactor_f_wr_resp$D_IN, slave_xactor_f_wr_resp$D_OUT;
-  wire slave_xactor_f_wr_resp$CLR,
-       slave_xactor_f_wr_resp$DEQ,
-       slave_xactor_f_wr_resp$EMPTY_N,
-       slave_xactor_f_wr_resp$ENQ,
-       slave_xactor_f_wr_resp$FULL_N;
+  // register slave_xactor_shim_wff_rv
+  reg [73 : 0] slave_xactor_shim_wff_rv;
+  wire [73 : 0] slave_xactor_shim_wff_rv$D_IN;
+  wire slave_xactor_shim_wff_rv$EN;
 
   // rule scheduling signals
-  wire CAN_FIRE_RL_rl_drain_mem_wr_resps,
+  wire CAN_FIRE_RL_master_xactor_do_clear,
+       CAN_FIRE_RL_master_xactor_ug_master_u_ar_doDrop,
+       CAN_FIRE_RL_master_xactor_ug_master_u_ar_setPeek,
+       CAN_FIRE_RL_master_xactor_ug_master_u_ar_warnDoDrop,
+       CAN_FIRE_RL_master_xactor_ug_master_u_aw_doDrop,
+       CAN_FIRE_RL_master_xactor_ug_master_u_aw_setPeek,
+       CAN_FIRE_RL_master_xactor_ug_master_u_aw_warnDoDrop,
+       CAN_FIRE_RL_master_xactor_ug_master_u_b_doPut,
+       CAN_FIRE_RL_master_xactor_ug_master_u_b_warnDoPut,
+       CAN_FIRE_RL_master_xactor_ug_master_u_r_doPut,
+       CAN_FIRE_RL_master_xactor_ug_master_u_r_warnDoPut,
+       CAN_FIRE_RL_master_xactor_ug_master_u_w_doDrop,
+       CAN_FIRE_RL_master_xactor_ug_master_u_w_setPeek,
+       CAN_FIRE_RL_master_xactor_ug_master_u_w_warnDoDrop,
+       CAN_FIRE_RL_rl_drain_mem_wr_resps,
        CAN_FIRE_RL_rl_invalid_rd_address,
        CAN_FIRE_RL_rl_invalid_wr_address,
        CAN_FIRE_RL_rl_merge_rd_req,
@@ -647,19 +707,46 @@ module mkAWS_DDR4_Adapter(CLK,
        CAN_FIRE_RL_rl_start,
        CAN_FIRE_RL_rl_writeback_dirty_idle,
        CAN_FIRE_RL_rl_writeback_dirty_miss,
+       CAN_FIRE_RL_slave_xactor_do_clear,
+       CAN_FIRE_RL_slave_xactor_ug_slave_u_ar_doPut,
+       CAN_FIRE_RL_slave_xactor_ug_slave_u_ar_warnDoPut,
+       CAN_FIRE_RL_slave_xactor_ug_slave_u_aw_doPut,
+       CAN_FIRE_RL_slave_xactor_ug_slave_u_aw_warnDoPut,
+       CAN_FIRE_RL_slave_xactor_ug_slave_u_b_doDrop,
+       CAN_FIRE_RL_slave_xactor_ug_slave_u_b_setPeek,
+       CAN_FIRE_RL_slave_xactor_ug_slave_u_b_warnDoDrop,
+       CAN_FIRE_RL_slave_xactor_ug_slave_u_r_doDrop,
+       CAN_FIRE_RL_slave_xactor_ug_slave_u_r_setPeek,
+       CAN_FIRE_RL_slave_xactor_ug_slave_u_r_warnDoDrop,
+       CAN_FIRE_RL_slave_xactor_ug_slave_u_w_doPut,
+       CAN_FIRE_RL_slave_xactor_ug_slave_u_w_warnDoPut,
        CAN_FIRE_ma_ddr4_ready,
        CAN_FIRE_ma_set_addr_map,
        CAN_FIRE_ma_set_watch_tohost,
-       CAN_FIRE_slave_m_arvalid,
-       CAN_FIRE_slave_m_awvalid,
-       CAN_FIRE_slave_m_bready,
-       CAN_FIRE_slave_m_rready,
-       CAN_FIRE_slave_m_wvalid,
-       CAN_FIRE_to_ddr4_m_arready,
-       CAN_FIRE_to_ddr4_m_awready,
-       CAN_FIRE_to_ddr4_m_bvalid,
-       CAN_FIRE_to_ddr4_m_rvalid,
-       CAN_FIRE_to_ddr4_m_wready,
+       CAN_FIRE_slave_ar_arflit,
+       CAN_FIRE_slave_aw_awflit,
+       CAN_FIRE_slave_b_bready,
+       CAN_FIRE_slave_r_rready,
+       CAN_FIRE_slave_w_wflit,
+       CAN_FIRE_to_ddr4_ar_arready,
+       CAN_FIRE_to_ddr4_aw_awready,
+       CAN_FIRE_to_ddr4_b_bflit,
+       CAN_FIRE_to_ddr4_r_rflit,
+       CAN_FIRE_to_ddr4_w_wready,
+       WILL_FIRE_RL_master_xactor_do_clear,
+       WILL_FIRE_RL_master_xactor_ug_master_u_ar_doDrop,
+       WILL_FIRE_RL_master_xactor_ug_master_u_ar_setPeek,
+       WILL_FIRE_RL_master_xactor_ug_master_u_ar_warnDoDrop,
+       WILL_FIRE_RL_master_xactor_ug_master_u_aw_doDrop,
+       WILL_FIRE_RL_master_xactor_ug_master_u_aw_setPeek,
+       WILL_FIRE_RL_master_xactor_ug_master_u_aw_warnDoDrop,
+       WILL_FIRE_RL_master_xactor_ug_master_u_b_doPut,
+       WILL_FIRE_RL_master_xactor_ug_master_u_b_warnDoPut,
+       WILL_FIRE_RL_master_xactor_ug_master_u_r_doPut,
+       WILL_FIRE_RL_master_xactor_ug_master_u_r_warnDoPut,
+       WILL_FIRE_RL_master_xactor_ug_master_u_w_doDrop,
+       WILL_FIRE_RL_master_xactor_ug_master_u_w_setPeek,
+       WILL_FIRE_RL_master_xactor_ug_master_u_w_warnDoDrop,
        WILL_FIRE_RL_rl_drain_mem_wr_resps,
        WILL_FIRE_RL_rl_invalid_rd_address,
        WILL_FIRE_RL_rl_invalid_wr_address,
@@ -672,235 +759,281 @@ module mkAWS_DDR4_Adapter(CLK,
        WILL_FIRE_RL_rl_start,
        WILL_FIRE_RL_rl_writeback_dirty_idle,
        WILL_FIRE_RL_rl_writeback_dirty_miss,
+       WILL_FIRE_RL_slave_xactor_do_clear,
+       WILL_FIRE_RL_slave_xactor_ug_slave_u_ar_doPut,
+       WILL_FIRE_RL_slave_xactor_ug_slave_u_ar_warnDoPut,
+       WILL_FIRE_RL_slave_xactor_ug_slave_u_aw_doPut,
+       WILL_FIRE_RL_slave_xactor_ug_slave_u_aw_warnDoPut,
+       WILL_FIRE_RL_slave_xactor_ug_slave_u_b_doDrop,
+       WILL_FIRE_RL_slave_xactor_ug_slave_u_b_setPeek,
+       WILL_FIRE_RL_slave_xactor_ug_slave_u_b_warnDoDrop,
+       WILL_FIRE_RL_slave_xactor_ug_slave_u_r_doDrop,
+       WILL_FIRE_RL_slave_xactor_ug_slave_u_r_setPeek,
+       WILL_FIRE_RL_slave_xactor_ug_slave_u_r_warnDoDrop,
+       WILL_FIRE_RL_slave_xactor_ug_slave_u_w_doPut,
+       WILL_FIRE_RL_slave_xactor_ug_slave_u_w_warnDoPut,
        WILL_FIRE_ma_ddr4_ready,
        WILL_FIRE_ma_set_addr_map,
        WILL_FIRE_ma_set_watch_tohost,
-       WILL_FIRE_slave_m_arvalid,
-       WILL_FIRE_slave_m_awvalid,
-       WILL_FIRE_slave_m_bready,
-       WILL_FIRE_slave_m_rready,
-       WILL_FIRE_slave_m_wvalid,
-       WILL_FIRE_to_ddr4_m_arready,
-       WILL_FIRE_to_ddr4_m_awready,
-       WILL_FIRE_to_ddr4_m_bvalid,
-       WILL_FIRE_to_ddr4_m_rvalid,
-       WILL_FIRE_to_ddr4_m_wready;
+       WILL_FIRE_slave_ar_arflit,
+       WILL_FIRE_slave_aw_awflit,
+       WILL_FIRE_slave_b_bready,
+       WILL_FIRE_slave_r_rready,
+       WILL_FIRE_slave_w_wflit,
+       WILL_FIRE_to_ddr4_ar_arready,
+       WILL_FIRE_to_ddr4_aw_awready,
+       WILL_FIRE_to_ddr4_b_bflit,
+       WILL_FIRE_to_ddr4_r_rflit,
+       WILL_FIRE_to_ddr4_w_wready;
 
   // inputs to muxes for submodule ports
   wire [511 : 0] MUX_rg_cached_data_512$write_1__VAL_2;
-  wire [170 : 0] MUX_f_reqs_rv$port1__write_1__VAL_1,
+  wire [181 : 0] MUX_f_reqs_rv$port1__write_1__VAL_1,
 		 MUX_f_reqs_rv$port1__write_1__VAL_2;
-  wire [108 : 0] MUX_master_xactor_f_rd_addr$enq_1__VAL_1;
-  wire [70 : 0] MUX_slave_xactor_f_rd_data$enq_1__VAL_1,
-		MUX_slave_xactor_f_rd_data$enq_1__VAL_2;
-  wire [5 : 0] MUX_slave_xactor_f_wr_resp$enq_1__VAL_1,
-	       MUX_slave_xactor_f_wr_resp$enq_1__VAL_2;
+  wire [108 : 0] MUX_master_xactor_shim_arff_rv$port0__write_1__VAL_1;
+  wire [82 : 0] MUX_slave_xactor_shim_rff_rv$port0__write_1__VAL_1,
+		MUX_slave_xactor_shim_rff_rv$port0__write_1__VAL_2;
+  wire [17 : 0] MUX_slave_xactor_shim_bff_rv$port0__write_1__VAL_1,
+		MUX_slave_xactor_shim_bff_rv$port0__write_1__VAL_2;
   wire MUX_rg_cached_clean$write_1__SEL_1,
        MUX_rg_cached_clean$write_1__SEL_2,
        MUX_rg_cached_clean$write_1__SEL_3,
        MUX_rg_state$write_1__SEL_2,
+       MUX_rg_status$write_1__SEL_1,
        MUX_rg_status$write_1__SEL_2,
-       MUX_rg_status$write_1__SEL_3,
-       MUX_rg_status$write_1__SEL_4;
+       MUX_rg_status$write_1__SEL_3;
 
   // declarations used by system tasks
   // synopsys translate_off
-  reg [31 : 0] v__h9750;
-  reg [31 : 0] v__h7232;
-  reg [31 : 0] v__h7854;
-  reg [31 : 0] v__h8646;
-  reg [31 : 0] v__h7226;
-  reg [31 : 0] v__h7848;
-  reg [31 : 0] v__h8640;
-  reg [31 : 0] v__h9744;
+  reg [31 : 0] v__h15618;
+  reg [31 : 0] v__h12651;
+  reg [31 : 0] v__h13400;
+  reg [31 : 0] v__h14266;
+  reg [31 : 0] v__h12645;
+  reg [31 : 0] v__h13394;
+  reg [31 : 0] v__h14260;
+  reg [31 : 0] v__h15612;
   // synopsys translate_on
 
   // remaining internal signals
-  reg [63 : 0] data_64_old__h4889, rdata__h4066;
-  wire [383 : 0] IF_f_reqs_rv_port0__read__6_BITS_106_TO_104_24_ETC___d188;
-  wire [255 : 0] IF_f_reqs_rv_port0__read__6_BITS_106_TO_104_24_ETC___d183;
-  wire [63 : 0] exit_value__h7270,
-		mask__h4893,
-		updated_data_64__h4894,
-		x__h5530,
-		y__h5531,
-		y__h5532;
-  wire [7 : 0] SEXT_f_reqs_rv_port0__read__6_BIT_64_63___d164,
-	       SEXT_f_reqs_rv_port0__read__6_BIT_65_60___d161,
-	       SEXT_f_reqs_rv_port0__read__6_BIT_66_56___d157,
-	       SEXT_f_reqs_rv_port0__read__6_BIT_67_53___d154,
-	       SEXT_f_reqs_rv_port0__read__6_BIT_68_49___d150,
-	       SEXT_f_reqs_rv_port0__read__6_BIT_69_46___d147,
-	       SEXT_f_reqs_rv_port0__read__6_BIT_70_42___d143,
-	       SEXT_f_reqs_rv_port0__read__6_BIT_71_39___d140;
-  wire [5 : 0] n__h4065;
-  wire [1 : 0] rdr_rresp__h4100;
-  wire NOT_f_reqs_rv_port0__read__6_BITS_92_TO_90_0_E_ETC___d246,
-       f_reqs_rv_port0__read__6_BITS_164_TO_101_0_ULT_ETC___d83,
-       f_reqs_rv_port0__read__6_BITS_164_TO_107_7_EQ__ETC___d89,
-       f_reqs_rv_port0__read__6_BITS_92_TO_90_0_EQ_0b_ETC___d77,
-       f_reqs_rv_port0__read__6_BITS_92_TO_90_0_ULE_0b11___d41,
-       rg_addr_base_9_ULE_f_reqs_rv_port0__read__6_BI_ETC___d81,
-       rg_state_EQ_3_AND_NOT_f_reqs_rv_port0__read__6_ETC___d252,
-       rg_state_EQ_3_AND_f_reqs_rv_port0__read__6_BIT_ETC___d86,
-       rg_watch_tohost_95_AND_f_reqs_rv_port0__read___ETC___d201;
+  reg [63 : 0] data_64_old__h10245, rdata__h9342;
+  wire [576 : 0] master_xactor_shim_wff_rvport1__read_BITS_576_ETC__q4;
+  wire [383 : 0] IF_f_reqs_rv_port0__read__22_BITS_106_TO_104_2_ETC___d295;
+  wire [255 : 0] IF_f_reqs_rv_port0__read__22_BITS_106_TO_104_2_ETC___d290;
+  wire [107 : 0] master_xactor_shim_arff_rvport1__read_BITS_10_ETC__q5,
+		 master_xactor_shim_awff_rvport1__read_BITS_10_ETC__q3;
+  wire [81 : 0] slave_xactor_shim_rff_rvport1__read_BITS_81_TO_0__q2;
+  wire [63 : 0] exit_value__h12689,
+		mask__h10249,
+		updated_data_64__h10250,
+		x__h10886,
+		y__h10887,
+		y__h10888;
+  wire [16 : 0] slave_xactor_shim_bff_rvport1__read_BITS_16_TO_0__q1;
+  wire [7 : 0] SEXT_f_reqs_rv_port0__read__22_BIT_64_70___d271,
+	       SEXT_f_reqs_rv_port0__read__22_BIT_65_67___d268,
+	       SEXT_f_reqs_rv_port0__read__22_BIT_66_63___d264,
+	       SEXT_f_reqs_rv_port0__read__22_BIT_67_60___d261,
+	       SEXT_f_reqs_rv_port0__read__22_BIT_68_56___d257,
+	       SEXT_f_reqs_rv_port0__read__22_BIT_69_53___d254,
+	       SEXT_f_reqs_rv_port0__read__22_BIT_70_49___d250,
+	       SEXT_f_reqs_rv_port0__read__22_BIT_71_46___d247;
+  wire [5 : 0] n__h9341;
+  wire NOT_f_reqs_rv_port0__read__22_BITS_92_TO_90_37_ETC___d354,
+       f_reqs_rv_port0__read__22_BITS_164_TO_101_77_U_ETC___d180,
+       f_reqs_rv_port0__read__22_BITS_164_TO_107_84_E_ETC___d186,
+       f_reqs_rv_port0__read__22_BITS_92_TO_90_37_EQ__ETC___d174,
+       f_reqs_rv_port0__read__22_BITS_92_TO_90_37_ULE_ETC___d138,
+       rg_addr_base_76_ULE_f_reqs_rv_port0__read__22__ETC___d178,
+       rg_state_7_EQ_3_7_AND_NOT_f_reqs_rv_port0__rea_ETC___d360,
+       rg_state_7_EQ_3_7_AND_f_reqs_rv_port0__read__2_ETC___d183,
+       rg_watch_tohost_02_AND_f_reqs_rv_port0__read___ETC___d308;
 
-  // action method slave_m_awvalid
-  assign CAN_FIRE_slave_m_awvalid = 1'd1 ;
-  assign WILL_FIRE_slave_m_awvalid = 1'd1 ;
+  // action method slave_aw_awflit
+  assign CAN_FIRE_slave_aw_awflit = 1'd1 ;
+  assign WILL_FIRE_slave_aw_awflit = slave_awvalid ;
 
-  // value method slave_m_awready
-  assign slave_awready = slave_xactor_f_wr_addr$FULL_N ;
+  // value method slave_aw_awready
+  assign slave_awready = !slave_xactor_shim_awff_rv[108] ;
 
-  // action method slave_m_wvalid
-  assign CAN_FIRE_slave_m_wvalid = 1'd1 ;
-  assign WILL_FIRE_slave_m_wvalid = 1'd1 ;
+  // action method slave_w_wflit
+  assign CAN_FIRE_slave_w_wflit = 1'd1 ;
+  assign WILL_FIRE_slave_w_wflit = slave_wvalid ;
 
-  // value method slave_m_wready
-  assign slave_wready = slave_xactor_f_wr_data$FULL_N ;
+  // value method slave_w_wready
+  assign slave_wready = !slave_xactor_shim_wff_rv[73] ;
 
-  // value method slave_m_bvalid
-  assign slave_bvalid = slave_xactor_f_wr_resp$EMPTY_N ;
+  // value method slave_b_bid
+  assign slave_bid =
+	     slave_xactor_shim_bff_rvport1__read_BITS_16_TO_0__q1[16:2] ;
 
-  // value method slave_m_bid
-  assign slave_bid = slave_xactor_f_wr_resp$D_OUT[5:2] ;
+  // value method slave_b_bresp
+  assign slave_bresp =
+	     slave_xactor_shim_bff_rvport1__read_BITS_16_TO_0__q1[1:0] ;
 
-  // value method slave_m_bresp
-  assign slave_bresp = slave_xactor_f_wr_resp$D_OUT[1:0] ;
+  // value method slave_b_bvalid
+  assign slave_bvalid = CAN_FIRE_RL_slave_xactor_ug_slave_u_b_setPeek ;
 
-  // action method slave_m_bready
-  assign CAN_FIRE_slave_m_bready = 1'd1 ;
-  assign WILL_FIRE_slave_m_bready = 1'd1 ;
+  // action method slave_b_bready
+  assign CAN_FIRE_slave_b_bready = 1'd1 ;
+  assign WILL_FIRE_slave_b_bready = 1'd1 ;
 
-  // action method slave_m_arvalid
-  assign CAN_FIRE_slave_m_arvalid = 1'd1 ;
-  assign WILL_FIRE_slave_m_arvalid = 1'd1 ;
+  // action method slave_ar_arflit
+  assign CAN_FIRE_slave_ar_arflit = 1'd1 ;
+  assign WILL_FIRE_slave_ar_arflit = slave_arvalid ;
 
-  // value method slave_m_arready
-  assign slave_arready = slave_xactor_f_rd_addr$FULL_N ;
+  // value method slave_ar_arready
+  assign slave_arready = !slave_xactor_shim_arff_rv[108] ;
 
-  // value method slave_m_rvalid
-  assign slave_rvalid = slave_xactor_f_rd_data$EMPTY_N ;
+  // value method slave_r_rid
+  assign slave_rid =
+	     slave_xactor_shim_rff_rvport1__read_BITS_81_TO_0__q2[81:67] ;
 
-  // value method slave_m_rid
-  assign slave_rid = slave_xactor_f_rd_data$D_OUT[70:67] ;
+  // value method slave_r_rdata
+  assign slave_rdata =
+	     slave_xactor_shim_rff_rvport1__read_BITS_81_TO_0__q2[66:3] ;
 
-  // value method slave_m_rdata
-  assign slave_rdata = slave_xactor_f_rd_data$D_OUT[66:3] ;
+  // value method slave_r_rresp
+  assign slave_rresp =
+	     slave_xactor_shim_rff_rvport1__read_BITS_81_TO_0__q2[2:1] ;
 
-  // value method slave_m_rresp
-  assign slave_rresp = slave_xactor_f_rd_data$D_OUT[2:1] ;
+  // value method slave_r_rlast
+  assign slave_rlast =
+	     slave_xactor_shim_rff_rvport1__read_BITS_81_TO_0__q2[0] ;
 
-  // value method slave_m_rlast
-  assign slave_rlast = slave_xactor_f_rd_data$D_OUT[0] ;
+  // value method slave_r_rvalid
+  assign slave_rvalid = CAN_FIRE_RL_slave_xactor_ug_slave_u_r_setPeek ;
 
-  // action method slave_m_rready
-  assign CAN_FIRE_slave_m_rready = 1'd1 ;
-  assign WILL_FIRE_slave_m_rready = 1'd1 ;
+  // action method slave_r_rready
+  assign CAN_FIRE_slave_r_rready = 1'd1 ;
+  assign WILL_FIRE_slave_r_rready = 1'd1 ;
 
-  // value method to_ddr4_m_awvalid
-  assign to_ddr4_awvalid = master_xactor_f_wr_addr$EMPTY_N ;
+  // value method to_ddr4_aw_awid
+  assign to_ddr4_awid =
+	     master_xactor_shim_awff_rvport1__read_BITS_10_ETC__q3[107:93] ;
 
-  // value method to_ddr4_m_awid
-  assign to_ddr4_awid = master_xactor_f_wr_addr$D_OUT[108:93] ;
+  // value method to_ddr4_aw_awaddr
+  assign to_ddr4_awaddr =
+	     master_xactor_shim_awff_rvport1__read_BITS_10_ETC__q3[92:29] ;
 
-  // value method to_ddr4_m_awaddr
-  assign to_ddr4_awaddr = master_xactor_f_wr_addr$D_OUT[92:29] ;
+  // value method to_ddr4_aw_awlen
+  assign to_ddr4_awlen =
+	     master_xactor_shim_awff_rvport1__read_BITS_10_ETC__q3[28:21] ;
 
-  // value method to_ddr4_m_awlen
-  assign to_ddr4_awlen = master_xactor_f_wr_addr$D_OUT[28:21] ;
+  // value method to_ddr4_aw_awsize
+  assign to_ddr4_awsize =
+	     master_xactor_shim_awff_rvport1__read_BITS_10_ETC__q3[20:18] ;
 
-  // value method to_ddr4_m_awsize
-  assign to_ddr4_awsize = master_xactor_f_wr_addr$D_OUT[20:18] ;
+  // value method to_ddr4_aw_awburst
+  assign to_ddr4_awburst =
+	     master_xactor_shim_awff_rvport1__read_BITS_10_ETC__q3[17:16] ;
 
-  // value method to_ddr4_m_awburst
-  assign to_ddr4_awburst = master_xactor_f_wr_addr$D_OUT[17:16] ;
+  // value method to_ddr4_aw_awlock
+  assign to_ddr4_awlock =
+	     master_xactor_shim_awff_rvport1__read_BITS_10_ETC__q3[15] ;
 
-  // value method to_ddr4_m_awlock
-  assign to_ddr4_awlock = master_xactor_f_wr_addr$D_OUT[15] ;
+  // value method to_ddr4_aw_awcache
+  assign to_ddr4_awcache =
+	     master_xactor_shim_awff_rvport1__read_BITS_10_ETC__q3[14:11] ;
 
-  // value method to_ddr4_m_awcache
-  assign to_ddr4_awcache = master_xactor_f_wr_addr$D_OUT[14:11] ;
+  // value method to_ddr4_aw_awprot
+  assign to_ddr4_awprot =
+	     master_xactor_shim_awff_rvport1__read_BITS_10_ETC__q3[10:8] ;
 
-  // value method to_ddr4_m_awprot
-  assign to_ddr4_awprot = master_xactor_f_wr_addr$D_OUT[10:8] ;
+  // value method to_ddr4_aw_awqos
+  assign to_ddr4_awqos =
+	     master_xactor_shim_awff_rvport1__read_BITS_10_ETC__q3[7:4] ;
 
-  // value method to_ddr4_m_awqos
-  assign to_ddr4_awqos = master_xactor_f_wr_addr$D_OUT[7:4] ;
+  // value method to_ddr4_aw_awregion
+  assign to_ddr4_awregion =
+	     master_xactor_shim_awff_rvport1__read_BITS_10_ETC__q3[3:0] ;
 
-  // value method to_ddr4_m_awregion
-  assign to_ddr4_awregion = master_xactor_f_wr_addr$D_OUT[3:0] ;
+  // value method to_ddr4_aw_awvalid
+  assign to_ddr4_awvalid = CAN_FIRE_RL_master_xactor_ug_master_u_aw_setPeek ;
 
-  // action method to_ddr4_m_awready
-  assign CAN_FIRE_to_ddr4_m_awready = 1'd1 ;
-  assign WILL_FIRE_to_ddr4_m_awready = 1'd1 ;
+  // action method to_ddr4_aw_awready
+  assign CAN_FIRE_to_ddr4_aw_awready = 1'd1 ;
+  assign WILL_FIRE_to_ddr4_aw_awready = 1'd1 ;
 
-  // value method to_ddr4_m_wvalid
-  assign to_ddr4_wvalid = master_xactor_f_wr_data$EMPTY_N ;
+  // value method to_ddr4_w_wdata
+  assign to_ddr4_wdata =
+	     master_xactor_shim_wff_rvport1__read_BITS_576_ETC__q4[576:65] ;
 
-  // value method to_ddr4_m_wdata
-  assign to_ddr4_wdata = master_xactor_f_wr_data$D_OUT[576:65] ;
+  // value method to_ddr4_w_wstrb
+  assign to_ddr4_wstrb =
+	     master_xactor_shim_wff_rvport1__read_BITS_576_ETC__q4[64:1] ;
 
-  // value method to_ddr4_m_wstrb
-  assign to_ddr4_wstrb = master_xactor_f_wr_data$D_OUT[64:1] ;
+  // value method to_ddr4_w_wlast
+  assign to_ddr4_wlast =
+	     master_xactor_shim_wff_rvport1__read_BITS_576_ETC__q4[0] ;
 
-  // value method to_ddr4_m_wlast
-  assign to_ddr4_wlast = master_xactor_f_wr_data$D_OUT[0] ;
+  // value method to_ddr4_w_wvalid
+  assign to_ddr4_wvalid = CAN_FIRE_RL_master_xactor_ug_master_u_w_setPeek ;
 
-  // action method to_ddr4_m_wready
-  assign CAN_FIRE_to_ddr4_m_wready = 1'd1 ;
-  assign WILL_FIRE_to_ddr4_m_wready = 1'd1 ;
+  // action method to_ddr4_w_wready
+  assign CAN_FIRE_to_ddr4_w_wready = 1'd1 ;
+  assign WILL_FIRE_to_ddr4_w_wready = 1'd1 ;
 
-  // action method to_ddr4_m_bvalid
-  assign CAN_FIRE_to_ddr4_m_bvalid = 1'd1 ;
-  assign WILL_FIRE_to_ddr4_m_bvalid = 1'd1 ;
+  // action method to_ddr4_b_bflit
+  assign CAN_FIRE_to_ddr4_b_bflit = 1'd1 ;
+  assign WILL_FIRE_to_ddr4_b_bflit = to_ddr4_bvalid ;
 
-  // value method to_ddr4_m_bready
-  assign to_ddr4_bready = master_xactor_f_wr_resp$FULL_N ;
+  // value method to_ddr4_b_bready
+  assign to_ddr4_bready = !master_xactor_shim_bff_rv[17] ;
 
-  // value method to_ddr4_m_arvalid
-  assign to_ddr4_arvalid = master_xactor_f_rd_addr$EMPTY_N ;
+  // value method to_ddr4_ar_arid
+  assign to_ddr4_arid =
+	     master_xactor_shim_arff_rvport1__read_BITS_10_ETC__q5[107:93] ;
 
-  // value method to_ddr4_m_arid
-  assign to_ddr4_arid = master_xactor_f_rd_addr$D_OUT[108:93] ;
+  // value method to_ddr4_ar_araddr
+  assign to_ddr4_araddr =
+	     master_xactor_shim_arff_rvport1__read_BITS_10_ETC__q5[92:29] ;
 
-  // value method to_ddr4_m_araddr
-  assign to_ddr4_araddr = master_xactor_f_rd_addr$D_OUT[92:29] ;
+  // value method to_ddr4_ar_arlen
+  assign to_ddr4_arlen =
+	     master_xactor_shim_arff_rvport1__read_BITS_10_ETC__q5[28:21] ;
 
-  // value method to_ddr4_m_arlen
-  assign to_ddr4_arlen = master_xactor_f_rd_addr$D_OUT[28:21] ;
+  // value method to_ddr4_ar_arsize
+  assign to_ddr4_arsize =
+	     master_xactor_shim_arff_rvport1__read_BITS_10_ETC__q5[20:18] ;
 
-  // value method to_ddr4_m_arsize
-  assign to_ddr4_arsize = master_xactor_f_rd_addr$D_OUT[20:18] ;
+  // value method to_ddr4_ar_arburst
+  assign to_ddr4_arburst =
+	     master_xactor_shim_arff_rvport1__read_BITS_10_ETC__q5[17:16] ;
 
-  // value method to_ddr4_m_arburst
-  assign to_ddr4_arburst = master_xactor_f_rd_addr$D_OUT[17:16] ;
+  // value method to_ddr4_ar_arlock
+  assign to_ddr4_arlock =
+	     master_xactor_shim_arff_rvport1__read_BITS_10_ETC__q5[15] ;
 
-  // value method to_ddr4_m_arlock
-  assign to_ddr4_arlock = master_xactor_f_rd_addr$D_OUT[15] ;
+  // value method to_ddr4_ar_arcache
+  assign to_ddr4_arcache =
+	     master_xactor_shim_arff_rvport1__read_BITS_10_ETC__q5[14:11] ;
 
-  // value method to_ddr4_m_arcache
-  assign to_ddr4_arcache = master_xactor_f_rd_addr$D_OUT[14:11] ;
+  // value method to_ddr4_ar_arprot
+  assign to_ddr4_arprot =
+	     master_xactor_shim_arff_rvport1__read_BITS_10_ETC__q5[10:8] ;
 
-  // value method to_ddr4_m_arprot
-  assign to_ddr4_arprot = master_xactor_f_rd_addr$D_OUT[10:8] ;
+  // value method to_ddr4_ar_arqos
+  assign to_ddr4_arqos =
+	     master_xactor_shim_arff_rvport1__read_BITS_10_ETC__q5[7:4] ;
 
-  // value method to_ddr4_m_arqos
-  assign to_ddr4_arqos = master_xactor_f_rd_addr$D_OUT[7:4] ;
+  // value method to_ddr4_ar_arregion
+  assign to_ddr4_arregion =
+	     master_xactor_shim_arff_rvport1__read_BITS_10_ETC__q5[3:0] ;
 
-  // value method to_ddr4_m_arregion
-  assign to_ddr4_arregion = master_xactor_f_rd_addr$D_OUT[3:0] ;
+  // value method to_ddr4_ar_arvalid
+  assign to_ddr4_arvalid = CAN_FIRE_RL_master_xactor_ug_master_u_ar_setPeek ;
 
-  // action method to_ddr4_m_arready
-  assign CAN_FIRE_to_ddr4_m_arready = 1'd1 ;
-  assign WILL_FIRE_to_ddr4_m_arready = 1'd1 ;
+  // action method to_ddr4_ar_arready
+  assign CAN_FIRE_to_ddr4_ar_arready = 1'd1 ;
+  assign WILL_FIRE_to_ddr4_ar_arready = 1'd1 ;
 
-  // action method to_ddr4_m_rvalid
-  assign CAN_FIRE_to_ddr4_m_rvalid = 1'd1 ;
-  assign WILL_FIRE_to_ddr4_m_rvalid = 1'd1 ;
+  // action method to_ddr4_r_rflit
+  assign CAN_FIRE_to_ddr4_r_rflit = 1'd1 ;
+  assign WILL_FIRE_to_ddr4_r_rflit = to_ddr4_rvalid ;
 
-  // value method to_ddr4_m_rready
-  assign to_ddr4_rready = master_xactor_f_rd_data$FULL_N ;
+  // value method to_ddr4_r_rready
+  assign to_ddr4_rready = !master_xactor_shim_rff_rv[530] ;
 
   // action method ma_set_addr_map
   assign RDY_ma_set_addr_map = rg_state == 2'd1 ;
@@ -914,224 +1047,304 @@ module mkAWS_DDR4_Adapter(CLK,
 
   // action method ma_ddr4_ready
   assign RDY_ma_ddr4_ready =
-	     rg_state == 2'd1 && master_xactor_f_rd_addr$FULL_N ;
+	     !master_xactor_clearing && rg_state == 2'd1 &&
+	     !master_xactor_shim_arff_rv[108] ;
   assign CAN_FIRE_ma_ddr4_ready =
-	     rg_state == 2'd1 && master_xactor_f_rd_addr$FULL_N ;
+	     !master_xactor_clearing && rg_state == 2'd1 &&
+	     !master_xactor_shim_arff_rv[108] ;
   assign WILL_FIRE_ma_ddr4_ready = EN_ma_ddr4_ready ;
 
   // value method mv_status
   assign mv_status = rg_status ;
 
-  // submodule master_xactor_f_rd_addr
-  FIFO2 #(.width(32'd109),
-	  .guarded(32'd1)) master_xactor_f_rd_addr(.RST(RST_N),
-						   .CLK(CLK),
-						   .D_IN(master_xactor_f_rd_addr$D_IN),
-						   .ENQ(master_xactor_f_rd_addr$ENQ),
-						   .DEQ(master_xactor_f_rd_addr$DEQ),
-						   .CLR(master_xactor_f_rd_addr$CLR),
-						   .D_OUT(master_xactor_f_rd_addr$D_OUT),
-						   .FULL_N(master_xactor_f_rd_addr$FULL_N),
-						   .EMPTY_N(master_xactor_f_rd_addr$EMPTY_N));
-
-  // submodule master_xactor_f_rd_data
-  FIFO2 #(.width(32'd531),
-	  .guarded(32'd1)) master_xactor_f_rd_data(.RST(RST_N),
-						   .CLK(CLK),
-						   .D_IN(master_xactor_f_rd_data$D_IN),
-						   .ENQ(master_xactor_f_rd_data$ENQ),
-						   .DEQ(master_xactor_f_rd_data$DEQ),
-						   .CLR(master_xactor_f_rd_data$CLR),
-						   .D_OUT(master_xactor_f_rd_data$D_OUT),
-						   .FULL_N(master_xactor_f_rd_data$FULL_N),
-						   .EMPTY_N(master_xactor_f_rd_data$EMPTY_N));
-
-  // submodule master_xactor_f_wr_addr
-  FIFO2 #(.width(32'd109),
-	  .guarded(32'd1)) master_xactor_f_wr_addr(.RST(RST_N),
-						   .CLK(CLK),
-						   .D_IN(master_xactor_f_wr_addr$D_IN),
-						   .ENQ(master_xactor_f_wr_addr$ENQ),
-						   .DEQ(master_xactor_f_wr_addr$DEQ),
-						   .CLR(master_xactor_f_wr_addr$CLR),
-						   .D_OUT(master_xactor_f_wr_addr$D_OUT),
-						   .FULL_N(master_xactor_f_wr_addr$FULL_N),
-						   .EMPTY_N(master_xactor_f_wr_addr$EMPTY_N));
-
-  // submodule master_xactor_f_wr_data
-  FIFO2 #(.width(32'd577),
-	  .guarded(32'd1)) master_xactor_f_wr_data(.RST(RST_N),
-						   .CLK(CLK),
-						   .D_IN(master_xactor_f_wr_data$D_IN),
-						   .ENQ(master_xactor_f_wr_data$ENQ),
-						   .DEQ(master_xactor_f_wr_data$DEQ),
-						   .CLR(master_xactor_f_wr_data$CLR),
-						   .D_OUT(master_xactor_f_wr_data$D_OUT),
-						   .FULL_N(master_xactor_f_wr_data$FULL_N),
-						   .EMPTY_N(master_xactor_f_wr_data$EMPTY_N));
-
-  // submodule master_xactor_f_wr_resp
-  FIFO2 #(.width(32'd18),
-	  .guarded(32'd1)) master_xactor_f_wr_resp(.RST(RST_N),
-						   .CLK(CLK),
-						   .D_IN(master_xactor_f_wr_resp$D_IN),
-						   .ENQ(master_xactor_f_wr_resp$ENQ),
-						   .DEQ(master_xactor_f_wr_resp$DEQ),
-						   .CLR(master_xactor_f_wr_resp$CLR),
-						   .D_OUT(master_xactor_f_wr_resp$D_OUT),
-						   .FULL_N(master_xactor_f_wr_resp$FULL_N),
-						   .EMPTY_N(master_xactor_f_wr_resp$EMPTY_N));
-
-  // submodule slave_xactor_f_rd_addr
-  FIFO2 #(.width(32'd97), .guarded(32'd1)) slave_xactor_f_rd_addr(.RST(RST_N),
-								  .CLK(CLK),
-								  .D_IN(slave_xactor_f_rd_addr$D_IN),
-								  .ENQ(slave_xactor_f_rd_addr$ENQ),
-								  .DEQ(slave_xactor_f_rd_addr$DEQ),
-								  .CLR(slave_xactor_f_rd_addr$CLR),
-								  .D_OUT(slave_xactor_f_rd_addr$D_OUT),
-								  .FULL_N(slave_xactor_f_rd_addr$FULL_N),
-								  .EMPTY_N(slave_xactor_f_rd_addr$EMPTY_N));
-
-  // submodule slave_xactor_f_rd_data
-  FIFO2 #(.width(32'd71), .guarded(32'd1)) slave_xactor_f_rd_data(.RST(RST_N),
-								  .CLK(CLK),
-								  .D_IN(slave_xactor_f_rd_data$D_IN),
-								  .ENQ(slave_xactor_f_rd_data$ENQ),
-								  .DEQ(slave_xactor_f_rd_data$DEQ),
-								  .CLR(slave_xactor_f_rd_data$CLR),
-								  .D_OUT(slave_xactor_f_rd_data$D_OUT),
-								  .FULL_N(slave_xactor_f_rd_data$FULL_N),
-								  .EMPTY_N(slave_xactor_f_rd_data$EMPTY_N));
-
-  // submodule slave_xactor_f_wr_addr
-  FIFO2 #(.width(32'd97), .guarded(32'd1)) slave_xactor_f_wr_addr(.RST(RST_N),
-								  .CLK(CLK),
-								  .D_IN(slave_xactor_f_wr_addr$D_IN),
-								  .ENQ(slave_xactor_f_wr_addr$ENQ),
-								  .DEQ(slave_xactor_f_wr_addr$DEQ),
-								  .CLR(slave_xactor_f_wr_addr$CLR),
-								  .D_OUT(slave_xactor_f_wr_addr$D_OUT),
-								  .FULL_N(slave_xactor_f_wr_addr$FULL_N),
-								  .EMPTY_N(slave_xactor_f_wr_addr$EMPTY_N));
-
-  // submodule slave_xactor_f_wr_data
-  FIFO2 #(.width(32'd73), .guarded(32'd1)) slave_xactor_f_wr_data(.RST(RST_N),
-								  .CLK(CLK),
-								  .D_IN(slave_xactor_f_wr_data$D_IN),
-								  .ENQ(slave_xactor_f_wr_data$ENQ),
-								  .DEQ(slave_xactor_f_wr_data$DEQ),
-								  .CLR(slave_xactor_f_wr_data$CLR),
-								  .D_OUT(slave_xactor_f_wr_data$D_OUT),
-								  .FULL_N(slave_xactor_f_wr_data$FULL_N),
-								  .EMPTY_N(slave_xactor_f_wr_data$EMPTY_N));
-
-  // submodule slave_xactor_f_wr_resp
-  FIFO2 #(.width(32'd6), .guarded(32'd1)) slave_xactor_f_wr_resp(.RST(RST_N),
-								 .CLK(CLK),
-								 .D_IN(slave_xactor_f_wr_resp$D_IN),
-								 .ENQ(slave_xactor_f_wr_resp$ENQ),
-								 .DEQ(slave_xactor_f_wr_resp$DEQ),
-								 .CLR(slave_xactor_f_wr_resp$CLR),
-								 .D_OUT(slave_xactor_f_wr_resp$D_OUT),
-								 .FULL_N(slave_xactor_f_wr_resp$FULL_N),
-								 .EMPTY_N(slave_xactor_f_wr_resp$EMPTY_N));
+  // rule RL_rl_start
+  assign CAN_FIRE_RL_rl_start =
+	     !slave_xactor_clearing && !master_xactor_clearing &&
+	     rg_state == 2'd0 ;
+  assign WILL_FIRE_RL_rl_start = CAN_FIRE_RL_rl_start ;
 
   // rule RL_rl_writeback_dirty_idle
   assign CAN_FIRE_RL_rl_writeback_dirty_idle =
-	     master_xactor_f_wr_addr$FULL_N &&
-	     master_xactor_f_wr_data$FULL_N &&
+	     !master_xactor_clearing && !master_xactor_shim_awff_rv[108] &&
+	     !master_xactor_shim_wff_rv[577] &&
 	     rg_state == 2'd3 &&
-	     !f_reqs_rv[170] &&
+	     !f_reqs_rv[181] &&
 	     !rg_cached_clean ;
   assign WILL_FIRE_RL_rl_writeback_dirty_idle =
 	     CAN_FIRE_RL_rl_writeback_dirty_idle ;
 
   // rule RL_rl_writeback_dirty_miss
   assign CAN_FIRE_RL_rl_writeback_dirty_miss =
-	     master_xactor_f_wr_addr$FULL_N &&
-	     master_xactor_f_wr_data$FULL_N &&
-	     f_reqs_rv[170] &&
-	     rg_state_EQ_3_AND_f_reqs_rv_port0__read__6_BIT_ETC___d86 &&
-	     !f_reqs_rv_port0__read__6_BITS_164_TO_107_7_EQ__ETC___d89 &&
+	     !master_xactor_clearing && !master_xactor_shim_awff_rv[108] &&
+	     !master_xactor_shim_wff_rv[577] &&
+	     f_reqs_rv[181] &&
+	     rg_state_7_EQ_3_7_AND_f_reqs_rv_port0__read__2_ETC___d183 &&
+	     !f_reqs_rv_port0__read__22_BITS_164_TO_107_84_E_ETC___d186 &&
 	     !rg_cached_clean ;
   assign WILL_FIRE_RL_rl_writeback_dirty_miss =
 	     CAN_FIRE_RL_rl_writeback_dirty_miss ;
 
   // rule RL_rl_miss_clean_req
   assign CAN_FIRE_RL_rl_miss_clean_req =
-	     f_reqs_rv[170] && master_xactor_f_rd_addr$FULL_N &&
-	     rg_state_EQ_3_AND_f_reqs_rv_port0__read__6_BIT_ETC___d86 &&
-	     !f_reqs_rv_port0__read__6_BITS_164_TO_107_7_EQ__ETC___d89 &&
+	     !master_xactor_clearing && f_reqs_rv[181] &&
+	     !master_xactor_shim_arff_rv[108] &&
+	     rg_state_7_EQ_3_7_AND_f_reqs_rv_port0__read__2_ETC___d183 &&
+	     !f_reqs_rv_port0__read__22_BITS_164_TO_107_84_E_ETC___d186 &&
 	     rg_cached_clean ;
   assign WILL_FIRE_RL_rl_miss_clean_req = CAN_FIRE_RL_rl_miss_clean_req ;
 
-  // rule RL_rl_refill
-  assign CAN_FIRE_RL_rl_refill =
-	     master_xactor_f_rd_data$EMPTY_N && rg_state == 2'd2 ;
-  assign WILL_FIRE_RL_rl_refill = CAN_FIRE_RL_rl_refill ;
-
   // rule RL_rl_process_rd_req
   assign CAN_FIRE_RL_rl_process_rd_req =
-	     f_reqs_rv[170] && slave_xactor_f_rd_data$FULL_N &&
-	     rg_state_EQ_3_AND_f_reqs_rv_port0__read__6_BIT_ETC___d86 &&
-	     f_reqs_rv_port0__read__6_BITS_164_TO_107_7_EQ__ETC___d89 &&
-	     !f_reqs_rv[169] ;
+	     !slave_xactor_clearing && f_reqs_rv[181] &&
+	     !slave_xactor_shim_rff_rv[82] &&
+	     rg_state_7_EQ_3_7_AND_f_reqs_rv_port0__read__2_ETC___d183 &&
+	     f_reqs_rv_port0__read__22_BITS_164_TO_107_84_E_ETC___d186 &&
+	     !f_reqs_rv[180] ;
   assign WILL_FIRE_RL_rl_process_rd_req = CAN_FIRE_RL_rl_process_rd_req ;
 
   // rule RL_rl_process_wr_req
   assign CAN_FIRE_RL_rl_process_wr_req =
-	     f_reqs_rv[170] && slave_xactor_f_wr_resp$FULL_N &&
-	     rg_state_EQ_3_AND_f_reqs_rv_port0__read__6_BIT_ETC___d86 &&
-	     f_reqs_rv_port0__read__6_BITS_164_TO_107_7_EQ__ETC___d89 &&
-	     f_reqs_rv[169] ;
+	     !slave_xactor_clearing && f_reqs_rv[181] &&
+	     !slave_xactor_shim_bff_rv[17] &&
+	     rg_state_7_EQ_3_7_AND_f_reqs_rv_port0__read__2_ETC___d183 &&
+	     f_reqs_rv_port0__read__22_BITS_164_TO_107_84_E_ETC___d186 &&
+	     f_reqs_rv[180] ;
   assign WILL_FIRE_RL_rl_process_wr_req = CAN_FIRE_RL_rl_process_wr_req ;
-
-  // rule RL_rl_drain_mem_wr_resps
-  assign CAN_FIRE_RL_rl_drain_mem_wr_resps = master_xactor_f_wr_resp$EMPTY_N ;
-  assign WILL_FIRE_RL_rl_drain_mem_wr_resps =
-	     master_xactor_f_wr_resp$EMPTY_N ;
-
-  // rule RL_rl_start
-  assign CAN_FIRE_RL_rl_start = rg_state == 2'd0 ;
-  assign WILL_FIRE_RL_rl_start = CAN_FIRE_RL_rl_start ;
 
   // rule RL_rl_invalid_rd_address
   assign CAN_FIRE_RL_rl_invalid_rd_address =
-	     f_reqs_rv[170] && slave_xactor_f_rd_data$FULL_N &&
-	     rg_state_EQ_3_AND_NOT_f_reqs_rv_port0__read__6_ETC___d252 &&
-	     !f_reqs_rv[169] ;
+	     !slave_xactor_clearing && f_reqs_rv[181] &&
+	     !slave_xactor_shim_rff_rv[82] &&
+	     rg_state_7_EQ_3_7_AND_NOT_f_reqs_rv_port0__rea_ETC___d360 &&
+	     !f_reqs_rv[180] ;
   assign WILL_FIRE_RL_rl_invalid_rd_address =
 	     CAN_FIRE_RL_rl_invalid_rd_address ;
 
   // rule RL_rl_invalid_wr_address
   assign CAN_FIRE_RL_rl_invalid_wr_address =
-	     f_reqs_rv[170] && slave_xactor_f_wr_resp$FULL_N &&
-	     rg_state_EQ_3_AND_NOT_f_reqs_rv_port0__read__6_ETC___d252 &&
-	     f_reqs_rv[169] ;
+	     !slave_xactor_clearing && f_reqs_rv[181] &&
+	     !slave_xactor_shim_bff_rv[17] &&
+	     rg_state_7_EQ_3_7_AND_NOT_f_reqs_rv_port0__rea_ETC___d360 &&
+	     f_reqs_rv[180] ;
   assign WILL_FIRE_RL_rl_invalid_wr_address =
 	     CAN_FIRE_RL_rl_invalid_wr_address ;
 
+  // rule RL_slave_xactor_ug_slave_u_aw_warnDoPut
+  assign CAN_FIRE_RL_slave_xactor_ug_slave_u_aw_warnDoPut =
+	     slave_xactor_ug_slave_u_aw_putWire$whas &&
+	     slave_xactor_shim_awff_rv[108] ;
+  assign WILL_FIRE_RL_slave_xactor_ug_slave_u_aw_warnDoPut =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_aw_warnDoPut ;
+
+  // rule RL_slave_xactor_ug_slave_u_aw_doPut
+  assign CAN_FIRE_RL_slave_xactor_ug_slave_u_aw_doPut =
+	     !slave_xactor_shim_awff_rv[108] &&
+	     slave_xactor_ug_slave_u_aw_putWire$whas ;
+  assign WILL_FIRE_RL_slave_xactor_ug_slave_u_aw_doPut =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_aw_doPut ;
+
+  // rule RL_slave_xactor_ug_slave_u_w_warnDoPut
+  assign CAN_FIRE_RL_slave_xactor_ug_slave_u_w_warnDoPut =
+	     slave_xactor_ug_slave_u_w_putWire$whas &&
+	     slave_xactor_shim_wff_rv[73] ;
+  assign WILL_FIRE_RL_slave_xactor_ug_slave_u_w_warnDoPut =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_w_warnDoPut ;
+
+  // rule RL_slave_xactor_ug_slave_u_w_doPut
+  assign CAN_FIRE_RL_slave_xactor_ug_slave_u_w_doPut =
+	     !slave_xactor_shim_wff_rv[73] &&
+	     slave_xactor_ug_slave_u_w_putWire$whas ;
+  assign WILL_FIRE_RL_slave_xactor_ug_slave_u_w_doPut =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_w_doPut ;
+
+  // rule RL_slave_xactor_ug_slave_u_b_setPeek
+  assign CAN_FIRE_RL_slave_xactor_ug_slave_u_b_setPeek =
+	     slave_xactor_shim_bff_rv$port1__read[17] ;
+  assign WILL_FIRE_RL_slave_xactor_ug_slave_u_b_setPeek =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_b_setPeek ;
+
+  // rule RL_slave_xactor_ug_slave_u_b_warnDoDrop
+  assign CAN_FIRE_RL_slave_xactor_ug_slave_u_b_warnDoDrop =
+	     slave_xactor_ug_slave_u_b_dropWire$whas &&
+	     !slave_xactor_shim_bff_rv$port1__read[17] ;
+  assign WILL_FIRE_RL_slave_xactor_ug_slave_u_b_warnDoDrop =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_b_warnDoDrop ;
+
+  // rule RL_slave_xactor_ug_slave_u_b_doDrop
+  assign CAN_FIRE_RL_slave_xactor_ug_slave_u_b_doDrop =
+	     slave_xactor_shim_bff_rv$port1__read[17] &&
+	     slave_xactor_ug_slave_u_b_dropWire$whas ;
+  assign WILL_FIRE_RL_slave_xactor_ug_slave_u_b_doDrop =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_b_doDrop ;
+
+  // rule RL_slave_xactor_ug_slave_u_ar_warnDoPut
+  assign CAN_FIRE_RL_slave_xactor_ug_slave_u_ar_warnDoPut =
+	     slave_xactor_ug_slave_u_ar_putWire$whas &&
+	     slave_xactor_shim_arff_rv[108] ;
+  assign WILL_FIRE_RL_slave_xactor_ug_slave_u_ar_warnDoPut =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_ar_warnDoPut ;
+
+  // rule RL_slave_xactor_ug_slave_u_ar_doPut
+  assign CAN_FIRE_RL_slave_xactor_ug_slave_u_ar_doPut =
+	     !slave_xactor_shim_arff_rv[108] &&
+	     slave_xactor_ug_slave_u_ar_putWire$whas ;
+  assign WILL_FIRE_RL_slave_xactor_ug_slave_u_ar_doPut =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_ar_doPut ;
+
   // rule RL_rl_merge_rd_req
   assign CAN_FIRE_RL_rl_merge_rd_req =
-	     slave_xactor_f_rd_addr$EMPTY_N && !f_reqs_rv$port1__read[170] &&
+	     !slave_xactor_clearing &&
+	     slave_xactor_shim_arff_rv$port1__read[108] &&
+	     !f_reqs_rv$port1__read[181] &&
 	     rg_state == 2'd3 ;
   assign WILL_FIRE_RL_rl_merge_rd_req =
 	     CAN_FIRE_RL_rl_merge_rd_req && !WILL_FIRE_RL_rl_miss_clean_req ;
 
   // rule RL_rl_merge_wr_req
   assign CAN_FIRE_RL_rl_merge_wr_req =
-	     !f_reqs_rv$port1__read[170] && slave_xactor_f_wr_addr$EMPTY_N &&
-	     slave_xactor_f_wr_data$EMPTY_N &&
+	     !slave_xactor_clearing &&
+	     slave_xactor_shim_awff_rv$port1__read[108] &&
+	     slave_xactor_shim_wff_rv$port1__read[73] &&
+	     !f_reqs_rv$port1__read[181] &&
 	     rg_state == 2'd3 ;
   assign WILL_FIRE_RL_rl_merge_wr_req =
 	     CAN_FIRE_RL_rl_merge_wr_req && !WILL_FIRE_RL_rl_merge_rd_req &&
 	     !WILL_FIRE_RL_rl_miss_clean_req ;
 
+  // rule RL_slave_xactor_ug_slave_u_r_setPeek
+  assign CAN_FIRE_RL_slave_xactor_ug_slave_u_r_setPeek =
+	     slave_xactor_shim_rff_rv$port1__read[82] ;
+  assign WILL_FIRE_RL_slave_xactor_ug_slave_u_r_setPeek =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_r_setPeek ;
+
+  // rule RL_slave_xactor_ug_slave_u_r_warnDoDrop
+  assign CAN_FIRE_RL_slave_xactor_ug_slave_u_r_warnDoDrop =
+	     slave_xactor_ug_slave_u_r_dropWire$whas &&
+	     !slave_xactor_shim_rff_rv$port1__read[82] ;
+  assign WILL_FIRE_RL_slave_xactor_ug_slave_u_r_warnDoDrop =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_r_warnDoDrop ;
+
+  // rule RL_slave_xactor_ug_slave_u_r_doDrop
+  assign CAN_FIRE_RL_slave_xactor_ug_slave_u_r_doDrop =
+	     slave_xactor_shim_rff_rv$port1__read[82] &&
+	     slave_xactor_ug_slave_u_r_dropWire$whas ;
+  assign WILL_FIRE_RL_slave_xactor_ug_slave_u_r_doDrop =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_r_doDrop ;
+
+  // rule RL_slave_xactor_do_clear
+  assign CAN_FIRE_RL_slave_xactor_do_clear = slave_xactor_clearing ;
+  assign WILL_FIRE_RL_slave_xactor_do_clear = slave_xactor_clearing ;
+
+  // rule RL_master_xactor_ug_master_u_aw_setPeek
+  assign CAN_FIRE_RL_master_xactor_ug_master_u_aw_setPeek =
+	     master_xactor_shim_awff_rv$port1__read[108] ;
+  assign WILL_FIRE_RL_master_xactor_ug_master_u_aw_setPeek =
+	     CAN_FIRE_RL_master_xactor_ug_master_u_aw_setPeek ;
+
+  // rule RL_master_xactor_ug_master_u_aw_warnDoDrop
+  assign CAN_FIRE_RL_master_xactor_ug_master_u_aw_warnDoDrop =
+	     master_xactor_ug_master_u_aw_dropWire$whas &&
+	     !master_xactor_shim_awff_rv$port1__read[108] ;
+  assign WILL_FIRE_RL_master_xactor_ug_master_u_aw_warnDoDrop =
+	     CAN_FIRE_RL_master_xactor_ug_master_u_aw_warnDoDrop ;
+
+  // rule RL_master_xactor_ug_master_u_aw_doDrop
+  assign CAN_FIRE_RL_master_xactor_ug_master_u_aw_doDrop =
+	     master_xactor_shim_awff_rv$port1__read[108] &&
+	     master_xactor_ug_master_u_aw_dropWire$whas ;
+  assign WILL_FIRE_RL_master_xactor_ug_master_u_aw_doDrop =
+	     CAN_FIRE_RL_master_xactor_ug_master_u_aw_doDrop ;
+
+  // rule RL_master_xactor_ug_master_u_w_setPeek
+  assign CAN_FIRE_RL_master_xactor_ug_master_u_w_setPeek =
+	     master_xactor_shim_wff_rv$port1__read[577] ;
+  assign WILL_FIRE_RL_master_xactor_ug_master_u_w_setPeek =
+	     CAN_FIRE_RL_master_xactor_ug_master_u_w_setPeek ;
+
+  // rule RL_master_xactor_ug_master_u_w_warnDoDrop
+  assign CAN_FIRE_RL_master_xactor_ug_master_u_w_warnDoDrop =
+	     master_xactor_ug_master_u_w_dropWire$whas &&
+	     !master_xactor_shim_wff_rv$port1__read[577] ;
+  assign WILL_FIRE_RL_master_xactor_ug_master_u_w_warnDoDrop =
+	     CAN_FIRE_RL_master_xactor_ug_master_u_w_warnDoDrop ;
+
+  // rule RL_master_xactor_ug_master_u_w_doDrop
+  assign CAN_FIRE_RL_master_xactor_ug_master_u_w_doDrop =
+	     master_xactor_shim_wff_rv$port1__read[577] &&
+	     master_xactor_ug_master_u_w_dropWire$whas ;
+  assign WILL_FIRE_RL_master_xactor_ug_master_u_w_doDrop =
+	     CAN_FIRE_RL_master_xactor_ug_master_u_w_doDrop ;
+
+  // rule RL_master_xactor_ug_master_u_b_warnDoPut
+  assign CAN_FIRE_RL_master_xactor_ug_master_u_b_warnDoPut =
+	     master_xactor_ug_master_u_b_putWire$whas &&
+	     master_xactor_shim_bff_rv[17] ;
+  assign WILL_FIRE_RL_master_xactor_ug_master_u_b_warnDoPut =
+	     CAN_FIRE_RL_master_xactor_ug_master_u_b_warnDoPut ;
+
+  // rule RL_master_xactor_ug_master_u_b_doPut
+  assign CAN_FIRE_RL_master_xactor_ug_master_u_b_doPut =
+	     !master_xactor_shim_bff_rv[17] &&
+	     master_xactor_ug_master_u_b_putWire$whas ;
+  assign WILL_FIRE_RL_master_xactor_ug_master_u_b_doPut =
+	     CAN_FIRE_RL_master_xactor_ug_master_u_b_doPut ;
+
+  // rule RL_rl_drain_mem_wr_resps
+  assign CAN_FIRE_RL_rl_drain_mem_wr_resps =
+	     !master_xactor_clearing &&
+	     master_xactor_shim_bff_rv$port1__read[17] ;
+  assign WILL_FIRE_RL_rl_drain_mem_wr_resps =
+	     CAN_FIRE_RL_rl_drain_mem_wr_resps ;
+
+  // rule RL_master_xactor_ug_master_u_ar_setPeek
+  assign CAN_FIRE_RL_master_xactor_ug_master_u_ar_setPeek =
+	     master_xactor_shim_arff_rv$port1__read[108] ;
+  assign WILL_FIRE_RL_master_xactor_ug_master_u_ar_setPeek =
+	     CAN_FIRE_RL_master_xactor_ug_master_u_ar_setPeek ;
+
+  // rule RL_master_xactor_ug_master_u_ar_warnDoDrop
+  assign CAN_FIRE_RL_master_xactor_ug_master_u_ar_warnDoDrop =
+	     master_xactor_ug_master_u_ar_dropWire$whas &&
+	     !master_xactor_shim_arff_rv$port1__read[108] ;
+  assign WILL_FIRE_RL_master_xactor_ug_master_u_ar_warnDoDrop =
+	     CAN_FIRE_RL_master_xactor_ug_master_u_ar_warnDoDrop ;
+
+  // rule RL_master_xactor_ug_master_u_ar_doDrop
+  assign CAN_FIRE_RL_master_xactor_ug_master_u_ar_doDrop =
+	     master_xactor_shim_arff_rv$port1__read[108] &&
+	     master_xactor_ug_master_u_ar_dropWire$whas ;
+  assign WILL_FIRE_RL_master_xactor_ug_master_u_ar_doDrop =
+	     CAN_FIRE_RL_master_xactor_ug_master_u_ar_doDrop ;
+
+  // rule RL_master_xactor_ug_master_u_r_warnDoPut
+  assign CAN_FIRE_RL_master_xactor_ug_master_u_r_warnDoPut =
+	     master_xactor_ug_master_u_r_putWire$whas &&
+	     master_xactor_shim_rff_rv[530] ;
+  assign WILL_FIRE_RL_master_xactor_ug_master_u_r_warnDoPut =
+	     CAN_FIRE_RL_master_xactor_ug_master_u_r_warnDoPut ;
+
+  // rule RL_master_xactor_ug_master_u_r_doPut
+  assign CAN_FIRE_RL_master_xactor_ug_master_u_r_doPut =
+	     !master_xactor_shim_rff_rv[530] &&
+	     master_xactor_ug_master_u_r_putWire$whas ;
+  assign WILL_FIRE_RL_master_xactor_ug_master_u_r_doPut =
+	     CAN_FIRE_RL_master_xactor_ug_master_u_r_doPut ;
+
+  // rule RL_rl_refill
+  assign CAN_FIRE_RL_rl_refill =
+	     !master_xactor_clearing &&
+	     master_xactor_shim_rff_rv$port1__read[530] &&
+	     rg_state == 2'd2 ;
+  assign WILL_FIRE_RL_rl_refill = CAN_FIRE_RL_rl_refill ;
+
+  // rule RL_master_xactor_do_clear
+  assign CAN_FIRE_RL_master_xactor_do_clear = master_xactor_clearing ;
+  assign WILL_FIRE_RL_master_xactor_do_clear = master_xactor_clearing ;
+
   // inputs to muxes for submodule ports
   assign MUX_rg_cached_clean$write_1__SEL_1 =
 	     WILL_FIRE_RL_rl_refill &&
-	     master_xactor_f_rd_data$D_OUT[2:1] == 2'b0 ;
+	     master_xactor_shim_rff_rv$port1__read[2:1] == 2'd0 ;
   assign MUX_rg_cached_clean$write_1__SEL_2 =
 	     WILL_FIRE_RL_rl_process_wr_req && rg_status == 8'd0 ;
   assign MUX_rg_cached_clean$write_1__SEL_3 =
@@ -1139,43 +1352,177 @@ module mkAWS_DDR4_Adapter(CLK,
 	     WILL_FIRE_RL_rl_writeback_dirty_idle ;
   assign MUX_rg_state$write_1__SEL_2 =
 	     WILL_FIRE_RL_rl_miss_clean_req || EN_ma_ddr4_ready ;
+  assign MUX_rg_status$write_1__SEL_1 =
+	     WILL_FIRE_RL_rl_refill &&
+	     master_xactor_shim_rff_rv$port1__read[2:1] != 2'd0 ;
   assign MUX_rg_status$write_1__SEL_2 =
-	     master_xactor_f_wr_resp$EMPTY_N &&
-	     master_xactor_f_wr_resp$D_OUT[1:0] != 2'b0 ;
+	     WILL_FIRE_RL_rl_drain_mem_wr_resps &&
+	     master_xactor_shim_bff_rv$port1__read[1:0] != 2'd0 ;
   assign MUX_rg_status$write_1__SEL_3 =
 	     WILL_FIRE_RL_rl_process_wr_req &&
-	     rg_watch_tohost_95_AND_f_reqs_rv_port0__read___ETC___d201 &&
+	     rg_watch_tohost_02_AND_f_reqs_rv_port0__read___ETC___d308 &&
 	     rg_status != 8'd1 ;
-  assign MUX_rg_status$write_1__SEL_4 =
-	     WILL_FIRE_RL_rl_refill &&
-	     master_xactor_f_rd_data$D_OUT[2:1] != 2'b0 ;
   assign MUX_f_reqs_rv$port1__write_1__VAL_1 =
-	     { 2'd2, slave_xactor_f_rd_addr$D_OUT, 72'hAAAAAAAAAAAAAAAAAA } ;
+	     { 2'd2,
+	       slave_xactor_shim_arff_rv$port1__read[107:0],
+	       72'hAAAAAAAAAAAAAAAAAA } ;
   assign MUX_f_reqs_rv$port1__write_1__VAL_2 =
 	     { 2'd3,
-	       slave_xactor_f_wr_addr$D_OUT,
-	       slave_xactor_f_wr_data$D_OUT[8:1],
-	       slave_xactor_f_wr_data$D_OUT[72:9] } ;
-  assign MUX_master_xactor_f_rd_addr$enq_1__VAL_1 =
-	     { 16'd0, f_reqs_rv[164:101], 29'd1638656 } ;
+	       slave_xactor_shim_awff_rv$port1__read[107:0],
+	       slave_xactor_shim_wff_rv$port1__read[8:1],
+	       slave_xactor_shim_wff_rv$port1__read[72:9] } ;
+  assign MUX_master_xactor_shim_arff_rv$port0__write_1__VAL_1 =
+	     { 16'd32768, f_reqs_rv[164:101], 29'd1638656 } ;
   assign MUX_rg_cached_data_512$write_1__VAL_2 =
-	     { IF_f_reqs_rv_port0__read__6_BITS_106_TO_104_24_ETC___d188,
+	     { IF_f_reqs_rv_port0__read__22_BITS_106_TO_104_2_ETC___d295,
 	       (f_reqs_rv[106:104] == 3'd1) ?
-		 updated_data_64__h4894 :
+		 updated_data_64__h10250 :
 		 rg_cached_data_512[127:64],
 	       (f_reqs_rv[106:104] == 3'd0) ?
-		 updated_data_64__h4894 :
+		 updated_data_64__h10250 :
 		 rg_cached_data_512[63:0] } ;
-  assign MUX_slave_xactor_f_rd_data$enq_1__VAL_1 =
-	     { f_reqs_rv[168:165], rdata__h4066, rdr_rresp__h4100, 1'd1 } ;
-  assign MUX_slave_xactor_f_rd_data$enq_1__VAL_2 =
-	     { f_reqs_rv[168:101], 3'd5 } ;
-  assign MUX_slave_xactor_f_wr_resp$enq_1__VAL_1 =
-	     { f_reqs_rv[168:165], 2'd0 } ;
-  assign MUX_slave_xactor_f_wr_resp$enq_1__VAL_2 =
-	     { f_reqs_rv[168:165], 2'd2 } ;
+  assign MUX_slave_xactor_shim_bff_rv$port0__write_1__VAL_1 =
+	     { 1'd1, f_reqs_rv[179:165], 2'd0 } ;
+  assign MUX_slave_xactor_shim_bff_rv$port0__write_1__VAL_2 =
+	     { 1'd1, f_reqs_rv[179:165], 2'd2 } ;
+  assign MUX_slave_xactor_shim_rff_rv$port0__write_1__VAL_1 =
+	     { 1'd1,
+	       f_reqs_rv[179:165],
+	       rdata__h9342,
+	       (rg_status == 8'd0) ? 2'd0 : 2'd2,
+	       1'd1 } ;
+  assign MUX_slave_xactor_shim_rff_rv$port0__write_1__VAL_2 =
+	     { 1'd1, f_reqs_rv[179:101], 3'd5 } ;
 
   // inlined wires
+  assign slave_xactor_ug_slave_u_aw_putWire$wget =
+	     { slave_awid,
+	       slave_awaddr,
+	       slave_awlen,
+	       slave_awsize,
+	       slave_awburst,
+	       slave_awlock,
+	       slave_awcache,
+	       slave_awprot,
+	       slave_awqos,
+	       slave_awregion } ;
+  assign slave_xactor_ug_slave_u_aw_putWire$whas =
+	     slave_awvalid && !slave_xactor_shim_awff_rv[108] ;
+  assign slave_xactor_ug_slave_u_w_putWire$wget =
+	     { slave_wdata, slave_wstrb, slave_wlast } ;
+  assign slave_xactor_ug_slave_u_w_putWire$whas =
+	     slave_wvalid && !slave_xactor_shim_wff_rv[73] ;
+  assign slave_xactor_ug_slave_u_ar_putWire$wget =
+	     { slave_arid,
+	       slave_araddr,
+	       slave_arlen,
+	       slave_arsize,
+	       slave_arburst,
+	       slave_arlock,
+	       slave_arcache,
+	       slave_arprot,
+	       slave_arqos,
+	       slave_arregion } ;
+  assign slave_xactor_ug_slave_u_ar_putWire$whas =
+	     slave_arvalid && !slave_xactor_shim_arff_rv[108] ;
+  assign master_xactor_ug_master_u_b_putWire$wget =
+	     { to_ddr4_bid, to_ddr4_bresp } ;
+  assign master_xactor_ug_master_u_b_putWire$whas =
+	     to_ddr4_bvalid && !master_xactor_shim_bff_rv[17] ;
+  assign master_xactor_ug_master_u_r_putWire$wget =
+	     { to_ddr4_rid, to_ddr4_rdata, to_ddr4_rresp, to_ddr4_rlast } ;
+  assign master_xactor_ug_master_u_r_putWire$whas =
+	     to_ddr4_rvalid && !master_xactor_shim_rff_rv[530] ;
+  assign slave_xactor_ug_slave_u_b_dropWire$whas =
+	     slave_xactor_shim_bff_rv$port1__read[17] && slave_bready ;
+  assign slave_xactor_ug_slave_u_r_dropWire$whas =
+	     slave_xactor_shim_rff_rv$port1__read[82] && slave_rready ;
+  assign master_xactor_ug_master_u_aw_dropWire$whas =
+	     master_xactor_shim_awff_rv$port1__read[108] && to_ddr4_awready ;
+  assign master_xactor_ug_master_u_w_dropWire$whas =
+	     master_xactor_shim_wff_rv$port1__read[577] && to_ddr4_wready ;
+  assign master_xactor_ug_master_u_ar_dropWire$whas =
+	     master_xactor_shim_arff_rv$port1__read[108] && to_ddr4_arready ;
+  assign slave_xactor_shim_awff_rv$port0__write_1 =
+	     { 1'd1, slave_xactor_ug_slave_u_aw_putWire$wget } ;
+  assign slave_xactor_shim_awff_rv$port1__read =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_aw_doPut ?
+	       slave_xactor_shim_awff_rv$port0__write_1 :
+	       slave_xactor_shim_awff_rv ;
+  assign slave_xactor_shim_awff_rv$port2__read =
+	     WILL_FIRE_RL_rl_merge_wr_req ?
+	       109'h0AAAAAAAAAAAAAAAAAAAAAAAAAAA :
+	       slave_xactor_shim_awff_rv$port1__read ;
+  assign slave_xactor_shim_awff_rv$port3__read =
+	     slave_xactor_clearing ?
+	       109'h0AAAAAAAAAAAAAAAAAAAAAAAAAAA :
+	       slave_xactor_shim_awff_rv$port2__read ;
+  assign slave_xactor_shim_wff_rv$port0__write_1 =
+	     { 1'd1, slave_xactor_ug_slave_u_w_putWire$wget } ;
+  assign slave_xactor_shim_wff_rv$port1__read =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_w_doPut ?
+	       slave_xactor_shim_wff_rv$port0__write_1 :
+	       slave_xactor_shim_wff_rv ;
+  assign slave_xactor_shim_wff_rv$port2__read =
+	     WILL_FIRE_RL_rl_merge_wr_req ?
+	       74'h0AAAAAAAAAAAAAAAAAA :
+	       slave_xactor_shim_wff_rv$port1__read ;
+  assign slave_xactor_shim_wff_rv$port3__read =
+	     slave_xactor_clearing ?
+	       74'h0AAAAAAAAAAAAAAAAAA :
+	       slave_xactor_shim_wff_rv$port2__read ;
+  assign slave_xactor_shim_bff_rv$EN_port0__write =
+	     WILL_FIRE_RL_rl_process_wr_req ||
+	     WILL_FIRE_RL_rl_invalid_wr_address ;
+  assign slave_xactor_shim_bff_rv$port0__write_1 =
+	     WILL_FIRE_RL_rl_process_wr_req ?
+	       MUX_slave_xactor_shim_bff_rv$port0__write_1__VAL_1 :
+	       MUX_slave_xactor_shim_bff_rv$port0__write_1__VAL_2 ;
+  assign slave_xactor_shim_bff_rv$port1__read =
+	     slave_xactor_shim_bff_rv$EN_port0__write ?
+	       slave_xactor_shim_bff_rv$port0__write_1 :
+	       slave_xactor_shim_bff_rv ;
+  assign slave_xactor_shim_bff_rv$port2__read =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_b_doDrop ?
+	       18'd43690 :
+	       slave_xactor_shim_bff_rv$port1__read ;
+  assign slave_xactor_shim_bff_rv$port3__read =
+	     slave_xactor_clearing ?
+	       18'd43690 :
+	       slave_xactor_shim_bff_rv$port2__read ;
+  assign slave_xactor_shim_arff_rv$port0__write_1 =
+	     { 1'd1, slave_xactor_ug_slave_u_ar_putWire$wget } ;
+  assign slave_xactor_shim_arff_rv$port1__read =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_ar_doPut ?
+	       slave_xactor_shim_arff_rv$port0__write_1 :
+	       slave_xactor_shim_arff_rv ;
+  assign slave_xactor_shim_arff_rv$port2__read =
+	     WILL_FIRE_RL_rl_merge_rd_req ?
+	       109'h0AAAAAAAAAAAAAAAAAAAAAAAAAAA :
+	       slave_xactor_shim_arff_rv$port1__read ;
+  assign slave_xactor_shim_arff_rv$port3__read =
+	     slave_xactor_clearing ?
+	       109'h0AAAAAAAAAAAAAAAAAAAAAAAAAAA :
+	       slave_xactor_shim_arff_rv$port2__read ;
+  assign slave_xactor_shim_rff_rv$EN_port0__write =
+	     WILL_FIRE_RL_rl_process_rd_req ||
+	     WILL_FIRE_RL_rl_invalid_rd_address ;
+  assign slave_xactor_shim_rff_rv$port0__write_1 =
+	     WILL_FIRE_RL_rl_process_rd_req ?
+	       MUX_slave_xactor_shim_rff_rv$port0__write_1__VAL_1 :
+	       MUX_slave_xactor_shim_rff_rv$port0__write_1__VAL_2 ;
+  assign slave_xactor_shim_rff_rv$port1__read =
+	     slave_xactor_shim_rff_rv$EN_port0__write ?
+	       slave_xactor_shim_rff_rv$port0__write_1 :
+	       slave_xactor_shim_rff_rv ;
+  assign slave_xactor_shim_rff_rv$port2__read =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_r_doDrop ?
+	       83'h2AAAAAAAAAAAAAAAAAAAA :
+	       slave_xactor_shim_rff_rv$port1__read ;
+  assign slave_xactor_shim_rff_rv$port3__read =
+	     slave_xactor_clearing ?
+	       83'h2AAAAAAAAAAAAAAAAAAAA :
+	       slave_xactor_shim_rff_rv$port2__read ;
   assign f_reqs_rv$EN_port0__write =
 	     WILL_FIRE_RL_rl_invalid_wr_address ||
 	     WILL_FIRE_RL_rl_invalid_rd_address ||
@@ -1183,7 +1530,7 @@ module mkAWS_DDR4_Adapter(CLK,
 	     WILL_FIRE_RL_rl_process_rd_req ;
   assign f_reqs_rv$port1__read =
 	     f_reqs_rv$EN_port0__write ?
-	       171'h2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA :
+	       182'h0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA :
 	       f_reqs_rv ;
   assign f_reqs_rv$EN_port1__write =
 	     WILL_FIRE_RL_rl_merge_rd_req || WILL_FIRE_RL_rl_merge_wr_req ;
@@ -1195,10 +1542,112 @@ module mkAWS_DDR4_Adapter(CLK,
 	     f_reqs_rv$EN_port1__write ?
 	       f_reqs_rv$port1__write_1 :
 	       f_reqs_rv$port1__read ;
+  assign master_xactor_shim_awff_rv$port0__write_1 =
+	     { 16'd32768, rg_cached_addr, 29'd1638656 } ;
+  assign master_xactor_shim_awff_rv$port1__read =
+	     MUX_rg_cached_clean$write_1__SEL_3 ?
+	       master_xactor_shim_awff_rv$port0__write_1 :
+	       master_xactor_shim_awff_rv ;
+  assign master_xactor_shim_awff_rv$port2__read =
+	     CAN_FIRE_RL_master_xactor_ug_master_u_aw_doDrop ?
+	       109'h0AAAAAAAAAAAAAAAAAAAAAAAAAAA :
+	       master_xactor_shim_awff_rv$port1__read ;
+  assign master_xactor_shim_awff_rv$port3__read =
+	     master_xactor_clearing ?
+	       109'h0AAAAAAAAAAAAAAAAAAAAAAAAAAA :
+	       master_xactor_shim_awff_rv$port2__read ;
+  assign master_xactor_shim_wff_rv$port0__write_1 =
+	     { 1'd1, rg_cached_data_512, 65'h1FFFFFFFFFFFFFFFF } ;
+  assign master_xactor_shim_wff_rv$port1__read =
+	     MUX_rg_cached_clean$write_1__SEL_3 ?
+	       master_xactor_shim_wff_rv$port0__write_1 :
+	       master_xactor_shim_wff_rv ;
+  assign master_xactor_shim_wff_rv$port2__read =
+	     CAN_FIRE_RL_master_xactor_ug_master_u_w_doDrop ?
+	       578'h0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA :
+	       master_xactor_shim_wff_rv$port1__read ;
+  assign master_xactor_shim_wff_rv$port3__read =
+	     master_xactor_clearing ?
+	       578'h0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA :
+	       master_xactor_shim_wff_rv$port2__read ;
+  assign master_xactor_shim_bff_rv$port0__write_1 =
+	     { 1'd1, master_xactor_ug_master_u_b_putWire$wget } ;
+  assign master_xactor_shim_bff_rv$port1__read =
+	     CAN_FIRE_RL_master_xactor_ug_master_u_b_doPut ?
+	       master_xactor_shim_bff_rv$port0__write_1 :
+	       master_xactor_shim_bff_rv ;
+  assign master_xactor_shim_bff_rv$port2__read =
+	     CAN_FIRE_RL_rl_drain_mem_wr_resps ?
+	       18'd43690 :
+	       master_xactor_shim_bff_rv$port1__read ;
+  assign master_xactor_shim_bff_rv$port3__read =
+	     master_xactor_clearing ?
+	       18'd43690 :
+	       master_xactor_shim_bff_rv$port2__read ;
+  assign master_xactor_shim_arff_rv$port0__write_1 =
+	     WILL_FIRE_RL_rl_miss_clean_req ?
+	       MUX_master_xactor_shim_arff_rv$port0__write_1__VAL_1 :
+	       109'h1000000000000000000000190100 ;
+  assign master_xactor_shim_arff_rv$port1__read =
+	     MUX_rg_state$write_1__SEL_2 ?
+	       master_xactor_shim_arff_rv$port0__write_1 :
+	       master_xactor_shim_arff_rv ;
+  assign master_xactor_shim_arff_rv$port2__read =
+	     CAN_FIRE_RL_master_xactor_ug_master_u_ar_doDrop ?
+	       109'h0AAAAAAAAAAAAAAAAAAAAAAAAAAA :
+	       master_xactor_shim_arff_rv$port1__read ;
+  assign master_xactor_shim_arff_rv$port3__read =
+	     master_xactor_clearing ?
+	       109'h0AAAAAAAAAAAAAAAAAAAAAAAAAAA :
+	       master_xactor_shim_arff_rv$port2__read ;
+  assign master_xactor_shim_rff_rv$port0__write_1 =
+	     { 1'd1, master_xactor_ug_master_u_r_putWire$wget } ;
+  assign master_xactor_shim_rff_rv$port1__read =
+	     CAN_FIRE_RL_master_xactor_ug_master_u_r_doPut ?
+	       master_xactor_shim_rff_rv$port0__write_1 :
+	       master_xactor_shim_rff_rv ;
+  assign master_xactor_shim_rff_rv$port2__read =
+	     CAN_FIRE_RL_rl_refill ?
+	       531'h2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA :
+	       master_xactor_shim_rff_rv$port1__read ;
+  assign master_xactor_shim_rff_rv$port3__read =
+	     master_xactor_clearing ?
+	       531'h2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA :
+	       master_xactor_shim_rff_rv$port2__read ;
 
   // register f_reqs_rv
   assign f_reqs_rv$D_IN = f_reqs_rv$port2__read ;
   assign f_reqs_rv$EN = 1'b1 ;
+
+  // register master_xactor_clearing
+  assign master_xactor_clearing$D_IN = !master_xactor_clearing ;
+  assign master_xactor_clearing$EN =
+	     master_xactor_clearing || WILL_FIRE_RL_rl_start ;
+
+  // register master_xactor_shim_arff_rv
+  assign master_xactor_shim_arff_rv$D_IN =
+	     master_xactor_shim_arff_rv$port3__read ;
+  assign master_xactor_shim_arff_rv$EN = 1'b1 ;
+
+  // register master_xactor_shim_awff_rv
+  assign master_xactor_shim_awff_rv$D_IN =
+	     master_xactor_shim_awff_rv$port3__read ;
+  assign master_xactor_shim_awff_rv$EN = 1'b1 ;
+
+  // register master_xactor_shim_bff_rv
+  assign master_xactor_shim_bff_rv$D_IN =
+	     master_xactor_shim_bff_rv$port3__read ;
+  assign master_xactor_shim_bff_rv$EN = 1'b1 ;
+
+  // register master_xactor_shim_rff_rv
+  assign master_xactor_shim_rff_rv$D_IN =
+	     master_xactor_shim_rff_rv$port3__read ;
+  assign master_xactor_shim_rff_rv$EN = 1'b1 ;
+
+  // register master_xactor_shim_wff_rv
+  assign master_xactor_shim_wff_rv$D_IN =
+	     master_xactor_shim_wff_rv$port3__read ;
+  assign master_xactor_shim_wff_rv$EN = 1'b1 ;
 
   // register rg_addr_base
   assign rg_addr_base$D_IN = ma_set_addr_map_addr_base ;
@@ -1217,7 +1666,7 @@ module mkAWS_DDR4_Adapter(CLK,
   assign rg_cached_clean$D_IN = !MUX_rg_cached_clean$write_1__SEL_2 ;
   assign rg_cached_clean$EN =
 	     WILL_FIRE_RL_rl_refill &&
-	     master_xactor_f_rd_data$D_OUT[2:1] == 2'b0 ||
+	     master_xactor_shim_rff_rv$port1__read[2:1] == 2'd0 ||
 	     WILL_FIRE_RL_rl_process_wr_req && rg_status == 8'd0 ||
 	     WILL_FIRE_RL_rl_writeback_dirty_miss ||
 	     WILL_FIRE_RL_rl_writeback_dirty_idle ;
@@ -1225,11 +1674,11 @@ module mkAWS_DDR4_Adapter(CLK,
   // register rg_cached_data_512
   assign rg_cached_data_512$D_IN =
 	     MUX_rg_cached_clean$write_1__SEL_1 ?
-	       master_xactor_f_rd_data$D_OUT[514:3] :
+	       master_xactor_shim_rff_rv$port1__read[514:3] :
 	       MUX_rg_cached_data_512$write_1__VAL_2 ;
   assign rg_cached_data_512$EN =
 	     WILL_FIRE_RL_rl_refill &&
-	     master_xactor_f_rd_data$D_OUT[2:1] == 2'b0 ||
+	     master_xactor_shim_rff_rv$port1__read[2:1] == 2'd0 ||
 	     WILL_FIRE_RL_rl_process_wr_req && rg_status == 8'd0 ;
 
   // register rg_state
@@ -1249,24 +1698,24 @@ module mkAWS_DDR4_Adapter(CLK,
 	     WILL_FIRE_RL_rl_refill ;
 
   // register rg_status
-  always@(WILL_FIRE_RL_rl_start or
+  always@(MUX_rg_status$write_1__SEL_1 or
 	  MUX_rg_status$write_1__SEL_2 or
-	  MUX_rg_status$write_1__SEL_3 or MUX_rg_status$write_1__SEL_4)
+	  MUX_rg_status$write_1__SEL_3 or WILL_FIRE_RL_rl_start)
   case (1'b1)
-    WILL_FIRE_RL_rl_start: rg_status$D_IN = 8'd0;
-    MUX_rg_status$write_1__SEL_2: rg_status$D_IN = 8'd2;
+    MUX_rg_status$write_1__SEL_1 || MUX_rg_status$write_1__SEL_2:
+	rg_status$D_IN = 8'd2;
     MUX_rg_status$write_1__SEL_3: rg_status$D_IN = 8'd1;
-    MUX_rg_status$write_1__SEL_4: rg_status$D_IN = 8'd2;
+    WILL_FIRE_RL_rl_start: rg_status$D_IN = 8'd0;
     default: rg_status$D_IN = 8'b10101010 /* unspecified value */ ;
   endcase
   assign rg_status$EN =
 	     WILL_FIRE_RL_rl_process_wr_req &&
-	     rg_watch_tohost_95_AND_f_reqs_rv_port0__read___ETC___d201 &&
+	     rg_watch_tohost_02_AND_f_reqs_rv_port0__read___ETC___d308 &&
 	     rg_status != 8'd1 ||
 	     WILL_FIRE_RL_rl_refill &&
-	     master_xactor_f_rd_data$D_OUT[2:1] != 2'b0 ||
-	     master_xactor_f_wr_resp$EMPTY_N &&
-	     master_xactor_f_wr_resp$D_OUT[1:0] != 2'b0 ||
+	     master_xactor_shim_rff_rv$port1__read[2:1] != 2'd0 ||
+	     WILL_FIRE_RL_rl_drain_mem_wr_resps &&
+	     master_xactor_shim_bff_rv$port1__read[1:0] != 2'd0 ||
 	     WILL_FIRE_RL_rl_start ;
 
   // register rg_tohost_addr
@@ -1277,141 +1726,59 @@ module mkAWS_DDR4_Adapter(CLK,
   assign rg_watch_tohost$D_IN = ma_set_watch_tohost_watch_tohost ;
   assign rg_watch_tohost$EN = EN_ma_set_watch_tohost ;
 
-  // submodule master_xactor_f_rd_addr
-  assign master_xactor_f_rd_addr$D_IN =
-	     WILL_FIRE_RL_rl_miss_clean_req ?
-	       MUX_master_xactor_f_rd_addr$enq_1__VAL_1 :
-	       109'd1638656 ;
-  assign master_xactor_f_rd_addr$ENQ = MUX_rg_state$write_1__SEL_2 ;
-  assign master_xactor_f_rd_addr$DEQ =
-	     master_xactor_f_rd_addr$EMPTY_N && to_ddr4_arready ;
-  assign master_xactor_f_rd_addr$CLR = CAN_FIRE_RL_rl_start ;
+  // register slave_xactor_clearing
+  assign slave_xactor_clearing$D_IN = !slave_xactor_clearing ;
+  assign slave_xactor_clearing$EN =
+	     slave_xactor_clearing || WILL_FIRE_RL_rl_start ;
 
-  // submodule master_xactor_f_rd_data
-  assign master_xactor_f_rd_data$D_IN =
-	     { to_ddr4_rid, to_ddr4_rdata, to_ddr4_rresp, to_ddr4_rlast } ;
-  assign master_xactor_f_rd_data$ENQ =
-	     to_ddr4_rvalid && master_xactor_f_rd_data$FULL_N ;
-  assign master_xactor_f_rd_data$DEQ = CAN_FIRE_RL_rl_refill ;
-  assign master_xactor_f_rd_data$CLR = CAN_FIRE_RL_rl_start ;
+  // register slave_xactor_shim_arff_rv
+  assign slave_xactor_shim_arff_rv$D_IN =
+	     slave_xactor_shim_arff_rv$port3__read ;
+  assign slave_xactor_shim_arff_rv$EN = 1'b1 ;
 
-  // submodule master_xactor_f_wr_addr
-  assign master_xactor_f_wr_addr$D_IN =
-	     { 16'd0, rg_cached_addr, 29'd1638656 } ;
-  assign master_xactor_f_wr_addr$ENQ = MUX_rg_cached_clean$write_1__SEL_3 ;
-  assign master_xactor_f_wr_addr$DEQ =
-	     master_xactor_f_wr_addr$EMPTY_N && to_ddr4_awready ;
-  assign master_xactor_f_wr_addr$CLR = CAN_FIRE_RL_rl_start ;
+  // register slave_xactor_shim_awff_rv
+  assign slave_xactor_shim_awff_rv$D_IN =
+	     slave_xactor_shim_awff_rv$port3__read ;
+  assign slave_xactor_shim_awff_rv$EN = 1'b1 ;
 
-  // submodule master_xactor_f_wr_data
-  assign master_xactor_f_wr_data$D_IN =
-	     { rg_cached_data_512, 65'h1FFFFFFFFFFFFFFFF } ;
-  assign master_xactor_f_wr_data$ENQ = MUX_rg_cached_clean$write_1__SEL_3 ;
-  assign master_xactor_f_wr_data$DEQ =
-	     master_xactor_f_wr_data$EMPTY_N && to_ddr4_wready ;
-  assign master_xactor_f_wr_data$CLR = CAN_FIRE_RL_rl_start ;
+  // register slave_xactor_shim_bff_rv
+  assign slave_xactor_shim_bff_rv$D_IN =
+	     slave_xactor_shim_bff_rv$port3__read ;
+  assign slave_xactor_shim_bff_rv$EN = 1'b1 ;
 
-  // submodule master_xactor_f_wr_resp
-  assign master_xactor_f_wr_resp$D_IN = { to_ddr4_bid, to_ddr4_bresp } ;
-  assign master_xactor_f_wr_resp$ENQ =
-	     to_ddr4_bvalid && master_xactor_f_wr_resp$FULL_N ;
-  assign master_xactor_f_wr_resp$DEQ = master_xactor_f_wr_resp$EMPTY_N ;
-  assign master_xactor_f_wr_resp$CLR = CAN_FIRE_RL_rl_start ;
+  // register slave_xactor_shim_rff_rv
+  assign slave_xactor_shim_rff_rv$D_IN =
+	     slave_xactor_shim_rff_rv$port3__read ;
+  assign slave_xactor_shim_rff_rv$EN = 1'b1 ;
 
-  // submodule slave_xactor_f_rd_addr
-  assign slave_xactor_f_rd_addr$D_IN =
-	     { slave_arid,
-	       slave_araddr,
-	       slave_arlen,
-	       slave_arsize,
-	       slave_arburst,
-	       slave_arlock,
-	       slave_arcache,
-	       slave_arprot,
-	       slave_arqos,
-	       slave_arregion } ;
-  assign slave_xactor_f_rd_addr$ENQ =
-	     slave_arvalid && slave_xactor_f_rd_addr$FULL_N ;
-  assign slave_xactor_f_rd_addr$DEQ =
-	     CAN_FIRE_RL_rl_merge_rd_req && !WILL_FIRE_RL_rl_miss_clean_req ;
-  assign slave_xactor_f_rd_addr$CLR = rg_state == 2'd0 ;
-
-  // submodule slave_xactor_f_rd_data
-  assign slave_xactor_f_rd_data$D_IN =
-	     WILL_FIRE_RL_rl_process_rd_req ?
-	       MUX_slave_xactor_f_rd_data$enq_1__VAL_1 :
-	       MUX_slave_xactor_f_rd_data$enq_1__VAL_2 ;
-  assign slave_xactor_f_rd_data$ENQ =
-	     WILL_FIRE_RL_rl_process_rd_req ||
-	     WILL_FIRE_RL_rl_invalid_rd_address ;
-  assign slave_xactor_f_rd_data$DEQ =
-	     slave_rready && slave_xactor_f_rd_data$EMPTY_N ;
-  assign slave_xactor_f_rd_data$CLR = rg_state == 2'd0 ;
-
-  // submodule slave_xactor_f_wr_addr
-  assign slave_xactor_f_wr_addr$D_IN =
-	     { slave_awid,
-	       slave_awaddr,
-	       slave_awlen,
-	       slave_awsize,
-	       slave_awburst,
-	       slave_awlock,
-	       slave_awcache,
-	       slave_awprot,
-	       slave_awqos,
-	       slave_awregion } ;
-  assign slave_xactor_f_wr_addr$ENQ =
-	     slave_awvalid && slave_xactor_f_wr_addr$FULL_N ;
-  assign slave_xactor_f_wr_addr$DEQ =
-	     CAN_FIRE_RL_rl_merge_wr_req && !WILL_FIRE_RL_rl_merge_rd_req &&
-	     !WILL_FIRE_RL_rl_miss_clean_req ;
-  assign slave_xactor_f_wr_addr$CLR = rg_state == 2'd0 ;
-
-  // submodule slave_xactor_f_wr_data
-  assign slave_xactor_f_wr_data$D_IN =
-	     { slave_wdata, slave_wstrb, slave_wlast } ;
-  assign slave_xactor_f_wr_data$ENQ =
-	     slave_wvalid && slave_xactor_f_wr_data$FULL_N ;
-  assign slave_xactor_f_wr_data$DEQ =
-	     CAN_FIRE_RL_rl_merge_wr_req && !WILL_FIRE_RL_rl_merge_rd_req &&
-	     !WILL_FIRE_RL_rl_miss_clean_req ;
-  assign slave_xactor_f_wr_data$CLR = rg_state == 2'd0 ;
-
-  // submodule slave_xactor_f_wr_resp
-  assign slave_xactor_f_wr_resp$D_IN =
-	     WILL_FIRE_RL_rl_process_wr_req ?
-	       MUX_slave_xactor_f_wr_resp$enq_1__VAL_1 :
-	       MUX_slave_xactor_f_wr_resp$enq_1__VAL_2 ;
-  assign slave_xactor_f_wr_resp$ENQ =
-	     WILL_FIRE_RL_rl_process_wr_req ||
-	     WILL_FIRE_RL_rl_invalid_wr_address ;
-  assign slave_xactor_f_wr_resp$DEQ =
-	     slave_bready && slave_xactor_f_wr_resp$EMPTY_N ;
-  assign slave_xactor_f_wr_resp$CLR = rg_state == 2'd0 ;
+  // register slave_xactor_shim_wff_rv
+  assign slave_xactor_shim_wff_rv$D_IN =
+	     slave_xactor_shim_wff_rv$port3__read ;
+  assign slave_xactor_shim_wff_rv$EN = 1'b1 ;
 
   // remaining internal signals
-  assign IF_f_reqs_rv_port0__read__6_BITS_106_TO_104_24_ETC___d183 =
+  assign IF_f_reqs_rv_port0__read__22_BITS_106_TO_104_2_ETC___d290 =
 	     { (f_reqs_rv[106:104] == 3'd7) ?
-		 updated_data_64__h4894 :
+		 updated_data_64__h10250 :
 		 rg_cached_data_512[511:448],
 	       (f_reqs_rv[106:104] == 3'd6) ?
-		 updated_data_64__h4894 :
+		 updated_data_64__h10250 :
 		 rg_cached_data_512[447:384],
 	       (f_reqs_rv[106:104] == 3'd5) ?
-		 updated_data_64__h4894 :
+		 updated_data_64__h10250 :
 		 rg_cached_data_512[383:320],
 	       (f_reqs_rv[106:104] == 3'd4) ?
-		 updated_data_64__h4894 :
+		 updated_data_64__h10250 :
 		 rg_cached_data_512[319:256] } ;
-  assign IF_f_reqs_rv_port0__read__6_BITS_106_TO_104_24_ETC___d188 =
-	     { IF_f_reqs_rv_port0__read__6_BITS_106_TO_104_24_ETC___d183,
+  assign IF_f_reqs_rv_port0__read__22_BITS_106_TO_104_2_ETC___d295 =
+	     { IF_f_reqs_rv_port0__read__22_BITS_106_TO_104_2_ETC___d290,
 	       (f_reqs_rv[106:104] == 3'd3) ?
-		 updated_data_64__h4894 :
+		 updated_data_64__h10250 :
 		 rg_cached_data_512[255:192],
 	       (f_reqs_rv[106:104] == 3'd2) ?
-		 updated_data_64__h4894 :
+		 updated_data_64__h10250 :
 		 rg_cached_data_512[191:128] } ;
-  assign NOT_f_reqs_rv_port0__read__6_BITS_92_TO_90_0_E_ETC___d246 =
+  assign NOT_f_reqs_rv_port0__read__22_BITS_92_TO_90_37_ETC___d354 =
 	     f_reqs_rv[92:90] != 3'b0 &&
 	     (f_reqs_rv[92:90] != 3'b001 || f_reqs_rv[101]) &&
 	     (f_reqs_rv[92:90] != 3'b010 || f_reqs_rv[102:101] != 2'h0) &&
@@ -1420,20 +1787,28 @@ module mkAWS_DDR4_Adapter(CLK,
 	     (f_reqs_rv[92:90] != 3'b101 || f_reqs_rv[105:101] != 5'h0) &&
 	     (f_reqs_rv[92:90] != 3'b110 || f_reqs_rv[106:101] != 6'h0) &&
 	     (f_reqs_rv[92:90] != 3'b111 || f_reqs_rv[107:101] != 7'h0) ;
-  assign SEXT_f_reqs_rv_port0__read__6_BIT_64_63___d164 = {8{f_reqs_rv[64]}} ;
-  assign SEXT_f_reqs_rv_port0__read__6_BIT_65_60___d161 = {8{f_reqs_rv[65]}} ;
-  assign SEXT_f_reqs_rv_port0__read__6_BIT_66_56___d157 = {8{f_reqs_rv[66]}} ;
-  assign SEXT_f_reqs_rv_port0__read__6_BIT_67_53___d154 = {8{f_reqs_rv[67]}} ;
-  assign SEXT_f_reqs_rv_port0__read__6_BIT_68_49___d150 = {8{f_reqs_rv[68]}} ;
-  assign SEXT_f_reqs_rv_port0__read__6_BIT_69_46___d147 = {8{f_reqs_rv[69]}} ;
-  assign SEXT_f_reqs_rv_port0__read__6_BIT_70_42___d143 = {8{f_reqs_rv[70]}} ;
-  assign SEXT_f_reqs_rv_port0__read__6_BIT_71_39___d140 = {8{f_reqs_rv[71]}} ;
-  assign exit_value__h7270 = { 1'd0, f_reqs_rv[63:1] } ;
-  assign f_reqs_rv_port0__read__6_BITS_164_TO_101_0_ULT_ETC___d83 =
+  assign SEXT_f_reqs_rv_port0__read__22_BIT_64_70___d271 =
+	     {8{f_reqs_rv[64]}} ;
+  assign SEXT_f_reqs_rv_port0__read__22_BIT_65_67___d268 =
+	     {8{f_reqs_rv[65]}} ;
+  assign SEXT_f_reqs_rv_port0__read__22_BIT_66_63___d264 =
+	     {8{f_reqs_rv[66]}} ;
+  assign SEXT_f_reqs_rv_port0__read__22_BIT_67_60___d261 =
+	     {8{f_reqs_rv[67]}} ;
+  assign SEXT_f_reqs_rv_port0__read__22_BIT_68_56___d257 =
+	     {8{f_reqs_rv[68]}} ;
+  assign SEXT_f_reqs_rv_port0__read__22_BIT_69_53___d254 =
+	     {8{f_reqs_rv[69]}} ;
+  assign SEXT_f_reqs_rv_port0__read__22_BIT_70_49___d250 =
+	     {8{f_reqs_rv[70]}} ;
+  assign SEXT_f_reqs_rv_port0__read__22_BIT_71_46___d247 =
+	     {8{f_reqs_rv[71]}} ;
+  assign exit_value__h12689 = { 1'd0, f_reqs_rv[63:1] } ;
+  assign f_reqs_rv_port0__read__22_BITS_164_TO_101_77_U_ETC___d180 =
 	     f_reqs_rv[164:101] < rg_addr_lim ;
-  assign f_reqs_rv_port0__read__6_BITS_164_TO_107_7_EQ__ETC___d89 =
+  assign f_reqs_rv_port0__read__22_BITS_164_TO_107_84_E_ETC___d186 =
 	     f_reqs_rv[164:107] == rg_cached_addr[63:6] ;
-  assign f_reqs_rv_port0__read__6_BITS_92_TO_90_0_EQ_0b_ETC___d77 =
+  assign f_reqs_rv_port0__read__22_BITS_92_TO_90_37_EQ__ETC___d174 =
 	     f_reqs_rv[92:90] == 3'b0 ||
 	     f_reqs_rv[92:90] == 3'b001 && !f_reqs_rv[101] ||
 	     f_reqs_rv[92:90] == 3'b010 && f_reqs_rv[102:101] == 2'h0 ||
@@ -1442,73 +1817,82 @@ module mkAWS_DDR4_Adapter(CLK,
 	     f_reqs_rv[92:90] == 3'b101 && f_reqs_rv[105:101] == 5'h0 ||
 	     f_reqs_rv[92:90] == 3'b110 && f_reqs_rv[106:101] == 6'h0 ||
 	     f_reqs_rv[92:90] == 3'b111 && f_reqs_rv[107:101] == 7'h0 ;
-  assign f_reqs_rv_port0__read__6_BITS_92_TO_90_0_ULE_0b11___d41 =
+  assign f_reqs_rv_port0__read__22_BITS_92_TO_90_37_ULE_ETC___d138 =
 	     f_reqs_rv[92:90] <= 3'b011 ;
-  assign mask__h4893 =
-	     { SEXT_f_reqs_rv_port0__read__6_BIT_71_39___d140,
-	       SEXT_f_reqs_rv_port0__read__6_BIT_70_42___d143,
-	       SEXT_f_reqs_rv_port0__read__6_BIT_69_46___d147,
-	       SEXT_f_reqs_rv_port0__read__6_BIT_68_49___d150,
-	       SEXT_f_reqs_rv_port0__read__6_BIT_67_53___d154,
-	       SEXT_f_reqs_rv_port0__read__6_BIT_66_56___d157,
-	       SEXT_f_reqs_rv_port0__read__6_BIT_65_60___d161,
-	       SEXT_f_reqs_rv_port0__read__6_BIT_64_63___d164 } ;
-  assign n__h4065 = { 3'd0, f_reqs_rv[106:104] } ;
-  assign rdr_rresp__h4100 = (rg_status == 8'd0) ? 2'b0 : 2'b10 ;
-  assign rg_addr_base_9_ULE_f_reqs_rv_port0__read__6_BI_ETC___d81 =
+  assign mask__h10249 =
+	     { SEXT_f_reqs_rv_port0__read__22_BIT_71_46___d247,
+	       SEXT_f_reqs_rv_port0__read__22_BIT_70_49___d250,
+	       SEXT_f_reqs_rv_port0__read__22_BIT_69_53___d254,
+	       SEXT_f_reqs_rv_port0__read__22_BIT_68_56___d257,
+	       SEXT_f_reqs_rv_port0__read__22_BIT_67_60___d261,
+	       SEXT_f_reqs_rv_port0__read__22_BIT_66_63___d264,
+	       SEXT_f_reqs_rv_port0__read__22_BIT_65_67___d268,
+	       SEXT_f_reqs_rv_port0__read__22_BIT_64_70___d271 } ;
+  assign master_xactor_shim_arff_rvport1__read_BITS_10_ETC__q5 =
+	     master_xactor_shim_arff_rv$port1__read[107:0] ;
+  assign master_xactor_shim_awff_rvport1__read_BITS_10_ETC__q3 =
+	     master_xactor_shim_awff_rv$port1__read[107:0] ;
+  assign master_xactor_shim_wff_rvport1__read_BITS_576_ETC__q4 =
+	     master_xactor_shim_wff_rv$port1__read[576:0] ;
+  assign n__h9341 = { 3'd0, f_reqs_rv[106:104] } ;
+  assign rg_addr_base_76_ULE_f_reqs_rv_port0__read__22__ETC___d178 =
 	     rg_addr_base <= f_reqs_rv[164:101] ;
-  assign rg_state_EQ_3_AND_NOT_f_reqs_rv_port0__read__6_ETC___d252 =
+  assign rg_state_7_EQ_3_7_AND_NOT_f_reqs_rv_port0__rea_ETC___d360 =
 	     rg_state == 2'd3 &&
-	     (!f_reqs_rv_port0__read__6_BITS_92_TO_90_0_ULE_0b11___d41 ||
-	      NOT_f_reqs_rv_port0__read__6_BITS_92_TO_90_0_E_ETC___d246 ||
-	      !rg_addr_base_9_ULE_f_reqs_rv_port0__read__6_BI_ETC___d81 ||
-	      !f_reqs_rv_port0__read__6_BITS_164_TO_101_0_ULT_ETC___d83) ;
-  assign rg_state_EQ_3_AND_f_reqs_rv_port0__read__6_BIT_ETC___d86 =
+	     (!f_reqs_rv_port0__read__22_BITS_92_TO_90_37_ULE_ETC___d138 ||
+	      NOT_f_reqs_rv_port0__read__22_BITS_92_TO_90_37_ETC___d354 ||
+	      !rg_addr_base_76_ULE_f_reqs_rv_port0__read__22__ETC___d178 ||
+	      !f_reqs_rv_port0__read__22_BITS_164_TO_101_77_U_ETC___d180) ;
+  assign rg_state_7_EQ_3_7_AND_f_reqs_rv_port0__read__2_ETC___d183 =
 	     rg_state == 2'd3 &&
-	     f_reqs_rv_port0__read__6_BITS_92_TO_90_0_ULE_0b11___d41 &&
-	     f_reqs_rv_port0__read__6_BITS_92_TO_90_0_EQ_0b_ETC___d77 &&
-	     rg_addr_base_9_ULE_f_reqs_rv_port0__read__6_BI_ETC___d81 &&
-	     f_reqs_rv_port0__read__6_BITS_164_TO_101_0_ULT_ETC___d83 ;
-  assign rg_watch_tohost_95_AND_f_reqs_rv_port0__read___ETC___d201 =
+	     f_reqs_rv_port0__read__22_BITS_92_TO_90_37_ULE_ETC___d138 &&
+	     f_reqs_rv_port0__read__22_BITS_92_TO_90_37_EQ__ETC___d174 &&
+	     rg_addr_base_76_ULE_f_reqs_rv_port0__read__22__ETC___d178 &&
+	     f_reqs_rv_port0__read__22_BITS_164_TO_101_77_U_ETC___d180 ;
+  assign rg_watch_tohost_02_AND_f_reqs_rv_port0__read___ETC___d308 =
 	     rg_watch_tohost && f_reqs_rv[164:101] == rg_tohost_addr &&
 	     f_reqs_rv[63:0] != 64'd0 ;
-  assign updated_data_64__h4894 = x__h5530 | y__h5531 ;
-  assign x__h5530 = data_64_old__h4889 & y__h5532 ;
-  assign y__h5531 = f_reqs_rv[63:0] & mask__h4893 ;
-  assign y__h5532 =
-	     { ~SEXT_f_reqs_rv_port0__read__6_BIT_71_39___d140,
-	       ~SEXT_f_reqs_rv_port0__read__6_BIT_70_42___d143,
-	       ~SEXT_f_reqs_rv_port0__read__6_BIT_69_46___d147,
-	       ~SEXT_f_reqs_rv_port0__read__6_BIT_68_49___d150,
-	       ~SEXT_f_reqs_rv_port0__read__6_BIT_67_53___d154,
-	       ~SEXT_f_reqs_rv_port0__read__6_BIT_66_56___d157,
-	       ~SEXT_f_reqs_rv_port0__read__6_BIT_65_60___d161,
-	       ~SEXT_f_reqs_rv_port0__read__6_BIT_64_63___d164 } ;
+  assign slave_xactor_shim_bff_rvport1__read_BITS_16_TO_0__q1 =
+	     slave_xactor_shim_bff_rv$port1__read[16:0] ;
+  assign slave_xactor_shim_rff_rvport1__read_BITS_81_TO_0__q2 =
+	     slave_xactor_shim_rff_rv$port1__read[81:0] ;
+  assign updated_data_64__h10250 = x__h10886 | y__h10887 ;
+  assign x__h10886 = data_64_old__h10245 & y__h10888 ;
+  assign y__h10887 = f_reqs_rv[63:0] & mask__h10249 ;
+  assign y__h10888 =
+	     { ~SEXT_f_reqs_rv_port0__read__22_BIT_71_46___d247,
+	       ~SEXT_f_reqs_rv_port0__read__22_BIT_70_49___d250,
+	       ~SEXT_f_reqs_rv_port0__read__22_BIT_69_53___d254,
+	       ~SEXT_f_reqs_rv_port0__read__22_BIT_68_56___d257,
+	       ~SEXT_f_reqs_rv_port0__read__22_BIT_67_60___d261,
+	       ~SEXT_f_reqs_rv_port0__read__22_BIT_66_63___d264,
+	       ~SEXT_f_reqs_rv_port0__read__22_BIT_65_67___d268,
+	       ~SEXT_f_reqs_rv_port0__read__22_BIT_64_70___d271 } ;
   always@(f_reqs_rv or rg_cached_data_512)
   begin
     case (f_reqs_rv[106:104])
-      3'd0: data_64_old__h4889 = rg_cached_data_512[63:0];
-      3'd1: data_64_old__h4889 = rg_cached_data_512[127:64];
-      3'd2: data_64_old__h4889 = rg_cached_data_512[191:128];
-      3'd3: data_64_old__h4889 = rg_cached_data_512[255:192];
-      3'd4: data_64_old__h4889 = rg_cached_data_512[319:256];
-      3'd5: data_64_old__h4889 = rg_cached_data_512[383:320];
-      3'd6: data_64_old__h4889 = rg_cached_data_512[447:384];
-      3'd7: data_64_old__h4889 = rg_cached_data_512[511:448];
+      3'd0: data_64_old__h10245 = rg_cached_data_512[63:0];
+      3'd1: data_64_old__h10245 = rg_cached_data_512[127:64];
+      3'd2: data_64_old__h10245 = rg_cached_data_512[191:128];
+      3'd3: data_64_old__h10245 = rg_cached_data_512[255:192];
+      3'd4: data_64_old__h10245 = rg_cached_data_512[319:256];
+      3'd5: data_64_old__h10245 = rg_cached_data_512[383:320];
+      3'd6: data_64_old__h10245 = rg_cached_data_512[447:384];
+      3'd7: data_64_old__h10245 = rg_cached_data_512[511:448];
     endcase
   end
-  always@(n__h4065 or rg_cached_data_512)
+  always@(n__h9341 or rg_cached_data_512)
   begin
-    case (n__h4065)
-      6'd0: rdata__h4066 = rg_cached_data_512[63:0];
-      6'd1: rdata__h4066 = rg_cached_data_512[127:64];
-      6'd2: rdata__h4066 = rg_cached_data_512[191:128];
-      6'd3: rdata__h4066 = rg_cached_data_512[255:192];
-      6'd4: rdata__h4066 = rg_cached_data_512[319:256];
-      6'd5: rdata__h4066 = rg_cached_data_512[383:320];
-      6'd6: rdata__h4066 = rg_cached_data_512[447:384];
-      6'd7: rdata__h4066 = rg_cached_data_512[511:448];
-      default: rdata__h4066 = 64'hAAAAAAAAAAAAAAAA /* unspecified value */ ;
+    case (n__h9341)
+      6'd0: rdata__h9342 = rg_cached_data_512[63:0];
+      6'd1: rdata__h9342 = rg_cached_data_512[127:64];
+      6'd2: rdata__h9342 = rg_cached_data_512[191:128];
+      6'd3: rdata__h9342 = rg_cached_data_512[255:192];
+      6'd4: rdata__h9342 = rg_cached_data_512[319:256];
+      6'd5: rdata__h9342 = rg_cached_data_512[383:320];
+      6'd6: rdata__h9342 = rg_cached_data_512[447:384];
+      6'd7: rdata__h9342 = rg_cached_data_512[511:448];
+      default: rdata__h9342 = 64'hAAAAAAAAAAAAAAAA /* unspecified value */ ;
     endcase
   end
 
@@ -1519,21 +1903,77 @@ module mkAWS_DDR4_Adapter(CLK,
     if (RST_N == `BSV_RESET_VALUE)
       begin
         f_reqs_rv <= `BSV_ASSIGNMENT_DELAY
-	    171'h2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+	    182'h0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+	master_xactor_clearing <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	master_xactor_shim_arff_rv <= `BSV_ASSIGNMENT_DELAY
+	    109'h0AAAAAAAAAAAAAAAAAAAAAAAAAAA;
+	master_xactor_shim_awff_rv <= `BSV_ASSIGNMENT_DELAY
+	    109'h0AAAAAAAAAAAAAAAAAAAAAAAAAAA;
+	master_xactor_shim_bff_rv <= `BSV_ASSIGNMENT_DELAY 18'd43690;
+	master_xactor_shim_rff_rv <= `BSV_ASSIGNMENT_DELAY
+	    531'h2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+	master_xactor_shim_wff_rv <= `BSV_ASSIGNMENT_DELAY
+	    578'h0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
 	rg_state <= `BSV_ASSIGNMENT_DELAY 2'd0;
 	rg_status <= `BSV_ASSIGNMENT_DELAY 8'd0;
 	rg_tohost_addr <= `BSV_ASSIGNMENT_DELAY 64'h0000000080001000;
 	rg_watch_tohost <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	slave_xactor_clearing <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	slave_xactor_shim_arff_rv <= `BSV_ASSIGNMENT_DELAY
+	    109'h0AAAAAAAAAAAAAAAAAAAAAAAAAAA;
+	slave_xactor_shim_awff_rv <= `BSV_ASSIGNMENT_DELAY
+	    109'h0AAAAAAAAAAAAAAAAAAAAAAAAAAA;
+	slave_xactor_shim_bff_rv <= `BSV_ASSIGNMENT_DELAY 18'd43690;
+	slave_xactor_shim_rff_rv <= `BSV_ASSIGNMENT_DELAY
+	    83'h2AAAAAAAAAAAAAAAAAAAA;
+	slave_xactor_shim_wff_rv <= `BSV_ASSIGNMENT_DELAY
+	    74'h0AAAAAAAAAAAAAAAAAA;
       end
     else
       begin
         if (f_reqs_rv$EN) f_reqs_rv <= `BSV_ASSIGNMENT_DELAY f_reqs_rv$D_IN;
+	if (master_xactor_clearing$EN)
+	  master_xactor_clearing <= `BSV_ASSIGNMENT_DELAY
+	      master_xactor_clearing$D_IN;
+	if (master_xactor_shim_arff_rv$EN)
+	  master_xactor_shim_arff_rv <= `BSV_ASSIGNMENT_DELAY
+	      master_xactor_shim_arff_rv$D_IN;
+	if (master_xactor_shim_awff_rv$EN)
+	  master_xactor_shim_awff_rv <= `BSV_ASSIGNMENT_DELAY
+	      master_xactor_shim_awff_rv$D_IN;
+	if (master_xactor_shim_bff_rv$EN)
+	  master_xactor_shim_bff_rv <= `BSV_ASSIGNMENT_DELAY
+	      master_xactor_shim_bff_rv$D_IN;
+	if (master_xactor_shim_rff_rv$EN)
+	  master_xactor_shim_rff_rv <= `BSV_ASSIGNMENT_DELAY
+	      master_xactor_shim_rff_rv$D_IN;
+	if (master_xactor_shim_wff_rv$EN)
+	  master_xactor_shim_wff_rv <= `BSV_ASSIGNMENT_DELAY
+	      master_xactor_shim_wff_rv$D_IN;
 	if (rg_state$EN) rg_state <= `BSV_ASSIGNMENT_DELAY rg_state$D_IN;
 	if (rg_status$EN) rg_status <= `BSV_ASSIGNMENT_DELAY rg_status$D_IN;
 	if (rg_tohost_addr$EN)
 	  rg_tohost_addr <= `BSV_ASSIGNMENT_DELAY rg_tohost_addr$D_IN;
 	if (rg_watch_tohost$EN)
 	  rg_watch_tohost <= `BSV_ASSIGNMENT_DELAY rg_watch_tohost$D_IN;
+	if (slave_xactor_clearing$EN)
+	  slave_xactor_clearing <= `BSV_ASSIGNMENT_DELAY
+	      slave_xactor_clearing$D_IN;
+	if (slave_xactor_shim_arff_rv$EN)
+	  slave_xactor_shim_arff_rv <= `BSV_ASSIGNMENT_DELAY
+	      slave_xactor_shim_arff_rv$D_IN;
+	if (slave_xactor_shim_awff_rv$EN)
+	  slave_xactor_shim_awff_rv <= `BSV_ASSIGNMENT_DELAY
+	      slave_xactor_shim_awff_rv$D_IN;
+	if (slave_xactor_shim_bff_rv$EN)
+	  slave_xactor_shim_bff_rv <= `BSV_ASSIGNMENT_DELAY
+	      slave_xactor_shim_bff_rv$D_IN;
+	if (slave_xactor_shim_rff_rv$EN)
+	  slave_xactor_shim_rff_rv <= `BSV_ASSIGNMENT_DELAY
+	      slave_xactor_shim_rff_rv$D_IN;
+	if (slave_xactor_shim_wff_rv$EN)
+	  slave_xactor_shim_wff_rv <= `BSV_ASSIGNMENT_DELAY
+	      slave_xactor_shim_wff_rv$D_IN;
       end
     if (rg_addr_base$EN)
       rg_addr_base <= `BSV_ASSIGNMENT_DELAY rg_addr_base$D_IN;
@@ -1551,7 +1991,15 @@ module mkAWS_DDR4_Adapter(CLK,
   `else // not BSV_NO_INITIAL_BLOCKS
   initial
   begin
-    f_reqs_rv = 171'h2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    f_reqs_rv = 182'h2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    master_xactor_clearing = 1'h0;
+    master_xactor_shim_arff_rv = 109'h0AAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    master_xactor_shim_awff_rv = 109'h0AAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    master_xactor_shim_bff_rv = 18'h2AAAA;
+    master_xactor_shim_rff_rv =
+	531'h2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    master_xactor_shim_wff_rv =
+	578'h2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
     rg_addr_base = 64'hAAAAAAAAAAAAAAAA;
     rg_addr_lim = 64'hAAAAAAAAAAAAAAAA;
     rg_cached_addr = 64'hAAAAAAAAAAAAAAAA;
@@ -1562,6 +2010,12 @@ module mkAWS_DDR4_Adapter(CLK,
     rg_status = 8'hAA;
     rg_tohost_addr = 64'hAAAAAAAAAAAAAAAA;
     rg_watch_tohost = 1'h0;
+    slave_xactor_clearing = 1'h0;
+    slave_xactor_shim_arff_rv = 109'h0AAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    slave_xactor_shim_awff_rv = 109'h0AAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    slave_xactor_shim_bff_rv = 18'h2AAAA;
+    slave_xactor_shim_rff_rv = 83'h2AAAAAAAAAAAAAAAAAAAA;
+    slave_xactor_shim_wff_rv = 74'h2AAAAAAAAAAAAAAAAAA;
   end
   `endif // BSV_NO_INITIAL_BLOCKS
   // synopsys translate_on
@@ -1575,14 +2029,14 @@ module mkAWS_DDR4_Adapter(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (EN_ma_set_addr_map)
 	begin
-	  v__h9750 = $stime;
+	  v__h15618 = $stime;
 	  #0;
 	end
-    v__h9744 = v__h9750 / 32'd10;
+    v__h15612 = v__h15618 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (EN_ma_set_addr_map)
 	$display("%0d: AWS_DDR4_Adapter.ma_set_addr_map: addr_base %0h lim %0h",
-		 v__h9744,
+		 v__h15612,
 		 ma_set_addr_map_addr_base,
 		 ma_set_addr_map_addr_lim);
     if (RST_N != `BSV_RESET_VALUE)
@@ -1594,54 +2048,50 @@ module mkAWS_DDR4_Adapter(CLK,
 	$display("AWS_DDR4_Adapater.ma_ddr4_ready; start serving requests.");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  rg_watch_tohost_95_AND_f_reqs_rv_port0__read___ETC___d201 &&
+	  rg_watch_tohost_02_AND_f_reqs_rv_port0__read___ETC___d308 &&
 	  rg_status != 8'd1)
 	begin
-	  v__h7232 = $stime;
+	  v__h12651 = $stime;
 	  #0;
 	end
-    v__h7226 = v__h7232 / 32'd10;
+    v__h12645 = v__h12651 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  rg_watch_tohost_95_AND_f_reqs_rv_port0__read___ETC___d201 &&
+	  rg_watch_tohost_02_AND_f_reqs_rv_port0__read___ETC___d308 &&
 	  rg_status != 8'd1)
 	$display("%0d: AWS_DDR4_Adapter.rl_process_wr_req: addr 0x%0h (<tohost>) data 0x%0h",
-		 v__h7226,
+		 v__h12645,
 		 f_reqs_rv[164:101],
 		 f_reqs_rv[63:0]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  rg_watch_tohost_95_AND_f_reqs_rv_port0__read___ETC___d201 &&
+	  rg_watch_tohost_02_AND_f_reqs_rv_port0__read___ETC___d308 &&
 	  rg_status != 8'd1 &&
 	  f_reqs_rv[63:1] == 63'd0)
 	$display("PASS ISA Test");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  rg_watch_tohost_95_AND_f_reqs_rv_port0__read___ETC___d201 &&
+	  rg_watch_tohost_02_AND_f_reqs_rv_port0__read___ETC___d308 &&
 	  rg_status != 8'd1 &&
 	  f_reqs_rv[63:1] != 63'd0)
-	$display("FAIL ISA Test, sub-test number %0d", exit_value__h7270);
-    if (RST_N != `BSV_RESET_VALUE)
-      if (master_xactor_f_wr_resp$EMPTY_N &&
-	  master_xactor_f_wr_resp$D_OUT[1:0] != 2'b0)
-	$finish(32'd1);
+	$display("FAIL ISA Test, sub-test number %0d", exit_value__h12689);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_rd_address)
 	begin
-	  v__h7854 = $stime;
+	  v__h13400 = $stime;
 	  #0;
 	end
-    v__h7848 = v__h7854 / 32'd10;
+    v__h13394 = v__h13400 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_rd_address)
-	$write("%0d: ERROR: AWS_DDR4_Adapter:", v__h7848);
+	$write("%0d: ERROR: AWS_DDR4_Adapter:", v__h13394);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_rd_address &&
-	  NOT_f_reqs_rv_port0__read__6_BITS_92_TO_90_0_E_ETC___d246)
+	  NOT_f_reqs_rv_port0__read__22_BITS_92_TO_90_37_ETC___d354)
 	$display(" read-addr is misaligned");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_rd_address &&
-	  f_reqs_rv_port0__read__6_BITS_92_TO_90_0_EQ_0b_ETC___d77)
+	  f_reqs_rv_port0__read__22_BITS_92_TO_90_37_EQ__ETC___d174)
 	$display(" read-addr is out of bounds");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_rd_address)
@@ -1658,7 +2108,7 @@ module mkAWS_DDR4_Adapter(CLK,
       if (WILL_FIRE_RL_rl_invalid_rd_address) $write(", ", "id: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_rd_address)
-	$write("'h%h", f_reqs_rv[168:165]);
+	$write("'h%h", f_reqs_rv[179:165]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_rd_address) $write(", ", "addr: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -1672,17 +2122,34 @@ module mkAWS_DDR4_Adapter(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_rd_address) $write(", ", "size: ");
     if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_rl_invalid_rd_address) $write("AXI4_Size { ", "val: ");
+    if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_rd_address)
-	$write("'h%h", f_reqs_rv[92:90]);
+	$write("'h%h", f_reqs_rv[92:90], " }");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_rd_address) $write(", ", "burst: ");
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_rl_invalid_rd_address)
-	$write("'h%h", f_reqs_rv[89:88]);
+      if (WILL_FIRE_RL_rl_invalid_rd_address && f_reqs_rv[89:88] == 2'd0)
+	$write("FIXED");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_rl_invalid_rd_address && f_reqs_rv[89:88] == 2'd1)
+	$write("INCR");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_rl_invalid_rd_address && f_reqs_rv[89:88] == 2'd2)
+	$write("WRAP");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_rl_invalid_rd_address && f_reqs_rv[89:88] != 2'd0 &&
+	  f_reqs_rv[89:88] != 2'd1 &&
+	  f_reqs_rv[89:88] != 2'd2)
+	$write("Res");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_rd_address) $write(", ", "lock: ");
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_rl_invalid_rd_address) $write("'h%h", f_reqs_rv[87]);
+      if (WILL_FIRE_RL_rl_invalid_rd_address && f_reqs_rv[87])
+	$write("EXCLUSIVE");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_rl_invalid_rd_address && !f_reqs_rv[87])
+	$write("NORMAL");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_rd_address) $write(", ", "cache: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -1723,10 +2190,10 @@ module mkAWS_DDR4_Adapter(CLK,
       if (WILL_FIRE_RL_rl_invalid_rd_address) $write("     => ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_rd_address)
-	$write("AXI4_Rd_Data { ", "rid: ");
+	$write("AXI4_RFlit { ", "rid: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_rd_address)
-	$write("'h%h", f_reqs_rv[168:165]);
+	$write("'h%h", f_reqs_rv[179:165]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_rd_address) $write(", ", "rdata: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -1735,7 +2202,7 @@ module mkAWS_DDR4_Adapter(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_rd_address) $write(", ", "rresp: ");
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_rl_invalid_rd_address) $write("'h%h", 2'b10);
+      if (WILL_FIRE_RL_rl_invalid_rd_address) $write("SLVERR");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_rd_address) $write(", ", "rlast: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -1749,20 +2216,20 @@ module mkAWS_DDR4_Adapter(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_wr_address)
 	begin
-	  v__h8646 = $stime;
+	  v__h14266 = $stime;
 	  #0;
 	end
-    v__h8640 = v__h8646 / 32'd10;
+    v__h14260 = v__h14266 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_wr_address)
-	$write("%0d: ERROR: AWS_DDR4_Adapter:", v__h8640);
+	$write("%0d: ERROR: AWS_DDR4_Adapter:", v__h14260);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_wr_address &&
-	  NOT_f_reqs_rv_port0__read__6_BITS_92_TO_90_0_E_ETC___d246)
+	  NOT_f_reqs_rv_port0__read__22_BITS_92_TO_90_37_ETC___d354)
 	$display(" write-addr is misaligned");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_wr_address &&
-	  f_reqs_rv_port0__read__6_BITS_92_TO_90_0_EQ_0b_ETC___d77)
+	  f_reqs_rv_port0__read__22_BITS_92_TO_90_37_EQ__ETC___d174)
 	$display(" write-addr is out of bounds");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_wr_address)
@@ -1779,7 +2246,7 @@ module mkAWS_DDR4_Adapter(CLK,
       if (WILL_FIRE_RL_rl_invalid_wr_address) $write(", ", "id: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_wr_address)
-	$write("'h%h", f_reqs_rv[168:165]);
+	$write("'h%h", f_reqs_rv[179:165]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_wr_address) $write(", ", "addr: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -1793,17 +2260,34 @@ module mkAWS_DDR4_Adapter(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_wr_address) $write(", ", "size: ");
     if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_rl_invalid_wr_address) $write("AXI4_Size { ", "val: ");
+    if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_wr_address)
-	$write("'h%h", f_reqs_rv[92:90]);
+	$write("'h%h", f_reqs_rv[92:90], " }");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_wr_address) $write(", ", "burst: ");
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_rl_invalid_wr_address)
-	$write("'h%h", f_reqs_rv[89:88]);
+      if (WILL_FIRE_RL_rl_invalid_wr_address && f_reqs_rv[89:88] == 2'd0)
+	$write("FIXED");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_rl_invalid_wr_address && f_reqs_rv[89:88] == 2'd1)
+	$write("INCR");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_rl_invalid_wr_address && f_reqs_rv[89:88] == 2'd2)
+	$write("WRAP");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_rl_invalid_wr_address && f_reqs_rv[89:88] != 2'd0 &&
+	  f_reqs_rv[89:88] != 2'd1 &&
+	  f_reqs_rv[89:88] != 2'd2)
+	$write("Res");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_wr_address) $write(", ", "lock: ");
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_rl_invalid_wr_address) $write("'h%h", f_reqs_rv[87]);
+      if (WILL_FIRE_RL_rl_invalid_wr_address && f_reqs_rv[87])
+	$write("EXCLUSIVE");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_rl_invalid_wr_address && !f_reqs_rv[87])
+	$write("NORMAL");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_wr_address) $write(", ", "cache: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -1844,20 +2328,54 @@ module mkAWS_DDR4_Adapter(CLK,
       if (WILL_FIRE_RL_rl_invalid_wr_address) $write("     => ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_wr_address)
-	$write("AXI4_Wr_Resp { ", "bid: ");
+	$write("AXI4_BFlit { ", "bid: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_wr_address)
-	$write("'h%h", f_reqs_rv[168:165]);
+	$write("'h%h", f_reqs_rv[179:165]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_wr_address) $write(", ", "bresp: ");
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_rl_invalid_wr_address) $write("'h%h", 2'b10);
+      if (WILL_FIRE_RL_rl_invalid_wr_address) $write("SLVERR");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_wr_address) $write(", ", "buser: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_wr_address) $write("'h%h", 1'd0, " }");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_invalid_wr_address) $write("\n");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_slave_xactor_ug_slave_u_aw_warnDoPut)
+	$display("WARNING: putting into a Sink that can't be put into");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_slave_xactor_ug_slave_u_w_warnDoPut)
+	$display("WARNING: putting into a Sink that can't be put into");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_slave_xactor_ug_slave_u_b_warnDoDrop)
+	$display("WARNING: dropping from Source that can't be dropped from");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_slave_xactor_ug_slave_u_ar_warnDoPut)
+	$display("WARNING: putting into a Sink that can't be put into");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_slave_xactor_ug_slave_u_r_warnDoDrop)
+	$display("WARNING: dropping from Source that can't be dropped from");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_master_xactor_ug_master_u_aw_warnDoDrop)
+	$display("WARNING: dropping from Source that can't be dropped from");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_master_xactor_ug_master_u_w_warnDoDrop)
+	$display("WARNING: dropping from Source that can't be dropped from");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_master_xactor_ug_master_u_b_warnDoPut)
+	$display("WARNING: putting into a Sink that can't be put into");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_rl_drain_mem_wr_resps &&
+	  master_xactor_shim_bff_rv$port1__read[1:0] != 2'd0)
+	$finish(32'd1);
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_master_xactor_ug_master_u_ar_warnDoDrop)
+	$display("WARNING: dropping from Source that can't be dropped from");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_master_xactor_ug_master_u_r_warnDoPut)
+	$display("WARNING: putting into a Sink that can't be put into");
   end
   // synopsys translate_on
 endmodule  // mkAWS_DDR4_Adapter

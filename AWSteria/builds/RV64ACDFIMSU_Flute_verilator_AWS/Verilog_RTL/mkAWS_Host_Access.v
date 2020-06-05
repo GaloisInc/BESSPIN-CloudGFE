@@ -6,51 +6,53 @@
 //
 // Ports:
 // Name                         I/O  size props
-// slave_awready                  O     1 reg
-// slave_wready                   O     1 reg
-// slave_bvalid                   O     1 reg
-// slave_bid                      O     4 reg
-// slave_bresp                    O     2 reg
-// slave_arready                  O     1 reg
-// slave_rvalid                   O     1 reg
-// slave_rid                      O     4 reg
-// slave_rdata                    O    64 reg
-// slave_rresp                    O     2 reg
-// slave_rlast                    O     1 reg
+// slave_awready                  O     1
+// slave_wready                   O     1
+// slave_bid                      O     7
+// slave_bresp                    O     2
+// slave_bvalid                   O     1
+// slave_arready                  O     1
+// slave_rid                      O     7
+// slave_rdata                    O    64
+// slave_rresp                    O     2
+// slave_rlast                    O     1
+// slave_ruser                    O     1
+// slave_rvalid                   O     1
 // to_aws_host_get                O    32 reg
 // RDY_to_aws_host_get            O     1 reg
 // RDY_from_aws_host_put          O     1 reg
 // CLK                            I     1 clock
 // RST_N                          I     1 reset
-// slave_awvalid                  I     1
-// slave_awid                     I     4 reg
-// slave_awaddr                   I    64 reg
-// slave_awlen                    I     8 reg
-// slave_awsize                   I     3 reg
-// slave_awburst                  I     2 reg
-// slave_awlock                   I     1 reg
-// slave_awcache                  I     4 reg
-// slave_awprot                   I     3 reg
-// slave_awqos                    I     4 reg
-// slave_awregion                 I     4 reg
-// slave_wvalid                   I     1
-// slave_wdata                    I    64 reg
-// slave_wstrb                    I     8 reg
-// slave_wlast                    I     1 reg
+// slave_awid                     I     7
+// slave_awaddr                   I    64
+// slave_awlen                    I     8
+// slave_awsize                   I     3
+// slave_awburst                  I     2
+// slave_awlock                   I     1
+// slave_awcache                  I     4
+// slave_awprot                   I     3
+// slave_awqos                    I     4
+// slave_awregion                 I     4
+// slave_wdata                    I    64
+// slave_wstrb                    I     8
+// slave_wlast                    I     1
+// slave_wuser                    I     1
 // slave_bready                   I     1
-// slave_arvalid                  I     1
-// slave_arid                     I     4 reg
-// slave_araddr                   I    64 reg
-// slave_arlen                    I     8 reg
-// slave_arsize                   I     3 reg
-// slave_arburst                  I     2 reg
-// slave_arlock                   I     1 reg
-// slave_arcache                  I     4 reg
-// slave_arprot                   I     3 reg
-// slave_arqos                    I     4 reg
-// slave_arregion                 I     4 reg
+// slave_arid                     I     7
+// slave_araddr                   I    64
+// slave_arlen                    I     8
+// slave_arsize                   I     3
+// slave_arburst                  I     2
+// slave_arlock                   I     1
+// slave_arcache                  I     4
+// slave_arprot                   I     3
+// slave_arqos                    I     4
+// slave_arregion                 I     4
 // slave_rready                   I     1
 // from_aws_host_put              I    32 reg
+// slave_awvalid                  I     1
+// slave_wvalid                   I     1
+// slave_arvalid                  I     1
 // EN_from_aws_host_put           I     1
 // EN_to_aws_host_get             I     1
 //
@@ -74,7 +76,6 @@
 module mkAWS_Host_Access(CLK,
 			 RST_N,
 
-			 slave_awvalid,
 			 slave_awid,
 			 slave_awaddr,
 			 slave_awlen,
@@ -85,25 +86,26 @@ module mkAWS_Host_Access(CLK,
 			 slave_awprot,
 			 slave_awqos,
 			 slave_awregion,
+			 slave_awvalid,
 
 			 slave_awready,
 
-			 slave_wvalid,
 			 slave_wdata,
 			 slave_wstrb,
 			 slave_wlast,
+			 slave_wuser,
+			 slave_wvalid,
 
 			 slave_wready,
-
-			 slave_bvalid,
 
 			 slave_bid,
 
 			 slave_bresp,
 
+			 slave_bvalid,
+
 			 slave_bready,
 
-			 slave_arvalid,
 			 slave_arid,
 			 slave_araddr,
 			 slave_arlen,
@@ -114,10 +116,9 @@ module mkAWS_Host_Access(CLK,
 			 slave_arprot,
 			 slave_arqos,
 			 slave_arregion,
+			 slave_arvalid,
 
 			 slave_arready,
-
-			 slave_rvalid,
 
 			 slave_rid,
 
@@ -126,6 +127,10 @@ module mkAWS_Host_Access(CLK,
 			 slave_rresp,
 
 			 slave_rlast,
+
+			 slave_ruser,
+
+			 slave_rvalid,
 
 			 slave_rready,
 
@@ -139,9 +144,8 @@ module mkAWS_Host_Access(CLK,
   input  CLK;
   input  RST_N;
 
-  // action method slave_m_awvalid
-  input  slave_awvalid;
-  input  [3 : 0] slave_awid;
+  // action method slave_aw_awflit
+  input  [6 : 0] slave_awid;
   input  [63 : 0] slave_awaddr;
   input  [7 : 0] slave_awlen;
   input  [2 : 0] slave_awsize;
@@ -151,36 +155,37 @@ module mkAWS_Host_Access(CLK,
   input  [2 : 0] slave_awprot;
   input  [3 : 0] slave_awqos;
   input  [3 : 0] slave_awregion;
+  input  slave_awvalid;
 
-  // value method slave_m_awready
+  // value method slave_aw_awready
   output slave_awready;
 
-  // action method slave_m_wvalid
-  input  slave_wvalid;
+  // action method slave_w_wflit
   input  [63 : 0] slave_wdata;
   input  [7 : 0] slave_wstrb;
   input  slave_wlast;
+  input  slave_wuser;
+  input  slave_wvalid;
 
-  // value method slave_m_wready
+  // value method slave_w_wready
   output slave_wready;
 
-  // value method slave_m_bvalid
-  output slave_bvalid;
+  // value method slave_b_bid
+  output [6 : 0] slave_bid;
 
-  // value method slave_m_bid
-  output [3 : 0] slave_bid;
-
-  // value method slave_m_bresp
+  // value method slave_b_bresp
   output [1 : 0] slave_bresp;
 
-  // value method slave_m_buser
+  // value method slave_b_buser
 
-  // action method slave_m_bready
+  // value method slave_b_bvalid
+  output slave_bvalid;
+
+  // action method slave_b_bready
   input  slave_bready;
 
-  // action method slave_m_arvalid
-  input  slave_arvalid;
-  input  [3 : 0] slave_arid;
+  // action method slave_ar_arflit
+  input  [6 : 0] slave_arid;
   input  [63 : 0] slave_araddr;
   input  [7 : 0] slave_arlen;
   input  [2 : 0] slave_arsize;
@@ -190,28 +195,30 @@ module mkAWS_Host_Access(CLK,
   input  [2 : 0] slave_arprot;
   input  [3 : 0] slave_arqos;
   input  [3 : 0] slave_arregion;
+  input  slave_arvalid;
 
-  // value method slave_m_arready
+  // value method slave_ar_arready
   output slave_arready;
 
-  // value method slave_m_rvalid
-  output slave_rvalid;
+  // value method slave_r_rid
+  output [6 : 0] slave_rid;
 
-  // value method slave_m_rid
-  output [3 : 0] slave_rid;
-
-  // value method slave_m_rdata
+  // value method slave_r_rdata
   output [63 : 0] slave_rdata;
 
-  // value method slave_m_rresp
+  // value method slave_r_rresp
   output [1 : 0] slave_rresp;
 
-  // value method slave_m_rlast
+  // value method slave_r_rlast
   output slave_rlast;
 
-  // value method slave_m_ruser
+  // value method slave_r_ruser
+  output slave_ruser;
 
-  // action method slave_m_rready
+  // value method slave_r_rvalid
+  output slave_rvalid;
+
+  // action method slave_r_rready
   input  slave_rready;
 
   // actionvalue method to_aws_host_get
@@ -227,7 +234,7 @@ module mkAWS_Host_Access(CLK,
   // signals for module outputs
   wire [63 : 0] slave_rdata;
   wire [31 : 0] to_aws_host_get;
-  wire [3 : 0] slave_bid, slave_rid;
+  wire [6 : 0] slave_bid, slave_rid;
   wire [1 : 0] slave_bresp, slave_rresp;
   wire RDY_from_aws_host_put,
        RDY_to_aws_host_get,
@@ -235,8 +242,44 @@ module mkAWS_Host_Access(CLK,
        slave_awready,
        slave_bvalid,
        slave_rlast,
+       slave_ruser,
        slave_rvalid,
        slave_wready;
+
+  // inlined wires
+  wire [100 : 0] slave_xactor_shim_arff_rv$port0__write_1,
+		 slave_xactor_shim_arff_rv$port1__read,
+		 slave_xactor_shim_arff_rv$port2__read,
+		 slave_xactor_shim_arff_rv$port3__read,
+		 slave_xactor_shim_awff_rv$port0__write_1,
+		 slave_xactor_shim_awff_rv$port1__read,
+		 slave_xactor_shim_awff_rv$port2__read,
+		 slave_xactor_shim_awff_rv$port3__read;
+  wire [99 : 0] slave_xactor_ug_slave_u_ar_putWire$wget,
+		slave_xactor_ug_slave_u_aw_putWire$wget;
+  wire [75 : 0] slave_xactor_shim_rff_rv$port0__write_1,
+		slave_xactor_shim_rff_rv$port1__read,
+		slave_xactor_shim_rff_rv$port2__read,
+		slave_xactor_shim_rff_rv$port3__read;
+  wire [74 : 0] slave_xactor_shim_wff_rv$port0__write_1,
+		slave_xactor_shim_wff_rv$port1__read,
+		slave_xactor_shim_wff_rv$port2__read,
+		slave_xactor_shim_wff_rv$port3__read;
+  wire [73 : 0] slave_xactor_ug_slave_u_w_putWire$wget;
+  wire [9 : 0] slave_xactor_shim_bff_rv$port0__write_1,
+	       slave_xactor_shim_bff_rv$port1__read,
+	       slave_xactor_shim_bff_rv$port2__read,
+	       slave_xactor_shim_bff_rv$port3__read;
+  wire slave_xactor_shim_arff_rv$EN_port1__write,
+       slave_xactor_shim_awff_rv$EN_port1__write,
+       slave_xactor_shim_bff_rv$EN_port0__write,
+       slave_xactor_shim_rff_rv$EN_port0__write,
+       slave_xactor_shim_wff_rv$EN_port1__write,
+       slave_xactor_ug_slave_u_ar_putWire$whas,
+       slave_xactor_ug_slave_u_aw_putWire$whas,
+       slave_xactor_ug_slave_u_b_dropWire$whas,
+       slave_xactor_ug_slave_u_r_dropWire$whas,
+       slave_xactor_ug_slave_u_w_putWire$whas;
 
   // register rg_received
   reg [7 : 0] rg_received;
@@ -252,6 +295,35 @@ module mkAWS_Host_Access(CLK,
   reg [7 : 0] rg_sent;
   wire [7 : 0] rg_sent$D_IN;
   wire rg_sent$EN;
+
+  // register slave_xactor_clearing
+  reg slave_xactor_clearing;
+  wire slave_xactor_clearing$D_IN, slave_xactor_clearing$EN;
+
+  // register slave_xactor_shim_arff_rv
+  reg [100 : 0] slave_xactor_shim_arff_rv;
+  wire [100 : 0] slave_xactor_shim_arff_rv$D_IN;
+  wire slave_xactor_shim_arff_rv$EN;
+
+  // register slave_xactor_shim_awff_rv
+  reg [100 : 0] slave_xactor_shim_awff_rv;
+  wire [100 : 0] slave_xactor_shim_awff_rv$D_IN;
+  wire slave_xactor_shim_awff_rv$EN;
+
+  // register slave_xactor_shim_bff_rv
+  reg [9 : 0] slave_xactor_shim_bff_rv;
+  wire [9 : 0] slave_xactor_shim_bff_rv$D_IN;
+  wire slave_xactor_shim_bff_rv$EN;
+
+  // register slave_xactor_shim_rff_rv
+  reg [75 : 0] slave_xactor_shim_rff_rv;
+  wire [75 : 0] slave_xactor_shim_rff_rv$D_IN;
+  wire slave_xactor_shim_rff_rv$EN;
+
+  // register slave_xactor_shim_wff_rv
+  reg [74 : 0] slave_xactor_shim_wff_rv;
+  wire [74 : 0] slave_xactor_shim_wff_rv$D_IN;
+  wire slave_xactor_shim_wff_rv$EN;
 
   // ports of submodule f_from_aws_host
   wire [31 : 0] f_from_aws_host$D_IN, f_from_aws_host$D_OUT;
@@ -288,46 +360,6 @@ module mkAWS_Host_Access(CLK,
        f_to_aws_host$ENQ,
        f_to_aws_host$FULL_N;
 
-  // ports of submodule slave_xactor_f_rd_addr
-  wire [96 : 0] slave_xactor_f_rd_addr$D_IN, slave_xactor_f_rd_addr$D_OUT;
-  wire slave_xactor_f_rd_addr$CLR,
-       slave_xactor_f_rd_addr$DEQ,
-       slave_xactor_f_rd_addr$EMPTY_N,
-       slave_xactor_f_rd_addr$ENQ,
-       slave_xactor_f_rd_addr$FULL_N;
-
-  // ports of submodule slave_xactor_f_rd_data
-  wire [70 : 0] slave_xactor_f_rd_data$D_IN, slave_xactor_f_rd_data$D_OUT;
-  wire slave_xactor_f_rd_data$CLR,
-       slave_xactor_f_rd_data$DEQ,
-       slave_xactor_f_rd_data$EMPTY_N,
-       slave_xactor_f_rd_data$ENQ,
-       slave_xactor_f_rd_data$FULL_N;
-
-  // ports of submodule slave_xactor_f_wr_addr
-  wire [96 : 0] slave_xactor_f_wr_addr$D_IN, slave_xactor_f_wr_addr$D_OUT;
-  wire slave_xactor_f_wr_addr$CLR,
-       slave_xactor_f_wr_addr$DEQ,
-       slave_xactor_f_wr_addr$EMPTY_N,
-       slave_xactor_f_wr_addr$ENQ,
-       slave_xactor_f_wr_addr$FULL_N;
-
-  // ports of submodule slave_xactor_f_wr_data
-  wire [72 : 0] slave_xactor_f_wr_data$D_IN, slave_xactor_f_wr_data$D_OUT;
-  wire slave_xactor_f_wr_data$CLR,
-       slave_xactor_f_wr_data$DEQ,
-       slave_xactor_f_wr_data$EMPTY_N,
-       slave_xactor_f_wr_data$ENQ,
-       slave_xactor_f_wr_data$FULL_N;
-
-  // ports of submodule slave_xactor_f_wr_resp
-  wire [5 : 0] slave_xactor_f_wr_resp$D_IN, slave_xactor_f_wr_resp$D_OUT;
-  wire slave_xactor_f_wr_resp$CLR,
-       slave_xactor_f_wr_resp$DEQ,
-       slave_xactor_f_wr_resp$EMPTY_N,
-       slave_xactor_f_wr_resp$ENQ,
-       slave_xactor_f_wr_resp$FULL_N;
-
   // rule scheduling signals
   wire CAN_FIRE_RL_rl_distribute_from_aws_host,
        CAN_FIRE_RL_rl_forward_rd_addr,
@@ -335,12 +367,25 @@ module mkAWS_Host_Access(CLK,
        CAN_FIRE_RL_rl_forward_wr_addr,
        CAN_FIRE_RL_rl_forward_wr_data,
        CAN_FIRE_RL_rl_unserialize_from_aws_host,
+       CAN_FIRE_RL_slave_xactor_do_clear,
+       CAN_FIRE_RL_slave_xactor_ug_slave_u_ar_doPut,
+       CAN_FIRE_RL_slave_xactor_ug_slave_u_ar_warnDoPut,
+       CAN_FIRE_RL_slave_xactor_ug_slave_u_aw_doPut,
+       CAN_FIRE_RL_slave_xactor_ug_slave_u_aw_warnDoPut,
+       CAN_FIRE_RL_slave_xactor_ug_slave_u_b_doDrop,
+       CAN_FIRE_RL_slave_xactor_ug_slave_u_b_setPeek,
+       CAN_FIRE_RL_slave_xactor_ug_slave_u_b_warnDoDrop,
+       CAN_FIRE_RL_slave_xactor_ug_slave_u_r_doDrop,
+       CAN_FIRE_RL_slave_xactor_ug_slave_u_r_setPeek,
+       CAN_FIRE_RL_slave_xactor_ug_slave_u_r_warnDoDrop,
+       CAN_FIRE_RL_slave_xactor_ug_slave_u_w_doPut,
+       CAN_FIRE_RL_slave_xactor_ug_slave_u_w_warnDoPut,
        CAN_FIRE_from_aws_host_put,
-       CAN_FIRE_slave_m_arvalid,
-       CAN_FIRE_slave_m_awvalid,
-       CAN_FIRE_slave_m_bready,
-       CAN_FIRE_slave_m_rready,
-       CAN_FIRE_slave_m_wvalid,
+       CAN_FIRE_slave_ar_arflit,
+       CAN_FIRE_slave_aw_awflit,
+       CAN_FIRE_slave_b_bready,
+       CAN_FIRE_slave_r_rready,
+       CAN_FIRE_slave_w_wflit,
        CAN_FIRE_to_aws_host_get,
        WILL_FIRE_RL_rl_distribute_from_aws_host,
        WILL_FIRE_RL_rl_forward_rd_addr,
@@ -348,12 +393,25 @@ module mkAWS_Host_Access(CLK,
        WILL_FIRE_RL_rl_forward_wr_addr,
        WILL_FIRE_RL_rl_forward_wr_data,
        WILL_FIRE_RL_rl_unserialize_from_aws_host,
+       WILL_FIRE_RL_slave_xactor_do_clear,
+       WILL_FIRE_RL_slave_xactor_ug_slave_u_ar_doPut,
+       WILL_FIRE_RL_slave_xactor_ug_slave_u_ar_warnDoPut,
+       WILL_FIRE_RL_slave_xactor_ug_slave_u_aw_doPut,
+       WILL_FIRE_RL_slave_xactor_ug_slave_u_aw_warnDoPut,
+       WILL_FIRE_RL_slave_xactor_ug_slave_u_b_doDrop,
+       WILL_FIRE_RL_slave_xactor_ug_slave_u_b_setPeek,
+       WILL_FIRE_RL_slave_xactor_ug_slave_u_b_warnDoDrop,
+       WILL_FIRE_RL_slave_xactor_ug_slave_u_r_doDrop,
+       WILL_FIRE_RL_slave_xactor_ug_slave_u_r_setPeek,
+       WILL_FIRE_RL_slave_xactor_ug_slave_u_r_warnDoDrop,
+       WILL_FIRE_RL_slave_xactor_ug_slave_u_w_doPut,
+       WILL_FIRE_RL_slave_xactor_ug_slave_u_w_warnDoPut,
        WILL_FIRE_from_aws_host_put,
-       WILL_FIRE_slave_m_arvalid,
-       WILL_FIRE_slave_m_awvalid,
-       WILL_FIRE_slave_m_bready,
-       WILL_FIRE_slave_m_rready,
-       WILL_FIRE_slave_m_wvalid,
+       WILL_FIRE_slave_ar_arflit,
+       WILL_FIRE_slave_aw_awflit,
+       WILL_FIRE_slave_b_bready,
+       WILL_FIRE_slave_r_rready,
+       WILL_FIRE_slave_w_wflit,
        WILL_FIRE_to_aws_host_get;
 
   // inputs to muxes for submodule ports
@@ -362,61 +420,74 @@ module mkAWS_Host_Access(CLK,
 		 MUX_f_req_bufs_to_aws_host$enq_1__VAL_3;
 
   // remaining internal signals
-  wire [7 : 0] x__h3229, x__h3970;
-  wire rg_sent_6_PLUS_1_8_EQ_f_req_bufs_to_aws_host_f_ETC___d30;
+  wire [74 : 0] slave_xactor_shim_rff_rvport1__read_BITS_74_TO_0__q2;
+  wire [8 : 0] slave_xactor_shim_bff_rvport1__read_BITS_8_TO_0__q1;
+  wire [7 : 0] x__h5912, x__h6653;
+  wire IF_f_rsp_bufs_from_aws_host_first__06_BIT_75_0_ETC___d116,
+       rg_sent_5_PLUS_1_7_EQ_f_req_bufs_to_aws_host_f_ETC___d79;
 
-  // action method slave_m_awvalid
-  assign CAN_FIRE_slave_m_awvalid = 1'd1 ;
-  assign WILL_FIRE_slave_m_awvalid = 1'd1 ;
+  // action method slave_aw_awflit
+  assign CAN_FIRE_slave_aw_awflit = 1'd1 ;
+  assign WILL_FIRE_slave_aw_awflit = slave_awvalid ;
 
-  // value method slave_m_awready
-  assign slave_awready = slave_xactor_f_wr_addr$FULL_N ;
+  // value method slave_aw_awready
+  assign slave_awready = !slave_xactor_shim_awff_rv[100] ;
 
-  // action method slave_m_wvalid
-  assign CAN_FIRE_slave_m_wvalid = 1'd1 ;
-  assign WILL_FIRE_slave_m_wvalid = 1'd1 ;
+  // action method slave_w_wflit
+  assign CAN_FIRE_slave_w_wflit = 1'd1 ;
+  assign WILL_FIRE_slave_w_wflit = slave_wvalid ;
 
-  // value method slave_m_wready
-  assign slave_wready = slave_xactor_f_wr_data$FULL_N ;
+  // value method slave_w_wready
+  assign slave_wready = !slave_xactor_shim_wff_rv[74] ;
 
-  // value method slave_m_bvalid
-  assign slave_bvalid = slave_xactor_f_wr_resp$EMPTY_N ;
+  // value method slave_b_bid
+  assign slave_bid =
+	     slave_xactor_shim_bff_rvport1__read_BITS_8_TO_0__q1[8:2] ;
 
-  // value method slave_m_bid
-  assign slave_bid = slave_xactor_f_wr_resp$D_OUT[5:2] ;
+  // value method slave_b_bresp
+  assign slave_bresp =
+	     slave_xactor_shim_bff_rvport1__read_BITS_8_TO_0__q1[1:0] ;
 
-  // value method slave_m_bresp
-  assign slave_bresp = slave_xactor_f_wr_resp$D_OUT[1:0] ;
+  // value method slave_b_bvalid
+  assign slave_bvalid = CAN_FIRE_RL_slave_xactor_ug_slave_u_b_setPeek ;
 
-  // action method slave_m_bready
-  assign CAN_FIRE_slave_m_bready = 1'd1 ;
-  assign WILL_FIRE_slave_m_bready = 1'd1 ;
+  // action method slave_b_bready
+  assign CAN_FIRE_slave_b_bready = 1'd1 ;
+  assign WILL_FIRE_slave_b_bready = 1'd1 ;
 
-  // action method slave_m_arvalid
-  assign CAN_FIRE_slave_m_arvalid = 1'd1 ;
-  assign WILL_FIRE_slave_m_arvalid = 1'd1 ;
+  // action method slave_ar_arflit
+  assign CAN_FIRE_slave_ar_arflit = 1'd1 ;
+  assign WILL_FIRE_slave_ar_arflit = slave_arvalid ;
 
-  // value method slave_m_arready
-  assign slave_arready = slave_xactor_f_rd_addr$FULL_N ;
+  // value method slave_ar_arready
+  assign slave_arready = !slave_xactor_shim_arff_rv[100] ;
 
-  // value method slave_m_rvalid
-  assign slave_rvalid = slave_xactor_f_rd_data$EMPTY_N ;
+  // value method slave_r_rid
+  assign slave_rid =
+	     slave_xactor_shim_rff_rvport1__read_BITS_74_TO_0__q2[74:68] ;
 
-  // value method slave_m_rid
-  assign slave_rid = slave_xactor_f_rd_data$D_OUT[70:67] ;
+  // value method slave_r_rdata
+  assign slave_rdata =
+	     slave_xactor_shim_rff_rvport1__read_BITS_74_TO_0__q2[67:4] ;
 
-  // value method slave_m_rdata
-  assign slave_rdata = slave_xactor_f_rd_data$D_OUT[66:3] ;
+  // value method slave_r_rresp
+  assign slave_rresp =
+	     slave_xactor_shim_rff_rvport1__read_BITS_74_TO_0__q2[3:2] ;
 
-  // value method slave_m_rresp
-  assign slave_rresp = slave_xactor_f_rd_data$D_OUT[2:1] ;
+  // value method slave_r_rlast
+  assign slave_rlast =
+	     slave_xactor_shim_rff_rvport1__read_BITS_74_TO_0__q2[1] ;
 
-  // value method slave_m_rlast
-  assign slave_rlast = slave_xactor_f_rd_data$D_OUT[0] ;
+  // value method slave_r_ruser
+  assign slave_ruser =
+	     slave_xactor_shim_rff_rvport1__read_BITS_74_TO_0__q2[0] ;
 
-  // action method slave_m_rready
-  assign CAN_FIRE_slave_m_rready = 1'd1 ;
-  assign WILL_FIRE_slave_m_rready = 1'd1 ;
+  // value method slave_r_rvalid
+  assign slave_rvalid = CAN_FIRE_RL_slave_xactor_ug_slave_u_r_setPeek ;
+
+  // action method slave_r_rready
+  assign CAN_FIRE_slave_r_rready = 1'd1 ;
+  assign WILL_FIRE_slave_r_rready = 1'd1 ;
 
   // actionvalue method to_aws_host_get
   assign to_aws_host_get = f_to_aws_host$D_OUT ;
@@ -475,81 +546,6 @@ module mkAWS_Host_Access(CLK,
 							 .FULL_N(f_to_aws_host$FULL_N),
 							 .EMPTY_N(f_to_aws_host$EMPTY_N));
 
-  // submodule slave_xactor_f_rd_addr
-  FIFO2 #(.width(32'd97), .guarded(32'd1)) slave_xactor_f_rd_addr(.RST(RST_N),
-								  .CLK(CLK),
-								  .D_IN(slave_xactor_f_rd_addr$D_IN),
-								  .ENQ(slave_xactor_f_rd_addr$ENQ),
-								  .DEQ(slave_xactor_f_rd_addr$DEQ),
-								  .CLR(slave_xactor_f_rd_addr$CLR),
-								  .D_OUT(slave_xactor_f_rd_addr$D_OUT),
-								  .FULL_N(slave_xactor_f_rd_addr$FULL_N),
-								  .EMPTY_N(slave_xactor_f_rd_addr$EMPTY_N));
-
-  // submodule slave_xactor_f_rd_data
-  FIFO2 #(.width(32'd71), .guarded(32'd1)) slave_xactor_f_rd_data(.RST(RST_N),
-								  .CLK(CLK),
-								  .D_IN(slave_xactor_f_rd_data$D_IN),
-								  .ENQ(slave_xactor_f_rd_data$ENQ),
-								  .DEQ(slave_xactor_f_rd_data$DEQ),
-								  .CLR(slave_xactor_f_rd_data$CLR),
-								  .D_OUT(slave_xactor_f_rd_data$D_OUT),
-								  .FULL_N(slave_xactor_f_rd_data$FULL_N),
-								  .EMPTY_N(slave_xactor_f_rd_data$EMPTY_N));
-
-  // submodule slave_xactor_f_wr_addr
-  FIFO2 #(.width(32'd97), .guarded(32'd1)) slave_xactor_f_wr_addr(.RST(RST_N),
-								  .CLK(CLK),
-								  .D_IN(slave_xactor_f_wr_addr$D_IN),
-								  .ENQ(slave_xactor_f_wr_addr$ENQ),
-								  .DEQ(slave_xactor_f_wr_addr$DEQ),
-								  .CLR(slave_xactor_f_wr_addr$CLR),
-								  .D_OUT(slave_xactor_f_wr_addr$D_OUT),
-								  .FULL_N(slave_xactor_f_wr_addr$FULL_N),
-								  .EMPTY_N(slave_xactor_f_wr_addr$EMPTY_N));
-
-  // submodule slave_xactor_f_wr_data
-  FIFO2 #(.width(32'd73), .guarded(32'd1)) slave_xactor_f_wr_data(.RST(RST_N),
-								  .CLK(CLK),
-								  .D_IN(slave_xactor_f_wr_data$D_IN),
-								  .ENQ(slave_xactor_f_wr_data$ENQ),
-								  .DEQ(slave_xactor_f_wr_data$DEQ),
-								  .CLR(slave_xactor_f_wr_data$CLR),
-								  .D_OUT(slave_xactor_f_wr_data$D_OUT),
-								  .FULL_N(slave_xactor_f_wr_data$FULL_N),
-								  .EMPTY_N(slave_xactor_f_wr_data$EMPTY_N));
-
-  // submodule slave_xactor_f_wr_resp
-  FIFO2 #(.width(32'd6), .guarded(32'd1)) slave_xactor_f_wr_resp(.RST(RST_N),
-								 .CLK(CLK),
-								 .D_IN(slave_xactor_f_wr_resp$D_IN),
-								 .ENQ(slave_xactor_f_wr_resp$ENQ),
-								 .DEQ(slave_xactor_f_wr_resp$DEQ),
-								 .CLR(slave_xactor_f_wr_resp$CLR),
-								 .D_OUT(slave_xactor_f_wr_resp$D_OUT),
-								 .FULL_N(slave_xactor_f_wr_resp$FULL_N),
-								 .EMPTY_N(slave_xactor_f_wr_resp$EMPTY_N));
-
-  // rule RL_rl_forward_rd_addr
-  assign CAN_FIRE_RL_rl_forward_rd_addr =
-	     slave_xactor_f_rd_addr$EMPTY_N && f_req_bufs_to_aws_host$FULL_N ;
-  assign WILL_FIRE_RL_rl_forward_rd_addr = CAN_FIRE_RL_rl_forward_rd_addr ;
-
-  // rule RL_rl_forward_wr_addr
-  assign CAN_FIRE_RL_rl_forward_wr_addr =
-	     f_req_bufs_to_aws_host$FULL_N && slave_xactor_f_wr_addr$EMPTY_N ;
-  assign WILL_FIRE_RL_rl_forward_wr_addr =
-	     CAN_FIRE_RL_rl_forward_wr_addr &&
-	     !WILL_FIRE_RL_rl_forward_rd_addr ;
-
-  // rule RL_rl_forward_wr_data
-  assign CAN_FIRE_RL_rl_forward_wr_data =
-	     f_req_bufs_to_aws_host$FULL_N && slave_xactor_f_wr_data$EMPTY_N ;
-  assign WILL_FIRE_RL_rl_forward_wr_data =
-	     CAN_FIRE_RL_rl_forward_wr_data &&
-	     !WILL_FIRE_RL_rl_forward_wr_addr &&
-	     !WILL_FIRE_RL_rl_forward_rd_addr ;
-
   // rule RL_rl_forward_to_aws_host
   assign CAN_FIRE_RL_rl_forward_to_aws_host =
 	     f_to_aws_host$FULL_N && f_req_bufs_to_aws_host$EMPTY_N ;
@@ -566,22 +562,255 @@ module mkAWS_Host_Access(CLK,
   // rule RL_rl_distribute_from_aws_host
   assign CAN_FIRE_RL_rl_distribute_from_aws_host =
 	     f_rsp_bufs_from_aws_host$EMPTY_N &&
-	     (f_rsp_bufs_from_aws_host$D_OUT[71] ?
-		slave_xactor_f_rd_data$FULL_N :
-		slave_xactor_f_wr_resp$FULL_N) ;
+	     IF_f_rsp_bufs_from_aws_host_first__06_BIT_75_0_ETC___d116 ;
   assign WILL_FIRE_RL_rl_distribute_from_aws_host =
 	     CAN_FIRE_RL_rl_distribute_from_aws_host ;
 
+  // rule RL_slave_xactor_ug_slave_u_aw_warnDoPut
+  assign CAN_FIRE_RL_slave_xactor_ug_slave_u_aw_warnDoPut =
+	     slave_xactor_ug_slave_u_aw_putWire$whas &&
+	     slave_xactor_shim_awff_rv[100] ;
+  assign WILL_FIRE_RL_slave_xactor_ug_slave_u_aw_warnDoPut =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_aw_warnDoPut ;
+
+  // rule RL_slave_xactor_ug_slave_u_aw_doPut
+  assign CAN_FIRE_RL_slave_xactor_ug_slave_u_aw_doPut =
+	     !slave_xactor_shim_awff_rv[100] &&
+	     slave_xactor_ug_slave_u_aw_putWire$whas ;
+  assign WILL_FIRE_RL_slave_xactor_ug_slave_u_aw_doPut =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_aw_doPut ;
+
+  // rule RL_rl_forward_wr_addr
+  assign CAN_FIRE_RL_rl_forward_wr_addr =
+	     !slave_xactor_clearing &&
+	     slave_xactor_shim_awff_rv$port1__read[100] &&
+	     f_req_bufs_to_aws_host$FULL_N ;
+  assign WILL_FIRE_RL_rl_forward_wr_addr = CAN_FIRE_RL_rl_forward_wr_addr ;
+
+  // rule RL_slave_xactor_ug_slave_u_w_warnDoPut
+  assign CAN_FIRE_RL_slave_xactor_ug_slave_u_w_warnDoPut =
+	     slave_xactor_ug_slave_u_w_putWire$whas &&
+	     slave_xactor_shim_wff_rv[74] ;
+  assign WILL_FIRE_RL_slave_xactor_ug_slave_u_w_warnDoPut =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_w_warnDoPut ;
+
+  // rule RL_slave_xactor_ug_slave_u_w_doPut
+  assign CAN_FIRE_RL_slave_xactor_ug_slave_u_w_doPut =
+	     !slave_xactor_shim_wff_rv[74] &&
+	     slave_xactor_ug_slave_u_w_putWire$whas ;
+  assign WILL_FIRE_RL_slave_xactor_ug_slave_u_w_doPut =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_w_doPut ;
+
+  // rule RL_rl_forward_wr_data
+  assign CAN_FIRE_RL_rl_forward_wr_data =
+	     !slave_xactor_clearing &&
+	     slave_xactor_shim_wff_rv$port1__read[74] &&
+	     f_req_bufs_to_aws_host$FULL_N ;
+  assign WILL_FIRE_RL_rl_forward_wr_data =
+	     CAN_FIRE_RL_rl_forward_wr_data &&
+	     !WILL_FIRE_RL_rl_forward_wr_addr ;
+
+  // rule RL_slave_xactor_ug_slave_u_b_setPeek
+  assign CAN_FIRE_RL_slave_xactor_ug_slave_u_b_setPeek =
+	     slave_xactor_shim_bff_rv$port1__read[9] ;
+  assign WILL_FIRE_RL_slave_xactor_ug_slave_u_b_setPeek =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_b_setPeek ;
+
+  // rule RL_slave_xactor_ug_slave_u_b_warnDoDrop
+  assign CAN_FIRE_RL_slave_xactor_ug_slave_u_b_warnDoDrop =
+	     slave_xactor_ug_slave_u_b_dropWire$whas &&
+	     !slave_xactor_shim_bff_rv$port1__read[9] ;
+  assign WILL_FIRE_RL_slave_xactor_ug_slave_u_b_warnDoDrop =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_b_warnDoDrop ;
+
+  // rule RL_slave_xactor_ug_slave_u_b_doDrop
+  assign CAN_FIRE_RL_slave_xactor_ug_slave_u_b_doDrop =
+	     slave_xactor_shim_bff_rv$port1__read[9] &&
+	     slave_xactor_ug_slave_u_b_dropWire$whas ;
+  assign WILL_FIRE_RL_slave_xactor_ug_slave_u_b_doDrop =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_b_doDrop ;
+
+  // rule RL_slave_xactor_ug_slave_u_ar_warnDoPut
+  assign CAN_FIRE_RL_slave_xactor_ug_slave_u_ar_warnDoPut =
+	     slave_xactor_ug_slave_u_ar_putWire$whas &&
+	     slave_xactor_shim_arff_rv[100] ;
+  assign WILL_FIRE_RL_slave_xactor_ug_slave_u_ar_warnDoPut =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_ar_warnDoPut ;
+
+  // rule RL_slave_xactor_ug_slave_u_ar_doPut
+  assign CAN_FIRE_RL_slave_xactor_ug_slave_u_ar_doPut =
+	     !slave_xactor_shim_arff_rv[100] &&
+	     slave_xactor_ug_slave_u_ar_putWire$whas ;
+  assign WILL_FIRE_RL_slave_xactor_ug_slave_u_ar_doPut =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_ar_doPut ;
+
+  // rule RL_rl_forward_rd_addr
+  assign CAN_FIRE_RL_rl_forward_rd_addr =
+	     !slave_xactor_clearing &&
+	     slave_xactor_shim_arff_rv$port1__read[100] &&
+	     f_req_bufs_to_aws_host$FULL_N ;
+  assign WILL_FIRE_RL_rl_forward_rd_addr =
+	     CAN_FIRE_RL_rl_forward_rd_addr &&
+	     !WILL_FIRE_RL_rl_forward_wr_data &&
+	     !WILL_FIRE_RL_rl_forward_wr_addr ;
+
+  // rule RL_slave_xactor_ug_slave_u_r_setPeek
+  assign CAN_FIRE_RL_slave_xactor_ug_slave_u_r_setPeek =
+	     slave_xactor_shim_rff_rv$port1__read[75] ;
+  assign WILL_FIRE_RL_slave_xactor_ug_slave_u_r_setPeek =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_r_setPeek ;
+
+  // rule RL_slave_xactor_ug_slave_u_r_warnDoDrop
+  assign CAN_FIRE_RL_slave_xactor_ug_slave_u_r_warnDoDrop =
+	     slave_xactor_ug_slave_u_r_dropWire$whas &&
+	     !slave_xactor_shim_rff_rv$port1__read[75] ;
+  assign WILL_FIRE_RL_slave_xactor_ug_slave_u_r_warnDoDrop =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_r_warnDoDrop ;
+
+  // rule RL_slave_xactor_ug_slave_u_r_doDrop
+  assign CAN_FIRE_RL_slave_xactor_ug_slave_u_r_doDrop =
+	     slave_xactor_shim_rff_rv$port1__read[75] &&
+	     slave_xactor_ug_slave_u_r_dropWire$whas ;
+  assign WILL_FIRE_RL_slave_xactor_ug_slave_u_r_doDrop =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_r_doDrop ;
+
+  // rule RL_slave_xactor_do_clear
+  assign CAN_FIRE_RL_slave_xactor_do_clear = slave_xactor_clearing ;
+  assign WILL_FIRE_RL_slave_xactor_do_clear = slave_xactor_clearing ;
+
   // inputs to muxes for submodule ports
   assign MUX_f_req_bufs_to_aws_host$enq_1__VAL_1 =
-	     { 39'h0200000002, slave_xactor_f_rd_addr$D_OUT } ;
+	     { 36'd1073741826, slave_xactor_shim_arff_rv$port1__read[99:0] } ;
   assign MUX_f_req_bufs_to_aws_host$enq_1__VAL_2 =
-	     { 39'h0200000000, slave_xactor_f_wr_addr$D_OUT } ;
+	     { 36'd1073741824, slave_xactor_shim_awff_rv$port1__read[99:0] } ;
   assign MUX_f_req_bufs_to_aws_host$enq_1__VAL_3 =
-	     { 63'h02000000012AAAAA, slave_xactor_f_wr_data$D_OUT } ;
+	     { 61'h00800000034AAAAA, slave_xactor_shim_wff_rv$port1__read } ;
+
+  // inlined wires
+  assign slave_xactor_ug_slave_u_aw_putWire$wget =
+	     { slave_awid,
+	       slave_awaddr,
+	       slave_awlen,
+	       slave_awsize,
+	       slave_awburst,
+	       slave_awlock,
+	       slave_awcache,
+	       slave_awprot,
+	       slave_awqos,
+	       slave_awregion } ;
+  assign slave_xactor_ug_slave_u_aw_putWire$whas =
+	     slave_awvalid && !slave_xactor_shim_awff_rv[100] ;
+  assign slave_xactor_ug_slave_u_w_putWire$wget =
+	     { slave_wdata, slave_wstrb, slave_wlast, slave_wuser } ;
+  assign slave_xactor_ug_slave_u_w_putWire$whas =
+	     slave_wvalid && !slave_xactor_shim_wff_rv[74] ;
+  assign slave_xactor_ug_slave_u_ar_putWire$wget =
+	     { slave_arid,
+	       slave_araddr,
+	       slave_arlen,
+	       slave_arsize,
+	       slave_arburst,
+	       slave_arlock,
+	       slave_arcache,
+	       slave_arprot,
+	       slave_arqos,
+	       slave_arregion } ;
+  assign slave_xactor_ug_slave_u_ar_putWire$whas =
+	     slave_arvalid && !slave_xactor_shim_arff_rv[100] ;
+  assign slave_xactor_ug_slave_u_b_dropWire$whas =
+	     slave_xactor_shim_bff_rv$port1__read[9] && slave_bready ;
+  assign slave_xactor_ug_slave_u_r_dropWire$whas =
+	     slave_xactor_shim_rff_rv$port1__read[75] && slave_rready ;
+  assign slave_xactor_shim_awff_rv$port0__write_1 =
+	     { 1'd1, slave_xactor_ug_slave_u_aw_putWire$wget } ;
+  assign slave_xactor_shim_awff_rv$port1__read =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_aw_doPut ?
+	       slave_xactor_shim_awff_rv$port0__write_1 :
+	       slave_xactor_shim_awff_rv ;
+  assign slave_xactor_shim_awff_rv$EN_port1__write =
+	     !slave_xactor_clearing &&
+	     slave_xactor_shim_awff_rv$port1__read[100] &&
+	     f_req_bufs_to_aws_host$FULL_N ;
+  assign slave_xactor_shim_awff_rv$port2__read =
+	     slave_xactor_shim_awff_rv$EN_port1__write ?
+	       101'h0AAAAAAAAAAAAAAAAAAAAAAAAA :
+	       slave_xactor_shim_awff_rv$port1__read ;
+  assign slave_xactor_shim_awff_rv$port3__read =
+	     slave_xactor_clearing ?
+	       101'h0AAAAAAAAAAAAAAAAAAAAAAAAA :
+	       slave_xactor_shim_awff_rv$port2__read ;
+  assign slave_xactor_shim_wff_rv$port0__write_1 =
+	     { 1'd1, slave_xactor_ug_slave_u_w_putWire$wget } ;
+  assign slave_xactor_shim_wff_rv$port1__read =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_w_doPut ?
+	       slave_xactor_shim_wff_rv$port0__write_1 :
+	       slave_xactor_shim_wff_rv ;
+  assign slave_xactor_shim_wff_rv$EN_port1__write =
+	     CAN_FIRE_RL_rl_forward_wr_data &&
+	     !WILL_FIRE_RL_rl_forward_wr_addr ;
+  assign slave_xactor_shim_wff_rv$port2__read =
+	     slave_xactor_shim_wff_rv$EN_port1__write ?
+	       75'h2AAAAAAAAAAAAAAAAAA :
+	       slave_xactor_shim_wff_rv$port1__read ;
+  assign slave_xactor_shim_wff_rv$port3__read =
+	     slave_xactor_clearing ?
+	       75'h2AAAAAAAAAAAAAAAAAA :
+	       slave_xactor_shim_wff_rv$port2__read ;
+  assign slave_xactor_shim_bff_rv$EN_port0__write =
+	     WILL_FIRE_RL_rl_distribute_from_aws_host &&
+	     !f_rsp_bufs_from_aws_host$D_OUT[75] ;
+  assign slave_xactor_shim_bff_rv$port0__write_1 =
+	     { 1'd1, f_rsp_bufs_from_aws_host$D_OUT[8:0] } ;
+  assign slave_xactor_shim_bff_rv$port1__read =
+	     slave_xactor_shim_bff_rv$EN_port0__write ?
+	       slave_xactor_shim_bff_rv$port0__write_1 :
+	       slave_xactor_shim_bff_rv ;
+  assign slave_xactor_shim_bff_rv$port2__read =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_b_doDrop ?
+	       10'd170 :
+	       slave_xactor_shim_bff_rv$port1__read ;
+  assign slave_xactor_shim_bff_rv$port3__read =
+	     slave_xactor_clearing ?
+	       10'd170 :
+	       slave_xactor_shim_bff_rv$port2__read ;
+  assign slave_xactor_shim_arff_rv$port0__write_1 =
+	     { 1'd1, slave_xactor_ug_slave_u_ar_putWire$wget } ;
+  assign slave_xactor_shim_arff_rv$port1__read =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_ar_doPut ?
+	       slave_xactor_shim_arff_rv$port0__write_1 :
+	       slave_xactor_shim_arff_rv ;
+  assign slave_xactor_shim_arff_rv$EN_port1__write =
+	     CAN_FIRE_RL_rl_forward_rd_addr &&
+	     !WILL_FIRE_RL_rl_forward_wr_data &&
+	     !WILL_FIRE_RL_rl_forward_wr_addr ;
+  assign slave_xactor_shim_arff_rv$port2__read =
+	     slave_xactor_shim_arff_rv$EN_port1__write ?
+	       101'h0AAAAAAAAAAAAAAAAAAAAAAAAA :
+	       slave_xactor_shim_arff_rv$port1__read ;
+  assign slave_xactor_shim_arff_rv$port3__read =
+	     slave_xactor_clearing ?
+	       101'h0AAAAAAAAAAAAAAAAAAAAAAAAA :
+	       slave_xactor_shim_arff_rv$port2__read ;
+  assign slave_xactor_shim_rff_rv$EN_port0__write =
+	     WILL_FIRE_RL_rl_distribute_from_aws_host &&
+	     f_rsp_bufs_from_aws_host$D_OUT[75] ;
+  assign slave_xactor_shim_rff_rv$port0__write_1 =
+	     { 1'd1, f_rsp_bufs_from_aws_host$D_OUT[74:0] } ;
+  assign slave_xactor_shim_rff_rv$port1__read =
+	     slave_xactor_shim_rff_rv$EN_port0__write ?
+	       slave_xactor_shim_rff_rv$port0__write_1 :
+	       slave_xactor_shim_rff_rv ;
+  assign slave_xactor_shim_rff_rv$port2__read =
+	     CAN_FIRE_RL_slave_xactor_ug_slave_u_r_doDrop ?
+	       76'h2AAAAAAAAAAAAAAAAAA :
+	       slave_xactor_shim_rff_rv$port1__read ;
+  assign slave_xactor_shim_rff_rv$port3__read =
+	     slave_xactor_clearing ?
+	       76'h2AAAAAAAAAAAAAAAAAA :
+	       slave_xactor_shim_rff_rv$port2__read ;
 
   // register rg_received
-  assign rg_received$D_IN = (rg_received == 8'd3) ? 8'd0 : x__h3970 ;
+  assign rg_received$D_IN = (rg_received == 8'd3) ? 8'd0 : x__h6653 ;
   assign rg_received$EN = CAN_FIRE_RL_rl_unserialize_from_aws_host ;
 
   // register rg_rsp_buf
@@ -602,10 +831,39 @@ module mkAWS_Host_Access(CLK,
 
   // register rg_sent
   assign rg_sent$D_IN =
-	     rg_sent_6_PLUS_1_8_EQ_f_req_bufs_to_aws_host_f_ETC___d30 ?
+	     rg_sent_5_PLUS_1_7_EQ_f_req_bufs_to_aws_host_f_ETC___d79 ?
 	       8'd0 :
-	       x__h3229 ;
+	       x__h5912 ;
   assign rg_sent$EN = CAN_FIRE_RL_rl_forward_to_aws_host ;
+
+  // register slave_xactor_clearing
+  assign slave_xactor_clearing$D_IN = 1'd0 ;
+  assign slave_xactor_clearing$EN = slave_xactor_clearing ;
+
+  // register slave_xactor_shim_arff_rv
+  assign slave_xactor_shim_arff_rv$D_IN =
+	     slave_xactor_shim_arff_rv$port3__read ;
+  assign slave_xactor_shim_arff_rv$EN = 1'b1 ;
+
+  // register slave_xactor_shim_awff_rv
+  assign slave_xactor_shim_awff_rv$D_IN =
+	     slave_xactor_shim_awff_rv$port3__read ;
+  assign slave_xactor_shim_awff_rv$EN = 1'b1 ;
+
+  // register slave_xactor_shim_bff_rv
+  assign slave_xactor_shim_bff_rv$D_IN =
+	     slave_xactor_shim_bff_rv$port3__read ;
+  assign slave_xactor_shim_bff_rv$EN = 1'b1 ;
+
+  // register slave_xactor_shim_rff_rv
+  assign slave_xactor_shim_rff_rv$D_IN =
+	     slave_xactor_shim_rff_rv$port3__read ;
+  assign slave_xactor_shim_rff_rv$EN = 1'b1 ;
+
+  // register slave_xactor_shim_wff_rv
+  assign slave_xactor_shim_wff_rv$D_IN =
+	     slave_xactor_shim_wff_rv$port3__read ;
+  assign slave_xactor_shim_wff_rv$EN = 1'b1 ;
 
   // submodule f_from_aws_host
   assign f_from_aws_host$D_IN = from_aws_host_put ;
@@ -641,7 +899,7 @@ module mkAWS_Host_Access(CLK,
 	     WILL_FIRE_RL_rl_forward_wr_data ;
   assign f_req_bufs_to_aws_host$DEQ =
 	     WILL_FIRE_RL_rl_forward_to_aws_host &&
-	     rg_sent_6_PLUS_1_8_EQ_f_req_bufs_to_aws_host_f_ETC___d30 ;
+	     rg_sent_5_PLUS_1_7_EQ_f_req_bufs_to_aws_host_f_ETC___d79 ;
   assign f_req_bufs_to_aws_host$CLR = 1'b0 ;
 
   // submodule f_rsp_bufs_from_aws_host
@@ -668,77 +926,19 @@ module mkAWS_Host_Access(CLK,
   assign f_to_aws_host$DEQ = EN_to_aws_host_get ;
   assign f_to_aws_host$CLR = 1'b0 ;
 
-  // submodule slave_xactor_f_rd_addr
-  assign slave_xactor_f_rd_addr$D_IN =
-	     { slave_arid,
-	       slave_araddr,
-	       slave_arlen,
-	       slave_arsize,
-	       slave_arburst,
-	       slave_arlock,
-	       slave_arcache,
-	       slave_arprot,
-	       slave_arqos,
-	       slave_arregion } ;
-  assign slave_xactor_f_rd_addr$ENQ =
-	     slave_arvalid && slave_xactor_f_rd_addr$FULL_N ;
-  assign slave_xactor_f_rd_addr$DEQ =
-	     slave_xactor_f_rd_addr$EMPTY_N && f_req_bufs_to_aws_host$FULL_N ;
-  assign slave_xactor_f_rd_addr$CLR = 1'b0 ;
-
-  // submodule slave_xactor_f_rd_data
-  assign slave_xactor_f_rd_data$D_IN = f_rsp_bufs_from_aws_host$D_OUT[70:0] ;
-  assign slave_xactor_f_rd_data$ENQ =
-	     WILL_FIRE_RL_rl_distribute_from_aws_host &&
-	     f_rsp_bufs_from_aws_host$D_OUT[71] ;
-  assign slave_xactor_f_rd_data$DEQ =
-	     slave_rready && slave_xactor_f_rd_data$EMPTY_N ;
-  assign slave_xactor_f_rd_data$CLR = 1'b0 ;
-
-  // submodule slave_xactor_f_wr_addr
-  assign slave_xactor_f_wr_addr$D_IN =
-	     { slave_awid,
-	       slave_awaddr,
-	       slave_awlen,
-	       slave_awsize,
-	       slave_awburst,
-	       slave_awlock,
-	       slave_awcache,
-	       slave_awprot,
-	       slave_awqos,
-	       slave_awregion } ;
-  assign slave_xactor_f_wr_addr$ENQ =
-	     slave_awvalid && slave_xactor_f_wr_addr$FULL_N ;
-  assign slave_xactor_f_wr_addr$DEQ =
-	     CAN_FIRE_RL_rl_forward_wr_addr &&
-	     !WILL_FIRE_RL_rl_forward_rd_addr ;
-  assign slave_xactor_f_wr_addr$CLR = 1'b0 ;
-
-  // submodule slave_xactor_f_wr_data
-  assign slave_xactor_f_wr_data$D_IN =
-	     { slave_wdata, slave_wstrb, slave_wlast } ;
-  assign slave_xactor_f_wr_data$ENQ =
-	     slave_wvalid && slave_xactor_f_wr_data$FULL_N ;
-  assign slave_xactor_f_wr_data$DEQ =
-	     CAN_FIRE_RL_rl_forward_wr_data &&
-	     !WILL_FIRE_RL_rl_forward_wr_addr &&
-	     !WILL_FIRE_RL_rl_forward_rd_addr ;
-  assign slave_xactor_f_wr_data$CLR = 1'b0 ;
-
-  // submodule slave_xactor_f_wr_resp
-  assign slave_xactor_f_wr_resp$D_IN = f_rsp_bufs_from_aws_host$D_OUT[5:0] ;
-  assign slave_xactor_f_wr_resp$ENQ =
-	     WILL_FIRE_RL_rl_distribute_from_aws_host &&
-	     !f_rsp_bufs_from_aws_host$D_OUT[71] ;
-  assign slave_xactor_f_wr_resp$DEQ =
-	     slave_bready && slave_xactor_f_wr_resp$EMPTY_N ;
-  assign slave_xactor_f_wr_resp$CLR = 1'b0 ;
-
   // remaining internal signals
-  assign rg_sent_6_PLUS_1_8_EQ_f_req_bufs_to_aws_host_f_ETC___d30 =
-	     x__h3229 == f_req_bufs_to_aws_host$D_OUT[135:128] ;
-  assign x__h3229 = rg_sent + 8'd1 ;
-  assign x__h3970 = rg_received + 8'd1 ;
+  assign IF_f_rsp_bufs_from_aws_host_first__06_BIT_75_0_ETC___d116 =
+	     f_rsp_bufs_from_aws_host$D_OUT[75] ?
+	       !slave_xactor_clearing && !slave_xactor_shim_rff_rv[75] :
+	       !slave_xactor_clearing && !slave_xactor_shim_bff_rv[9] ;
+  assign rg_sent_5_PLUS_1_7_EQ_f_req_bufs_to_aws_host_f_ETC___d79 =
+	     x__h5912 == f_req_bufs_to_aws_host$D_OUT[135:128] ;
+  assign slave_xactor_shim_bff_rvport1__read_BITS_8_TO_0__q1 =
+	     slave_xactor_shim_bff_rv$port1__read[8:0] ;
+  assign slave_xactor_shim_rff_rvport1__read_BITS_74_TO_0__q2 =
+	     slave_xactor_shim_rff_rv$port1__read[74:0] ;
+  assign x__h5912 = rg_sent + 8'd1 ;
+  assign x__h6653 = rg_received + 8'd1 ;
 
   // handling of inlined registers
 
@@ -748,12 +948,40 @@ module mkAWS_Host_Access(CLK,
       begin
         rg_received <= `BSV_ASSIGNMENT_DELAY 8'd0;
 	rg_sent <= `BSV_ASSIGNMENT_DELAY 8'd0;
+	slave_xactor_clearing <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	slave_xactor_shim_arff_rv <= `BSV_ASSIGNMENT_DELAY
+	    101'h0AAAAAAAAAAAAAAAAAAAAAAAAA;
+	slave_xactor_shim_awff_rv <= `BSV_ASSIGNMENT_DELAY
+	    101'h0AAAAAAAAAAAAAAAAAAAAAAAAA;
+	slave_xactor_shim_bff_rv <= `BSV_ASSIGNMENT_DELAY 10'd170;
+	slave_xactor_shim_rff_rv <= `BSV_ASSIGNMENT_DELAY
+	    76'h2AAAAAAAAAAAAAAAAAA;
+	slave_xactor_shim_wff_rv <= `BSV_ASSIGNMENT_DELAY
+	    75'h2AAAAAAAAAAAAAAAAAA;
       end
     else
       begin
         if (rg_received$EN)
 	  rg_received <= `BSV_ASSIGNMENT_DELAY rg_received$D_IN;
 	if (rg_sent$EN) rg_sent <= `BSV_ASSIGNMENT_DELAY rg_sent$D_IN;
+	if (slave_xactor_clearing$EN)
+	  slave_xactor_clearing <= `BSV_ASSIGNMENT_DELAY
+	      slave_xactor_clearing$D_IN;
+	if (slave_xactor_shim_arff_rv$EN)
+	  slave_xactor_shim_arff_rv <= `BSV_ASSIGNMENT_DELAY
+	      slave_xactor_shim_arff_rv$D_IN;
+	if (slave_xactor_shim_awff_rv$EN)
+	  slave_xactor_shim_awff_rv <= `BSV_ASSIGNMENT_DELAY
+	      slave_xactor_shim_awff_rv$D_IN;
+	if (slave_xactor_shim_bff_rv$EN)
+	  slave_xactor_shim_bff_rv <= `BSV_ASSIGNMENT_DELAY
+	      slave_xactor_shim_bff_rv$D_IN;
+	if (slave_xactor_shim_rff_rv$EN)
+	  slave_xactor_shim_rff_rv <= `BSV_ASSIGNMENT_DELAY
+	      slave_xactor_shim_rff_rv$D_IN;
+	if (slave_xactor_shim_wff_rv$EN)
+	  slave_xactor_shim_wff_rv <= `BSV_ASSIGNMENT_DELAY
+	      slave_xactor_shim_wff_rv$D_IN;
       end
     if (rg_rsp_buf$EN) rg_rsp_buf <= `BSV_ASSIGNMENT_DELAY rg_rsp_buf$D_IN;
   end
@@ -766,8 +994,38 @@ module mkAWS_Host_Access(CLK,
     rg_received = 8'hAA;
     rg_rsp_buf = 128'hAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
     rg_sent = 8'hAA;
+    slave_xactor_clearing = 1'h0;
+    slave_xactor_shim_arff_rv = 101'h0AAAAAAAAAAAAAAAAAAAAAAAAA;
+    slave_xactor_shim_awff_rv = 101'h0AAAAAAAAAAAAAAAAAAAAAAAAA;
+    slave_xactor_shim_bff_rv = 10'h2AA;
+    slave_xactor_shim_rff_rv = 76'hAAAAAAAAAAAAAAAAAAA;
+    slave_xactor_shim_wff_rv = 75'h2AAAAAAAAAAAAAAAAAA;
   end
   `endif // BSV_NO_INITIAL_BLOCKS
+  // synopsys translate_on
+
+  // handling of system tasks
+
+  // synopsys translate_off
+  always@(negedge CLK)
+  begin
+    #0;
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_slave_xactor_ug_slave_u_aw_warnDoPut)
+	$display("WARNING: putting into a Sink that can't be put into");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_slave_xactor_ug_slave_u_w_warnDoPut)
+	$display("WARNING: putting into a Sink that can't be put into");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_slave_xactor_ug_slave_u_b_warnDoDrop)
+	$display("WARNING: dropping from Source that can't be dropped from");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_slave_xactor_ug_slave_u_ar_warnDoPut)
+	$display("WARNING: putting into a Sink that can't be put into");
+    if (RST_N != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_slave_xactor_ug_slave_u_r_warnDoDrop)
+	$display("WARNING: dropping from Source that can't be dropped from");
+  end
   // synopsys translate_on
 endmodule  // mkAWS_Host_Access
 
