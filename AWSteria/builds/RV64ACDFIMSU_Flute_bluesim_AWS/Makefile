@@ -4,7 +4,7 @@
 # Edit this def to point at your clone of the GitHub Flute repo:
 # (https://github.com/bluespec/Flute)
 
-AWSTERIA   = $(HOME)/git_clones/AWS/BESSPIN-CloudGFE_rsn/AWSteria
+AWSTERIA   ?= $(HOME)/git_clones/AWS/BESSPIN-CloudGFE_rsn/AWSteria
 # AWSTERIA   = $(HOME)/git_clones/AWS/BESSPIN-CloudGFE/AWSteria
 # AWSTERIA   = $(HOME)/git-repos/BESSPIN-CloudGFE/AWSteria
 
@@ -26,22 +26,24 @@ CAPSIZE = 128
 TAGS_STRUCT = 0 64
 TAGS_ALIGN = 32
 
-BSC_COMPILATION_FLAGS += \
-	-D RV64 \
-	-D ISA_PRIV_M  -D ISA_PRIV_U  -D ISA_PRIV_S  \
-	-D SV39  \
-	-D ISA_I  -D ISA_M  -D ISA_A  -D ISA_C \
-	-D ISA_F  -D ISA_D  -D INCLUDE_FDIV  -D INCLUDE_FSQRT \
-	-D SHIFT_BARREL    \
-	-D MULT_SYNTH    \
-	-D Near_Mem_Caches    \
-	-D FABRIC64    \
-	-D CAP128 \
-	-D RISCV \
-	-D MEM64 \
-	-D ISA_CHERI \
-	-D NO_TAGTABLE_ZEROING \
+# BSC flags for Flute
+BSC_COMPILATION_FLAGS += -D RV64 \
+                         -D ISA_PRIV_M  -D ISA_PRIV_U  -D ISA_PRIV_S  \
+                         -D SV39  \
+                         -D ISA_I  -D ISA_M  -D ISA_A  -D ISA_C \
+                         -D ISA_F  -D ISA_D  -D INCLUDE_FDIV  -D INCLUDE_FSQRT \
+                         -D SHIFT_BARREL    \
+                         -D MULT_SYNTH    \
+                         -D Near_Mem_Caches    \
+                         -D FABRIC64    \
+                         -D CAP128 \
+                         -D NO_TAG_CACHE \
+                         -D RISCV \
+                         -D MEM64 \
+                         -D ISA_CHERI
 
+# BSC flags
+BSC_COMPILATION_FLAGS += -D NO_TAGTABLE_ZEROING
 
 # Default ISA test
 

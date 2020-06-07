@@ -27,64 +27,64 @@ typedef 32   Wd_Data_32;
 typedef 64   Wd_Data_64;
 typedef 512  Wd_Data_512;
 
-typedef 0    Wd_AWUser_0;
-typedef 0    Wd_WUser_0;
-typedef 0    Wd_BUser_0;
-typedef 0    Wd_ARUser_0;
-typedef 0    Wd_RUser_0;
+typedef 0    Wd_AW_User_0;
+typedef 0    Wd_W_User_0;
+typedef 0    Wd_B_User_0;
+typedef 0    Wd_AR_User_0;
+typedef 0    Wd_R_User_0;
 
 // ================================================================
 // AXI4 defs for cl_ports interface for DMA_PCIS
 
 typedef AXI4_Master_Synth#( Wd_Id_6, Wd_Addr_64, Wd_Data_512
-                          , Wd_AWUser_0, Wd_WUser_0, Wd_BUser_0, Wd_ARUser_0, Wd_RUser_0)
+                          , Wd_AW_User_0, Wd_W_User_0, Wd_B_User_0, Wd_AR_User_0, Wd_R_User_0)
         AXI4_6_64_512_0_0_0_0_0_Master_Synth;
 typedef AXI4_Slave_Synth#( Wd_Id_6, Wd_Addr_64, Wd_Data_512
-                         , Wd_AWUser_0, Wd_WUser_0, Wd_BUser_0, Wd_ARUser_0, Wd_RUser_0)
+                         , Wd_AW_User_0, Wd_W_User_0, Wd_B_User_0, Wd_AR_User_0, Wd_R_User_0)
         AXI4_6_64_512_0_0_0_0_0_Slave_Synth;
 typedef AXI4_Master_Xactor#( Wd_Id_6, Wd_Addr_64, Wd_Data_512
-                           , Wd_AWUser_0, Wd_WUser_0, Wd_BUser_0, Wd_ARUser_0, Wd_RUser_0)
+                           , Wd_AW_User_0, Wd_W_User_0, Wd_B_User_0, Wd_AR_User_0, Wd_R_User_0)
         AXI4_6_64_512_0_0_0_0_0_Master_Xactor;
 typedef AXI4_Slave_Xactor#( Wd_Id_6, Wd_Addr_64, Wd_Data_512
-                          , Wd_AWUser_0, Wd_WUser_0, Wd_BUser_0, Wd_ARUser_0, Wd_RUser_0)
+                          , Wd_AW_User_0, Wd_W_User_0, Wd_B_User_0, Wd_AR_User_0, Wd_R_User_0)
         AXI4_6_64_512_0_0_0_0_0_Slave_Xactor;
 
 // ================================================================
 // AXI4 defs for sh_ddr interfaces for DDR4 access
 
 typedef AXI4_Master_Synth#( Wd_Id_15, Wd_Addr_64, Wd_Data_512
-                          , Wd_AWUser_0, Wd_WUser_0, Wd_BUser_0, Wd_ARUser_0, Wd_RUser_0)
+                          , Wd_AW_User_0, Wd_W_User_0, Wd_B_User_0, Wd_AR_User_0, Wd_R_User_0)
         AXI4_15_64_512_0_0_0_0_0_Master_Synth;
 typedef AXI4_Master_Synth#( Wd_Id_16, Wd_Addr_64, Wd_Data_512
-                          , Wd_AWUser_0, Wd_WUser_0, Wd_BUser_0, Wd_ARUser_0, Wd_RUser_0)
+                          , Wd_AW_User_0, Wd_W_User_0, Wd_B_User_0, Wd_AR_User_0, Wd_R_User_0)
         AXI4_16_64_512_0_0_0_0_0_Master_Synth;
 typedef AXI4_Slave_Synth#( Wd_Id_15, Wd_Addr_64, Wd_Data_512
-                         , Wd_AWUser_0, Wd_WUser_0, Wd_BUser_0, Wd_ARUser_0, Wd_RUser_0)
+                         , Wd_AW_User_0, Wd_W_User_0, Wd_B_User_0, Wd_AR_User_0, Wd_R_User_0)
         AXI4_15_64_512_0_0_0_0_0_Slave_Synth;
 typedef AXI4_Slave_Synth#( Wd_Id_16, Wd_Addr_64, Wd_Data_512
-                         , Wd_AWUser_0, Wd_WUser_0, Wd_BUser_0, Wd_ARUser_0, Wd_RUser_0)
+                         , Wd_AW_User_0, Wd_W_User_0, Wd_B_User_0, Wd_AR_User_0, Wd_R_User_0)
         AXI4_16_64_512_0_0_0_0_0_Slave_Synth;
 typedef AXI4_Master_Xactor#( Wd_Id_15, Wd_Addr_64, Wd_Data_512
-                           , Wd_AWUser_0, Wd_WUser_0, Wd_BUser_0, Wd_ARUser_0, Wd_RUser_0)
+                           , Wd_AW_User_0, Wd_W_User_0, Wd_B_User_0, Wd_AR_User_0, Wd_R_User_0)
         AXI4_15_64_512_0_0_0_0_0_Master_Xactor;
 typedef AXI4_Slave_Xactor#( Wd_Id_15, Wd_Addr_64, Wd_Data_512
-                          , Wd_AWUser_0, Wd_WUser_0, Wd_BUser_0, Wd_ARUser_0, Wd_RUser_0)
+                          , Wd_AW_User_0, Wd_W_User_0, Wd_B_User_0, Wd_AR_User_0, Wd_R_User_0)
         AXI4_15_64_512_0_0_0_0_0_Slave_Xactor;
 
 // ================================================================
 // AXI4-Lite defs for OCL and other interfaces
 
 typedef AXI4Lite_Master_Synth#( Wd_Addr_32, Wd_Addr_32
-                              , Wd_AWUser_0, Wd_WUser_0, Wd_BUser_0, Wd_ARUser_0, Wd_RUser_0)
+                              , Wd_AW_User_0, Wd_W_User_0, Wd_B_User_0, Wd_AR_User_0, Wd_R_User_0)
         AXI4L_32_32_0_0_0_0_0_Master_Synth;
 typedef AXI4Lite_Slave_Synth#( Wd_Addr_32, Wd_Addr_32
-                             , Wd_AWUser_0, Wd_WUser_0, Wd_BUser_0, Wd_ARUser_0, Wd_RUser_0)
+                             , Wd_AW_User_0, Wd_W_User_0, Wd_B_User_0, Wd_AR_User_0, Wd_R_User_0)
         AXI4L_32_32_0_0_0_0_0_Slave_Synth;
 typedef AXI4Lite_Master_Xactor#( Wd_Addr_32, Wd_Addr_32
-                               , Wd_AWUser_0, Wd_WUser_0, Wd_BUser_0, Wd_ARUser_0, Wd_RUser_0)
+                               , Wd_AW_User_0, Wd_W_User_0, Wd_B_User_0, Wd_AR_User_0, Wd_R_User_0)
         AXI4L_32_32_0_0_0_0_0_Master_Xactor;
 typedef AXI4Lite_Slave_Xactor#( Wd_Addr_32, Wd_Addr_32
-                              , Wd_AWUser_0, Wd_WUser_0, Wd_BUser_0, Wd_ARUser_0, Wd_RUser_0)
+                              , Wd_AW_User_0, Wd_W_User_0, Wd_B_User_0, Wd_AR_User_0, Wd_R_User_0)
         AXI4L_32_32_0_0_0_0_0_Slave_Xactor;
 
 // ================================================================

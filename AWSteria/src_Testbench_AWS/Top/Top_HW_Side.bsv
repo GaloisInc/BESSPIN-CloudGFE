@@ -72,16 +72,16 @@ module mkTop_HW_Side (Empty) ;
    AXI4_Shim #(16, 64, 512, 0, 0, 0, 0, 0) ddr4_D_deburster <- mkBurstToNoBurst;
 
    // Connect AWS_BSV_Top ddr ports to debursters
-   mkConnection (aws_BSV_top.ddr4_A_master, toAXI4_Slave_Synth (ddr4_A_deburster.slave));
-   mkConnection (aws_BSV_top.ddr4_B_master, toAXI4_Slave_Synth (ddr4_B_deburster.slave));
-   mkConnection (aws_BSV_top.ddr4_C_master, toAXI4_Slave_Synth (ddr4_C_deburster.slave));
-   mkConnection (aws_BSV_top.ddr4_D_master, toAXI4_Slave_Synth (ddr4_D_deburster.slave));
+   mkConnection (aws_BSV_top.ddr4_A_master, toAXI4_Slave_Synth (debugAXI4_Slave(ddr4_A_deburster.slave, $format("DDR4_A_AXI_Slave"))));
+   mkConnection (aws_BSV_top.ddr4_B_master, toAXI4_Slave_Synth (debugAXI4_Slave(ddr4_B_deburster.slave, $format("DDR4_B_AXI_Slave"))));
+   mkConnection (aws_BSV_top.ddr4_C_master, toAXI4_Slave_Synth (debugAXI4_Slave(ddr4_C_deburster.slave, $format("DDR4_C_AXI_Slave"))));
+   mkConnection (aws_BSV_top.ddr4_D_master, toAXI4_Slave_Synth (debugAXI4_Slave(ddr4_D_deburster.slave, $format("DDR4_D_AXI_Slave"))));
 
    // Connect debursters to DDR models
-   mkConnection (toAXI4_Master_Synth(ddr4_A_deburster.master), ddr4_A);
-   mkConnection (toAXI4_Master_Synth(ddr4_B_deburster.master), ddr4_B);
-   mkConnection (toAXI4_Master_Synth(ddr4_C_deburster.master), ddr4_C);
-   mkConnection (toAXI4_Master_Synth(ddr4_D_deburster.master), ddr4_D);
+   mkConnection (toAXI4_Master_Synth(debugAXI4_Master(ddr4_A_deburster.master, $format("DDR4_A_AXI_Master"))), ddr4_A);
+   mkConnection (toAXI4_Master_Synth(debugAXI4_Master(ddr4_B_deburster.master, $format("DDR4_B_AXI_Master"))), ddr4_B);
+   mkConnection (toAXI4_Master_Synth(debugAXI4_Master(ddr4_C_deburster.master, $format("DDR4_C_AXI_Master"))), ddr4_C);
+   mkConnection (toAXI4_Master_Synth(debugAXI4_Master(ddr4_D_deburster.master, $format("DDR4_D_AXI_Master"))), ddr4_D);
 
    // ================================================================
    // BEHAVIOR: start up
@@ -150,7 +150,7 @@ module mkTop_HW_Side (Empty) ;
    // ----------------
    // Connect communication box and DMA_PCIS AXI4 port of aws_BSV_top
 
-   Integer verbosity_AXI = 0;
+   Integer verbosity_AXI = 1;
 
    // Note: the rl_xxx's below can't be replaced by 'mkConnection'
    // because although t1 and t2 are isomorphic types, they are

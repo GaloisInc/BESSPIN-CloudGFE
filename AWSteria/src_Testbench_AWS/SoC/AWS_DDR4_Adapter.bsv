@@ -131,7 +131,8 @@ Integer aws_DDR4_adapter_status_error      = 2;
 interface AWS_DDR4_Adapter_IFC;
    // AXI4 interface facing client app/fabric
    interface AXI4_Slave_Synth#( Wd_Id_15, Wd_Addr_Fabric, Wd_Data_Fabric
-                              , Wd_AWUser_0, Wd_WUser_0, Wd_BUser_0, Wd_ARUser_0, Wd_RUser_0) slave;
+                              , Wd_AW_User_0, Wd_W_User_0, Wd_B_User_0
+                              , Wd_AR_User_0, Wd_R_User_0) slave;
 
    // AXI4 interface facing DDR
    interface AXI4_15_64_512_0_0_0_0_0_Master_Synth to_ddr4;
@@ -266,7 +267,7 @@ typedef struct {Req_Op                     req_op;
 		AXI4_Prot                  prot;
 		AXI4_QoS                   qos;
 		AXI4_Region                region;
-		Bit #(Wd_ARUser_0)         user;
+		Bit #(Wd_AR_User_0)        user;
 
 		// Write data info
 		Bit #(TDiv #(Wd_Data_Fabric, 8))  wstrb;
@@ -291,16 +292,18 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
 
    // Front-side interface to clients
    AXI4_Slave_Xactor#( Wd_Id_15, Wd_Addr_Fabric, Wd_Data_Fabric
-                     , Wd_AWUser_0, Wd_WUser_0, Wd_BUser_0, Wd_ARUser_0, Wd_RUser_0)
-     slave_xactor <- mkAXI4_Slave_Xactor;
+                     , Wd_AW_User_0, Wd_W_User_0, Wd_B_User_0
+                     , Wd_AR_User_0, Wd_R_User_0)
+      slave_xactor <- mkAXI4_Slave_Xactor;
 
    // Requests merged from client (WrA, WrD) and RdA channels
    FIFOF #(Req) f_reqs <- mkPipelineFIFOF;
 
    // Back-side interface to memory
    AXI4_Master_Xactor#( Wd_Id_15, Wd_Addr_64, Wd_Data_512
-                      , Wd_AWUser_0, Wd_WUser_0, Wd_BUser_0, Wd_ARUser_0, Wd_RUser_0)
-     master_xactor <- mkAXI4_Master_Xactor;
+                      , Wd_AW_User_0, Wd_W_User_0, Wd_B_User_0
+                      , Wd_AR_User_0, Wd_R_User_0)
+      master_xactor <- mkAXI4_Master_Xactor;
 
    // We maintain a cache of 1 Data_512
    Reg #(Bool)      rg_cached_clean  <- mkRegU;

@@ -32,13 +32,15 @@ import AXI4        :: *;
 import SourceSink  :: *;
 import Fabric_Defs :: *;
 import SoC_Map     :: *; // for Wd_SId
+import AWS_BSV_Top_Defs :: *;    // For AXI4 bus widths (id, addr, data, user)
 
 // ================================================================
 
 interface AWS_Host_Access_IFC;
    // Main Fabric Reqs/Rsps
    interface AXI4_Slave_Synth#( Wd_SId, Wd_Addr, Wd_Data
-                              , Wd_AW_User, Wd_W_User, Wd_B_User, Wd_AR_User, Wd_R_User) slave;
+                              , Wd_AW_User_0, Wd_W_User_0, Wd_B_User_0
+                              , Wd_AR_User_0, Wd_R_User_0) slave;
 
    // Transport to/from host
    interface Get #(Bit #(32)) to_aws_host;
@@ -49,9 +51,9 @@ endinterface
 
 // From SoC_Fabric to AWS host
 typedef union tagged {
-   AXI4_AWFlit#(Wd_SId, Wd_Addr, Wd_AW_User) WAddr;
-   AXI4_WFlit#(Wd_Data, Wd_W_User)           WData;
-   AXI4_ARFlit#(Wd_SId, Wd_Addr, Wd_AR_User) RAddr;
+   AXI4_AWFlit#(Wd_SId, Wd_Addr, Wd_AW_User_0) WAddr;
+   AXI4_WFlit#(Wd_Data, Wd_W_User_0)           WData;
+   AXI4_ARFlit#(Wd_SId, Wd_Addr, Wd_AR_User_0) RAddr;
    } Tagged_AXI4_Req
 deriving (Bits, FShow);
 
@@ -63,8 +65,8 @@ typedef Vector #(VMax_Req, Bit #(32)) Req_Buf;
 
 // From AWS host to SoC_Fabric
 typedef union tagged {
-   AXI4_BFlit#(Wd_SId, Wd_B_User)          WResp;
-   AXI4_RFlit#(Wd_SId, Wd_Data, Wd_R_User) RData;
+   AXI4_BFlit#(Wd_SId, Wd_B_User_0)          WResp;
+   AXI4_RFlit#(Wd_SId, Wd_Data, Wd_R_User_0) RData;
    } Tagged_AXI4_Rsp
 deriving (Bits, FShow);
 
@@ -95,8 +97,9 @@ module mkAWS_Host_Access (AWS_Host_Access_IFC);
    // Connector to AXI4 fabric
 
    AXI4_Slave_Xactor#( Wd_SId, Wd_Addr, Wd_Data
-                     , Wd_AW_User, Wd_W_User, Wd_B_User, Wd_AR_User, Wd_R_User)
-     slave_xactor <- mkAXI4_Slave_Xactor;
+                     , Wd_AW_User_0, Wd_W_User_0, Wd_B_User_0
+                     , Wd_AR_User_0, Wd_R_User_0)
+      slave_xactor <- mkAXI4_Slave_Xactor;
 
    // ================================================================
    // BEHAVIOR

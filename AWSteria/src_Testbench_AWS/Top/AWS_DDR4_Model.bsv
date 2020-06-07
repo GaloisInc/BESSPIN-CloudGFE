@@ -40,7 +40,7 @@ endfunction
 (* synthesize *)
 module mkMem_Model #(parameter Bit #(2) ddr4_num) (AXI4_16_64_512_0_0_0_0_0_Slave_Synth);
 
-   Integer verbosity = 0;
+   Integer verbosity = 2;
 
    // Note: each 'word' in the RegFile is 512b = 64B => uses 6 lsbs of address.
 
@@ -49,8 +49,9 @@ module mkMem_Model #(parameter Bit #(2) ddr4_num) (AXI4_16_64_512_0_0_0_0_0_Slav
    RegFile #(Bit #(64), Bit #(512)) rf <- mkRegFile (0, implemented_words - 1);
 
    AXI4_Slave_Xactor#( Wd_Id_16, Wd_Addr_64, Wd_Data_512
-                      , Wd_AWUser_0, Wd_WUser_0, Wd_BUser_0, Wd_ARUser_0, Wd_RUser_0)
-     axi4_xactor <- mkAXI4_Slave_Xactor;
+                     , Wd_AW_User_0, Wd_W_User_0, Wd_B_User_0
+                     , Wd_AR_User_0, Wd_R_User_0)
+      axi4_xactor <- mkAXI4_Slave_Xactor;
 
    // base and last are the full 16 GB space logically served by this
    // DDR model, regardless of how much of the space is implemented.

@@ -146,16 +146,18 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    // SoC Boot ROM
    Boot_ROM_IFC  boot_rom <- mkBoot_ROM;
    // AXI4 Deburster in front of Boot_ROM
-   AXI4_Shim#(Wd_SId, Wd_Addr, Wd_Data,
-              Wd_AWUser_0, Wd_WUser_0, Wd_BUser_0, Wd_ARUser_0, Wd_RUser_0)
-              boot_rom_axi4_deburster <- mkBurstToNoBurst;
+   AXI4_Shim#( Wd_SId, Wd_Addr, Wd_Data
+             , Wd_AW_User_0, Wd_W_User_0, Wd_B_User_0
+             , Wd_AR_User_0, Wd_R_User_0)
+      boot_rom_axi4_deburster <- mkBurstToNoBurst;
 
    // SoC Memory
    AWS_DDR4_Adapter_IFC  mem0_controller <- mkAWS_DDR4_Adapter;
    // AXI4 Deburster in front of SoC Memory
-   AXI4_Shim#(Wd_SId, Wd_Addr, Wd_Data,
-              Wd_AWUser_0, Wd_WUser_0, Wd_BUser_0, Wd_ARUser_0, Wd_RUser_0)
-              mem0_controller_axi4_deburster <- mkBurstToNoBurst;
+   AXI4_Shim#( Wd_SId, Wd_Addr, Wd_Data
+             , Wd_AW_User_0, Wd_W_User_0, Wd_B_User_0
+             , Wd_AR_User_0, Wd_R_User_0)
+      mem0_controller_axi4_deburster <- mkBurstToNoBurst;
 
    // SoC IPs
    UART_IFC   uart0  <- mkUART;
@@ -171,12 +173,14 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    // SoC fabric master connections
    // Note: see 'SoC_Map' for 'master_num' definitions
 
-   Vector#(Num_Masters, AXI4_Master_Synth #(TAdd#(Wd_MId,1), Wd_Addr, Wd_Data,
-                                            0, 0, 0, 0, 0))
-                                            master_vector = newVector;
+   Vector#(Num_Masters, AXI4_Master_Synth #( Wd_MId_ext, Wd_Addr, Wd_Data
+                                           , Wd_AW_User_ext, Wd_W_User_ext, Wd_B_User_ext
+                                           , Wd_AR_User_ext, Wd_R_User_ext))
+      master_vector = newVector;
 
    // CPU IMem master to fabric
-   master_vector[imem_master_num] = core.cpu_imem_master;
+   let imem <- fromAXI4_Master_Synth(core.cpu_imem_master);
+   master_vector[imem_master_num] = toAXI4_Master_Synth(zeroMasterUserFields(imem));
 
    // CPU DMem master to fabric
    master_vector[dmem_master_num] = core.cpu_dmem_master;
@@ -185,9 +189,11 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    // SoC fabric slave connections
    // Note: see 'SoC_Map' for 'slave_num' definitions
 
-   Vector#(Num_Slaves, AXI4_Slave_Synth #(Wd_SId, Wd_Addr, Wd_Data,
-                                          0, 0, 0, 0, 0))
-                                          slave_vector = newVector;
+   Vector#(Num_Slaves, AXI4_Slave_Synth #( Wd_SId, Wd_Addr, Wd_Data
+                                         , Wd_AW_User_ext, Wd_W_User_ext, Wd_B_User_ext
+                                         , Wd_AR_User_ext, Wd_R_User_ext))
+   //Vector#(Num_Slaves, AXI4_Slave_Synth#(Wd_SId, 64, 64, 0, 1, 0, 0, 1))
+      slave_vector = newVector;
    Vector#(Num_Slaves, Range#(Wd_Addr))   route_vector = newVector;
 
    // Fabric to Boot ROM
@@ -200,8 +206,9 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    // Fabric to Mem Controller
    let mem <- fromAXI4_Slave_Synth(mem0_controller.slave);
    AXI4_Master#( Wd_Id_15, Wd_Addr, Wd_Data
-               , Wd_AWUser_0, Wd_WUser_0, Wd_BUser_0, Wd_ARUser_0, Wd_RUser_0)
-     tmp = extendIDFields(mem0_controller_axi4_deburster.master, 0);
+               , Wd_AW_User_0, Wd_W_User_0, Wd_B_User_0
+               , Wd_AR_User_0, Wd_R_User_0)
+      tmp = extendIDFields(mem0_controller_axi4_deburster.master, 0);
    mkConnection(tmp, mem);
    let ug_mem0_slave <- toUnguarded_AXI4_Slave(mem0_controller_axi4_deburster.slave);
    slave_vector[mem0_controller_slave_num] = toAXI4_Slave_Synth(zeroSlaveUserFields(ug_mem0_slave));
