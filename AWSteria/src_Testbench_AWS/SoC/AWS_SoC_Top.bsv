@@ -179,8 +179,7 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
       master_vector = newVector;
 
    // CPU IMem master to fabric
-   let imem <- fromAXI4_Master_Synth(core.cpu_imem_master);
-   master_vector[imem_master_num] = toAXI4_Master_Synth(zeroMasterUserFields(imem));
+   master_vector[imem_master_num] <- liftAXI4_Master_Synth(zeroMasterUserFields, core.cpu_imem_master);
 
    // CPU DMem master to fabric
    master_vector[dmem_master_num] = core.cpu_dmem_master;
@@ -199,8 +198,7 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    // Fabric to Boot ROM
    let br <- fromAXI4_Slave_Synth(boot_rom.slave);
    mkConnection(boot_rom_axi4_deburster.master, br);
-   let ug_boot_rom_slave <- toUnguarded_AXI4_Slave(boot_rom_axi4_deburster.slave);
-   slave_vector[boot_rom_slave_num] = toAXI4_Slave_Synth(zeroSlaveUserFields(ug_boot_rom_slave));
+   slave_vector[boot_rom_slave_num] <- toAXI4_Slave_Synth(zeroSlaveUserFields(boot_rom_axi4_deburster.slave));
    route_vector[boot_rom_slave_num] = soc_map.m_boot_rom_addr_range;
 
    // Fabric to Mem Controller
@@ -210,18 +208,15 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
                , Wd_AR_User_0, Wd_R_User_0)
       tmp = extendIDFields(mem0_controller_axi4_deburster.master, 0);
    mkConnection(tmp, mem);
-   let ug_mem0_slave <- toUnguarded_AXI4_Slave(mem0_controller_axi4_deburster.slave);
-   slave_vector[mem0_controller_slave_num] = toAXI4_Slave_Synth(zeroSlaveUserFields(ug_mem0_slave));
+   slave_vector[mem0_controller_slave_num] <- toAXI4_Slave_Synth(zeroSlaveUserFields(mem0_controller_axi4_deburster.slave));
    route_vector[mem0_controller_slave_num] = soc_map.m_mem0_controller_addr_range;
 
    // Fabric to UART0
-   let uart0_slave <- fromAXI4_Slave_Synth(uart0.slave);
-   slave_vector[uart16550_0_slave_num] = toAXI4_Slave_Synth(zeroSlaveUserFields(uart0_slave));
+   slave_vector[uart16550_0_slave_num] <- liftAXI4_Slave_Synth(zeroSlaveUserFields, uart0.slave);
    route_vector[uart16550_0_slave_num] = soc_map.m_uart16550_0_addr_range;
 
    // Fabric to AWS Host Access
-   let aws_host_access_slave <- fromAXI4_Slave_Synth(aws_host_access.slave);
-   slave_vector[host_access_slave_num] = toAXI4_Slave_Synth(zeroSlaveUserFields(aws_host_access_slave));
+   slave_vector[host_access_slave_num] <- liftAXI4_Slave_Synth(zeroSlaveUserFields, aws_host_access.slave);
    route_vector[host_access_slave_num] = soc_map.m_host_access_addr_range;
 
 `ifdef INCLUDE_ACCEL0
