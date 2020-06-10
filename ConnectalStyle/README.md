@@ -54,15 +54,17 @@ make
 
 ## Running the P2 processors
 
-First set up the network tap:
+Configure a network tap device named `tap0`.
+
+Make sure the `pcieportal` driver is not loaded. It sometimes crashes while the FPGA is being loaded.
+
 ```
-sudo ./tap.sh
+sudo rmmod pcieportal
 ```
 
 Then load the FPGA image and drivers:
 
 ```
-sudo rmmod pcieportal
 sudo fpga-load-local-image -S 0 -I AGFI-TBD
 sudo insmod ssith-aws-fpga/hw/connectal/drivers/pcieportal/pcieportal.ko
 sudo insmod ssith-aws-fpga/hw/connectal/drivers/portalmem/portalmem.ko
