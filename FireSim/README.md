@@ -7,7 +7,7 @@ This is the FireSim-based platform for CloudGFE.
 |-------------|--------------------------|---------------------------------------------------------------------|
 | Chisel P1   | `agfi-0b40e94b0e98b3313` | `s3://firesim-localuser/swpkgs/firesim-cloudgfe-chisel-p1-sw.tgz`   |
 | Chisel P2   | `agfi-032ab8336e2cd3438` | `s3://firesim-localuser/swpkgs/firesim-cloudgfe-chisel-p2-sw.tgz`   |
-| Bluespec P2 | `agfi-0eb2fa447870a5426` | `s3://firesim-localuser/swpkgs/firesim-cloudgfe-bluespec-p2-sw.tgz` |
+| Bluespec P2 | `agfi-0dcad3a3f079d247e` | `s3://firesim-localuser/swpkgs/firesim-cloudgfe-bluespec-p2-sw.tgz` |
 
 The SW packages are pre-configured to use the appropriate AGFI. 
 
