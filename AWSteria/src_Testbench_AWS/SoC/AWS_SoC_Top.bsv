@@ -76,7 +76,9 @@ import Debug_Module     :: *;
 
 interface AWS_SoC_Top_IFC;
    // AXI4 interface facing DDR
-   interface AXI4_15_64_512_0_0_0_0_0_Master_Synth to_ddr4;
+   interface AXI4_Master_Synth#( Wd_Id_15, Wd_Addr_64, Wd_Data_512
+                               , Wd_AW_User_0, 4, Wd_B_User_0
+                               , Wd_AR_User_0, 4) to_ddr4;
 
    // UART0 to external console
    interface Get #(Bit #(8)) get_to_console;
@@ -155,8 +157,8 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    AWS_DDR4_Adapter_IFC  mem0_controller <- mkAWS_DDR4_Adapter;
    // AXI4 Deburster in front of SoC Memory
    AXI4_Shim#( Wd_SId, Wd_Addr, Wd_Data
-             , Wd_AW_User_0, Wd_W_User_0, Wd_B_User_0
-             , Wd_AR_User_0, Wd_R_User_0)
+             , Wd_AW_User_ext, Wd_W_User_ext, Wd_B_User_ext
+             , Wd_AR_User_ext, Wd_R_User_ext)
       mem0_controller_axi4_deburster <- mkBurstToNoBurst;
 
    // SoC IPs
@@ -191,7 +193,6 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    Vector#(Num_Slaves, AXI4_Slave_Synth #( Wd_SId, Wd_Addr, Wd_Data
                                          , Wd_AW_User_ext, Wd_W_User_ext, Wd_B_User_ext
                                          , Wd_AR_User_ext, Wd_R_User_ext))
-   //Vector#(Num_Slaves, AXI4_Slave_Synth#(Wd_SId, 64, 64, 0, 1, 0, 0, 1))
       slave_vector = newVector;
    Vector#(Num_Slaves, Range#(Wd_Addr))   route_vector = newVector;
 
@@ -204,8 +205,8 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    // Fabric to Mem Controller
    let mem <- fromAXI4_Slave_Synth(mem0_controller.slave);
    AXI4_Master#( Wd_Id_15, Wd_Addr, Wd_Data
-               , Wd_AW_User_0, Wd_W_User_0, Wd_B_User_0
-               , Wd_AR_User_0, Wd_R_User_0)
+               , Wd_AW_User_ext, Wd_W_User_ext, Wd_B_User_ext
+               , Wd_AR_User_ext, Wd_R_User_ext)
       tmp = extendIDFields(mem0_controller_axi4_deburster.master, 0);
    mkConnection(tmp, mem);
    slave_vector[mem0_controller_slave_num] <- toAXI4_Slave_Synth(zeroSlaveUserFields(mem0_controller_axi4_deburster.slave));

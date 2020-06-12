@@ -165,26 +165,29 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
    // ================================================================
    // connections
 
-   Vector#(2, AXI4_Master_Synth #(15, 64, 512, 0, 0, 0, 0, 0))
+   Vector#(2, AXI4_Master_Synth #(15, 64, 512, 0, 4, 0, 0, 4))
      master_vector = newVector;
-   Vector#(4, AXI4_Slave_Synth #(16, 64, 512, 0, 0, 0, 0, 0))
+   Vector#(4, AXI4_Slave_Synth #(16, 64, 512, 0, 4, 0, 0, 4))
      slave_vector = newVector;
    Vector#(4, Range#(64)) route_vector = newVector;
 
    // shim helper
-   module mkShim(AXI4_Shim_Synth #(a, 64, 512, 0, 0, 0, 0, 0));
+   module mkShim(AXI4_Shim_Synth #(a, 64, 512, 0, 4, 0, 0, 4));
      let tmp <- mkAXI4ShimFF;
      let shim <- toAXI4_Shim_Synth(tmp);
      return shim;
    endmodule
    // connect interface master shim
    let inner_shim <- mkShim;
+   let inner_shim_slave <- liftAXI4_Slave_Synth (zeroSlaveUserFields, inner_shim.slave);
    master_vector[0] = inner_shim.master;
    // Connect SoC DDR4 interface
    master_vector[1] = soc_top.to_ddr4;
    // connect interface ddr4 slave shims
-   Vector#(4, AXI4_Shim_Synth #(16, 64, 512, 0, 0, 0, 0, 0))
+   Vector#(4, AXI4_Shim_Synth #(16, 64, 512, 0, 4, 0, 0, 4))
      outer_shim <- replicateM(mkShim);
+   function AXI4_Master_Synth #(16, 64, 512, 0, 4, 0, 0, 4) getMaster (AXI4_Shim_Synth #(16, 64, 512, 0, 4, 0, 0, 4) x) = x.master;
+   let outer_shim_master <- mapM (liftAXI4_Master_Synth (zeroMasterUserFields), map (getMaster, outer_shim));
    slave_vector[0] = outer_shim[0].slave;
    route_vector[0] = Range { base: 64'h0_0000_0000, size: 64'h4_0000_0000 };
    slave_vector[1] = outer_shim[1].slave;
@@ -264,14 +267,14 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
    // INTERFACE
 
    // Facing SH
-   interface AWS_AXI4_Slave_IFC       dma_pcis_slave = inner_shim.slave;
+   interface AWS_AXI4_Slave_IFC       dma_pcis_slave = inner_shim_slave;
    interface AWS_AXI4_Lite_Slave_IFC  ocl_slave      = ocl_adapter.ocl_slave;
 
    // Facing DDR4
-   interface AWS_AXI4_Master_IFC  ddr4_A_master = outer_shim[0].master;
-   interface AWS_AXI4_Master_IFC  ddr4_B_master = outer_shim[1].master;
-   interface AWS_AXI4_Master_IFC  ddr4_C_master = outer_shim[2].master;
-   interface AWS_AXI4_Master_IFC  ddr4_D_master = outer_shim[3].master;
+   interface AWS_AXI4_Master_IFC  ddr4_A_master = outer_shim_master[0];
+   interface AWS_AXI4_Master_IFC  ddr4_B_master = outer_shim_master[1];
+   interface AWS_AXI4_Master_IFC  ddr4_C_master = outer_shim_master[2];
+   interface AWS_AXI4_Master_IFC  ddr4_D_master = outer_shim_master[3];
 
    // DDR4 ready signals
    // The SystemVerilog top-level invokes this to signal readiness of AWS DDR4 A, B, C, D
