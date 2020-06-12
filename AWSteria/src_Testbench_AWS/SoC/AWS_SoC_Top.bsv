@@ -3,6 +3,25 @@
 
 package AWS_SoC_Top;
 
+import SourceSink::*;
+
+module mkNoisyConnection#(
+   String st,
+   AXI4_Master#(a, b, c, d, e, f, g, h) m,
+   AXI4_Slave#(a, b, c, d, e, f, g, h) s)
+   (Empty);
+
+   Fmt mess = $format("%s: ", st);
+   mkConnection(m.aw, s.aw);
+   mkConnection(m.w, s.w);
+   mkConnection(m.b, s.b);
+   mkConnection(m.ar, s.ar);
+   mkConnection(m.r, debugSource(s.r, mess));
+endmodule
+
+
+
+
 // ================================================================
 // This package is the SoC "top-level".
 
@@ -48,6 +67,7 @@ import Boot_ROM        :: *;
 import UART_Model      :: *;
 import AWS_Host_Access :: *;
 import AXI4_ClockCrossing ::*;
+import AXI4_Fabric_CHERI ::*;
 
 
 // IPs on the fabric (memory)
@@ -201,7 +221,7 @@ module mkAWS_SoC_Top #(Clock core_clk)(AWS_SoC_Top_IFC);
 
    // Fabric to Boot ROM
    let br <- fromAXI4_Slave_Synth(boot_rom.slave);
-   mkConnection(boot_rom_axi4_deburster.master, br);
+   mkNoisyConnection("S side", boot_rom_axi4_deburster.master, br);
    slave_vector[boot_rom_slave_num] <- toAXI4_Slave_Synth(zeroSlaveUserFields(boot_rom_axi4_deburster.slave));
    route_vector[boot_rom_slave_num] = soc_map.m_boot_rom_addr_range;
 
@@ -243,15 +263,60 @@ module mkAWS_SoC_Top #(Clock core_clk)(AWS_SoC_Top_IFC);
 
    AXI4_ClockCrossing #(5, 64, 64, 0,1,0,0,1) master0Crossing <- mkAXI4_ClockCrossingToCC(core_clk, core_rstn);
    AXI4_ClockCrossing #(5, 64, 64, 0,1,0,0,1) master1Crossing <- mkAXI4_ClockCrossingToCC(core_clk, core_rstn);
-   mkConnection(msNoSynth[0], master0Crossing.from_master, clocked_by core_clk, reset_by core_rstn);
+   mkNoisyConnection("M side", msNoSynth[0], master0Crossing.from_master, clocked_by core_clk, reset_by core_rstn);
    mkConnection(msNoSynth[1], master1Crossing.from_master, clocked_by core_clk, reset_by core_rstn);
 
    msNoSynth[0] = master0Crossing.to_slave;
    msNoSynth[1] = master1Crossing.to_slave;
 
    // SoC Fabric
+   /*
    let bus <-mkAXI4Bus(routeFromMappingTable(route_vector),
 		       msNoSynth, ssNoSynth);
+   */
+
+      function Tuple2 #(Bool, Bit#(TLog#(Num_Slaves))) fn_addr_to_slave_num  (Fabric_Addr addr);
+
+      // Main Mem
+      if (   (soc_map.m_mem0_controller_addr_range.base <= addr)
+	  && (addr < (soc_map.m_mem0_controller_addr_range.base + soc_map.m_mem0_controller_addr_range.size)))
+	 return tuple2 (True, fromInteger (mem0_controller_slave_num));
+
+      // Boot ROM
+      else if ((soc_map.m_boot_rom_addr_range.base <= addr)
+	  && (addr < (soc_map.m_boot_rom_addr_range.base + soc_map.m_boot_rom_addr_range.size)))
+	 return tuple2 (True, fromInteger (boot_rom_slave_num));
+
+      // UART
+      else if ((soc_map.m_uart16550_0_addr_range.base <= addr)
+	  && (addr < (soc_map.m_uart16550_0_addr_range.base + soc_map.m_uart16550_0_addr_range.size)))
+	 return tuple2 (True, fromInteger (uart16550_0_slave_num));
+/*
+`ifdef HTIF_MEMORY
+      else if (   (soc_map.m_htif_addr_base <= addr)
+	       && (addr < soc_map.m_htif_addr_lim))
+	 return tuple2 (True, fromInteger (htif_slave_num));
+`endif
+
+`ifdef INCLUDE_ACCEL0
+      // Accelerator 0
+      else if (   (soc_map.m_accel0_addr_base <= addr)
+	       && (addr < soc_map.m_accel0_addr_lim))
+	 return tuple2 (True, fromInteger (accel0_slave_num));
+`endif
+*/
+      else
+	 return tuple2 (False, ?);
+   endfunction
+
+
+    AXI4_Fabric #(Num_Masters, Num_Slaves,
+		  Wd_MId, Wd_Addr, Wd_Data
+		  , Wd_AW_User_ext, Wd_W_User_ext, Wd_B_User_ext
+		  , Wd_AR_User_ext, Wd_R_User_ext) fabric <- mkAXI4_Fabric(fn_addr_to_slave_num);
+
+   zipWithM(mkConnection, msNoSynth, fabric.v_from_masters);
+   zipWithM(mkConnection, ssNoSynth, zipWith(extendIDFields, fabric.v_to_slaves, replicate(Bit#(1)'(0))));
 
    // ----------------
    // Connect interrupt sources for CPU external interrupt request inputs.
