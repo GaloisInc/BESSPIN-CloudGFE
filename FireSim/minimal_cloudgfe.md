@@ -85,8 +85,9 @@ The bare-metal `helloworld_32bit` example will print "Hello World!" and immediat
 ## P2 64-bit Binaries
 ### Linux
 
-There are two flavors of Linux provided. The first, `busyboxlinux_64bit` is a Busybox-based Linux OS built using buildroot. It uses the block device to provide a persistent filesystem.
-The second, `debianlinux_64bit`, is a Debian-based Linux OS. The kernel and ramdisk image are combined into the single ELF file. While this OS includes block device drivers, only an empty image is provided.
+There are three flavors of Linux provided. The first, `gfebusybox_64bit` is a Busybox-based Linux OS built from the existing GFE repo. It includes all the necessary drivers for FireSim AFIs and provides a quick booting test environment. The filesystem is completely contained within the ELF.
+The second, `debianlinux_64bit`, is a Debian-based Linux OS. The kernel and ramdisk image are combined into the single ELF file. While this OS includes block device drivers, only an empty image is provided. 
+The last, `busyboxlinux_64bit`, is a Busybox-based Linux OS built using buildroot. It uses the block device to provide a persistent filesystem, but it is only provided for backward compatibility with older AFIs. **This will be removed in a future release. It no longer works on the most up to date AFIs built with CloudGFE FireSim. Use gfebusybox or debian instead**.
 
 To boot Debian Linux:
 ```
@@ -98,6 +99,14 @@ The login for Debian is `root` and password `riscv`. The login for Busybox is `r
 Busybox linux will boot with full network / internet access. You can SSH into it from the F1 instance using:
 ```
 TERM=Linux ssh root@172.16.0.2
+```
+
+Debian requires a few additional commands to bring up networking:
+```
+ip link set dev eth0 up
+ip addr add 172.16.0.2/24 dev eth0
+ip route add default via 172.16.0.1
+echo "nameserver 1.1.1.1" > /etc/resolv.conf
 ```
 
 Running `poweroff -f` within the target OS will automatically stop the simulator cleanly. If it becomes stuck or unresponsive, you can also use the `./kill_sim.sh` script.
