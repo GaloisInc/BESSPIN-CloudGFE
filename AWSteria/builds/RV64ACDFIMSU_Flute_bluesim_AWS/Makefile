@@ -39,7 +39,7 @@ BSC_COMPILATION_FLAGS += -D RV64 \
                          -D CAP128 \
                          -D NO_TAG_CACHE \
                          -D RISCV \
-                         -D MEM512 \
+                         -D CheriBusBytes=64 -D CheriMasterIDWidth=1 -D CheriTransactionIDWidth=15 \
                          -D ISA_CHERI
 
 # BSC flags
