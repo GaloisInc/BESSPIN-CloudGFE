@@ -132,11 +132,11 @@ Integer aws_DDR4_adapter_status_error      = 2;
 
 interface AWS_DDR4_Adapter_IFC;
    // AXI4 interface facing client app/fabric
-   interface AXI4_Slave_Synth#( Wd_Id_15, Wd_Addr_Fabric, Wd_Data_Fabric
+   interface AXI4_Slave_Synth#( Wd_Id_14, Wd_Addr_Fabric, Wd_Data_Fabric
                               , 0, 1, 0, 0, 1) slave;
 
    // AXI4 interface facing DDR
-   interface AXI4_Master_Synth#( Wd_Id_15, Wd_Addr_64, Wd_Data_512
+   interface AXI4_Master_Synth#( Wd_Id_14, Wd_Addr_64, Wd_Data_512
                                , 0, 4, 0, 0, 4) to_ddr4;
 
    // ----------------
@@ -259,7 +259,7 @@ deriving (Bits, Eq, FShow);
 typedef struct {Req_Op                     req_op;
 
 		// AW and AR channel info
-		Bit #(Wd_Id_15)            id;
+		Bit #(Wd_Id_14)            id;
 		Addr_64                    addr;
 		AXI4_Len                   len;
 		AXI4_Size                  size;
@@ -294,7 +294,7 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
    Reg #(Addr_64) rg_addr_lim  <- mkRegU;
 
    // Front-side interface to clients
-   AXI4_Slave_Xactor#( Wd_Id_15, Wd_Addr_Fabric, Wd_Data_Fabric
+   AXI4_Slave_Xactor#( Wd_Id_14, Wd_Addr_Fabric, Wd_Data_Fabric
                      , 0, 1, 0, 0, 1)
       slave_xactor <- mkAXI4_Slave_Xactor;
 
@@ -302,7 +302,7 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
    FIFOF #(Req) f_reqs <- mkPipelineFIFOF;
 
    // Back-side interface to memory
-   AXI4_Master_Xactor#( Wd_Id_15, Wd_Addr_64, Wd_Data_512
+   AXI4_Master_Xactor#( Wd_Id_14, Wd_Addr_64, Wd_Data_512
                       , 0, 4, 0, 0, 4)
       master_xactor <- mkAXI4_Master_Xactor;
 

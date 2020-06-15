@@ -37,6 +37,10 @@ import AWS_SoC_Top      :: *;
 import AWS_DDR4_Adapter :: *;
 import AWS_OCL_Adapter  :: *;
 
+`ifdef ISA_CHERI
+import TagControllerAXI :: *;
+`endif
+
 // ================================================================
 
 export mkAWS_BSV_Top;
@@ -165,9 +169,9 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
    // ================================================================
    // connections
 
-   Vector#(2, AXI4_Master_Synth #(15, 64, 512, 0, 4, 0, 0, 4))
+   Vector#(2, AXI4_Master_Synth #(14, 64, 512, 0, 4, 0, 0, 4))
      master_vector = newVector;
-   Vector#(4, AXI4_Slave_Synth #(16, 64, 512, 0, 4, 0, 0, 4))
+   Vector#(4, AXI4_Slave_Synth #(15, 64, 512, 0, 4, 0, 0, 4))
      slave_vector = newVector;
    Vector#(4, Range#(64)) route_vector = newVector;
 
@@ -183,18 +187,31 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
    master_vector[0] = inner_shim.master;
    // Connect SoC DDR4 interface
    master_vector[1] = soc_top.to_ddr4;
-   // connect interface ddr4 slave shims
+   // connect interface ddr4 slave shims / tag controller in CHERI case
+   Vector #(4, AXI4_Master_Synth #(16, 64, 512, 0, 0, 0, 0, 0)) outer_shim_master;
+   Vector #(4, AXI4_Slave_Synth #(15, 64, 512, 0, 4, 0, 0, 4)) outer_shim_slave;
+   `ifdef ISA_CHERI
+   Vector#(4, TagControllerAXI #(15, 64, 512))
+      tagCtrl <- replicateM(mkTagControllerAXI);
+   for (Integer i = 0; i < 4; i = i + 1) begin
+      outer_shim_master[i] <- toAXI4_Master_Synth (tagCtrl[i].master);
+      outer_shim_slave[i] <- toAXI4_Slave_Synth (tagCtrl[i].slave);
+   end
+   `else
    Vector#(4, AXI4_Shim_Synth #(16, 64, 512, 0, 4, 0, 0, 4))
      outer_shim <- replicateM(mkShim);
-   function AXI4_Master_Synth #(16, 64, 512, 0, 4, 0, 0, 4) getMaster (AXI4_Shim_Synth #(16, 64, 512, 0, 4, 0, 0, 4) x) = x.master;
-   let outer_shim_master <- mapM (liftAXI4_Master_Synth (zeroMasterUserFields), map (getMaster, outer_shim));
-   slave_vector[0] = outer_shim[0].slave;
+   for (Integer i = 0; i < 4; i = i + 1) begin
+      outer_shim_master[i] = outer_shim[i].master;
+      outer_shim_slave[i] = outer_shim[i].slave;
+   end
+   `endif
+   slave_vector[0] = outer_shim_slave[0];
    route_vector[0] = Range { base: 64'h0_0000_0000, size: 64'h4_0000_0000 };
-   slave_vector[1] = outer_shim[1].slave;
+   slave_vector[1] = outer_shim_slave[1];
    route_vector[1] = Range { base: 64'h4_0000_0000, size: 64'h4_0000_0000 };
-   slave_vector[2] = outer_shim[2].slave;
+   slave_vector[2] = outer_shim_slave[2];
    route_vector[2] = Range { base: 64'h8_0000_0000, size: 64'h4_0000_0000 };
-   slave_vector[3] = outer_shim[3].slave;
+   slave_vector[3] = outer_shim_slave[3];
    route_vector[3] = Range { base: 64'hC_0000_0000, size: 64'h4_0000_0000 };
    // Fabric
    mkAXI4Bus_Synth (routeFromMappingTable(route_vector),

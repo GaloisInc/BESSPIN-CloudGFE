@@ -17,6 +17,7 @@ import AXI4Lite :: *;
 
 typedef 4    Wd_Id_4;
 typedef 6    Wd_Id_6;
+typedef 14   Wd_Id_14;
 typedef 15   Wd_Id_15;
 typedef 16   Wd_Id_16;
 
@@ -58,15 +59,15 @@ typedef AXI4_Master_Synth#( Wd_Id_15, Wd_Addr_64, Wd_Data_512
 typedef AXI4_Master_Synth#( Wd_Id_16, Wd_Addr_64, Wd_Data_512
                           , Wd_AW_User_0, Wd_W_User_0, Wd_B_User_0, Wd_AR_User_0, Wd_R_User_0)
         AXI4_16_64_512_0_0_0_0_0_Master_Synth;
-typedef AXI4_Slave_Synth#( Wd_Id_15, Wd_Addr_64, Wd_Data_512
+typedef AXI4_Slave_Synth#( Wd_Id_14, Wd_Addr_64, Wd_Data_512
                          , Wd_AW_User_0, Wd_W_User_0, Wd_B_User_0, Wd_AR_User_0, Wd_R_User_0)
-        AXI4_15_64_512_0_0_0_0_0_Slave_Synth;
+        AXI4_14_64_512_0_0_0_0_0_Slave_Synth;
 typedef AXI4_Slave_Synth#( Wd_Id_16, Wd_Addr_64, Wd_Data_512
                          , Wd_AW_User_0, Wd_W_User_0, Wd_B_User_0, Wd_AR_User_0, Wd_R_User_0)
         AXI4_16_64_512_0_0_0_0_0_Slave_Synth;
-typedef AXI4_Master_Xactor#( Wd_Id_15, Wd_Addr_64, Wd_Data_512
+typedef AXI4_Master_Xactor#( Wd_Id_14, Wd_Addr_64, Wd_Data_512
                            , Wd_AW_User_0, Wd_W_User_0, Wd_B_User_0, Wd_AR_User_0, Wd_R_User_0)
-        AXI4_15_64_512_0_0_0_0_0_Master_Xactor;
+        AXI4_14_64_512_0_0_0_0_0_Master_Xactor;
 typedef AXI4_Slave_Xactor#( Wd_Id_15, Wd_Addr_64, Wd_Data_512
                           , Wd_AW_User_0, Wd_W_User_0, Wd_B_User_0, Wd_AR_User_0, Wd_R_User_0)
         AXI4_15_64_512_0_0_0_0_0_Slave_Xactor;
@@ -94,7 +95,7 @@ interface AWS_BSV_Top_IFC;
    // Facing SH: DMA_PCIS
    // WARNING: Actual DMA_PCIS is AXI4_6_64_512_0 and is missing the 'wid' bus
    //          The top-level SV shim should adapt these.
-   interface AXI4_15_64_512_0_0_0_0_0_Slave_Synth  dma_pcis_slave;
+   interface AXI4_14_64_512_0_0_0_0_0_Slave_Synth  dma_pcis_slave;
 
    // Facing SH: OCL
    interface AXI4L_32_32_0_0_0_0_0_Slave_Synth     ocl_slave;

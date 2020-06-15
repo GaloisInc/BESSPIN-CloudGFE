@@ -164,7 +164,7 @@ module mkTop_HW_Side (Empty) ;
    // because although t1 and t2 are isomorphic types, they are
    // different BSV types coming from different declarations.
 
-   AXI4_15_64_512_0_0_0_0_0_Master_Xactor dma_pcis_xactor <- mkAXI4_Master_Xactor;
+   AXI4_14_64_512_0_0_0_0_0_Master_Xactor dma_pcis_xactor <- mkAXI4_Master_Xactor;
 
    mkConnection (dma_pcis_xactor.masterSynth, aws_BSV_top.dma_pcis_slave);
 

@@ -76,7 +76,7 @@ import Debug_Module     :: *;
 
 interface AWS_SoC_Top_IFC;
    // AXI4 interface facing DDR
-   interface AXI4_Master_Synth#( Wd_Id_15, Wd_Addr_64, Wd_Data_512
+   interface AXI4_Master_Synth#( Wd_Id_14, Wd_Addr_64, Wd_Data_512
                                , Wd_AW_User_0, 4, Wd_B_User_0
                                , Wd_AR_User_0, 4) to_ddr4;
 
@@ -204,7 +204,7 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
 
    // Fabric to Mem Controller
    let mem <- fromAXI4_Slave_Synth(mem0_controller.slave);
-   AXI4_Master#( Wd_Id_15, Wd_Addr, Wd_Data
+   AXI4_Master#( Wd_Id_14, Wd_Addr, Wd_Data
                , Wd_AW_User_ext, Wd_W_User_ext, Wd_B_User_ext
                , Wd_AR_User_ext, Wd_R_User_ext)
       tmp = extendIDFields(mem0_controller_axi4_deburster.master, 0);

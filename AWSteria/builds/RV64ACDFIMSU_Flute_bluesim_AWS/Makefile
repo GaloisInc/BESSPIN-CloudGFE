@@ -39,7 +39,7 @@ BSC_COMPILATION_FLAGS += -D RV64 \
                          -D CAP128 \
                          -D NO_TAG_CACHE \
                          -D RISCV \
-                         -D MEM64 \
+                         -D MEM512 \
                          -D ISA_CHERI
 
 # BSC flags
