@@ -17,30 +17,24 @@
 #include <string.h>
 #include <unistd.h>
 
-// ================================================================
+// ----------------
+// Virtio library includes
+
+#include "virtio.h"
+#include "temu.h"
+
+// ----------------
 // Project includes
 
 #include "Memhex32_read.h"
-#include "Memhex32_read_protos.h"
-
 #include "SimpleQueue.h"
-#include "SimpleQueue_protos.h"
-
 #include "HS_syscontrol.h"
-#include "HS_syscontrol_protos.h"
-
 #include "HS_tty.h"
-#include "HS_tty_protos.h"
-
 #include "HS_virtio.h"
-#include "HS_virtio_protos.h"
-
 #include "HS_msg.h"
-#include "HS_msg_protos.h"
 
 // Simulation library replacing AWS' actual FPGA interaction library
 #include "AWS_Sim_Lib.h"
-#include "AWS_Sim_Lib_protos.h"
 
 // ================================================================
 
@@ -180,12 +174,22 @@ out:
 // ================================================================
 // Startup sequence over OCL
 
-int start_hw (void)
+int start_hw (const char *tun_iface,
+	      const int   enable_virtio_console,
+	      const int   dma_enabled,
+	      const int   xdma_enabled,
+	      const char *block_files [],
+	      const int   num_block_files)
 {
     int err;
     HS_SysControl_State *syscontrol_state = HS_syscontrol_init ();
     HS_tty_State        *tty_state        = HS_tty_init ();
-    HS_Virtio_State     *virtio_state     = HS_virtio_init ();
+    HS_Virtio_State     *virtio_state     = HS_virtio_init (tun_iface,
+							    enable_virtio_console,
+							    dma_enabled,
+							    xdma_enabled,
+							    block_files,
+							    num_block_files);
 
     // ----------------
     // Main work loop, moving data from producers to consumers:
@@ -328,16 +332,6 @@ void usage(const char* program_name)
     printf("usage: %s [--slot <slot>]\n", program_name);
 }
 
-// ================================================================
-
-static const char this_file_name [] = "test.c";
-
-#include "Memhex32_read.h"
-
-int start_hw ();
-
-int load_mem_hex32_using_DMA (int slot_id, char *filename);
-
 // ****************************************************************
 
 int main(int argc, char **argv)
@@ -374,8 +368,21 @@ int main(int argc, char **argv)
     // ================================================================
     // AWSteria code
 
+    // TODO: the following should come from command-line args
+    const char *tun_iface = NULL;
+    const int   enable_virtio_console = 0;
+    const int   dma_enabled           = 1;
+    const int   xdma_enabled          = 1;
+    const char *block_files [1] = { NULL };
+    const int   num_block_files = 1;
+
     // Start the hardware
-    rc = start_hw ();
+    rc = start_hw (tun_iface,
+		   enable_virtio_console,
+		   dma_enabled,
+		   xdma_enabled,
+		   block_files,
+		   num_block_files);
     if (rc != 0) {
 	fprintf (stdout, "starting the HW failed");
 	goto out;

@@ -6,3 +6,8 @@
 #pragma once
 
 // Nothing in this file, so far
+
+// ================================================================
+// Extern functions
+
+#include "Memhex32_read_protos.h"

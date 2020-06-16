@@ -1,3 +1,45 @@
+# Makefile to build host-side executable (x86-64 Linux) for AWSteria
+
+# ================================================================
+# Defs for incorporating tinyemu
+
+TINYEMU       = tinyemu
+TINYEMU_SLIRP = tinyemu/slirp
+
+TINYEMU_SRCS_C = $(TINYEMU)/cutils.c \
+		$(TINYEMU)/fs_disk.c \
+		$(TINYEMU)/iomem.c \
+		$(TINYEMU)/json.c \
+		$(TINYEMU)/machine.c \
+		$(TINYEMU)/pci.c \
+		$(TINYEMU)/riscv_cpu.c \
+		$(TINYEMU)/riscv_machine.c \
+		$(TINYEMU)/simplefb.c \
+		$(TINYEMU)/softfp.c \
+		$(TINYEMU)/temu.c \
+		$(TINYEMU)/virtio.c \
+		$(TINYEMU_SLIRP)/bootp.c \
+		$(TINYEMU_SLIRP)/cksum.c \
+		$(TINYEMU_SLIRP)/if.c \
+		$(TINYEMU_SLIRP)/ip_icmp.c \
+		$(TINYEMU_SLIRP)/ip_input.c \
+		$(TINYEMU_SLIRP)/ip_output.c \
+		$(TINYEMU_SLIRP)/mbuf.c \
+		$(TINYEMU_SLIRP)/misc.c \
+		$(TINYEMU_SLIRP)/sbuf.c \
+		$(TINYEMU_SLIRP)/slirp.c \
+		$(TINYEMU_SLIRP)/socket.c \
+		$(TINYEMU_SLIRP)/tcp_subr.c \
+		$(TINYEMU_SLIRP)/tcp_input.c \
+		$(TINYEMU_SLIRP)/tcp_output.c \
+		$(TINYEMU_SLIRP)/tcp_timer.c \
+		$(TINYEMU_SLIRP)/udp.c \
+
+TINYEMU_CFLAGS= -DCONFIG_RISCV_MAX_XLEN=64 \
+		-DMAX_XLEN=64 \
+		-DCONFIG_SLIRP \
+
+
 # ================================================================
 
 EXE    = exe_host_side
@@ -7,23 +49,27 @@ OBJS   = HS_main.o  Memhex32_read.o \
 	HS_msg.o  AWS_Sim_Lib.o  Bytevec.o  TCP_Client_Lib.o
 
 $(EXE): $(OBJS)
-	cc -g  -o $(EXE)  $(OBJS)
+	cc -g  -o $(EXE) \
+	$(TINYEMU_CFLAGS) -I $(TINYEMU)  -I $(TINYEMU_SLIRP)  $(TINYEMU_SRCS_C) \
+	$(OBJS) \
+	-lpthread
 
 # ================================================================
 
-H_SRCS = Memhex32_read.h  Memhex32_read_protos.h \
-	SimpleQueue.h     SimpleQueue_protos.h \
-	HS_syscontrol.h   HS_syscontrol_protos.h \
-	HS_tty.h          HS_tty_protos.h \
-	HS_virtio.h       HS_virtio_protos.h \
-	HS_gdbstub.h      HS_gdbstub_protos.h \
-	HS_msg.h          HS_msg_protos.h \
-	Bytevec.h  \
-	AWS_Sim_Lib.h     AWS_Sim_Lib_protos.h \
-	TCP_Client_Lib.h  TCP_Client_Lib_protos.h
+HS_MAIN_SRCS_H = Memhex32_read.h  Memhex32_read_protos.h \
+		SimpleQueue.h     SimpleQueue_protos.h \
+		HS_syscontrol.h   HS_syscontrol_protos.h \
+		HS_tty.h          HS_tty_protos.h \
+		HS_virtio.h       HS_virtio_protos.h \
+		HS_gdbstub.h      HS_gdbstub_protos.h \
+		HS_msg.h          HS_msg_protos.h \
+		Bytevec.h  \
+		AWS_Sim_Lib.h     AWS_Sim_Lib_protos.h \
+		TCP_Client_Lib.h  TCP_Client_Lib_protos.h
 
-HS_main.o: HS_main.c  $(H_SRCS)
-	cc -c  -DSV_TEST  HS_main.c
+HS_main.o: HS_main.c  $(HS_MAIN_SRCS_H)
+	cc -c  $(TINYEMU_CFLAGS) -I $(TINYEMU)  -I $(TINYEMU_SLIRP) \
+	-DSV_TEST  HS_main.c
 
 # ================================================================
 
@@ -43,8 +89,9 @@ HS_tty_protos.h: HS_tty.c
 
 # ================================================================
 
-HS_virtio.o: HS_virtio.h  HS_virtio.c  HS_virtio_protos.h
-	cc -c HS_virtio.c
+HS_virtio.o: HS_virtio.h  HS_virtio.c  HS_virtio_protos.h  SimpleQueue.h
+	cc -c $(TINYEMU_CFLAGS) -I $(TINYEMU)  -I $(TINYEMU_SLIRP) \
+	HS_virtio.c
 
 HS_virtio_protos.h: HS_virtio.c
 	C_Proto_Extract.py  HS_virtio.c

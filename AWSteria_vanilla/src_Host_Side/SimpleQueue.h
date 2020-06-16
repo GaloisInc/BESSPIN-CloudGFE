@@ -14,4 +14,7 @@ typedef struct {
     int       out;
 } SimpleQueue;
 
+// ================================================================
+// Extern functions
+
 #include "SimpleQueue_protos.h"
