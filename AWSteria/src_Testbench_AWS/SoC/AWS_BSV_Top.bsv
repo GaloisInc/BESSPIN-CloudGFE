@@ -17,6 +17,7 @@ package AWS_BSV_Top;
 import FIFOF       :: *;
 import GetPut      :: *;
 import Connectable :: *;
+import Clocks      :: *;
 
 // ----------------
 // BSV additional libs
@@ -59,13 +60,13 @@ Integer hw_to_host_chan_debug_module = 3;
 // ================================================================
 
 (* synthesize *)
-module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
+module mkAWS_BSV_Top #(Clock core_clk) (AWS_BSV_Top_IFC);
 
    // 0: quiet    1: rules
    Integer verbosity = 0;
 
    // WindSoC
-   AWS_SoC_Top_IFC soc_top <- mkAWS_SoC_Top;
+   AWS_SoC_Top_IFC soc_top <- mkAWS_SoC_Top(core_clk);
 
    // Adapter towards OCL
    OCL_Adapter_IFC  ocl_adapter <- mkOCL_Adapter;

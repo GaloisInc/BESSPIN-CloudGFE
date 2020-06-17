@@ -15,6 +15,7 @@ import FIFOF        :: *;
 import GetPut       :: *;
 import ClientServer :: *;
 import Connectable  :: *;
+import Clocks       :: *;
 
 // ----------------
 // BSV additional libs
@@ -50,39 +51,44 @@ deriving (Eq, Bits, FShow);
 
 (* synthesize *)
 module mkTop_HW_Side (Empty) ;
+   Clock  clk <- exposeCurrentClock();
+   Reset rstn <- mkAsyncResetFromCR(5, clk);
 
    // 0: quiet; 1: rules
    Integer verbosity = 0;
 
-   Reg #(State) rg_state <- mkReg (STATE_CONNECTING);
+   Reg #(State) rg_state <- mkReg (STATE_CONNECTING, reset_by rstn);
+
+   // If the default clock is nominally 250MHz at 10 Verilog time steps,
+   // then period 26 is just under 100MHz:
+   Clock core_clk  <- mkAbsoluteClock(0, 26, reset_by rstn);
 
    // The top-level of the BSV code in the AWS CL
-   AWS_BSV_Top_IFC  aws_BSV_top <- mkAWS_BSV_Top;
+   AWS_BSV_Top_IFC  aws_BSV_top <- mkAWS_BSV_Top (core_clk, reset_by rstn);
 
    // Models for the four DDR4s
-   AXI4_16_64_512_0_Slave_IFC  ddr4_A <- mkMem_Model (0);
-   AXI4_16_64_512_0_Slave_IFC  ddr4_B <- mkMem_Model (1);
-   AXI4_16_64_512_0_Slave_IFC  ddr4_C <- mkMem_Model (2);
-   AXI4_16_64_512_0_Slave_IFC  ddr4_D <- mkMem_Model (3);
+   AXI4_16_64_512_0_Slave_IFC  ddr4_A <- mkMem_Model (0, reset_by rstn);
+   AXI4_16_64_512_0_Slave_IFC  ddr4_B <- mkMem_Model (1, reset_by rstn);
+   AXI4_16_64_512_0_Slave_IFC  ddr4_C <- mkMem_Model (2, reset_by rstn);
+   AXI4_16_64_512_0_Slave_IFC  ddr4_D <- mkMem_Model (3, reset_by rstn);
 
    // AXI4 Deburster in front of DDR4 A
-   AXI4_Deburster_IFC #(16, 64, 512, 0) ddr4_A_deburster <- mkAXI4_Deburster_DDR4;
-   AXI4_Deburster_IFC #(16, 64, 512, 0) ddr4_B_deburster <- mkAXI4_Deburster_DDR4;
-   AXI4_Deburster_IFC #(16, 64, 512, 0) ddr4_C_deburster <- mkAXI4_Deburster_DDR4;
-   AXI4_Deburster_IFC #(16, 64, 512, 0) ddr4_D_deburster <- mkAXI4_Deburster_DDR4;
-
+   AXI4_Deburster_IFC #(16, 64, 512, 0) ddr4_A_deburster <- mkAXI4_Deburster_DDR4(reset_by rstn);
+   AXI4_Deburster_IFC #(16, 64, 512, 0) ddr4_B_deburster <- mkAXI4_Deburster_DDR4(reset_by rstn);
+   AXI4_Deburster_IFC #(16, 64, 512, 0) ddr4_C_deburster <- mkAXI4_Deburster_DDR4(reset_by rstn);
+   AXI4_Deburster_IFC #(16, 64, 512, 0) ddr4_D_deburster <- mkAXI4_Deburster_DDR4(reset_by rstn);
 
    // Connect AWS_BSV_Top ddr ports to debursters
-   mkConnection (aws_BSV_top.ddr4_A_master, ddr4_A_deburster.from_master);
-   mkConnection (aws_BSV_top.ddr4_B_master, ddr4_B_deburster.from_master);
-   mkConnection (aws_BSV_top.ddr4_C_master, ddr4_C_deburster.from_master);
-   mkConnection (aws_BSV_top.ddr4_D_master, ddr4_D_deburster.from_master);
+   mkConnection (aws_BSV_top.ddr4_A_master, ddr4_A_deburster.from_master, reset_by rstn);
+   mkConnection (aws_BSV_top.ddr4_B_master, ddr4_B_deburster.from_master, reset_by rstn);
+   mkConnection (aws_BSV_top.ddr4_C_master, ddr4_C_deburster.from_master, reset_by rstn);
+   mkConnection (aws_BSV_top.ddr4_D_master, ddr4_D_deburster.from_master, reset_by rstn);
 
    // Connect debursters to DDR models
-   mkConnection (ddr4_A_deburster.to_slave, ddr4_A);
-   mkConnection (ddr4_B_deburster.to_slave, ddr4_B);
-   mkConnection (ddr4_C_deburster.to_slave, ddr4_C);
-   mkConnection (ddr4_D_deburster.to_slave, ddr4_D);
+   mkConnection (ddr4_A_deburster.to_slave, ddr4_A, reset_by rstn);
+   mkConnection (ddr4_B_deburster.to_slave, ddr4_B, reset_by rstn);
+   mkConnection (ddr4_C_deburster.to_slave, ddr4_C, reset_by rstn);
+   mkConnection (ddr4_D_deburster.to_slave, ddr4_D, reset_by rstn);
 
    // ================================================================
    // BEHAVIOR: start up
@@ -113,7 +119,7 @@ module mkTop_HW_Side (Empty) ;
    Integer verbosity_AXIL    = 0;
 
    // Communication box (converts between bytevecs and message structs)
-   Bytevec_IFC comms <- mkBytevec;
+   Bytevec_IFC comms <- mkBytevec(reset_by rstn);
 
    // Receive a bytevec from host and put into communication box
    rule rl_host_recv (rg_state == STATE_RUNNING);
@@ -157,9 +163,9 @@ module mkTop_HW_Side (Empty) ;
    // because although t1 and t2 are isomorphic types, they are
    // different BSV types coming from different declarations.
 
-   AXI4_16_64_512_0_Master_Xactor_IFC  dma_pcis_xactor <- mkAXI4_Master_Xactor;
+   AXI4_16_64_512_0_Master_Xactor_IFC  dma_pcis_xactor <- mkAXI4_Master_Xactor(reset_by rstn);
 
-   mkConnection (dma_pcis_xactor.axi_side, aws_BSV_top.dma_pcis_slave);
+   mkConnection (dma_pcis_xactor.axi_side, aws_BSV_top.dma_pcis_slave, reset_by rstn);
 
    // Connect AXI4 WR_ADDR channel
    // Basically: mkConnection (comms.fo_AXI4_Wr_Addr_i16_a64_u0,  dma_pcis_xactor.i_wr_addr)
@@ -179,7 +185,7 @@ module mkTop_HW_Side (Empty) ;
       dma_pcis_xactor.i_wr_addr.enq (x2);
    endrule
 
-   Reg #(Bit #(8)) rg_AXI4_wr_data_beat <- mkReg (0);
+   Reg #(Bit #(8)) rg_AXI4_wr_data_beat <- mkReg (0, reset_by rstn);
 
    // Connect AXI4 WR_DATA channel
    // Basically: mkConnection (comms.fo_AXI4_Wr_Data_d512_u0,  dma_pcis_xactor.i_wr_data)
@@ -241,9 +247,9 @@ module mkTop_HW_Side (Empty) ;
    // ----------------
    // Connect communication box and OCL AXI4-Lite port of aws_BSV_top
 
-   AXI4L_32_32_0_Master_Xactor_IFC  ocl_xactor <- mkAXI4_Lite_Master_Xactor;
+   AXI4L_32_32_0_Master_Xactor_IFC  ocl_xactor <- mkAXI4_Lite_Master_Xactor(reset_by rstn);
 
-   mkConnection (ocl_xactor.axi_side, aws_BSV_top.ocl_slave);
+   mkConnection (ocl_xactor.axi_side, aws_BSV_top.ocl_slave, reset_by rstn);
 
    // Connect AXI4L WR_ADDR channel
    // Basically: mkConnection (comms.fo_AXI4L_Wr_Addr_a32_u0,  ocl_xactor.i_wr_addr)
@@ -282,7 +288,7 @@ module mkTop_HW_Side (Empty) ;
 				 buser: x1.buser};
       comms.fi_AXI4L_Wr_Resp_u0.enq (x2);
    endrule
-   
+
    // Connect AXI4L RD_DATA channel
    // Basically: mkConnection (comms.fi_AXI4L_Rd_Data_d32_u0,  ocl_xactor.o_rd_data)
    rule rl_connect_ocl_rd_data;
@@ -300,9 +306,9 @@ module mkTop_HW_Side (Empty) ;
    //     vdip, vled (*)
    // TODO: (*) should have own channels to/from host in communication box
 
-   Reg #(Bit #(64)) rg_counter_4ns <- mkReg (0);
-   Reg #(Bit #(16)) rg_last_vled   <- mkReg (0);
-   Reg #(Bit #(16)) rg_vdip        <- mkReg (0);
+   Reg #(Bit #(64)) rg_counter_4ns <- mkReg (0, reset_by rstn);
+   Reg #(Bit #(16)) rg_last_vled   <- mkReg (0, reset_by rstn);
+   Reg #(Bit #(16)) rg_vdip        <- mkReg (0, reset_by rstn);
 
    rule rl_status_signals;
       // ---------------- gcounts (4ns counters)
