@@ -34,9 +34,9 @@ function usage
 }
 
 # Default arguments for script and strategy
-strategy=DEFAULT
-clock_recipe_a=A0
-clock_recipe_b=B0
+strategy=TIMING
+clock_recipe_a=A1
+clock_recipe_b=B5
 clock_recipe_c=C0
 vivado_script="create_dcp_from_cl.tcl"
 foreground=0
@@ -157,7 +157,7 @@ IFS=',' read -r -a vdefine_array <<< "$vdefine"
 opt_vdefine=""
 
 for index in "${!vdefine_array[@]}"
-do 
+do
  echo "$index ${vdefine_array[index]}"
  opt_vdefine+=" -verilog_define "
  opt_vdefine+=${vdefine_array[index]}
@@ -217,7 +217,7 @@ then
 fi
 
 # Use timestamp for logs and output files
-timestamp=$(date +"%y_%m_%d-%H%M%S") 
+timestamp=$(date +"%y_%m_%d-%H%M%S")
 logname=$timestamp.vivado.log
 ln -s -f $logname last_log
 
@@ -246,7 +246,7 @@ subsystem_vendor_id="0x${id1_version:4:4}";
 cmd="vivado -mode batch -nojournal -log $logname -source $vivado_script -tclargs $timestamp $strategy $hdk_version $shell_version $device_id $vendor_id $subsystem_id $subsystem_vendor_id $clock_recipe_a $clock_recipe_b $clock_recipe_c $uram_option $notify $opt_vdefine"
 if [[ "$foreground" == "0" ]]; then
   nohup $cmd > $timestamp.nohup.out 2>&1 &
-  
+
   info_msg "Build through Vivado is running as background process, this may take few hours."
   info_msg "Output is being redirected to $timestamp.nohup.out"
   info_msg "If you have set your EMAIL environment variable and -notify is specified, you will receive a notification when complete."
