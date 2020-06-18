@@ -101,12 +101,9 @@ Busybox linux will boot with full network / internet access. You can SSH into it
 TERM=Linux ssh root@172.16.0.2
 ```
 
-Debian requires a few additional commands to bring up networking:
+Debian requires an additional command to bring up networking:
 ```
-ip link set dev eth0 up
-ip addr add 172.16.0.2/24 dev eth0
-ip route add default via 172.16.0.1
-echo "nameserver 1.1.1.1" > /etc/resolv.conf
+ifup eth0
 ```
 
 Running `poweroff -f` within the target OS will automatically stop the simulator cleanly. If it becomes stuck or unresponsive, you can also use the `./kill_sim.sh` script.
@@ -119,18 +116,34 @@ The current FreeBSD build does not include Ethernet or Block device drivers, so 
 ./run_sim.sh ~/cloudgfe_binaries/freebsd_64bit/freebsd.img ~/cloudgfe_binaries/freebsd_64bit/freebsd.dwarf ~/cloudgfe_binaries/freebsd_64bit/freebsd.elf
 ```
 
+## Debug Support
+
+`gdb` is now supported to debug programs running on the F1's FPGA. 
+
+To use gdb:
+1. Edit `run_sim.sh` and enable debugging by setting `DEBUG_ENABLE=1` near the top of the file in the `Debug Support` section. 
+
+2. Start your simulation normally using the steps outlined earlier for using `./run_sim.sh`. You'll notice the simulation stops at the line:
+```
+[DMI] Waiting for connection from gdb / openocd ...
+```
+
+3. Use your preferred method to open a different terminal session (new tab in `screen`, detach from `screen`, separate SSH connection, etc) and run from the `sim` folder:
+```
+./run_gdb.sh <elf_file>
+```
+The ELF file should ideally match what you provided to `run_sim.sh`. The first time this script runs, it will download the RISC-V toolchain and extract it, so it may take some time.
+
+_Side Note_ One nice way to do this is using `screen`'s split-view. Press `<ctrl>-a <shift>S`, `<ctrl>-a <tab>`, `<ctrl>-a c` to create a new horizontal split view, switch to the bottom view, and create a new window. You can then switch between views using `<ctrl>-a <tab>`.
+
+4. Once `gdb` connects, the processor will be stalled and the PC automatically set to main memory, which has been pre-populated with the ELF file. You can simply type `continue` to run the program or use any other functionality at this point.
+
+5. To end the session, quit `gdb` and then use the `./kill_sim.sh` script to clean up.
+
+**Note** File loading via gdb is currently maxing out around 30KB/sec. You can load smaller bare metal programs directly using gdb, but larger OS images will take a long time. It is often faster to kill the simulation and re-run `./run_sim.sh` to load a new ELF. Then reconnect gdb.
+
 ## Networking Notes
 * The target OS has full internet access by default, but it is NAT'd behind the host OS.
-* The Busybox Linux image starts a simple Dropbear SSH server and Apache HTTP server. On the host OS you can run:
-```
-curl http://172.16.0.2
-<html><body><h1>Hello!</h1>
-
-This webpage is hosted by apache, running on Linux, running on a FireSim simulation
-of RISC-V RocketChip on the FPGA of an EC2 F1 instance.
-
-</body></html>
-```
 
 ## Known Issues
 * If the tap0 interface is already `up` when loading the simulator, Linux will get stuck when starting networking for an unknown reason. Keeping the interface `down` until fully booted fixes this issue.
