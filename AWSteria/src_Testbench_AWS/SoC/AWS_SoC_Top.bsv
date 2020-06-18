@@ -76,9 +76,9 @@ import Debug_Module     :: *;
 
 interface AWS_SoC_Top_IFC;
    // AXI4 interface facing DDR
-   interface AXI4_Master_Synth#( Wd_Id_14, Wd_Addr_64, Wd_Data_512
-                               , Wd_AW_User_0, 4, Wd_B_User_0
-                               , Wd_AR_User_0, 4) to_ddr4;
+   interface AXI4_Master #( Wd_Id_14, Wd_Addr_64, Wd_Data_512
+                          , Wd_AW_User_0, 4, Wd_B_User_0
+                          , Wd_AR_User_0, 4) to_ddr4;
 
    // UART0 to external console
    interface Get #(Bit #(8)) get_to_console;
@@ -175,13 +175,13 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    // SoC fabric master connections
    // Note: see 'SoC_Map' for 'master_num' definitions
 
-   Vector#(Num_Masters, AXI4_Master_Synth #( Wd_MId_ext, Wd_Addr, Wd_Data
-                                           , Wd_AW_User_ext, Wd_W_User_ext, Wd_B_User_ext
-                                           , Wd_AR_User_ext, Wd_R_User_ext))
+   Vector#(Num_Masters, AXI4_Master #( Wd_MId_ext, Wd_Addr, Wd_Data
+                                     , Wd_AW_User_ext, Wd_W_User_ext, Wd_B_User_ext
+                                     , Wd_AR_User_ext, Wd_R_User_ext))
       master_vector = newVector;
 
    // CPU IMem master to fabric
-   master_vector[imem_master_num] <- liftAXI4_Master_Synth(zeroMasterUserFields, core.cpu_imem_master);
+   master_vector[imem_master_num] = zeroMasterUserFields (core.cpu_imem_master);
 
    // CPU DMem master to fabric
    master_vector[dmem_master_num] = core.cpu_dmem_master;
@@ -190,34 +190,32 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    // SoC fabric slave connections
    // Note: see 'SoC_Map' for 'slave_num' definitions
 
-   Vector#(Num_Slaves, AXI4_Slave_Synth #( Wd_SId, Wd_Addr, Wd_Data
-                                         , Wd_AW_User_ext, Wd_W_User_ext, Wd_B_User_ext
-                                         , Wd_AR_User_ext, Wd_R_User_ext))
+   Vector#(Num_Slaves, AXI4_Slave #( Wd_SId, Wd_Addr, Wd_Data
+                                   , Wd_AW_User_ext, Wd_W_User_ext, Wd_B_User_ext
+                                   , Wd_AR_User_ext, Wd_R_User_ext))
       slave_vector = newVector;
    Vector#(Num_Slaves, Range#(Wd_Addr))   route_vector = newVector;
 
    // Fabric to Boot ROM
-   let br <- fromAXI4_Slave_Synth(boot_rom.slave);
-   mkConnection(boot_rom_axi4_deburster.master, br);
-   slave_vector[boot_rom_slave_num] <- toAXI4_Slave_Synth(zeroSlaveUserFields(boot_rom_axi4_deburster.slave));
+   mkConnection (boot_rom_axi4_deburster.master, boot_rom.slave);
+   slave_vector[boot_rom_slave_num] = zeroSlaveUserFields (boot_rom_axi4_deburster.slave);
    route_vector[boot_rom_slave_num] = soc_map.m_boot_rom_addr_range;
 
    // Fabric to Mem Controller
-   let mem <- fromAXI4_Slave_Synth(mem0_controller.slave);
-   AXI4_Master#( Wd_Id_14, Wd_Addr, Wd_Data
-               , Wd_AW_User_ext, Wd_W_User_ext, Wd_B_User_ext
-               , Wd_AR_User_ext, Wd_R_User_ext)
+   AXI4_Master #( Wd_Id_14, Wd_Addr, Wd_Data
+                , Wd_AW_User_ext, Wd_W_User_ext, Wd_B_User_ext
+                , Wd_AR_User_ext, Wd_R_User_ext)
       tmp = extendIDFields(mem0_controller_axi4_deburster.master, 0);
-   mkConnection(tmp, mem);
-   slave_vector[mem0_controller_slave_num] <- toAXI4_Slave_Synth(zeroSlaveUserFields(mem0_controller_axi4_deburster.slave));
+   mkConnection (tmp, mem0_controller.slave);
+   slave_vector[mem0_controller_slave_num] = mem0_controller_axi4_deburster.slave;
    route_vector[mem0_controller_slave_num] = soc_map.m_mem0_controller_addr_range;
 
    // Fabric to UART0
-   slave_vector[uart16550_0_slave_num] <- liftAXI4_Slave_Synth(zeroSlaveUserFields, uart0.slave);
+   slave_vector[uart16550_0_slave_num] = zeroSlaveUserFields (uart0.slave);
    route_vector[uart16550_0_slave_num] = soc_map.m_uart16550_0_addr_range;
 
    // Fabric to AWS Host Access
-   slave_vector[host_access_slave_num] <- liftAXI4_Slave_Synth(zeroSlaveUserFields, aws_host_access.slave);
+   slave_vector[host_access_slave_num] = zeroSlaveUserFields (aws_host_access.slave);
    route_vector[host_access_slave_num] = soc_map.m_host_access_addr_range;
 
 `ifdef INCLUDE_ACCEL0
@@ -233,8 +231,8 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
 `endif
 
    // SoC Fabric
-   let bus <- mkAXI4Bus_Synth (routeFromMappingTable(route_vector),
-                               master_vector, slave_vector);
+   let bus <- mkAXI4Bus ( routeFromMappingTable(route_vector)
+                        , master_vector, slave_vector);
 
    // ----------------
    // Connect interrupt sources for CPU external interrupt request inputs.

@@ -169,39 +169,33 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
    // ================================================================
    // connections
 
-   Vector#(2, AXI4_Master_Synth #(14, 64, 512, 0, 4, 0, 0, 4))
+   Vector#(2, AXI4_Master #(14, 64, 512, 0, 4, 0, 0, 4))
      master_vector = newVector;
-   Vector#(4, AXI4_Slave_Synth #(15, 64, 512, 0, 4, 0, 0, 4))
+   Vector#(4, AXI4_Slave #(15, 64, 512, 0, 4, 0, 0, 4))
      slave_vector = newVector;
    Vector#(4, Range#(64)) route_vector = newVector;
 
-   // shim helper
-   module mkShim(AXI4_Shim_Synth #(a, 64, 512, 0, 4, 0, 0, 4));
-     let tmp <- mkAXI4ShimFF;
-     let shim <- toAXI4_Shim_Synth(tmp);
-     return shim;
-   endmodule
    // connect interface master shim
-   let inner_shim <- mkShim;
-   let inner_shim_slave <- liftAXI4_Slave_Synth (zeroSlaveUserFields, inner_shim.slave);
+   let inner_shim <- mkAXI4ShimFF;
+   let inner_shim_slave <- toAXI4_Slave_Synth (zeroSlaveUserFields (inner_shim.slave));
    master_vector[0] = inner_shim.master;
    // Connect SoC DDR4 interface
    master_vector[1] = soc_top.to_ddr4;
    // connect interface ddr4 slave shims / tag controller in CHERI case
    Vector #(4, AXI4_Master_Synth #(16, 64, 512, 0, 0, 0, 0, 0)) outer_shim_master;
-   Vector #(4, AXI4_Slave_Synth #(15, 64, 512, 0, 4, 0, 0, 4)) outer_shim_slave;
+   Vector #(4, AXI4_Slave #(15, 64, 512, 0, 4, 0, 0, 4)) outer_shim_slave;
    `ifdef ISA_CHERI
    Vector#(4, TagControllerAXI #(15, 64, 512))
       tagCtrl <- replicateM(mkTagControllerAXI);
    for (Integer i = 0; i < 4; i = i + 1) begin
       outer_shim_master[i] <- toAXI4_Master_Synth (tagCtrl[i].master);
-      outer_shim_slave[i] <- toAXI4_Slave_Synth (tagCtrl[i].slave);
+      outer_shim_slave[i]  = tagCtrl[i].slave;
    end
    `else
-   Vector#(4, AXI4_Shim_Synth #(16, 64, 512, 0, 4, 0, 0, 4))
-     outer_shim <- replicateM(mkShim);
+   Vector#(4, AXI4_Shim #(16, 64, 512, 0, 4, 0, 0, 4))
+     outer_shim <- replicateM(mkAXI4ShimFF);
    for (Integer i = 0; i < 4; i = i + 1) begin
-      outer_shim_master[i] = outer_shim[i].master;
+      outer_shim_master[i] <- toAXI4_Master_Synth (outer_shim[i].master);
       outer_shim_slave[i] = outer_shim[i].slave;
    end
    `endif
@@ -214,8 +208,8 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
    slave_vector[3] = outer_shim_slave[3];
    route_vector[3] = Range { base: 64'hC_0000_0000, size: 64'h4_0000_0000 };
    // Fabric
-   mkAXI4Bus_Synth (routeFromMappingTable(route_vector),
-                    master_vector, slave_vector);
+   mkAXI4Bus ( routeFromMappingTable(route_vector)
+             , master_vector, slave_vector);
    // ================================================================
    // Connection OCL Adapter to Debug Module
    // First word [31:24] specifies rd or wr; lsbs specify DM address

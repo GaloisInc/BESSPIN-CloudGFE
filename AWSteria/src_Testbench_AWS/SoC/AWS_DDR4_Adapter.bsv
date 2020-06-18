@@ -132,12 +132,12 @@ Integer aws_DDR4_adapter_status_error      = 2;
 
 interface AWS_DDR4_Adapter_IFC;
    // AXI4 interface facing client app/fabric
-   interface AXI4_Slave_Synth#( Wd_Id_14, Wd_Addr_Fabric, Wd_Data_Fabric
-                              , 0, 1, 0, 0, 1) slave;
+   interface AXI4_Slave #( Wd_Id_14, Wd_Addr_Fabric, Wd_Data_Fabric
+                         , 0, 1, 0, 0, 1) slave;
 
    // AXI4 interface facing DDR
-   interface AXI4_Master_Synth#( Wd_Id_14, Wd_Addr_64, Wd_Data_512
-                               , 0, 4, 0, 0, 4) to_ddr4;
+   interface AXI4_Master #( Wd_Id_14, Wd_Addr_64, Wd_Data_512
+                          , 0, 4, 0, 0, 4) to_ddr4;
 
    // ----------------
    // Control methods; should be called at beginning (STATE_WAITING)
@@ -294,17 +294,13 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
    Reg #(Addr_64) rg_addr_lim  <- mkRegU;
 
    // Front-side interface to clients
-   AXI4_Slave_Xactor#( Wd_Id_14, Wd_Addr_Fabric, Wd_Data_Fabric
-                     , 0, 1, 0, 0, 1)
-      slave_xactor <- mkAXI4_Slave_Xactor;
+   let slavePortShim <- mkAXI4ShimFF;
 
    // Requests merged from client (WrA, WrD) and RdA channels
    FIFOF #(Req) f_reqs <- mkPipelineFIFOF;
 
    // Back-side interface to memory
-   AXI4_Master_Xactor#( Wd_Id_14, Wd_Addr_64, Wd_Data_512
-                      , 0, 4, 0, 0, 4)
-      master_xactor <- mkAXI4_Master_Xactor;
+   let masterPortShim <- mkAXI4ShimFF;
 
    // We maintain a cache of 1 Data_512
    Reg #(Bool)      rg_cached_clean  <- mkRegU;
@@ -344,8 +340,8 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
 				  wstrb: '1,
 				  wlast: True,
 				  wuser: write_user};
-	    master_xactor.slave.aw.put(wra);
-	    master_xactor.slave.w.put(wrd);
+	    masterPortShim.slave.aw.put(wra);
+	    masterPortShim.slave.w.put(wrd);
 	 end
 	 else begin
 	    let rda = AXI4_ARFlit {arid:     0,
@@ -359,7 +355,7 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
 				   arqos:    0,
 				   arregion: 0,
 				   aruser:   0};
-	    master_xactor.slave.ar.put(rda);
+	    masterPortShim.slave.ar.put(rda);
 	 end
       endaction
    endfunction
@@ -368,8 +364,8 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
    // Start the module
 
    rule rl_start (rg_state == STATE_START);
-      slave_xactor.clear;
-      master_xactor.clear;
+      slavePortShim.clear;
+      masterPortShim.clear;
       rg_status <= fromInteger (aws_DDR4_adapter_status_ok);
       rg_state  <= STATE_WAITING;
 
@@ -381,7 +377,7 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
    // Merge requests into a single queue, prioritizing reads over writes
 
    rule rl_merge_rd_req (rg_state == STATE_READY);
-      let rda <- get(slave_xactor.master.ar);
+      let rda <- get(slavePortShim.master.ar);
       let req = Req {req_op:     REQ_OP_RD,
 		     id:         rda.arid,
 		     addr:       rda.araddr,
@@ -407,8 +403,8 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
 
    (* descending_urgency = "rl_merge_rd_req, rl_merge_wr_req" *)
    rule rl_merge_wr_req (rg_state == STATE_READY);
-      let wra <- get(slave_xactor.master.aw);
-      let wrd <- get(slave_xactor.master.w);
+      let wra <- get(slavePortShim.master.aw);
+      let wrd <- get(slavePortShim.master.w);
       let req = Req {req_op:     REQ_OP_WR,
 		     id:         wra.awid,
 		     addr:       wra.awaddr,
@@ -492,7 +488,7 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
    endrule
 
    rule rl_refill (rg_state == STATE_REFILLING);
-      let rdd <- get(master_xactor.slave.r);
+      let rdd <- get(masterPortShim.slave.r);
       if (rdd.rresp != OKAY)
 	 rg_status <= fromInteger (aws_DDR4_adapter_status_error);
       else begin
@@ -546,7 +542,7 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
 			            : SLVERR),
 			    rlast: True,
 			    ruser: ruser};
-      slave_xactor.master.r.put(rdr);
+      slavePortShim.master.r.put(rdr);
       f_reqs.deq;
 
       if (verbosity > 1) begin
@@ -606,7 +602,7 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
       let wrr = AXI4_BFlit {bid:   f_reqs.first.id,
 			    bresp: OKAY,
 			    buser: f_reqs.first.user};
-      slave_xactor.master.b.put(wrr);
+      slavePortShim.master.b.put(wrr);
 
       // Done with this request
       f_reqs.deq;
@@ -638,7 +634,7 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
    // Drain write-responses from mem, recording error if any.
 
    rule rl_drain_mem_wr_resps;
-      let wrr <- get(master_xactor.slave.b);
+      let wrr <- get(masterPortShim.slave.b);
       if (wrr.bresp != OKAY) begin
 	 rg_status <= fromInteger (aws_DDR4_adapter_status_error);
 	 $finish (1);
@@ -658,7 +654,7 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
 			    rresp: SLVERR,
 			    rlast: True,
 			    ruser: 1'b0 };
-      slave_xactor.master.r.put(rdr);
+      slavePortShim.master.r.put(rdr);
       f_reqs.deq;
 
       $write ("%0d: ERROR: AWS_DDR4_Adapter:", cur_cycle);
@@ -678,7 +674,7 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
       let wrr = AXI4_BFlit {bid:   f_reqs.first.id,
 			    bresp: SLVERR,
 			    buser: f_reqs.first.user};
-      slave_xactor.master.b.put(wrr);
+      slavePortShim.master.b.put(wrr);
       f_reqs.deq;
 
       $write ("%0d: ERROR: AWS_DDR4_Adapter:", cur_cycle);
@@ -695,10 +691,10 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
    // INTERFACE
 
    // AXI4 interface facing client
-   interface  slave = slave_xactor.slaveSynth;
+   interface  slave = slavePortShim.slave;
 
    // AXI4 interface facing DDR
-   interface  to_ddr4 = master_xactor.masterSynth;
+   interface  to_ddr4 = masterPortShim.master;
 
    // ----------------
    // Control methods; should be called at beginning (STATE_WAITING)
