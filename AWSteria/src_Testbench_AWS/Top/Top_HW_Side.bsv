@@ -15,6 +15,7 @@ import FIFOF        :: *;
 import GetPut       :: *;
 import ClientServer :: *;
 import Connectable  :: *;
+import Clocks       :: *;
 
 // ----------------
 // BSV additional libs
@@ -50,46 +51,52 @@ deriving (Eq, Bits, FShow);
 
 (* synthesize *)
 module mkTop_HW_Side (Empty) ;
+   Clock  clk <- exposeCurrentClock();
+   Reset rstn <- mkAsyncResetFromCR(5, clk);
 
    // 0: quiet; 1: rules
    Integer verbosity = 1;
 
-   Reg #(State) rg_state <- mkReg (STATE_CONNECTING);
+   Reg #(State) rg_state <- mkReg (STATE_CONNECTING, reset_by rstn);
+
+   // If the default clock is nominally 250MHz at 10 Verilog time steps,
+   // then period 26 is just under 100MHz:
+   Clock core_clk  <- mkAbsoluteClock(0, 26, reset_by rstn);
 
    // The top-level of the BSV code in the AWS CL
-   AWS_BSV_Top_IFC  aws_BSV_top <- mkAWS_BSV_Top;
+   AWS_BSV_Top_IFC  aws_BSV_top <- mkAWS_BSV_Top (core_clk, reset_by rstn);
 
    // Models for the four DDR4s
-   AXI4_16_64_512_0_0_0_0_0_Slave_Synth ddr4_A <- mkMem_Model (0);
-   AXI4_16_64_512_0_0_0_0_0_Slave_Synth ddr4_B <- mkMem_Model (1);
-   AXI4_16_64_512_0_0_0_0_0_Slave_Synth ddr4_C <- mkMem_Model (2);
-   AXI4_16_64_512_0_0_0_0_0_Slave_Synth ddr4_D <- mkMem_Model (3);
+   AXI4_16_64_512_0_0_0_0_0_Slave_Synth ddr4_A <- mkMem_Model (0, reset_by rstn);
+   AXI4_16_64_512_0_0_0_0_0_Slave_Synth ddr4_B <- mkMem_Model (1, reset_by rstn);
+   AXI4_16_64_512_0_0_0_0_0_Slave_Synth ddr4_C <- mkMem_Model (2, reset_by rstn);
+   AXI4_16_64_512_0_0_0_0_0_Slave_Synth ddr4_D <- mkMem_Model (3, reset_by rstn);
 
    // AXI4 Deburster in front of DDR4 A
-   AXI4_Shim #(16, 64, 512, 0, 0, 0, 0, 0) ddr4_A_deburster <- mkBurstToNoBurst;
-   let ddr4_A_deburster_Synth_master <- toAXI4_Master_Synth (ddr4_A_deburster.master);
-   let ddr4_A_deburster_Synth_slave  <- toAXI4_Slave_Synth  (ddr4_A_deburster.slave);
-   AXI4_Shim #(16, 64, 512, 0, 0, 0, 0, 0) ddr4_B_deburster <- mkBurstToNoBurst;
-   let ddr4_B_deburster_Synth_master <- toAXI4_Master_Synth (ddr4_B_deburster.master);
-   let ddr4_B_deburster_Synth_slave  <- toAXI4_Slave_Synth  (ddr4_B_deburster.slave);
-   AXI4_Shim #(16, 64, 512, 0, 0, 0, 0, 0) ddr4_C_deburster <- mkBurstToNoBurst;
-   let ddr4_C_deburster_Synth_master <- toAXI4_Master_Synth (ddr4_C_deburster.master);
-   let ddr4_C_deburster_Synth_slave  <- toAXI4_Slave_Synth  (ddr4_C_deburster.slave);
-   AXI4_Shim #(16, 64, 512, 0, 0, 0, 0, 0) ddr4_D_deburster <- mkBurstToNoBurst;
-   let ddr4_D_deburster_Synth_master <- toAXI4_Master_Synth (ddr4_D_deburster.master);
-   let ddr4_D_deburster_Synth_slave  <- toAXI4_Slave_Synth  (ddr4_D_deburster.slave);
+   AXI4_Shim #(16, 64, 512, 0, 0, 0, 0, 0) ddr4_A_deburster <- mkBurstToNoBurst(reset_by rstn);
+   let ddr4_A_deburster_Synth_master <- toAXI4_Master_Synth (ddr4_A_deburster.master, reset_by rstn);
+   let ddr4_A_deburster_Synth_slave  <- toAXI4_Slave_Synth  (ddr4_A_deburster.slave, reset_by rstn);
+   AXI4_Shim #(16, 64, 512, 0, 0, 0, 0, 0) ddr4_B_deburster <- mkBurstToNoBurst(reset_by rstn);
+   let ddr4_B_deburster_Synth_master <- toAXI4_Master_Synth (ddr4_B_deburster.master, reset_by rstn);
+   let ddr4_B_deburster_Synth_slave  <- toAXI4_Slave_Synth  (ddr4_B_deburster.slave, reset_by rstn);
+   AXI4_Shim #(16, 64, 512, 0, 0, 0, 0, 0) ddr4_C_deburster <- mkBurstToNoBurst(reset_by rstn);
+   let ddr4_C_deburster_Synth_master <- toAXI4_Master_Synth (ddr4_C_deburster.master, reset_by rstn);
+   let ddr4_C_deburster_Synth_slave  <- toAXI4_Slave_Synth  (ddr4_C_deburster.slave, reset_by rstn);
+   AXI4_Shim #(16, 64, 512, 0, 0, 0, 0, 0) ddr4_D_deburster <- mkBurstToNoBurst(reset_by rstn);
+   let ddr4_D_deburster_Synth_master <- toAXI4_Master_Synth (ddr4_D_deburster.master, reset_by rstn);
+   let ddr4_D_deburster_Synth_slave  <- toAXI4_Slave_Synth  (ddr4_D_deburster.slave, reset_by rstn);
 
    // Connect AWS_BSV_Top ddr ports to debursters
-   mkConnection (aws_BSV_top.ddr4_A_master, ddr4_A_deburster_Synth_slave);
-   mkConnection (aws_BSV_top.ddr4_B_master, ddr4_B_deburster_Synth_slave);
-   mkConnection (aws_BSV_top.ddr4_C_master, ddr4_C_deburster_Synth_slave);
-   mkConnection (aws_BSV_top.ddr4_D_master, ddr4_D_deburster_Synth_slave);
+   mkConnection (aws_BSV_top.ddr4_A_master, ddr4_A_deburster_Synth_slave, reset_by rstn);
+   mkConnection (aws_BSV_top.ddr4_B_master, ddr4_B_deburster_Synth_slave, reset_by rstn);
+   mkConnection (aws_BSV_top.ddr4_C_master, ddr4_C_deburster_Synth_slave, reset_by rstn);
+   mkConnection (aws_BSV_top.ddr4_D_master, ddr4_D_deburster_Synth_slave, reset_by rstn);
 
    // Connect debursters to DDR models
-   mkConnection (ddr4_A_deburster_Synth_master, ddr4_A);
-   mkConnection (ddr4_B_deburster_Synth_master, ddr4_B);
-   mkConnection (ddr4_C_deburster_Synth_master, ddr4_C);
-   mkConnection (ddr4_D_deburster_Synth_master, ddr4_D);
+   mkConnection (ddr4_A_deburster_Synth_master, ddr4_A, reset_by rstn);
+   mkConnection (ddr4_B_deburster_Synth_master, ddr4_B, reset_by rstn);
+   mkConnection (ddr4_C_deburster_Synth_master, ddr4_C, reset_by rstn);
+   mkConnection (ddr4_D_deburster_Synth_master, ddr4_D, reset_by rstn);
 
    // ================================================================
    // BEHAVIOR: start up
@@ -118,7 +125,7 @@ module mkTop_HW_Side (Empty) ;
    Integer verbosity_bytevec = 0;
 
    // Communication box (converts between bytevecs and message structs)
-   Bytevec_IFC comms <- mkBytevec;
+   Bytevec_IFC comms <- mkBytevec(reset_by rstn);
 
    // Receive a bytevec from host and put into communication box
    rule rl_host_recv (rg_state == STATE_RUNNING);
@@ -158,15 +165,15 @@ module mkTop_HW_Side (Empty) ;
    // ----------------
    // Connect communication box and DMA_PCIS AXI4 port of aws_BSV_top
 
-   Integer verbosity_AXI = 1;
+   Integer verbosity_AXI = 0;
 
    // Note: the rl_xxx's below can't be replaced by 'mkConnection'
    // because although t1 and t2 are isomorphic types, they are
    // different BSV types coming from different declarations.
 
-   AXI4_14_64_512_0_0_0_0_0_Master_Xactor dma_pcis_xactor <- mkAXI4_Master_Xactor;
+   AXI4_14_64_512_0_0_0_0_0_Master_Xactor dma_pcis_xactor <- mkAXI4_Master_Xactor(reset_by rstn);
 
-   mkConnection (dma_pcis_xactor.masterSynth, aws_BSV_top.dma_pcis_slave);
+   mkConnection (dma_pcis_xactor.masterSynth, aws_BSV_top.dma_pcis_slave, reset_by rstn);
 
    // Connect AXI4 WR_ADDR channel
    // Basically: mkConnection (comms.fo_AXI4_Wr_Addr_i16_a64_u0,  dma_pcis_xactor.i_wr_addr)
@@ -191,7 +198,7 @@ module mkTop_HW_Side (Empty) ;
       end
    endrule
 
-   Reg #(Bit #(8)) rg_AXI4_wr_data_beat <- mkReg (0);
+   Reg #(Bit #(8)) rg_AXI4_wr_data_beat <- mkReg (0, reset_by rstn);
 
    // Connect AXI4 WR_DATA channel
    // Basically: mkConnection (comms.fo_AXI4_Wr_Data_d512_u0,  dma_pcis_xactor.i_wr_data)
@@ -270,9 +277,9 @@ module mkTop_HW_Side (Empty) ;
 
    Integer verbosity_AXI4L = 1;
 
-   AXI4L_32_32_0_0_0_0_0_Master_Xactor ocl_xactor <- mkAXI4Lite_Master_Xactor;
+   AXI4L_32_32_0_0_0_0_0_Master_Xactor ocl_xactor <- mkAXI4Lite_Master_Xactor(reset_by rstn);
 
-   mkConnection (ocl_xactor.masterSynth, aws_BSV_top.ocl_slave);
+   mkConnection (ocl_xactor.masterSynth, aws_BSV_top.ocl_slave, reset_by rstn);
 
    // Connect AXI4L WR_ADDR channel
    // Basically: mkConnection (comms.fo_AXI4L_Wr_Addr_a32_u0,  ocl_xactor.i_wr_addr)
@@ -294,7 +301,8 @@ module mkTop_HW_Side (Empty) ;
    rule rl_connect_ocl_wr_data;
       let x1 <- pop_o (comms.fo_AXI4L_Wr_Data_d32);
       let x2 = AXI4Lite_WFlit {wdata: x1.wdata,
-			       wstrb: x1.wstrb};
+			       wstrb: x1.wstrb,
+			       wuser: 0};
       ocl_xactor.slave.w.put (x2);
 
       if (verbosity_AXI4L != 0) begin
@@ -354,9 +362,9 @@ module mkTop_HW_Side (Empty) ;
    //     vdip, vled (*)
    // TODO: (*) should have own channels to/from host in communication box
 
-   Reg #(Bit #(64)) rg_counter_4ns <- mkReg (0);
-   Reg #(Bit #(16)) rg_last_vled   <- mkReg (0);
-   Reg #(Bit #(16)) rg_vdip        <- mkReg (0);
+   Reg #(Bit #(64)) rg_counter_4ns <- mkReg (0, reset_by rstn);
+   Reg #(Bit #(16)) rg_last_vled   <- mkReg (0, reset_by rstn);
+   Reg #(Bit #(16)) rg_vdip        <- mkReg (0, reset_by rstn);
 
    rule rl_status_signals;
       // ---------------- gcounts (4ns counters)

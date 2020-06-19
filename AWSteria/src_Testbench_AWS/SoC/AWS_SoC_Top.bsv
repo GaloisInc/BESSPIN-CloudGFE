@@ -22,6 +22,7 @@ import GetPut        :: *;
 import ClientServer  :: *;
 import Connectable   :: *;
 import Vector        :: *;
+import Clocks        :: *;
 
 // ----------------
 // BSV additional libs
@@ -38,7 +39,6 @@ import Fabric_Defs :: *;
 import SoC_Map     :: *;
 
 // SoC components (CPU, mem, and IPs)
-
 import Core_IFC :: *;
 import Core     :: *;
 import PLIC     :: *;    // For interface to PLIC interrupt sources, in Core_IFC
@@ -47,6 +47,7 @@ import PLIC     :: *;    // For interface to PLIC interrupt sources, in Core_IFC
 import Boot_ROM        :: *;
 import UART_Model      :: *;
 import AWS_Host_Access :: *;
+import AXI4_ClockCrossing ::*;
 
 
 // IPs on the fabric (memory)
@@ -134,7 +135,9 @@ deriving (Bits, Eq, FShow);
 // The module
 
 (* synthesize *)
-module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
+module mkAWS_SoC_Top #(Clock core_clk) (AWS_SoC_Top_IFC);
+   Reset core_rstn <- mkAsyncResetFromCR(2, core_clk);
+
    Integer verbosity = 0;    // Normally 0; non-zero for debugging
 
    Reg #(SoC_State) rg_state <- mkReg (SOC_START);
@@ -143,7 +146,8 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    SoC_Map_IFC soc_map <- mkSoC_Map;
 
    // Core: CPU + Near_Mem_IO (CLINT) + PLIC + Debug module (optional) + TV (optional)
-   Core_IFC #(N_External_Interrupt_Sources)  core <- mkCore;
+   Core_IFC #(N_External_Interrupt_Sources)  core <- mkCore (clocked_by core_clk,
+							     reset_by   core_rstn);
 
    // SoC Boot ROM
    Boot_ROM_IFC  boot_rom <- mkBoot_ROM;
@@ -181,10 +185,20 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
       master_vector = newVector;
 
    // CPU IMem master to fabric
-   master_vector[imem_master_num] = zeroMasterUserFields (core.cpu_imem_master);
+   AXI4_Master #( Wd_MId_ext, Wd_Addr, Wd_Data
+               , Wd_AW_User_ext, Wd_W_User_ext, Wd_B_User_ext
+               , Wd_AR_User_ext, Wd_R_User_ext)
+      cpu_imem_master = zeroMasterUserFields (core.cpu_imem_master);
+   let imem_crossing <- mkAXI4_ClockCrossingToCC (core_clk, core_rstn);
+   mkConnection ( cpu_imem_master, imem_crossing.slave
+                , clocked_by core_clk, reset_by core_rstn);
+   master_vector[imem_master_num] = imem_crossing.master;
 
    // CPU DMem master to fabric
-   master_vector[dmem_master_num] = core.cpu_dmem_master;
+   let dmem_crossing <- mkAXI4_ClockCrossingToCC (core_clk, core_rstn);
+   mkConnection ( core.cpu_dmem_master, dmem_crossing.slave
+                , clocked_by core_clk, reset_by core_rstn);
+   master_vector[dmem_master_num] = dmem_crossing.master;
 
    // ----------------
    // SoC fabric slave connections
@@ -237,21 +251,51 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    // ----------------
    // Connect interrupt sources for CPU external interrupt request inputs.
 
+   // Interrupt lines are independent (no inter-bit consistency issues), so we
+   // can get away with per-bit synchronizers. The Verilog is parameterised on
+   // the reset value, though this is not exposed, but the default of 0 is what
+   // we want.
+
    Reg #(Bool) rg_aws_host_to_hw_interrupt <- mkReg (False);
 
+   let uartSync <- mkSyncBitFromCC(core_clk);
+   let awsSync  <- mkSyncBitFromCC(core_clk);
+
+`ifdef INCLUDE_ACCEL0
+   let accel0Sync <- mkSyncBitFromCC(core_clk);
+`endif
+
+   // In SoC clock domain:
    (* fire_when_enabled, no_implicit_conditions *)
-   rule rl_connect_external_interrupt_requests;
+   rule rl_connect_external_interrupt_sources;
       // UART
-      Bool intr = uart0.intr;
-      core.core_external_interrupt_sources [irq_num_uart16550_0].m_interrupt_req (intr);
-      Integer last_irq_num = irq_num_uart16550_0;
+      Bool intr_uart = uart0.intr;
+      uartSync.send(intr_uart);
 
       // AWS Host-to-HW interrupt
-      core.core_external_interrupt_sources [irq_num_host_to_hw].m_interrupt_req (rg_aws_host_to_hw_interrupt);
-      last_irq_num = irq_num_host_to_hw;
+      awsSync.send (rg_aws_host_to_hw_interrupt);
 
 `ifdef INCLUDE_ACCEL0
       Bool intr_accel0 = accel0.interrupt_req;
+      accel0Sync.send(intr_accel0);
+`endif
+   endrule
+
+   // In core_clk domain:
+   (* fire_when_enabled, no_implicit_conditions *)
+   rule rl_connect_external_interrupt_requests;
+      // UART
+      Bool intr_uart = uartSync.read();
+      core.core_external_interrupt_sources [irq_num_uart16550_0].m_interrupt_req (intr_uart);
+      Integer last_irq_num = irq_num_uart16550_0;
+
+      // AWS Host-to-HW interrupt
+      Bool intr_aws = awsSync.read();
+      core.core_external_interrupt_sources [irq_num_host_to_hw].m_interrupt_req (intr_aws);
+      last_irq_num = irq_num_host_to_hw;
+
+`ifdef INCLUDE_ACCEL0
+      Bool intr_accel0 = accel0Sync.read();
       core.core_external_interrupt_sources [irq_num_accel0].m_interrupt_req (intr_accel0);
       last_irq_num = irq_num_accel0;
 `endif
@@ -276,9 +320,38 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    // ================================================================
    // SOFT RESET
 
+   // A little mechanism to transmit CPU reset request and response
+   // between the two clock domains
+
+   Reg#(Tuple2#(Bool, Bool)) fromCC <- mkSyncRegFromCC(unpack(0), core_clk);
+   Reg#(Bool)                  toCC <- mkSyncRegToCC  (unpack(0), core_clk,core_rstn);
+
+   Reg#(Bool) stateCPUs <- mkReg(False, clocked_by core_clk, reset_by core_rstn);
+   Reg#(Bool) stateCPUe <- mkReg(False, clocked_by core_clk, reset_by core_rstn);
+   Reg#(Bool) stateSoCs <- mkReg(False);
+   Reg#(Bool) stateSoCe <- mkReg(False);
+
+   // in Core domain
+   rule start_cpu_reset (fromCC matches {.s, .running} &&& s != stateCPUs);
+      stateCPUs <= s;
+      core.cpu_reset_server.request.put (running);
+   endrule
+
+   // in Core domain
+   rule end_cpu_reset;
+      let cpu_rsp <- core.cpu_reset_server.response.get;
+      let s = !stateCPUe;
+      toCC <= s;
+      stateCPUe <= s;
+   endrule
+
    function Action fa_reset_start_actions (Bool running);
       action
-	 core.cpu_reset_server.request.put (running);
+	 // in SoC domain:
+	 let s = !stateSoCs;
+	 fromCC   <= tuple2(s, running);
+	 stateSoCs <= s;
+
 	 uart0.server_reset.request.put (?);
          boot_rom_axi4_deburster.clear;
          mem0_controller_axi4_deburster.clear;
@@ -286,39 +359,43 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    endfunction
 
    function Action fa_reset_complete_actions ();
-      action
-	 let cpu_rsp             <- core.cpu_reset_server.response.get;
-	 let uart0_rsp           <- uart0.server_reset.response.get;
+      return
+      when (toCC != stateSoCe,
+	 action
+	    // in SoC domain:
+	    stateSoCe <= toCC;
 
-	 // Initialize address maps of slave IPs
-	 boot_rom.set_addr_map (rangeBase(soc_map.m_boot_rom_addr_range),
-				rangeTop(soc_map.m_boot_rom_addr_range));
+	    let uart0_rsp <- uart0.server_reset.response.get;
 
-	 mem0_controller.ma_set_addr_map (rangeBase(soc_map.m_mem0_controller_addr_range),
-			                  rangeTop(soc_map.m_mem0_controller_addr_range));
+	    // Initialize address maps of slave IPs
+	    boot_rom.set_addr_map (rangeBase(soc_map.m_boot_rom_addr_range),
+				   rangeTop(soc_map.m_boot_rom_addr_range));
 
-	 uart0.set_addr_map (rangeBase(soc_map.m_uart16550_0_addr_range),
-                             rangeTop(soc_map.m_uart16550_0_addr_range));
+	    mem0_controller.ma_set_addr_map (rangeBase(soc_map.m_mem0_controller_addr_range),
+					     rangeTop(soc_map.m_mem0_controller_addr_range));
 
-`ifdef INCLUDE_ACCEL0
-	 accel0.init (fabric_default_id,
-		      soc_map.m_accel0_addr_base,
-		      soc_map.m_accel0_addr_lim);
-`endif
+	    uart0.set_addr_map (rangeBase(soc_map.m_uart16550_0_addr_range),
+				rangeTop(soc_map.m_uart16550_0_addr_range));
 
-	 if (verbosity != 0) begin
-	    $display ("  SoC address map:");
-	    $display ("  Boot ROM:        0x%0h .. 0x%0h",
-		      rangeBase(soc_map.m_boot_rom_addr_range),
-		      rangeTop(soc_map.m_boot_rom_addr_range));
-	    $display ("  Mem0 Controller: 0x%0h .. 0x%0h",
-		      rangeBase(soc_map.m_mem0_controller_addr_range),
-		      rangeTop(soc_map.m_mem0_controller_addr_range));
-	    $display ("  UART0:           0x%0h .. 0x%0h",
-		      rangeBase(soc_map.m_uart16550_0_addr_range),
-		      rangeTop(soc_map.m_uart16550_0_addr_range));
-	 end
-      endaction
+	 `ifdef INCLUDE_ACCEL0
+	    accel0.init (fabric_default_id,
+			 soc_map.m_accel0_addr_base,
+			 soc_map.m_accel0_addr_lim);
+	 `endif
+
+	    if (verbosity != 0) begin
+	 $display ("  SoC address map:");
+	 $display ("  Boot ROM:        0x%0h .. 0x%0h",
+		   rangeBase(soc_map.m_boot_rom_addr_range),
+		   rangeTop(soc_map.m_boot_rom_addr_range));
+	 $display ("  Mem0 Controller: 0x%0h .. 0x%0h",
+		   rangeBase(soc_map.m_mem0_controller_addr_range),
+		   rangeTop(soc_map.m_mem0_controller_addr_range));
+	 $display ("  UART0:           0x%0h .. 0x%0h",
+		   rangeBase(soc_map.m_uart16550_0_addr_range),
+		   rangeTop(soc_map.m_uart16550_0_addr_range));
+	    end
+	 endaction);
    endfunction
 
    // ----------------
@@ -421,6 +498,15 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    endrule
 `endif
 
+   // Domain crossing for set_verbosity method
+   Reg#(Tuple2#(Bit#(4), Bit#(64))) verbReg <- mkSyncRegFromCC(unpack(0), core_clk);
+
+   // In core domain
+   rule setVerb;
+      match {.v, .d} = verbReg;
+      core.set_verbosity (v, d);
+   endrule
+
    // ================================================================
    // INTERFACE
 
@@ -458,7 +544,7 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    // Misc. control
 
    method Action ma_set_verbosity (Bit #(4)   verbosity1, Bit #(64)  logdelay1);
-      core.set_verbosity (verbosity1, logdelay1);
+      verbReg <= tuple2 (verbosity1, logdelay1);
    endmethod
 
    method Action ma_set_watch_tohost (Bool  watch_tohost, Bit #(64)  tohost_addr);

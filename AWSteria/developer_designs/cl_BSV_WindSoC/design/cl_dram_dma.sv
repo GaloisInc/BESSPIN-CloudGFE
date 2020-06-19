@@ -63,6 +63,12 @@
 
 // ================================================================
 
+// In this version, the SoC will be clocked by the main clock, which is as
+// usual clk_main_a0, running at 250MHz by using recipe A1.  The core will be
+// clocked by clock clk_extra_b1, running at 100MHz by using recipe B5.
+
+// ================================================================
+
 module cl_dram_dma #(parameter NUM_DDR=4)
 
 (
@@ -465,6 +471,7 @@ module cl_dram_dma #(parameter NUM_DDR=4)
 
    mkAWS_BSV_Top #()
    aws_BSV_top   (.CLK   (clk_main_a0),
+		  .CLK_core_clk (clk_extra_b1),
 		  .RST_N (mkAWS_BSV_Top_sync_rst_n),
 
 		  // ----------------
