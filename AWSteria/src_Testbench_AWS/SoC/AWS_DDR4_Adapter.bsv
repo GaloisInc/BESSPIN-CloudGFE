@@ -306,7 +306,7 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
    Reg #(Bool)      rg_cached_clean  <- mkRegU;
    Reg #(Addr_64)   rg_cached_addr   <- mkRegU;
    Reg #(Data_512)  rg_cached_data_512   <- mkRegU;
-   Reg #(Vector #(4, Bit #(1)))  rg_cached_user_4     <- mkRegU;
+   Reg #(Vector #(4, Bit #(2)))  rg_cached_user_4x2   <- mkRegU;
 
    // Ad hoc RISC-V ISA-test simulation support: watch <tohost> and stop on non-zero write.
    // The default tohost_addr here is fragile (may change on recompilation of tests).
@@ -319,14 +319,21 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
    Reg #(Bit #(8)) rg_status <- mkReg (fromInteger (aws_DDR4_adapter_status_ok));
 
    // ================================================================
+   // Tags helper functions
+
+   function Bit #(1) andPair (Bit #(2) x) = x[0] & x[1];
+   function Bit #(2) replicateBit (Bit #(1) x) = {x, x};
+
+   // ================================================================
    // Function to encapsulate and simplify AXI4 request/response on back-side AXI4 (to mem)
    // Arg 'addr' is an address within this DDR4, not a global address.
 
    function Action fa_mem_req (Bool write, Bit #(64) addr, Bit #(512) write_data, Bit #(4) write_user);
       action
+         Bit #(64) addr_mask = ~0 << 6;
 	 if (write) begin
 	    let wra = AXI4_AWFlit {awid:     0,
-				   awaddr:   addr,
+				   awaddr:   addr & addr_mask,
 				   awlen:    0,                    // 1-beat burst
 				   awsize:   64,                   // full 64 bytes
 				   awburst:  INCR,
@@ -345,7 +352,7 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
 	 end
 	 else begin
 	    let rda = AXI4_ARFlit {arid:     0,
-				   araddr:   addr,
+				   araddr:   addr & addr_mask,
 				   arlen:    0,                    // 1-beat burst
 				   arsize:   64,            // full 64 bytes
 				   arburst:  INCR,
@@ -440,13 +447,13 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
    rule rl_writeback_dirty_idle (   (rg_state == STATE_READY)
 				 && (! f_reqs.notEmpty)           // Idle
 				 && (! rg_cached_clean));
-      fa_mem_req (True, rg_cached_addr, rg_cached_data_512, pack(rg_cached_user_4));
+      fa_mem_req (True, rg_cached_addr, rg_cached_data_512, pack(map (andPair, rg_cached_user_4x2)));
       rg_cached_clean <= True;
       if (verbosity > 2) begin
 	 $display ("%0d: AWS_DDR4_Adapter.rl_writeback_dirty_idle addr 0x%0h",
 		   cur_cycle, rg_cached_addr);
 	 $display ("    cache data %0h: ", rg_cached_data_512);
-	 $display ("    cache user %0h: ", rg_cached_user_4);
+	 $display ("    cache user %0h: ", map (andPair, rg_cached_user_4x2));
       end
    endrule
 
@@ -461,7 +468,7 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
 						   f_reqs.first.addr, f_reqs.first.size)
 				 && (! fv_addrs_in_same_Data_512 (f_reqs.first.addr, rg_cached_addr))
 				 && (! rg_cached_clean));
-      fa_mem_req (True, rg_cached_addr, rg_cached_data_512, pack(rg_cached_user_4));
+      fa_mem_req (True, rg_cached_addr, rg_cached_data_512, pack(map (andPair, rg_cached_user_4x2)));
       rg_cached_clean <= True;
       if (verbosity > 2)
 	 $display ("%0d: AWS_DDR4_Adapter.rl_writeback_dirty_miss addr 0x%0h",
@@ -493,7 +500,7 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
 	 rg_status <= fromInteger (aws_DDR4_adapter_status_error);
       else begin
 	 rg_cached_data_512  <= rdd.rdata;
-	 rg_cached_user_4    <= unpack(rdd.ruser);
+	 rg_cached_user_4x2  <= map (replicateBit, unpack(rdd.ruser));
 	 rg_cached_clean     <= True;
       end
       rg_state <= STATE_READY;
@@ -501,7 +508,8 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
       if (verbosity > 2) begin
 	 $display ("%0d: AWS_DDR4_Adapter.rl_refill: addr 0x%0h",
 		   cur_cycle, rg_cached_addr);
-	 $display ("    %0h", rdd.rdata);
+	 $display ("    %0h", rdd.rdata, ", user: %40b", rdd.ruser);
+	 $display (" tags : %08b => %08b", pack(rg_cached_user_4x2), pack(map (replicateBit, unpack(rdd.ruser))));
       end
    endrule
 
@@ -523,8 +531,7 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
 
       // View the cached Data_512 as a vector of Fabric_Data
       Vector #(Fabric_Data_per_Data_512, Fabric_Data) v_fabric_data = unpack (rg_cached_data_512);
-      Vector #(Fabric_Data_per_Data_512, Vector #(User_ratio, Bit #(1)))
-         v_fabric_user = unpack (pack (map (replicate, rg_cached_user_4)));
+      Vector #(8, Bit #(1)) v_fabric_user = unpack(pack(rg_cached_user_4x2));
 
       // Byte offset of addr in Data_512
       Data_8_in_Data_512 n = truncate (f_reqs.first.addr);
@@ -549,6 +556,7 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
 	 $display ("%0d: AWS_DDR4_Adapter.rl_process_rd_req: ", cur_cycle);
 	 $display ("    ", fshow (f_reqs.first));
 	 $display (" => ", fshow (rdr));
+	 $display (" tags : %08b", pack(rg_cached_user_4x2));
       end
    endrule
 
@@ -565,10 +573,9 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
 
       // Index of relevant Data_64 from the cached Data_512
       Data_64_in_Data_512 data_64_in_Data_512 = f_reqs.first.addr [hi_byte_in_Data_512 : 3];
-      Bit #(2) user_in_Data_512 = f_reqs.first.addr [hi_byte_in_Data_512 : 4];
       // View the cached Data_512 as a vector of 64-bit words
       Vector #(Data_64s_per_Data_512, Bit #(64)) v_data_64 = unpack (rg_cached_data_512);
-      Vector #(4, Bit #(1)) v_user = rg_cached_user_4;
+      Vector #(8, Bit #(1)) v_user = unpack (pack (rg_cached_user_4x2));
 
       // Extract the relevant Data_64
       Bit #(64) data_64_old = v_data_64 [data_64_in_Data_512];
@@ -576,7 +583,7 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
       Bit #(64) data_64_new = zeroExtend (f_reqs.first.data);
       Bit #(8)  strobe      = zeroExtend (f_reqs.first.wstrb);
       Bit #(1)  newUserBit  = (strobe == ~0) ? f_reqs.first.wuser :
-                              (strobe == 0)  ? v_user [user_in_Data_512] : 0;
+                              (strobe == 0)  ? v_user [data_64_in_Data_512] : 0;
 
       // In case of FABRIC32, lane-adjust data and strobe for 64b view
       if ((valueOf (Wd_Data_Fabric) == 32) && (f_reqs.first.addr [2] == 1'b1)) begin
@@ -584,17 +591,17 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
 	 data_64_new = { data_64_new [31:0], 32'b0 };
 	 strobe      = { strobe      [3:0],  4'b0 };
          newUserBit  = (strobe [3:0] == ~0) ? f_reqs.first.wuser :
-                       (strobe [3:0] == 0)  ? v_user [user_in_Data_512] : 0;
+                       (strobe [3:0] == 0)  ? v_user [data_64_in_Data_512] : 0;
       end
       Bit #(64) mask      = fn_strobe_to_mask (strobe);
       let updated_data_64 = ((data_64_old & (~ mask)) | (data_64_new & mask));
       v_data_64 [data_64_in_Data_512] = updated_data_64;
-      v_user [user_in_Data_512] = v_user [user_in_Data_512] & newUserBit;
+      v_user [data_64_in_Data_512] = newUserBit;
 
       // Write it back into the cached Data_512 (if we're not in the error state)
       if (rg_status == fromInteger (aws_DDR4_adapter_status_ok)) begin
 	 rg_cached_data_512  <= pack (v_data_64);
-         rg_cached_user_4 <= v_user;
+         rg_cached_user_4x2 <= unpack (pack (v_user));
 	 rg_cached_clean <= False;
       end
 
@@ -611,6 +618,7 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
 	 $display ("%0d: AWS_DDR4_Adapter.rl_process_wr_req: ", cur_cycle);
 	 $display ("    ", fshow (f_reqs.first));
 	 $display (" => ", fshow (wrr));
+	 $display (" tags : %08b => %08b", pack(rg_cached_user_4x2), pack(v_user));
       end
 
       // For simulation testing of riscv-tests/isa only:
