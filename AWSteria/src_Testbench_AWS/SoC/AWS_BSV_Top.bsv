@@ -186,18 +186,32 @@ module mkAWS_BSV_Top #(Clock core_clk) (AWS_BSV_Top_IFC);
    Vector #(4, AXI4_Master_Synth #(16, 64, 512, 0, 0, 0, 0, 0)) outer_shim_master;
    Vector #(4, AXI4_Slave #(15, 64, 512, 0, 4, 0, 0, 4)) outer_shim_slave;
    `ifdef ISA_CHERI
+   /* TODO -- mkTagControllerAXI currently does not cope with multiple
+      instances in one design...
    Vector#(4, TagControllerAXI #(15, 64, 512))
       tagCtrl <- replicateM(mkTagControllerAXI);
    for (Integer i = 0; i < 4; i = i + 1) begin
       outer_shim_master[i] <- toAXI4_Master_Synth (tagCtrl[i].master);
       outer_shim_slave[i]  = tagCtrl[i].slave;
    end
+   */
+   let tagCtrl <- mkTagControllerAXI;
+   outer_shim_master[0] <- toAXI4_Master_Synth (tagCtrl.master);
+   outer_shim_slave[0]  = tagCtrl.slave;
+   Vector#(3, AXI4_Shim #(15, 64, 512, 0, 0, 0, 0, 0))
+     outer_shim <- replicateM(mkAXI4ShimFF);
+   for (Integer i = 1; i < 4; i = i + 1) begin
+      outer_shim_master[i] <-
+         toAXI4_Master_Synth (extendIDFields (outer_shim[i-1].master, 0));
+      outer_shim_slave[i] = zeroSlaveUserFields (outer_shim[i-1].slave);
+   end
    `else
-   Vector#(4, AXI4_Shim #(16, 64, 512, 0, 4, 0, 0, 4))
+   Vector#(4, AXI4_Shim #(16, 64, 512, 0, 0, 0, 0, 0))
      outer_shim <- replicateM(mkAXI4ShimFF);
    for (Integer i = 0; i < 4; i = i + 1) begin
-      outer_shim_master[i] <- toAXI4_Master_Synth (outer_shim[i].master);
-      outer_shim_slave[i] = outer_shim[i].slave;
+      outer_shim_master[i] <-
+         toAXI4_Master_Synth (extendIDFields (outer_shim[i].master, 0));
+      outer_shim_slave[i] = zeroSlaveUserFields (outer_shim[i].slave);
    end
    `endif
    slave_vector[0] = outer_shim_slave[0];
