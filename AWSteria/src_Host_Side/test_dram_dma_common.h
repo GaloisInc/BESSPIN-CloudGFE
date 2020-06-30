@@ -30,4 +30,13 @@ int fill_buffer_urandom(uint8_t *buf, size_t size);
 uint64_t buffer_compare(uint8_t *bufa, uint8_t *bufb,
     size_t buffer_size);
 
-#define min(x,y) (((x) <= (y)) ? (x) : (y))
+/**
+ * Checks to make sure that the slot has a recognized AFI loaded.
+ */
+int check_slot_config(int slot_id);
+
+
+#if defined(SV_TEST)
+void setup_send_rdbuf_to_c(uint8_t *read_buffer, size_t buffer_size);
+int send_rdbuf_to_c(char* rd_buf);
+#endif

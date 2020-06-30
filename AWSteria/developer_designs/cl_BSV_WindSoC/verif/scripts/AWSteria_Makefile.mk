@@ -7,5 +7,5 @@ prep:
 
 .PHONY: test
 test:
-	make  C_TEST=test_dram_dma_hwsw_cosim  AXI_MEMORY_MODEL=1  clean
-	make  C_TEST=test_dram_dma_hwsw_cosim  AXI_MEMORY_MODEL=1 
+	make  C_TEST=test  AXI_MEMORY_MODEL=1  clean
+	make  C_TEST=test  AXI_MEMORY_MODEL=1

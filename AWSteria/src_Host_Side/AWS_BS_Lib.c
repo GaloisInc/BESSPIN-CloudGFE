@@ -6,13 +6,30 @@
 #include <unistd.h>
 
 #include "Bytevec.h"
-#include "AWS_Sim_Lib.h"
+#include "AWS_BS_Lib.h"
 #include "TCP_Client_Lib.h"
+# include <utils/lcd.h>
+
+#ifdef SV_TEST
+# include <test_dram_dma_common.h>
+# include <fpga_pci_sv.h>
+#elif defined(AWS_FPGA)
+# include <fpga_pci.h>
+# include <fpga_mgmt.h>
+# include "fpga_dma.h"
+#endif
+
+#define fail_on1(CONDITION, LABEL, ...)          \
+	do {                                    \
+		if (CONDITION) {                \
+			log_error(__VA_ARGS__); \
+			exit(1);		\
+		}                               \
+	} while (0)
 
 // ================================================================
 // Misc. constants
-
-#define min(a,b) = (((a) < (b)) ? (a) : (b))
+const char * this_file_name = "AWS_BS_Lib.c";
 
 const uint64_t  span_4KB = 0x1000;
 const uint64_t  align_mask_4KB = (~ ((uint64_t) 0xFFF));
@@ -24,20 +41,41 @@ const uint64_t  align_mask_64B = (~ ((uint64_t) 0x3F));
 static char      default_hostname []    = "127.0.0.1";    // localhost
 static uint16_t  default_port           = 30000;
 
-static
-Bytevec_state *p_bytevec_state = NULL;
+static Bytevec_state *p_bytevec_state = NULL;
+#if (defined(AWS_FPGA) || defined(SV_TEST))
+static pci_bar_handle_t pci_bar_handle = PCI_BAR_HANDLE_INIT;
+#endif
+static int  read_fd = -1;
+static int write_fd = -1;
 
-void AWS_Sim_Lib_init (void)
+void AWS_BS_Lib_init (void)
 {
-    fprintf (stdout, "AWS_Sim_Lib_init()\n");
+    fprintf (stdout, "AWS_BS_Lib_init()\n");
 
+#ifdef AWS_FPGA
+    //initialize the fpga_plat library
+    int rc = fpga_mgmt_init();
+    fail_on1(rc, out, "Unable to initialize the fpga_mgmt library");
+
+    // Attach to the fpga, with a pci_bar_handle out param
+    // To attach to multiple slots or BARs, call this function multiple times,
+    // saving the pci_bar_handle to specify which address space to interact with in
+    // other API calls.
+    // This function accepts the slot_id (0 for the single-fpga case),
+    // physical function, and bar number
+    rc = fpga_pci_attach(0, FPGA_APP_PF, APP_PF_BAR0, 0, & pci_bar_handle);
+    fail_on1(rc, out, "Unable to attach to the AFI on slot id 0");
+
+#elif !defined(SV_TEST)
     if (p_bytevec_state != NULL) {
-	fprintf (stdout, "ERROR: AWS_Sim_Lib_init: already initialized\n");
+	fprintf (stdout, "ERROR: AWS_BS_Lib_init: already initialized\n");
 	exit (1);
     }
+
+    // Initialize Bytevec system:
     p_bytevec_state = mk_Bytevec_state ();
     if (p_bytevec_state == NULL) {
-	fprintf (stdout, "ERROR: AWS_Sim_Lib_init: mk_Bytevec_state failed\n");
+	fprintf (stdout, "ERROR: AWS_BS_Lib_init: mk_Bytevec_state failed\n");
 	exit (1);
     }
 
@@ -47,20 +85,74 @@ void AWS_Sim_Lib_init (void)
 	exit (1);
     }
 
-    fprintf (stdout, "AWS_Sim_Lib_init: initialized, connected to simulation server\n");
+    fprintf (stdout, "AWS_BS_Lib_init: initialized, connected to simulation server\n");
+#endif
 }
 
 void check_state_initialized (void)
 {
+#ifndef AWS_FPFA
+#ifndef SV_TEST
     if (p_bytevec_state != NULL) return;
-    AWS_Sim_Lib_init ();
+    AWS_BS_Lib_init ();
+#endif
+#endif
 }
 
-void AWS_Sim_Lib_shutdown (void)
+void AWS_BS_Lib_shutdown (void)
 {
-    fprintf (stdout, "AWS_Sim_Lib_shutdown: closing TCP connection\n");
+#ifdef AWS_FPGA
+  if (pci_bar_handle >= 0) {
+    int rc = fpga_pci_detach(pci_bar_handle);
+    if (rc) {
+      printf("Failure while detaching from the fpga.\n");
+    }
+  }
+#elif !defined(SV_TEST)
+    fprintf (stdout, "AWS_BS_Lib_shutdown: closing TCP connection\n");
     tcp_client_close (0);
+#endif
 }
+
+// ================================================================
+
+void open_dma_read  (uint8_t * read_buffer, size_t buffer_size) {
+#ifdef AWS_FPGA
+    read_fd = fpga_dma_open_queue(FPGA_DMA_XDMA, /*slot_id*/ 0,
+				  /*channel*/ 0, /*is_read*/ true);
+    fail_on1(((read_fd < 0) ? -1 : 0), out, "unable to open read dma queue");
+#elif defined(SV_TEST)
+    setup_send_rdbuf_to_c(read_buffer, buffer_size);
+    printf("Starting DDR init...\n");
+    init_ddr();
+    printf("Done DDR init...\n");
+#endif
+}
+
+void open_dma_write () {
+#ifdef AWS_FPGA
+    write_fd = fpga_dma_open_queue(FPGA_DMA_XDMA, /*slot_id*/ 0,
+				   /*channel*/ 0, /*is_read*/ false);
+    fail_on1(((write_fd < 0) ? -1 : 0), out, "unable to open write dma queue");
+#endif
+}
+
+void close_dma_read  (void) {
+  if (read_fd >= 0) {
+    fprintf (stdout, "Closing read_fd\n");
+    close(read_fd);
+    read_fd = -1;
+  }
+}
+
+void close_dma_write (void) {
+  if (write_fd >= 0) {
+    fprintf (stdout, "Closing write_fd\n");
+    close(write_fd);
+    write_fd = -1;
+  }
+}
+
 
 // ================================================================
 
@@ -94,7 +186,7 @@ bool do_comms (void)
 
 	activity = true;
     }
-        
+
     // Receive
     if (verbosity2 > 1)
 	fprintf (stdout, "do_comms: attempt receive bytevec\n");
@@ -123,8 +215,14 @@ bool do_comms (void)
 
 // ================================================================
 
-int fpga_dma_burst_read (int fd, uint8_t *buffer, size_t size, uint64_t address)
+int dma_burst_read (uint8_t *buffer, size_t size, uint64_t address, int channel)
 {
+#ifdef AWS_FPGA
+    return fpga_dma_burst_read(read_fd, buffer, size, address);
+#elif defined(SV_TEST)
+    sv_fpga_start_cl_to_buffer(0, channel, size, (uint64_t) buffer, address);
+    return 0;
+#else
     int  verbosity2 = 0;
     bool tcp_activity;
 
@@ -133,7 +231,7 @@ int fpga_dma_burst_read (int fd, uint8_t *buffer, size_t size, uint64_t address)
     // Check that the buffer does not cross a 4K boundary (= 12 bits of LSBs)
     uint64_t  address_lim = address + size;
     if ((address >> 12) != ((address_lim - 1) >> 12)) {
-	fprintf (stdout, "ERROR: fpga_dma_burst_write: buffer crosses a 4K boundary\n");
+	fprintf (stdout, "ERROR: dma_burst_read: buffer crosses a 4K boundary\n");
 	fprintf (stdout, "    Start address: %16lx\n", address);
 	fprintf (stdout, "    Last  address: %16lx\n", (address_lim - 1));
 	return 1;
@@ -141,7 +239,7 @@ int fpga_dma_burst_read (int fd, uint8_t *buffer, size_t size, uint64_t address)
 
     // Check that address is 64-Byte aligned (TODO: temporary; relax this)
     if ((address & 0x3F) != 0) {
-	fprintf (stdout, "ERROR: fpga_dma_burst_write: address is not 64-byte aligned\n");
+	fprintf (stdout, "ERROR: dma_burst_read: address is not 64-byte aligned\n");
 	fprintf (stdout, "    Start address: %16lx\n", address);
 	return 1;
     }
@@ -169,7 +267,7 @@ int fpga_dma_burst_read (int fd, uint8_t *buffer, size_t size, uint64_t address)
     rda.arburst = 0x1;              // AXI4 code: 'incrementing' burst
 
     if (verbosity2 != 0)
-	fprintf (stdout, "fpga_dma_burst_read: araddr %0lx arlen %0d arsize %0x arburst %0x",
+	fprintf (stdout, "dma_burst_read: araddr %0lx arlen %0d arsize %0x arburst %0x",
 		 rda.araddr, rda.arlen, rda.arsize, rda.arburst);
     while (true) {
 	int status = Bytevec_enqueue_AXI4_Rd_Addr_i16_a64_u0 (p_bytevec_state, & rda);
@@ -197,12 +295,12 @@ int fpga_dma_burst_read (int fd, uint8_t *buffer, size_t size, uint64_t address)
 	    if (status == 1) break;
 
 	    if (verbosity2 > 1)
-		fprintf (stdout, "fpga_dma_burst_read: response polling loop; beat %0d\n", beat);
+		fprintf (stdout, "dma_burst_read: response polling loop; beat %0d\n", beat);
 	}
 
 	// Debugging: show response
 	if (verbosity2 != 0) {
-	    fprintf (stdout, "fpga_dma_burst_read: beat %0d  rresp %0d  rlast %0d  rdata:\n  [",
+	    fprintf (stdout, "dma_burst_read: beat %0d  rresp %0d  rlast %0d  rdata:\n  [",
 		     beat, rdd.rresp, rdd.rlast);
 	    for (int k = 0; k < 64; k++)
 		fprintf (stdout, " %02x", rdd.rdata [k]);
@@ -212,13 +310,13 @@ int fpga_dma_burst_read (int fd, uint8_t *buffer, size_t size, uint64_t address)
 	// Check rlast was properly set
 	if (beat == (num_beats - 1)) {
 	    if (rdd.rlast == 0) {
-		fprintf (stdout, "ERROR: fpga_dma_burst_read: rlast is 0 on last beat\n");
+		fprintf (stdout, "ERROR: dma_burst_read: rlast is 0 on last beat\n");
 		return 1;
 	    }
 	}
 	else {
 	    if (rdd.rlast == 1) {
-		fprintf (stdout, "ERROR: fpga_dma_burst_read: rlast is 1 on non-last beat\n");
+		fprintf (stdout, "ERROR: dma_burst_read: rlast is 1 on non-last beat\n");
 		return 1;
 	    }
 	}
@@ -226,16 +324,23 @@ int fpga_dma_burst_read (int fd, uint8_t *buffer, size_t size, uint64_t address)
 
 	memcpy (pb, & (rdd.rdata), 64);
 	pb += 64;
-    }    
-    fprintf (stdout, "fpga_dma_burst_read complete\n");
+    }
+    fprintf (stdout, "dma_burst_read complete\n");
 
     return (! ok);
+#endif
 }
 
 // ================================================================
 
-int fpga_dma_burst_write (int fd, uint8_t *buffer, size_t size, uint64_t address)
+int dma_burst_write (uint8_t *buffer, size_t size, uint64_t address, int channel)
 {
+#ifdef AWS_FPGA
+    return fpga_dma_burst_write(write_fd, buffer, size, address);
+#elif defined(SV_TEST)
+    sv_fpga_start_buffer_to_cl(0, channel, size, (uint64_t) buffer, address);
+    return 0;
+#else
     int  verbosity2 = 0;
     bool tcp_activity;
 
@@ -244,7 +349,7 @@ int fpga_dma_burst_write (int fd, uint8_t *buffer, size_t size, uint64_t address
     // Check that the buffer does not cross a 4K boundary (= 12 bits of LSBs)
     uint64_t  address_lim = address + size;
     if ((address >> 12) != ((address_lim - 1) >> 12)) {
-	fprintf (stdout, "ERROR: fpga_dma_burst_write: buffer crosses a 4K boundary\n");
+	fprintf (stdout, "ERROR: dma_burst_write: buffer crosses a 4K boundary\n");
 	fprintf (stdout, "    Start address: %16lx\n", address);
 	fprintf (stdout, "    Last  address: %16lx\n", (address_lim - 1));
 	return 1;
@@ -252,7 +357,7 @@ int fpga_dma_burst_write (int fd, uint8_t *buffer, size_t size, uint64_t address
 
     // Check that address is 64-Byte aligned (TODO: temporary; relax this)
     if ((address & 0x3F) != 0) {
-	fprintf (stdout, "ERROR: fpga_dma_burst_write: address is not 64-byte aligned\n");
+	fprintf (stdout, "ERROR: dma_burst_write: address is not 64-byte aligned\n");
 	fprintf (stdout, "    Start address: %16lx\n", address);
 	return 1;
     }
@@ -280,7 +385,7 @@ int fpga_dma_burst_write (int fd, uint8_t *buffer, size_t size, uint64_t address
     wra.awburst = 0x1;              // AXI4 code: 'incrementing' burst
 
     if (verbosity2 != 0)
-	fprintf (stdout, "fpga_dma_burst_write: awaddr %0lx awlen %0d awsize %0x awburst %0x\n",
+	fprintf (stdout, "dma_burst_write: awaddr %0lx awlen %0d awsize %0x awburst %0x\n",
 		 wra.awaddr, wra.awlen, wra.awsize, wra.awburst);
     while (true) {
 	int status = Bytevec_enqueue_AXI4_Wr_Addr_i16_a64_u0 (p_bytevec_state, & wra);
@@ -304,7 +409,7 @@ int fpga_dma_burst_write (int fd, uint8_t *buffer, size_t size, uint64_t address
 	wrd.wlast = (beat == (num_beats - 1));
 
 	if (verbosity2 != 0) {
-	    fprintf (stdout, "fpga_dma_burst_write: beat %0d  wlast %0d  wdata:\n  ",
+	    fprintf (stdout, "dma_burst_write: beat %0d  wlast %0d  wdata:\n  ",
 		     beat, wrd.wlast);
 	    for (int k = 0; k < 64; k++)
 		fprintf (stdout, " %02x", wrd.wdata [k]);
@@ -319,7 +424,7 @@ int fpga_dma_burst_write (int fd, uint8_t *buffer, size_t size, uint64_t address
 	}
 	tcp_activity = do_comms ();
 	pb += 64;
-    }    
+    }
 
     // ----------------
     // Get  WR_RESP bus response
@@ -335,19 +440,25 @@ int fpga_dma_burst_write (int fd, uint8_t *buffer, size_t size, uint64_t address
 	if (status == 1) break;
 
 	if (verbosity2 > 1)
-	    fprintf (stdout, "fpga_dma_burst_write: response polling loop\n");
+	    fprintf (stdout, "dma_burst_write: response polling loop\n");
 
     }
     if (verbosity2 != 0)
-	fprintf (stdout, "fpga_dma_burst_write: complete; bresp = %0d\n", wrr.bresp);
+	fprintf (stdout, "dma_burst_write: complete; bresp = %0d\n", wrr.bresp);
 
     return (wrr.bresp != 0);
+#endif
 }
 
 // ================================================================
 
-int fpga_pci_peek (uint32_t ocl_addr, uint32_t *p_ocl_data)
+int ocl_peek (uint32_t ocl_addr, uint32_t *p_ocl_data)
 {
+#if defined(AWS_FPGA) || defined(SV_TEST)
+	int rc = fpga_pci_peek (pci_bar_handle, ocl_addr, p_ocl_data);
+	fail_on1 (rc, out, "ERROR: %s: OCL peek addr %0x\n",
+		 this_file_name, ocl_addr);
+#else
     int  verbosity2 = 0;
     bool tcp_activity;
 
@@ -361,7 +472,7 @@ int fpga_pci_peek (uint32_t ocl_addr, uint32_t *p_ocl_data)
     rda.aruser = 0;
 
     if (verbosity2 != 0)
-	fprintf (stdout, "fpga_pci_peek: enqueue AXI4L Rd_Addr %08x\n", rda.araddr);
+	fprintf (stdout, "ocl_peek: enqueue AXI4L Rd_Addr %08x\n", rda.araddr);
     while (true) {
 	int status = Bytevec_enqueue_AXI4L_Rd_Addr_a32_u0 (p_bytevec_state, & rda);
 	if (status == 1) break;
@@ -381,14 +492,20 @@ int fpga_pci_peek (uint32_t ocl_addr, uint32_t *p_ocl_data)
 	}
     }
     if (verbosity2 != 0)
-	fprintf (stdout, "fpga_pci_peek: rresp %0d, rdata %08x\n", rdd.rresp, rdd.rdata);
+	fprintf (stdout, "ocl_peek: rresp %0d, rdata %08x\n", rdd.rresp, rdd.rdata);
     return 0;
+#endif
 }
 
 // ================================================================
 
-int fpga_pci_poke (uint32_t ocl_addr, uint32_t ocl_data)
+int ocl_poke (uint32_t ocl_addr, uint32_t ocl_data)
 {
+#if defined(AWS_FPGA) || defined(SV_TEST)
+	int rc = fpga_pci_poke (pci_bar_handle, ocl_addr, ocl_data);
+	fail_on1 (rc, out, "ERROR: %s: OCL poke addr %0x, data %0x\n",
+		 this_file_name, ocl_addr, ocl_data);
+#else
     int  verbosity2 = 0;
     bool tcp_activity;
 
@@ -427,8 +544,9 @@ int fpga_pci_poke (uint32_t ocl_addr, uint32_t ocl_data)
 	if (status == 1) break;
     }
     if (verbosity2 != 0)
-	fprintf (stdout, "fpga_pci_poke: bresp = %0d\n", wrr.bresp);
+	fprintf (stdout, "ocl_poke: bresp = %0d\n", wrr.bresp);
     return 0;
+#endif
 }
 
 // ================================================================
