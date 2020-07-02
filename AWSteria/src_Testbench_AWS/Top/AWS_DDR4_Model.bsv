@@ -48,10 +48,7 @@ module mkMem_Model #(parameter Bit #(2) ddr4_num) (AXI4_16_64_512_0_0_0_0_0_Slav
 
    RegFile #(Bit #(64), Bit #(512)) rf <- mkRegFile (0, implemented_words - 1);
 
-   AXI4_Slave_Xactor#( Wd_Id_16, Wd_Addr_64, Wd_Data_512
-                     , Wd_AW_User_0, Wd_W_User_0, Wd_B_User_0
-                     , Wd_AR_User_0, Wd_R_User_0)
-      axi4_xactor <- mkAXI4_Slave_Xactor;
+   let shim <- mkAXI4Shim;
 
    // base and last are the full 16 GB space logically served by this
    // DDR model, regardless of how much of the space is implemented.
@@ -71,7 +68,7 @@ module mkMem_Model #(parameter Bit #(2) ddr4_num) (AXI4_16_64_512_0_0_0_0_0_Slav
    // Read requests
 
    rule rl_rd_req;
-      let rda <- get(axi4_xactor.master.ar);
+      let rda <- get(shim.master.ar);
 
       Bool ok1      = ((addr_base <= rda.araddr) && (rda.araddr <= addr_last));
       let  offset_b = rda.araddr - addr_base;
@@ -103,15 +100,15 @@ module mkMem_Model #(parameter Bit #(2) ddr4_num) (AXI4_16_64_512_0_0_0_0_0_Slav
 		      cur_cycle, ddr4_num, rda.araddr, data);
       end
 
-      axi4_xactor.master.r.put(rdd);
+      shim.master.r.put(rdd);
    endrule
 
    // ----------------
    // Write requests
 
    rule rl_wr_req;
-      let wra <- get(axi4_xactor.master.aw);
-      let wrd <- get(axi4_xactor.master.w);
+      let wra <- get(shim.master.aw);
+      let wrd <- get(shim.master.w);
 
       Bool ok1      = ((addr_base <= wra.awaddr) && (wra.awaddr <= addr_last));
       let  offset_b = wra.awaddr - addr_base;
@@ -142,13 +139,14 @@ module mkMem_Model #(parameter Bit #(2) ddr4_num) (AXI4_16_64_512_0_0_0_0_0_Slav
 		      cur_cycle, ddr4_num, wra.awaddr, wrd.wdata, wrd.wstrb);
       end
 
-      axi4_xactor.master.b.put(wrr);
+      shim.master.b.put(wrr);
    endrule
 
    // ================================================================
    // INTERFACE
 
-   return axi4_xactor.slaveSynth;
+   let slaveSynth <- toAXI4_Slave_Synth (shim.slave);
+   return slaveSynth;
 endmodule
 
 // ================================================================

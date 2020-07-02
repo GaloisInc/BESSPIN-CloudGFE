@@ -90,8 +90,7 @@ module mkOCL_Adapter (OCL_Adapter_IFC);
    // 0: quiet; 1: rules
    Integer verbosity = 0;
 
-   // Transactor for the OCL AXI4-Lite interface
-   AXI4L_32_32_0_0_0_0_0_Slave_Xactor ocl_xactor <- mkAXI4Lite_Slave_Xactor;
+   let shim <- mkAXI4LiteShim;
 
    Vector #(Num_OCL_Host_to_HW_Channels, FIFOF #(Bit #(32))) v_f_from_host <- replicateM (mkFIFOF);
    Vector #(Num_OCL_HW_to_Host_Channels, FIFOF #(Bit #(32))) v_f_to_host   <- replicateM (mkFIFOF);
@@ -102,8 +101,8 @@ module mkOCL_Adapter (OCL_Adapter_IFC);
    // Write requests (AXI4-Lite channels WR_ADDR, WR_DATA and WR_RESP)
    // (we send the AXI4-Lite response immediately.)
    rule rl_AXI4L_wr;    // req from AWS SH
-      let wra <- get(ocl_xactor.master.aw);
-      let wrd <- get(ocl_xactor.master.w);
+      let wra <- get(shim.master.aw);
+      let wrd <- get(shim.master.w);
       if (verbosity != 0)
 	 $display ("AWS_OCL_Adapter.rl_AXI4L_wr: addr %0h data %0h", wra.awaddr, wrd.wdata);
 
@@ -132,7 +131,7 @@ module mkOCL_Adapter (OCL_Adapter_IFC);
 		   wra.awaddr, wrd.wdata);
       end
 
-      ocl_xactor.master.b.put(wrr);
+      shim.master.b.put(wrr);
       if (verbosity != 0) begin
 	 $write ("    Response: ", fshow (wrr.bresp));
 	 if (wrr.bresp == SLVERR)
@@ -147,7 +146,7 @@ module mkOCL_Adapter (OCL_Adapter_IFC);
    // or for status (notFull/notEmpty) on hw-to-host and host-to-hw channels.
    // Address [2:0] is 3'b000 for data (read data only), 3'b100 for status.
    rule rl_AXI4L_rd;
-      let rda <- get(ocl_xactor.master.ar);
+      let rda <- get(shim.master.ar);
       if (verbosity != 0)
 	 $display ("AWS_OCL_Adapter.rl_AXI4L_rd: addr %0h", rda.araddr);
 
@@ -210,7 +209,7 @@ module mkOCL_Adapter (OCL_Adapter_IFC);
       // Note: rresp=AXI4_LITE_OKAY even for invalid requests since
       // AWS host-side API does not seem to provide access to rresp.
 
-      ocl_xactor.master.r.put(rdr);
+      shim.master.r.put(rdr);
       if (verbosity != 0)
 	 $display ("    response ", fshow (rdr));
    endrule
@@ -220,7 +219,8 @@ module mkOCL_Adapter (OCL_Adapter_IFC);
 
    // ----------------
    // Facing SH: OCL
-   interface AWS_AXI4_Lite_Slave_IFC ocl_slave = ocl_xactor.slaveSynth;
+   let slaveSynth <- toAXI4Lite_Slave_Synth (shim.slave);
+   interface AWS_AXI4_Lite_Slave_IFC ocl_slave = slaveSynth;
 
    // ----------------
    // Facing SoC

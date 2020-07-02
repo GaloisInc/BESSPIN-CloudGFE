@@ -171,9 +171,12 @@ module mkTop_HW_Side (Empty) ;
    // because although t1 and t2 are isomorphic types, they are
    // different BSV types coming from different declarations.
 
-   AXI4_14_64_512_0_0_0_0_0_Master_Xactor dma_pcis_xactor <- mkAXI4_Master_Xactor(reset_by rstn);
+   AXI4_Shim #(14, 64, 512, 0, 0, 0, 0, 0)
+      dma_pcis_shim <- mkAXI4Shim (reset_by rstn);
+   let dma_pcis_shim_masterSynth <- toAXI4_Master_Synth ( dma_pcis_shim.master
+                                                        , reset_by rstn);
 
-   mkConnection (dma_pcis_xactor.masterSynth, aws_BSV_top.dma_pcis_slave, reset_by rstn);
+   mkConnection (dma_pcis_shim_masterSynth, aws_BSV_top.dma_pcis_slave, reset_by rstn);
 
    // Connect AXI4 WR_ADDR channel
    // Basically: mkConnection (comms.fo_AXI4_Wr_Addr_i16_a64_u0,  dma_pcis_xactor.i_wr_addr)
@@ -190,7 +193,7 @@ module mkTop_HW_Side (Empty) ;
 			    awqos: x1.awqos,
 			    awregion: x1.awregion,
 			    awuser: x1.awuser};
-      dma_pcis_xactor.slave.aw.put (x2);
+      dma_pcis_shim.slave.aw.put (x2);
 
       if (verbosity_AXI != 0) begin
 	 $display ("Top_HW_Side.rl_connect_dma_pcis_wr_addr:");
@@ -208,7 +211,7 @@ module mkTop_HW_Side (Empty) ;
 			   wstrb: x1.wstrb,
 			   wlast: unpack (x1.wlast),
 			   wuser: x1.wuser};
-      dma_pcis_xactor.slave.w.put (x2);
+      dma_pcis_shim.slave.w.put (x2);
 
       if (verbosity_AXI != 0) begin
 	 $display ("Top_HW_Side.rl_connect_dma_pcis_wr_data: beat %0d", rg_AXI4_wr_data_beat);
@@ -232,7 +235,7 @@ module mkTop_HW_Side (Empty) ;
 			    arqos: x1.arqos,
 			    arregion: x1.arregion,
 			    aruser: x1.aruser};
-      dma_pcis_xactor.slave.ar.put (x2);
+      dma_pcis_shim.slave.ar.put (x2);
 
       if (verbosity_AXI != 0) begin
 	 $display ("Top_HW_Side.rl_connect_dma_pcis_rd_addr:");
@@ -243,7 +246,7 @@ module mkTop_HW_Side (Empty) ;
    // Connect AXI4 WR_RESP channel
    // Basically: mkConnection (comms.fi_AXI4_Wr_Resp_i16_u0,  dma_pcis_xactor.o_wr_resp)
    rule rl_connect_dma_pcis_wr_resp;
-      let x1 <- get (dma_pcis_xactor.slave.b);
+      let x1 <- get (dma_pcis_shim.slave.b);
       let x2 = AXI4_Wr_Resp_i16_u0 {bid:   zeroExtend (x1.bid),
 				    bresp: pack (x1.bresp),
 				    buser: x1.buser};
@@ -258,7 +261,7 @@ module mkTop_HW_Side (Empty) ;
    // Connect AXI4 RD_DATA channel
    // Basically: mkConnection (comms.fi_AXI4_Rd_Data_i16_d512_u0,  dma_pcis_xactor.o_rd_data)
    rule rl_connect_dma_pcis_rd_data;
-      let x1 <- get (dma_pcis_xactor.slave.r);
+      let x1 <- get (dma_pcis_shim.slave.r);
       let x2 = AXI4_Rd_Data_i16_d512_u0 {rid:   zeroExtend (x1.rid),
 					 rdata: x1.rdata,
 					 rresp: pack (x1.rresp),
@@ -277,9 +280,12 @@ module mkTop_HW_Side (Empty) ;
 
    Integer verbosity_AXI4L = 1;
 
-   AXI4L_32_32_0_0_0_0_0_Master_Xactor ocl_xactor <- mkAXI4Lite_Master_Xactor(reset_by rstn);
+   AXI4Lite_Shim #(32, 32, 0, 0, 0, 0, 0)
+      ocl_shim <- mkAXI4LiteShim (reset_by rstn);
+   let ocl_shim_masterSynth <- toAXI4Lite_Master_Synth ( ocl_shim.master
+                                                       , reset_by rstn);
 
-   mkConnection (ocl_xactor.masterSynth, aws_BSV_top.ocl_slave, reset_by rstn);
+   mkConnection (ocl_shim_masterSynth, aws_BSV_top.ocl_slave, reset_by rstn);
 
    // Connect AXI4L WR_ADDR channel
    // Basically: mkConnection (comms.fo_AXI4L_Wr_Addr_a32_u0,  ocl_xactor.i_wr_addr)
@@ -288,7 +294,7 @@ module mkTop_HW_Side (Empty) ;
       let x2 = AXI4Lite_AWFlit {awaddr: x1.awaddr,
 				awprot: x1.awprot,
 				awuser: x1.awuser};
-      ocl_xactor.slave.aw.put (x2);
+      ocl_shim.slave.aw.put (x2);
 
       if (verbosity_AXI4L != 0) begin
 	 $display ("Top_HW_Side.rl_connect_ocl_wr_addr:");
@@ -303,7 +309,7 @@ module mkTop_HW_Side (Empty) ;
       let x2 = AXI4Lite_WFlit {wdata: x1.wdata,
 			       wstrb: x1.wstrb,
 			       wuser: 0};
-      ocl_xactor.slave.w.put (x2);
+      ocl_shim.slave.w.put (x2);
 
       if (verbosity_AXI4L != 0) begin
 	 $display ("Top_HW_Side.rl_connect_ocl_wr_data:");
@@ -318,7 +324,7 @@ module mkTop_HW_Side (Empty) ;
       let x2 = AXI4Lite_ARFlit {araddr: x1.araddr,
 				arprot: x1.arprot,
 				aruser: x1.aruser};
-      ocl_xactor.slave.ar.put (x2);
+      ocl_shim.slave.ar.put (x2);
 
       if (verbosity_AXI4L != 0) begin
 	 $display ("Top_HW_Side.rl_connect_ocl_rd_addr:");
@@ -329,7 +335,7 @@ module mkTop_HW_Side (Empty) ;
    // Connect AXI4L WR_RESP channel
    // Basically: mkConnection (comms.fi_AXI4L_Wr_Resp_u0,  ocl_xactor.i_wr_resp)
    rule rl_connect_ocl_wr_resp;
-      let x1 <- get (ocl_xactor.slave.b);
+      let x1 <- get (ocl_shim.slave.b);
       let x2 = AXI4L_Wr_Resp_u0 {bresp: pack (x1.bresp),
 				 buser: x1.buser};
       comms.fi_AXI4L_Wr_Resp_u0.enq (x2);
@@ -343,7 +349,7 @@ module mkTop_HW_Side (Empty) ;
    // Connect AXI4L RD_DATA channel
    // Basically: mkConnection (comms.fi_AXI4L_Rd_Data_d32_u0,  ocl_xactor.o_rd_data)
    rule rl_connect_ocl_rd_data;
-      let x1 <- get (ocl_xactor.slave.r);
+      let x1 <- get (ocl_shim.slave.r);
       let x2 = AXI4L_Rd_Data_d32_u0 {rresp: pack (x1.rresp),
 				     rdata: x1.rdata,
 				     ruser: x1.ruser};
