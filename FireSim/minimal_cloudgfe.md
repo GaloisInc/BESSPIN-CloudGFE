@@ -45,7 +45,7 @@ A number of example binaries have been precompiled and provided for use (FreeRTO
 To download this package:
 ```
 cd ~
-aws s3 cp s3://firesim-localuser/swpkgs/cloudgfe_binaries.tgz
+aws s3 cp s3://firesim-localuser/swpkgs/cloudgfe_binaries.tgz .
 tar xzvf cloudgfe_binaries.tgz
 ```
 
