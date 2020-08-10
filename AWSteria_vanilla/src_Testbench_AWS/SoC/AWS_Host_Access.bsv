@@ -5,10 +5,22 @@ package AWS_Host_Access;
 
 // mkAWS_Host_Access is a simple AXI4 slave that is a 'proxy' for a
 // the AWS host, which actually services all the AXI4 transactions.
-// It simply forwards the Wr_Addr, Wr_Data, and Rd_Addr request
-// structs (from the SoC fabric) to the AWS host, and forwards the
-// Wr_Resp and Rd_Data response structs from the AWS host back into
+// It simply forwards Read/Write requests (from the SoC fabric) to the
+// AWS host, and forwards the responses from the AWS host back into
 // the SoC fabric.
+
+// All reads/writes are with 32-bit addrs, 32-bit aligned, for 32-bit data.
+
+// Encoding:
+// - Write requests: we send two 32-bit words:
+//      - addr | 0x1 (because of 32b alignment, [1:0] of addr are
+//                    always 0; we use [0]=1 as a 'write' tag)
+//      - data
+// - Read requests: we send one 32-bit word:
+//      - addr | 0x0 (because of 32b alignment, [1:0] of addr are
+//                    always 0; we use [0]=0 as a 'read' tag)
+// - Responses: Each request eventually gets a 32-bit response:
+//       the read-data for reads, any unspecified value for writes.
 
 // ================================================================
 // BSV library imports
@@ -44,49 +56,21 @@ endinterface
 
 // ================================================================
 
-// From SoC_Fabric to AWS host
-typedef union tagged {
-   AXI4_Wr_Addr #(Wd_Id, Wd_Addr, Wd_User)  WAddr;
-   AXI4_Wr_Data #(Wd_Data, Wd_User)         WData;
-   AXI4_Rd_Addr #(Wd_Id, Wd_Addr, Wd_User)  RAddr;
-   } Tagged_AXI4_Req
-deriving (Bits, FShow);
-
-// The following should be the size of a 32-bit vector that is large
-// enough to hold a packed version of an Tagged_AXI4_Req object.
-typedef 4 VMax_Req;
-
-typedef Vector #(VMax_Req, Bit #(32)) Req_Buf;
-
-// From AWS host to SoC_Fabric
-typedef union tagged {
-   AXI4_Wr_Resp #(Wd_Id, Wd_User)           WResp;
-   AXI4_Rd_Data #(Wd_Id, Wd_Data, Wd_User)  RData;
-   } Tagged_AXI4_Rsp
-deriving (Bits, FShow);
-
-// The following should be the size of a 32-bit vector that is large
-// enough to hold a packed version of an Tagged_AXI4_Rsp object
-typedef 4 VMax_Rsp;
-
-typedef Vector #(VMax_Rsp, Bit #(32)) Rsp_Buf;
-
-// ================================================================
-
 (* synthesize *)
 module mkAWS_Host_Access (AWS_Host_Access_IFC);
 
    // 0: quiet; 1 rules
-   Integer verbosity = 0;
+   Integer verbosity = 1;
 
    FIFOF #(Bit #(32)) f_to_aws_host   <- mkFIFOF;
    FIFOF #(Bit #(32)) f_from_aws_host <- mkFIFOF;
 
-   // # of 32-bit words to send, vector of 32-bit words
-   FIFOF #(Tuple2 #(Bit #(8), Req_Buf)) f_req_bufs_to_aws_host <- mkFIFOF;
-
-   // Vector of 32-bit words
-   FIFOF #(Rsp_Buf) f_rsp_bufs_from_aws_host <- mkFIFOF;
+   // Pending responses
+   // First component is: 
+   FIFOF #(Tuple4 #(Bit #(1),         // 0=read, 1=write
+		    Bit #(32),        // addr lsbs, for aligning read-data to AXI bus
+		    Bit #(Wd_Id),
+		    Bit #(Wd_User)))  f_rsps_pending <- mkSizedFIFOF (32);
 
    // ----------------
    // Connector to AXI4 fabric
@@ -95,75 +79,77 @@ module mkAWS_Host_Access (AWS_Host_Access_IFC);
 
    // ================================================================
    // BEHAVIOR
+   // Note: ignoring many AXI4 fields, assuming 32-bit aligned data.
 
-   // ---- RD_ADDR
-   rule rl_forward_rd_addr;
+   // ---- Read requests (RD_ADDR)
+   rule rl_forward_rd_req_addr;
       let rda <- pop_o (slave_xactor.o_rd_addr);
-      let tagged_req = tagged RAddr rda;
-      Req_Buf  req_buf = unpack (zeroExtend (pack (tagged_req)));
-      f_req_bufs_to_aws_host.enq (tuple2 (4, req_buf));
+      Bit #(32) addr = truncate (rda.araddr);
+      f_to_aws_host.enq ((addr & 32'h_FFFF_FFFC) | 32'h0);
+      f_rsps_pending.enq (tuple4 (1'b0, addr, rda.arid, rda.aruser));
+
+      if (verbosity > 0)
+	 $display ("AWS_Host_Access.rl_forward_rd_req_addr: addr %08h", addr);
    endrule
 
-   // ---- WR_ADDR
-   rule rl_forward_wr_addr;
+   Reg #(Maybe #(Bit #(32))) rg_wdata_pending <- mkReg (tagged Invalid);
+
+   // ---- Write requests (WR_ADDR)
+   rule rl_forward_wr_req_addr (rg_wdata_pending == tagged Invalid);
       let wra <- pop_o (slave_xactor.o_wr_addr);
-      let tagged_req = tagged WAddr wra;
-      Req_Buf  req_buf = unpack (zeroExtend (pack (tagged_req)));
-      f_req_bufs_to_aws_host.enq (tuple2 (4, req_buf));
+      Bit #(32) addr = truncate (wra.awaddr);
+      f_to_aws_host.enq ((addr & 32'h_FFFF_FFFC) | 32'h1);
+      f_rsps_pending.enq (tuple4 (1'b1, addr, wra.awid, wra.awuser));
+      rg_wdata_pending <= tagged Valid addr;
+
+      if (verbosity > 0)
+	 $display ("AWS_Host_Access.rl_forward_wr_req_addr: addr %08h", addr);
    endrule
 
-   // ---- WR_DATA
-   rule rl_forward_wr_data;
+   // Priortize reads, assuming writes may be used for side-effects after reads
+   (* descending_urgency = "rl_forward_rd_req_addr, rl_forward_wr_req_addr, rl_forward_wr_req_data" *)
+
+   // ---- Write requests (WR_DATA)
+   rule rl_forward_wr_req_data (rg_wdata_pending matches tagged Valid .addr);
       let wrd <- pop_o (slave_xactor.o_wr_data);
-      let tagged_req = tagged WData wrd;
-      Req_Buf  req_buf = unpack (zeroExtend (pack (tagged_req)));
-      f_req_bufs_to_aws_host.enq (tuple2 (4, req_buf));
-   endrule
+      Bit #(32) data = wrd.wdata [31:0];
+      if ((valueOf (Wd_Data) == 64) && (addr [2:0] == 3'b100))
+	 data = (wrd.wdata >> 32) [31:0];
+      f_to_aws_host.enq (data);
+      rg_wdata_pending <= tagged Invalid;
 
-   // ================================================================
-   // Forward f_req_bufs_to_aws_host to AWS host
-
-   Reg #(Bit #(8)) rg_sent <- mkReg (0);
-
-   rule rl_forward_to_aws_host;
-      match { .size, .req_buf } = f_req_bufs_to_aws_host.first;
-      f_to_aws_host.enq (req_buf [rg_sent]);
-      if (rg_sent + 1 == size) begin
-	 f_req_bufs_to_aws_host.deq;
-	 rg_sent <= 0;
-      end
-      else
-	 rg_sent <= rg_sent + 1;
+      if (verbosity > 0)
+	 $display ("AWS_Host_Access.rl_forward_wr_req_data: ... data %08h", data);
    endrule
 
    // ================================================================
    // Forward from AWS host to f_rsp_bufs_from_aws_host
 
-   Reg #(Bit #(8)) rg_received <- mkReg (0);
+   rule rl_forward_rd_rsp (f_rsps_pending.first matches { 1'b0, .addr, .id, .user });
+      Bit #(64) data = zeroExtend (f_from_aws_host.first);
+      f_from_aws_host.deq;
+      f_rsps_pending.deq;
 
-   Reg #(Rsp_Buf)  rg_rsp_buf <- mkRegU;
+      if ((valueOf (Wd_Data) == 64) && (addr [2:0] == 3'b100))
+	 data = data << 32;
 
-   rule rl_unserialize_from_aws_host;
-      let x32 <- pop (f_from_aws_host);
-      let rsp_buf = rg_rsp_buf;
-      rsp_buf [rg_received] = x32;
-      rg_rsp_buf <= rsp_buf;
+      let rdd = AXI4_Rd_Data {rid: id, rdata: data, rresp: axi4_resp_okay, rlast: True, ruser: user};
+      slave_xactor.i_rd_data.enq (rdd);
 
-      if (rg_received == fromInteger (valueOf (VMax_Rsp) - 1)) begin
-	 f_rsp_bufs_from_aws_host.enq (rg_rsp_buf);
-	 rg_received <= 0;
-      end
-      else
-	 rg_received <= rg_received + 1;
+      if (verbosity > 0)
+	 $display ("AWS_Host_Access.rl_forward_rd_rsp: addr %08h => data %08h", addr, data);
    endrule
 
-   rule rl_distribute_from_aws_host;
-      Rsp_Buf          rsp_buf   <- pop (f_rsp_bufs_from_aws_host);
-      Tagged_AXI4_Rsp  tagged_rsp = unpack (truncate (pack (rsp_buf)));
-      case (tagged_rsp) matches
-	 tagged WResp .wr: slave_xactor.i_wr_resp.enq (wr);
-	 tagged RData .rd: slave_xactor.i_rd_data.enq (rd);
-      endcase
+   rule rl_forward_wr_rsp (f_rsps_pending.first matches { 1'b1, .addr, .id, .user });
+      Bit #(64) data = zeroExtend (f_from_aws_host.first);
+      f_from_aws_host.deq;
+      f_rsps_pending.deq;
+
+      let wrd = AXI4_Wr_Resp {bid: id, bresp: axi4_resp_okay, buser: user};
+      slave_xactor.i_wr_resp.enq (wrd);
+
+      if (verbosity > 0)
+	 $display ("AWS_Host_Access.rl_forward_wr_rsp: addr %08h => data %08h", addr, data);
    endrule
 
    // ================================================================

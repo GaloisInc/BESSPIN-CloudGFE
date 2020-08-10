@@ -67,7 +67,7 @@
 
 // ================================================================
 
-static int debug_virtio   = 0;
+static int debug_virtio   = 1;
 static int debug_stray_io = 0;
 
 // ================================================================
@@ -182,8 +182,11 @@ HS_Virtio_State *HS_virtio_init (const char *tun_iface,
 				 const char *block_files [],
 				 const int   num_block_files)
 {
+    VirtioDevices *vds = NULL;
+
+    /*
     // Allocate and initialize VirtioDevices object
-    VirtioDevices *vds = (VirtioDevices *) malloc (sizeof (VirtioDevices));
+    vds = (VirtioDevices *) malloc (sizeof (VirtioDevices));
     if (vds == NULL) {
 	fprintf (stderr, "ERROR: %s: malloc failed\n", __FUNCTION__);
 	exit (1);
@@ -221,10 +224,9 @@ HS_Virtio_State *HS_virtio_init (const char *tun_iface,
     fprintf(stderr, "virtio entropy device %p at addr %08lx\n",
 	    vds->virtio_entropy, vds->virtio_bus->addr);
 
-    /* TODO: Do we need this?
-    if (dma_enabled)
-        fpga->map_pcis_dma();
-    */
+    // TODO: Do we need this?
+    // if (dma_enabled)
+    //    fpga->map_pcis_dma();
 
     // ================================================================
     // Set up XDMA
@@ -236,14 +238,16 @@ HS_Virtio_State *HS_virtio_init (const char *tun_iface,
 
 #if defined(AWS_FPGA) || defined (AWS_BLUESIM) || defined (AWS_VERILATOR)
     read_fd = fpga_dma_open_queue(FPGA_DMA_XDMA, slot_id,
-				  /*channel*/ 0, /*is_read*/ true);
+				  0,        // channel
+				  true);    // is_read
     if (read_fd < 0) {
 	fprintf (stdout, "ERROR: %s: unable to open read-dma queue\n");
 	exit (1);
     }
 
     write_fd = fpga_dma_open_queue(FPGA_DMA_XDMA, slot_id,
-				   /*channel*/ 0, /*is_read*/ false);
+				   0,         // channel
+				   false);    // is_read
     if (write_fd < 0) {
 	fprintf (stdout, "ERROR: %s: unable to open write-dma queue\n");
 	exit (1);
@@ -300,6 +304,7 @@ HS_Virtio_State *HS_virtio_init (const char *tun_iface,
     virtio_start_pending_notify_thread (n, ps);
     pthread_create (& vds->io_thread, NULL, & HS_virtio_process_io_thread, vds);
     pthread_setname_np (vds->io_thread, "VirtIO I/O");
+    */
 
     // ================================================================
     // Allocate and initialize HS_Virtio_State object
@@ -371,6 +376,10 @@ int HS_virtio_irq_to_hw_data (HS_Virtio_State *state, uint32_t *p_data)
     uint64_t data;
     SimpleQueueGet (state->queue_virtio_irq_to_hw, & data);
     *p_data = data;
+
+    if (debug_virtio)
+	fprintf (stdout, "%s: data %0x\n", __FUNCTION__, *p_data);
+
     return 0;
 }
 
@@ -381,13 +390,16 @@ int HS_virtio_irq_to_hw_data (HS_Virtio_State *state, uint32_t *p_data)
 // MMIO reads from guest
 // Returns value read from MMIO control register array.
 
+static bool send_irq = false;    // TODO: DELETE AFTER DEBUG
+
 static
 uint32_t HS_virtio_MMIO_read (VirtioDevices *vds, uint32_t addr)
 {
     if (debug_virtio)
 	fprintf (stdout, "%s: addr %0x\n", __FUNCTION__, addr);
 
-    uint32_t result = 0;
+    uint32_t result = addr + 1;    // TODO: temporary
+    /*
     PhysMemoryRange *pr = get_phys_mem_range (vds->mem_map, addr);
     if (pr) {
         uint32_t offset    = addr - pr->addr;
@@ -398,6 +410,10 @@ uint32_t HS_virtio_MMIO_read (VirtioDevices *vds, uint32_t addr)
         if (debug_stray_io)
 	    fprintf (stdout, "%s: ERROR: UNKNOWN ADDR %0x\n", __FUNCTION__, addr);
     }
+    */
+
+    if (addr == 0x62500024) send_irq = true;    // TODO: DELETE AFTER DEBUG
+
     return result;
 }
 
@@ -405,11 +421,13 @@ uint32_t HS_virtio_MMIO_read (VirtioDevices *vds, uint32_t addr)
 // MMIO writes from quest
 
 static
-void HS_virtio_MMIO_write (VirtioDevices *vds, uint32_t addr, uint32_t data)
+uint32_t HS_virtio_MMIO_write (VirtioDevices *vds, uint32_t addr, uint32_t data)
 {
     if (debug_virtio)
 	fprintf (stdout, "%s: addr %0x data %0x\n", __FUNCTION__, addr, data);
 
+    uint32_t result = data + 0x100;    // TODO: temporary
+    /*
     PhysMemoryRange *pr = get_phys_mem_range (vds->mem_map, addr);
 
     if (pr) {
@@ -421,6 +439,8 @@ void HS_virtio_MMIO_write (VirtioDevices *vds, uint32_t addr, uint32_t data)
         if (debug_stray_io)
 	    fprintf (stdout, "%s: ERROR: UNKNOWN ADDR %0x data %0x\n", __FUNCTION__, addr, data);
     }
+    */
+    return result;
 }
 
 // ================================================================
@@ -438,6 +458,16 @@ bool HS_virtio_do_some_work (HS_Virtio_State *state)
     SimpleQueueFirst (state->queue_virtio_req_from_hw, & x64);
     uint32_t  addr          = (x64 & 0xFFFFFFFC);    // zero the lsbs
     bool      rsp_notFull   = (! SimpleQueueFull (state->queue_virtio_rsp_to_hw));
+
+    if (send_irq && (! SimpleQueueFull (state->queue_virtio_irq_to_hw))) {
+	if (debug_virtio)
+	    fprintf (stdout, "%s: Generating interrrupt for hw\n", __FUNCTION__);
+	send_irq = false;
+
+	SimpleQueuePut (state->queue_virtio_irq_to_hw, 0xFEDCFEDC);
+	did_some_work = true;
+    }
+
     if ((req_occupancy > 0) && rsp_notFull && ((x64 & 0x1) == 0)) {
 	// Read request
 
@@ -459,9 +489,9 @@ bool HS_virtio_do_some_work (HS_Virtio_State *state)
 	uint32_t write_data = (x64 & 0xFFFFFFFF);
 
 	// Perform MMIO write request from guest and respond
-	// (Response is only to show 'completion'
-	HS_virtio_MMIO_write (state->virtiodevices, addr, write_data);
-	SimpleQueuePut (state->queue_virtio_rsp_to_hw, 0);
+	// (Response is bogus data, only indicates 'write-completion'
+	uint32_t write_rsp = HS_virtio_MMIO_write (state->virtiodevices, addr, write_data);
+	SimpleQueuePut (state->queue_virtio_rsp_to_hw, write_rsp);
 
 	did_some_work = true;
     }

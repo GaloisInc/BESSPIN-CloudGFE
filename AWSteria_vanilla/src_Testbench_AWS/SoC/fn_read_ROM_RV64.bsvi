@@ -1,6 +1,6 @@
 // ***** DO NOT EDIT *****
 // ***** This file was generated from a script *****
-// Generated at UTC 2020-06-02T21:03:54.156555
+// Generated at UTC 2020-06-21T23:08:37.367416
 
 
 // This file is a BSV 'include' file
@@ -14,7 +14,7 @@ function Bit #(32) fn_read_ROM_0 (Bit #(n) addr);
       case (addr)
          0: 32'h_f1402573;
          8: 32'h_1c58593;
-         16: 32'h_1e29293;
+         16: 32'h_828202fa;
          24: 32'h_00;
          32: 32'h_edfe0dd0;
          40: 32'h_38000000;
@@ -231,7 +231,7 @@ function Bit #(32) fn_read_ROM_4 (Bit #(n) addr);
       case (addr)
          4: 32'h_597;
          12: 32'h_30029b;
-         20: 32'h_8282;
+         20: 32'h_00;
          28: 32'h_00;
          36: 32'h_60060000;
          44: 32'h_30050000;

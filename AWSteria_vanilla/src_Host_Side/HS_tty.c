@@ -24,6 +24,10 @@
 
 // ================================================================
 
+static int verbosity_tty = 0;
+
+// ================================================================
+
 HS_tty_State *HS_tty_init (void)
 {
     HS_tty_State *state = (HS_tty_State *) malloc (sizeof (HS_tty_State));
@@ -49,6 +53,10 @@ int HS_tty_to_hw_data (HS_tty_State *state, uint32_t *p_data)
     uint64_t data;
     SimpleQueueGet (state->queue_tty_to_hw, & data);
     *p_data = data;
+
+    if (verbosity_tty > 0)
+	fprintf (stdout, "HS_tty_to_hw_data: input char: %02x\n", *p_data);
+
     return 0;
 }
 
@@ -66,6 +74,9 @@ int HS_tty_from_hw_notFull (HS_tty_State *state, bool *p_notFull)
 
 int HS_tty_from_hw_data (HS_tty_State *state, uint32_t data)
 {
+    if (verbosity_tty > 0)
+	fprintf (stdout, "HS_tty_from_hw_data: output char: %02x\n", data);
+
     SimpleQueuePut (state->queue_tty_from_hw, data);
 }
 
@@ -103,6 +114,10 @@ bool HS_tty_do_some_work (HS_tty_State *state)
 	if (ret == 1) {
 	    SimpleQueuePut (state->queue_tty_to_hw, buf);
 	    did_some_work = true;
+
+	    if (verbosity_tty > 0)
+		fprintf (stdout, "HS_tty_do_some_work: char keyboard to input queue: %02x\n", buf);
+
 	}
     }
 
@@ -112,8 +127,12 @@ bool HS_tty_do_some_work (HS_tty_State *state)
     while (! SimpleQueueEmpty (state->queue_tty_from_hw)) {
 	uint64_t data;
 	SimpleQueueGet (state->queue_tty_from_hw, & data);
-
 	int ch = data;
+
+	if (verbosity_tty > 0)
+	    fprintf (stdout, "HS_tty_do_some_work: char output queue to screen: %02x\n", ch);
+
+	/*
 	fprintf (stdout, "TTY output: %02x", ch);
 	if ((' ' <= ch) && (ch < 0x7F))
 	    fprintf (stdout, " '%c'", ch);
@@ -124,6 +143,9 @@ bool HS_tty_do_some_work (HS_tty_State *state)
 	else if (data == '\r')
 	    fprintf (stdout, " '\\r'");
 	fprintf (stdout, "\n");
+	*/
+	fputc (ch, stdout);
+
 	did_some_work = true;
     }
     fflush (stdout);

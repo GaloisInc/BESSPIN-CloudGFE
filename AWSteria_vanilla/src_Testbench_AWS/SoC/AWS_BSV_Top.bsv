@@ -35,7 +35,6 @@ import AXI4_Lite_Types :: *;
 import AWS_BSV_Top_Defs :: *;
 import AWS_SoC_Top      :: *;
 import AWS_DDR4_Adapter :: *;
-import AWS_AXI_Fabrics  :: *;
 import AWS_OCL_Adapter  :: *;
 
 // ================================================================
@@ -62,7 +61,7 @@ Integer hw_to_host_chan_debug_module = 3;
 module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
 
    // 0: quiet    1: rules
-   Integer verbosity = 0;
+   Integer verbosity = 1;
 
    // WindSoC
    AWS_SoC_Top_IFC soc_top <- mkAWS_SoC_Top;
@@ -70,14 +69,12 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
    // Adapter towards OCL
    OCL_Adapter_IFC  ocl_adapter <- mkOCL_Adapter;
 
-   // AXI4 crossbar to connect to the four DDRs
-   AXI4_16_64_512_0_Fabric_2_4_IFC  fabric <- mkAXI4_16_64_512_0_Fabric_2_4;
-
    // AWS signal
    Reg #(Bit #(4)) rg_ddr4_ready     <- mkReg (0);
 
-   Reg #(Bool)     rg_initialized    <- mkReg (False);
-   Reg #(Bool)     rg_ddr4_is_loaded <- mkReg (False);
+   Reg #(Bool)     rg_ddr4_is_loaded <- mkReg (False);    // AWS says ddr4 is ready
+   Reg #(Bool)     rg_initialized_1  <- mkReg (False);    // Relayed ddr4_ready to core
+   Reg #(Bool)     rg_initialized_2  <- mkReg (False);    // Start SoC
 
    // ================================================================
    // Connect OCL Adapter and SoC control
@@ -126,7 +123,7 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
 
    rule rl_hw_to_host_status; // (soc_top.mv_status != 0);
       Bit#(32) status = zeroExtend(soc_top.mv_status);
-      if (rg_initialized)    status = status | (1 << 8);
+      if (rg_initialized_2)  status = status | (1 << 8);
       if (rg_ddr4_is_loaded) status = status | (1 << 9);
       status = status | (zeroExtend(rg_ddr4_ready) << 12);
       ocl_adapter.v_to_host [hw_to_host_chan_status].enq (status);
@@ -138,11 +135,17 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
    rule rl_console_to_UART;
       Bit #(32) ch <- pop_o (ocl_adapter.v_from_host [host_to_hw_chan_UART]);
       soc_top.put_from_console.put (truncate (ch));
+
+      if (verbosity > 0)
+	 $display ("%0d: AWS_BSV_Top.rl_console_to_UART: %02h", cur_cycle, ch);
    endrule
 
    rule rl_UART_to_console;
       let ch <- soc_top.get_to_console.get;
       ocl_adapter.v_to_host [hw_to_host_chan_UART].enq (zeroExtend (ch));
+
+      if (verbosity > 0)
+	 $display ("%0d: AWS_BSV_Top.rl_UART_to_console: %02h", cur_cycle, ch);
    endrule
 
    // ================================================================
@@ -151,11 +154,17 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
    rule rl_hw_to_aws_host_mem_req;
       Bit #(32) x <- soc_top.to_aws_host.get;
       ocl_adapter.v_to_host [hw_to_host_chan_mem_req].enq (x);
+
+      if (verbosity > 0)
+	 $display ("%0d: AWS_BSV_Top.rl_hw_to_aws_host_mem_req: %02h", cur_cycle, x);
    endrule
 
    rule rl_aws_host_to_hw_mem_rsp;
       Bit #(32) x <- pop_o (ocl_adapter.v_from_host [host_to_hw_chan_mem_rsp]);
       soc_top.from_aws_host.put (x);
+
+      if (verbosity > 0)
+	 $display ("%0d: AWS_BSV_Top.rl_aws_host_to_hw_mem_rsp: %02h", cur_cycle, x);
    endrule
 
    // ================================================================
@@ -164,12 +173,11 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
    rule rl_aws_host_to_hw_interrupt;
       Bit #(32) x <- pop_o (ocl_adapter.v_from_host [host_to_hw_chan_interrupt]);
       soc_top.ma_aws_host_to_hw_interrupt (x [0]);
+
+      if (verbosity > 0) begin
+	 $display ("%0d: AWS_BSV_Top.rl_aws_host_to_hw_interrupt: %08h", cur_cycle, x);
+      end
    endrule
-
-   // ================================================================
-
-   // Connect SoC DDR4 interface to crossbar [1]
-   mkConnection (soc_top.to_ddr4, fabric.v_from_masters [1]);
 
    // ================================================================
    // Connection OCL Adapter to Debug Module
@@ -226,27 +234,37 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
 `endif
 
    // ================================================================
+   // Initializations
 
-   rule rl_initialize ((! rg_initialized)
-		       && (rg_ddr4_ready[3:0] == 4'b1111)
-		       && rg_ddr4_is_loaded);
+   rule rl_initialize_1 ((! rg_initialized_1) && (rg_ddr4_ready[3:0] == 4'b1111));
       soc_top.ma_ddr4_ready;
-      rg_initialized <= True;
-      $display ("%0d: AWS_BSV_Top.rl_initialize: DDRs ready, DDRs loaded; start DUT", cur_cycle);
+      rg_initialized_1 <= True;
+      $display ("%0d: %0m.rl_initialize_1", cur_cycle);
+      $display ("    DDRs ready, mem access enabled");
+   endrule
+
+   rule rl_initialize_2 (rg_initialized_1
+			 && (! rg_initialized_2)
+			 && rg_ddr4_is_loaded);
+      soc_top.ma_ddr4_is_loaded;
+      rg_initialized_2 <= True;
+      $display ("%0d: %0m.rl_initialize_2: DDRs loaded", cur_cycle);
    endrule
 
    // ================================================================
    // INTERFACE
 
+   AXI4_16_64_512_0_Master_IFC dummy_ddr4_master = dummy_AXI4_Master_ifc;
+
    // Facing SH
-   interface AWS_AXI4_Slave_IFC       dma_pcis_slave = fabric.v_from_masters [0];
+   interface AWS_AXI4_Slave_IFC       dma_pcis_slave = soc_top.dma_server;
    interface AWS_AXI4_Lite_Slave_IFC  ocl_slave      = ocl_adapter.ocl_slave;
 
    // Facing DDR4
-   interface AWS_AXI4_Master_IFC  ddr4_A_master = fabric.v_to_slaves [0];
-   interface AWS_AXI4_Master_IFC  ddr4_B_master = fabric.v_to_slaves [1];
-   interface AWS_AXI4_Master_IFC  ddr4_C_master = fabric.v_to_slaves [2];
-   interface AWS_AXI4_Master_IFC  ddr4_D_master = fabric.v_to_slaves [3];
+   interface AWS_AXI4_Master_IFC  ddr4_A_master = soc_top.to_ddr4;
+   interface AWS_AXI4_Master_IFC  ddr4_B_master = dummy_ddr4_master;
+   interface AWS_AXI4_Master_IFC  ddr4_C_master = dummy_ddr4_master;
+   interface AWS_AXI4_Master_IFC  ddr4_D_master = dummy_ddr4_master;
 
    // DDR4 ready signals
    // The SystemVerilog top-level invokes this to signal readiness of AWS DDR4 A, B, C, D
