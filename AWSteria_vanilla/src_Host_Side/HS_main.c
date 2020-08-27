@@ -16,6 +16,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/time.h>
 
 // ----------------
 // Virtio library includes
@@ -192,14 +193,52 @@ int start_hw (const char *tun_iface,
 							    num_block_files);
 
     // ----------------
-    // Main work loop, moving data from producers to consumers:
+    // Main work loop.
+    // "Round-robin" service of logically independent "processes"
+    // For each "process", call do_some_work() and move packets from
+    // producers to consumers.
 
     fprintf (stdout, "%s: starting main work loop\n", __FUNCTION__);
     bool      notEmpty, notFull;
     uint32_t  data;
     
+    struct timeval  tv;
+    const uint64_t  TERMINATION_DELAY_USEC          = 10000000;    // 10 msecs (SWAG)
+    uint64_t        termination_delay_start_usec    = 0;
+    uint64_t        idle_iterations_before_shutdown = 0;
+
+    // 0: running
+    // 1: termination started
+    // 2: sent SHUTDOWN to HW
+    uint8_t  termination_state = 0;
+
     while (true) {
 	bool did_some_work = false;
+
+	// ================
+	// Check termination and do termination protocol
+	if (termination_state == 0) {
+	    if (HS_syscontrol_terminating ()) {
+		gettimeofday (& tv, NULL);
+		uint64_t cur_usec            = (tv.tv_sec * 1000000000 + tv.tv_usec);
+		termination_delay_start_usec = cur_usec;
+		termination_state            = 1;
+		fprintf (stdout, "Termination signal received; delaying %0ld usecs before sending shutdown\n",
+			 TERMINATION_DELAY_USEC);
+	    }
+	}
+	else if (termination_state == 1) {
+	    gettimeofday (& tv, NULL);
+	    uint64_t cur_usec = (tv.tv_sec * 1000000000 + tv.tv_usec);
+	    if ((cur_usec - termination_delay_start_usec) > TERMINATION_DELAY_USEC) {
+		fprintf (stdout, "Termination delay (%0ld usecs) elapsed; shutting down\n",
+			 TERMINATION_DELAY_USEC);
+		fprintf (stdout, "%ld idle iterations before shutdown\n",
+			 idle_iterations_before_shutdown);
+
+		break;
+	    }
+	}
 
 	// ================================
 	// HW System Control (this is not the TTY for CPU!)
@@ -207,6 +246,8 @@ int start_hw (const char *tun_iface,
 	did_some_work |= HS_syscontrol_do_some_work (syscontrol_state);
 
 	// ----------------
+	// Move commands from System Control to hw
+
 	err = HS_syscontrol_to_hw_notEmpty (syscontrol_state, & notEmpty);
 	if (err) break;
 	err = HS_msg_host_to_hw_CONTROL_notFull (& notFull);
@@ -319,9 +360,19 @@ int start_hw (const char *tun_iface,
 	}
 
 	// ================================
-	if (! did_some_work)
+	if (! did_some_work) {
+	    idle_iterations_before_shutdown++;
 	    usleep (100);
+	}
+	else {
+	    idle_iterations_before_shutdown = 0;
+	}
+
     }
+
+    fprintf (stdout, "%s: Sending SHUTDOWN to hardware\n", __FUNCTION__);
+    err = HS_msg_host_to_hw_CONTROL_data (HS_syscontrol_tag_shutdown);
+
     return err;
 }
 
@@ -339,6 +390,10 @@ int main(int argc, char **argv)
     int rc;
     int slot_id = 0;
 
+    // TODO: command-line parsing/config file
+    // - Mem.hex filename filename
+    // - slot_id    (what exactly is this?)
+
     switch (argc) {
     case 1:
         break;
@@ -355,8 +410,6 @@ int main(int argc, char **argv)
     // ================================================================
     // AWSteria code
 
-    // TODO: get the filename from command-line args/config file/...
-    // char memhex32_filename [] = "Mem.hex";
     char memhex32_filename[] = "Mem.hex";
 
     rc = load_mem_hex32_using_DMA (slot_id, memhex32_filename);

@@ -79,54 +79,66 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
    // ================================================================
    // Connect OCL Adapter and SoC control
    // Writes are coded as follows: (ad hoc; we may evolve this as needed)
-   // [1:0] is a tag
-   //     tag_ddr4_is_loaded    [31:2]  = ?: 'signal that ddr4 is loaded'
-   //     tag_verbosity         [31:8]  = logdelay, [7:2] = verbosity
-   //     tag_no_watch_tohost   [31:2]  = ?    set 'watch_tohost' to False
-   //     tag_watch_tohost      [31:2]  = x    set 'watch_tohost' to True; tohost_addr = (x << 2)
+   // [3:0] is a tag; [31:4] gives more info
 
-   Bit #(2) tag_ddr4_is_loaded  = 0;
-   Bit #(2) tag_verbosity       = 1;
-   Bit #(2) tag_no_watch_tohost = 2;
-   Bit #(2) tag_watch_tohost    = 3;
+   Bit #(4) tag_ddr4_is_loaded  = 0;
+   //       [31:4]  = ?:    ddr4 has been loaded from host
+   Bit #(4) tag_verbosity       = 1;
+   //       [31:8]  = logdelay, [7:4] = verbosity
+   Bit #(4) tag_no_watch_tohost = 2;
+   //       [31:4]  = ?:    set 'watch_tohost' to False
+   Bit #(4) tag_watch_tohost    = 3;
+   //       [31:4]  = x     set 'watch_tohost' to True; tohost_addr = (x << 4)
+   Bit #(4) tag_shutdown        = 4;
+   //       [31:4]  = ?:    stop simulation
 
    rule rl_host_to_hw_control;
       Bit #(32) data <- pop_o (ocl_adapter.v_from_host [host_to_hw_chan_control]);
-      Bit #(2)  tag = data [1:0];
+      Bit #(4)  tag = data [3:0];
       if (tag == tag_ddr4_is_loaded) begin
+	 $display ("%0d: %m.rl_host_to_hw_control: ddr4 loaded", cur_cycle);
 	 rg_ddr4_is_loaded <= True;
-	 if (verbosity != 0)
-	    $display ("AWS_BSV_Top: control: ddr4 loaded");
       end
       else if (tag == tag_verbosity) begin
-	 Bit #(4)  verbosity = truncate   (data [7:2]);
+	 Bit #(4)  verbosity = data [7:4];
 	 Bit #(64) logdelay  = zeroExtend (data [31:8]);
+	 $display ("%0d: %m.rl_host_to_hw_control: verbosity %0d, logdelay %0h", cur_cycle, verbosity, logdelay);
 	 soc_top.ma_set_verbosity (verbosity, logdelay);
-	 if (verbosity != 0)
-	    $display ("    Control: verbosity %0d, logdelay %0h", verbosity, logdelay);
       end
       else if (tag == tag_no_watch_tohost) begin
+	 $display ("%0d: %m.rl_host_to_hw_control: do not watch tohost", cur_cycle);
 	 soc_top.ma_set_watch_tohost (False, ?);
-	 if (verbosity != 0)
-	    $display ("    Control: do not watch tohost");
       end
       else if (tag == tag_watch_tohost) begin
-	 Bit #(64) tohost_addr = zeroExtend ({ data [31:2], 2'b00 });
+	 Bit #(64) tohost_addr = zeroExtend ({ data [31:4], 4'b00 });
+	 $display ("%0d: %m.rl_host_to_hw_control: watch tohost at addr %0h", cur_cycle, tohost_addr);
 	 soc_top.ma_set_watch_tohost (True, tohost_addr);
-	 if (verbosity != 0)
-	    $display ("    Control: watch tohost at addr %0h", tohost_addr);
+      end
+      else if (tag == tag_shutdown) begin
+	 $display ("%0d: %m.rl_host_to_hw_control: SHUTDOWN", cur_cycle);
+	 // TODO: RETURN THIS OUT OF THE INTERFACE, DON'T $FINISH HERE
+	 $finish (0);
       end
       else begin
-	 $display ("AWS_BSV_Top: Control: ERROR: unrecognized control command %0h", data);
+	 $display ("%0d: %m.rl_host_to_hw_control: ERROR: unrecognized control command %0h",
+		   cur_cycle, data);
       end
    endrule
 
-   rule rl_hw_to_host_status; // (soc_top.mv_status != 0);
-      Bit#(32) status = zeroExtend(soc_top.mv_status);
+   // Return hw status to host
+   // Encoding: { 16'tohost_value,
+   //             4'ddr4_ready, 2'b0, 1'ddr4_is_loaded, 1'initialized_2, 8'soc_status}
+   rule rl_hw_to_host_status;
+      Bit #(32) status = zeroExtend(soc_top.mv_status);
       if (rg_initialized_2)  status = status | (1 << 8);
       if (rg_ddr4_is_loaded) status = status | (1 << 9);
       status = status | (zeroExtend(rg_ddr4_ready) << 12);
+
+      let tohost_value = soc_top.mv_tohost_value;
+      status = status | { tohost_value [15:0], 16'h0 };
       ocl_adapter.v_to_host [hw_to_host_chan_status].enq (status);
+      if ((tohost_value != 0) || (status [7:0] != 0))
+	 $display ("%0d: %m.rl_hw_to_host_status: %0h", cur_cycle, status);
    endrule
 
    // ================================================================

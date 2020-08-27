@@ -24,4 +24,7 @@ extern
 int HS_syscontrol_from_hw_data (HS_SysControl_State *state, uint32_t data);
 
 extern
+bool HS_syscontrol_terminating ();
+
+extern
 bool HS_syscontrol_do_some_work (HS_SysControl_State *state);

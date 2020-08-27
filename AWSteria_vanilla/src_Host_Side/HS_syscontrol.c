@@ -71,13 +71,22 @@ int HS_syscontrol_from_hw_data (HS_SysControl_State *state, uint32_t data)
 }
 
 // ================================================================
+// Termination signal
+
+static bool terminating = false;
+
+bool HS_syscontrol_terminating ()
+{
+    return terminating;
+}
+
+// ================================================================
 // This function performs 'syscontrol work'
 
 bool HS_syscontrol_do_some_work (HS_SysControl_State *state)
 {
     static bool first_time = true;
     bool did_some_work = false;
-    bool terminate     = false;
 
     if (first_time) {
 	// Initialize with some commands
@@ -87,7 +96,9 @@ bool HS_syscontrol_do_some_work (HS_SysControl_State *state)
 	// Set up CPU verbosity and logdelay
 	uint32_t cpu_verbosity = 0;
 	uint32_t logdelay      = 0;    // # of instructions after which to set verbosity
-	command = ((logdelay << 24) | (cpu_verbosity << 2) | 0x1);    // { 24'h_log_delay, 6'h_verbosity, 2'b01 }
+	command = ((logdelay << 24)                   // 24'h_log_delay
+		   | (cpu_verbosity << 4)             // 4'h_verbosity
+		   | HS_syscontrol_tag_verbosity);
 
 
 	fprintf (stdout, "%s: (first time) logdelay = %0x, set verbosity = %0x (chan command: %0x)\n",
@@ -106,12 +117,15 @@ bool HS_syscontrol_do_some_work (HS_SysControl_State *state)
 	// uint32_t tohost_addr  = 0x80001000;    // WindSoC SoC map
 
 	if (watch_tohost) {
-	    command = (tohost_addr | 0x0 | 0x3);    // { 29'h_to_host_addr_DW, 1'b0, 2'b11 }
+	    command = (tohost_addr             // 29'h_to_host_addr_DW
+		       | 0x0                   // 1'b0
+		       | HS_syscontrol_tag_watch_tohost);
 	    fprintf (stdout, "%s: (first time) set watch tohost, tohost_addr = %0x (chan command: %0x)\n",
 		     __FUNCTION__, tohost_addr, command);
 	}
 	else {
-	    command = (0 | 0x4 | 0x3);    // { 29'h_0, 1'b1, 2'b11 }
+	    command = (0                          // 28'h_0
+		       | HS_syscontrol_tag_no_watch_tohost);
 	    fprintf (stdout, "%s: (first time) set NO watch tohost (chan command: %0x)\n",
 		     __FUNCTION__, command);
 	}
@@ -121,9 +135,10 @@ bool HS_syscontrol_do_some_work (HS_SysControl_State *state)
 	// ----------------
 	// Go! Inform hw that DDR4 is loaded, allow the CPU to access it
 
-	command = 0;
+	command = (0                          // 28'h_0
+		   | HS_syscontrol_tag_ddr4_is_loaded);
 	fprintf (stdout,
-		 "%s: (first time) send 'DDR4 Loaded' message, allowing CPU access to DDR4 (chan command: %0x)\n",
+		 "%s: (first time) send 'DDR4 Loaded', allowing CPU access to DDR4 (chan command: %0x)\n",
 		 __FUNCTION__, command);
 	SimpleQueuePut (state->queue_syscontrol_to_hw, command);
 
@@ -143,22 +158,32 @@ bool HS_syscontrol_do_some_work (HS_SysControl_State *state)
 	uint64_t data;
 	SimpleQueueGet (state->queue_syscontrol_from_hw, & data);
 
+	// Encoding: { 16'tohost_value,
+	//             4'ddr4_ready, 2'b0, 1'ddr4_is_loaded, 1'initialized_2, 8'soc_status}
+
+	uint8_t  soc_status     = (data & 0xFF);
+	uint8_t  hw_initialized = ((data >> 8) & 0x1);
+	uint8_t  ddr4_is_loaded = ((data >> 9) & 0x1);
+	uint16_t tohost_value   = ((data >> 16) & 0xFFFF);
+
 	if ((data & 0xFF) != 0) {
-	    // Termination signal from HW
-	    fprintf (stdout, "Final HW status 0x%0lx\n", data);
-	    if (data == 1) {
-		fprintf (stdout, "    (Non-zero write tohost)\n");
-	    }
-	    else if (data == 2) {
-		fprintf (stdout, "    (Memory system error)\n");
-	    }
-	    terminate = true;
+	    // Error termination signal from HW
+	    fprintf (stdout, "HS_syscontrol: soc_status (non-zero, ERROR): 0x%0x\n", soc_status);
+	    fprintf (stdout, "HS_syscontrol: hw_initialized = %0d\n", hw_initialized);
+	    fprintf (stdout, "HS_syscontrol: ddr4_is_loaded = %0d\n", ddr4_is_loaded);
+	    terminating = true;
+	}
+	else if (tohost_value != 0) {
+	    fprintf (stdout, "HS_syscontrol: tohost_value = 0x%0x\n", tohost_value);
+	    uint16_t testnum = (tohost_value >> 1);
+	    if (testnum == 0)
+		fprintf (stdout, "PASS\n");
+	    else
+		fprintf (stdout, "FAIL on test %0d\n", testnum);
+	    terminating = true;
 	}
     }
     fflush (stdout);
-
-    if (terminate)
-	fprintf (stdout, "Terminating\n");
 
     return did_some_work;
 }

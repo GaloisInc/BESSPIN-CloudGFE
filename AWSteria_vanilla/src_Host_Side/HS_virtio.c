@@ -73,6 +73,9 @@ static int debug_stray_io = 0;
 // ================================================================
 // These two functions are called by the Virtio console device driver
 // to actually perform the console character read/write.
+// Note: this is NOT the direct UART device on the HW side;
+//     this is the virtio emulation of a console.
+//     Both can co-exist.
 // TODO: can be improved substantially.
 
 static

@@ -102,20 +102,30 @@ interface AWS_SoC_Top_IFC;
    interface Get #(Info_CPU_to_Verifier) tv_verifier_info_get;
 `endif
 
-   // ----------------
-   // Misc. control
+   // ----------------------------------------------------------------
+   // Misc. control and status
 
+   // ----------------
+   // Debugging: set core's verbosity
    method Action ma_set_verbosity (Bit #(4)   verbosity1, Bit #(64)  logdelay1);
 
+   // ----------------
+   // For ISA tests: watch memory writes to <tohost> addr
+`ifdef WATCH_TOHOST
    method Action ma_set_watch_tohost (Bool  watch_tohost, Bit #(64)  tohost_addr);
+   method Bit #(64) mv_tohost_value;
+`endif
 
-   // Environment says ddr4 has been initialized
+   // ----------------
+   // Inform core that DDR4 has been initialized by AWS and is ready to accept requests
    method Action ma_ddr4_ready;
 
+   // ----------------
    // Environment says ddr4 has been loaded (program memory, ...)
    method Action ma_ddr4_is_loaded;
 
-   // Misc. status; 0 = running, no error
+   // ----------------
+   // Misc. status; 0 = running, no error.
    (* always_ready *)
    method Bit #(8) mv_status;
 endinterface
@@ -400,26 +410,38 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    // ----------------------------------------------------------------
    // Misc. control and status
 
+   // ----------------
+   // Debugging: set core's verbosity
    method Action ma_set_verbosity (Bit #(4)   verbosity1, Bit #(64)  logdelay1);
       core.set_verbosity (verbosity1, logdelay1);
    endmethod
 
+   // ----------------
+   // For ISA tests: watch memory writes to <tohost> addr
+`ifdef WATCH_TOHOST
    method Action ma_set_watch_tohost (Bool  watch_tohost, Bit #(64)  tohost_addr);
       core.set_watch_tohost (watch_tohost, tohost_addr);
    endmethod
 
-   // Environment says ddr4 has been initialized
+   method Bit #(64) mv_tohost_value = core.mv_tohost_value;
+`endif
+
+   // ----------------
+   // Inform core that DDR4 has been initialized by AWS and is ready to accept requests
    method Action ma_ddr4_ready;
       core.ma_ddr4_ready;
    endmethod
 
+   // ----------------
    // Environment says ddr4 has been loaded (program memory, ...)
    method Action ma_ddr4_is_loaded;
       rg_ddr4_is_loaded <= True;
    endmethod
 
+   // ----------------
+   // Misc. status; 0 = running, no error.
    method Bit #(8) mv_status;
-      return core.mv_status;    // 0 = running, no error
+      return core.mv_status;
    endmethod
 endmodule: mkAWS_SoC_Top
 
