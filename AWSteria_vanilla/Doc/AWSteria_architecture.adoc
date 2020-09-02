@@ -1,7 +1,7 @@
 = AWSteria architecture: Host-side and FPGA-side (HW-side)
 Rishiyur S. Nikhil, Bluespec, Inc. (c) 2020
 :revnumber: v0.1
-:revdate: 2020-08-13
+:revdate: 2020-09-02
 :revremark: Draft
 :sectnums:
 :toc:
@@ -165,9 +165,9 @@ image::Fig_8_AWS_SoC_Top.png[align="center"]
 
 == FPGA-Side application: `AWS_BSV_Top.SoC_Top.Core`
 
-[#Fig_9_Core]
+[#Fig_310_mkCore_v2]
 .CPU Core (with CPU, MMUs, L1s, unified L2, cache coherence, Debug Module and Tandem Verifier Encoder)
-image::Fig_9_Core.png[align="center"]
+image::Fig_310_mkCore_v2.png[align="center"]
 
 The `Core` is the version in `Flute/src_Core/Core_v2/Core.bsv`, and includes
 

@@ -37,6 +37,10 @@ import AWS_SoC_Top      :: *;
 import AWS_DDR4_Adapter :: *;
 import AWS_OCL_Adapter  :: *;
 
+import TV_Info :: *;
+
+import C_Imports :: *;
+
 // ================================================================
 
 export mkAWS_BSV_Top;
@@ -246,13 +250,58 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
 `endif
 
    // ================================================================
+   // Tandem verifier: drain and output vectors of bytes
+
+`ifdef INCLUDE_TANDEM_VERIF
+   rule rl_tv_vb_out;
+      let tv_info <- soc_top.tv_verifier_info_get.get;
+      let n  = tv_info.num_bytes;
+      let vb = tv_info.vec_bytes;
+
+      Bit #(32) success = 1;
+
+      for (Bit #(32) j = 0; j < fromInteger (valueOf (TV_VB_SIZE)); j = j + 8) begin
+	 Bit #(64) w64 = { vb [j+7], vb [j+6], vb [j+5], vb [j+4], vb [j+3], vb [j+2], vb [j+1], vb [j] };
+	 let success1 <- c_trace_file_load_word64_in_buffer (j, w64);
+      end
+
+      if (success == 0)
+	 $display ("ERROR: Top_HW_Side.rl_tv_vb_out: error loading %0d bytes into buffer", n);
+      else begin
+	 // Send the data
+	 success <- c_trace_file_write_buffer (n);
+	 if (success == 0)
+	    $display ("ERROR: Top_HW_Side.rl_tv_vb_out: error writing bytevec data buffer (%0d bytes)", n);
+      end
+
+      if (success == 0) begin
+	 $finish (1);
+      end
+   endrule
+`endif
+
+   // ================================================================
    // Initializations
 
    rule rl_initialize_1 ((! rg_initialized_1) && (rg_ddr4_ready[3:0] == 4'b1111));
-      soc_top.ma_ddr4_ready;
-      rg_initialized_1 <= True;
       $display ("%0d: %0m.rl_initialize_1", cur_cycle);
       $display ("    DDRs ready, mem access enabled");
+
+      soc_top.ma_ddr4_ready;
+      rg_initialized_1 <= True;
+
+`ifdef INCLUDE_TANDEM_VERIF
+      // ----------------
+      // Open file for Tandem Verification trace output
+      let success <- c_trace_file_open ('h_AA);
+      if (success == 0) begin
+	 $display ("    ERROR: Top_HW_Side.rl_step0: error opening trace file.");
+	 $display ("    Aborting.");
+	 $finish (1);
+      end
+      else
+	 $display ("    opened trace file.");
+`endif
    endrule
 
    rule rl_initialize_2 (rg_initialized_1
@@ -260,6 +309,7 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
 			 && rg_ddr4_is_loaded);
       soc_top.ma_ddr4_is_loaded;
       rg_initialized_2 <= True;
+
       $display ("%0d: %0m.rl_initialize_2: DDRs loaded", cur_cycle);
    endrule
 
