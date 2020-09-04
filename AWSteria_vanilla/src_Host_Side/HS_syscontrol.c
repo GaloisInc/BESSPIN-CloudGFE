@@ -94,7 +94,7 @@ bool HS_syscontrol_do_some_work (HS_SysControl_State *state)
 
 	// ----------------
 	// Set up CPU verbosity and logdelay
-	uint32_t cpu_verbosity = 0;
+	uint32_t cpu_verbosity = 1;
 	uint32_t logdelay      = 0;    // # of instructions after which to set verbosity
 	command = ((logdelay << 24)                   // 24'h_log_delay
 		   | (cpu_verbosity << 4)             // 4'h_verbosity

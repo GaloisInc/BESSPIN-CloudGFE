@@ -132,7 +132,8 @@ int load_mem_hex32_using_DMA (int slot_id, char *filename)
     // ================
     // Readback up to 128 bytes and cross-check
     size_t read_size = ((download_size <= 128) ? download_size : 128);
-    fprintf (stdout, "%s: reading back %0ld bytes to spot-check the download\n", __FUNCTION__, read_size);
+    fprintf (stdout, "%s: reading back %0ld bytes to spot-check the download\n",
+	     __FUNCTION__, read_size);
     addr1 = ((addr_base >> 6) << 6);    // 64B aligned (required by AWS)
     rc = fpga_dma_burst_read (read_fd, dma_buf, read_size, addr1);
     if (rc != 0) {
@@ -378,31 +379,24 @@ int start_hw (const char *tun_iface,
 
 // ================================================================
 
-void usage(const char* program_name)
+void print_help (int argc, char *argv [])
 {
-    printf("usage: %s [--slot <slot>]\n", program_name);
+    fprintf (stdout, "Usage:  %s  <optional memhexfile>\n", argv [0]);
 }
 
 // ****************************************************************
 
-int main(int argc, char **argv)
+int main (int argc, char *argv [])
 {
     int rc;
-    int slot_id = 0;
 
-    // TODO: command-line parsing/config file
-    // - Mem.hex filename filename
-    // - slot_id    (what exactly is this?)
+    int slot_id = 0;    // TODO: what exactly is this?
 
-    switch (argc) {
-    case 1:
-        break;
-    case 3:
-        sscanf(argv[2], "%x", &slot_id);
-        break;
-    default:
-        usage(argv[0]);
-        return 1;
+    if ((argc > 1)
+	&& ((strcmp (argv [1], "--help") == 0)
+	    || (strcmp (argv [1], "-h") == 0))) {
+	print_help (argc, argv);
+	return 0;
     }
 
     AWS_Sim_Lib_init ();
@@ -410,12 +404,15 @@ int main(int argc, char **argv)
     // ================================================================
     // AWSteria code
 
-    char memhex32_filename[] = "Mem.hex";
-
-    rc = load_mem_hex32_using_DMA (slot_id, memhex32_filename);
-    if (rc != 0) {
-	fprintf (stdout, "Loading the mem hex32 file failed\n");
-	goto out;
+    if (argc > 1) {
+	rc = load_mem_hex32_using_DMA (slot_id, argv [1]);
+	if (rc != 0) {
+	    fprintf (stdout, "Loading the mem hex32 file failed\n");
+	    goto out;
+	}
+    }
+    else {
+	fprintf (stdout, "No memhex file specified: skipping loading\n");
     }
 
     // ================================================================

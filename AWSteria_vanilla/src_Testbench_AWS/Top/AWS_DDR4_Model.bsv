@@ -45,7 +45,7 @@ module mkMem_Model #(parameter Bit #(2) ddr4_num) (AXI4_16_64_512_0_Slave_IFC);
 
    Bit #(64) implemented_words = 'h_0400_0000;    // 64M words, each 64 B => 4 GB size
 
-   RegFile #(Bit #(64), Bit #(512)) rf <- mkRegFile (0, implemented_words - 1);
+   RegFile #(Bit #(64), Bit #(512)) rf <- mkRegFileLoad ("Mem.hex512", 0, implemented_words - 1);
 
    AXI4_16_64_512_0_Slave_Xactor_IFC  axi4_xactor <- mkAXI4_Slave_Xactor;
 
