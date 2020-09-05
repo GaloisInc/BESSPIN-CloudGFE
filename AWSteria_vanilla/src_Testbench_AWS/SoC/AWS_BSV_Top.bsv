@@ -284,7 +284,7 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
    // Initializations
 
    rule rl_initialize_1 ((! rg_initialized_1) && (rg_ddr4_ready[3:0] == 4'b1111));
-      $display ("%0d: %0m.rl_initialize_1", cur_cycle);
+      $display ("%0d: %m.rl_initialize_1", cur_cycle);
       $display ("    DDRs ready, mem access enabled");
 
       soc_top.ma_ddr4_ready;
@@ -310,7 +310,7 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
       soc_top.ma_ddr4_is_loaded;
       rg_initialized_2 <= True;
 
-      $display ("%0d: %0m.rl_initialize_2: DDRs loaded", cur_cycle);
+      $display ("%0d: %m.rl_initialize_2: DDRs loaded", cur_cycle);
    endrule
 
    // ================================================================

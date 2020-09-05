@@ -62,7 +62,19 @@ extern
 void c_host_recv (uint8_t *bytevec, uint8_t bytevec_size);
 
 extern
+uint8_t c_host_recv2 (uint8_t dummy);
+
+extern
+uint8_t c_host_recv_get_byte_j (uint32_t j);
+
+extern
 void c_host_send (const uint8_t *bytevec, uint8_t bytevec_size);
+
+extern
+uint8_t c_host_send_put_byte_j (uint32_t j, uint8_t x);
+
+extern
+void c_host_send2 (uint8_t dummy);
 
 // ****************************************************************
 // ****************************************************************

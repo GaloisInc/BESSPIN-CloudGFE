@@ -118,6 +118,6 @@ clean:
 
 .PHONY: full_clean
 full_clean: clean
-	rm -r -f  $(SIM_EXE_FILE)*  *.log  *.vcd  *.hex  Logs/  worker_*
+	rm -r -f  $(SIM_EXE_FILE)*  *.log  *.vcd  *.hex  Logs/  worker_*  Verilator_RTL
 
 # ================================================================

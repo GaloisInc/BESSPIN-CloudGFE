@@ -70,8 +70,8 @@ module mkMem_Model #(parameter Bit #(2) ddr4_num) (AXI4_16_64_512_0_Slave_IFC);
       let rda <- pop_o (axi4_xactor.o_rd_addr);
 
       Bool ok1      = ((addr_base <= rda.araddr) && (rda.araddr <= addr_last));
+      Bool ok2      = (rda.araddr <= addr_impl_last);
       let  offset_b = rda.araddr - addr_base;
-      Bool ok2      = (ok1 && (offset_b <= addr_impl_last));
       let  offset_W = (offset_b >> 6);
 
       // Default error response

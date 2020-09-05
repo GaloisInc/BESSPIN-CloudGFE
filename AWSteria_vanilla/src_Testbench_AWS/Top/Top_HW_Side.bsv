@@ -117,7 +117,20 @@ module mkTop_HW_Side (Empty) ;
 
    // Receive a bytevec from host and put into communication box
    rule rl_host_recv (rg_state == STATE_RUNNING);
-      Bytevec_C_to_BSV bytevec <- c_host_recv (fromInteger (bytevec_C_to_BSV_size));
+      Bytevec_C_to_BSV bytevec = ?;
+
+      // Try to receive a bytevec from host (into a buffer-in-C)
+      Bit #(8) status <- c_host_recv2 ('hAA);
+
+      if (status == 0)
+	 // No bytes received
+	 bytevec [0] = 0;
+      else begin
+	 // Bytes received; load them into bytevec from the buffer-in-C
+	 for (Integer j = 0; j < bytevec_C_to_BSV_size; j = j + 1)
+	    bytevec [j] <- c_host_recv_get_byte_j (fromInteger (j));
+      end
+
       // Protocol: bytevec [0] is the size of the bytevec
       // 0 is used to indicate that no bytevec was available from the host
       if (bytevec [0] != 0) begin
@@ -147,7 +160,16 @@ module mkTop_HW_Side (Empty) ;
 	 $display ("]");
       end
 
-      c_host_send (bytevec, fromInteger (bytevec_BSV_to_C_size));
+      Bit #(8) status = 0;
+
+      for (Integer j = 0; j < bytevec_BSV_to_C_size; j = j + 1) begin
+	 let status1 <- c_host_send_put_byte_j (fromInteger (j), bytevec [j]);
+	 status = (status | status1);
+      end
+      if (status != 0)
+	 c_host_send2 ('hAA);
+
+      // c_host_send (bytevec, fromInteger (bytevec_BSV_to_C_size));
    endrule
 
    // ----------------

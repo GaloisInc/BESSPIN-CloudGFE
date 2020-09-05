@@ -71,6 +71,12 @@ function Action  c_host_disconnect (Bit #(8)  dummy);
 import "BDPI"
 function ActionValue #(Vector #(79, Bit #(8)))  c_host_recv (Bit #(8)  bytevec_size);
 
+import "BDPI"
+   function ActionValue #(Bit #(8)) c_host_recv2 (Bit #(8) dummy);
+
+import "BDPI"
+   function ActionValue #(Bit #(8)) c_host_recv_get_byte_j (Bit #(32) j);
+
 // ================================================================
 // Send bytevec to remote host
 // Returns fail/ok status
@@ -83,6 +89,12 @@ function ActionValue #(Vector #(79, Bit #(8)))  c_host_recv (Bit #(8)  bytevec_s
 import "BDPI"
 function Action  c_host_send (Vector #(76, Bit #(8)) bytevec,
 			      Bit #(8) bytevec_size);
+
+import "BDPI"
+   function ActionValue #(Bit #(8)) c_host_send_put_byte_j (Bit #(32) j, Bit #(8) x);
+
+import "BDPI"
+   function Action c_host_send2 (Bit #(8) dummy);
 
 // ****************************************************************
 // ****************************************************************
