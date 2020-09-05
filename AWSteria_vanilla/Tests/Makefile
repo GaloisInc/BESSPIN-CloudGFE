@@ -3,12 +3,15 @@
 # ELF_DIR  ?= $(HOME)/git_clones/RISCV_Tests/GFE/c/
 # ELF_FILE ?= rv64-hello
 
-ELF_DIR  ?= $(HOME)/git_clones/RISCV_Tests/GFE/isa/
-ELF_FILE ?= rv64ui-p-add
+# ELF_DIR  ?= $(HOME)/git_clones/RISCV_Tests/GFE/isa/
+# ELF_FILE ?= rv64ui-p-add
+
+ELF_DIR  ?= .
+ELF_FILE ?= bbl-riscv64.GFE
 
 # ================================================================
-
 # You need to point this at a standard Elf-to-MemHex32 converter
+
 ELF_TO_HEX32 ?= Elf_to_Hex32
 
 # ================================================================

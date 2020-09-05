@@ -17,7 +17,6 @@ FreeBSD
 
 FreeBSD without virtio, creating filestore in RAM
     32331912 Jun  4 12:05 bbl-riscv64.GFE    (ELF file)
-    72107830 Jun  4 12:05 bbl.hex
     72107830 Jun  4 12:05 miniFreeBSD.hex
 
 FreeBSD with virtio

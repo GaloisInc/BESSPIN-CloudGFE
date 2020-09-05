@@ -38,7 +38,14 @@ EDIT_MODULE2 = mkAWS_BSV_Top
 #    --x-initial fast   Optimize uninitialized value
 #    --noassert         Disable all assertions
 
-VERILATOR_FLAGS = --stats -O3 -CFLAGS -O2 -LDFLAGS -static --x-assign fast --x-initial fast --noassert
+# VERILATOR_FLAGS = --stats -O3 -LDFLAGS -static --x-assign fast --x-initial fast --noassert
+VERILATOR_FLAGS = --stats -O3 -CFLAGS -O1 -LDFLAGS -static --x-assign fast --x-initial fast --noassert
+# Note: C++ compile times for AWSteria:
+#    no CFLAGS:   2 min
+#    -CFLAGS -O:  4 min
+#    -CFLAGS -O1: 4 min
+#    -CFLAGS -O2: 8 min
+#    -CFLAGS -O3: 15 min
 
 # Verilator flags: use the following to include code to generate VCDs
 # Select trace-depth according to your module hierarchy
