@@ -42,7 +42,9 @@ BSC_COMPILATION_FLAGS += \
 	-D FABRIC64    \
 	-D WATCH_TOHOST    \
 	-D MEM_512b    \
-	-D INCLUDE_TANDEM_VERIF \
+
+
+#	-D INCLUDE_TANDEM_VERIF \
 
 
 # Default ISA test
