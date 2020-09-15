@@ -1,3 +1,6 @@
 [submodule "FireSim/firesim"]
 	path = FireSim/firesim
 	url = ../firesim.git
+[submodule "ConnectalStyle/ssith-aws-fpga"]
+	path = ConnectalStyle/ssith-aws-fpga
+	url = https://github.com/acceleratedtech/ssith-aws-fpga
