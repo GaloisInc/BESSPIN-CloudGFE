@@ -93,6 +93,120 @@ void c_end_timing (uint64_t  cycle_num)
 // ****************************************************************
 // ****************************************************************
 
+// Functions for console I/O
+
+// ================================================================
+// c_trygetchar()
+// Returns next input character (ASCII code) from the console.
+// Returns 0 if no input is available.
+
+uint8_t c_trygetchar (uint8_t  dummy)
+{
+    uint8_t  ch;
+    ssize_t  n;
+    struct pollfd  x_pollfd;
+    const int fd_stdin = 0;
+
+    // ----------------
+    // Poll for input
+    x_pollfd.fd      = fd_stdin;
+    x_pollfd.events  = POLLRDNORM;
+    x_pollfd.revents = 0;
+    poll (& x_pollfd, 1, 1);
+
+    // printf ("INFO: c_trygetchar: Polling for input\n");
+    if ((x_pollfd.revents & POLLRDNORM) == 0) {
+	return 0;
+    }
+
+    // ----------------
+    // Input is available
+
+    n = read (fd_stdin, & ch, 1);
+    if (n == 1) {
+	return ch;
+    }
+    else {
+	if (n == 0)
+	    printf ("c_trygetchar: end of file\n");
+	return 0xFF;
+    }
+}
+
+// ================================================================
+// A small 'main' to test c_trygetchar()
+
+#ifdef TEST_TRYGETCHAR
+
+char message[] = "Hello World!\n";
+
+int main (int argc, char *argv [])
+{
+    uint8_t ch;
+    int j;
+
+    for (j = 0; j < strlen (message); j++)
+	c_putchar (message[j]);
+
+    printf ("Polling for input\n");
+
+    j = 0;
+    while (1) {
+	ch = c_trygetchar ();
+	if (ch == 0xFF) break;
+	if (ch != 0)
+	    printf ("Received character %0d 0x%0x '%c'\n", ch, ch, ch);
+	else {
+	    printf ("\r%0d ", j);
+	    fflush (stdout);
+	    j++;
+	    sleep (1);
+	}
+    }
+    return 0;
+}
+
+#endif
+
+// ================================================================
+// c_putchar()
+// Writes character to stdout
+
+uint32_t c_putchar (uint8_t ch)
+{
+    int      status;
+    uint32_t success = 0;
+
+    if ((ch == 0) || (ch > 0x7F)) {
+	// Discard non-printables
+	success = 1;
+    }
+    else {
+	if ((ch == '\n') || (' ' <= ch)) {
+	    status = fprintf (stdout, "%c", ch);
+	    if (status > 0)
+		success = 1;
+	}
+	else {
+	    status = fprintf (stdout, "[\\%0d]", ch);
+	    if (status > 0)
+		success = 1;
+	}
+
+	if (success == 1) {
+	    status = fflush (stdout);
+	    if (status != 0)
+		success = 0;
+	}
+    }
+
+    return success;
+}
+
+// ****************************************************************
+// ****************************************************************
+// ****************************************************************
+
 // Functions for communication with host-side
 
 // ================================================================

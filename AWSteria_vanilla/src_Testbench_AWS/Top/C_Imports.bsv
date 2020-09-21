@@ -43,7 +43,28 @@ function Action c_end_timing (Bit #(64)  cycle_num);
 // ****************************************************************
 // ****************************************************************
 
-// Functions for communication with remote debug client.
+// Functions for console I/O
+
+// ================================================================
+// c_trygetchar ()
+// Returns next input character (ASCII code) from the console.
+// Returns 0 if no input is available.
+
+import "BDPI"
+function ActionValue #(Bit #(8)) c_trygetchar (Bit #(8) dummy);
+
+// ================================================================
+// c_putchar ()
+// Writes character to stdout
+
+import "BDPI"
+function ActionValue #(Bit #(32)) c_putchar (Bit #(8) ch);
+
+// ****************************************************************
+// ****************************************************************
+// ****************************************************************
+
+// Functions for communication with host side
 
 Bit #(16) default_tcp_port = 30000;
 

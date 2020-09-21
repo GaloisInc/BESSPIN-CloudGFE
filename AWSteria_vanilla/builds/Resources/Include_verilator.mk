@@ -39,7 +39,7 @@ EDIT_MODULE2 = mkAWS_BSV_Top
 #    --noassert         Disable all assertions
 
 # VERILATOR_FLAGS = --stats -O3 -LDFLAGS -static --x-assign fast --x-initial fast --noassert
-VERILATOR_FLAGS = --stats -O3 -CFLAGS -O1 -LDFLAGS -static --x-assign fast --x-initial fast --noassert
+VERILATOR_FLAGS = --stats -O3 -CFLAGS -O3 -LDFLAGS -static --x-assign fast --x-initial fast --noassert
 # Note: C++ compile times for AWSteria:
 #    no CFLAGS:   2 min
 #    -CFLAGS -O:  4 min

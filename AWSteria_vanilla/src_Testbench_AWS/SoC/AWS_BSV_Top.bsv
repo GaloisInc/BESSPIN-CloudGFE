@@ -44,6 +44,16 @@ import C_Imports :: *;
 // ================================================================
 
 export mkAWS_BSV_Top;
+export host_to_hw_chan_control;
+export host_to_hw_chan_UART;
+export host_to_hw_chan_mem_rsp;
+export host_to_hw_chan_debug_module;
+export host_to_hw_chan_interrupt;
+
+export hw_to_host_chan_status;
+export hw_to_host_chan_UART;
+export hw_to_host_chan_mem_req;
+export hw_to_host_chan_debug_module;
 
 // ================================================================
 // OCL channel numbers
@@ -141,7 +151,7 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
       let tohost_value = soc_top.mv_tohost_value;
       status = status | { tohost_value [15:0], 16'h0 };
       ocl_adapter.v_to_host [hw_to_host_chan_status].enq (status);
-      if ((tohost_value != 0) || (status [7:0] != 0))
+      if ((verbosity > 0) && ((tohost_value != 0) || (status [7:0] != 0)))
 	 $display ("%0d: %m.rl_hw_to_host_status: %0h", cur_cycle, status);
    endrule
 
