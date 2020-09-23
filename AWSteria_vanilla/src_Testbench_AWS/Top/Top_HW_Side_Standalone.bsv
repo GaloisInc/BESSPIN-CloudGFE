@@ -78,28 +78,28 @@ module mkTop_HW_Side (Empty) ;
 
    // Models for the four DDR4s
    AXI4_16_64_512_0_Slave_IFC  ddr4_A <- mkMem_Model (0);
-   AXI4_16_64_512_0_Slave_IFC  ddr4_B <- mkMem_Model (1);
-   AXI4_16_64_512_0_Slave_IFC  ddr4_C <- mkMem_Model (2);
-   AXI4_16_64_512_0_Slave_IFC  ddr4_D <- mkMem_Model (3);
+   AXI4_16_64_512_0_Slave_IFC  ddr4_B  = dummy_AXI4_Slave_ifc;
+   AXI4_16_64_512_0_Slave_IFC  ddr4_C  = dummy_AXI4_Slave_ifc;
+   AXI4_16_64_512_0_Slave_IFC  ddr4_D  = dummy_AXI4_Slave_ifc;
 
    // AXI4 Deburster in front of DDR4 A
    AXI4_Deburster_IFC #(16, 64, 512, 0) ddr4_A_deburster <- mkAXI4_Deburster_DDR4;
-   AXI4_Deburster_IFC #(16, 64, 512, 0) ddr4_B_deburster <- mkAXI4_Deburster_DDR4;
-   AXI4_Deburster_IFC #(16, 64, 512, 0) ddr4_C_deburster <- mkAXI4_Deburster_DDR4;
-   AXI4_Deburster_IFC #(16, 64, 512, 0) ddr4_D_deburster <- mkAXI4_Deburster_DDR4;
+   // AXI4_Deburster_IFC #(16, 64, 512, 0) ddr4_B_deburster <- mkAXI4_Deburster_DDR4;
+   // AXI4_Deburster_IFC #(16, 64, 512, 0) ddr4_C_deburster <- mkAXI4_Deburster_DDR4;
+   // AXI4_Deburster_IFC #(16, 64, 512, 0) ddr4_D_deburster <- mkAXI4_Deburster_DDR4;
 
 
    // Connect AWS_BSV_Top ddr ports to debursters
    mkConnection (aws_BSV_top.ddr4_A_master, ddr4_A_deburster.from_master);
-   mkConnection (aws_BSV_top.ddr4_B_master, ddr4_B_deburster.from_master);
-   mkConnection (aws_BSV_top.ddr4_C_master, ddr4_C_deburster.from_master);
-   mkConnection (aws_BSV_top.ddr4_D_master, ddr4_D_deburster.from_master);
+   mkConnection (aws_BSV_top.ddr4_B_master, ddr4_B);    // ddr4_B_deburster.from_master);
+   mkConnection (aws_BSV_top.ddr4_C_master, ddr4_C);    // ddr4_C_deburster.from_master);
+   mkConnection (aws_BSV_top.ddr4_D_master, ddr4_D);    // ddr4_D_deburster.from_master);
 
    // Connect debursters to DDR models
    mkConnection (ddr4_A_deburster.to_slave, ddr4_A);
-   mkConnection (ddr4_B_deburster.to_slave, ddr4_B);
-   mkConnection (ddr4_C_deburster.to_slave, ddr4_C);
-   mkConnection (ddr4_D_deburster.to_slave, ddr4_D);
+   // mkConnection (ddr4_B_deburster.to_slave, ddr4_B);
+   // mkConnection (ddr4_C_deburster.to_slave, ddr4_C);
+   // mkConnection (ddr4_D_deburster.to_slave, ddr4_D);
 
    // ================================================================
    // Functions to simulate host-to/from-hw communication with
