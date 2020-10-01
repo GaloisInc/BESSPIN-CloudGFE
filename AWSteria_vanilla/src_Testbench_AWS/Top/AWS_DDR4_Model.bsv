@@ -9,19 +9,32 @@ package AWS_DDR4_Model;
 // WARNING: This is a simplified model: does not support AXI4 bursts.
 
 // ================================================================
+// BSV lib imports
 
 import Vector          :: *;
 import RegFile         :: *;
 import Connectable     :: *;
-import StmtFSM         :: *;
+
+// ----------------
+// BSV additional libs
 
 import Semi_FIFOF      :: *;
 import Cur_Cycle       :: *;
-import AXI4_Types      :: *;
-import AXI4_Lite_Types :: *;
+
+// ================================================================
+// Project imports
+
+import AXI4_Types     :: *;
+import AXI4_Deburster :: *;
 
 import AWS_BSV_Top_Defs :: *;
-import AWS_BSV_Top      :: *;
+
+// ================================================================
+
+export mkAWS_DDR4_A_Model;
+export mkAWS_DDR4_B_Model;
+export mkAWS_DDR4_C_Model;
+export mkAWS_DDR4_D_Model;
 
 // ================================================================
 
@@ -35,33 +48,103 @@ function Bit #(512) fv_new_data (Bit #(512) old_data, Bit #(512) new_data, Bit #
 endfunction
 
 // ================================================================
+// DDR4_A
+// Supports bursts
 
 (* synthesize *)
-module mkMem_Model #(parameter Bit #(2) ddr4_num) (AXI4_16_64_512_0_Slave_IFC);
+module mkAWS_DDR4_A_Model (AXI4_16_64_512_0_Slave_IFC);
+   let ifc <- mkMem_Model (0,                       // verbosity
+			   0,                       // ddr4_num
+			   True,                    // init_with_memhex
+			   "DDR4_A.memhex512",      // memhex_filename
+			   'h_0_0000_0000,          // byte_addr_base
+			   'h_4_0000_0000,          // byte_addr_lim    (16 GB)
+			   'h_1_0000_0000);         // bytes_implemented (4 GB)
 
-   Integer verbosity = 0;
+   AXI4_Deburster_IFC #(16, 64, 512, 0) deburster <- mkAXI4_Deburster;
+   mkConnection (deburster.to_slave, ifc);
+   return deburster.from_master;
+endmodule
+
+// ================================================================
+// DDR4_B
+// Supports bursts
+
+(* synthesize *)
+module mkAWS_DDR4_B_Model (AXI4_16_64_512_0_Slave_IFC);
+   let ifc <- mkMem_Model (0,                       // verbosity
+			   1,                       // ddr4_num
+			   False,                   // init_with_memhex
+			   "DDR4_B.memhex512",      // memhex_filename
+			   'h_4_0000_0000,          // byte_addr_base
+			   'h_8_0000_0000,          // byte_addr_lim  (16 GB)
+			   'h_0_C000_0000);         // bytes_implemented (3 GB)
+   AXI4_Deburster_IFC #(16, 64, 512, 0) deburster <- mkAXI4_Deburster;
+   mkConnection (deburster.to_slave, ifc);
+   return deburster.from_master;
+endmodule
+
+// ================================================================
+// DDR4_C
+// Currently a dummy
+
+(* synthesize *)
+module mkAWS_DDR4_C_Model (AXI4_16_64_512_0_Slave_IFC);
+   return dummy_AXI4_Slave_ifc;
+endmodule
+
+// ================================================================
+// DDR4_C
+// Currently a dummy
+
+(* synthesize *)
+module mkAWS_DDR4_D_Model (AXI4_16_64_512_0_Slave_IFC);
+   return dummy_AXI4_Slave_ifc;
+endmodule
+
+// ================================================================
+// Common implementation
+// - ddr4_num is unique id for each DDR4 (A=0, B=1, C=2, D=3)
+// - init_with_memhex and memhex_file are for optional initialization from a memhex512
+// - byte_addr_base and byte_addr_lim are the range of byte-addrs served by this DDR (16GB in AWS)
+// - bytes_implemented are the # of bytes implemented (on top of byte_addr_base)
+//     which need not cover until addr_last
+
+module mkMem_Model #(Integer    verbosity,
+                     Bit #(2)   ddr4_num,
+		     Bool       init_with_memhex,
+		     String     memhex_filename,
+		     Bit #(64)  byte_addr_base,
+		     Bit #(64)  byte_addr_lim,
+                     Bit #(64)  bytes_implemented)
+                   (AXI4_16_64_512_0_Slave_IFC);
 
    // Note: each 'word' in the RegFile is 512b = 64B => uses 6 lsbs of address.
+   Bit #(64) words_implemented = (bytes_implemented >> 6);
+   Bit #(64) addr_align_mask   = (~ 'h3F);
 
-   Bit #(64) implemented_words = 'h_0400_0000;    // 64M words, each 64 B => 4 GB size
-
-   RegFile #(Bit #(64), Bit #(512)) rf <- mkRegFileLoad ("Mem.hex512", 0, implemented_words - 1);
+   RegFile #(Bit #(64), Bit #(512)) rf <- (init_with_memhex
+					   ? mkRegFileLoad (memhex_filename, 0, words_implemented - 1)
+					   : mkRegFile (0, words_implemented - 1));
 
    AXI4_16_64_512_0_Slave_Xactor_IFC  axi4_xactor <- mkAXI4_Slave_Xactor;
 
-   // base and last are the full 16 GB space logically served by this
-   // DDR model, regardless of how much of the space is implemented.
-   // Thus, the stride from one DDR to the next is 16GB.
-
-   Bit #(64) addr_base      = { 28'b0, ddr4_num, 34'h_0_0000_0000 };
-   Bit #(64) addr_last      = { 28'b0, ddr4_num, 34'h_3_FFFF_FFFF };
-
-   // impl_last is the last actually implemented addr in this model,
-   // which could be < addr_last.
-   Bit #(64) addr_impl_last = addr_base + ((implemented_words << 6) - 1);
+   Bit #(64) implem_addr_lim = byte_addr_base + (bytes_implemented & addr_align_mask);
 
    // ================================================================
    // BEHAVIOR
+
+   Reg #(Bool) rg_info_done <- mkReg (False);
+
+   rule rl_info (! rg_info_done);
+      rg_info_done <= True;
+
+      $display ("INFO: %0d: %m", cur_cycle);
+      $display ("    base %016h  lim %016h    implemented %016h",
+		byte_addr_base, byte_addr_lim, bytes_implemented);
+      if (init_with_memhex)
+	 $display ("    initialized from: %s", memhex_filename);
+   endrule
 
    // ----------------
    // Read requests
@@ -69,9 +152,9 @@ module mkMem_Model #(parameter Bit #(2) ddr4_num) (AXI4_16_64_512_0_Slave_IFC);
    rule rl_rd_req;
       let rda <- pop_o (axi4_xactor.o_rd_addr);
 
-      Bool ok1      = ((addr_base <= rda.araddr) && (rda.araddr <= addr_last));
-      Bool ok2      = (rda.araddr <= addr_impl_last);
-      let  offset_b = rda.araddr - addr_base;
+      Bool ok1      = ((byte_addr_base <= rda.araddr) && (rda.araddr < byte_addr_lim));
+      Bool ok2      = (rda.araddr < implem_addr_lim);
+      let  offset_b = rda.araddr - byte_addr_base;
       let  offset_W = (offset_b >> 6);
 
       // Default error response
@@ -81,12 +164,16 @@ module mkMem_Model #(parameter Bit #(2) ddr4_num) (AXI4_16_64_512_0_Slave_IFC);
 			      rlast: True,
 			      ruser: ?};
 
-      if (! ok1)
+      if (! ok1) begin
 	 $display ("%0d: Mem_Model [%0d]: rl_rd_req: @ %0h -> OUT OF BOUNDS",
 		   cur_cycle, ddr4_num, rda.araddr);
-      else if (! ok2)
+	 $display ("    base %016h  lim %016h", byte_addr_base, byte_addr_lim);
+      end
+      else if (! ok2) begin
 	 $display ("%0d: Mem_Model [%0d]: rl_rd_req: @ %0h -> OUT OF IMPLEMENTED BOUNDS",
 		   cur_cycle, ddr4_num, rda.araddr);
+	 $display ("    base %016h  implementation lim %016h", byte_addr_base, implem_addr_lim);
+      end
       else begin
 	 let data = rf.sub (offset_W);
 	 rdd = AXI4_Rd_Data {rid:   rda.arid,
@@ -109,20 +196,24 @@ module mkMem_Model #(parameter Bit #(2) ddr4_num) (AXI4_16_64_512_0_Slave_IFC);
       let wra <- pop_o (axi4_xactor.o_wr_addr);
       let wrd <- pop_o (axi4_xactor.o_wr_data);
 
-      Bool ok1      = ((addr_base <= wra.awaddr) && (wra.awaddr <= addr_last));
-      let  offset_b = wra.awaddr - addr_base;
-      Bool ok2      = (ok1 && (offset_b <= addr_impl_last));
+      Bool ok1      = ((byte_addr_base <= wra.awaddr) && (wra.awaddr < byte_addr_lim));
+      Bool ok2      = (wra.awaddr < implem_addr_lim);
+      let  offset_b = wra.awaddr - byte_addr_base;
       let  offset_W = (offset_b >> 6);
 
       // Default error response
-      let wrr = AXI4_Wr_Resp {bid:   wra.awid, bresp: axi4_resp_slverr, buser: ?};
+      let wrr = AXI4_Wr_Resp {bid: wra.awid, bresp: axi4_resp_slverr, buser: ?};
 
-      if (! ok1)
+      if (! ok1) begin
 	 $display ("%0d: Mem_Model [%0d]: rl_wr_req: @ %0h <= %0h strb %0h: OUT OF BOUNDS",
 		   cur_cycle, ddr4_num, wra.awaddr, wrd.wdata, wrd.wstrb);
-      else if (! ok2)
+	 $display ("    base %016h  lim %016h", byte_addr_base, byte_addr_lim);
+      end
+      else if (! ok2) begin
 	 $display ("%0d: Mem_Model [%0d]: rl_wr_req: @ %0h <= %0h strb %0h: OUT OF IMPLEMENTED BOUNDS",
 		   cur_cycle, ddr4_num, wra.awaddr, wrd.wdata, wrd.wstrb);
+	 $display ("    base %016h  implementation lim %016h", byte_addr_base, implem_addr_lim);
+      end
       else begin
 	 let old_data = rf.sub (offset_W);
 	 let new_data = fv_new_data (old_data, wrd.wdata, wrd.wstrb);

@@ -30,23 +30,31 @@ SIM_EXE_FILE = exe_HW_sim
 # Each of these should have a 'sed' step (see below)
 EDIT_MODULE2 = mkAWS_BSV_Top
 
-# Verilator flags: notes
-#    stats              Dump stats on the design, in file {prefix}__stats.txt
-#    -O3                Verilator optimization level
-#    -CFLAGS -O3        C++ optimization level
-#    --x-assign fast    Optimize X value
-#    --x-initial fast   Optimize uninitialized value
-#    --noassert         Disable all assertions
+# Verilator flags:
+#   The following are recommended in verilator manual for best performance
+#     -O3                          Verilator optimization level
+#     --x-assign fast              Optimize X value
+#     --x-initial fast             Optimize uninitialized value
+#     --noassert                   Disable all assertions
+#   Directory in which Verilator places verilated files, does the build, etc.
+#     --Mdir <dir>
+#   C++ compiler flags
+#     -CFLAGS -O3
+#   ld flags
+#     -LDFLAGS -static
+#   Generate multi-threaded simulation
+#     --threads N                  Use N threads
+#     --threads-dpi none/pure/all  Which DPI functions are considered thread-safe
+#   Dump stats on the design, in file {prefix}__stats.txt
+#     --stats
+#   Generate VCDs (select trace-depth according to your module hierarchy)
+#     --trace  --trace-depth 2  -CFLAGS -DVM_TRACE
 
-# The following flags are recommended in the verilator manual for best performance
-VERILATOR_FLAGS  = -O3 --x-assign fast --x-initial fast --noassert
-VERILATOR_FLAGS += --stats -CFLAGS -D$(RV) -CFLAGS -O3 -LDFLAGS -static 
+VERILATOR_FLAGS  = -Mdir $(VERILATOR_MAKE_DIR)
+VERILATOR_FLAGS += -O3 --x-assign fast --x-initial fast --noassert
+VERILATOR_FLAGS += --stats -CFLAGS -D$(RV) -CFLAGS -O3 -CFLAGS -DVL_DEBUG -LDFLAGS -static
 
-# Use the following to verilate into models that use multithreading in simulatino
 # VERILATOR_FLAGS += --threads 6  --threads-dpi pure
-
-# Verilator flags: use the following to include code to generate VCDs
-# Select trace-depth according to your module hierarchy
 # VERILATOR_FLAGS += --trace  --trace-depth 2  -CFLAGS -DVM_TRACE
 
 VTOP                = V$(TOPMODULE)
@@ -71,11 +79,10 @@ simulator:
 	@echo "INFO: Editing Verilog_RTL/$(EDIT_MODULE2).v -> Verilator_RTL/$(EDIT_MODULE2).v for DPI-C"
 	sed  -f $(VERILATOR_RESOURCES)/sed_script.txt  Verilog_RTL/$(EDIT_MODULE2).v  > Verilator_RTL/$(EDIT_MODULE2).v
 	@echo "----------------"
-	@echo "INFO: Verilating Verilog files (in newly created obj_dir)"
+	@echo "INFO: Verilating Verilog files (in $(VERILATOR_MAKE_DIR))"
 	verilator \
 		-IVerilator_RTL \
 		-I$(REPO)/src_bsc_lib_RTL \
-		-Mdir $(VERILATOR_MAKE_DIR) \
 		$(VERILATOR_FLAGS) \
 		--cc  --exe --build -j 4 -o exe_HW_sim  $(TOPMODULE).v \
 		--top-module $(TOPMODULE) \

@@ -61,6 +61,22 @@ typedef AXI4_Slave_Xactor_IFC #(Wd_Id_16,
 				Wd_User_0)  AXI4_16_64_512_0_Slave_Xactor_IFC;
 
 // ================================================================
+// AXI4 defs for sh_ddr interfaces for uncached DDR4 access
+
+typedef AXI4_Master_IFC #(Wd_Id_16, Wd_Addr_64, Wd_Data_64, Wd_User_0)  AXI4_16_64_64_0_Master_IFC;
+typedef AXI4_Slave_IFC  #(Wd_Id_16, Wd_Addr_64, Wd_Data_64, Wd_User_0)  AXI4_16_64_64_0_Slave_IFC;
+
+typedef AXI4_Master_Xactor_IFC #(Wd_Id_16,
+				 Wd_Addr_64,
+				 Wd_Data_64,
+				 Wd_User_0)  AXI4_4_64_64_0_Master_Xactor_IFC;
+
+typedef AXI4_Slave_Xactor_IFC #(Wd_Id_16,
+				Wd_Addr_64,
+				Wd_Data_64,
+				Wd_User_0)  AXI4_4_64_64_0_Slave_Xactor_IFC;
+
+// ================================================================
 // AXI4-Lite defs for OCL and other interfaces
 
 typedef AXI4_Lite_Master_IFC #(Wd_Addr_32, Wd_Data_32, Wd_User_0)  AXI4L_32_32_0_Master_IFC;

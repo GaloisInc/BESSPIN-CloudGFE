@@ -28,13 +28,14 @@ import GetPut_Aux :: *;
 // ================================================================
 // Project imports
 
-import AXI4_Types      :: *;
-import AXI4_Fabric     :: *;
-import AXI4_Lite_Types :: *;
+import AXI4_Types           :: *;
+import AXI4_Fabric          :: *;
+import AXI4_Lite_Types      :: *;
+import AXI4_Widener         :: *;
+import AXI4_Addr_Translator :: *;
 
 import AWS_BSV_Top_Defs :: *;
 import AWS_SoC_Top      :: *;
-import AWS_DDR4_Adapter :: *;
 import AWS_OCL_Adapter  :: *;
 
 import TV_Info :: *;
@@ -83,6 +84,13 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
    // Adapter towards OCL
    OCL_Adapter_IFC  ocl_adapter <- mkOCL_Adapter;
 
+   // Widener to connect to uncached mem
+   AXI4_Widener_IFC #(Wd_Id_16,
+		      Wd_Addr_64,
+		      Wd_Data_64,
+		      Wd_Data_512,
+		      Wd_User_0) uncached_mem_widener<- mkAXI4_Widener;
+
    // AWS signal
    Reg #(Bit #(4)) rg_ddr4_ready     <- mkReg (0);
 
@@ -116,7 +124,8 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
       else if (tag == tag_verbosity) begin
 	 Bit #(4)  verbosity = data [7:4];
 	 Bit #(64) logdelay  = zeroExtend (data [31:8]);
-	 $display ("%0d: %m.rl_host_to_hw_control: verbosity %0d, logdelay %0h", cur_cycle, verbosity, logdelay);
+	 $display ("%0d: %m.rl_host_to_hw_control: verbosity %0d, logdelay %0h",
+		   cur_cycle, verbosity, logdelay);
 	 soc_top.ma_set_verbosity (verbosity, logdelay);
       end
       else if (tag == tag_no_watch_tohost) begin
@@ -125,7 +134,8 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
       end
       else if (tag == tag_watch_tohost) begin
 	 Bit #(64) tohost_addr = zeroExtend ({ data [31:4], 4'b00 });
-	 $display ("%0d: %m.rl_host_to_hw_control: watch tohost at addr %0h", cur_cycle, tohost_addr);
+	 $display ("%0d: %m.rl_host_to_hw_control: watch tohost at addr %0h",
+		   cur_cycle, tohost_addr);
 	 soc_top.ma_set_watch_tohost (True, tohost_addr);
       end
       else if (tag == tag_shutdown) begin
@@ -324,6 +334,11 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
    endrule
 
    // ================================================================
+   // Widener for uncached memory access
+
+   mkConnection (soc_top.to_ddr4_0_uncached, uncached_mem_widener.from_master);
+
+   // ================================================================
    // INTERFACE
 
    AXI4_16_64_512_0_Master_IFC dummy_ddr4_master = dummy_AXI4_Master_ifc;
@@ -334,7 +349,9 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
 
    // Facing DDR4
    interface AWS_AXI4_Master_IFC  ddr4_A_master = soc_top.to_ddr4;
-   interface AWS_AXI4_Master_IFC  ddr4_B_master = dummy_ddr4_master;
+   interface AWS_AXI4_Master_IFC  ddr4_B_master = fv_AXI4_Master_Address_Translator (True, // add, not subtract
+										     'h_4_0000_0000,  // addr offset
+										     uncached_mem_widener.to_slave);
    interface AWS_AXI4_Master_IFC  ddr4_C_master = dummy_ddr4_master;
    interface AWS_AXI4_Master_IFC  ddr4_D_master = dummy_ddr4_master;
 

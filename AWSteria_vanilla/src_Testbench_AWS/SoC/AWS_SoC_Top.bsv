@@ -77,6 +77,9 @@ interface AWS_SoC_Top_IFC;
    // AXI4 interface facing DDR
    interface AXI4_16_64_512_0_Master_IFC  to_ddr4;
 
+   // AXI4 64-bit interface facing uncached DDR
+   interface AXI4_16_64_64_0_Master_IFC  to_ddr4_0_uncached;
+
    // UART0 to external console
    interface Get #(Bit #(8)) get_to_console;
    interface Put #(Bit #(8)) put_from_console;
@@ -379,6 +382,9 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
 
    // External real memory
    interface to_ddr4 = core.core_mem_master;
+
+   // External uncached memory
+   interface to_ddr4_0_uncached = fabric.v_to_slaves [ddr4_0_uncached_target_num];
 
    // UART to external console
    interface get_to_console   = uart0.get_to_console;

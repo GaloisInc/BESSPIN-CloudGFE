@@ -40,7 +40,6 @@ import TV_Info        :: *;
 
 import AXI4_Types      :: *;
 import AXI4_Lite_Types :: *;
-import AXI4_Deburster  :: *;
 
 import AWS_BSV_Top_Defs :: *;
 import AWS_BSV_Top      :: *;
@@ -76,30 +75,24 @@ module mkTop_HW_Side (Empty) ;
    AXI4L_32_32_0_Master_Xactor_IFC  ocl_xactor <- mkAXI4_Lite_Master_Xactor;
    mkConnection (ocl_xactor.axi_side, aws_BSV_top.ocl_slave);
 
+   // ----------------
    // Models for the four DDR4s
-   AXI4_16_64_512_0_Slave_IFC  ddr4_A <- mkMem_Model (0);
-   AXI4_16_64_512_0_Slave_IFC  ddr4_B  = dummy_AXI4_Slave_ifc;
-   AXI4_16_64_512_0_Slave_IFC  ddr4_C  = dummy_AXI4_Slave_ifc;
-   AXI4_16_64_512_0_Slave_IFC  ddr4_D  = dummy_AXI4_Slave_ifc;
 
-   // AXI4 Deburster in front of DDR4 A
-   AXI4_Deburster_IFC #(16, 64, 512, 0) ddr4_A_deburster <- mkAXI4_Deburster_DDR4;
-   // AXI4_Deburster_IFC #(16, 64, 512, 0) ddr4_B_deburster <- mkAXI4_Deburster_DDR4;
-   // AXI4_Deburster_IFC #(16, 64, 512, 0) ddr4_C_deburster <- mkAXI4_Deburster_DDR4;
-   // AXI4_Deburster_IFC #(16, 64, 512, 0) ddr4_D_deburster <- mkAXI4_Deburster_DDR4;
+   // DDR4 A (cached mem access, incl. bursts)
+   AXI4_16_64_512_0_Slave_IFC  ddr4_A <- mkAWS_DDR4_A_Model;
+   mkConnection (aws_BSV_top.ddr4_A_master, ddr4_A);
 
+   // DDR4 B (uncached mem access, no bursts)
+   AXI4_16_64_512_0_Slave_IFC  ddr4_B <- mkAWS_DDR4_B_Model;
+   mkConnection (aws_BSV_top.ddr4_B_master, ddr4_B);
 
-   // Connect AWS_BSV_Top ddr ports to debursters
-   mkConnection (aws_BSV_top.ddr4_A_master, ddr4_A_deburster.from_master);
-   mkConnection (aws_BSV_top.ddr4_B_master, ddr4_B);    // ddr4_B_deburster.from_master);
-   mkConnection (aws_BSV_top.ddr4_C_master, ddr4_C);    // ddr4_C_deburster.from_master);
-   mkConnection (aws_BSV_top.ddr4_D_master, ddr4_D);    // ddr4_D_deburster.from_master);
+   // DDR4 C (tie-off: unused for now)
+   AXI4_16_64_512_0_Slave_IFC  ddr4_C <- mkAWS_DDR4_C_Model;
+   mkConnection (aws_BSV_top.ddr4_C_master, ddr4_C);
 
-   // Connect debursters to DDR models
-   mkConnection (ddr4_A_deburster.to_slave, ddr4_A);
-   // mkConnection (ddr4_B_deburster.to_slave, ddr4_B);
-   // mkConnection (ddr4_C_deburster.to_slave, ddr4_C);
-   // mkConnection (ddr4_D_deburster.to_slave, ddr4_D);
+   // DDR4 D (tie-off: unused for now)
+   AXI4_16_64_512_0_Slave_IFC  ddr4_D <- mkAWS_DDR4_D_Model;
+   mkConnection (aws_BSV_top.ddr4_D_master, ddr4_D);
 
    // ================================================================
    // Functions to simulate host-to/from-hw communication with
@@ -371,7 +364,7 @@ module mkTop_HW_Side (Empty) ;
       end
       else begin
 	 // Poll keyboard
-	 Bit #(8) ch <- c_trygetchar (?);
+	 Bit #(8) ch = 0;    // TODO: TEMPORARY DISABLE <- c_trygetchar (?);
 	 if (ch != 0) begin
 	    // Console char available; enqueue it for UART
 	    f_UART_input_chars.enq (ch);
@@ -448,15 +441,6 @@ module mkTop_HW_Side (Empty) ;
 
    //  None (this is top-level)
 
-endmodule
-
-// ================================================================
-// Specialization of parameterized AXI4 Deburster for DDR4s
-
-(* synthesize *)
-module mkAXI4_Deburster_DDR4 (AXI4_Deburster_IFC #(16, 64, 512, 0));
-   let m <- mkAXI4_Deburster;
-   return m;
 endmodule
 
 // ================================================================

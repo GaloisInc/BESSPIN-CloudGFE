@@ -78,12 +78,6 @@ interface SoC_Map_IFC;
    (* always_ready *)   method  Fabric_Addr  m_gpio_0_addr_size;
    (* always_ready *)   method  Fabric_Addr  m_gpio_0_addr_lim;
 
-`ifdef INCLUDE_ACCEL0
-   (* always_ready *)   method  Fabric_Addr  m_accel0_addr_base;
-   (* always_ready *)   method  Fabric_Addr  m_accel0_addr_size;
-   (* always_ready *)   method  Fabric_Addr  m_accel0_addr_lim;
-`endif
-
    (* always_ready *)   method  Fabric_Addr  m_boot_rom_addr_base;
    (* always_ready *)   method  Fabric_Addr  m_boot_rom_addr_size;
    (* always_ready *)   method  Fabric_Addr  m_boot_rom_addr_lim;
@@ -99,10 +93,6 @@ interface SoC_Map_IFC;
    (* always_ready *)   method  Fabric_Addr  m_host_access_addr_base;
    (* always_ready *)   method  Fabric_Addr  m_host_access_addr_size;
    (* always_ready *)   method  Fabric_Addr  m_host_access_addr_lim;
-
-   (* always_ready *)   method  Fabric_Addr  m_mem0_controller_addr_base;
-   (* always_ready *)   method  Fabric_Addr  m_mem0_controller_addr_size;
-   (* always_ready *)   method  Fabric_Addr  m_mem0_controller_addr_lim;
 
    (* always_ready *)
    method  Bool  m_is_mem_addr (Fabric_Addr addr);
@@ -211,19 +201,6 @@ module mkSoC_Map (SoC_Map_IFC);
       return ((host_access_addr_base <= addr) && (addr < host_access_addr_lim));
    endfunction
 
-    // ----------------------------------------------------------------
-   // ACCEL 0
-
-`ifdef INCLUDE_ACCEL0
-   Fabric_Addr accel0_addr_base = 'h6240_0000;
-   Fabric_Addr accel0_addr_size = 'h0000_1000;    // 4K
-   Fabric_Addr accel0_addr_lim  = accel0_addr_base + accel0_addr_size;
-
-   function Bool fn_is_accel0_addr (Fabric_Addr addr);
-      return ((accel0_addr_base <= addr) && (addr < accel0_addr_lim));
-   endfunction
-`endif
-
    // ----------------------------------------------------------------
    // GPIO 0
 
@@ -269,17 +246,6 @@ module mkSoC_Map (SoC_Map_IFC);
    endfunction
 
    // ----------------------------------------------------------------
-   // Main Mem Controller 0
-
-   Fabric_Addr mem0_controller_addr_base = ddr4_0_uncached_addr_base;
-   Fabric_Addr mem0_controller_addr_size = ddr4_0_cached_addr_lim - ddr4_0_uncached_addr_base;
-   Fabric_Addr mem0_controller_addr_lim  = ddr4_0_cached_addr_lim;
-
-   function Bool fn_is_mem0_controller_addr (Fabric_Addr addr);
-      return ((mem0_controller_addr_base <= addr) && (addr < mem0_controller_addr_lim));
-   endfunction
-
-   // ----------------------------------------------------------------
    // Memory address predicate
    // Identifies memory addresses in the Fabric.
    // (Caches needs this information to cache these addresses.)
@@ -304,9 +270,6 @@ module mkSoC_Map (SoC_Map_IFC);
 	      || fn_is_ethernet_0_addr (addr)
 	      || fn_is_dma_0_addr (addr)
 	      || fn_is_uart16550_0_addr  (addr)
-`ifdef INCLUDE_ACCEL0
-	      || fn_is_accel0_addr  (addr)
-`endif
 	      || fn_is_gpio_0_addr (addr)
 	      || fn_is_boot_rom_addr (addr)
 	      || fn_is_ddr4_0_uncached_addr (addr)
@@ -355,12 +318,6 @@ module mkSoC_Map (SoC_Map_IFC);
    method  Fabric_Addr  m_host_access_addr_size = host_access_addr_size;
    method  Fabric_Addr  m_host_access_addr_lim  = host_access_addr_lim;
 
-`ifdef INCLUDE_ACCEL0
-   method  Fabric_Addr  m_accel0_addr_base = accel0_addr_base;
-   method  Fabric_Addr  m_accel0_addr_size = accel0_addr_size;
-   method  Fabric_Addr  m_accel0_addr_lim  = accel0_addr_lim;
-`endif
-
    method  Fabric_Addr  m_gpio_0_addr_base = gpio_0_addr_base;
    method  Fabric_Addr  m_gpio_0_addr_size = gpio_0_addr_size;
    method  Fabric_Addr  m_gpio_0_addr_lim  = gpio_0_addr_lim;
@@ -376,10 +333,6 @@ module mkSoC_Map (SoC_Map_IFC);
    method  Fabric_Addr  m_ddr4_0_cached_addr_base = ddr4_0_cached_addr_base;
    method  Fabric_Addr  m_ddr4_0_cached_addr_size = ddr4_0_cached_addr_size;
    method  Fabric_Addr  m_ddr4_0_cached_addr_lim  = ddr4_0_cached_addr_lim;
-
-   method  Fabric_Addr  m_mem0_controller_addr_base = mem0_controller_addr_base;
-   method  Fabric_Addr  m_mem0_controller_addr_size = mem0_controller_addr_size;
-   method  Fabric_Addr  m_mem0_controller_addr_lim  = mem0_controller_addr_lim;
 
    method  Bool  m_is_mem_addr (Fabric_Addr addr) = fn_is_mem_addr (addr);
 

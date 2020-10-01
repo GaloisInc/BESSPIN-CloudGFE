@@ -3,7 +3,7 @@
 package AWS_SoC_Fabric;
 
 // ================================================================
-// Defines a SoC Fabric that is a specialization of AXI4_Lite_Fabric
+// Defines a SoC Fabric that is a specialization of AXI4_Fabric
 // for this particular SoC.
 
 // ================================================================
@@ -26,11 +26,12 @@ Integer core_initiator_num = 0;
 
 // Count and target-numbers of targets in the fabric.
 
-typedef 3 Num_Targets;
+typedef 4 Num_Targets;
 
 Integer boot_rom_target_num        = 0;
-Integer uart16550_0_target_num     = 1;
-Integer host_access_target_num     = 2;
+Integer ddr4_0_uncached_target_num = 1;
+Integer uart16550_0_target_num     = 2;
+Integer host_access_target_num     = 3;
 
 // ================================================================
 // Target address decoder
@@ -77,6 +78,15 @@ function Tuple2 #(Bool, Target_Num) fn_addr_to_target_num  (SoC_Map_IFC soc_map,
    else if (   (soc_map.m_host_access_addr_base <= addr)
 	    && (addr < soc_map.m_host_access_addr_lim))
       return tuple2 (True, fromInteger (host_access_target_num));
+
+   // Uncached DDR4 and dma_0 both go to same target
+   else if (   (soc_map.m_ddr4_0_uncached_addr_base <= addr)
+	    && (addr < soc_map.m_ddr4_0_uncached_addr_lim))
+      return tuple2 (True, fromInteger (ddr4_0_uncached_target_num));
+
+   else if (   (soc_map.m_dma_0_addr_base <= addr)
+	    && (addr < soc_map.m_dma_0_addr_lim))
+      return tuple2 (True, fromInteger (ddr4_0_uncached_target_num));
 
    else
       return tuple2 (False, ?);
