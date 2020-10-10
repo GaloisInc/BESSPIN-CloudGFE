@@ -364,7 +364,7 @@ module mkTop_HW_Side (Empty) ;
       end
       else begin
 	 // Poll keyboard
-	 Bit #(8) ch = 0;    // TODO: TEMPORARY DISABLE <- c_trygetchar (?);
+	 Bit #(8) ch <- c_trygetchar (?);
 	 if (ch != 0) begin
 	    // Console char available; enqueue it for UART
 	    f_UART_input_chars.enq (ch);

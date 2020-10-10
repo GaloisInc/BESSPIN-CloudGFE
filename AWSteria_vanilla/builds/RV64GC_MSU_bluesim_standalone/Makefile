@@ -16,6 +16,7 @@ REPO ?= $(FLUTE_REPO)
 # ================================================================
 # Edit this def to configure desired ISA features
 
+RV = RV64
 ARCH ?= RV64ACDFIMSU
 
 # Alternative cache organizations:
@@ -32,7 +33,7 @@ SRC_CORE ?= $(REPO)/src_Core/Core_v2
 # RISC-V config macros passed into Bluespec 'bsc' compiler
 
 BSC_COMPILATION_FLAGS += \
-	-D RV64 \
+	-D $(RV) \
 	-D ISA_PRIV_M  -D ISA_PRIV_U  -D ISA_PRIV_S  \
 	-D SV39  \
 	-D ISA_I  -D ISA_M  -D ISA_A  -D ISA_C \
@@ -43,9 +44,7 @@ BSC_COMPILATION_FLAGS += \
 	-D FABRIC64    \
 	-D WATCH_TOHOST    \
 	-D MEM_512b    \
-
-
-#	-D INCLUDE_TANDEM_VERIF \
+	-D INCLUDE_TANDEM_VERIF \
 
 
 # Default ISA test

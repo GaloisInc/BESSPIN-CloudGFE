@@ -283,19 +283,18 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
       for (Bit #(32) j = 0; j < fromInteger (valueOf (TV_VB_SIZE)); j = j + 8) begin
 	 Bit #(64) w64 = { vb [j+7], vb [j+6], vb [j+5], vb [j+4], vb [j+3], vb [j+2], vb [j+1], vb [j] };
 	 let success1 <- c_trace_file_load_word64_in_buffer (j, w64);
+	 success = (success & success1);
       end
 
-      if (success == 0)
+      if (success == 0) begin
 	 $display ("ERROR: Top_HW_Side.rl_tv_vb_out: error loading %0d bytes into buffer", n);
+	 $finish (1);
+      end
       else begin
 	 // Send the data
 	 success <- c_trace_file_write_buffer (n);
 	 if (success == 0)
 	    $display ("ERROR: Top_HW_Side.rl_tv_vb_out: error writing bytevec data buffer (%0d bytes)", n);
-      end
-
-      if (success == 0) begin
-	 $finish (1);
       end
    endrule
 `endif

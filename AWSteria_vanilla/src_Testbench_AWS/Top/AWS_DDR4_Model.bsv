@@ -74,11 +74,11 @@ endmodule
 module mkAWS_DDR4_B_Model (AXI4_16_64_512_0_Slave_IFC);
    let ifc <- mkMem_Model (0,                       // verbosity
 			   1,                       // ddr4_num
-			   False,                   // init_with_memhex
+			   True,                    // init_with_memhex
 			   "DDR4_B.memhex512",      // memhex_filename
 			   'h_4_0000_0000,          // byte_addr_base
 			   'h_8_0000_0000,          // byte_addr_lim  (16 GB)
-			   'h_0_C000_0000);         // bytes_implemented (3 GB)
+			   'h_1_0000_0000);         // bytes_implemented (4 GB)
    AXI4_Deburster_IFC #(16, 64, 512, 0) deburster <- mkAXI4_Deburster;
    mkConnection (deburster.to_slave, ifc);
    return deburster.from_master;
