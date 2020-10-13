@@ -4,11 +4,11 @@
 # Edit this def to point at your clone of the GitHub Flute repo:
 # (https://github.com/bluespec/Flute)
 
-AWSTERIA   = $(HOME)/git_clones/AWS/BESSPIN-CloudGFE_rsn/AWSteria
+AWSTERIA   = ../../
 # AWSTERIA   = $(HOME)/git_clones/AWS/BESSPIN-CloudGFE/AWSteria
 # AWSTERIA   = $(HOME)/git-repos/BESSPIN-CloudGFE/AWSteria
 
-FLUTE_REPO ?= $(HOME)/git_clones/CHERI_Flute
+FLUTE_REPO ?= /local/scratch/aj443/Flute-CTSRD-CHERI/
 # FLUTE_REPO = $(HOME)/git_clones/Flute
 # FLUTE_REPO = $(HOME)/git-repos/Flute
 
@@ -37,9 +37,11 @@ BSC_COMPILATION_FLAGS += \
 	-D Near_Mem_Caches    \
 	-D FABRIC64    \
 	-D CAP128 \
+	-D CheriMasterIDWidth=1 -D CheriTransactionIDWidth=15 \
 	-D RISCV \
-	-D MEM64 \
+	-D MEM512 \
 	-D ISA_CHERI \
+	-D NO_TAG_CACHE \
 	-D NO_TAGTABLE_ZEROING \
 
 

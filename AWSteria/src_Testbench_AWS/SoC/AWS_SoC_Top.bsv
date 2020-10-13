@@ -188,7 +188,7 @@ module mkAWS_SoC_Top #(Clock core_clk) (AWS_SoC_Top_IFC);
    AXI4_Master #( Wd_MId_ext, Wd_Addr, Wd_Data
                , Wd_AW_User_ext, Wd_W_User_ext, Wd_B_User_ext
                , Wd_AR_User_ext, Wd_R_User_ext)
-      cpu_imem_master = zeroMasterUserFields (core.cpu_imem_master);
+      cpu_imem_master = zeroMasterUserFields (extendIDFields (core.cpu_imem_master, 0));
    let imem_crossing <- mkAXI4_ClockCrossingToCC (core_clk, core_rstn);
    mkConnection ( cpu_imem_master, imem_crossing.slave
                 , clocked_by core_clk, reset_by core_rstn);
@@ -196,7 +196,7 @@ module mkAWS_SoC_Top #(Clock core_clk) (AWS_SoC_Top_IFC);
 
    // CPU DMem master to fabric
    let dmem_crossing <- mkAXI4_ClockCrossingToCC (core_clk, core_rstn);
-   mkConnection ( core.cpu_dmem_master, dmem_crossing.slave
+   mkConnection ( core.core_mem_master, dmem_crossing.slave
                 , clocked_by core_clk, reset_by core_rstn);
    master_vector[dmem_master_num] = dmem_crossing.master;
 

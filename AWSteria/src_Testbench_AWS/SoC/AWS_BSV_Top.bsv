@@ -181,7 +181,8 @@ module mkAWS_BSV_Top #(Clock core_clk) (AWS_BSV_Top_IFC);
    let inner_shim_slave <- toAXI4_Slave_Synth (zeroSlaveUserFields (inner_shim.slave));
    master_vector[0] = inner_shim.master;
    // Connect SoC DDR4 interface
-   master_vector[1] = soc_top.to_ddr4;
+   let to_ddr4 <- toUnguarded_AXI4_Master (soc_top.to_ddr4);
+   master_vector[1] = to_ddr4;
    // connect interface ddr4 slave shims / tag controller in CHERI case
    Vector #(4, AXI4_Master_Synth #(16, 64, 512, 0, 0, 0, 0, 0)) outer_shim_master;
    Vector #(4, AXI4_Slave #(15, 64, 512, 0, 4, 0, 0, 4)) outer_shim_slave;
