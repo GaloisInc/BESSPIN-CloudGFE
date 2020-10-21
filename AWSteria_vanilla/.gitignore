@@ -16,3 +16,11 @@ developer_designs/cl_BSV_WindSoC/software/runtime/test_dram_dma_hwsw_cosim
 developer_designs/cl_BSV_WindSoC/software/runtime/test_dram_dma_retention
 exe_*
 log*.txt
+Verilog_RTL
+Verilator_RTL
+Verilator_Make
+*.memhex512
+*.memhex32
+worker_*
+Logs
+trace_out.dat
