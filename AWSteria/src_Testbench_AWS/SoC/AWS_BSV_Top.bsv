@@ -45,6 +45,9 @@ import TagControllerAXI :: *;
 // ================================================================
 
 export mkAWS_BSV_Top;
+export host_to_hw_chan_control;
+export host_to_hw_chan_UART;
+export hw_to_host_chan_status;
 
 // ================================================================
 // OCL channel numbers
