@@ -49,6 +49,9 @@ module mkAXI4_ClockCrossing #(Clock master_clock,
       interface ar = toSource(f_ar);
       interface r  = toSink  (f_r);
    endinterface
+
+   method clear = noAction; // clear() no available on SyncFIFOIfc
+
 endmodule
 
 module mkAXI4_ClockCrossingToCC #(Clock master_clock, Reset master_reset)

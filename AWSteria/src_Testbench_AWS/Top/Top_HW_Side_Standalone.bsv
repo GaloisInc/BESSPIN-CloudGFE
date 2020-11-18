@@ -83,8 +83,7 @@ module mkTop_HW_Side (Empty) ;
    // Transactor to connect to the OCL interface
    AXI4Lite_Shim #(32, 32, 0, 0, 0, 0, 0)
      ocl_shim <- mkAXI4LiteShimFF (reset_by rstn);
-   let tmp <- toUnguarded_AXI4Lite_Master (ocl_shim.master, reset_by rstn);
-   let ocl_shim_masterSynth <- toAXI4Lite_Master_Synth ( tmp
+   let ocl_shim_masterSynth <- toAXI4Lite_Master_Synth ( ocl_shim.master
                                                        , reset_by rstn);
 
    mkConnection (ocl_shim_masterSynth, aws_BSV_top.ocl_slave, reset_by rstn);
@@ -170,7 +169,7 @@ module mkTop_HW_Side (Empty) ;
 	 ocl_shim.slave.aw.put (wra);
 
 	 // AXI4L-channel data
-	 let wrd = AXI4Lite_WFlit {wdata: data, wstrb: '1};
+	 let wrd = AXI4Lite_WFlit {wdata: data, wstrb: '1, wuser: 0};
 	 ocl_shim.slave.w.put (wrd);
       endaction
    endfunction

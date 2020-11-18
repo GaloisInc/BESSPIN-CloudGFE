@@ -360,7 +360,6 @@ module mkAWS_SoC_Top #(Clock core_clk) (AWS_SoC_Top_IFC);
 
    function Action fa_reset_complete_actions ();
       return
-      when (toCC != stateSoCe,
 	 action
 	    // in SoC domain:
 	    stateSoCe <= toCC;
@@ -395,8 +394,10 @@ module mkAWS_SoC_Top #(Clock core_clk) (AWS_SoC_Top_IFC);
 		   rangeBase(soc_map.m_uart16550_0_addr_range),
 		   rangeTop(soc_map.m_uart16550_0_addr_range));
 	    end
-	 endaction);
+	 endaction;
    endfunction
+   function fa_reset_complete_actions_cc =
+     when (toCC != stateSoCe, fa_reset_complete_actions);
 
    // ----------------
    // Initial reset; CPU comes up running.
@@ -435,7 +436,7 @@ module mkAWS_SoC_Top #(Clock core_clk) (AWS_SoC_Top_IFC);
    endrule
 
    rule rl_ndm_reset_complete (rg_state == SOC_RESETTING_NDM);
-      fa_reset_complete_actions;
+      fa_reset_complete_actions_cc;
       rg_state <= SOC_IDLE;
 
       core.ndm_reset_client.response.put (rg_running);
