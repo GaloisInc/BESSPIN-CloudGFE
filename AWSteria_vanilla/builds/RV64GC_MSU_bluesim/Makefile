@@ -16,6 +16,7 @@ REPO ?= $(FLUTE_REPO)
 # ================================================================
 # Edit this def to configure desired ISA features
 
+RV = RV64
 ARCH ?= RV64ACDFIMSU
 
 # Alternative cache organizations:
@@ -25,13 +26,14 @@ ARCH ?= RV64ACDFIMSU
 
 CACHES=WB_L1_L2
 
+TOPFILE   ?= $(AWSTERIA)/src_Testbench_AWS/Top/Top_HW_Side.bsv
 SRC_CORE ?= $(REPO)/src_Core/Core_v2
 
 # ================================================================
 # RISC-V config macros passed into Bluespec 'bsc' compiler
 
 BSC_COMPILATION_FLAGS += \
-	-D RV64 \
+	-D $(RV) \
 	-D ISA_PRIV_M  -D ISA_PRIV_U  -D ISA_PRIV_S  \
 	-D SV39  \
 	-D ISA_I  -D ISA_M  -D ISA_A  -D ISA_C \

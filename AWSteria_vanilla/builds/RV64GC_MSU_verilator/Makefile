@@ -26,6 +26,7 @@ ARCH ?= RV64ACDFIMSU
 
 CACHES=WB_L1_L2
 
+TOPFILE   ?= $(AWSTERIA)/src_Testbench_AWS/Top/Top_HW_Side.bsv
 SRC_CORE ?= $(REPO)/src_Core/Core_v2
 
 # ================================================================
