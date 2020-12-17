@@ -1,0 +1,1768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.5">
+<meta name="description" content="How to build and run AWSteria in simulation and on Amazon AWS F1">
+<meta name="keywords" content="AWSteria, BSV, Flute, Virtio">
+<meta name="author" content="Rishiyur S. Nikhil, Bluespec, Inc. (c) 2020">
+<title>Building and running AWSteria/Flute/Virtio</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<style>
+/* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
+/* Remove comment around @import statement below when using as a custom stylesheet */
+/*@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700";*/
+article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary{display:block}
+audio,canvas,video{display:inline-block}
+audio:not([controls]){display:none;height:0}
+[hidden],template{display:none}
+script{display:none!important}
+html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}
+a{background:transparent}
+a:focus{outline:thin dotted}
+a:active,a:hover{outline:0}
+h1{font-size:2em;margin:.67em 0}
+abbr[title]{border-bottom:1px dotted}
+b,strong{font-weight:bold}
+dfn{font-style:italic}
+hr{-moz-box-sizing:content-box;box-sizing:content-box;height:0}
+mark{background:#ff0;color:#000}
+code,kbd,pre,samp{font-family:monospace;font-size:1em}
+pre{white-space:pre-wrap}
+q{quotes:"\201C" "\201D" "\2018" "\2019"}
+small{font-size:80%}
+sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}
+sup{top:-.5em}
+sub{bottom:-.25em}
+img{border:0}
+svg:not(:root){overflow:hidden}
+figure{margin:0}
+fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}
+legend{border:0;padding:0}
+button,input,select,textarea{font-family:inherit;font-size:100%;margin:0}
+button,input{line-height:normal}
+button,select{text-transform:none}
+button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer}
+button[disabled],html input[disabled]{cursor:default}
+input[type="checkbox"],input[type="radio"]{box-sizing:border-box;padding:0}
+input[type="search"]{-webkit-appearance:textfield;-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box}
+input[type="search"]::-webkit-search-cancel-button,input[type="search"]::-webkit-search-decoration{-webkit-appearance:none}
+button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}
+textarea{overflow:auto;vertical-align:top}
+table{border-collapse:collapse;border-spacing:0}
+*,*:before,*:after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}
+html,body{font-size:100%}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto;tab-size:4;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
+a:hover{cursor:pointer}
+img,object,embed{max-width:100%;height:auto}
+object,embed{height:100%}
+img{-ms-interpolation-mode:bicubic}
+.left{float:left!important}
+.right{float:right!important}
+.text-left{text-align:left!important}
+.text-right{text-align:right!important}
+.text-center{text-align:center!important}
+.text-justify{text-align:justify!important}
+.hide{display:none}
+img,object,svg{display:inline-block;vertical-align:middle}
+textarea{height:auto;min-height:50px}
+select{width:100%}
+.center{margin-left:auto;margin-right:auto}
+.spread{width:100%}
+p.lead,.paragraph.lead>p,#preamble>.sectionbody>.paragraph:first-of-type p{font-size:1.21875em;line-height:1.6}
+.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0;direction:ltr}
+a{color:#2156a5;text-decoration:underline;line-height:inherit}
+a:hover,a:focus{color:#1d4b8f}
+a img{border:none}
+p{font-family:inherit;font-weight:400;font-size:1em;line-height:1.6;margin-bottom:1.25em;text-rendering:optimizeLegibility}
+p aside{font-size:.875em;line-height:1.35;font-style:italic}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight:300;font-style:normal;color:#ba3925;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
+h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#e99b8f;line-height:0}
+h1{font-size:2.125em}
+h2{font-size:1.6875em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.375em}
+h4,h5{font-size:1.125em}
+h6{font-size:1em}
+hr{border:solid #ddddd8;border-width:1px 0 0;clear:both;margin:1.25em 0 1.1875em;height:0}
+em,i{font-style:italic;line-height:inherit}
+strong,b{font-weight:bold;line-height:inherit}
+small{font-size:60%;line-height:inherit}
+code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;color:rgba(0,0,0,.9)}
+ul,ol,dl{font-size:1em;line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
+ul,ol,ul.no-bullet,ol.no-bullet{margin-left:1.5em}
+ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0;font-size:1em}
+ul.square li ul,ul.circle li ul,ul.disc li ul{list-style:inherit}
+ul.square{list-style-type:square}
+ul.circle{list-style-type:circle}
+ul.disc{list-style-type:disc}
+ul.no-bullet{list-style:none}
+ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
+dl dt{margin-bottom:.3125em;font-weight:bold}
+dl dd{margin-bottom:1.25em}
+abbr,acronym{text-transform:uppercase;font-size:90%;color:rgba(0,0,0,.8);border-bottom:1px dotted #ddd;cursor:help}
+abbr{text-transform:none}
+blockquote{margin:0 0 1.25em;padding:.5625em 1.25em 0 1.1875em;border-left:1px solid #ddd}
+blockquote cite{display:block;font-size:.9375em;color:rgba(0,0,0,.6)}
+blockquote cite:before{content:"\2014 \0020"}
+blockquote cite a,blockquote cite a:visited{color:rgba(0,0,0,.6)}
+blockquote,blockquote p{line-height:1.6;color:rgba(0,0,0,.85)}
+@media only screen and (min-width:768px){h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2}
+h1{font-size:2.75em}
+h2{font-size:2.3125em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
+h4{font-size:1.4375em}}
+table{background:#fff;margin-bottom:1.25em;border:solid 1px #dedede}
+table thead,table tfoot{background:#f7f8f7;font-weight:bold}
+table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:.5em .625em .625em;font-size:inherit;color:rgba(0,0,0,.8);text-align:left}
+table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
+table tr.even,table tr.alt,table tr:nth-of-type(even){background:#f8f8f7}
+table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{display:table-cell;line-height:1.6}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
+h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
+.clearfix:before,.clearfix:after,.float-group:before,.float-group:after{content:" ";display:table}
+.clearfix:after,.float-group:after{clear:both}
+*:not(pre)>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background-color:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed;word-wrap:break-word}
+*:not(pre)>code.nobreak{word-wrap:normal}
+*:not(pre)>code.nowrap{white-space:nowrap}
+pre,pre>code{line-height:1.45;color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;text-rendering:optimizeSpeed}
+em em{font-style:normal}
+strong strong{font-weight:400}
+.keyseq{color:rgba(51,51,51,.8)}
+kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background-color:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
+.keyseq kbd:first-child{margin-left:0}
+.keyseq kbd:last-child{margin-right:0}
+.menuseq,.menu{color:rgba(0,0,0,.8)}
+b.button:before,b.button:after{position:relative;top:-1px;font-weight:400}
+b.button:before{content:"[";padding:0 3px 0 2px}
+b.button:after{content:"]";padding:0 2px 0 3px}
+p a>code:hover{color:rgba(0,0,0,.9)}
+#header,#content,#footnotes,#footer{width:100%;margin-left:auto;margin-right:auto;margin-top:0;margin-bottom:0;max-width:62.5em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
+#header:before,#header:after,#content:before,#content:after,#footnotes:before,#footnotes:after,#footer:before,#footer:after{content:" ";display:table}
+#header:after,#content:after,#footnotes:after,#footer:after{clear:both}
+#content{margin-top:1.25em}
+#content:before{content:none}
+#header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
+#header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #ddddd8}
+#header>h1:only-child,body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #ddddd8;padding-bottom:8px}
+#header .details{border-bottom:1px solid #ddddd8;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:-ms-flexbox;display:-webkit-flex;display:flex;-ms-flex-flow:row wrap;-webkit-flex-flow:row wrap;flex-flow:row wrap}
+#header .details span:first-child{margin-left:-.125em}
+#header .details span.email a{color:rgba(0,0,0,.85)}
+#header .details br{display:none}
+#header .details br+span:before{content:"\00a0\2013\00a0"}
+#header .details br+span.author:before{content:"\00a0\22c5\00a0";color:rgba(0,0,0,.85)}
+#header .details br+span#revremark:before{content:"\00a0|\00a0"}
+#header #revnumber{text-transform:capitalize}
+#header #revnumber:after{content:"\00a0"}
+#content>h1:first-child:not([class]){color:rgba(0,0,0,.85);border-bottom:1px solid #ddddd8;padding-bottom:8px;margin-top:0;padding-top:1rem;margin-bottom:1.25rem}
+#toc{border-bottom:1px solid #efefed;padding-bottom:.5em}
+#toc>ul{margin-left:.125em}
+#toc ul.sectlevel0>li>a{font-style:italic}
+#toc ul.sectlevel0 ul.sectlevel1{margin:.5em 0}
+#toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
+#toc li{line-height:1.3334;margin-top:.3334em}
+#toc a{text-decoration:none}
+#toc a:active{text-decoration:underline}
+#toctitle{color:#7a2518;font-size:1.2em}
+@media only screen and (min-width:768px){#toctitle{font-size:1.375em}
+body.toc2{padding-left:15em;padding-right:0}
+#toc.toc2{margin-top:0!important;background-color:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #efefed;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
+#toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
+#toc.toc2>ul{font-size:.9em;margin-bottom:0}
+#toc.toc2 ul ul{margin-left:0;padding-left:1em}
+#toc.toc2 ul.sectlevel0 ul.sectlevel1{padding-left:0;margin-top:.5em;margin-bottom:.5em}
+body.toc2.toc-right{padding-left:0;padding-right:15em}
+body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #efefed;left:auto;right:0}}
+@media only screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
+#toc.toc2{width:20em}
+#toc.toc2 #toctitle{font-size:1.375em}
+#toc.toc2>ul{font-size:.95em}
+#toc.toc2 ul ul{padding-left:1.25em}
+body.toc2.toc-right{padding-left:0;padding-right:20em}}
+#content #toc{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
+#content #toc>:first-child{margin-top:0}
+#content #toc>:last-child{margin-bottom:0}
+#footer{max-width:100%;background-color:rgba(0,0,0,.8);padding:1.25em}
+#footer-text{color:rgba(255,255,255,.8);line-height:1.44}
+.sect1{padding-bottom:.625em}
+@media only screen and (min-width:768px){.sect1{padding-bottom:1.25em}}
+.sect1+.sect1{border-top:1px solid #efefed}
+#content h1>a.anchor,h2>a.anchor,h3>a.anchor,#toctitle>a.anchor,.sidebarblock>.content>.title>a.anchor,h4>a.anchor,h5>a.anchor,h6>a.anchor{position:absolute;z-index:1001;width:1.5ex;margin-left:-1.5ex;display:block;text-decoration:none!important;visibility:hidden;text-align:center;font-weight:400}
+#content h1>a.anchor:before,h2>a.anchor:before,h3>a.anchor:before,#toctitle>a.anchor:before,.sidebarblock>.content>.title>a.anchor:before,h4>a.anchor:before,h5>a.anchor:before,h6>a.anchor:before{content:"\00A7";font-size:.85em;display:block;padding-top:.1em}
+#content h1:hover>a.anchor,#content h1>a.anchor:hover,h2:hover>a.anchor,h2>a.anchor:hover,h3:hover>a.anchor,#toctitle:hover>a.anchor,.sidebarblock>.content>.title:hover>a.anchor,h3>a.anchor:hover,#toctitle>a.anchor:hover,.sidebarblock>.content>.title>a.anchor:hover,h4:hover>a.anchor,h4>a.anchor:hover,h5:hover>a.anchor,h5>a.anchor:hover,h6:hover>a.anchor,h6>a.anchor:hover{visibility:visible}
+#content h1>a.link,h2>a.link,h3>a.link,#toctitle>a.link,.sidebarblock>.content>.title>a.link,h4>a.link,h5>a.link,h6>a.link{color:#ba3925;text-decoration:none}
+#content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
+.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
+.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{text-rendering:optimizeLegibility;text-align:left;font-family:"Noto Serif","DejaVu Serif",serif;font-size:1rem;font-style:italic}
+table.tableblock>caption.title{white-space:nowrap;overflow:visible;max-width:0}
+.paragraph.lead>p,#preamble>.sectionbody>.paragraph:first-of-type p{color:rgba(0,0,0,.85)}
+table.tableblock #preamble>.sectionbody>.paragraph:first-of-type p{font-size:inherit}
+.admonitionblock>table{border-collapse:separate;border:0;background:none;width:100%}
+.admonitionblock>table td.icon{text-align:center;width:80px}
+.admonitionblock>table td.icon img{max-width:none}
+.admonitionblock>table td.icon .title{font-weight:bold;font-family:"Open Sans","DejaVu Sans",sans-serif;text-transform:uppercase}
+.admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #ddddd8;color:rgba(0,0,0,.6)}
+.admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content{border-style:solid;border-width:1px;border-color:#e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;-webkit-border-radius:4px;border-radius:4px}
+.exampleblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child{margin-bottom:0}
+.sidebarblock{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
+.sidebarblock>:first-child{margin-top:0}
+.sidebarblock>:last-child{margin-bottom:0}
+.sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
+.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.literalblock pre,.listingblock pre:not(.highlight),.listingblock pre[class="highlight"],.listingblock pre[class^="highlight "],.listingblock pre.CodeRay,.listingblock pre.prettyprint{background:#f7f7f8}
+.sidebarblock .literalblock pre,.sidebarblock .listingblock pre:not(.highlight),.sidebarblock .listingblock pre[class="highlight"],.sidebarblock .listingblock pre[class^="highlight "],.sidebarblock .listingblock pre.CodeRay,.sidebarblock .listingblock pre.prettyprint{background:#f2f1f1}
+.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{-webkit-border-radius:4px;border-radius:4px;word-wrap:break-word;padding:1em;font-size:.8125em}
+.literalblock pre.nowrap,.literalblock pre[class].nowrap,.listingblock pre.nowrap,.listingblock pre[class].nowrap{overflow-x:auto;white-space:pre;word-wrap:normal}
+@media only screen and (min-width:768px){.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{font-size:.90625em}}
+@media only screen and (min-width:1280px){.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{font-size:1em}}
+.literalblock.output pre{color:#f7f7f8;background-color:rgba(0,0,0,.9)}
+.listingblock pre.highlightjs{padding:0}
+.listingblock pre.highlightjs>code{padding:1em;-webkit-border-radius:4px;border-radius:4px}
+.listingblock pre.prettyprint{border-width:0}
+.listingblock>.content{position:relative}
+.listingblock code[data-lang]:before{display:none;content:attr(data-lang);position:absolute;font-size:.75em;top:.425rem;right:.5rem;line-height:1;text-transform:uppercase;color:#999}
+.listingblock:hover code[data-lang]:before{display:block}
+.listingblock.terminal pre .command:before{content:attr(data-prompt);padding-right:.5em;color:#999}
+.listingblock.terminal pre .command:not([data-prompt]):before{content:"$"}
+table.pyhltable{border-collapse:separate;border:0;margin-bottom:0;background:none}
+table.pyhltable td{vertical-align:top;padding-top:0;padding-bottom:0;line-height:1.45}
+table.pyhltable td.code{padding-left:.75em;padding-right:0}
+pre.pygments .lineno,table.pyhltable td:not(.code){color:#999;padding-left:0;padding-right:.5em;border-right:1px solid #ddddd8}
+pre.pygments .lineno{display:inline-block;margin-right:.25em}
+table.pyhltable .linenodiv{background:none!important;padding-right:0!important}
+.quoteblock{margin:0 1em 1.25em 1.5em;display:table}
+.quoteblock>.title{margin-left:-1.5em;margin-bottom:.75em}
+.quoteblock blockquote,.quoteblock blockquote p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
+.quoteblock blockquote{margin:0;padding:0;border:0}
+.quoteblock blockquote:before{content:"\201c";float:left;font-size:2.75em;font-weight:bold;line-height:.6em;margin-left:-.6em;color:#7a2518;text-shadow:0 1px 2px rgba(0,0,0,.1)}
+.quoteblock blockquote>.paragraph:last-child p{margin-bottom:0}
+.quoteblock .attribution{margin-top:.5em;margin-right:.5ex;text-align:right}
+.quoteblock .quoteblock{margin-left:0;margin-right:0;padding:.5em 0;border-left:3px solid rgba(0,0,0,.6)}
+.quoteblock .quoteblock blockquote{padding:0 0 0 .75em}
+.quoteblock .quoteblock blockquote:before{display:none}
+.verseblock{margin:0 1em 1.25em 1em}
+.verseblock pre{font-family:"Open Sans","DejaVu Sans",sans;font-size:1.15rem;color:rgba(0,0,0,.85);font-weight:300;text-rendering:optimizeLegibility}
+.verseblock pre strong{font-weight:400}
+.verseblock .attribution{margin-top:1.25rem;margin-left:.5ex}
+.quoteblock .attribution,.verseblock .attribution{font-size:.9375em;line-height:1.45;font-style:italic}
+.quoteblock .attribution br,.verseblock .attribution br{display:none}
+.quoteblock .attribution cite,.verseblock .attribution cite{display:block;letter-spacing:-.025em;color:rgba(0,0,0,.6)}
+.quoteblock.abstract{margin:0 0 1.25em 0;display:block}
+.quoteblock.abstract blockquote,.quoteblock.abstract blockquote p{text-align:left;word-spacing:0}
+.quoteblock.abstract blockquote:before,.quoteblock.abstract blockquote p:first-of-type:before{display:none}
+table.tableblock{max-width:100%;border-collapse:separate}
+table.tableblock td>.paragraph:last-child p>p:last-child,table.tableblock th>p:last-child,table.tableblock td>p:last-child{margin-bottom:0}
+table.tableblock,th.tableblock,td.tableblock{border:0 solid #dedede}
+table.grid-all th.tableblock,table.grid-all td.tableblock{border-width:0 1px 1px 0}
+table.grid-all tfoot>tr>th.tableblock,table.grid-all tfoot>tr>td.tableblock{border-width:1px 1px 0 0}
+table.grid-cols th.tableblock,table.grid-cols td.tableblock{border-width:0 1px 0 0}
+table.grid-all *>tr>.tableblock:last-child,table.grid-cols *>tr>.tableblock:last-child{border-right-width:0}
+table.grid-rows th.tableblock,table.grid-rows td.tableblock{border-width:0 0 1px 0}
+table.grid-all tbody>tr:last-child>th.tableblock,table.grid-all tbody>tr:last-child>td.tableblock,table.grid-all thead:last-child>tr>th.tableblock,table.grid-rows tbody>tr:last-child>th.tableblock,table.grid-rows tbody>tr:last-child>td.tableblock,table.grid-rows thead:last-child>tr>th.tableblock{border-bottom-width:0}
+table.grid-rows tfoot>tr>th.tableblock,table.grid-rows tfoot>tr>td.tableblock{border-width:1px 0 0 0}
+table.frame-all{border-width:1px}
+table.frame-sides{border-width:0 1px}
+table.frame-topbot{border-width:1px 0}
+th.halign-left,td.halign-left{text-align:left}
+th.halign-right,td.halign-right{text-align:right}
+th.halign-center,td.halign-center{text-align:center}
+th.valign-top,td.valign-top{vertical-align:top}
+th.valign-bottom,td.valign-bottom{vertical-align:bottom}
+th.valign-middle,td.valign-middle{vertical-align:middle}
+table thead th,table tfoot th{font-weight:bold}
+tbody tr th{display:table-cell;line-height:1.6;background:#f7f8f7}
+tbody tr th,tbody tr th p,tfoot tr th,tfoot tr th p{color:rgba(0,0,0,.8);font-weight:bold}
+p.tableblock>code:only-child{background:none;padding:0}
+p.tableblock{font-size:1em}
+td>div.verse{white-space:pre}
+ol{margin-left:1.75em}
+ul li ol{margin-left:1.5em}
+dl dd{margin-left:1.125em}
+dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
+ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+ul.unstyled,ol.unnumbered,ul.checklist,ul.none{list-style-type:none}
+ul.unstyled,ol.unnumbered,ul.checklist{margin-left:.625em}
+ul.checklist li>p:first-child>.fa-square-o:first-child,ul.checklist li>p:first-child>.fa-check-square-o:first-child{width:1em;font-size:.85em}
+ul.checklist li>p:first-child>input[type="checkbox"]:first-child{width:1em;position:relative;top:1px}
+ul.inline{margin:0 auto .625em auto;margin-left:-1.375em;margin-right:0;padding:0;list-style:none;overflow:hidden}
+ul.inline>li{list-style:none;float:left;margin-left:1.375em;display:block}
+ul.inline>li>*{display:block}
+.unstyled dl dt{font-weight:400;font-style:normal}
+ol.arabic{list-style-type:decimal}
+ol.decimal{list-style-type:decimal-leading-zero}
+ol.loweralpha{list-style-type:lower-alpha}
+ol.upperalpha{list-style-type:upper-alpha}
+ol.lowerroman{list-style-type:lower-roman}
+ol.upperroman{list-style-type:upper-roman}
+ol.lowergreek{list-style-type:lower-greek}
+.hdlist>table,.colist>table{border:0;background:none}
+.hdlist>table>tbody>tr,.colist>table>tbody>tr{background:none}
+td.hdlist1,td.hdlist2{vertical-align:top;padding:0 .625em}
+td.hdlist1{font-weight:bold;padding-bottom:1.25em}
+.literalblock+.colist,.listingblock+.colist{margin-top:-.5em}
+.colist>table tr>td:first-of-type{padding:0 .75em;line-height:1}
+.colist>table tr>td:last-of-type{padding:.25em 0}
+.thumb,.th{line-height:0;display:inline-block;border:solid 4px #fff;-webkit-box-shadow:0 0 0 1px #ddd;box-shadow:0 0 0 1px #ddd}
+.imageblock.left,.imageblock[style*="float: left"]{margin:.25em .625em 1.25em 0}
+.imageblock.right,.imageblock[style*="float: right"]{margin:.25em 0 1.25em .625em}
+.imageblock>.title{margin-bottom:0}
+.imageblock.thumb,.imageblock.th{border-width:6px}
+.imageblock.thumb>.title,.imageblock.th>.title{padding:0 .125em}
+.image.left,.image.right{margin-top:.25em;margin-bottom:.25em;display:inline-block;line-height:0}
+.image.left{margin-right:.625em}
+.image.right{margin-left:.625em}
+a.image{text-decoration:none;display:inline-block}
+a.image object{pointer-events:none}
+sup.footnote,sup.footnoteref{font-size:.875em;position:static;vertical-align:super}
+sup.footnote a,sup.footnoteref a{text-decoration:none}
+sup.footnote a:active,sup.footnoteref a:active{text-decoration:underline}
+#footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
+#footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em 0;border-width:1px 0 0 0}
+#footnotes .footnote{padding:0 .375em 0 .225em;line-height:1.3334;font-size:.875em;margin-left:1.2em;text-indent:-1.05em;margin-bottom:.2em}
+#footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none}
+#footnotes .footnote:last-of-type{margin-bottom:0}
+#content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
+.gist .file-data>table{border:0;background:#fff;width:100%;margin-bottom:0}
+.gist .file-data>table td.line-data{width:99%}
+div.unbreakable{page-break-inside:avoid}
+.big{font-size:larger}
+.small{font-size:smaller}
+.underline{text-decoration:underline}
+.overline{text-decoration:overline}
+.line-through{text-decoration:line-through}
+.aqua{color:#00bfbf}
+.aqua-background{background-color:#00fafa}
+.black{color:#000}
+.black-background{background-color:#000}
+.blue{color:#0000bf}
+.blue-background{background-color:#0000fa}
+.fuchsia{color:#bf00bf}
+.fuchsia-background{background-color:#fa00fa}
+.gray{color:#606060}
+.gray-background{background-color:#7d7d7d}
+.green{color:#006000}
+.green-background{background-color:#007d00}
+.lime{color:#00bf00}
+.lime-background{background-color:#00fa00}
+.maroon{color:#600000}
+.maroon-background{background-color:#7d0000}
+.navy{color:#000060}
+.navy-background{background-color:#00007d}
+.olive{color:#606000}
+.olive-background{background-color:#7d7d00}
+.purple{color:#600060}
+.purple-background{background-color:#7d007d}
+.red{color:#bf0000}
+.red-background{background-color:#fa0000}
+.silver{color:#909090}
+.silver-background{background-color:#bcbcbc}
+.teal{color:#006060}
+.teal-background{background-color:#007d7d}
+.white{color:#bfbfbf}
+.white-background{background-color:#fafafa}
+.yellow{color:#bfbf00}
+.yellow-background{background-color:#fafa00}
+span.icon>.fa{cursor:default}
+.admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
+.admonitionblock td.icon .icon-note:before{content:"\f05a";color:#19407c}
+.admonitionblock td.icon .icon-tip:before{content:"\f0eb";text-shadow:1px 1px 2px rgba(155,155,0,.8);color:#111}
+.admonitionblock td.icon .icon-warning:before{content:"\f071";color:#bf6900}
+.admonitionblock td.icon .icon-caution:before{content:"\f06d";color:#bf3400}
+.admonitionblock td.icon .icon-important:before{content:"\f06a";color:#bf0000}
+.conum[data-value]{display:inline-block;color:#fff!important;background-color:rgba(0,0,0,.8);-webkit-border-radius:100px;border-radius:100px;text-align:center;font-size:.75em;width:1.67em;height:1.67em;line-height:1.67em;font-family:"Open Sans","DejaVu Sans",sans-serif;font-style:normal;font-weight:bold}
+.conum[data-value] *{color:#fff!important}
+.conum[data-value]+b{display:none}
+.conum[data-value]:after{content:attr(data-value)}
+pre .conum[data-value]{position:relative;top:-.125em}
+b.conum *{color:inherit!important}
+.conum:not([data-value]):empty{display:none}
+dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
+h1,h2,p,td.content,span.alt{letter-spacing:-.01em}
+p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
+p,blockquote,dt,td.content,span.alt{font-size:1.0625rem}
+p{margin-bottom:1.25rem}
+.sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
+.exampleblock>.content{background-color:#fffef7;border-color:#e0e0dc;-webkit-box-shadow:0 1px 4px #e0e0dc;box-shadow:0 1px 4px #e0e0dc}
+.print-only{display:none!important}
+@media print{@page{margin:1.25cm .75cm}
+*{-webkit-box-shadow:none!important;box-shadow:none!important;text-shadow:none!important}
+a{color:inherit!important;text-decoration:underline!important}
+a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
+a[href^="http:"]:not(.bare):after,a[href^="https:"]:not(.bare):after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+abbr[title]:after{content:" (" attr(title) ")"}
+pre,blockquote,tr,img,object,svg{page-break-inside:avoid}
+thead{display:table-header-group}
+svg{max-width:100%}
+p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
+h2,h3,#toctitle,.sidebarblock>.content>.title{page-break-after:avoid}
+#toc,.sidebarblock,.exampleblock>.content{background:none!important}
+#toc{border-bottom:1px solid #ddddd8!important;padding-bottom:0!important}
+.sect1{padding-bottom:0!important}
+.sect1+.sect1{border:0!important}
+#header>h1:first-child{margin-top:1.25rem}
+body.book #header{text-align:center}
+body.book #header>h1:first-child{border:0!important;margin:2.5em 0 1em 0}
+body.book #header .details{border:0!important;display:block;padding:0!important}
+body.book #header .details span:first-child{margin-left:0!important}
+body.book #header .details br{display:block}
+body.book #header .details br+span:before{content:none!important}
+body.book #toc{border:0!important;text-align:left!important;padding:0!important;margin:0!important}
+body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-break-before:always}
+.listingblock code[data-lang]:before{display:block}
+#footer{background:none!important;padding:0 .9375em}
+#footer-text{color:rgba(0,0,0,.6)!important;font-size:.9em}
+.hide-on-print{display:none!important}
+.print-only{display:block!important}
+.hide-for-print{display:none!important}
+.show-for-print{display:inherit!important}}
+</style>
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Building and running AWSteria/Flute/Virtio</h1>
+<div class="details">
+<span id="author" class="author">Rishiyur S. Nikhil, Bluespec, Inc. (c) 2020</span><br>
+<span id="revnumber">version v0.1,</span>
+<span id="revdate">2020-12-14</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_introduction">1. Introduction</a></li>
+<li><a href="#_awsteria_flute_virtio">2. AWSteria/Flute/Virtio</a></li>
+<li><a href="#_environnment_variables">3. ENVIRONNMENT VARIABLES</a></li>
+<li><a href="#_build_and_run_a_simulation">4. Build and Run a Simulation</a>
+<ul class="sectlevel2">
+<li><a href="#_building_for_bluesim">4.1. Building for Bluesim</a></li>
+<li><a href="#_run_the_host_side_software_and_the_bluesim_hardware_simulation">4.2. Run the host-side software and the Bluesim hardware simulation</a></li>
+</ul>
+</li>
+<li><a href="#_build_for_aws_f1">5. Build for AWS F1</a>
+<ul class="sectlevel2">
+<li><a href="#_overview_of_the_build_process">5.1. Overview of the build process</a></li>
+<li><a href="#_one_time_step_set_up_xilinx_vivado">5.2. One-time step: Set up Xilinx Vivado</a></li>
+<li><a href="#_one_time_step_set_up_aws_repo_and_tools">5.3. One-time step: Set up AWS repo and tools</a></li>
+<li><a href="#_define_code_cl_dir_code_and_go_there">5.4. Define <code>CL_DIR</code> and go there</a></li>
+<li><a href="#_build_a_dcp_file_design_checkpoint">5.5. Build a DCP file (Design Checkpoint)</a></li>
+<li><a href="#_upload_submit_the_dcp_file_to_aws_so_it_can_package_it_as_an_afi">5.6. Upload/submit the DCP file to AWS so it can package it as an AFI</a>
+<ul class="sectlevel3">
+<li><a href="#_one_time_step_install_aws_cli">5.6.1. One-time step: Install AWS CLI</a></li>
+<li><a href="#_create_an_s3_bucket_for_your_submission">5.6.2. Create an S3 bucket for your submission</a></li>
+<li><a href="#_create_a_folder_in_the_bucket_for_the_dcp_design_checkpoint_tarball">5.6.3. Create a folder in the bucket for the DCP (design checkpoint tarball)</a></li>
+<li><a href="#_upload_the_dcp_file_to_the_s3_folder">5.6.4. Upload the DCP file to the S3 folder</a></li>
+<li><a href="#_create_a_folder_where_aws_will_place_logfiles">5.6.5. Create a folder where AWS will place logfiles</a></li>
+<li><a href="#_submit_the_dcp_to_aws_to_package_it_in_an_afi">5.6.6. Submit the DCP to AWS to package it in an AFI</a></li>
+<li><a href="#_wait_for_completion_of_afi_creation">5.6.7. Wait for completion of AFI creation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_running_your_design_on_an_aws_f1_instance">6. Running your design on an AWS F1 Instance</a>
+<ul class="sectlevel2">
+<li><a href="#_one_time_step_set_up_aws_fpga_management_tools">6.1. One-time step: Set up AWS FPGA Management tools</a></li>
+<li><a href="#_set_up_your_aws_credentials">6.2. Set up your AWS credentials</a></li>
+<li><a href="#_check_status_and_clear_any_previously_loaded_afi">6.3. Check status and clear any previously loaded AFI</a></li>
+<li><a href="#_load_your_new_afi">6.4. Load your new AFI</a></li>
+<li><a href="#_one_time_step_remove_xocl_driver_install_xdma_driver">6.5. One-time step: Remove XOCL driver, install XDMA driver</a></li>
+<li><a href="#_build_your_host_side_software">6.6. Build your host-side software</a></li>
+<li><a href="#_run_your_host_side_software_which_will_interact_with_the_fpga">6.7. Run your host-side software which will interact with the FPGA</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_introduction">1. Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This document describes how to build and run the host side and the
+hardware side for an AWSteria/Flute/Virtio setup, in simulation and on
+an actual Amazon AWS F1 Instance (i.e., an AWS server with attached
+FPGA).  In both scenarios, there are two &#8220;processes&#8221; involved: a
+&#8220;host-side&#8221; and a &#8220;hardware-side&#8221;.  The host-side process is
+normal Linux process.  In simulation, the hardware-side processs is
+also a normal Linux process, a Bluesim or verilator simulation of a
+hardware design.  On an AWS F1 instance, the hardware-side is the
+design on the attached FPGA.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">On Amazon AWS F1</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>This has to run on an AWS F1 instance (i.e., an AWS server with attached FPGA).</p>
+</li>
+<li>
+<p>The hardware side is an AFI (Amazon FPGA Image) containing a bitfile that is loaded into the FPGA.</p>
+</li>
+<li>
+<p>The host side is a Linux executable</p>
+</li>
+<li>
+<p>The two sides communicate over AWS-provided code infrastructure,
+which provides AXI4 and AXI4-Lite abstractions.  On the host-side,
+these are an API for reads, writes and DMA transfers.  On the hardware-side, these are
+actual AXI4 (&#8220;DMA PCIS&#8221;) and AXI4-Lite (&#8220;OCP&#8221;) interfaces that connect to your design.
+The communication is carried over a hardware PCIe interface.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Simulation</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>Simulation is typically used for initial debugging of a design, and
+can be done on any computer (does not have to be on Amazon AWS).</p>
+</li>
+<li>
+<p>The hardware side is a Bluesim or a verilator simulation running as a Linux executable.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Note: what we describe here is different from the AWS-supplied
+example simulation flow, which uses XSIM, Xilinx Vivado&#8217;s
+simulator.  You will need that flow instead, if your design
+contains IP that needs Vivado licenses, Vivado encrypted IP,
+etc.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>The host side is a Linux executable.</p>
+</li>
+<li>
+<p>The two sides communicate over TCP, using a provided emulation of AWS F1&#8217;s
+PCIe/AXI4-Lite/AXI4 communication.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>The host-side user code and hardware-side user design are identical in
+the two scenarios.  The only difference is in the build flow.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_awsteria_flute_virtio">2. AWSteria/Flute/Virtio</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>On the hardware side, AWSteria/Flute/Virtio contains:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The Bluespec Flute open-source RISC-V CPU, configured with Writeback
+coherent caches (<code>WB_L1_L2</code>).  This includes separate L1 caches
+for Instruction and Data and a shared L2 cache</p>
+</li>
+<li>
+<p>A Bluespec RISC-V Debug Module for debugging the program on the
+RISC-V CPU from the host side.</p>
+</li>
+<li>
+<p>DRAM (uses the AWS F1-provided DRAM)</p>
+</li>
+<li>
+<p>A UART for communication with a console on the host side</p>
+</li>
+<li>
+<p>Hardware to support &#8220;Virtio&#8221; (more below).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>On the host side, AWSteria/Flute/Virtio contains:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Software to load a RISC-V executable (ELF or Memhex file), download
+the contents into the DRAM in the hardware, and start the RISC-V
+CPU&#8217;s execution on that code.</p>
+</li>
+<li>
+<p>A tty console for the RISC-V CPU.</p>
+</li>
+<li>
+<p>A GDB connection to the Debug Module on the RISC-V CPU</p>
+</li>
+<li>
+<p>[This feature is not yet implemented] A way to record &#8220;tandem verification&#8221; traces from the RISC-V CPU.</p>
+</li>
+<li>
+<p>&#8220;Virtio&#8221; device emulation and support for the RISC-V CPU (more below).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>About Virtio</strong></p>
+</div>
+<div class="paragraph">
+<p>Virtio is an open standard for a &#8220;guest&#8221; OS to have access to
+devices (particularly network and block storage) provided by a
+&#8220;host&#8221; OS (cf.
+<a href="https://developer.ibm.com/technologies/linux/articles/l-virtio/" class="bare">https://developer.ibm.com/technologies/linux/articles/l-virtio/</a>).
+AWSteria/Flute/Virtio provides this capability, where the RISC-V CPU runs the
+&#8220;guest&#8221; OS and the "`host` OS" is code running on the AWS x86 server
+running Linux.  In this way, the RISC-V CPU has virtual access to
+network, disk and other devices, even though the AWS F1 FPGA does not
+directly connect to any such devices.  AWSteria/Flute/Virtio provides these
+services through a combination of host-side software and hardware-side support
+infrastructure.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_environnment_variables">3. ENVIRONNMENT VARIABLES</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following environment variables are used at various points in the
+build-and-run flow.</p>
+</div>
+<div class="paragraph">
+<p>Location of your clone of the AWS FPGA repository <a href="https://github.com/aws/aws-fpga.git" class="bare">https://github.com/aws/aws-fpga.git</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    AWS_FPGA_REPO_DIR = ...</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Location of your clone of the AWSteria repository
+<a href="https://github.com/DARPA-SSITH-Demonstrators/BESSPIN-CloudGFE" class="bare">https://github.com/DARPA-SSITH-Demonstrators/BESSPIN-CloudGFE</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    AWSTERIA = ...</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Location of your clone of the Flute repository <a href="https://github.com/bluespec/Flute" class="bare">https://github.com/bluespec/Flute</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    FLUTE_REPO = ...</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After you build your host-side executable, its name (<code>test_hello_world</code> or <code>exe_host_side</code>):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    SW_EXE = exe_host_side</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_build_and_run_a_simulation">4. Build and Run a Simulation</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_building_for_bluesim">4.1. Building for Bluesim</h3>
+<div class="paragraph">
+<p>Build the Bluesim executable (this requires the <code>bsc</code> compiler to be
+set up, with environment variables <code>BLUESPECDIR</code>, etc.):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ cd  $(AWSTERIA)/builds/RV64GC_MSU_bluesim/
+    $ make  all</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will invoke <code>bsc</code> to compile and build the &#8220;hardware-side&#8221; into
+a Bluesim simulator, embodied in two files that together form a Linux
+executable (the first is a shell script that simply loads the shared
+object in the second file and invokes it):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    exe_HW_sim*
+    exe_HW_sim.so*</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Build the host-side software executable:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ cd  $(AWSTERIA)/src_Host_Side/
+    $ make</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will build the host-side executable, embodied as an ELF file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    exe_host_side</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_run_the_host_side_software_and_the_bluesim_hardware_simulation">4.2. Run the host-side software and the Bluesim hardware simulation</h3>
+<div class="paragraph">
+<p>You will need two terminal windows, call them <em>T1</em> (hardware side) and
+<em>T2</em> (host side).</p>
+</div>
+<div class="paragraph">
+<p><em>In terminal window T1 (hardware side):</em> start the Bluesim executable as follows. It
+will immediately pause, waiting for a TCP connection on socket 30000
+from the host-side software.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ cd  $(AWSTERIA)/builds/RV64GC_MSU_bluesim
+    $ ./exe_HW_sim</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><em>In terminal window T2 (host side):</em> start the host-side executable. It will
+connect to the Bluesim executable on the TCP socket, and then both
+will run concurrently.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ cd  $(AWSTERIA)/src_Host_Side
+    $ ./exe_host_side    &lt;memhex32 file&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The argument should be a MemHex file (32-bit-wide) for the program
+that you want the RISC-V CPU to execute.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_build_for_aws_f1">5. Build for AWS F1</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This section shows the steps to create an AFI (Amazon AWS FPGA image)
+for AWSteria/Flute/Virtio.  This does not have to be done on an AWS
+machine, it can be on your own computer (what Amazon calls &#8220;customer
+premises&#8221;), as long as you have the required Xilinx Vivado licenses.</p>
+</div>
+<div class="paragraph">
+<p>This section repeats information from <code>README</code> in the repository
+<a href="https://github.com/aws/aws-fpga/tree/master/hdk" class="bare">https://github.com/aws/aws-fpga/tree/master/hdk</a>.  The numeric step
+numbers below correspond to step numbers in that reference.  Hopefully
+this is a simpler and clearer narrative.</p>
+</div>
+<div class="sect2">
+<h3 id="_overview_of_the_build_process">5.1. Overview of the build process</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Your hardware design (which will go on the AWS F1 FPGA) can be designed
+and debugged with any EDA tools, but ultimately must have a
+top-level Verilog module with a specific interface (input and
+output signals and buses) so that it will &#8220;fit&#8221; into the
+AWS-provided environment called the <em>Shell</em>.  The Shell provides
+clocks and resets, AXI4 and AXI4-Lite interfaces for communication
+with the host, and AXI4 interfaces for communicating with DDR4
+memory.</p>
+</li>
+<li>
+<p>When your design is ready, you will invoke a step that results in a
+&#8220;Design Checkpoint&#8221; (DCP) which you submit to some AWS tools
+which will (in the background) perform Vivado synthesis and
+integration with the AWS shell, resulting in a &#8220;bitfile&#8221; that
+can be loaded into the AWS F1 FPGA.  This submission involves
+uploading files into an AWS &#8220;bucket&#8221; that you create (a bucket
+is a unit in AWS&#8217;s cloud storage system).</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_one_time_step_set_up_xilinx_vivado">5.2. One-time step: Set up Xilinx Vivado</h3>
+<div class="paragraph">
+<p>Earlier, you (or your administrator) should have downloaded and
+installed Xilinx Vivado, Xilinx licenses etc.</p>
+</div>
+<div class="paragraph">
+<p><strong>Step 0a:</strong> To run Vivado, set it up using the Xilinx-provided script:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ source  /tools/Xilinx/Vivado/2019.1/settings64.sh</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Step 0b:</strong> Several commands to check on your Vivado setup:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ which vivado
+    $ vivado  -version
+    $ vivado  -mode batch</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_one_time_step_set_up_aws_repo_and_tools">5.3. One-time step: Set up AWS repo and tools</h3>
+<div class="paragraph">
+<p><strong>Step 0c:</strong> git-clone the AWS-FPGA repository:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $git clone  https://github.com/aws/aws-fpga.git  $(AWS_FPGA_REPO_DIR)</pre>
+</div>
+</div>
+<div id="Setup_HDK" class="paragraph">
+<p><strong>Step 0e:</strong> Set up the Amazon AWS HDK (Hardware Design Kit).  This
+defines <code>HDK_DIR</code> and other environment variables.  The very first
+time you do this after downloading the <code>aws-fpga</code> repo, this can take
+several minutes, since it invokes Vivado to build ddr4 simulation
+models.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ cd  $(AWS_FPGA_REPO_DIR)
+    $ source hdk_setup.sh</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>AWS tools have a capability to send you an email notification on
+completion, which is useful for long-running steps.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_define_code_cl_dir_code_and_go_there">5.4. Define <code>CL_DIR</code> and go there</h3>
+<div id="Set_CL_DIR" class="paragraph">
+<p>Your DCP builds will be done within particular directories inside your
+clone of the <code>aws-repo</code> repository. You should set environment
+variable <code>CL_DIR</code> to point at this directory.</p>
+</div>
+<div class="paragraph">
+<p>If you were building the AWS-supplied examples, you&#8217;d use definitions like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    CL_DIR ?= $(AWS_FPGA_REPO_DIR)/hdk/cl/examples/cl_hello_world
+    CL_DIR ?= $(AWS_FPGA_REPO_DIR)/hdk/cl/examples/cl_dram_dma</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>AWS documentation recommends doing your designs in a directory
+<code>developer_designs</code> (sibling to <code>examples</code>), copying one of their
+supplied examples.  We&#8217;ll use:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    CL_DIR ?= $(AWS_FPGA_REPO_DIR)/hdk/cl/developer_designs/cl_BSV_GFE</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Step 1a:</strong> Change to that directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ cd  $(CL_DIR)</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_build_a_dcp_file_design_checkpoint">5.5. Build a DCP file (Design Checkpoint)</h3>
+<div class="paragraph">
+<p>This step can take a long time (possibly hours) because it does a
+Vivado synthesis of your design.  So, it runs in the background, in a
+<code>nohup</code> environment, so that it continues even if your terminal goes
+away.  Its output is captured in a logfile with a name in this format
+<code>yy_mm_dd-hhmmss.nohup.out</code> so you can follow its progress if you
+wish.</p>
+</div>
+<div class="paragraph">
+<p>You will be running the AWS script
+<code>$(CL_DIR)/build/scripts/aws_build_dcp_from_cl.sh</code>.  This has a number
+of command-line flags, which you can collect in the environment
+variables <code>BUILD_DCP_FLAGS</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Clocks</strong>: You can control which of several standard clocks should be
+supplied to your design from the AWS shell.  If you don&#8217;t specify
+anything, you get the default &#8220;Clock Group A Recipe A0 (125 MHz)&#8221;</p>
+</div>
+<div class="paragraph">
+<p>As an example alternative, the following will set it up for &#8220;Clock Group A Recipe A1 (250 MHz)&#8221;:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    BUILD_DCP_FLAGS += -clock_recipe_a A1</pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Because the build step can take many hours, you may wish to receive an
+email from AWS when the step has completed.  This is how you set it up:</p>
+</div>
+<div class="paragraph">
+<p><strong>Step 2a:</strong> One-time step: register an email address with AWS for notifications:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    EMAIL ?= &lt;your email address for notifications&gt;
+    $ $(AWS_FPGA_REPO_DIR)/shared/bin/scripts/notify_via_sns.py</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When you run this it will send you an email asking for you to click
+for confirmation, and pause waiting until you do so.  Note: email
+confirmations go through <code>sns.amazonaws.com</code>.</p>
+</div>
+<div class="paragraph">
+<p><code>notify_via_sns.py</code> is a Python program, so of course you will need
+Python installed.  It may still fail with error: &#8220;missing python
+package 'boto3'&#8221; This can be fixed by adding the <code>boto3</code> package in
+your Python installation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ pip install boto3        # For Python 2.x
+    $ pip3 install boto3       # For Python 3.x</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For the DCP build, add this flag to request a notification:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    BUILD_DCP_FLAGS += -notify</pre>
+</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>This flag avoids &#8220;ERROR: your instance has less mem than is
+necessary&#8221;, concerning the machine on which you are running the build:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    BUILD_DCP_FLAGS += -ignore_memory_requirement</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>On an Amazon AMI (AWS Machine Instance), if you need to resize it to
+have more memory, please see this document;
+<a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-resize.html" class="bare">http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-resize.html</a>.</p>
+</div>
+<div class="paragraph">
+<p>During the build, you may see many warnings.  You can see examples by
+viewing warnings produced while building the AWS-supplied examples,
+in:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $(AWS_FPGA_REPO_DIR)/hdk/cl/examples/cl_hello_world/build/scripts/warnings.txt
+    $(AWS_FPGA_REPO_DIR)/hdk/cl/examples/cl_dram_dma/build/scripts/warnings.txt</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Checklist before running <code>$CL_DIR/build/scripts/aws_build_dcp_from_cl.sh</code>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Environment variable <code>$HDK_SHELL_DIR</code> is set (see Section <a href="#Setup_HDK">[Setup_HDK]</a>)</p>
+</li>
+<li>
+<p>Environment variable <code>$CL_DIR</code> is set (see Section <a href="#Set_CL_DIR">[Set_CL_DIR]</a>)</p>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>This contains sub-directories:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    build/
+    ├── constraints
+    ├── scripts
+    └── src_post_encryption</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>During execution, the script will create some more sub-directories:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    build/
+    ├── checkpoints
+    │   └── to_aws
+    ├── constraints
+    ├── reports
+    ├── scripts
+    └── src_post_encryption</pre>
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>Update the following files for design-specific options:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>List of all source files including header files (.inc, .h, .vh).
+These will be copied to <code>src_post_encryption/</code>
+and encrypted there (if you are doing encryption)
+and any other design-specifics.
+Comment-out the last few <code>encrypt</code> commands if you&#8217;re not doing encryption</p>
+<div class="listingblock">
+<div class="content">
+<pre>    build/scripts/encrypt.tcl</pre>
+</div>
+</div>
+</li>
+<li>
+<p>For your design specifics, specifically around IP sources and xdc files,
+and your specific design xdc files.</p>
+<div class="listingblock">
+<div class="content">
+<pre>    build/scripts/create_dcp_from_cl.tcl</pre>
+</div>
+</div>
+</li>
+<li>
+<p>For timing and placement constraints</p>
+<div class="listingblock">
+<div class="content">
+<pre>    build/constraints/*.xdc</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Step 2b:</strong> Then, build your DCP.  This can take a while (for standard
+AWS-supplied example Hello World, took it 93 minutes on a AWS
+t2.2xlarge AMI machine).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ cd $(CL_DIR)/build/scripts
+    $ ./aws_build_dcp_from_cl.sh  $(BUILD_DCP_FLAGS)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When finished, the step produces a file whose name has a timestamped format:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $(CL_DIR)/build/checkpoints/to_aws/YY_MM_DD-hhmm.Developer_CL.tar</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>comprising a DCP file, and other log/manifest files.
+In a later step, the DCP file will be submitted to AWS to create an AFI.</p>
+</div>
+<div class="paragraph">
+<p><strong>Step 2c:</strong> Check that it created your DCP tarfile, and export an
+environment variable <code>DCP_TARFILE</code> with the tarfile&#8217;s name:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ ls  $(CL_DIR)/build/checkpoints/to_aws/*.Developer_CL.tar
+    $  export  DCP_TARFILE=&lt;the DCP tarfile that was just created&gt;</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_upload_submit_the_dcp_file_to_aws_so_it_can_package_it_as_an_afi">5.6. Upload/submit the DCP file to AWS so it can package it as an AFI</h3>
+<div class="sect3">
+<h4 id="_one_time_step_install_aws_cli">5.6.1. One-time step: Install AWS CLI</h4>
+<div class="paragraph">
+<p>Make sure you have the AWS CLI (Command-Line Interface) tools
+installed which gives you the <code>aws</code> command on the command line.</p>
+</div>
+<div class="paragraph">
+<p>These are pre-installed in certain AWS AMIs (Amazon Machine Instances)
+such as <code>FPGA Developer AMI-1.8.1</code>. (When you create an Amazon AWS
+instance, you can select this in the menu to specify the kind of
+instance you want.)</p>
+</div>
+<div class="paragraph">
+<p>To install it on other machines or AWS instances, use the
+package manager for the machine&#8217;s OS (like one of the following commands):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ sudo apt-get install awscli        # Ubuntu or Debian
+    $ sudo yum install awscli            # CentOS, ...
+    ...                                  # command for your package manager</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Check that you have the <code>aws</code> command installed:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ which aws
+    $ aws  --version</pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>When I used the standard AWS AMI <code>FPGA Developer AMI-1.8.1</code>,
+which has <code>awscli</code> pre-installed, and where you think everything
+should work out-of-the-box, the commands shown in the next section
+failed with Python errors.  In fact all <code>aws s3</code> commands failed.  It
+seems it has an obsolete version of <code>awscli</code>.  I did:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ sudo pip install awscli</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>to upgrade AWS CLI: it reported:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    uninstalled botocore-1.16.7  and installed 1.8.32
+    uninstalled s2transfer-0.3.3 and installed s3transfer-0.1.13.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>after which the 'aws s3' commands started working.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_create_an_s3_bucket_for_your_submission">5.6.2. Create an S3 bucket for your submission</h4>
+<div class="paragraph">
+<p>Create an S3 &#8220;bucket&#8221; to contain your submission for an AFI build.
+S3 is Amazon AWS' cloud storage system.  Buckets are Amazon AWS'
+storage units in the cloud; they have globally unique names.</p>
+</div>
+<div class="paragraph">
+<p>Choose a name for the bucket you create.  Amazon&#8217;s rules for bucket names:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>3 to 63 chars long</p>
+</li>
+<li>
+<p>lowercase letters, digits, hyphens
+(in particular no underscores; dots allowed but not recommended)</p>
+</li>
+<li>
+<p>must start and end with a letter or digit, not hyphen</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    DCP_BUCKET ?= rsnbucket1</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The specific Amazon region that you use:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    REGION ?= us-west-2</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Step 3a</strong>: Create Bucket</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ aws s3 mb s3://$(DCP_BUCKET) --region $(REGION)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Step 3b:</strong> You can list the buckets visible to you:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ aws s3 ls</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_create_a_folder_in_the_bucket_for_the_dcp_design_checkpoint_tarball">5.6.3. Create a folder in the bucket for the DCP (design checkpoint tarball)</h4>
+<div class="paragraph">
+<p><strong>Step 3c:</strong> Create folder for DCP</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ export DCP_FOLDER = AWSteria    (example)
+    $ aws s3 mb s3://$(DCP_BUCKET)/$(DCP_FOLDER)/</pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>It seems there are no actual folders on S3. Each bucket is a
+unique storage unit with a globally unique name but, for a convenient
+'folder view', common prefixes ending in <code>/</code> are interpreted by AWS
+software and web interface as &#8220;the same hierarchical
+directory/folder&#8221;.  This is why the command above to create a folder
+looks just like the command earlier to create a bucket (they&#8217;re in
+fact the same thing).</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Step 3c did not work for me (and still does not). I always get this error:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>     make_bucket failed: s3://$(DCP_BUCKET)/$(DCP_FOLDER)/ An error occurred (BucketAlreadyOwnedByYou)
+         when calling the CreateBucket operation: Your previous request to create the named bucket
+         succeeded and you already own it.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>But <code>aws s3 ls</code> shows that it does not exist,
+and viewing it from the S3 dashboard on the web also shows it does not exist.</p>
+</div>
+<div class="paragraph">
+<p>The S3 dashboard on the web does have a button to create a
+folder, and that worked.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_upload_the_dcp_file_to_the_s3_folder">5.6.4. Upload the DCP file to the S3 folder</h4>
+<div class="paragraph">
+<p><strong>Step 3d</strong>: Upload the DCP to the folder:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ export DCP_TARFILE = 20_05_24-162730.Developer_CL.tar    # (example)
+    $ aws s3 cp  $(DCP_TARFILE)  s3://$(DCP_BUCKET)/$(DCP_FOLDER)/</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note, the trailing '/' in the command above is is necessary!</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_create_a_folder_where_aws_will_place_logfiles">5.6.5. Create a folder where AWS will place logfiles</h4>
+<div class="paragraph">
+<p>Create a folder for log files that will be generated during the AFI build,
+and move a temporary, empty file LOGS_FILES_GO_HERE.txt there.</p>
+</div>
+<div class="paragraph">
+<p><strong>Step 3e</strong>: Create Folder for Logs:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ export LOGS_BUCKET = $(DCP_BUCKET)
+    $ export LOGS_FOLDER = $(DCP_FOLDER)-logs
+    $ touch LOGS_FILES_GO_HERE.txt
+    $ aws s3 cp LOGS_FILES_GO_HERE.txt s3://$(DCP_BUCKET)/$(LOGS_FOLDER)/</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note: the training '/' in the command above is necessary!</p>
+</div>
+<div class="paragraph">
+<p>This example creates the LOGS_FOLDER &#8220;inside&#8221; the DCP_BUCKET, but I
+think that is not necessary; the <code>create-fpga-image</code> step below
+allows you to specify the bucket and folder for logs separately.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ aws s3 mb s3://$(DCP_BUCKET)/$(LOGS_FOLDER)/</pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>As in the earlier note, the first command (folder-creation) failed
+for me, in the same way (<code>BucketAlreadyOwnedByYou</code> error).
+I ignored it: the next two commands worked.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_submit_the_dcp_to_aws_to_package_it_in_an_afi">5.6.6. Submit the DCP to AWS to package it in an AFI</h4>
+<div class="paragraph">
+<p>Pick a name and text description for the AFI to be created:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ export AFI_NAME        = RSNAwsteriaTest3     # (example)
+    $ export AFI_DESCRIPTION = "AWSteria take 3"    # (example)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>AFI creation can be controlled by a number of flags.  You&#8217;ll
+definitely want to use these:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    --region $(REGION)
+    --name $(AFI_NAME)
+    --description $(AFI_DESCRIPTION)
+    --input-storage-location Bucket=$(DCP_BUCKET),Key=$(DCP_FOLDER)/$(DCP_TARFILE)
+    --logs-storage-location Bucket=$(LOGS_BUCKET),Key=$(LOGS_FOLDER)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Other flags of interest:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    --client-token &lt;value&gt;    # No idea what this does
+    --dry-run
+    --no-dry-run</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Assuming you&#8217;ve defined <code>CREATE_FPGA_IMAGE_FLAGS</code> to be your chosen flags,</p>
+</div>
+<div class="paragraph">
+<p><strong>Step 3f</strong>: Start AFI Creation</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ aws ec2 create-fpga-image  $(CREATE_FPGA_IMAGE_FLAGS)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The command will submit it to the cloud, and immediately print
+output that looks like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    {
+        "FpgaImageId": "afi-0fced9721a34d8d99",
+        "FpgaImageGlobalId": "agfi-0cb465a4e98968670"
+    }</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You should save this information, for future reference.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">AFI ID</dt>
+<dd>
+<p>(&#8220;AWS FPGA Image Identifier&#8221;) This is the main ID used to manage the AFI
+through AWS EC2 CLI commands and AWS SDK APIs. This ID is
+regional, i.e., if an AFI is copied across multiple regions,
+it will have a different unique AFI ID in each region. An
+example AFI ID is afi-06d0ffc989feeea2a.</p>
+</dd>
+<dt class="hdlist1">AGFI ID</dt>
+<dd>
+<p>(&#8220;AWS Global FPGA Image Identifier&#8221;) This is the global ID
+to refer to an AFI from within an F1 instance. E.g.,, to load or clear
+an AFI from an FPGA slot, you use the AGFI ID. Since the AGFI IDs is
+global (by design), it allows you to copy a combination of AFI/AMI to
+multiple regions, and they will work without requiring any extra
+setup. An example AGFI ID is agfi-0f0e045f919413242.</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>Please use these to define environment variables:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ export AFI_ID  = "afi-0735d1366f0532f90"    # (example)
+    $ export AGFI_ID = "agfi-037d7a8803a9d632c"   # (example)</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_wait_for_completion_of_afi_creation">5.6.7. Wait for completion of AFI creation</h4>
+<div class="paragraph">
+<p>There are several ways by which you can wait for AWS to complete its
+creation of the AFI.</p>
+</div>
+<div class="paragraph">
+<p>You can study the logs in:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    s3://$(LOGS_BUCKET)/$(LOGS_FOLDER)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can run a command-line status check by providing the AFI ID:</p>
+</div>
+<div class="paragraph">
+<p><strong>Step 3g</strong>: Check AFI creation_status:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ aws ec2 describe-fpga-images --fpga-image-ids  $(AFI_ID)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will show a JSON/YAML output; look for a line like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>     "State": { "Code" : "pending" or "available" or "failed" }</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can request that you get an email notification on AFI build completion:</p>
+</div>
+<div class="paragraph">
+<p><strong>Step 3h</strong>: Request AFI completion email notification:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ wait_for_afi.py --afi $(AFI_ID) --notify --email $(EMAIL)</pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>This program is in:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $(AWS_FPGA_REPO_DIR)/shared/bin/scripts/wait_for_afi.py</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>but it should already be in your path due to your HDK setup earlier (see Section <a href="#Setup_HDK">[Setup_HDK]</a>).</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_running_your_design_on_an_aws_f1_instance">6. Running your design on an AWS F1 Instance</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_one_time_step_set_up_aws_fpga_management_tools">6.1. One-time step: Set up AWS FPGA Management tools</h3>
+<div class="paragraph">
+<p><strong>Step 4a:</strong> Run the following AWS-provided script.  Note, it will prompt
+for your password since it does some sub-steps as 'root':</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ cd  $(AWS_FPGA_REPO_DIR)
+    $ source sdk_setup.sh</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_set_up_your_aws_credentials">6.2. Set up your AWS credentials</h3>
+<div class="paragraph">
+<p><strong>Step 4b:</strong> Configure AWS to set your credentials, in the usual way.
+Note: it will prompt for password since it does some sub-steps as
+'root':</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ aws configure</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_check_status_and_clear_any_previously_loaded_afi">6.3. Check status and clear any previously loaded AFI</h3>
+<div class="paragraph">
+<p>The AWS F1 instance on which you are running may have an AFI (Amazon
+FPGA Instance) already loaded in its attached FPGA.  You can check
+this as follows:</p>
+</div>
+<div class="paragraph">
+<p><strong>Step 5a:</strong> Check status of existing loaded AFI in &#8220;slot 0&#8221;, if any:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ sudo  fpga-describe-local-image  -S 0  -H</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Your output may look like this (if your instance has an FPGA device):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    Type  FpgaImageSlot  FpgaImageId             StatusName    StatusCode   ErrorName    ErrorCode   ShVersion
+    AFI          0       none                    cleared           1        ok               0       &lt;shell_version&gt;
+    Type  FpgaImageSlot  VendorId    DeviceId    DBDF
+    AFIDEVICE    0       0x1d0f      0x1042      0000:00:0f.0</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Step 5b:</strong> You can clear (unload) any previously loaded AFI as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ sudo fpga-clear-local-image  -S 0</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_load_your_new_afi">6.4. Load your new AFI</h3>
+<div class="paragraph">
+<p>The environment variable <code>AGFI_ID</code> should be defined to name your
+desired AFI (given to you after Step 3f).</p>
+</div>
+<div class="paragraph">
+<p><strong>Step 5c:</strong> Load your new AFI into Slot 0 (note, using <code>AGFI_ID</code>, not <code>AFI_ID</code>):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ sudo fpga-load-local-image -S 0 -I $(AGFI_ID)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note: This optionally takes a flag like <code>-a 87</code>
+or <code>-a 97</code> to run it at 87 MHz or 97 MHz, respectively, which may be
+different from the target MHz during synthesis (DCP build). The
+following page has more information on setting runtime clock
+frequency: <a href="https://github.com/aws/aws-fpga/blob/master/hdk/docs/dynamic_clock_config.md" class="bare">https://github.com/aws/aws-fpga/blob/master/hdk/docs/dynamic_clock_config.md</a></p>
+</div>
+<div class="paragraph">
+<p>Verify that it&#8217;s loaded by checking status:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ sudo fpga-describe-local-image -S 0 -R -H -M</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note: <code>-R</code> forces the PCI bus to refresh AFI Vendor and Device ID, and
+<code>-M</code> describes the clock setting.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_one_time_step_remove_xocl_driver_install_xdma_driver">6.5. One-time step: Remove XOCL driver, install XDMA driver</h3>
+<div class="paragraph">
+<p>On AWS F1, the host-side talks to the hardware over a PCI bus, using
+DMA, which terminates at the <code>DMA_PCIS</code> Verilog port connected to your
+design.</p>
+</div>
+<div class="paragraph">
+<p>Details about this step are in:
+<a href="https://github.com/aws/aws-fpga/blob/master/sdk/linux_kernel_drivers/xdma/xdma_install.md" class="bare">https://github.com/aws/aws-fpga/blob/master/sdk/linux_kernel_drivers/xdma/xdma_install.md</a>.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">WARNING</dt>
+<dd>
+<p>the following steps worked when attempted on the Amazon
+Machine Instance "FPGA Developers AMI", which runs CentOS.  We
+recommend staying with this.</p>
+<div class="paragraph">
+<p>It did not work when I tried it on an Ubuntu 18.04 AMI.  The web page
+cited above says do the following in Ubuntu instead of the
+yum-installs described in Step 6a_1 below:</p>
+</div>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ sudo apt-get install make
+    $ sudo apt-get install gcc</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>But there were complaints about a function <code>mmiowb()</code> (which has
+recently been removed from the Linux kernel), number of arguments to
+some macro (which has recently changed in the Linux kernel), etc..</p>
+</div>
+<div class="paragraph">
+<p><strong>Step 6a_1:</strong> Do some installs using the <code>yum</code> package manager (on Centos):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ sudo yum groupinstall "Development tools"
+    $ sudo yum install kernel kernel-devel</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Reboot the kernel, if necessary: The <code>yum install kernel</code> above will
+say, in its messages, which version of the kernel it installed. Typing
+<code>uname -a</code> will tell you which version of the kernel you&#8217;re running.
+These two should be the same.  If not, reboot your instance.  This
+will disconnect your ssh connection (although your instance will
+continuously show as &#8220;running&#8221; in the AWS dashboard); reconnect
+after a minute or so, when it allows you to reconnect.</p>
+</div>
+<div class="paragraph">
+<p><strong>Step 6a_2:</strong> Reboot</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ sudo shutdown -r now</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Build the XDMA driver (see caveat above about FPGA Developers AMI/CentOS vs Ubuntu):</p>
+</div>
+<div class="paragraph">
+<p><strong>Step 6a_3:</strong> Build XDMA driver:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ cd  $(AWS_FPGA_REPO_DIR)/sdk/linux_kernel_drivers/xdma
+    $ make</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The HDK <code>README</code> says the install of the XDMA driver (used by
+host-side software) may fail on Development AMI versions 1.5.x or
+later, which come with a preinstalled Xilinx Runtime Environment
+(XRT), which contains a pre-installed XOCL driver. This prevents
+installation of the XDMA driver. Please first remove the XOCL driver
+module.</p>
+</div>
+<div class="paragraph">
+<p><strong>Step 6b_0:</strong> check if XOCL is running:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ lsmod | grep xocl</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If XOCL is present, it should in the listing.</p>
+</div>
+<div class="paragraph">
+<p><strong>Step 6b_1:</strong> remove XOCL driver, if it was running:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ sudo rmmod xocl</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Install the XDMA driver (will fail if XOCL driver is still in the kernel).</p>
+</div>
+<div class="paragraph">
+<p><strong>Step 6c:</strong> Install XDMA driver:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ sudo make install
+    $ sudo modprobe xdma</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and verify that it is present:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ lsmod | grep xdma</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You should see a line like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    xdma                   72503  0</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_build_your_host_side_software">6.6. Build your host-side software</h3>
+<div class="paragraph">
+<p><strong>Step 6d:</strong> Build your host-side software:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ cd  $(CL_DIR)/software/runtime/
+    $ make all</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_run_your_host_side_software_which_will_interact_with_the_fpga">6.7. Run your host-side software which will interact with the FPGA</h3>
+<div class="paragraph">
+<p><strong>Step 6e:</strong> run host-side software:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    $ cd  $(CL_DIR)/software/runtime/
+    $ sudo ./$(SW_EXE)</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version v0.1<br>
+Last updated 2020-12-16 19:36:17 EST
+</div>
+</div>
+</body>
+</html>
