@@ -27,17 +27,12 @@ function void c_end_timing (longint unsigned  cycle_num);
 // ****************************************************************
 // ****************************************************************
 
-import "DPI-C"
-function  void  c_host_connect (shortint  tcp_port);
+// Functions for console I/O
+
+// ================================================================
 
 import "DPI-C"
-function  void  c_host_disconnect (byte unsigned  dummy);
-
-import "DPI-C"
-function  void  c_host_recv (int unsigned  data, byte unsigned  bytevec_size);
-
-import "DPI-C"
-function  void  c_host_send (int unsigned  data, byte unsigned  bytevec_size);
+function  byte unsigned  c_trygetchar (byte unsigned  dummy);
 
 // ****************************************************************
 // ****************************************************************
@@ -59,6 +54,34 @@ function  int unsigned  c_trace_file_write_buffer (int unsigned  n);
 
 import "DPI-C"
 function  int unsigned  c_trace_file_close (byte unsigned dummy);
+
+// ****************************************************************
+// ****************************************************************
+// ****************************************************************
+
+import "DPI-C"
+function  void  c_host_connect (shortint  tcp_port);
+
+import "DPI-C"
+function  void  c_host_disconnect (byte unsigned  dummy);
+
+// import "DPI-C"
+// function  void  c_host_recv (int unsigned  data, byte unsigned  bytevec_size);
+
+import "DPI-C"
+function  byte unsigned  c_host_recv2 (byte unsigned  dummy);
+
+import "DPI-C"
+function  byte unsigned  c_host_recv_get_byte_j (int unsigned  j);
+
+import "DPI-C"
+function  byte unsigned  c_host_send_put_byte_j (int unsigned  j, byte unsigned x);
+
+import "DPI-C"
+function  void  c_host_send2 (byte unsigned  dummy);
+
+// import "DPI-C"
+// function  void  c_host_send (int unsigned  data, byte unsigned  bytevec_size);
 
 // ****************************************************************
 // ****************************************************************
