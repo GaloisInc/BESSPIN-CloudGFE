@@ -38,7 +38,7 @@ simulator:
 		$(TMP_DIRS) \
 		-e $(TOPMODULE) -o ./$(SIM_EXE_FILE) \
 		$(BSC_C_FLAGS) \
-		$(AWSTERIA)/src_Testbench_AWS/Top/C_Imported_Functions.c
+		$(AWSTERIA)/src_Testbench/Top/C_Imported_Functions.c
 	@echo "INFO: linked bsc-compiled objects into Bluesim executable"
 
 # ================================================================

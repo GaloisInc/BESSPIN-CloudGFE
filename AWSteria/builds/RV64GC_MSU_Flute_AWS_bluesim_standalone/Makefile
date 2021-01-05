@@ -12,6 +12,11 @@ FLUTE_REPO ?= $(AWSTERIA)/../../Flute
 REPO ?= $(FLUTE_REPO)
 
 # ================================================================
+# Edit this def to configure which platform is being targeted
+
+PLATFORM = AWS
+
+# ================================================================
 # Edit this def to configure desired ISA features
 
 RV = RV64
@@ -24,7 +29,7 @@ ARCH ?= RV64ACDFIMSU
 
 CACHES=WB_L1_L2
 
-TOPFILE   ?= $(AWSTERIA)/src_Testbench_AWS/Top/Top_HW_Side_Standalone.bsv
+TOPFILE   ?= $(AWSTERIA)/src_Testbench/Top/Top_HW_Side_Standalone.bsv
 SRC_CORE ?= $(REPO)/src_Core/Core_v2
 
 # ================================================================

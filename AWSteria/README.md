@@ -94,8 +94,9 @@ The directory tree looks like this:
             ├── Doc
             ├── README.md
             ├── src_Host_Side
-            └── src_Testbench_AWS
-                ├── SoC
+            ├── src_SoC
+            │   └── AWS
+            └── src_Testbench
                 └── Top
                     └── Gen_Bytevec
 
@@ -117,16 +118,17 @@ SVG files are the original sources, created using Inkscape, and the
 PNG files are automatically generated from them using Inkscape in
 batch mode (see the Makefile therein).
 
-Directory `src_Testbench_AWS/` is a substitute for the `src_Testbench`
-directory in the Piccolo/Flute/Toooba repositories.  As in the
-original, it has two subdirectories, `SoC` which contains
-synthesizable code that goes into the FPGA, and `Top` which is just a
-harness for Bluesim or verilator simulation (and contains
-non-synthesizable imports of C code).
+Directory `src_SoC` is a substitute for the `src_SSITH_Px/src_BSV`
+directory in the Piccolo/Flute/Toooba repositories. It contains the
+generic code for AWSteria, and has subdirectories for platform-specific
+code (in this case, the boot ROM), with AWS the only platform currently
+supported.
 
-                src_Testbench_AWS/
-                ├── SoC
-                └── Top
+Directory `src_Testbench` is a substitute for the `src_Testbench`
+directory in the Piccolo/Flute/Toooba repositories.  As in the
+original it has a subdirectory `Top` which is just a harness for Bluesim
+or verilator simulation (and contains non-synthesizable imports of
+C code).
 
 Directory `src_Host_Side` is used for Bluesim or verilator sim; it
 provides libraries linked with the host-side software; these libraries

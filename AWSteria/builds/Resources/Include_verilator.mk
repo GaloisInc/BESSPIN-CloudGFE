@@ -87,7 +87,7 @@ simulator:
 		--cc  --exe --build -j 4 -o exe_HW_sim  $(TOPMODULE).v \
 		--top-module $(TOPMODULE) \
 		$(VERILATOR_RESOURCES)/sim_main.cpp \
-		$(AWSTERIA)/src_Testbench_AWS/Top/C_Imported_Functions.c
+		$(AWSTERIA)/src_Testbench/Top/C_Imported_Functions.c
 	mv  $(VERILATOR_MAKE_DIR)/$(SIM_EXE_FILE)  .
 	@echo "----------------"
 	@echo "INFO: Created verilator executable:    $(SIM_EXE_FILE)"
