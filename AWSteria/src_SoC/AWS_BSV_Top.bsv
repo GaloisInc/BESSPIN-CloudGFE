@@ -17,6 +17,7 @@ package AWS_BSV_Top;
 import FIFOF       :: *;
 import GetPut      :: *;
 import Connectable :: *;
+import Vector      :: *;
 
 // ----------------
 // BSV additional libs
@@ -92,7 +93,7 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
 		      Wd_User_0) uncached_mem_widener<- mkAXI4_Widener;
 
    // AWS signal
-   Reg #(Bit #(4)) rg_ddr4_ready     <- mkReg (0);
+   Reg #(Bit #(Num_DDR4)) rg_ddr4_ready <- mkReg (0);
 
    Reg #(Bool)     rg_ddr4_is_loaded <- mkReg (False);    // AWS says ddr4 is ready
    Reg #(Bool)     rg_initialized_1  <- mkReg (False);    // Relayed ddr4_ready to core
@@ -152,6 +153,8 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
    // Return hw status to host
    // Encoding: { 16'tohost_value,
    //             4'ddr4_ready, 2'b0, 1'ddr4_is_loaded, 1'initialized_2, 8'soc_status}
+   // NB: ddr4_ready may use fewer bits if there are fewer than 4 DDR4
+   // interfaces present, in which case the remaining bits will always be 0.
    rule rl_hw_to_host_status;
       Bit #(32) status = zeroExtend(soc_top.mv_status);
       if (rg_initialized_2)  status = status | (1 << 8);
@@ -302,7 +305,7 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
    // ================================================================
    // Initializations
 
-   rule rl_initialize_1 ((! rg_initialized_1) && (rg_ddr4_ready[3:0] == 4'b1111));
+   rule rl_initialize_1 ((! rg_initialized_1) && (rg_ddr4_ready == '1));
       $display ("%0d: %m.rl_initialize_1", cur_cycle);
       $display ("    DDRs ready, mem access enabled");
 
@@ -338,40 +341,45 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
    mkConnection (soc_top.to_ddr4_0_uncached, uncached_mem_widener.from_master);
 
    // ================================================================
-   // INTERFACE
+   // Vector of outgoing DDR4 interfaces
 
    AXI4_16_64_512_0_Master_IFC dummy_ddr4_master = dummy_AXI4_Master_ifc;
+
+   Vector #(Num_DDR4, AXI4_16_64_512_0_Master_IFC)  v_to_ddr4 = newVector;
+   v_to_ddr4 [0] = soc_top.to_ddr4;
+   v_to_ddr4 [1] = fv_AXI4_Master_Address_Translator (True, // add, not subtract
+						      ddr4_size,  // addr offset
+						      uncached_mem_widener.to_slave);
+   for (Integer i = 2; i < valueOf (Num_DDR4); i = i + 1)
+      v_to_ddr4 [i] = dummy_ddr4_master;
+
+   // ================================================================
+   // INTERFACE
 
    // Facing SH
    interface AWS_AXI4_Slave_IFC       dma_pcis_slave = soc_top.dma_server;
    interface AWS_AXI4_Lite_Slave_IFC  ocl_slave      = ocl_adapter.ocl_slave;
 
    // Facing DDR4
-   interface AWS_AXI4_Master_IFC  ddr4_A_master = soc_top.to_ddr4;
-   interface AWS_AXI4_Master_IFC  ddr4_B_master = fv_AXI4_Master_Address_Translator (True, // add, not subtract
-										     'h_4_0000_0000,  // addr offset
-										     uncached_mem_widener.to_slave);
-   interface AWS_AXI4_Master_IFC  ddr4_C_master = dummy_ddr4_master;
-   interface AWS_AXI4_Master_IFC  ddr4_D_master = dummy_ddr4_master;
+   interface Vector  v_ddr4_master = v_to_ddr4;
 
    // DDR4 ready signals
-   // The SystemVerilog top-level invokes this to signal readiness of AWS DDR4 A, B, C, D
-   method Action m_ddr4_ready (Bit #(4) ddr4_A_B_C_D_ready);
-      rg_ddr4_ready <= ddr4_A_B_C_D_ready;
+   // The SystemVerilog top-level invokes this to signal readiness of each DDR4
+   method Action m_ddr4_ready (Bit #(Num_DDR4) ddr4_ready);
+      rg_ddr4_ready <= ddr4_ready;
    endmethod
 
    // Global counters
    // The SystemVerilog top-level provides these 4 nsec counters
    // Note: they tick at 4ns even if the DUT is synthesized at a different clock speed
    // (so, may increment by more than 1 on DUT clock ticks)
-   method Action m_glcount0 (Bit #(64) glcount0) = noAction;
-   method Action m_glcount1 (Bit #(64) glcount1) = noAction;
+   method Action m_v_glcount (Vector #(Num_glcount, Bit #(64)) v_glcount) = noAction;
 
    // Virtual LEDs
-   method Bit #(16) m_vled = 0;
+   method Bit #(Num_vLED) m_vled = 0;
 
    // Virtual DIP Switches
-   method Action m_vdip (Bit #(16) vdip) = noAction;
+   method Action m_vdip (Bit #(Num_vDIP) vdip) = noAction;
 endmodule
 
 // ================================================================

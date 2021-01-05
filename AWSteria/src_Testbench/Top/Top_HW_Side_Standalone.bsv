@@ -76,23 +76,10 @@ module mkTop_HW_Side (Empty) ;
    mkConnection (ocl_xactor.axi_side, aws_BSV_top.ocl_slave);
 
    // ----------------
-   // Models for the four DDR4s
+   // Models for the DDR4s
 
-   // DDR4 A (cached mem access, incl. bursts)
-   AXI4_16_64_512_0_Slave_IFC  ddr4_A <- mkAWS_DDR4_A_Model;
-   mkConnection (aws_BSV_top.ddr4_A_master, ddr4_A);
-
-   // DDR4 B (uncached mem access, no bursts)
-   AXI4_16_64_512_0_Slave_IFC  ddr4_B <- mkAWS_DDR4_B_Model;
-   mkConnection (aws_BSV_top.ddr4_B_master, ddr4_B);
-
-   // DDR4 C (tie-off: unused for now)
-   AXI4_16_64_512_0_Slave_IFC  ddr4_C <- mkAWS_DDR4_C_Model;
-   mkConnection (aws_BSV_top.ddr4_C_master, ddr4_C);
-
-   // DDR4 D (tie-off: unused for now)
-   AXI4_16_64_512_0_Slave_IFC  ddr4_D <- mkAWS_DDR4_D_Model;
-   mkConnection (aws_BSV_top.ddr4_D_master, ddr4_D);
+   Vector #(Num_DDR4, AXI4_16_64_512_0_Slave_IFC) v_ddr4 <- mkAWS_DDR4_Models;
+   zipWithM_ (mkConnection, aws_BSV_top.v_ddr4_master, v_ddr4);
 
    // ================================================================
    // Functions to simulate host-to/from-hw communication with
@@ -403,17 +390,16 @@ module mkTop_HW_Side (Empty) ;
    //     vdip, vled (*)
    // TODO: (*) should have own channels to/from host in communication box
 
-   Reg #(Bit #(64)) rg_counter_4ns <- mkReg (0);
-   Reg #(Bit #(16)) rg_last_vled   <- mkReg (0);
-   Reg #(Bit #(16)) rg_vdip        <- mkReg (0);
+   Reg #(Bit #(64)) rg_counter_4ns     <- mkReg (0);
+   Reg #(Bit #(Num_vLED)) rg_last_vled <- mkReg (0);
+   Reg #(Bit #(Num_vDIP)) rg_vdip      <- mkReg (0);
 
    rule rl_status_signals;
       // ---------------- gcounts (4ns counters)
       // Assume 100 MHZ, so counter should increase by 2.5 every tick.
       // For rg_counter_4ns, let binary point be to between bits [1] and [0].
       // So 2.5 is 'b_101
-      aws_BSV_top.m_glcount0 (rg_counter_4ns >> 1);
-      aws_BSV_top.m_glcount1 (rg_counter_4ns >> 1);
+      aws_BSV_top.m_v_glcount (replicate (rg_counter_4ns >> 1));
       rg_counter_4ns <= rg_counter_4ns + 'b_101;
 
       // ---------------- DDR ready
@@ -424,7 +410,7 @@ module mkTop_HW_Side (Empty) ;
 
       // ---------------- VLED
       let vled = aws_BSV_top.m_vled;
-      for (Integer j = 0; j < 16; j = j + 1)
+      for (Integer j = 0; j < valueOf (Num_vLED); j = j + 1)
 	 if ((rg_last_vled [j] == 0) && (vled [j] == 1)) begin
 	    if (verbosity != 0)
 	       $display ("vled [%0d] turned on", j);

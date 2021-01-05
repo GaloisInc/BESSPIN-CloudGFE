@@ -26,10 +26,16 @@ import Mem_Model :: *;
 
 // ================================================================
 
-export mkAWS_DDR4_A_Model;
-export mkAWS_DDR4_B_Model;
-export mkAWS_DDR4_C_Model;
-export mkAWS_DDR4_D_Model;
+export mkAWS_DDR4_Models;
+
+module mkAWS_DDR4_Models (Vector #(4, AXI4_16_64_512_0_Slave_IFC));
+   Vector #(4, AXI4_16_64_512_0_Slave_IFC) v_ddr4;
+   v_ddr4 [0] <- mkAWS_DDR4_A_Model;
+   v_ddr4 [1] <- mkAWS_DDR4_B_Model;
+   v_ddr4 [2] <- mkAWS_DDR4_C_Model;
+   v_ddr4 [3] <- mkAWS_DDR4_D_Model;
+   return v_ddr4;
+endmodule
 
 // ================================================================
 // DDR4_A

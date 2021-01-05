@@ -8,9 +8,24 @@ package AWS_BSV_Top_Defs;
 // AWS interfaces, and the interface def for the AWS_BSV_Top module.
 
 // ================================================================
+// BSV library imports
+
+import Vector :: *;
+
+// ================================================================
+// Project imports
 
 import AXI4_Types      :: *;
 import AXI4_Lite_Types :: *;
+
+import AWS_BSV_Top_Defs_Platform :: *;
+
+// ================================================================
+// Export the platform-specific defines on top of everything in
+// this package
+
+export AWS_BSV_Top_Defs          :: *;
+export AWS_BSV_Top_Defs_Platform :: *;
 
 // ================================================================
 // AXI4 and AXI4-Lite widths of interest
@@ -103,16 +118,13 @@ interface AWS_BSV_Top_IFC;
    interface AXI4L_32_32_0_Slave_IFC     ocl_slave;
 
    // Facing DDR4
-   interface AXI4_16_64_512_0_Master_IFC  ddr4_A_master;
-   interface AXI4_16_64_512_0_Master_IFC  ddr4_B_master;
-   interface AXI4_16_64_512_0_Master_IFC  ddr4_C_master;
-   interface AXI4_16_64_512_0_Master_IFC  ddr4_D_master;
+   interface Vector #(Num_DDR4, AXI4_16_64_512_0_Master_IFC)  v_ddr4_master;
 
    // DDR4 ready signals
    // The SystemVerilog top-level invokes this to signal readiness of AWS DDR4 A, B, C, D
 
    (* always_ready, always_enabled *)
-   method Action m_ddr4_ready (Bit #(4) ddr4_A_B_C_D_ready);
+   method Action m_ddr4_ready (Bit #(Num_DDR4) ddr4_ready);
 
    // Global counters
    // The SystemVerilog top-level provides these 4 nsec counters
@@ -120,17 +132,15 @@ interface AWS_BSV_Top_IFC;
    // (so, may increment by more than 1 on DUT clock ticks)
 
    (* always_ready, always_enabled *)
-   method Action m_glcount0 (Bit #(64) glcount0);
-   (* always_ready, always_enabled *)
-   method Action m_glcount1 (Bit #(64) glcount1);
+   method Action m_v_glcount (Vector #(Num_glcount, Bit #(64)) v_glcount);
 
    // Virtual LEDs
    (* always_ready *)
-   method Bit #(16) m_vled;
+   method Bit #(Num_vLED) m_vled;
 
    // Virtual DIP Switches
    (* always_enabled, always_ready *)
-   method Action m_vdip (Bit #(16) vdip);
+   method Action m_vdip (Bit #(Num_vDIP) vdip);
 endinterface
 
 // ================================================================

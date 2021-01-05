@@ -541,194 +541,193 @@ module cl_dram_dma #(parameter NUM_DDR=4)
 
 		  // ----------------
 		  // DDR A
-		  .ddr4_A_master_awvalid  (v_ddr4_axi4_awvalid [0]),
-		  .ddr4_A_master_awid     (v_ddr4_axi4_awid [0]),
-		  .ddr4_A_master_awaddr   (v_ddr4_axi4_awaddr [0]),
-		  .ddr4_A_master_awlen    (v_ddr4_axi4_awlen [0]),
-		  .ddr4_A_master_awsize   (v_ddr4_axi4_awsize [0]),
-		  .ddr4_A_master_awburst  (),    // Unused; we drive 2'b01 (INCR) into sh_ddr
-		  .ddr4_A_master_awlock   (),    // Unused
-		  .ddr4_A_master_awcache  (),    // Unused
-		  .ddr4_A_master_awprot   (),    // Unused
-		  .ddr4_A_master_awqos    (),    // Unused
-		  .ddr4_A_master_awregion (),    // Unused
-		  .ddr4_A_master_awready  (v_ddr4_axi4_awready [0]),
+		  .v_ddr4_master_0_awvalid  (v_ddr4_axi4_awvalid [0]),
+		  .v_ddr4_master_0_awid     (v_ddr4_axi4_awid [0]),
+		  .v_ddr4_master_0_awaddr   (v_ddr4_axi4_awaddr [0]),
+		  .v_ddr4_master_0_awlen    (v_ddr4_axi4_awlen [0]),
+		  .v_ddr4_master_0_awsize   (v_ddr4_axi4_awsize [0]),
+		  .v_ddr4_master_0_awburst  (),    // Unused; we drive 2'b01 (INCR) into sh_ddr
+		  .v_ddr4_master_0_awlock   (),    // Unused
+		  .v_ddr4_master_0_awcache  (),    // Unused
+		  .v_ddr4_master_0_awprot   (),    // Unused
+		  .v_ddr4_master_0_awqos    (),    // Unused
+		  .v_ddr4_master_0_awregion (),    // Unused
+		  .v_ddr4_master_0_awready  (v_ddr4_axi4_awready [0]),
 
-		  .ddr4_A_master_wvalid   (v_ddr4_axi4_wvalid [0]),
-		  .ddr4_A_master_wdata    (v_ddr4_axi4_wdata [0]),
-		  .ddr4_A_master_wstrb    (v_ddr4_axi4_wstrb [0]),
-		  .ddr4_A_master_wlast    (v_ddr4_axi4_wlast [0]),
-		  .ddr4_A_master_wready   (v_ddr4_axi4_wready [0]),
+		  .v_ddr4_master_0_wvalid   (v_ddr4_axi4_wvalid [0]),
+		  .v_ddr4_master_0_wdata    (v_ddr4_axi4_wdata [0]),
+		  .v_ddr4_master_0_wstrb    (v_ddr4_axi4_wstrb [0]),
+		  .v_ddr4_master_0_wlast    (v_ddr4_axi4_wlast [0]),
+		  .v_ddr4_master_0_wready   (v_ddr4_axi4_wready [0]),
 
-		  .ddr4_A_master_bvalid   (v_ddr4_axi4_bvalid [0]),
-		  .ddr4_A_master_bid      (v_ddr4_axi4_bid [0]),
-		  .ddr4_A_master_bresp    (v_ddr4_axi4_bresp [0]),
-		  .ddr4_A_master_bready   (v_ddr4_axi4_bready [0]),
+		  .v_ddr4_master_0_bvalid   (v_ddr4_axi4_bvalid [0]),
+		  .v_ddr4_master_0_bid      (v_ddr4_axi4_bid [0]),
+		  .v_ddr4_master_0_bresp    (v_ddr4_axi4_bresp [0]),
+		  .v_ddr4_master_0_bready   (v_ddr4_axi4_bready [0]),
 
-		  .ddr4_A_master_arvalid  (v_ddr4_axi4_arvalid [0]),
-		  .ddr4_A_master_arid     (v_ddr4_axi4_arid [0]),
-		  .ddr4_A_master_araddr   (v_ddr4_axi4_araddr [0]),
-		  .ddr4_A_master_arlen    (v_ddr4_axi4_arlen [0]),
-		  .ddr4_A_master_arsize   (v_ddr4_axi4_arsize [0]),
-		  .ddr4_A_master_arburst  (),    // Unused; we drive 2'b01 (INCR) into sh_ddr
-		  .ddr4_A_master_arlock   (),    // Unused
-		  .ddr4_A_master_arcache  (),    // Unused
-		  .ddr4_A_master_arprot   (),    // Unused
-		  .ddr4_A_master_arqos    (),    // Unused
-		  .ddr4_A_master_arregion (),    // Unused
-		  .ddr4_A_master_arready  (v_ddr4_axi4_arready [0]),
+		  .v_ddr4_master_0_arvalid  (v_ddr4_axi4_arvalid [0]),
+		  .v_ddr4_master_0_arid     (v_ddr4_axi4_arid [0]),
+		  .v_ddr4_master_0_araddr   (v_ddr4_axi4_araddr [0]),
+		  .v_ddr4_master_0_arlen    (v_ddr4_axi4_arlen [0]),
+		  .v_ddr4_master_0_arsize   (v_ddr4_axi4_arsize [0]),
+		  .v_ddr4_master_0_arburst  (),    // Unused; we drive 2'b01 (INCR) into sh_ddr
+		  .v_ddr4_master_0_arlock   (),    // Unused
+		  .v_ddr4_master_0_arcache  (),    // Unused
+		  .v_ddr4_master_0_arprot   (),    // Unused
+		  .v_ddr4_master_0_arqos    (),    // Unused
+		  .v_ddr4_master_0_arregion (),    // Unused
+		  .v_ddr4_master_0_arready  (v_ddr4_axi4_arready [0]),
 
-		  .ddr4_A_master_rvalid   (v_ddr4_axi4_rvalid [0]),
-		  .ddr4_A_master_rid      (v_ddr4_axi4_rid [0]),
-		  .ddr4_A_master_rdata    (v_ddr4_axi4_rdata [0]),
-		  .ddr4_A_master_rresp    (v_ddr4_axi4_rresp [0]),
-		  .ddr4_A_master_rlast    (v_ddr4_axi4_rlast [0]),
-		  .ddr4_A_master_rready   (v_ddr4_axi4_rready [0]),
+		  .v_ddr4_master_0_rvalid   (v_ddr4_axi4_rvalid [0]),
+		  .v_ddr4_master_0_rid      (v_ddr4_axi4_rid [0]),
+		  .v_ddr4_master_0_rdata    (v_ddr4_axi4_rdata [0]),
+		  .v_ddr4_master_0_rresp    (v_ddr4_axi4_rresp [0]),
+		  .v_ddr4_master_0_rlast    (v_ddr4_axi4_rlast [0]),
+		  .v_ddr4_master_0_rready   (v_ddr4_axi4_rready [0]),
 
 		  // ----------------
 		  // DDR B
-		  .ddr4_B_master_awvalid  (v_ddr4_axi4_awvalid [1]),
-		  .ddr4_B_master_awid     (v_ddr4_axi4_awid [1]),
-		  .ddr4_B_master_awaddr   (v_ddr4_axi4_awaddr [1]),
-		  .ddr4_B_master_awlen    (v_ddr4_axi4_awlen [1]),
-		  .ddr4_B_master_awsize   (v_ddr4_axi4_awsize [1]),
-		  .ddr4_B_master_awburst  (),    // Unused; we drive 2'b01 (INCR) into sh_ddr
-		  .ddr4_B_master_awlock   (),    // Unused
-		  .ddr4_B_master_awcache  (),    // Unused
-		  .ddr4_B_master_awprot   (),    // Unused
-		  .ddr4_B_master_awqos    (),    // Unused
-		  .ddr4_B_master_awregion (),    // Unused
-		  .ddr4_B_master_awready  (v_ddr4_axi4_awready [1]),
+		  .v_ddr4_master_1_awvalid  (v_ddr4_axi4_awvalid [1]),
+		  .v_ddr4_master_1_awid     (v_ddr4_axi4_awid [1]),
+		  .v_ddr4_master_1_awaddr   (v_ddr4_axi4_awaddr [1]),
+		  .v_ddr4_master_1_awlen    (v_ddr4_axi4_awlen [1]),
+		  .v_ddr4_master_1_awsize   (v_ddr4_axi4_awsize [1]),
+		  .v_ddr4_master_1_awburst  (),    // Unused; we drive 2'b01 (INCR) into sh_ddr
+		  .v_ddr4_master_1_awlock   (),    // Unused
+		  .v_ddr4_master_1_awcache  (),    // Unused
+		  .v_ddr4_master_1_awprot   (),    // Unused
+		  .v_ddr4_master_1_awqos    (),    // Unused
+		  .v_ddr4_master_1_awregion (),    // Unused
+		  .v_ddr4_master_1_awready  (v_ddr4_axi4_awready [1]),
 
-		  .ddr4_B_master_wvalid   (v_ddr4_axi4_wvalid [1]),
-		  .ddr4_B_master_wdata    (v_ddr4_axi4_wdata [1]),
-		  .ddr4_B_master_wstrb    (v_ddr4_axi4_wstrb [1]),
-		  .ddr4_B_master_wlast    (v_ddr4_axi4_wlast [1]),
-		  .ddr4_B_master_wready   (v_ddr4_axi4_wready [1]),
+		  .v_ddr4_master_1_wvalid   (v_ddr4_axi4_wvalid [1]),
+		  .v_ddr4_master_1_wdata    (v_ddr4_axi4_wdata [1]),
+		  .v_ddr4_master_1_wstrb    (v_ddr4_axi4_wstrb [1]),
+		  .v_ddr4_master_1_wlast    (v_ddr4_axi4_wlast [1]),
+		  .v_ddr4_master_1_wready   (v_ddr4_axi4_wready [1]),
 
-		  .ddr4_B_master_bvalid   (v_ddr4_axi4_bvalid [1]),
-		  .ddr4_B_master_bid      (v_ddr4_axi4_bid [1]),
-		  .ddr4_B_master_bresp    (v_ddr4_axi4_bresp [1]),
-		  .ddr4_B_master_bready   (v_ddr4_axi4_bready [1]),
+		  .v_ddr4_master_1_bvalid   (v_ddr4_axi4_bvalid [1]),
+		  .v_ddr4_master_1_bid      (v_ddr4_axi4_bid [1]),
+		  .v_ddr4_master_1_bresp    (v_ddr4_axi4_bresp [1]),
+		  .v_ddr4_master_1_bready   (v_ddr4_axi4_bready [1]),
 
-		  .ddr4_B_master_arvalid  (v_ddr4_axi4_arvalid [1]),
-		  .ddr4_B_master_arid     (v_ddr4_axi4_arid [1]),
-		  .ddr4_B_master_araddr   (v_ddr4_axi4_araddr [1]),
-		  .ddr4_B_master_arlen    (v_ddr4_axi4_arlen [1]),
-		  .ddr4_B_master_arsize   (v_ddr4_axi4_arsize [1]),
-		  .ddr4_B_master_arburst  (),    // unused; we drive 2'b01 (INCR) into sh_ddr
-		  .ddr4_B_master_arlock   (),    // Unused
-		  .ddr4_B_master_arcache  (),    // Unused
-		  .ddr4_B_master_arprot   (),    // Unused
-		  .ddr4_B_master_arqos    (),    // Unused
-		  .ddr4_B_master_arregion (),    // Unused
-		  .ddr4_B_master_arready  (v_ddr4_axi4_arready [1]),
+		  .v_ddr4_master_1_arvalid  (v_ddr4_axi4_arvalid [1]),
+		  .v_ddr4_master_1_arid     (v_ddr4_axi4_arid [1]),
+		  .v_ddr4_master_1_araddr   (v_ddr4_axi4_araddr [1]),
+		  .v_ddr4_master_1_arlen    (v_ddr4_axi4_arlen [1]),
+		  .v_ddr4_master_1_arsize   (v_ddr4_axi4_arsize [1]),
+		  .v_ddr4_master_1_arburst  (),    // unused; we drive 2'b01 (INCR) into sh_ddr
+		  .v_ddr4_master_1_arlock   (),    // Unused
+		  .v_ddr4_master_1_arcache  (),    // Unused
+		  .v_ddr4_master_1_arprot   (),    // Unused
+		  .v_ddr4_master_1_arqos    (),    // Unused
+		  .v_ddr4_master_1_arregion (),    // Unused
+		  .v_ddr4_master_1_arready  (v_ddr4_axi4_arready [1]),
 
-		  .ddr4_B_master_rvalid   (v_ddr4_axi4_rvalid [1]),
-		  .ddr4_B_master_rid      (v_ddr4_axi4_rid [1]),
-		  .ddr4_B_master_rdata    (v_ddr4_axi4_rdata [1]),
-		  .ddr4_B_master_rresp    (v_ddr4_axi4_rresp [1]),
-		  .ddr4_B_master_rlast    (v_ddr4_axi4_rlast [1]),
-		  .ddr4_B_master_rready   (v_ddr4_axi4_rready [1]),
+		  .v_ddr4_master_1_rvalid   (v_ddr4_axi4_rvalid [1]),
+		  .v_ddr4_master_1_rid      (v_ddr4_axi4_rid [1]),
+		  .v_ddr4_master_1_rdata    (v_ddr4_axi4_rdata [1]),
+		  .v_ddr4_master_1_rresp    (v_ddr4_axi4_rresp [1]),
+		  .v_ddr4_master_1_rlast    (v_ddr4_axi4_rlast [1]),
+		  .v_ddr4_master_1_rready   (v_ddr4_axi4_rready [1]),
 
 		  // ----------------
 		  // DDR C
-		  .ddr4_C_master_awvalid  (cl_sh_ddr_awvalid),
-		  .ddr4_C_master_awid     (cl_sh_ddr_awid),
-		  .ddr4_C_master_awaddr   (cl_sh_ddr_awaddr),
-		  .ddr4_C_master_awlen    (cl_sh_ddr_awlen),
-		  .ddr4_C_master_awsize   (cl_sh_ddr_awsize),
-		  .ddr4_C_master_awburst  (),    // Unused; we drive 2'b01 (INCR) into cl_sh_ddr_awburst
-		  .ddr4_C_master_awlock   (),    // Unused
-		  .ddr4_C_master_awcache  (),    // Unused
-		  .ddr4_C_master_awprot   (),    // Unused
-		  .ddr4_C_master_awqos    (),    // Unused
-		  .ddr4_C_master_awregion (),    // Unused
-		  .ddr4_C_master_awready  (sh_cl_ddr_awready),
+		  .v_ddr4_master_2_awvalid  (cl_sh_ddr_awvalid),
+		  .v_ddr4_master_2_awid     (cl_sh_ddr_awid),
+		  .v_ddr4_master_2_awaddr   (cl_sh_ddr_awaddr),
+		  .v_ddr4_master_2_awlen    (cl_sh_ddr_awlen),
+		  .v_ddr4_master_2_awsize   (cl_sh_ddr_awsize),
+		  .v_ddr4_master_2_awburst  (),    // Unused; we drive 2'b01 (INCR) into cl_sh_ddr_awburst
+		  .v_ddr4_master_2_awlock   (),    // Unused
+		  .v_ddr4_master_2_awcache  (),    // Unused
+		  .v_ddr4_master_2_awprot   (),    // Unused
+		  .v_ddr4_master_2_awqos    (),    // Unused
+		  .v_ddr4_master_2_awregion (),    // Unused
+		  .v_ddr4_master_2_awready  (sh_cl_ddr_awready),
 
-		  .ddr4_C_master_wvalid   (cl_sh_ddr_wvalid),
-		  .ddr4_C_master_wdata    (cl_sh_ddr_wdata),
-		  .ddr4_C_master_wstrb    (cl_sh_ddr_wstrb),
-		  .ddr4_C_master_wlast    (cl_sh_ddr_wlast),
-		  .ddr4_C_master_wready   (sh_cl_ddr_wready),
+		  .v_ddr4_master_2_wvalid   (cl_sh_ddr_wvalid),
+		  .v_ddr4_master_2_wdata    (cl_sh_ddr_wdata),
+		  .v_ddr4_master_2_wstrb    (cl_sh_ddr_wstrb),
+		  .v_ddr4_master_2_wlast    (cl_sh_ddr_wlast),
+		  .v_ddr4_master_2_wready   (sh_cl_ddr_wready),
 
-		  .ddr4_C_master_bvalid   (sh_cl_ddr_bvalid),
-		  .ddr4_C_master_bid      (sh_cl_ddr_bid),
-		  .ddr4_C_master_bresp    (sh_cl_ddr_bresp),
-		  .ddr4_C_master_bready   (cl_sh_ddr_bready),
+		  .v_ddr4_master_2_bvalid   (sh_cl_ddr_bvalid),
+		  .v_ddr4_master_2_bid      (sh_cl_ddr_bid),
+		  .v_ddr4_master_2_bresp    (sh_cl_ddr_bresp),
+		  .v_ddr4_master_2_bready   (cl_sh_ddr_bready),
 
-		  .ddr4_C_master_arvalid  (cl_sh_ddr_arvalid),
-		  .ddr4_C_master_arid     (cl_sh_ddr_arid),
-		  .ddr4_C_master_araddr   (cl_sh_ddr_araddr),
-		  .ddr4_C_master_arlen    (cl_sh_ddr_arlen),
-		  .ddr4_C_master_arsize   (cl_sh_ddr_arsize),
-		  .ddr4_C_master_arburst  (),    // Unused; we drive 2'b01 (INCR) into cl_sh_ddr_arburst
-		  .ddr4_C_master_arlock   (),    // Unused
-		  .ddr4_C_master_arcache  (),    // Unused
-		  .ddr4_C_master_arprot   (),    // Unused
-		  .ddr4_C_master_arqos    (),    // Unused
-		  .ddr4_C_master_arregion (),    // Unused
-		  .ddr4_C_master_arready  (sh_cl_ddr_arready),
+		  .v_ddr4_master_2_arvalid  (cl_sh_ddr_arvalid),
+		  .v_ddr4_master_2_arid     (cl_sh_ddr_arid),
+		  .v_ddr4_master_2_araddr   (cl_sh_ddr_araddr),
+		  .v_ddr4_master_2_arlen    (cl_sh_ddr_arlen),
+		  .v_ddr4_master_2_arsize   (cl_sh_ddr_arsize),
+		  .v_ddr4_master_2_arburst  (),    // Unused; we drive 2'b01 (INCR) into cl_sh_ddr_arburst
+		  .v_ddr4_master_2_arlock   (),    // Unused
+		  .v_ddr4_master_2_arcache  (),    // Unused
+		  .v_ddr4_master_2_arprot   (),    // Unused
+		  .v_ddr4_master_2_arqos    (),    // Unused
+		  .v_ddr4_master_2_arregion (),    // Unused
+		  .v_ddr4_master_2_arready  (sh_cl_ddr_arready),
 
-		  .ddr4_C_master_rvalid   (sh_cl_ddr_rvalid),
-		  .ddr4_C_master_rid      (sh_cl_ddr_rid),
-		  .ddr4_C_master_rdata    (sh_cl_ddr_rdata),
-		  .ddr4_C_master_rresp    (sh_cl_ddr_rresp),
-		  .ddr4_C_master_rlast    (sh_cl_ddr_rlast),
-		  .ddr4_C_master_rready   (cl_sh_ddr_rready),
+		  .v_ddr4_master_2_rvalid   (sh_cl_ddr_rvalid),
+		  .v_ddr4_master_2_rid      (sh_cl_ddr_rid),
+		  .v_ddr4_master_2_rdata    (sh_cl_ddr_rdata),
+		  .v_ddr4_master_2_rresp    (sh_cl_ddr_rresp),
+		  .v_ddr4_master_2_rlast    (sh_cl_ddr_rlast),
+		  .v_ddr4_master_2_rready   (cl_sh_ddr_rready),
 
 		  // ----------------
 		  // DDR D
-		  .ddr4_D_master_awvalid  (v_ddr4_axi4_awvalid [2]),
-		  .ddr4_D_master_awid     (v_ddr4_axi4_awid [2]),
-		  .ddr4_D_master_awaddr   (v_ddr4_axi4_awaddr [2]),
-		  .ddr4_D_master_awlen    (v_ddr4_axi4_awlen [2]),
-		  .ddr4_D_master_awsize   (v_ddr4_axi4_awsize [2]),
-		  .ddr4_D_master_awburst  (),    // Unused; we drive 2'b01 (INCR) into sh_ddr
-		  .ddr4_D_master_awlock   (),    // Unused
-		  .ddr4_D_master_awcache  (),    // Unused
-		  .ddr4_D_master_awprot   (),    // Unused
-		  .ddr4_D_master_awqos    (),    // Unused
-		  .ddr4_D_master_awregion (),    // Unused
-		  .ddr4_D_master_awready  (v_ddr4_axi4_awready [2]),
+		  .v_ddr4_master_3_awvalid  (v_ddr4_axi4_awvalid [2]),
+		  .v_ddr4_master_3_awid     (v_ddr4_axi4_awid [2]),
+		  .v_ddr4_master_3_awaddr   (v_ddr4_axi4_awaddr [2]),
+		  .v_ddr4_master_3_awlen    (v_ddr4_axi4_awlen [2]),
+		  .v_ddr4_master_3_awsize   (v_ddr4_axi4_awsize [2]),
+		  .v_ddr4_master_3_awburst  (),    // Unused; we drive 2'b01 (INCR) into sh_ddr
+		  .v_ddr4_master_3_awlock   (),    // Unused
+		  .v_ddr4_master_3_awcache  (),    // Unused
+		  .v_ddr4_master_3_awprot   (),    // Unused
+		  .v_ddr4_master_3_awqos    (),    // Unused
+		  .v_ddr4_master_3_awregion (),    // Unused
+		  .v_ddr4_master_3_awready  (v_ddr4_axi4_awready [2]),
 
-		  .ddr4_D_master_wvalid   (v_ddr4_axi4_wvalid [2]),
-		  .ddr4_D_master_wdata    (v_ddr4_axi4_wdata [2]),
-		  .ddr4_D_master_wstrb    (v_ddr4_axi4_wstrb [2]),
-		  .ddr4_D_master_wlast    (v_ddr4_axi4_wlast [2]),
-		  .ddr4_D_master_wready   (v_ddr4_axi4_wready [2]),
+		  .v_ddr4_master_3_wvalid   (v_ddr4_axi4_wvalid [2]),
+		  .v_ddr4_master_3_wdata    (v_ddr4_axi4_wdata [2]),
+		  .v_ddr4_master_3_wstrb    (v_ddr4_axi4_wstrb [2]),
+		  .v_ddr4_master_3_wlast    (v_ddr4_axi4_wlast [2]),
+		  .v_ddr4_master_3_wready   (v_ddr4_axi4_wready [2]),
 
-		  .ddr4_D_master_bvalid   (v_ddr4_axi4_bvalid [2]),
-		  .ddr4_D_master_bid      (v_ddr4_axi4_bid [2]),
-		  .ddr4_D_master_bresp    (v_ddr4_axi4_bresp [2]),
-		  .ddr4_D_master_bready   (v_ddr4_axi4_bready [2]),
+		  .v_ddr4_master_3_bvalid   (v_ddr4_axi4_bvalid [2]),
+		  .v_ddr4_master_3_bid      (v_ddr4_axi4_bid [2]),
+		  .v_ddr4_master_3_bresp    (v_ddr4_axi4_bresp [2]),
+		  .v_ddr4_master_3_bready   (v_ddr4_axi4_bready [2]),
 
-		  .ddr4_D_master_arvalid  (v_ddr4_axi4_arvalid [2]),
-		  .ddr4_D_master_arid     (v_ddr4_axi4_arid [2]),
-		  .ddr4_D_master_araddr   (v_ddr4_axi4_araddr [2]),
-		  .ddr4_D_master_arlen    (v_ddr4_axi4_arlen [2]),
-		  .ddr4_D_master_arsize   (v_ddr4_axi4_arsize [2]),
-		  .ddr4_D_master_arburst  (),    // Unused; we drive 2'b01 (INCR) into sh_ddr
-		  .ddr4_D_master_arlock   (),    // Unused
-		  .ddr4_D_master_arcache  (),    // Unused
-		  .ddr4_D_master_arprot   (),    // Unused
-		  .ddr4_D_master_arqos    (),    // Unused
-		  .ddr4_D_master_arregion (),    // Unused
-		  .ddr4_D_master_arready  (v_ddr4_axi4_arready [2]),
+		  .v_ddr4_master_3_arvalid  (v_ddr4_axi4_arvalid [2]),
+		  .v_ddr4_master_3_arid     (v_ddr4_axi4_arid [2]),
+		  .v_ddr4_master_3_araddr   (v_ddr4_axi4_araddr [2]),
+		  .v_ddr4_master_3_arlen    (v_ddr4_axi4_arlen [2]),
+		  .v_ddr4_master_3_arsize   (v_ddr4_axi4_arsize [2]),
+		  .v_ddr4_master_3_arburst  (),    // Unused; we drive 2'b01 (INCR) into sh_ddr
+		  .v_ddr4_master_3_arlock   (),    // Unused
+		  .v_ddr4_master_3_arcache  (),    // Unused
+		  .v_ddr4_master_3_arprot   (),    // Unused
+		  .v_ddr4_master_3_arqos    (),    // Unused
+		  .v_ddr4_master_3_arregion (),    // Unused
+		  .v_ddr4_master_3_arready  (v_ddr4_axi4_arready [2]),
 
-		  .ddr4_D_master_rvalid   (v_ddr4_axi4_rvalid [2]),
-		  .ddr4_D_master_rid      (v_ddr4_axi4_rid [2]),
-		  .ddr4_D_master_rdata    (v_ddr4_axi4_rdata [2]),
-		  .ddr4_D_master_rresp    (v_ddr4_axi4_rresp [2]),
-		  .ddr4_D_master_rlast    (v_ddr4_axi4_rlast [2]),
-		  .ddr4_D_master_rready   (v_ddr4_axi4_rready [2]),
+		  .v_ddr4_master_3_rvalid   (v_ddr4_axi4_rvalid [2]),
+		  .v_ddr4_master_3_rid      (v_ddr4_axi4_rid [2]),
+		  .v_ddr4_master_3_rdata    (v_ddr4_axi4_rdata [2]),
+		  .v_ddr4_master_3_rresp    (v_ddr4_axi4_rresp [2]),
+		  .v_ddr4_master_3_rlast    (v_ddr4_axi4_rlast [2]),
+		  .v_ddr4_master_3_rready   (v_ddr4_axi4_rready [2]),
 
-		  .m_ddr4_ready_ddr4_A_B_C_D_ready (ddr4_A_B_C_D_ready),
+		  .m_ddr4_ready_ddr4_ready (ddr4_A_B_C_D_ready),
 
-		  .m_glcount0_glcount0 (sh_cl_glcount0),
-		  .m_glcount1_glcount1 (sh_cl_glcount1),
-		  .m_vled              (cl_sh_status_vled),
-		  .m_vdip_vdip         (sh_cl_status_vdip)
+		  .m_v_glcount_v_glcount ({sh_cl_glcount1, sh_cl_glcount0}),
+		  .m_vled                (cl_sh_status_vled),
+		  .m_vdip_vdip           (sh_cl_status_vdip)
 		  );
 
 // ****************************************************************
