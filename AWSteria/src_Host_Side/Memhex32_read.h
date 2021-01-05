@@ -1,12 +1,13 @@
+// Copyright (c) Bluespec, Inc.  All Rights Reserved
+// Author: Rishiyur S.Nikhil
+
+// Please see Memhex32_read.c for documentation
+
 #pragma once
 
-// ================================================================
-
-extern
-int memhex32_read (char      *filename,
-		   uint8_t   *buf,
-		   uint64_t   buf_size,
-		   uint64_t  *p_addr_base,
-		   uint64_t  *p_addr_lim);
+// Nothing in this file, so far
 
 // ================================================================
+// Extern functions
+
+#include "Memhex32_read_protos.h"

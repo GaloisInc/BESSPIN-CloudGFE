@@ -32,16 +32,36 @@ help:
 all: compile  simulator
 
 # ================================================================
+# Near-mem (Cache and optional MMU for VM)
+# WT = Write-through; WB = write-back
+# L1 = L1 only; L1_L2 = L1 + coherent L2
+
+CACHES ?= WT_L1
+
+ifeq ($(CACHES),WB_L1)
+  NEAR_MEM_VM_DIR=Near_Mem_VM_WB_L1
+else ifeq ($(CACHES),WB_L1_L2)
+  NEAR_MEM_VM_DIR=Near_Mem_VM_WB_L1_L2
+else
+  NEAR_MEM_VM_DIR=Near_Mem_VM_WT_L1
+endif
+
+# ================================================================
+# CORE
+
+# SRC_CORE ?= $(REPO)/src_Core/Core
+SRC_CORE ?= $(REPO)/src_Core/Core_v2
+
+# ================================================================
 # Search path for bsc for .bsv files
 
-CORE_DIRS = $(REPO)/src_Core/CPU:$(REPO)/src_Core/ISA:$(REPO)/src_Core/RegFiles:$(REPO)/src_Core/Core:$(REPO)/src_Core/Near_Mem_VM:$(REPO)/src_Core/PLIC:$(REPO)/src_Core/Near_Mem_IO:$(REPO)/src_Core/Debug_Module:$(REPO)/src_Core/BSV_Additional_Libs
+CORE_DIRS = $(REPO)/src_Core/CPU:$(REPO)/src_Core/ISA:$(REPO)/src_Core/RegFiles:$(SRC_CORE):$(REPO)/src_Core/Cache_Config:$(REPO)/src_Core/$(NEAR_MEM_VM_DIR):$(REPO)/src_Core/PLIC:$(REPO)/src_Core/Near_Mem_IO:$(REPO)/src_Core/Debug_Module:$(REPO)/src_Core/BSV_Additional_Libs
 
-CHERI_DIRS         = $(REPO)/libs/cheri-cap-lib:$(REPO)/libs/TagController/TagController:$(REPO)/libs/TagController/TagController/CacheCore:$(REPO)/libs/BlueStuff/BlueUtils
-AXI4_DIRS          = $(REPO)/libs/BlueStuff/AXI:$(REPO)/libs/BlueStuff/BlueBasics:$(REPO)/libs/BlueStuff
+AXI4_DIRS          = $(REPO)/src_Testbench/Fabrics/AXI4:$(REPO)/src_Testbench/Fabrics/AXI4_Lite
 TESTBENCH_DIRS     = $(REPO)/src_Testbench/Top:$(REPO)/src_Testbench/SoC
 AWS_TESTBENCH_DIRS = $(AWSTERIA)/src_Testbench_AWS/Top:$(AWSTERIA)/src_Testbench_AWS/SoC
 
-BSC_PATH = $(CUSTOM_DIRS):$(CORE_DIRS):$(CHERI_DIRS):$(AXI4_DIRS):$(AWS_TESTBENCH_DIRS):$(TESTBENCH_DIRS):+
+BSC_PATH = $(CUSTOM_DIRS):$(CORE_DIRS):$(AXI4_DIRS):$(AWS_TESTBENCH_DIRS):$(TESTBENCH_DIRS):+
 
 # ----------------
 # Top-level file and module
@@ -91,16 +111,6 @@ isa_tests:
 	@echo "Finished running regressions; saved logs in Logs/"
 
 # ================================================================
-# Generate Bluespec CHERI tag controller source file
-
-TagTableStructure.bsv: $(REPO)/libs/TagController/tagsparams.py
-	@echo "INFO: Re-generating CHERI tag controller parameters"
-	$^ -v -c $(CAPSIZE) -s $(TAGS_STRUCT:"%"=%) -a $(TAGS_ALIGN) --covered-start-addr 0x80000000 --covered-mem-size 0x3fffc000 --top-addr 0xbffff000 -b $@
-
-	@echo "INFO: Re-generated CHERI tag controller parameters"
-compile: TagTableStructure.bsv
-
-# ================================================================
 
 .PHONY: clean
 clean:
@@ -108,6 +118,6 @@ clean:
 
 .PHONY: full_clean
 full_clean: clean
-	rm -r -f  $(SIM_EXE_FILE)*  *.log  *.vcd  *.hex  Logs/
+	rm -r -f  $(SIM_EXE_FILE)*  *.log  *.vcd  *.hex  Logs/  worker_*  Verilator_RTL
 
 # ================================================================

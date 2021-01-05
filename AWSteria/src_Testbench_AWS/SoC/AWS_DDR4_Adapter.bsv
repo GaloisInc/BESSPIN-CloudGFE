@@ -88,8 +88,7 @@ import ByteLane   :: *;
 // ================================================================
 // Project imports
 
-import AXI4 :: *;
-import SourceSink :: *;
+import AXI4_Types       :: *;
 import AWS_BSV_Top_Defs :: *;    // For AXI4 bus widths (id, addr, data, user)
 
 // ================================================================
@@ -130,11 +129,10 @@ Integer aws_DDR4_adapter_status_error      = 2;
 
 interface AWS_DDR4_Adapter_IFC;
    // AXI4 interface facing client app/fabric
-   interface AXI4_Slave_Synth#( Wd_Id_15, Wd_Addr_Fabric, Wd_Data_Fabric
-                              , Wd_AWUser_0, Wd_WUser_0, Wd_BUser_0, Wd_ARUser_0, Wd_RUser_0) slave;
+   interface AXI4_Slave_IFC #(Wd_Id_4, Wd_Addr_Fabric, Wd_Data_Fabric, Wd_User_0) slave;
 
    // AXI4 interface facing DDR
-   interface AXI4_15_64_512_0_0_0_0_0_Master_Synth to_ddr4;
+   interface AXI4_16_64_512_0_Master_IFC  to_ddr4;
 
    // ----------------
    // Control methods; should be called at beginning (STATE_WAITING)
@@ -215,20 +213,20 @@ function Bool fv_addrs_in_same_Data_512 (Addr_64 addr1, Addr_64 addr2);
 endfunction
 
 function Bool fv_addr_is_aligned (Addr_64  addr, AXI4_Size  size);
-   Bool is_aligned = (   (size == 1)
-		      || ((size == 2)    && (addr [0]   == 1'h0))
-		      || ((size == 4)    && (addr [1:0] == 2'h0))
-		      || ((size == 8)    && (addr [2:0] == 3'h0))
-		      || ((size == 16)   && (addr [3:0] == 4'h0))
-		      || ((size == 32)   && (addr [4:0] == 5'h0))
-		      || ((size == 64)   && (addr [5:0] == 6'h0))
-		      || ((size == 128)  && (addr [6:0] == 7'h0)));
+   Bool is_aligned = (   (size == axsize_1)
+		      || ((size == axsize_2)    && (addr [0]   == 1'h0))
+		      || ((size == axsize_4)    && (addr [1:0] == 2'h0))
+		      || ((size == axsize_8)    && (addr [2:0] == 3'h0))
+		      || ((size == axsize_16)   && (addr [3:0] == 4'h0))
+		      || ((size == axsize_32)   && (addr [4:0] == 5'h0))
+		      || ((size == axsize_64)   && (addr [5:0] == 6'h0))
+		      || ((size == axsize_128)  && (addr [6:0] == 7'h0)));
    return is_aligned;
 endfunction
 
 function Bool fv_addr_is_ok (Addr_64 addr_base, Addr_64 addr_lim,
 			     Addr_64 addr, AXI4_Size  axi4_size);
-   Bool ok1 = (axi4_size <= 8);                              // Up to 8-byte requests only
+   Bool ok1 = (axi4_size <= axsize_8);                       // Up to 8-byte requests only
    Bool ok2 = fv_addr_is_aligned (addr, axi4_size);          // Aligned?
    Bool ok3 = ((addr_base <= addr) && (addr < addr_lim));    // Addr in range?
    return (ok1 && ok2 && ok3);
@@ -256,7 +254,7 @@ deriving (Bits, Eq, FShow);
 typedef struct {Req_Op                     req_op;
 
 		// AW and AR channel info
-		Bit #(Wd_Id_15)            id;
+		Bit #(Wd_Id_4)             id;
 		Addr_64                    addr;
 		AXI4_Len                   len;
 		AXI4_Size                  size;
@@ -266,7 +264,7 @@ typedef struct {Req_Op                     req_op;
 		AXI4_Prot                  prot;
 		AXI4_QoS                   qos;
 		AXI4_Region                region;
-		Bit #(Wd_ARUser_0)         user;
+		Bit #(Wd_User_0)           user;
 
 		// Write data info
 		Bit #(TDiv #(Wd_Data_Fabric, 8))  wstrb;
@@ -290,17 +288,19 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
    Reg #(Addr_64) rg_addr_lim  <- mkRegU;
 
    // Front-side interface to clients
-   AXI4_Slave_Xactor#( Wd_Id_15, Wd_Addr_Fabric, Wd_Data_Fabric
-                     , Wd_AWUser_0, Wd_WUser_0, Wd_BUser_0, Wd_ARUser_0, Wd_RUser_0)
-     slave_xactor <- mkAXI4_Slave_Xactor;
+   AXI4_Slave_Xactor_IFC #(Wd_Id_4,
+			   Wd_Addr_Fabric,
+			   Wd_Data_Fabric,
+			   Wd_User_0) slave_xactor <- mkAXI4_Slave_Xactor;
 
    // Requests merged from client (WrA, WrD) and RdA channels
    FIFOF #(Req) f_reqs <- mkPipelineFIFOF;
 
-   // Back-side interface to memory
-   AXI4_Master_Xactor#( Wd_Id_15, Wd_Addr_64, Wd_Data_512
-                      , Wd_AWUser_0, Wd_WUser_0, Wd_BUser_0, Wd_ARUser_0, Wd_RUser_0)
-     master_xactor <- mkAXI4_Master_Xactor;
+   // Back-side interface to memory 
+   AXI4_Master_Xactor_IFC #(Wd_Id_16,
+			    Wd_Addr_64,
+			    Wd_Data_512,
+			    Wd_User_0) master_xactor <- mkAXI4_Master_Xactor;
 
    // We maintain a cache of 1 Data_512
    Reg #(Bool)      rg_cached_clean  <- mkRegU;
@@ -324,37 +324,37 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
    function Action fa_mem_req (Bool write, Bit #(64) addr, Bit #(512) write_data);
       action
 	 if (write) begin
-	    let wra = AXI4_AWFlit {awid:     0,
-				   awaddr:   addr,
-				   awlen:    0,                    // 1-beat burst
-				   awsize:   64,                   // full 64 bytes
-				   awburst:  INCR,
-				   awlock:   NORMAL,
-				   awcache:  awcache_dev_nonbuf,
-				   awprot:   axi4Prot(DATA, SECURE, PRIV),
-				   awqos:    0,
-				   awregion: 0,
-				   awuser:   0};
-	    let wrd = AXI4_WFlit {wdata: write_data,
-				  wstrb: '1,
-				  wlast: True,
-				  wuser: 0};
-	    master_xactor.slave.aw.put(wra);
-	    master_xactor.slave.w.put(wrd);
+	    let wra = AXI4_Wr_Addr {awid:     0,
+				    awaddr:   addr,
+				    awlen:    0,                    // 1-beat burst
+				    awsize:   axsize_64,            // full 64 bytes
+				    awburst:  axburst_incr,
+				    awlock:   axlock_normal,
+				    awcache:  awcache_dev_nonbuf,
+				    awprot:   {axprot_2_data, axprot_1_secure, axprot_0_priv},
+				    awqos:    0,
+				    awregion: 0,
+				    awuser:   0};
+	    let wrd = AXI4_Wr_Data {wdata: write_data,
+				    wstrb: '1,
+				    wlast: True,
+				    wuser: 0};
+	    master_xactor.i_wr_addr.enq (wra);
+	    master_xactor.i_wr_data.enq (wrd);
 	 end
 	 else begin
-	    let rda = AXI4_ARFlit {arid:     0,
-				   araddr:   addr,
-				   arlen:    0,                    // 1-beat burst
-				   arsize:   64,            // full 64 bytes
-				   arburst:  INCR,
-				   arlock:   NORMAL,
-				   arcache:  arcache_dev_nonbuf,
-				   arprot:   axi4Prot(DATA, SECURE, PRIV),
-				   arqos:    0,
-				   arregion: 0,
-				   aruser:   0};
-	    master_xactor.slave.ar.put(rda);
+	    let rda = AXI4_Rd_Addr {arid:     0,
+				    araddr:   addr,
+				    arlen:    0,                    // 1-beat burst
+				    arsize:   axsize_64,            // full 64 bytes
+				    arburst:  axburst_incr,
+				    arlock:   axlock_normal,
+				    arcache:  arcache_dev_nonbuf,
+				    arprot:   {axprot_2_data, axprot_1_secure, axprot_0_priv},
+				    arqos:    0,
+				    arregion: 0,
+				    aruser:   0};
+	    master_xactor.i_rd_addr.enq (rda);
 	 end
       endaction
    endfunction
@@ -363,8 +363,8 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
    // Start the module
 
    rule rl_start (rg_state == STATE_START);
-      slave_xactor.clear;
-      master_xactor.clear;
+      slave_xactor.reset;
+      master_xactor.reset;
       rg_status <= fromInteger (aws_DDR4_adapter_status_ok);
       rg_state  <= STATE_WAITING;
 
@@ -376,7 +376,7 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
    // Merge requests into a single queue, prioritizing reads over writes
 
    rule rl_merge_rd_req (rg_state == STATE_READY);
-      let rda <- get(slave_xactor.master.ar);
+      let rda <- pop_o (slave_xactor.o_rd_addr);
       let req = Req {req_op:     REQ_OP_RD,
 		     id:         rda.arid,
 		     addr:       rda.araddr,
@@ -401,8 +401,8 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
 
    (* descending_urgency = "rl_merge_rd_req, rl_merge_wr_req" *)
    rule rl_merge_wr_req (rg_state == STATE_READY);
-      let wra <- get(slave_xactor.master.aw);
-      let wrd <- get(slave_xactor.master.w);
+      let wra <- pop_o (slave_xactor.o_wr_addr);
+      let wrd <- pop_o (slave_xactor.o_wr_data);
       let req = Req {req_op:     REQ_OP_WR,
 		     id:         wra.awid,
 		     addr:       wra.awaddr,
@@ -484,8 +484,8 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
    endrule
 
    rule rl_refill (rg_state == STATE_REFILLING);
-      let rdd <- get(master_xactor.slave.r);
-      if (rdd.rresp != OKAY)
+      let rdd <- pop_o (master_xactor.o_rd_data);
+      if (rdd.rresp != axi4_resp_okay)
 	 rg_status <= fromInteger (aws_DDR4_adapter_status_error);
       else begin
 	 rg_cached_data_512  <= rdd.rdata;
@@ -527,14 +527,14 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
       // Select the Fabric_Data of interest
       Fabric_Data rdata = v_fabric_data [n];
 
-      let rdr = AXI4_RFlit {rid:   f_reqs.first.id,
-			    rdata: rdata,
-			    rresp: ((rg_status == fromInteger (aws_DDR4_adapter_status_ok))
-			            ? OKAY
-			            : SLVERR),
-			    rlast: True,
-			    ruser: f_reqs.first.user};
-      slave_xactor.master.r.put(rdr);
+      let rdr = AXI4_Rd_Data {rid:   f_reqs.first.id,
+			      rdata: rdata,
+			      rresp: ((rg_status == fromInteger (aws_DDR4_adapter_status_ok))
+				      ? axi4_resp_okay
+				      : axi4_resp_slverr),
+			      rlast: True,
+			      ruser: f_reqs.first.user};
+      slave_xactor.i_rd_data.enq (rdr);
       f_reqs.deq;
 
       if (verbosity > 1) begin
@@ -582,10 +582,10 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
       end
 
       // Respond to client
-      let wrr = AXI4_BFlit {bid:   f_reqs.first.id,
-			    bresp: OKAY,
-			    buser: f_reqs.first.user};
-      slave_xactor.master.b.put(wrr);
+      let wrr = AXI4_Wr_Resp {bid:   f_reqs.first.id,
+			      bresp: axi4_resp_okay,
+			      buser: f_reqs.first.user};
+      slave_xactor.i_wr_resp.enq (wrr);
 
       // Done with this request
       f_reqs.deq;
@@ -617,8 +617,8 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
    // Drain write-responses from mem, recording error if any.
 
    rule rl_drain_mem_wr_resps;
-      let wrr <- get(master_xactor.slave.b);
-      if (wrr.bresp != OKAY) begin
+      let wrr <- pop_o (master_xactor.o_wr_resp);
+      if (wrr.bresp != axi4_resp_okay) begin
 	 rg_status <= fromInteger (aws_DDR4_adapter_status_error);
 	 $finish (1);
       end
@@ -632,12 +632,12 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
 						    f_reqs.first.addr, f_reqs.first.size))
 			       && (f_reqs.first.req_op == REQ_OP_RD));
       Fabric_Data rdata = zeroExtend (f_reqs.first.addr);
-      let rdr = AXI4_RFlit {rid:   f_reqs.first.id,
-			    rdata: rdata,                 // for debugging only
-			    rresp: SLVERR,
-			    rlast: True,
-			    ruser: f_reqs.first.user};
-      slave_xactor.master.r.put(rdr);
+      let rdr = AXI4_Rd_Data {rid:   f_reqs.first.id,
+			      rdata: rdata,                 // for debugging only
+			      rresp: axi4_resp_slverr,
+			      rlast: True,
+			      ruser: f_reqs.first.user};
+      slave_xactor.i_rd_data.enq (rdr);
       f_reqs.deq;
 
       $write ("%0d: ERROR: AWS_DDR4_Adapter:", cur_cycle);
@@ -654,10 +654,10 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
 			       && (! fv_addr_is_ok (rg_addr_base, rg_addr_lim,
 						    f_reqs.first.addr, f_reqs.first.size))
 			       && (f_reqs.first.req_op == REQ_OP_WR));
-      let wrr = AXI4_BFlit {bid:   f_reqs.first.id,
-			    bresp: SLVERR,
-			    buser: f_reqs.first.user};
-      slave_xactor.master.b.put(wrr);
+      let wrr = AXI4_Wr_Resp {bid:   f_reqs.first.id,
+			      bresp: axi4_resp_slverr,
+			      buser: f_reqs.first.user};
+      slave_xactor.i_wr_resp.enq (wrr);
       f_reqs.deq;
 
       $write ("%0d: ERROR: AWS_DDR4_Adapter:", cur_cycle);
@@ -674,10 +674,10 @@ module mkAWS_DDR4_Adapter (AWS_DDR4_Adapter_IFC);
    // INTERFACE
 
    // AXI4 interface facing client
-   interface  slave = slave_xactor.slaveSynth;
+   interface  slave = slave_xactor.axi_side;
 
    // AXI4 interface facing DDR
-   interface  to_ddr4 = master_xactor.masterSynth;
+   interface  to_ddr4 = master_xactor.axi_side;
 
    // ----------------
    // Control methods; should be called at beginning (STATE_WAITING)

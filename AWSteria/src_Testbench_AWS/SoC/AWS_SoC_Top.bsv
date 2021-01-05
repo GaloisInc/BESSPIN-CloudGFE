@@ -21,27 +21,31 @@ import FIFOF         :: *;
 import GetPut        :: *;
 import ClientServer  :: *;
 import Connectable   :: *;
-import Vector        :: *;
 
 // ----------------
 // BSV additional libs
 
 import Cur_Cycle   :: *;
 import GetPut_Aux  :: *;
-import Routable    :: *;
-import AXI4        :: *;
 
 // ================================================================
 // Project imports
 
-import Fabric_Defs :: *;
-import SoC_Map     :: *;
+// Main fabric
+import AXI4_Types     :: *;
+import AXI4_Fabric    :: *;
+import AXI4_Deburster :: *;
+
+import Fabric_Defs    :: *;
+import SoC_Map        :: *;
+import AWS_SoC_Fabric :: *;
 
 // SoC components (CPU, mem, and IPs)
 
-import Core_IFC :: *;
-import Core     :: *;
-import PLIC     :: *;    // For interface to PLIC interrupt sources, in Core_IFC
+import Core_IFC     :: *;
+import Core         :: *;
+import PLIC         :: *;    // For interface to PLIC interrupt sources, in Core_IFC
+import Near_Mem_IFC :: *;    // For Wd_{Id,Addr,Data,User}_Dma
 
 // IPs on the fabric (other than memory)
 import Boot_ROM        :: *;
@@ -50,17 +54,9 @@ import AWS_Host_Access :: *;
 
 
 // IPs on the fabric (memory)
+import AXI4_Types        :: *;
 import AWS_BSV_Top_Defs  :: *;    // For AXI4 bus widths (id, addr, data, user)
 import AWS_DDR4_Adapter  :: *;
-
-`ifdef INCLUDE_CAMERA_MODEL
-import Camera_Model   :: *;
-`endif
-
-`ifdef INCLUDE_ACCEL0
-import AXI4_Accel_IFC :: *;
-import AXI4_Accel     :: *;
-`endif
 
 `ifdef INCLUDE_TANDEM_VERIF
 import TV_Info :: *;
@@ -75,8 +71,14 @@ import Debug_Module     :: *;
 // The outermost interface of the SoC
 
 interface AWS_SoC_Top_IFC;
+   // Interface to 'coherent DMA' port of optional L2 cache
+   interface AXI4_Slave_IFC #(Wd_Id_Dma, Wd_Addr_Dma, Wd_Data_Dma, Wd_User_Dma)  dma_server;
+
    // AXI4 interface facing DDR
-   interface AXI4_15_64_512_0_0_0_0_0_Master_Synth to_ddr4;
+   interface AXI4_16_64_512_0_Master_IFC  to_ddr4;
+
+   // AXI4 64-bit interface facing uncached DDR
+   interface AXI4_16_64_64_0_Master_IFC  to_ddr4_0_uncached;
 
    // UART0 to external console
    interface Get #(Bit #(8)) get_to_console;
@@ -103,16 +105,30 @@ interface AWS_SoC_Top_IFC;
    interface Get #(Info_CPU_to_Verifier) tv_verifier_info_get;
 `endif
 
-   // ----------------
-   // Misc. control
+   // ----------------------------------------------------------------
+   // Misc. control and status
 
+   // ----------------
+   // Debugging: set core's verbosity
    method Action ma_set_verbosity (Bit #(4)   verbosity1, Bit #(64)  logdelay1);
 
+   // ----------------
+   // For ISA tests: watch memory writes to <tohost> addr
+`ifdef WATCH_TOHOST
    method Action ma_set_watch_tohost (Bool  watch_tohost, Bit #(64)  tohost_addr);
+   method Bit #(64) mv_tohost_value;
+`endif
 
+   // ----------------
+   // Inform core that DDR4 has been initialized by AWS and is ready to accept requests
    method Action ma_ddr4_ready;
 
-   // Misc. status; 0 = running, no error
+   // ----------------
+   // Environment says ddr4 has been loaded (program memory, ...)
+   method Action ma_ddr4_is_loaded;
+
+   // ----------------
+   // Misc. status; 0 = running, no error.
    (* always_ready *)
    method Bit #(8) mv_status;
 endinterface
@@ -135,7 +151,8 @@ deriving (Bits, Eq, FShow);
 module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    Integer verbosity = 0;    // Normally 0; non-zero for debugging
 
-   Reg #(SoC_State) rg_state <- mkReg (SOC_START);
+   Reg #(SoC_State) rg_state          <- mkReg (SOC_START);
+   Reg #(Bool)      rg_ddr4_is_loaded <- mkReg (False);
 
    // SoC address map specifying base and limit for memories, IPs, etc.
    SoC_Map_IFC soc_map <- mkSoC_Map;
@@ -143,95 +160,49 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    // Core: CPU + Near_Mem_IO (CLINT) + PLIC + Debug module (optional) + TV (optional)
    Core_IFC #(N_External_Interrupt_Sources)  core <- mkCore;
 
+   // AXI4 Deburster in front of coherent DMA port
+   AXI4_Deburster_IFC #(Wd_Id_Dma,
+			Wd_Addr_Dma,
+			Wd_Data_Dma,
+			Wd_User_Dma)  dma_server_axi4_deburster <- mkAXI4_Deburster_B;
+   mkConnection (dma_server_axi4_deburster.to_slave, core.dma_server);
+
+   // SoC Fabric
+   AWS_SoC_Fabric_IFC  fabric <- mkAWS_SoC_Fabric;
+
    // SoC Boot ROM
    Boot_ROM_IFC  boot_rom <- mkBoot_ROM;
    // AXI4 Deburster in front of Boot_ROM
-   AXI4_Shim#(Wd_SId, Wd_Addr, Wd_Data,
-              Wd_AWUser_0, Wd_WUser_0, Wd_BUser_0, Wd_ARUser_0, Wd_RUser_0)
-              boot_rom_axi4_deburster <- mkBurstToNoBurst;
-
-   // SoC Memory
-   AWS_DDR4_Adapter_IFC  mem0_controller <- mkAWS_DDR4_Adapter;
-   // AXI4 Deburster in front of SoC Memory
-   AXI4_Shim#(Wd_SId, Wd_Addr, Wd_Data,
-              Wd_AWUser_0, Wd_WUser_0, Wd_BUser_0, Wd_ARUser_0, Wd_RUser_0)
-              mem0_controller_axi4_deburster <- mkBurstToNoBurst;
+   AXI4_Deburster_IFC #(Wd_Id,
+			Wd_Addr,
+			Wd_Data,
+			Wd_User)  boot_rom_axi4_deburster <- mkAXI4_Deburster_A;
 
    // SoC IPs
    UART_IFC   uart0  <- mkUART;
 
    AWS_Host_Access_IFC  aws_host_access <- mkAWS_Host_Access;
 
-`ifdef INCLUDE_ACCEL0
-   // Accel0 master to fabric
-   AXI4_Accel_IFC  accel0 <- mkAXI4_Accel;
-`endif
+   // ----------------
+   // SoC fabric initiator connections
+   // Note: see 'SoC_Map' for 'initator_num' definitions
+
+   // CPU IMem initiator (MMIO) to fabric
+   mkConnection (core.cpu_imem_master,  fabric.v_from_masters [core_initiator_num]);
 
    // ----------------
-   // SoC fabric master connections
-   // Note: see 'SoC_Map' for 'master_num' definitions
-
-   Vector#(Num_Masters, AXI4_Master_Synth #(TAdd#(Wd_MId,1), Wd_Addr, Wd_Data,
-                                            0, 0, 0, 0, 0))
-                                            master_vector = newVector;
-
-   // CPU IMem master to fabric
-   master_vector[imem_master_num] = core.cpu_imem_master;
-
-   // CPU DMem master to fabric
-   master_vector[dmem_master_num] = core.cpu_dmem_master;
-
-   // ----------------
-   // SoC fabric slave connections
-   // Note: see 'SoC_Map' for 'slave_num' definitions
-
-   Vector#(Num_Slaves, AXI4_Slave_Synth #(Wd_SId, Wd_Addr, Wd_Data,
-                                          0, 0, 0, 0, 0))
-                                          slave_vector = newVector;
-   Vector#(Num_Slaves, Range#(Wd_Addr))   route_vector = newVector;
+   // SoC fabric target connections
+   // Note: see 'SoC_Map' for 'target_num' definitions
 
    // Fabric to Boot ROM
-   let br <- fromAXI4_Slave_Synth(boot_rom.slave);
-   mkConnection(boot_rom_axi4_deburster.master, br);
-   let ug_boot_rom_slave <- toUnguarded_AXI4_Slave(boot_rom_axi4_deburster.slave);
-   slave_vector[boot_rom_slave_num] = toAXI4_Slave_Synth(zeroSlaveUserFields(ug_boot_rom_slave));
-   route_vector[boot_rom_slave_num] = soc_map.m_boot_rom_addr_range;
-
-   // Fabric to Mem Controller
-   let mem <- fromAXI4_Slave_Synth(mem0_controller.slave);
-   AXI4_Master#( Wd_Id_15, Wd_Addr, Wd_Data
-               , Wd_AWUser_0, Wd_WUser_0, Wd_BUser_0, Wd_ARUser_0, Wd_RUser_0)
-     tmp = extendIDFields(mem0_controller_axi4_deburster.master, 0);
-   mkConnection(tmp, mem);
-   let ug_mem0_slave <- toUnguarded_AXI4_Slave(mem0_controller_axi4_deburster.slave);
-   slave_vector[mem0_controller_slave_num] = toAXI4_Slave_Synth(zeroSlaveUserFields(ug_mem0_slave));
-   route_vector[mem0_controller_slave_num] = soc_map.m_mem0_controller_addr_range;
+   mkConnection (fabric.v_to_slaves [boot_rom_target_num], boot_rom_axi4_deburster.from_master);
+   mkConnection (boot_rom_axi4_deburster.to_slave,         boot_rom.slave);
 
    // Fabric to UART0
-   let uart0_slave <- fromAXI4_Slave_Synth(uart0.slave);
-   slave_vector[uart16550_0_slave_num] = toAXI4_Slave_Synth(zeroSlaveUserFields(uart0_slave));
-   route_vector[uart16550_0_slave_num] = soc_map.m_uart16550_0_addr_range;
+   mkConnection (fabric.v_to_slaves [uart16550_0_target_num],  uart0.slave);
 
    // Fabric to AWS Host Access
-   let aws_host_access_slave <- fromAXI4_Slave_Synth(aws_host_access.slave);
-   slave_vector[host_access_slave_num] = toAXI4_Slave_Synth(zeroSlaveUserFields(aws_host_access_slave));
-   route_vector[host_access_slave_num] = soc_map.m_host_access_addr_range;
-
-`ifdef INCLUDE_ACCEL0
-   // Fabric to accel0
-   mkConnection (fabric.v_to_slaves [accel0_slave_num], accel0.slave);
-`endif
-
-`ifdef HTIF_MEMORY
-   AXI4_Slave_IFC#(Wd_Id, Wd_Addr, Wd_Data, WdUser_0) htif <- mkAxi4LRegFile(bytes_per_htif);
-
-   slave_vector[htif_slave_num] = htif;
-   route_vector[htif_slave_num] = soc_map.m_htif_addr_range;
-`endif
-
-   // SoC Fabric
-   let bus <- mkAXI4Bus_Synth (routeFromMappingTable(route_vector),
-                               master_vector, slave_vector);
+   mkConnection (fabric.v_to_slaves [host_access_target_num], aws_host_access.slave);
 
    // ----------------
    // Connect interrupt sources for CPU external interrupt request inputs.
@@ -248,12 +219,6 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
       // AWS Host-to-HW interrupt
       core.core_external_interrupt_sources [irq_num_host_to_hw].m_interrupt_req (rg_aws_host_to_hw_interrupt);
       last_irq_num = irq_num_host_to_hw;
-
-`ifdef INCLUDE_ACCEL0
-      Bool intr_accel0 = accel0.interrupt_req;
-      core.core_external_interrupt_sources [irq_num_accel0].m_interrupt_req (intr_accel0);
-      last_irq_num = irq_num_accel0;
-`endif
 
       // Tie off remaining interrupt request lines (2..N)
       for (Integer j = last_irq_num + 1; j < valueOf (N_External_Interrupt_Sources); j = j + 1)
@@ -279,8 +244,7 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
       action
 	 core.cpu_reset_server.request.put (running);
 	 uart0.server_reset.request.put (?);
-         boot_rom_axi4_deburster.clear;
-         mem0_controller_axi4_deburster.clear;
+	 fabric.reset;
       endaction
    endfunction
 
@@ -290,32 +254,22 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
 	 let uart0_rsp           <- uart0.server_reset.response.get;
 
 	 // Initialize address maps of slave IPs
-	 boot_rom.set_addr_map (rangeBase(soc_map.m_boot_rom_addr_range),
-				rangeTop(soc_map.m_boot_rom_addr_range));
+	 boot_rom.set_addr_map (soc_map.m_boot_rom_addr_base,
+				soc_map.m_boot_rom_addr_lim);
 
-	 mem0_controller.ma_set_addr_map (rangeBase(soc_map.m_mem0_controller_addr_range),
-			                  rangeTop(soc_map.m_mem0_controller_addr_range));
-
-	 uart0.set_addr_map (rangeBase(soc_map.m_uart16550_0_addr_range),
-                             rangeTop(soc_map.m_uart16550_0_addr_range));
-
-`ifdef INCLUDE_ACCEL0
-	 accel0.init (fabric_default_id,
-		      soc_map.m_accel0_addr_base,
-		      soc_map.m_accel0_addr_lim);
-`endif
+	 uart0.set_addr_map (soc_map.m_uart16550_0_addr_base, soc_map.m_uart16550_0_addr_lim);
 
 	 if (verbosity != 0) begin
 	    $display ("  SoC address map:");
 	    $display ("  Boot ROM:        0x%0h .. 0x%0h",
-		      rangeBase(soc_map.m_boot_rom_addr_range),
-		      rangeTop(soc_map.m_boot_rom_addr_range));
-	    $display ("  Mem0 Controller: 0x%0h .. 0x%0h",
-		      rangeBase(soc_map.m_mem0_controller_addr_range),
-		      rangeTop(soc_map.m_mem0_controller_addr_range));
+		      soc_map.m_boot_rom_addr_base,
+		      soc_map.m_boot_rom_addr_lim);
 	    $display ("  UART0:           0x%0h .. 0x%0h",
-		      rangeBase(soc_map.m_uart16550_0_addr_range),
-		      rangeTop(soc_map.m_uart16550_0_addr_range));
+		      soc_map.m_uart16550_0_addr_base,
+		      soc_map.m_uart16550_0_addr_lim);
+	    $display ("  Host Access      0x%0h .. 0x%0h",
+		      soc_map.m_host_access_addr_base,
+		      soc_map.m_host_access_addr_lim);
 	 end
       endaction
    endfunction
@@ -323,19 +277,19 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    // ----------------
    // Initial reset; CPU comes up running.
 
-   rule rl_reset_start_initial (rg_state == SOC_START);
+   rule rl_reset_start_initial (rg_ddr4_is_loaded && (rg_state == SOC_START));
       Bool running = True;
       fa_reset_start_actions (running);
       rg_state <= SOC_RESETTING;
 
-      $display ("%0d: AWS_SoC_Top.rl_reset_start_initial ...", cur_cycle);
+      $display ("%0d: %m.rl_reset_start_initial ...", cur_cycle);
    endrule
 
    rule rl_reset_complete_initial (rg_state == SOC_RESETTING);
       fa_reset_complete_actions;
       rg_state <= SOC_IDLE;
 
-      $display ("%0d: AWS_SoC_Top.rl_reset_complete_initial", cur_cycle);
+      $display ("%0d: %m.rl_reset_complete_initial", cur_cycle);
    endrule
 
    // ----------------
@@ -352,7 +306,7 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
       fa_reset_start_actions (running);
       rg_state <= SOC_RESETTING_NDM;
 
-      $display ("%0d: AWS_SoC_Top.rl_ndm_reset_start (non-debug-module) running = ",
+      $display ("%0d: %m.rl_ndm_reset_start (non-debug-module) running = ",
 		cur_cycle, fshow (running));
    endrule
 
@@ -362,7 +316,7 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
 
       core.ndm_reset_client.response.put (rg_running);
 
-      $display ("%0d: AWS_SoC_Top.rl_ndm_reset_complete (non-debug-module) running = ",
+      $display ("%0d: %m.rl_ndm_reset_complete (non-debug-module) running = ",
 		cur_cycle, fshow (rg_running));
    endrule
 `endif
@@ -383,7 +337,7 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
       f_external_control_reqs.deq;
       core.dm_dmi.read_addr (truncate (req.arg1));
       if (verbosity != 0) begin
-	 $display ("%0d: AWS_SoC_Top.rl_handle_external_req_read_request", cur_cycle);
+	 $display ("%0d: %m.rl_handle_external_req_read_request", cur_cycle);
          $display ("    ", fshow (req));
       end
    endrule
@@ -393,7 +347,7 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
       let rsp = Control_Rsp {status: external_control_rsp_status_ok, result: signExtend (x)};
       f_external_control_rsps.enq (rsp);
       if (verbosity != 0) begin
-	 $display ("%0d: AWS_SoC_Top.rl_handle_external_req_read_response", cur_cycle);
+	 $display ("%0d: %m.rl_handle_external_req_read_response", cur_cycle);
          $display ("    ", fshow (rsp));
       end
    endrule
@@ -404,7 +358,7 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
       // let rsp = Control_Rsp {status: external_control_rsp_status_ok, result: 0};
       // f_external_control_rsps.enq (rsp);
       if (verbosity != 0) begin
-         $display ("%0d: AWS_SoC_Top.rl_handle_external_req_write", cur_cycle);
+         $display ("%0d: %m.rl_handle_external_req_write", cur_cycle);
          $display ("    ", fshow (req));
       end
    endrule
@@ -415,7 +369,7 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
       let rsp = Control_Rsp {status: external_control_rsp_status_err, result: 0};
       f_external_control_rsps.enq (rsp);
 
-      $display ("%0d: AWS_SoC_Top.rl_handle_external_req_err: unknown req.op", cur_cycle);
+      $display ("%0d: %m.rl_handle_external_req_err: unknown req.op", cur_cycle);
       $display ("    ", fshow (req));
    endrule
 `endif
@@ -423,8 +377,14 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    // ================================================================
    // INTERFACE
 
+   // Interface to 'coherent DMA' port of optional L2 cache
+   interface AXI4_Slave_IFC dma_server = dma_server_axi4_deburster.from_master;
+
    // External real memory
-   interface to_ddr4 = mem0_controller.to_ddr4;
+   interface to_ddr4 = core.core_mem_master;
+
+   // External uncached memory
+   interface to_ddr4_0_uncached = fabric.v_to_slaves [ddr4_0_uncached_target_num];
 
    // UART to external console
    interface get_to_console   = uart0.get_to_console;
@@ -453,27 +413,67 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    interface tv_verifier_info_get = core.tv_verifier_info_get;
 `endif
 
-   // ----------------
-   // Misc. control
+   // ----------------------------------------------------------------
+   // Misc. control and status
 
+   // ----------------
+   // Debugging: set core's verbosity
    method Action ma_set_verbosity (Bit #(4)   verbosity1, Bit #(64)  logdelay1);
       core.set_verbosity (verbosity1, logdelay1);
    endmethod
 
+   // ----------------
+   // For ISA tests: watch memory writes to <tohost> addr
+`ifdef WATCH_TOHOST
    method Action ma_set_watch_tohost (Bool  watch_tohost, Bit #(64)  tohost_addr);
-      mem0_controller.ma_set_watch_tohost (watch_tohost, tohost_addr);
+      core.set_watch_tohost (watch_tohost, tohost_addr);
    endmethod
 
+   method Bit #(64) mv_tohost_value = core.mv_tohost_value;
+`endif
+
+   // ----------------
+   // Inform core that DDR4 has been initialized by AWS and is ready to accept requests
    method Action ma_ddr4_ready;
-      mem0_controller.ma_ddr4_ready;
+      core.ma_ddr4_ready;
    endmethod
 
    // ----------------
-   // Misc. status; 0 = running, no error
+   // Environment says ddr4 has been loaded (program memory, ...)
+   method Action ma_ddr4_is_loaded;
+      rg_ddr4_is_loaded <= True;
+   endmethod
+
+   // ----------------
+   // Misc. status; 0 = running, no error.
    method Bit #(8) mv_status;
-      return mem0_controller.mv_status;
+      return core.mv_status;
    endmethod
 endmodule: mkAWS_SoC_Top
+
+// ****************************************************************
+// Specialization of parameterized AXI4 Deburster for this SoC.
+
+(* synthesize *)
+module mkAXI4_Deburster_A (AXI4_Deburster_IFC #(Wd_Id,
+						Wd_Addr,
+						Wd_Data,
+						Wd_User));
+   let m <- mkAXI4_Deburster;
+   return m;
+endmodule
+
+// ****************************************************************
+// Specialization of parameterized AXI4 Deburster for this SoC.
+
+(* synthesize *)
+module mkAXI4_Deburster_B (AXI4_Deburster_IFC #(Wd_Id_Dma,
+						Wd_Addr_Dma,
+						Wd_Data_Dma,
+						Wd_User_Dma));
+   let m <- mkAXI4_Deburster;
+   return m;
+endmodule
 
 // ================================================================
 

@@ -43,7 +43,28 @@ function Action c_end_timing (Bit #(64)  cycle_num);
 // ****************************************************************
 // ****************************************************************
 
-// Functions for communication with remote debug client.
+// Functions for console I/O
+
+// ================================================================
+// c_trygetchar ()
+// Returns next input character (ASCII code) from the console.
+// Returns 0 if no input is available.
+
+import "BDPI"
+function ActionValue #(Bit #(8)) c_trygetchar (Bit #(8) dummy);
+
+// ================================================================
+// c_putchar ()
+// Writes character to stdout
+
+import "BDPI"
+function ActionValue #(Bit #(32)) c_putchar (Bit #(8) ch);
+
+// ****************************************************************
+// ****************************************************************
+// ****************************************************************
+
+// Functions for communication with host side
 
 Bit #(16) default_tcp_port = 30000;
 
@@ -71,6 +92,12 @@ function Action  c_host_disconnect (Bit #(8)  dummy);
 import "BDPI"
 function ActionValue #(Vector #(79, Bit #(8)))  c_host_recv (Bit #(8)  bytevec_size);
 
+import "BDPI"
+   function ActionValue #(Bit #(8)) c_host_recv2 (Bit #(8) dummy);
+
+import "BDPI"
+   function ActionValue #(Bit #(8)) c_host_recv_get_byte_j (Bit #(32) j);
+
 // ================================================================
 // Send bytevec to remote host
 // Returns fail/ok status
@@ -83,6 +110,12 @@ function ActionValue #(Vector #(79, Bit #(8)))  c_host_recv (Bit #(8)  bytevec_s
 import "BDPI"
 function Action  c_host_send (Vector #(76, Bit #(8)) bytevec,
 			      Bit #(8) bytevec_size);
+
+import "BDPI"
+   function ActionValue #(Bit #(8)) c_host_send_put_byte_j (Bit #(32) j, Bit #(8) x);
+
+import "BDPI"
+   function Action c_host_send2 (Bit #(8) dummy);
 
 // ****************************************************************
 // ****************************************************************

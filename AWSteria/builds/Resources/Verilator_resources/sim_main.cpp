@@ -1,4 +1,4 @@
-// Copyright (c) 2018-2019 Bluespec, Inc. All Rights Reserved
+// Copyright (c) 2018-2020 Bluespec, Inc. All Rights Reserved
 
 // Top-level driver for "verilated" objects (Verilog compiled with verilator)
 
@@ -6,7 +6,7 @@
 
 #include <sys/stat.h>  // for 'mkdir'
 
-#include "VmkTop_HW_Side_edited.h"
+#include "VmkTop_HW_Side.h"
 
 // If "verilator --trace" is used, include the tracing class
 #if VM_TRACE
@@ -22,7 +22,7 @@ double sc_time_stamp () {    // Called by $time in Verilog
 int main (int argc, char **argv, char **env) {
     Verilated::commandArgs (argc, argv);    // remember args
 
-    VmkTop_HW_Side_edited* mkTop_HW_Side = new VmkTop_HW_Side_edited;    // create instance of model
+    VmkTop_HW_Side* mkTop_HW_Side = new VmkTop_HW_Side;    // create instance of model
 
 #if VM_TRACE
     // If verilator was invoked with --trace argument,

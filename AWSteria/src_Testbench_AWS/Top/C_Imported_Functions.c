@@ -93,6 +93,120 @@ void c_end_timing (uint64_t  cycle_num)
 // ****************************************************************
 // ****************************************************************
 
+// Functions for console I/O
+
+// ================================================================
+// c_trygetchar()
+// Returns next input character (ASCII code) from the console.
+// Returns 0 if no input is available.
+
+uint8_t c_trygetchar (uint8_t  dummy)
+{
+    uint8_t  ch;
+    ssize_t  n;
+    struct pollfd  x_pollfd;
+    const int fd_stdin = 0;
+
+    // ----------------
+    // Poll for input
+    x_pollfd.fd      = fd_stdin;
+    x_pollfd.events  = POLLRDNORM;
+    x_pollfd.revents = 0;
+    poll (& x_pollfd, 1, 1);
+
+    // printf ("INFO: c_trygetchar: Polling for input\n");
+    if ((x_pollfd.revents & POLLRDNORM) == 0) {
+	return 0;
+    }
+
+    // ----------------
+    // Input is available
+
+    n = read (fd_stdin, & ch, 1);
+    if (n == 1) {
+	return ch;
+    }
+    else {
+	if (n == 0)
+	    printf ("c_trygetchar: end of file\n");
+	return 0xFF;
+    }
+}
+
+// ================================================================
+// A small 'main' to test c_trygetchar()
+
+#ifdef TEST_TRYGETCHAR
+
+char message[] = "Hello World!\n";
+
+int main (int argc, char *argv [])
+{
+    uint8_t ch;
+    int j;
+
+    for (j = 0; j < strlen (message); j++)
+	c_putchar (message[j]);
+
+    printf ("Polling for input\n");
+
+    j = 0;
+    while (1) {
+	ch = c_trygetchar ();
+	if (ch == 0xFF) break;
+	if (ch != 0)
+	    printf ("Received character %0d 0x%0x '%c'\n", ch, ch, ch);
+	else {
+	    printf ("\r%0d ", j);
+	    fflush (stdout);
+	    j++;
+	    sleep (1);
+	}
+    }
+    return 0;
+}
+
+#endif
+
+// ================================================================
+// c_putchar()
+// Writes character to stdout
+
+uint32_t c_putchar (uint8_t ch)
+{
+    int      status;
+    uint32_t success = 0;
+
+    if ((ch == 0) || (ch > 0x7F)) {
+	// Discard non-printables
+	success = 1;
+    }
+    else {
+	if ((ch == '\n') || (' ' <= ch)) {
+	    status = fprintf (stdout, "%c", ch);
+	    if (status > 0)
+		success = 1;
+	}
+	else {
+	    status = fprintf (stdout, "[\\%0d]", ch);
+	    if (status > 0)
+		success = 1;
+	}
+
+	if (success == 1) {
+	    status = fflush (stdout);
+	    if (status != 0)
+		success = 0;
+	}
+    }
+
+    return success;
+}
+
+// ****************************************************************
+// ****************************************************************
+// ****************************************************************
+
 // Functions for communication with host-side
 
 // ================================================================
@@ -274,6 +388,138 @@ void c_host_recv (uint8_t *bytevec, uint8_t bytevec_size)
 	    n_recd += n;
 	}
     }
+}
+
+// ================================================================
+// Receive a packet from host-side.
+// The stream of bytes is, logically, a sequence of packets.
+// The packets may be of different size, up to a certain maximum
+// (because there is a fixed repertoire of fixed-sized packets)
+// For each 'packet' byte [0] indicate the 'packet' size
+// An actual packet has at least 2 bytes (size, type).
+// An actual packet must be smaller than 'size_bytes'.
+// We return with [0] = 0 if no data is availble
+
+#define C_HOST_RECV_BUF_SIZE 1024
+
+static uint8_t c_host_recv_buf [C_HOST_RECV_BUF_SIZE];
+
+uint8_t c_host_recv2 (uint8_t dummy)
+{
+    // ----------------
+    // First, poll to check if any data is available
+    int fd = connected_sockfd;
+
+    struct pollfd  x_pollfd;
+    x_pollfd.fd      = fd;
+    x_pollfd.events  = POLLRDNORM;
+    x_pollfd.revents = 0;
+
+    int n = poll (& x_pollfd, 1, 0);
+
+    if (n < 0) {
+	fprintf (stdout, "ERROR: c_host_recv (): poll () failed\n");
+	exit (1);
+    }
+
+    if ((x_pollfd.revents & POLLRDNORM) == 0) {
+	// No byte available; return '0'
+	return 0;    // No packet available
+    }
+
+    // ----------------
+    // Data is available; read the first byte, which specifies # of bytes in the 'packet'
+
+    int  data_size = 1;
+    int  n_recd    = 0;
+    while (n_recd < data_size) {
+	int n = read (fd, & c_host_recv_buf [n_recd], (data_size - n_recd));
+	if ((n < 0) && (errno != EAGAIN) && (errno != EWOULDBLOCK)) {
+	    fprintf (stdout, "ERROR: c_host_recv (): read () failed on byte 0\n");
+	    exit (1);
+	}
+	else if (n > 0) {
+	    n_recd += n;
+	}
+    }
+
+    // ----------------
+    // Read the remaining bytes
+
+    data_size = c_host_recv_buf [0];
+    assert (data_size >= 2);
+    assert (data_size <= C_HOST_RECV_BUF_SIZE);
+    n_recd    = 1;
+    while (n_recd < data_size) {
+	int n = read (fd, & c_host_recv_buf [n_recd], (data_size - n_recd));
+	if ((n < 0) && (errno != EAGAIN) && (errno != EWOULDBLOCK)) {
+	    fprintf (stdout, "ERROR: c_host_recv (): read () failed after %0d bytes\n", n_recd);
+	    exit (1);
+	}
+	else if (n > 0) {
+	    n_recd += n;
+	}
+    }
+
+    for (int j = n_recd; j < C_HOST_RECV_BUF_SIZE; j++)
+	c_host_recv_buf [j] = 0;
+
+    return 1;    // Packet received
+}
+
+// ================================================================
+
+uint8_t c_host_recv_get_byte_j (uint32_t j)
+{
+    if (j >= C_HOST_RECV_BUF_SIZE) {
+	fprintf (stdout, "ERROR: c_host_recv_get_byte_j (%0d): index out of bounds\n", j);
+	fprintf (stdout, "    Buf size is %0d\n", C_HOST_RECV_BUF_SIZE);
+	exit (1);
+    }
+    return c_host_recv_buf [j];
+}
+
+// ================================================================
+// This function is called from BSV to load a bytevec to send
+
+#define C_HOST_SEND_BUF_SIZE 1024
+
+static uint8_t c_host_send_buf [C_HOST_SEND_BUF_SIZE];
+
+uint8_t c_host_send_put_byte_j (uint32_t j, uint8_t x)
+{
+    if (j >= C_HOST_SEND_BUF_SIZE) {
+	fprintf (stdout, "ERROR: c_host_send_put_byte_j (%0d): index out of bounds\n", j);
+	fprintf (stdout, "    Buf size is %0d\n", C_HOST_SEND_BUF_SIZE);
+	exit (1);
+    }
+    c_host_send_buf [j] = x;
+    return 1;
+}
+
+// ================================================================
+// Send the buffered bytevec to remote host
+// bytevec [0] specifies # of bytes to send
+
+void c_host_send2 (uint8_t dummy)
+{
+    int  fd = connected_sockfd;
+    int  data_size;
+    int  n_sent;
+
+    data_size = c_host_send_buf [0];
+    n_sent    = 0;
+    while (n_sent < data_size) {
+	int n = write (fd, & (c_host_send_buf [n_sent]), (data_size - n_sent));
+	if ((n < 0) && (errno != EAGAIN) && (errno != EWOULDBLOCK)) {
+	    fprintf (stdout, "ERROR: c_host_send (): write () failed after %0d bytes\n", n_sent);
+	    exit (1);
+	}
+	else if (n > 0) {
+	    n_sent += n;
+	}
+    }
+    fsync (fd);
 }
 
 // ================================================================

@@ -48,18 +48,15 @@ int memhex32_read (char      *filename,
 	// Parse an address or data
 	if (linebuf [0] == '@') {
 	    n = sscanf (linebuf + 1, "%lx", & x);
+	    // Note: in a memhex32 file, @x is an index of a 4-byte word, not a byte addr
 	    if (n == 1) {
-		if (x < addr) {
+		if ((x << 2) < addr) {
 		    fprintf (stdout, "WARNING on line %0d\n", linenum);
 		    fprintf (stdout, "    Address 0x%0lx is < latest address 0x%0lx\n", x, addr);
 		}
-		else if ((addr & 0x3) != 0) {
-		    fprintf (stdout, "WARNING on line %0d\n", linenum);
-		    fprintf (stdout, "    Address 0x%0lx is not 32-bit aligned\n", x);
-		}
-		addr = (x & 0xFFFFFFFC);
+		addr = (x << 2);
 		if (addr < addr_base) addr_base = addr;
-		if (addr_lim < addr)  addr_lim = addr;
+		if (addr_lim < addr)  addr_lim  = addr;
 	    }
 	    else {
 		fprintf (stdout, "ERROR on line %0d: syntax\n", linenum);
@@ -77,7 +74,8 @@ int memhex32_read (char      *filename,
 		    if (addr_lim < addr) addr_lim = addr;
 		}
 		else {
-		    fprintf (stdout, "ERROR on line %0d: addr %0lx out of buffer bounds\n", linenum, addr);
+		    fprintf (stdout, "ERROR on line %0d: addr %0lx out of buffer bounds\n",
+			     linenum, addr);
 		    fprintf (stdout, "    buffer size is: %0lx\n", buf_size);
 		    goto err_return;
 		}
@@ -132,7 +130,7 @@ ok_return:
 
 uint8_t buf [BUF_SIZE];
 
-int main (int argc, char *argv [])
+  int main (int argc, char *argv [])
 {
     if (argc < 2) {
 	fprintf (stdout, "Usage:    %s  <mem-hex filename>\n", argv [0]);

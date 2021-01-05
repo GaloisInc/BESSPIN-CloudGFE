@@ -1,4 +1,4 @@
-// Copyright (c) 2013-2019 Bluespec, Inc. All Rights Reserved
+// Copyright (c) 2013-2020 Bluespec, Inc. All Rights Reserved
 
 package SoC_Map;
 
@@ -27,63 +27,72 @@ package SoC_Map;
 // ================================================================
 // Exports
 
-export  Num_Masters;
-export  imem_master_num;
-export  dmem_master_num;
-export  accel0_master_num;
-
-export  Num_Slaves;
-export  Wd_SId;
-export  boot_rom_slave_num;
-export  mem0_controller_slave_num;
-export  uart16550_0_slave_num;
-export  host_access_slave_num;
-export  accel0_slave_num;
-
 export  SoC_Map_IFC (..), mkSoC_Map;
 
 export  N_External_Interrupt_Sources;
 export  n_external_interrupt_sources;
 
-export irq_num_uart16550_0;
-export irq_num_host_to_hw;
-export irq_num_accel0;
-
 // ================================================================
 // Bluespec library imports
 
-import Routable :: *; // For Range
+// None
 
 // ================================================================
 // Project imports
 
 import Fabric_Defs :: *;    // Only for type Fabric_Addr
 
-`ifdef ISA_CHERI
-import CHERICap     :: *;
-import CHERICC_Fat  :: *;
-`endif
-
 // ================================================================
 // Interface and module for the address map
 
 interface SoC_Map_IFC;
-   (* always_ready *)   method  Range #(Wd_Addr)  m_plic_addr_range;
-   (* always_ready *)   method  Range #(Wd_Addr)  m_debug_module_addr_range;
-   (* always_ready *)   method  Range #(Wd_Addr)  m_near_mem_io_addr_range;
-   (* always_ready *)   method  Range #(Wd_Addr)  m_flash_mem_addr_range;
-   (* always_ready *)   method  Range #(Wd_Addr)  m_ethernet_0_addr_range;
-   (* always_ready *)   method  Range #(Wd_Addr)  m_dma_0_addr_range;
-   (* always_ready *)   method  Range #(Wd_Addr)  m_uart16550_0_addr_range;
-   (* always_ready *)   method  Range #(Wd_Addr)  m_gpio_0_addr_range;
-`ifdef INCLUDE_ACCEL0
-   (* always_ready *)   method  Range #(Wd_Addr)  m_accel0_addr_range;
-`endif
-   (* always_ready *)   method  Range #(Wd_Addr)  m_boot_rom_addr_range;
-   (* always_ready *)   method  Range #(Wd_Addr)  m_ddr4_0_uncached_addr_range;
-   (* always_ready *)   method  Range #(Wd_Addr)  m_ddr4_0_cached_addr_range;
-   (* always_ready *)   method  Range #(Wd_Addr)  m_host_access_addr_range;
-   (* always_ready *)   method  Range #(Wd_Addr)  m_mem0_controller_addr_range;
+   (* always_ready *)   method  Fabric_Addr  m_plic_addr_base;
+   (* always_ready *)   method  Fabric_Addr  m_plic_addr_size;
+   (* always_ready *)   method  Fabric_Addr  m_plic_addr_lim;
+
+   (* always_ready *)   method  Fabric_Addr  m_debug_module_addr_base;
+   (* always_ready *)   method  Fabric_Addr  m_debug_module_addr_size;
+   (* always_ready *)   method  Fabric_Addr  m_debug_module_addr_lim;
+
+   (* always_ready *)   method  Fabric_Addr  m_near_mem_io_addr_base;
+   (* always_ready *)   method  Fabric_Addr  m_near_mem_io_addr_size;
+   (* always_ready *)   method  Fabric_Addr  m_near_mem_io_addr_lim;
+
+   (* always_ready *)   method  Fabric_Addr  m_flash_mem_addr_base;
+   (* always_ready *)   method  Fabric_Addr  m_flash_mem_addr_size;
+   (* always_ready *)   method  Fabric_Addr  m_flash_mem_addr_lim;
+
+   (* always_ready *)   method  Fabric_Addr  m_ethernet_0_addr_base;
+   (* always_ready *)   method  Fabric_Addr  m_ethernet_0_addr_size;
+   (* always_ready *)   method  Fabric_Addr  m_ethernet_0_addr_lim;
+
+   (* always_ready *)   method  Fabric_Addr  m_dma_0_addr_base;
+   (* always_ready *)   method  Fabric_Addr  m_dma_0_addr_size;
+   (* always_ready *)   method  Fabric_Addr  m_dma_0_addr_lim;
+
+   (* always_ready *)   method  Fabric_Addr  m_uart16550_0_addr_base;
+   (* always_ready *)   method  Fabric_Addr  m_uart16550_0_addr_size;
+   (* always_ready *)   method  Fabric_Addr  m_uart16550_0_addr_lim;
+
+   (* always_ready *)   method  Fabric_Addr  m_gpio_0_addr_base;
+   (* always_ready *)   method  Fabric_Addr  m_gpio_0_addr_size;
+   (* always_ready *)   method  Fabric_Addr  m_gpio_0_addr_lim;
+
+   (* always_ready *)   method  Fabric_Addr  m_boot_rom_addr_base;
+   (* always_ready *)   method  Fabric_Addr  m_boot_rom_addr_size;
+   (* always_ready *)   method  Fabric_Addr  m_boot_rom_addr_lim;
+
+   (* always_ready *)   method  Fabric_Addr  m_ddr4_0_uncached_addr_base;
+   (* always_ready *)   method  Fabric_Addr  m_ddr4_0_uncached_addr_size;
+   (* always_ready *)   method  Fabric_Addr  m_ddr4_0_uncached_addr_lim;
+
+   (* always_ready *)   method  Fabric_Addr  m_ddr4_0_cached_addr_base;
+   (* always_ready *)   method  Fabric_Addr  m_ddr4_0_cached_addr_size;
+   (* always_ready *)   method  Fabric_Addr  m_ddr4_0_cached_addr_lim;
+
+   (* always_ready *)   method  Fabric_Addr  m_host_access_addr_base;
+   (* always_ready *)   method  Fabric_Addr  m_host_access_addr_size;
+   (* always_ready *)   method  Fabric_Addr  m_host_access_addr_lim;
 
    (* always_ready *)
    method  Bool  m_is_mem_addr (Fabric_Addr addr);
@@ -97,13 +106,6 @@ interface SoC_Map_IFC;
    (* always_ready *)   method  Bit #(64)  m_pc_reset_value;
    (* always_ready *)   method  Bit #(64)  m_mtvec_reset_value;
    (* always_ready *)   method  Bit #(64)  m_nmivec_reset_value;
-
-`ifdef ISA_CHERI
-   (* always_ready *)   method  CapReg  m_pcc_reset_value;
-   (* always_ready *)   method  CapReg  m_ddc_reset_value;
-   (* always_ready *)   method  CapReg  m_mtcc_reset_value;
-   (* always_ready *)   method  CapReg  m_mepcc_reset_value;
-`endif
 endinterface
 
 // ================================================================
@@ -114,116 +116,134 @@ module mkSoC_Map (SoC_Map_IFC);
    // ----------------------------------------------------------------
    // PLIC
 
-   let plic_addr_range = Range {
-      base: 'h_0C00_0000,
-      size: 'h_0040_0000    // 4M
-   };
+   Fabric_Addr plic_addr_base = 'h_0C00_0000;
+   Fabric_Addr plic_addr_size = 'h_0040_0000;    // 4M
+   Fabric_Addr plic_addr_lim  = plic_addr_base + plic_addr_size;
+
+   function Bool fn_is_plic_addr (Fabric_Addr addr);
+      return ((plic_addr_base <= addr) && (addr < plic_addr_lim));
+   endfunction
 
    // ----------------------------------------------------------------
    // DEBUG_MODULE
 
-   let debug_module_addr_range = Range {
-      base: 'h_1001_0000,
-      size: 'h_0001_0000    // 64K
-   };
+   Fabric_Addr debug_module_addr_base = 'h_1001_0000;
+   Fabric_Addr debug_module_addr_size = 'h_0001_0000;    // 64K
+   Fabric_Addr debug_module_addr_lim  = debug_module_addr_base + debug_module_addr_size;
+
+   function Bool fn_is_debug_module_addr (Fabric_Addr addr);
+      return ((debug_module_addr_base <= addr) && (addr < debug_module_addr_lim));
+   endfunction
 
    // ----------------------------------------------------------------
    // Near_Mem_IO (CLINT)
 
-   let near_mem_io_addr_range = Range {
-      base: 'h_1000_0000,
-      size: 'h_0001_0000    // 64K
-   };
+   Fabric_Addr near_mem_io_addr_base = 'h_1000_0000;
+   Fabric_Addr near_mem_io_addr_size = 'h_0001_0000;    // 64K
+   Fabric_Addr near_mem_io_addr_lim  = near_mem_io_addr_base + near_mem_io_addr_size;
+
+   function Bool fn_is_near_mem_io_addr (Fabric_Addr addr);
+      return ((near_mem_io_addr_base <= addr) && (addr < near_mem_io_addr_lim));
+   endfunction
 
    // ----------------------------------------------------------------
    // Flash Mem
 
-   let flash_mem_addr_range = Range {
-      base: 'h4000_0000,
-      size: 'h0800_0000     // 128M
-   };
+   Fabric_Addr flash_mem_addr_base = 'h_4000_0000;
+   Fabric_Addr flash_mem_addr_size = 'h_0800_0000;    // 128M
+   Fabric_Addr flash_mem_addr_lim  = flash_mem_addr_base + flash_mem_addr_size;
+
+   function Bool fn_is_flash_mem_addr (Fabric_Addr addr);
+      return ((flash_mem_addr_base <= addr) && (addr < flash_mem_addr_lim));
+   endfunction
 
    // ----------------------------------------------------------------
    // Ethernet 0
 
-   let ethernet_0_addr_range = Range {
-      base: 'h6210_0000,
-      size: 'h0004_0000     // 256K
-   };
+   Fabric_Addr ethernet_0_addr_base = 'h_6210_0000;
+   Fabric_Addr ethernet_0_addr_size = 'h_0004_0000;    // 256K
+   Fabric_Addr ethernet_0_addr_lim  = ethernet_0_addr_base + ethernet_0_addr_size;
+
+   function Bool fn_is_ethernet_0_addr (Fabric_Addr addr);
+      return ((ethernet_0_addr_base <= addr) && (addr < ethernet_0_addr_lim));
+   endfunction
 
    // ----------------------------------------------------------------
    // DMA 0
 
-   let dma_0_addr_range = Range {
-      base: 'h6220_0000,
-      size: 'h0001_0000     // 64K
-   };
+   Fabric_Addr dma_0_addr_base = 'h_6220_0000;
+   Fabric_Addr dma_0_addr_size = 'h_0001_0000;    // 64K
+   Fabric_Addr dma_0_addr_lim  = dma_0_addr_base + dma_0_addr_size;
+
+   function Bool fn_is_dma_0_addr (Fabric_Addr addr);
+      return ((dma_0_addr_base <= addr) && (addr < dma_0_addr_lim));
+   endfunction
 
    // ----------------------------------------------------------------
    // UART 0
 
-   let uart16550_0_addr_range = Range {
-      base: 'h6230_0000,
-      size: 'h0000_1000     // 4K
-   };
+   Fabric_Addr uart16550_0_addr_base = 'h_6230_0000;
+   Fabric_Addr uart16550_0_addr_size = 'h_0000_1000;    // 4K
+   Fabric_Addr uart16550_0_addr_lim  = uart16550_0_addr_base + uart16550_0_addr_size;
+
+   function Bool fn_is_uart16550_0_addr (Fabric_Addr addr);
+      return ((uart16550_0_addr_base <= addr) && (addr < uart16550_0_addr_lim));
+   endfunction
 
    // ----------------------------------------------------------------
    // AWS host access
 
-   let host_access_addr_range = Range {
-      base: 'h6250_0000,
-      size: 'h0000_0080     // 128
-   };
+   Fabric_Addr host_access_addr_base = 'h6250_0000;
+   Fabric_Addr host_access_addr_size = 'h0000_0080;    // 128
+   Fabric_Addr host_access_addr_lim  = host_access_addr_base + host_access_addr_size;
 
-    // ----------------------------------------------------------------
-   // ACCEL 0
-
-`ifdef INCLUDE_ACCEL0
-   let accel0_addr_range = Range {
-      base: 'h6240_0000,
-      size: 'h0000_1000     // 4K
-   };
-`endif
+   function Bool fn_is_host_access_addr (Fabric_Addr addr);
+      return ((host_access_addr_base <= addr) && (addr < host_access_addr_lim));
+   endfunction
 
    // ----------------------------------------------------------------
    // GPIO 0
 
-   let gpio_0_addr_range = Range {
-      base: 'h6FFF_0000,
-      size: 'h0001_0000     // 64K
-   };
+   Fabric_Addr gpio_0_addr_base = 'h_6FFF_0000;
+   Fabric_Addr gpio_0_addr_size = 'h_0001_0000;    // 64K
+   Fabric_Addr gpio_0_addr_lim  = gpio_0_addr_base + gpio_0_addr_size;
+
+   function Bool fn_is_gpio_0_addr (Fabric_Addr addr);
+      return ((gpio_0_addr_base <= addr) && (addr < gpio_0_addr_lim));
+   endfunction
 
    // ----------------------------------------------------------------
    // Boot ROM
 
-   let boot_rom_addr_range = Range {
-      base: 'h_7000_0000,
-      size: 'h_0000_1000    // 4K
-   };
+   Fabric_Addr boot_rom_addr_base = 'h_7000_0000;
+   Fabric_Addr boot_rom_addr_size = 'h_0000_1000;    // 4K
+   Fabric_Addr boot_rom_addr_lim  = boot_rom_addr_base + boot_rom_addr_size;
+
+   function Bool fn_is_boot_rom_addr (Fabric_Addr addr);
+      return ((boot_rom_addr_base <= addr) && (addr < boot_rom_addr_lim));
+   endfunction
 
    // ----------------------------------------------------------------
    // DDR memory 0 uncached
 
-   let ddr4_0_uncached_addr_range = Range {
-      base: 'h_8000_0000,
-      size: 'h_4000_0000    // 1G
-   };
+   Fabric_Addr ddr4_0_uncached_addr_base = 'h_8000_0000;
+   Fabric_Addr ddr4_0_uncached_addr_size = 'h_4000_0000;    // 1G
+   Fabric_Addr ddr4_0_uncached_addr_lim  = ddr4_0_uncached_addr_base + ddr4_0_uncached_addr_size;
+
+   function Bool fn_is_ddr4_0_uncached_addr (Fabric_Addr addr);
+      return ((ddr4_0_uncached_addr_base <= addr) && (addr < ddr4_0_uncached_addr_lim));
+   endfunction
 
    // ----------------------------------------------------------------
    // DDR memory 0 cached
 
-   let ddr4_0_cached_addr_range = Range {
-      base: 'h_C000_0000,
-      size: 'h_4000_0000    // 1G
-   };
+   Fabric_Addr ddr4_0_cached_addr_base = 'h_C000_0000;
+   Fabric_Addr ddr4_0_cached_addr_size = 'h_4000_0000;    // 1G
+   Fabric_Addr ddr4_0_cached_addr_lim  = ddr4_0_cached_addr_base + ddr4_0_cached_addr_size;
 
-   // ----------------------------------------------------------------
-   // Main Mem Controller 0
-
-   let mem0_controller_addr_range = Range {
-      base: rangeBase(ddr4_0_uncached_addr_range),
-      size: rangeTop(ddr4_0_cached_addr_range) - rangeBase(ddr4_0_uncached_addr_range)
-   };
+   function Bool fn_is_ddr4_0_cached_addr (Fabric_Addr addr);
+      return ((ddr4_0_cached_addr_base <= addr) && (addr < ddr4_0_cached_addr_lim));
+   endfunction
 
    // ----------------------------------------------------------------
    // Memory address predicate
@@ -231,7 +251,7 @@ module mkSoC_Map (SoC_Map_IFC);
    // (Caches needs this information to cache these addresses.)
 
    function Bool fn_is_mem_addr (Fabric_Addr addr);
-      return (   inRange (ddr4_0_cached_addr_range, addr)
+      return (   fn_is_ddr4_0_cached_addr (addr)
 	      );
    endfunction
 
@@ -241,119 +261,92 @@ module mkSoC_Map (SoC_Map_IFC);
    // (Caches needs this information to avoid cacheing these addresses.)
 
    function Bool fn_is_IO_addr (Fabric_Addr addr);
-      return (   inRange (plic_addr_range, addr)
-	      || inRange (debug_module_addr_range, addr)
-	      || inRange (near_mem_io_addr_range, addr)
-	   // || inRange (pcie_ecam_slave_bridge_addr_range, addr)
-	      || inRange (flash_mem_addr_range, addr)
-	   // || inRange (pcie_block_registers_addr_range, addr)
-	      || inRange (ethernet_0_addr_range, addr)
-	      || inRange (dma_0_addr_range, addr)
-	      || inRange (uart16550_0_addr_range, addr)
-`ifdef INCLUDE_ACCEL0
-	      || inRange(accel0_addr_range, addr)
-`endif
-	      || inRange (gpio_0_addr_range, addr)
-	      || inRange (boot_rom_addr_range, addr)
-	      || inRange (ddr4_0_uncached_addr_range, addr)
+      return (   fn_is_plic_addr (addr)
+	      || fn_is_debug_module_addr (addr)
+	      || fn_is_near_mem_io_addr (addr)
+	   // || fn_is_pcie_ecam_slave_bridge_addr (addr)
+	      || fn_is_flash_mem_addr (addr)
+	   // || fn_is_pcie_block_registers_addr (addr)
+	      || fn_is_ethernet_0_addr (addr)
+	      || fn_is_dma_0_addr (addr)
+	      || fn_is_uart16550_0_addr  (addr)
+	      || fn_is_gpio_0_addr (addr)
+	      || fn_is_boot_rom_addr (addr)
+	      || fn_is_ddr4_0_uncached_addr (addr)
 	      );
    endfunction
 
    // ----------------------------------------------------------------
    // PC, MTVEC and NMIVEC reset values
 
-   Bit #(64) pc_reset_value     = rangeBase(boot_rom_addr_range);
+   Bit #(64) pc_reset_value     = boot_rom_addr_base;
    Bit #(64) mtvec_reset_value  = 'h1000;    // TODO
    Bit #(64) nmivec_reset_value = ?;         // TODO
-
-`ifdef ISA_CHERI
-   CapPipe almightyPipe = almightyCap;
-   CapReg pcc_reset_value  = cast(setOffset(almightyPipe, pc_reset_value).value);
-   CapReg ddc_reset_value = almightyCap;
-   CapReg mtcc_reset_value = cast(setOffset(almightyPipe, mtvec_reset_value).value);
-   CapReg mepcc_reset_value = almightyCap;
-`endif
 
    // ================================================================
    // INTERFACE
 
-   method  Range #(Wd_Addr)  m_plic_addr_range = plic_addr_range;
-   method  Range #(Wd_Addr)  m_debug_module_addr_range = debug_module_addr_range;
-   method  Range #(Wd_Addr)  m_near_mem_io_addr_range = near_mem_io_addr_range;
-   method  Range #(Wd_Addr)  m_flash_mem_addr_range = flash_mem_addr_range;
-   method  Range #(Wd_Addr)  m_ethernet_0_addr_range = ethernet_0_addr_range;
-   method  Range #(Wd_Addr)  m_dma_0_addr_range = dma_0_addr_range;
-   method  Range #(Wd_Addr)  m_uart16550_0_addr_range = uart16550_0_addr_range;
-   method  Range #(Wd_Addr)  m_host_access_addr_range = host_access_addr_range;
-`ifdef INCLUDE_ACCEL0
-   method  Range #(Wd_Addr)  m_accel0_addr_range = accel0_addr_range;
-`endif
-   method  Range #(Wd_Addr)  m_gpio_0_addr_range = gpio_0_addr_range;
-   method  Range #(Wd_Addr)  m_boot_rom_addr_range = boot_rom_addr_range;
-   method  Range #(Wd_Addr)  m_ddr4_0_uncached_addr_range = ddr4_0_uncached_addr_range;
-   method  Range #(Wd_Addr)  m_ddr4_0_cached_addr_range = ddr4_0_cached_addr_range;
-   method  Range #(Wd_Addr)  m_mem0_controller_addr_range = mem0_controller_addr_range;
+   method  Fabric_Addr  m_plic_addr_base = plic_addr_base;
+   method  Fabric_Addr  m_plic_addr_size = plic_addr_size;
+   method  Fabric_Addr  m_plic_addr_lim  = plic_addr_lim;
+
+   method  Fabric_Addr  m_debug_module_addr_base = debug_module_addr_base;
+   method  Fabric_Addr  m_debug_module_addr_size = debug_module_addr_size;
+   method  Fabric_Addr  m_debug_module_addr_lim  = debug_module_addr_lim;
+
+   method  Fabric_Addr  m_near_mem_io_addr_base = near_mem_io_addr_base;
+   method  Fabric_Addr  m_near_mem_io_addr_size = near_mem_io_addr_size;
+   method  Fabric_Addr  m_near_mem_io_addr_lim  = near_mem_io_addr_lim;
+
+   method  Fabric_Addr  m_flash_mem_addr_base = flash_mem_addr_base;
+   method  Fabric_Addr  m_flash_mem_addr_size = flash_mem_addr_size;
+   method  Fabric_Addr  m_flash_mem_addr_lim  = flash_mem_addr_lim;
+
+   method  Fabric_Addr  m_ethernet_0_addr_base = ethernet_0_addr_base;
+   method  Fabric_Addr  m_ethernet_0_addr_size = ethernet_0_addr_size;
+   method  Fabric_Addr  m_ethernet_0_addr_lim  = ethernet_0_addr_lim;
+
+   method  Fabric_Addr  m_dma_0_addr_base = dma_0_addr_base;
+   method  Fabric_Addr  m_dma_0_addr_size = dma_0_addr_size;
+   method  Fabric_Addr  m_dma_0_addr_lim  = dma_0_addr_lim;
+
+   method  Fabric_Addr  m_uart16550_0_addr_base = uart16550_0_addr_base;
+   method  Fabric_Addr  m_uart16550_0_addr_size = uart16550_0_addr_size;
+   method  Fabric_Addr  m_uart16550_0_addr_lim  = uart16550_0_addr_lim;
+
+   method  Fabric_Addr  m_host_access_addr_base = host_access_addr_base;
+   method  Fabric_Addr  m_host_access_addr_size = host_access_addr_size;
+   method  Fabric_Addr  m_host_access_addr_lim  = host_access_addr_lim;
+
+   method  Fabric_Addr  m_gpio_0_addr_base = gpio_0_addr_base;
+   method  Fabric_Addr  m_gpio_0_addr_size = gpio_0_addr_size;
+   method  Fabric_Addr  m_gpio_0_addr_lim  = gpio_0_addr_lim;
+
+   method  Fabric_Addr  m_boot_rom_addr_base = boot_rom_addr_base;
+   method  Fabric_Addr  m_boot_rom_addr_size = boot_rom_addr_size;
+   method  Fabric_Addr  m_boot_rom_addr_lim  = boot_rom_addr_lim;
+
+   method  Fabric_Addr  m_ddr4_0_uncached_addr_base = ddr4_0_uncached_addr_base;
+   method  Fabric_Addr  m_ddr4_0_uncached_addr_size = ddr4_0_uncached_addr_size;
+   method  Fabric_Addr  m_ddr4_0_uncached_addr_lim  = ddr4_0_uncached_addr_lim;
+
+   method  Fabric_Addr  m_ddr4_0_cached_addr_base = ddr4_0_cached_addr_base;
+   method  Fabric_Addr  m_ddr4_0_cached_addr_size = ddr4_0_cached_addr_size;
+   method  Fabric_Addr  m_ddr4_0_cached_addr_lim  = ddr4_0_cached_addr_lim;
 
    method  Bool  m_is_mem_addr (Fabric_Addr addr) = fn_is_mem_addr (addr);
 
    method  Bool  m_is_IO_addr (Fabric_Addr addr) = fn_is_IO_addr (addr);
 
-   method  Bool  m_is_near_mem_IO_addr (Fabric_Addr addr) = inRange (near_mem_io_addr_range, addr);
+   method  Bool  m_is_near_mem_IO_addr (Fabric_Addr addr) = fn_is_near_mem_io_addr (addr);
 
    method  Bit #(64)  m_pc_reset_value     = pc_reset_value;
    method  Bit #(64)  m_mtvec_reset_value  = mtvec_reset_value;
    method  Bit #(64)  m_nmivec_reset_value = nmivec_reset_value;
-
-`ifdef ISA_CHERI
-   method  CapReg  m_pcc_reset_value   = pcc_reset_value;
-   method  CapReg  m_ddc_reset_value   = ddc_reset_value;
-   method  CapReg  m_mtcc_reset_value  = mtcc_reset_value;
-   method  CapReg  m_mepcc_reset_value = mepcc_reset_value;
-`endif
 endmodule
-
-// ================================================================
-// Count and master-numbers of masters in the fabric.
-
-Integer imem_master_num   = 0;
-Integer dmem_master_num   = 1;
-Integer accel0_master_num = 2;
-
-`ifdef INCLUDE_ACCEL0
-typedef 3 Num_Masters;
-`else
-typedef 2 Num_Masters;
-`endif
-
-// ================================================================
-// Count and slave-numbers of slaves in the fabric.
-
-`ifdef INCLUDE_ACCEL0
-typedef 5 Num_Slaves;
-`else
-typedef 4 Num_Slaves;
-`endif
-
-Integer boot_rom_slave_num        = 0;
-Integer mem0_controller_slave_num = 1;
-Integer uart16550_0_slave_num     = 2;
-Integer host_access_slave_num     = 3;
-Integer accel0_slave_num          = 4;
-
-// ================================================================
-// Width of fabric 'id' buses
-typedef TAdd#(TAdd#(Wd_MId, TLog#(Num_Masters)),1) Wd_SId;
-
-// ================================================================
-// Interrupt request numbers (== index in to vector of
-// interrupt-request lines in Core)
 
 typedef  16  N_External_Interrupt_Sources;
 Integer  n_external_interrupt_sources = valueOf (N_External_Interrupt_Sources);
-
-Integer irq_num_uart16550_0 = 0;
-Integer irq_num_host_to_hw  = 1;
-Integer irq_num_accel0      = 2;
 
 // ================================================================
 

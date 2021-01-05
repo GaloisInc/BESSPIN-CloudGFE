@@ -48,6 +48,27 @@ void c_end_timing (uint64_t  cycle_num);
 // ****************************************************************
 // ****************************************************************
 
+// Functions for console I/O
+
+// ================================================================
+// c_trygetchar()
+// Returns next input character (ASCII code) from the console.
+// Returns 0 if no input is available.
+
+extern
+uint8_t c_trygetchar (uint8_t  dummy);
+
+// ================================================================
+// c_putchar()
+// Writes character to stdout
+
+extern
+uint32_t c_putchar (uint8_t ch);
+
+// ****************************************************************
+// ****************************************************************
+// ****************************************************************
+
 // Functions for communication with host-side
 
 // ================================================================
@@ -62,7 +83,19 @@ extern
 void c_host_recv (uint8_t *bytevec, uint8_t bytevec_size);
 
 extern
+uint8_t c_host_recv2 (uint8_t dummy);
+
+extern
+uint8_t c_host_recv_get_byte_j (uint32_t j);
+
+extern
 void c_host_send (const uint8_t *bytevec, uint8_t bytevec_size);
+
+extern
+uint8_t c_host_send_put_byte_j (uint32_t j, uint8_t x);
+
+extern
+void c_host_send2 (uint8_t dummy);
 
 // ****************************************************************
 // ****************************************************************
