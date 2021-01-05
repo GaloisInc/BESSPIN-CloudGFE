@@ -59,7 +59,7 @@ CORE_DIRS = $(REPO)/src_Core/CPU:$(REPO)/src_Core/ISA:$(REPO)/src_Core/RegFiles:
 
 AXI4_DIRS      = $(REPO)/src_Testbench/Fabrics/AXI4:$(REPO)/src_Testbench/Fabrics/AXI4_Lite
 SOC_DIRS       = $(AWSTERIA)/src_SoC/$(PLATFORM):$(AWSTERIA)/src_SoC
-TESTBENCH_DIRS = $(AWSTERIA)/src_Testbench/Top
+TESTBENCH_DIRS = $(AWSTERIA)/src_Testbench/Top/$(PLATFORM):$(AWSTERIA)/src_Testbench/Top
 
 BSC_PATH = $(CUSTOM_DIRS):$(CORE_DIRS):$(AXI4_DIRS):$(SOC_DIRS):$(TESTBENCH_DIRS):+
 

@@ -1,11 +1,11 @@
 // Copyright (c) 2016-2020 Bluespec, Inc. All Rights Reserved.
 // Author: Rishiyur S. Nikhil
 
-package AWS_DDR4_Model;
+package Mem_Model;
 
 // ================================================================
-// This package is a model of the AWS DDR4s (at the AXI4 interface)
-// for use in simulation.
+// This package is a parameterisable model of a DDR4 controller (at
+// the AXI4 interface) for use in simulation.
 // WARNING: This is a simplified model: does not support AXI4 bursts.
 
 // ================================================================
@@ -13,7 +13,6 @@ package AWS_DDR4_Model;
 
 import Vector          :: *;
 import RegFile         :: *;
-import Connectable     :: *;
 
 // ----------------
 // BSV additional libs
@@ -31,13 +30,6 @@ import AWS_BSV_Top_Defs :: *;
 
 // ================================================================
 
-export mkAWS_DDR4_A_Model;
-export mkAWS_DDR4_B_Model;
-export mkAWS_DDR4_C_Model;
-export mkAWS_DDR4_D_Model;
-
-// ================================================================
-
 function Bit #(512) fv_new_data (Bit #(512) old_data, Bit #(512) new_data, Bit #(64) strb);
    function Bit #(8) f (Integer j);
       return ((strb [j] == 1'b1) ? 'hFF : 'h00);
@@ -47,71 +39,17 @@ function Bit #(512) fv_new_data (Bit #(512) old_data, Bit #(512) new_data, Bit #
    return ((old_data & (~ mask)) | (new_data & mask));
 endfunction
 
-// ================================================================
-// DDR4_A
-// Supports bursts
-
-(* synthesize *)
-module mkAWS_DDR4_A_Model (AXI4_16_64_512_0_Slave_IFC);
-   let ifc <- mkMem_Model (0,                       // verbosity
-			   0,                       // ddr4_num
-			   True,                    // init_with_memhex
-			   "DDR4_A.memhex512",      // memhex_filename
-			   'h_0_0000_0000,          // byte_addr_base
-			   'h_4_0000_0000,          // byte_addr_lim    (16 GB)
-			   'h_1_0000_0000);         // bytes_implemented (4 GB)
-
-   AXI4_Deburster_IFC #(16, 64, 512, 0) deburster <- mkAXI4_Deburster;
-   mkConnection (deburster.to_slave, ifc);
-   return deburster.from_master;
-endmodule
 
 // ================================================================
-// DDR4_B
-// Supports bursts
-
-(* synthesize *)
-module mkAWS_DDR4_B_Model (AXI4_16_64_512_0_Slave_IFC);
-   let ifc <- mkMem_Model (0,                       // verbosity
-			   1,                       // ddr4_num
-			   True,                    // init_with_memhex
-			   "DDR4_B.memhex512",      // memhex_filename
-			   'h_4_0000_0000,          // byte_addr_base
-			   'h_8_0000_0000,          // byte_addr_lim  (16 GB)
-			   'h_1_0000_0000);         // bytes_implemented (4 GB)
-   AXI4_Deburster_IFC #(16, 64, 512, 0) deburster <- mkAXI4_Deburster;
-   mkConnection (deburster.to_slave, ifc);
-   return deburster.from_master;
-endmodule
-
-// ================================================================
-// DDR4_C
-// Currently a dummy
-
-(* synthesize *)
-module mkAWS_DDR4_C_Model (AXI4_16_64_512_0_Slave_IFC);
-   return dummy_AXI4_Slave_ifc;
-endmodule
-
-// ================================================================
-// DDR4_C
-// Currently a dummy
-
-(* synthesize *)
-module mkAWS_DDR4_D_Model (AXI4_16_64_512_0_Slave_IFC);
-   return dummy_AXI4_Slave_ifc;
-endmodule
-
-// ================================================================
-// Common implementation
-// - ddr4_num is unique id for each DDR4 (A=0, B=1, C=2, D=3)
+// Implementation
+// - ddr4_num is unique id for each DDR4 (A=0, B=1, ...)
 // - init_with_memhex and memhex_file are for optional initialization from a memhex512
 // - byte_addr_base and byte_addr_lim are the range of byte-addrs served by this DDR (16GB in AWS)
 // - bytes_implemented are the # of bytes implemented (on top of byte_addr_base)
 //     which need not cover until addr_last
 
 module mkMem_Model #(Integer    verbosity,
-                     Bit #(2)   ddr4_num,
+                     Integer    ddr4_num,
 		     Bool       init_with_memhex,
 		     String     memhex_filename,
 		     Bit #(64)  byte_addr_base,

@@ -98,6 +98,7 @@ The directory tree looks like this:
             │   └── AWS
             └── src_Testbench
                 └── Top
+                    └── AWS
                     └── Gen_Bytevec
 
 This repo contains no Piccolo/Flute/Toooba code at all.  Those are
@@ -128,7 +129,8 @@ Directory `src_Testbench` is a substitute for the `src_Testbench`
 directory in the Piccolo/Flute/Toooba repositories.  As in the
 original it has a subdirectory `Top` which is just a harness for Bluesim
 or verilator simulation (and contains non-synthesizable imports of
-C code).
+C code). Like `src_SoC` it also has subdirectories for platform-specific
+code.
 
 Directory `src_Host_Side` is used for Bluesim or verilator sim; it
 provides libraries linked with the host-side software; these libraries
