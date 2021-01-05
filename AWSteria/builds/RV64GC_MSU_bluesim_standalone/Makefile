@@ -1,15 +1,13 @@
 ###  -*-Makefile-*-
 
+AWSTERIA = $(CURDIR)/../..
+
 # ================================================================
-# Edit this def to point at your clone of the GitHub Flute repo:
-# (https://github.com/bluespec/Flute)
+# By default, assume Flute (https://github.com/bluespec/Flute) is
+# cloned adjacent to BESSPIN-CloudGFE. Override this on the command
+# line if that is not the case.
 
-AWSTERIA   = $(HOME)/git_clones/AWS/BESSPIN-CloudGFE_rsn2/AWSteria
-# AWSTERIA   = $(HOME)/git_clones/AWS/BESSPIN-CloudGFE/AWSteria
-# AWSTERIA   = $(HOME)/git-repos/BESSPIN-CloudGFE/AWSteria
-
-FLUTE_REPO = $(HOME)/git_clones/Flute
-# FLUTE_REPO = $(HOME)/git-repos/Flute
+FLUTE_REPO ?= $(AWSTERIA)/../../Flute
 
 REPO ?= $(FLUTE_REPO)
 
