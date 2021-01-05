@@ -135,7 +135,7 @@ After you build your host-side executable, its name (`test_hello_world` or `exe_
 Build the Bluesim executable (this requires the `bsc` compiler to be
 set up, with environment variables `BLUESPECDIR`, etc.):
 ----
-    $ cd  $(AWSTERIA)/builds/RV64GC_MSU_bluesim/
+    $ cd  $(AWSTERIA)/builds/RV64GC_MSU_Flute_AWS_bluesim/
     $ make  all
 ----
 
@@ -172,7 +172,7 @@ will immediately pause, waiting for a TCP connection on socket 30000
 from the host-side software.
 
 ----
-    $ cd  $(AWSTERIA)/builds/RV64GC_MSU_bluesim
+    $ cd  $(AWSTERIA)/builds/RV64GC_MSU_Flute_AWS_bluesim
     $ ./exe_HW_sim
 ----
 
