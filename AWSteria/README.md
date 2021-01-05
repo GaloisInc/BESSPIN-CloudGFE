@@ -96,9 +96,11 @@ The directory tree looks like this:
             ├── src_Host_Side
             ├── src_SoC
             │   └── AWS
+            │   └── Garnet
             └── src_Testbench
                 └── Top
                     └── AWS
+                    └── Garnet
                     └── Gen_Bytevec
 
 This repo contains no Piccolo/Flute/Toooba code at all.  Those are
@@ -122,8 +124,8 @@ batch mode (see the Makefile therein).
 Directory `src_SoC` is a substitute for the `src_SSITH_Px/src_BSV`
 directory in the Piccolo/Flute/Toooba repositories. It contains the
 generic code for AWSteria, and has subdirectories for platform-specific
-code (in this case, the boot ROM), with AWS the only platform currently
-supported.
+code (in this case, the boot ROM). Currently, AWS and [Garnet] are the
+two supported platforms.
 
 Directory `src_Testbench` is a substitute for the `src_Testbench`
 directory in the Piccolo/Flute/Toooba repositories.  As in the
@@ -154,3 +156,5 @@ directories in the standard Amazon `aws-fpga` repository:
             asw-fpga/hdk/cl/developer_designs/
 
 ----------------------------------------------------------------
+
+[Garnet]: https://github.com/CTSRD-CHERI/garnet
