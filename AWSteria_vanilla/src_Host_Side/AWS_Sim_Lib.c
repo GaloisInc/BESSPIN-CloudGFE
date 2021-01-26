@@ -1,4 +1,4 @@
-// Copyright (c) 2020 Bluespec, Inc.  All Rights Reserved
+// Copyright (c) 2020-2021 Bluespec, Inc.  All Rights Reserved
 
 // This library emulates AWS' routines fpga_dma_burst_read/write and
 // fpga_pci_peek/poke for Bluesim and Verilator sim.
@@ -349,7 +349,7 @@ int fpga_dma_burst_write (int fd, uint8_t *buffer, size_t size, uint64_t address
 // ================================================================
 // This is our simulation model of the corresponding AWS library routine.
 
-int fpga_pci_peek (uint32_t ocl_addr, uint32_t *p_ocl_data)
+int fpga_pci_peek (pci_bar_handle_t handle, uint64_t ocl_addr, uint32_t *p_ocl_data)
 {
     int  verbosity2 = 0;
     bool did_some_comms;
@@ -373,7 +373,7 @@ int fpga_pci_peek (uint32_t ocl_addr, uint32_t *p_ocl_data)
     }
 
     while (true) {
-	bool did_some_comms = do_comms ();
+	did_some_comms = do_comms ();
 	if (! did_some_comms)
 	    usleep (1000);
 
@@ -391,7 +391,7 @@ int fpga_pci_peek (uint32_t ocl_addr, uint32_t *p_ocl_data)
 // ================================================================
 // This is our simulation model of the corresponding AWS library routine.
 
-int fpga_pci_poke (uint32_t ocl_addr, uint32_t ocl_data)
+int fpga_pci_poke (pci_bar_handle_t handle, uint64_t ocl_addr, uint32_t ocl_data)
 {
     int  verbosity2 = 0;
     bool did_some_comms;
@@ -423,7 +423,7 @@ int fpga_pci_poke (uint32_t ocl_addr, uint32_t ocl_data)
     }
 
     while (true) {
-	bool did_some_comms = do_comms ();
+	did_some_comms = do_comms ();
 	if (! did_some_comms)
 	    usleep (1);
 

@@ -1,4 +1,4 @@
-// Copyright (c) 2020 Bluespec, Inc.  All Rights Reserved
+// Copyright (c) 2020-2021 Bluespec, Inc.  All Rights Reserved
 
 // ================================================================
 // Client communications over TCP/IP
@@ -50,8 +50,6 @@ static int sockfd = 0;
 
 uint32_t  tcp_client_open (const char *server_host, const uint16_t server_port)
 {
-    short int port;                 // port number
-
     if (server_host == NULL) {
 	fprintf (stderr, "tcp_client_open (): server_host is NULL\n");
 	return status_err;
@@ -107,7 +105,7 @@ uint32_t  tcp_client_close (uint32_t dummy)
 // ================================================================
 // Send a message
 
-uint32_t  tcp_client_send (const uint32_t data_size, const char *data)
+uint32_t  tcp_client_send (const uint32_t data_size, const uint8_t *data)
 {
     int n;
 
@@ -124,7 +122,7 @@ uint32_t  tcp_client_send (const uint32_t data_size, const char *data)
 // Recv a message
 // Return status_ok or status_unavail (no input data available)
 
-uint32_t  tcp_client_recv (bool do_poll, const uint32_t data_size, char *data)
+uint32_t  tcp_client_recv (bool do_poll, const uint32_t data_size, uint8_t *data)
 {
     // Poll, if required
     if (do_poll) {

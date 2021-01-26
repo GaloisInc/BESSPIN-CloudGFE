@@ -9,6 +9,12 @@
 #pragma once
 
 extern
+int HS_msg_initialize (void);
+
+extern
+int HS_msg_finalize (void);
+
+extern
 int HS_msg_hw_to_host_STATUS_notEmpty (bool *p_notEmpty);
 
 extern

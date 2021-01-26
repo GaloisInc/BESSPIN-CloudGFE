@@ -21,7 +21,7 @@ extern
 int fpga_dma_burst_write (int fd, uint8_t *buffer, size_t size, uint64_t address);
 
 extern
-int fpga_pci_peek (uint32_t ocl_addr, uint32_t *p_ocl_data);
+int fpga_pci_peek (pci_bar_handle_t handle, uint64_t ocl_addr, uint32_t *p_ocl_data);
 
 extern
-int fpga_pci_poke (uint32_t ocl_addr, uint32_t ocl_data);
+int fpga_pci_poke (pci_bar_handle_t handle, uint64_t ocl_addr, uint32_t ocl_data);

@@ -1,4 +1,4 @@
-// Copyright (c) Bluespec, Inc.  All Rights Reserved
+// Copyright (c) 2020-2021 Bluespec, Inc.  All Rights Reserved
 // Author: Rishiyur S.Nikhil
 
 // Please see Memhex32_read.c for documentation

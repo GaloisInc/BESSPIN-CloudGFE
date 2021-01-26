@@ -1,8 +1,8 @@
-// This file is generated automatically from the file 'Memhex32_read.c'
+// This file is generated automatically from the file '../Memhex32_read.c'
 //     and contains 'extern' function prototype declarations for its functions.
 // In any C source file using these functions, add:
-//     #include "Memhex32_read_protos.h"
-// You may also want to create/maintain a file 'Memhex32_read.h'
+//     #include "../Memhex32_read_protos.h"
+// You may also want to create/maintain a file '../Memhex32_read.h'
 //     containing #defines and type declarations.
 // ****************************************************************
 

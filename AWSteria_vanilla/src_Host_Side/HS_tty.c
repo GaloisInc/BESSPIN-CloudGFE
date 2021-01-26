@@ -1,4 +1,4 @@
-// Copyright (c) 2020 Bluespec, Inc.  All Rights Reserved
+// Copyright (c) 2020-2021 Bluespec, Inc.  All Rights Reserved
 // Author: Rishiyur S. Nikhil
 
 // This module encapsulates communication with a tty (keyboard + screen)
@@ -78,6 +78,7 @@ int HS_tty_from_hw_data (HS_tty_State *state, uint32_t data)
 	fprintf (stdout, "HS_tty_from_hw_data: output char: %02x\n", data);
 
     SimpleQueuePut (state->queue_tty_from_hw, data);
+    return 0;
 }
 
 // ================================================================
@@ -105,7 +106,7 @@ bool HS_tty_do_some_work (HS_tty_State *state)
 
     tv.tv_sec  = delay / 1000;
     tv.tv_usec = (delay % 1000) * 1000;
-    int ret = select (fd_max + 1, & rfds, & wfds, & efds, & tv);
+    select (fd_max + 1, & rfds, & wfds, & efds, & tv);
     if (FD_ISSET (stdin_fd, & rfds) &&
 	(! SimpleQueueFull (state->queue_tty_to_hw))) {
 	// Read a char from stdin and enqueue

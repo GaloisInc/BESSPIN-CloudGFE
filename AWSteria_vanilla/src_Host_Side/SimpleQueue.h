@@ -1,5 +1,5 @@
 // Copyright (c) ???? [ Original copyright? ]
-// Copyright (c) 2020 for modifications by Bluespec, Inc.
+// Copyright (c) 2020-2021 for modifications by Bluespec, Inc.
 
 // Please see SimpleQueue.c for documentation
 

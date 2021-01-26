@@ -1,8 +1,24 @@
+// Copyright (c) 2020-2021 Bluespec, Inc.  All Rights Reserved
+// Author: Rishiyur S. Nikhil
+
 // See HS_virtio.c for documentation
 
 #pragma once
 
-#define max(a,b) (((a) >= (b)) ? (a) : (b))
+// ================================================================
+// PCI stuff
+
+extern int               pci_slot_id;
+extern int               pci_pf_id;
+extern int               pci_bar_id;
+
+#ifdef IN_SIMULATION
+extern pci_bar_handle_t  pci_bar_handle;
+#endif
+
+// ================================================================
+
+#define max2(a,b) (((a) >= (b)) ? (a) : (b))
 
 typedef struct {
     BlockDevice      *block_device;

@@ -1,4 +1,4 @@
-// Copyright (c) 2020 Bluespec, Inc.  All Rights Reserved
+// Copyright (c) 2020-2021 Bluespec, Inc.  All Rights Reserved
 // Author: Rishiyur S. Nikhil
 
 // This module encapsulates gdbstub (which communicates with GDB)
@@ -64,6 +64,7 @@ int HS_gdbstub_rsp_from_hw_notFull (HS_Gdbstub_State *state, bool *p_notFull)
 int HS_gdbstub_rsp_from_hw_data (HS_Gdbstub_State *state, uint32_t data)
 {
     SimpleQueuePut (state->queue_gdbstub_rsp_from_hw, data);
+    return 0;
 }
 
 // ================================================================

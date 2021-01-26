@@ -1,4 +1,4 @@
-// Copyright (c) 2020 Bluespec, Inc.  All Rights Reserved
+// Copyright (c) 2020-2021 Bluespec, Inc.  All Rights Reserved
 // Author: Rishiyur S. Nikhil
 
 // This module encapsulates communication with a tty (keyboard + screen)
@@ -25,6 +25,27 @@
 #include "temu.h"
 
 // ----------------
+// Includes for PCI communications
+
+#ifdef IN_F1
+#include "fpga_pci.h"
+// int fpga_pci_attach(int slot_id, int pf_id, int bar_id, uint32_t flags, pci_bar_handle_t *handle);
+// int fpga_pci_poke(pci_bar_handle_t handle, uint64_t offset, uint32_t value);
+// int fpga_pci_peek(pci_bar_handle_t handle, uint64_t offset, uint32_t *value);
+// int fpga_pci_detach(pci_bar_handle_t handle);
+
+#include "fpga_mgmt.h"
+#include "fpga_dma.h"
+#include "utils/lcd.h"
+#endif
+
+#ifdef IN_SIMULATION
+// Simulation library replacing AWS' actual FPGA interaction library
+// AWS_Sim_Lib simulates the fpga peek, poke, dma_read and dma_write calls provided by AWS.
+#include "AWS_Sim_Lib.h"
+#endif
+
+// ----------------
 // Project includes
 
 #include "Memhex32_read.h"
@@ -34,22 +55,39 @@
 #include "HS_virtio.h"
 #include "HS_msg.h"
 
-// Simulation library replacing AWS' actual FPGA interaction library
-#include "AWS_Sim_Lib.h"
-
 // ================================================================
+// A constant for the size of each of the 4 AWS DDRs
 
 #define MEM_16G              (1ULL << 34)
 
 // ================================================================
+// PCIe parameters and variables
+
+#ifdef IN_F1
+pci_bar_handle_t  pci_bar_handle = PCI_BAR_HANDLE_INIT;
+#endif
+
+#ifdef IN_SIMULATION
+typedef int  pci_bar_handle_t;
+pci_bar_handle_t  pci_bar_handle = -1;
+#endif
+
+
+int  pci_slot_id  = 0;
+int  pci_pf_id    = 0;
+int  pci_bar_id   = 0;
+int  pci_read_fd  = -1;    // For DMA over AXI4
+int  pci_write_fd = -1;    // For DMA over AXI4
+
+// ================================================================
 // Load memory using DMA
 
-#define BUF_SIZE 0x200000000llu
+#define BUF_SIZE 0x400000000llu
 
 int load_mem_hex32_using_DMA (int slot_id, char *filename)
 {
     int write_fd, read_fd, rc;
-    int channel = 0;
+    // int channel = 0;
 
     fprintf (stdout, "%s: Reading Mem Hex32 file into local buffer: %s\n",
 	     __FUNCTION__, filename);
@@ -399,7 +437,10 @@ int main (int argc, char *argv [])
 	return 0;
     }
 
-    AWS_Sim_Lib_init ();
+    rc = HS_msg_initialize ();
+    if (rc != 0) {
+	return 1;
+    }
 
     // ================================================================
     // AWSteria code
@@ -449,7 +490,10 @@ out:
         fprintf (stdout, "TEST PASSED\n");
     }
 
-    AWS_Sim_Lib_shutdown ();
+    rc = HS_msg_finalize ();
+    if (rc != 0) {
+	return 1;
+    }
 }
 
 // ================================================================

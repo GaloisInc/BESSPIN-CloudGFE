@@ -1,4 +1,4 @@
-// Copyright (c) 2020 Bluespec, Inc.  All Rights Reserved
+// Copyright (c) 2020-2021 Bluespec, Inc.  All Rights Reserved
 // Author: Rishiyur S. Nikhil
 // (with some functionality taken from AWS Connectal-style)
 
@@ -40,17 +40,27 @@
 #include <pthread.h>
 
 // ----------------
-// AWS lib includes
+// For XSIM only
 
 #ifdef AWS_XSIM
 # include <fpga_pci_sv.h>
 #endif
 
-#ifdef AWS_FPGA
-# include <fpga_pci.h>
-# include <fpga_mgmt.h>
-# include "fpga_dma.h"
-# include <utils/lcd.h>
+// ----------------
+// Includes for PCI communications
+
+#ifdef IN_F1
+#include "fpga_pci.h"
+#include "fpga_mgmt.h"
+#include "fpga_dma.h"
+#include "utils/lcd.h"
+
+#endif
+
+#ifdef IN_SIMULATION
+// Simulation library replacing AWS' actual FPGA interaction library
+// AWS_Sim_Lib simulates the fpga peek, poke, dma_read and dma_write calls provided by AWS.
+#include "AWS_Sim_Lib.h"
 #endif
 
 // ----------------
@@ -67,8 +77,11 @@
 
 // ================================================================
 
+extern int pci_read_fd;
+extern int pci_write_fd;
+
 static int debug_virtio   = 1;
-static int debug_stray_io = 0;
+// static int debug_stray_io = 0;
 
 // ================================================================
 // These two functions are called by the Virtio console device driver
@@ -78,6 +91,7 @@ static int debug_stray_io = 0;
 //     Both can co-exist.
 // TODO: can be improved substantially.
 
+/*
 static
 void console_write_data (void *opaque, const uint8_t *buf, int buf_len)
 {
@@ -94,10 +108,12 @@ int console_read_data (void *opaque, uint8_t *buf, int len)
 
     return ret;
 }
+*/
 
 // ================================================================
 // This thread performs the Virtio 'work'
 
+/*
 static
 void *HS_virtio_process_io_thread(void *opaque)
 {
@@ -121,7 +137,7 @@ void *HS_virtio_process_io_thread(void *opaque)
         if (vds->virtio_console && virtio_console_can_write_data(vds->virtio_console)) {
             stdin_fd = (int)(intptr_t)vds->console->opaque;
             FD_SET(stdin_fd, &rfds);
-            fd_max = max(stdin_fd, fd_max);
+            fd_max = max2(stdin_fd, fd_max);
         }
 
 	if (vds->ethernet_device) {
@@ -155,9 +171,11 @@ void *HS_virtio_process_io_thread(void *opaque)
     }
     return NULL;
 }
+*/
 
 // ================================================================
 
+/*
 static
 void fn_set_irq (void *opaque, int irq_num, int level)
 {
@@ -177,6 +195,7 @@ void fn_set_irq (void *opaque, int irq_num, int level)
 	data = (1 << 31) | data;
     SimpleQueuePut (state->queue_virtio_irq_to_hw, data);
 }
+*/
 
 HS_Virtio_State *HS_virtio_init (const char *tun_iface,
 				 const int   enable_virtio_console,
@@ -187,7 +206,8 @@ HS_Virtio_State *HS_virtio_init (const char *tun_iface,
 {
     VirtioDevices *vds = NULL;
 
-    /*
+    /* TODO: fixup when we start supporting virtio
+
     // Allocate and initialize VirtioDevices object
     vds = (VirtioDevices *) malloc (sizeof (VirtioDevices));
     if (vds == NULL) {
@@ -236,27 +256,7 @@ HS_Virtio_State *HS_virtio_init (const char *tun_iface,
     // Corresponds to this in Connectal:
     //     if (xdma_enabled) fpga->open_xdma();
 
-    int read_fd  = -1;
-    int write_fd = -1;
-
-#if defined(AWS_FPGA) || defined (AWS_BLUESIM) || defined (AWS_VERILATOR)
-    read_fd = fpga_dma_open_queue(FPGA_DMA_XDMA, slot_id,
-				  0,        // channel
-				  true);    // is_read
-    if (read_fd < 0) {
-	fprintf (stdout, "ERROR: %s: unable to open read-dma queue\n");
-	exit (1);
-    }
-
-    write_fd = fpga_dma_open_queue(FPGA_DMA_XDMA, slot_id,
-				   0,         // channel
-				   false);    // is_read
-    if (write_fd < 0) {
-	fprintf (stdout, "ERROR: %s: unable to open write-dma queue\n");
-	exit (1);
-    }
-    virtio_xdma_init (read_fd, write_fd);
-#endif
+    virtio_xdma_init (pci_read_fd, pci_write_fd);
 
     // ================================================================
     // Set up a block device for each given block device filename
@@ -340,6 +340,7 @@ int HS_virtio_req_from_hw_notFull (HS_Virtio_State *state, bool *p_notFull)
 int HS_virtio_req_from_hw_data (HS_Virtio_State *state, uint32_t data)
 {
     SimpleQueuePut (state->queue_virtio_req_from_hw, data);
+    return 0;
 }
 
 // ================================================================
@@ -402,7 +403,7 @@ uint32_t HS_virtio_MMIO_read (VirtioDevices *vds, uint32_t addr)
 	fprintf (stdout, "%s: addr %0x\n", __FUNCTION__, addr);
 
     uint32_t result = addr + 1;    // TODO: temporary
-    /*
+    /* TODO: fixup when we start supporting Virtio
     PhysMemoryRange *pr = get_phys_mem_range (vds->mem_map, addr);
     if (pr) {
         uint32_t offset    = addr - pr->addr;
@@ -430,7 +431,8 @@ uint32_t HS_virtio_MMIO_write (VirtioDevices *vds, uint32_t addr, uint32_t data)
 	fprintf (stdout, "%s: addr %0x data %0x\n", __FUNCTION__, addr, data);
 
     uint32_t result = data + 0x100;    // TODO: temporary
-    /*
+    /* TODO: fixup when we start supporting Virtio
+
     PhysMemoryRange *pr = get_phys_mem_range (vds->mem_map, addr);
 
     if (pr) {
@@ -514,6 +516,7 @@ int HS_virtio_shutdown (HS_Virtio_State *state)
 
     virtio_join_pending_notify_thread();
     pthread_join (state->virtiodevices->io_thread, NULL);
+    return 0;
 }
 
 // ================================================================

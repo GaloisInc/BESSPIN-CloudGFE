@@ -7,7 +7,7 @@
 
 #include  "Bytevec.h"
 
-static int verbosity = 0;
+// static int verbosity = 0;
 
 // ================================================================
 // State constructor and initializer

@@ -336,8 +336,9 @@ Python installed.  It may still fail with error: "`missing python
 package 'boto3'`" This can be fixed by adding the `boto3` package in
 your Python installation:
 ----
-    $ pip install boto3        # For Python 2.x
-    $ pip3 install boto3       # For Python 3.x
+    $ sudo pip install boto3        # For Python 2.x
+    $ sudo pip3 install boto3       # For Python 3.x
+    $ sudo pip install --upgrade boto3
 ----
 
 For the DCP build, add this flag to request a notification:
@@ -477,7 +478,8 @@ should work out-of-the-box, the commands shown in the next section
 failed with Python errors.  In fact all `aws s3` commands failed.  It
 seems it has an obsolete version of `awscli`.  I did:
 ----
-    $ sudo pip install awscli
+    $ sudo yum install awscli
+    $ sudo pip install awscli    [ I think this is wrong ]
 ----
 to upgrade AWS CLI: it reported:
 ----
@@ -485,20 +487,26 @@ to upgrade AWS CLI: it reported:
     uninstalled s2transfer-0.3.3 and installed s3transfer-0.1.13.
 ----
 after which the 'aws s3' commands started working.
+
 ====
+
+More information:
+*  http://docs.aws.amazon.com/cli/latest/userguide/installing.html[]
+*  https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html[]
+
 
 // SUBSUBSECTION ================================================================
 ==== Create an S3 bucket for your submission
 
 Create an S3 "`bucket`" to contain your submission for an AFI build.
-S3 is Amazon AWS' cloud storage system.  Buckets are Amazon AWS'
-storage units in the cloud; they have globally unique names.
+S3 ("`Simple Storage Service`") is Amazon AWS' cloud storage service.
+Buckets are Amazon AWS' storage units in the cloud; they have globally unique names.
 
 Choose a name for the bucket you create.  Amazon's rules for bucket names:
 
 * 3 to 63 chars long
 * lowercase letters, digits, hyphens
-          (in particular no underscores; dots allowed but not recommended)
+          (in particular NO UNDERSCORES; dots allowed but not recommended)
 * must start and end with a letter or digit, not hyphen
 
 Example:
@@ -775,7 +783,9 @@ DMA, which terminates at the `DMA_PCIS` Verilog port connected to your
 design.
 
 Details about this step are in:
+https://github.com/aws/aws-fpga/blob/master/sdk/linux_kernel_drivers/xdma/README.md[] and
 https://github.com/aws/aws-fpga/blob/master/sdk/linux_kernel_drivers/xdma/xdma_install.md[].
+
 
 WARNING:: the following steps worked when attempted on the Amazon
 Machine Instance "FPGA Developers AMI", which runs CentOS.  We

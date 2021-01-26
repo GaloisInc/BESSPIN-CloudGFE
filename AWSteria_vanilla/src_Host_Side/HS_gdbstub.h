@@ -1,3 +1,6 @@
+// Copyright (c) 2020-2021 Bluespec, Inc.  All Rights Reserved
+// Author: Rishiyur S. Nikhil
+
 // See HS_gdbstub.c for documentation
 
 #pragma once

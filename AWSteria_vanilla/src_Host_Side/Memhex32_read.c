@@ -1,3 +1,6 @@
+// Copyright (c) 2020-2021 Bluespec, Inc.  All Rights Reserved
+// Author: Rishiyur S.Nikhil
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>

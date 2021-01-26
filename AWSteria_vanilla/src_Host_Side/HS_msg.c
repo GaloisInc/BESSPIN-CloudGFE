@@ -1,4 +1,4 @@
-// Copyright (c) 2020 Bluespec, Inc.  All Rights Reserved
+// Copyright (c) 2020-2021 Bluespec, Inc.  All Rights Reserved
 // Author: Rishiyur S. Nikhil
 
 // ================================================================
@@ -37,8 +37,18 @@
 // ================================================================
 // Project includes
 
+#ifdef IN_F1
+#include "fpga_pci.h"
+#include "fpga_mgmt.h"
+#include "fpga_dma.h"
+#include "utils/lcd.h"
+#endif
+
+#ifdef IN_SIMULATION
+// Simulation library replacing AWS' actual FPGA interaction library
 // AWS_Sim_Lib simulates the fpga peek, poke, dma_read and dma_write calls provided by AWS.
 #include "AWS_Sim_Lib.h"
+#endif
 
 #include "HS_msg.h"
 
@@ -46,6 +56,91 @@
 // Verbosity for this module
 
 static int verbosity = 0;
+
+// ================================================================
+// PCI variables
+
+extern int pci_read_fd;
+extern int pci_write_fd;
+
+// ================================================================
+// Perform initializations for PCI lib or AWS_Sim_Lib
+
+int HS_msg_initialize (void)
+{
+#ifdef IN_F1
+    int rc;
+
+    // ----------------
+    // Initialize FPGA management library
+    rc = fpga_mgmt_init ();    // Note: calls fpga_pci_init ();
+    if (rc != 0) {
+	fprintf (stdout, "%s: fpga_mgmt_init() failed: rc = %0d\n", __FUNCTION__, rc);
+	return 1;
+    }
+    fprintf (stdout, "%s: fpga_mgmt_init() done\n", __FUNCTION__);
+
+    // ----------------
+    // Open file descriptor for DMA read over AXI4
+    pci_read_fd = fpga_dma_open_queue (FPGA_DMA_XDMA,
+				       pci_slot_id,
+				       0,        // channel
+				       true);    // is_read
+    if (pci_read_fd < 0) {
+	fprintf (stdout, "ERROR: %s: unable to open read-dma queue\n", __FUNCTION__);
+	return 1;
+    }
+    fprintf (stdout, "ERROR: %s: opened PCI read-dma queue\n", __FUNCTION__);
+
+    // ----------------
+    // Open file descriptor for DMA write over AXI4
+    pci_write_fd = fpga_dma_open_queue(FPGA_DMA_XDMA,
+				       pci_slot_id,
+				       0,         // channel
+				       false);    // is_read
+    if (pci_write_fd < 0) {
+	fprintf (stdout, "ERROR: %s: unable to open write-dma queue\n", __FUNCTION__);
+	return 1;
+    }
+
+
+    int fpga_pci_attach_flags = 0;
+
+    rc = fpga_pci_attach (pci_slot_id, pci_pf_id, pci_bar_id, fpga_pci_attach_flags, & pci_bar_handle);
+    if (rc != 0) {
+	fprintf (stdout, "%s: fpga_pci_init() failed: rc = %0d\n", __FUNCTION__, rc);
+	return 1;
+    }
+#endif
+
+#ifdef IN_SIMULATION
+    AWS_Sim_Lib_init ();
+#endif
+
+    return 0;
+}
+
+// ================================================================
+// Perform finalizations for PCI lib or AWS_Sim_Lib
+
+int HS_msg_finalize (void)
+{
+#ifdef IN_F1
+    int rc;
+
+    rc = fpga_pci_detach (pci_bar_handle);
+    if (rc != 0) {
+	fprintf (stdout, "main: fpga_pci_detach() failed: rc = %0d\n", rc);
+	return 1;
+    }
+#endif
+
+#ifdef IN_SIMULATION
+    AWS_Sim_Lib_shutdown ();
+#endif
+
+    return 0;
+}
 
 // ================================================================
 // Channel configurations
@@ -73,7 +168,7 @@ int HS_msg_hw_to_host_chan_notEmpty (uint32_t chan_id, bool *p_notEmpty)
     uint32_t  ocl_addr = mk_chan_avail_addr (HS_MSG_HW_TO_HOST_CHAN_ADDR_BASE, chan_id);
     uint32_t  avail;
 
-    int err = fpga_pci_peek (ocl_addr, & avail);
+    int err = fpga_pci_peek (pci_bar_handle, ocl_addr, & avail);
     if (err == 0) {
 	*p_notEmpty = (avail != 0);
 	if (verbosity != 0)
@@ -98,7 +193,7 @@ int HS_msg_hw_to_host_chan_data (uint32_t chan_id, uint32_t *p_data)
 {
     uint32_t  ocl_addr = mk_chan_data_addr (HS_MSG_HW_TO_HOST_CHAN_ADDR_BASE, chan_id);
 
-    int err = fpga_pci_peek (ocl_addr, p_data);
+    int err = fpga_pci_peek (pci_bar_handle, ocl_addr, p_data);
     if (err == 0) {
 	if (verbosity != 0)
 	    fprintf (stdout, "%s (chan_id %0x) => %0d", __FUNCTION__, chan_id, *p_data);
@@ -121,7 +216,7 @@ int HS_msg_host_to_hw_chan_notFull (uint32_t chan_id, bool *p_notFull)
     uint32_t  ocl_addr = mk_chan_avail_addr (HS_MSG_HOST_TO_HW_CHAN_ADDR_BASE, chan_id);
     uint32_t  avail;
 
-    int err = fpga_pci_peek (ocl_addr, & avail);
+    int err = fpga_pci_peek (pci_bar_handle, ocl_addr, & avail);
     if (err == 0) {
 	*p_notFull = (avail != 0);
 	if (verbosity != 0)
@@ -145,7 +240,7 @@ int HS_msg_host_to_hw_chan_data (uint32_t chan_id, uint32_t data)
 {
     uint32_t  ocl_addr = mk_chan_data_addr (HS_MSG_HOST_TO_HW_CHAN_ADDR_BASE, chan_id);
 
-    int err = fpga_pci_poke (ocl_addr, data);
+    int err = fpga_pci_poke (pci_bar_handle, ocl_addr, data);
     if (err == 0) {
 	if (verbosity != 0)
 	    fprintf (stdout, "%s (chan_id 0x%0x, data 0x%0x)",

@@ -1,5 +1,5 @@
 // Copyright (c) ???? [ Original copyright? ]
-// Copyright (c) 2020 for modifications by Bluespec, Inc.
+// Copyright (c) 2020-2021 for modifications by Bluespec, Inc.
 
 // Author: [ Is there a different original author? ]
 // Author: Joe Stoy
@@ -42,6 +42,7 @@ SimpleQueue *SimpleQueueInit (void)
     }
     queue->in  = 0;
     queue->out = 0;
+    return queue;
 }
 
 // ================================================================

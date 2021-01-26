@@ -1,16 +1,26 @@
-# Makefile to convert an ELF file into a memhex512 file for AWS' DDR4 A
+# Makefile to convert an ELF file into:
+#     a hex32 file for AWS' host-side
+#     a memhex512 file for AWS' DDR4 A (for AWSteria standalone)
 
 # ================================================================
 # ELF files to be converted
 
-# ELF_DIR  ?= $(HOME)/git_clones/RISCV_Tests/GFE/c/
+# ELF_DIR  ?= $(HOME)/git_clones/RISCV_Tests/GFE/c
 # ELF_FILE ?= rv64-hello
 
-ELF_DIR  ?= $(HOME)/git_clones/RISCV_Tests/GFE/isa/
-ELF_FILE ?= rv64ui-p-add
+ELF_DIR  ?= $(HOME)/git_clones/RISCV_Tests/GFE/c
+ELF_FILE ?= rv64-cat
 
-# ELF_DIR  ?= .
-# ELF_FILE ?= bbl-riscv64.GFE
+# ELF_DIR ?= $(HOME)/git_clones/RISCV_Tests/GFE/isa
+# ELF_FILE ?= rv64ui-p-add
+# ELF_FILE ?= rv64ui-v-add
+
+# ELF_DIR  ?= $(HOME)/git_clones/RISCV_Tests/GFE/FreeRTOS
+# ELF_FILE ?= freertos1000.elf
+
+# ELF_DIR   ?= $(HOME)/git_clones/RISCV_Tests/GFE/FreeBSD_2020-09-03/
+# ELF_FILE  ?= bbl-riscv64
+# ELF_FILE2 ?= kernel-riscv64.GFE-NODEBUG
 
 # ================================================================
 # You need to point this at a standard Elf-to-MemHex32 converter
@@ -36,18 +46,45 @@ DDR4_MODEL_IMPLEMENTED_WORDS ?= 0x_0400_0000
 
 # ================================================================
 
-default:
+$(ELF_FILE).hex32:
 	@echo "----------------------------------------------------------------"
-	@echo "Converting Elf file $(ELF_FILE) to $(ELF_FILE).memhex32"
-	$(ELF_TO_HEX32)  $(ELF_DIR)/$(ELF_FILE)  $(ELF_FILE).memhex32
+	@echo "Converting Elf file"
+	@echo "    $(ELF_FILE)"
+	@echo "to  $(ELF_FILE).hex32 (zero offset)"
+	$(ELF_TO_HEX32)  $(ELF_DIR)/$(ELF_FILE)  $(ELF_FILE).hex32
+
+# For single ELF files
+
+$(ELF_FILE).memhex512: $(ELF_FILE).hex32
 	@echo "----------------------------------------------------------------"
-	@echo "Converting $(ELF_FILE).memhex32 to $(ELF_FILE).memhex512 for DDR4-load"
+	@echo "Converting $(ELF_FILE).hex32 (zero offset) to $(ELF_FILE).memhex512"
 	$(ELFHEX_TO_MEMHEX) \
 		$(ELF_FILE).memhex512 \
 		$(DDR4_WIDTH) \
 		$(DDR4_BASE_ADDR) \
 		$(DDR4_MODEL_IMPLEMENTED_WORDS) \
-		$(ELF_FILE).memhex32
+		$(ELF_FILE).hex32
+
+# For two ELF files
+
+$(ELF_FILE)_and_$(ELF_FILE2).hex32: $(ELF_FILE).hex32  $(ELF_FILE2).hex32
+	@echo "----------------------------------------------------------------"
+	@echo "Converting $(ELF_FILE).hex32 (zero offset)"
+	@echo "    and    $(ELF_FILE2).hex32 (zero offset)"
+	@echo "    to     $(ELF_FILE)_and_$(ELF_FILE2).hex32 (zero offset)"
+	cat  $(ELF_FILE).hex32  $(ELF_FILE2).hex32 > $(ELF_FILE)_and_$(ELF_FILE2).hex32
+
+$(ELF_FILE)_and_$(ELF_FILE2).memhex512: $(ELF_FILE).hex32  $(ELF_FILE2).hex32
+	@echo "----------------------------------------------------------------"
+	@echo "Converting $(ELF_FILE).hex32 (zero offset)"
+	@echo "    and    $(ELF_FILE2).hex32 (zero offset)"
+	@echo "    to     $(ELF_FILE)_and_$(ELF_FILE2).memhex512"
+	$(ELFHEX_TO_MEMHEX) \
+		$(ELF_FILE)_and_$(ELF_FILE2).memhex512 \
+		$(DDR4_WIDTH) \
+		$(DDR4_BASE_ADDR) \
+		$(DDR4_MODEL_IMPLEMENTED_WORDS) \
+		$(ELF_FILE).hex32  $(ELF_FILE2).hex32
 
 clean:
 	rm -r -f *.memhex32

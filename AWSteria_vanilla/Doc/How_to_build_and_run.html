@@ -938,8 +938,9 @@ your Python installation:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>    $ pip install boto3        # For Python 2.x
-    $ pip3 install boto3       # For Python 3.x</pre>
+<pre>    $ sudo pip install boto3        # For Python 2.x
+    $ sudo pip3 install boto3       # For Python 3.x
+    $ sudo pip install --upgrade boto3</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1141,7 +1142,8 @@ seems it has an obsolete version of <code>awscli</code>.  I did:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>    $ sudo pip install awscli</pre>
+<pre>    $ sudo yum install awscli
+    $ sudo pip install awscli    [ I think this is wrong ]</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1160,13 +1162,18 @@ seems it has an obsolete version of <code>awscli</code>.  I did:</p>
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>More information:
+*  <a href="http://docs.aws.amazon.com/cli/latest/userguide/installing.html" class="bare">http://docs.aws.amazon.com/cli/latest/userguide/installing.html</a>
+*  <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html" class="bare">https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html</a></p>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_create_an_s3_bucket_for_your_submission">5.6.2. Create an S3 bucket for your submission</h4>
 <div class="paragraph">
 <p>Create an S3 &#8220;bucket&#8221; to contain your submission for an AFI build.
-S3 is Amazon AWS' cloud storage system.  Buckets are Amazon AWS'
-storage units in the cloud; they have globally unique names.</p>
+S3 (&#8220;Simple Storage Service&#8221;) is Amazon AWS' cloud storage service.
+Buckets are Amazon AWS' storage units in the cloud; they have globally unique names.</p>
 </div>
 <div class="paragraph">
 <p>Choose a name for the bucket you create.  Amazon&#8217;s rules for bucket names:</p>
@@ -1178,7 +1185,7 @@ storage units in the cloud; they have globally unique names.</p>
 </li>
 <li>
 <p>lowercase letters, digits, hyphens
-(in particular no underscores; dots allowed but not recommended)</p>
+(in particular NO UNDERSCORES; dots allowed but not recommended)</p>
 </li>
 <li>
 <p>must start and end with a letter or digit, not hyphen</p>
@@ -1609,6 +1616,7 @@ design.</p>
 </div>
 <div class="paragraph">
 <p>Details about this step are in:
+<a href="https://github.com/aws/aws-fpga/blob/master/sdk/linux_kernel_drivers/xdma/README.md" class="bare">https://github.com/aws/aws-fpga/blob/master/sdk/linux_kernel_drivers/xdma/README.md</a> and
 <a href="https://github.com/aws/aws-fpga/blob/master/sdk/linux_kernel_drivers/xdma/xdma_install.md" class="bare">https://github.com/aws/aws-fpga/blob/master/sdk/linux_kernel_drivers/xdma/xdma_install.md</a>.</p>
 </div>
 <div class="dlist">
@@ -1761,7 +1769,7 @@ module.</p>
 <div id="footer">
 <div id="footer-text">
 Version v0.1<br>
-Last updated 2020-12-16 19:36:17 EST
+Last updated 2020-12-18 22:12:11 EST
 </div>
 </div>
 </body>

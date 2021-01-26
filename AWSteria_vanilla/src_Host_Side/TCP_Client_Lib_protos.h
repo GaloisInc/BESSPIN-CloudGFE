@@ -15,7 +15,7 @@ extern
 uint32_t  tcp_client_close (uint32_t dummy);
 
 extern
-uint32_t  tcp_client_send (const uint32_t data_size, const char *data);
+uint32_t  tcp_client_send (const uint32_t data_size, const uint8_t *data);
 
 extern
-uint32_t  tcp_client_recv (bool do_poll, const uint32_t data_size, char *data);
+uint32_t  tcp_client_recv (bool do_poll, const uint32_t data_size, uint8_t *data);

@@ -1,9 +1,17 @@
-// Copyright (c) 2020 Bluespec, Inc.  All Rights Reserved
+// Copyright (c) 2020-2021 Bluespec, Inc.  All Rights Reserved
 // Author: Rishiyur S. Nikhil
 
 // See top of corresponding .c file for documentation
 
 #pragma once
+
+// ================================================================
+// PCI stuff
+
+extern int               pci_slot_id;
+extern int               pci_pf_id;
+extern int               pci_bar_id;
+extern pci_bar_handle_t  pci_bar_handle;
 
 // ================================================================
 // Host to hardware channels
