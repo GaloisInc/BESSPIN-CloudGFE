@@ -1,6 +1,6 @@
 #!/usr/bin/python3 -B
 
-# Copyright (c) 2020 Rishiyur S. Nikhil
+# Copyright (c) 2020-2021 Rishiyur S. Nikhil
 
 # See README for details
 

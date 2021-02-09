@@ -1,4 +1,4 @@
-// Copyright (c) 2016-2020 Bluespec, Inc. All Rights Reserved.
+// Copyright (c) 2016-2021 Bluespec, Inc. All Rights Reserved.
 // Author: Rishiyur S. Nikhil
 
 package AWS_OCL_Adapter;
@@ -12,6 +12,8 @@ package AWS_OCL_Adapter;
 //         (response AXI4_LITE_SLVERR if full).
 // The host dequeues from a channel with a single read transaction
 //         (response is AXI4_LITE_SLVERR if empty).
+// The host can test the notFull/notEmpty status of a host-to-hw or
+// hw-to-host channel with a single read transation.
 
 // This module just transports, and does not interpret the 32-bit data
 // transferred on these channels.

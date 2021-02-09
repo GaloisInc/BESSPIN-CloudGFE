@@ -1,4 +1,4 @@
-// Copyright (c) 2013-2020 Bluespec, Inc. All Rights Reserved.
+// Copyright (c) 2013-2021 Bluespec, Inc. All Rights Reserved.
 // Author: Rishiyur S. Nikhil
 
 package Top_HW_Side;
@@ -84,7 +84,7 @@ module mkTop_HW_Side (Empty) ;
    rule rl_connecting (rg_state == STATE_CONNECTING);
       $display ("================================================================");
       $display ("Bluespec AWSteria simulation v1.0");
-      $display ("Copyright (c) 2020 Bluespec, Inc. All Rights Reserved.");
+      $display ("Copyright (c) 2020-2021 Bluespec, Inc. All Rights Reserved.");
       $display ("================================================================");
 
       // Open connection to remote host (host is client, we are server)

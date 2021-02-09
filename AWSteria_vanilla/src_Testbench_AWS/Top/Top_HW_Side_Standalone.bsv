@@ -1,4 +1,4 @@
-// Copyright (c) 2013-2020 Bluespec, Inc. All Rights Reserved.
+// Copyright (c) 2013-2021 Bluespec, Inc. All Rights Reserved.
 // Author: Rishiyur S. Nikhil
 
 package Top_HW_Side_Standalone;
@@ -153,7 +153,7 @@ module mkTop_HW_Side (Empty) ;
       rg_state <= 10;
       $display ("================================================================");
       $display ("Bluespec AWSteria standalone simulation (no host) v1.0");
-      $display ("Copyright (c) 2020 Bluespec, Inc. All Rights Reserved.");
+      $display ("Copyright (c) 2020-2021 Bluespec, Inc. All Rights Reserved.");
       $display ("================================================================");
    endrule
 
