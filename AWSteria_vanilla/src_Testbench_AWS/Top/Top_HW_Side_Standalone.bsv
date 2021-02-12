@@ -239,12 +239,42 @@ module mkTop_HW_Side (Empty) ;
       if (! notFull)
 	 rg_state <= 30;
       else begin
-	 rg_state <= 100;
+	 rg_state <= 40;
 	 Bit #(32) hs_syscontrol_tag_ddr4_is_loaded = 0;
 	 Bit #(32) command = (0                                       // 28'h_0
 			      | hs_syscontrol_tag_ddr4_is_loaded);
 	 fa_chan_write (host_to_hw_chan_control, command);
 	 $display ("    command = %0h", command);
+      end
+   endrule
+
+   // ----------------
+   // Set PC trace interval
+
+   rule rl_set_pc_trace_chan_status_req (rg_state == 40);
+      rg_state <= 41;
+      $display ("%0d: Top_HW_Side_Standalone.rl_set_pc_trace_chan_status_req", cur_cycle);
+      fa_chan_status_req (ocl_host_to_hw_chan_addr_base, host_to_hw_chan_control);
+   endrule
+
+   rule rl_set_pc_trace (rg_state == 41);
+      $display ("%0d: Top_HW_Side_Standalone.rl_set_pc_trace", cur_cycle);
+      let notFull <- fa_chan_status_rsp ();
+      if (! notFull)
+	 rg_state <= 40;
+      else begin
+	 rg_state <= 100;
+	 Bit #(32) hs_syscontrol_tag_pc_trace = 5;
+	 Bit #(32) pc_trace_on                = 1;    // Switch on trace
+	 Bit #(32) pc_trace_interval_max      = 'h3F;
+	 Bit #(32) command = ((pc_trace_interval_max << 8)        // 24'h_pc_trace_interval_max
+			      | (pc_trace_on     << 4)            // 4'h_pc_trace_on
+			      | hs_syscontrol_tag_pc_trace);
+	 fa_chan_write (host_to_hw_chan_control, command);
+	 if (pc_trace_on == 0)
+	    $display ("    command = %0h. Off.", command);
+	 else
+	    $display ("    command = %0h, On: interval_max = %0h", command, pc_trace_interval_max);
       end
    endrule
 
@@ -360,7 +390,7 @@ module mkTop_HW_Side (Empty) ;
       else if (rg_keyboard_poll_delay != 0) begin
 	 // Not yet time to poll keyboard
 	 rg_keyboard_poll_delay <= rg_keyboard_poll_delay - 1;
-	 rg_state <= state_top_of_loop;
+	 rg_state <= 130;
       end
       else begin
 	 // Poll keyboard
@@ -373,13 +403,13 @@ module mkTop_HW_Side (Empty) ;
 	 end
 	 else begin
 	    rg_keyboard_poll_delay <= '1;
-	    rg_state <= state_top_of_loop;
+	    rg_state <= 130;
 	 end
       end
    endrule
 
    rule rl_put_UART_input (rg_state == 121);
-      rg_state <= state_top_of_loop;
+      rg_state <= 130;
       if (verbosity >= 1)
 	 $display ("%0d: Top_HW_Side_Standalone.rl_put_UART_input", cur_cycle);
       let notFull <- fa_chan_status_rsp ();
@@ -387,6 +417,57 @@ module mkTop_HW_Side (Empty) ;
 	 let ch <- pop (f_UART_input_chars);
 	 fa_chan_write (host_to_hw_chan_UART, zeroExtend (ch));
       end
+   endrule
+
+   // ----------------
+   // Get PC trace output
+
+   Reg #(Bit #(3))               rg_pc_trace_word_index <- mkReg (0);    // cycles 0, 1, 2, 3, 4, 5
+   Reg #(Vector #(6, Bit #(32))) rg_v_pc_trace_words    <- mkRegU;
+
+   rule rl_get_PC_trace_out_chan_status_req (rg_state == 130);
+      rg_state <= 131;
+      if (verbosity >= 1)
+	 $display ("%0d: Top_HW_Side_Standalone.rl_get_PC_trace_out_chan_status_req", cur_cycle);
+      fa_chan_status_req (ocl_hw_to_host_chan_addr_base, hw_to_host_chan_pc_trace);
+   endrule
+
+   rule rl_get_PC_trace_out_req (rg_state == 131);
+      if (verbosity >= 1)
+	 $display ("%0d: Top_HW_Side_Standalone.rl_get_PC_trace_out_req", cur_cycle);
+
+      let notEmpty <- fa_chan_status_rsp ();
+      if (! notEmpty)
+	 rg_state <= 140;    // Skip to next step (after PC trace query)
+      else begin
+	 rg_state <= 132;
+	 fa_chan_read_req (hw_to_host_chan_pc_trace);
+      end
+   endrule
+
+   rule rl_get_PC_trace_out (rg_state == 132);
+      rg_state <= 140;
+      if (verbosity >= 1)
+	 $display ("%0d: Top_HW_Side_Standalone.rl_get_PC_trace_out", cur_cycle);
+      let data <- fa_chan_read_rsp ();
+
+      // Accumulate PC trace data
+      Vector #(6, Bit #(32)) v_pc_trace_words = shiftInAtN (rg_v_pc_trace_words, data);
+      rg_v_pc_trace_words <= v_pc_trace_words;
+      if (rg_pc_trace_word_index != 5) begin
+	 rg_pc_trace_word_index <= rg_pc_trace_word_index + 1;
+      end
+      else begin
+	 rg_pc_trace_word_index <= 0;
+	 $display ("Top_HW_Side: cycle %0h, instret %0h, pc %0h",
+		   { v_pc_trace_words [1],  v_pc_trace_words [0] },
+		   { v_pc_trace_words [3],  v_pc_trace_words [2] },
+		   { v_pc_trace_words [5],  v_pc_trace_words [4] });
+      end
+   endrule
+
+   rule rl_end_of_loop (rg_state == 140);
+      rg_state <= state_top_of_loop;
    endrule
 
    // ----------------

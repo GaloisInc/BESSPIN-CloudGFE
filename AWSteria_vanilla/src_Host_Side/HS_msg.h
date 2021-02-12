@@ -33,6 +33,7 @@ extern pci_bar_handle_t  pci_bar_handle;
 #define HS_MSG_HW_TO_HOST_CHAN_UART               ((uint32_t) 1)
 #define HS_MSG_HW_TO_HOST_CHAN_VIRTIO_MMIO_REQ    ((uint32_t) 2)
 #define HS_MSG_HW_TO_HOST_CHAN_DEBUG_MODULE       ((uint32_t) 3)
+#define HS_MSG_HW_TO_HOST_CHAN_PC_TRACE           ((uint32_t) 4)
 
 // ================================================================
 

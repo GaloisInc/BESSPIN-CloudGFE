@@ -134,6 +134,25 @@ bool HS_syscontrol_do_some_work (HS_SysControl_State *state)
 	SimpleQueuePut (state->queue_syscontrol_to_hw, command);
 
 	// ----------------
+	// Set up PC trace
+
+	bool     pc_trace_on           = true;
+	uint32_t pc_trace_interval_max = 100000;
+
+	if (pc_trace_on) {
+	    command = ((pc_trace_interval_max << 8) | (0x1 << 4) | HS_syscontrol_tag_pc_trace);
+	    fprintf (stdout, "%s: (first time) set pc_trace on; interval_max = %0x (chan command: %0x)\n",
+		     __FUNCTION__, pc_trace_interval_max, command);
+	}
+	else {
+	    command = HS_syscontrol_tag_pc_trace;
+	    fprintf (stdout, "%s: (first time) set pc_trace off; (chan command: %0x)\n",
+		     __FUNCTION__, command);
+	}
+
+	SimpleQueuePut (state->queue_syscontrol_to_hw, command);
+
+	// ----------------
 	// Go! Inform hw that DDR4 is loaded, allow the CPU to access it
 
 	command = (0                          // 28'h_0

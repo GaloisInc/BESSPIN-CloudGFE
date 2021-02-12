@@ -3,9 +3,9 @@
 
 // This module encapsulates communication with a tty (keyboard + screen)
 
-// For now, it's very limited, just for testing: no keyboard input,
-// and screen data is immediately written to stdout.  Eventually, this
-// should connect to a separate terminal window.
+// For now, it's very limited, just for testing: keyboard input is
+// taken from stdin, and screen data is immediately written to stdout.
+// Eventually, this should connect to a separate terminal window.
 
 // ================================================================
 // C lib includes

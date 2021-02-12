@@ -30,6 +30,10 @@ typedef struct {
 
 #define HS_syscontrol_tag_shutdown         4
 
+#define HS_syscontrol_tag_pc_trace         5
+//       [7:4]   = off (0) or on (non-zero)
+//       [31:8]  = pc trace interval max
+
 // ================================================================
 
 #include "HS_syscontrol_protos.h"

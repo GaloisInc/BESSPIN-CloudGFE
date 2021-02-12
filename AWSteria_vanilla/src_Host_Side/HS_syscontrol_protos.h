@@ -1,8 +1,8 @@
-// This file is generated automatically from the file 'HS_syscontrol.c'
+// This file is generated automatically from the file '/home/nikhil/git_clones/AWS/BESSPIN-CloudGFE_rsn2/AWSteria_vanilla/src_Host_Side/HS_syscontrol.c'
 //     and contains 'extern' function prototype declarations for its functions.
 // In any C source file using these functions, add:
-//     #include "HS_syscontrol_protos.h"
-// You may also want to create/maintain a file 'HS_syscontrol.h'
+//     #include "/home/nikhil/git_clones/AWS/BESSPIN-CloudGFE_rsn2/AWSteria_vanilla/src_Host_Side/HS_syscontrol_protos.h"
+// You may also want to create/maintain a file '/home/nikhil/git_clones/AWS/BESSPIN-CloudGFE_rsn2/AWSteria_vanilla/src_Host_Side/HS_syscontrol.h'
 //     containing #defines and type declarations.
 // ****************************************************************
 

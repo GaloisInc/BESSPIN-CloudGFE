@@ -38,7 +38,13 @@ import AWS_BSV_Top_Defs :: *;
 import AWS_SoC_Top      :: *;
 import AWS_OCL_Adapter  :: *;
 
+`ifdef INCLUDE_PC_TRACE
+import PC_Trace :: *;
+`endif
+
+`ifdef INCLUDE_TANDEM_VERIF
 import TV_Info :: *;
+`endif
 
 import C_Imports :: *;
 
@@ -55,6 +61,7 @@ export hw_to_host_chan_status;
 export hw_to_host_chan_UART;
 export hw_to_host_chan_mem_req;
 export hw_to_host_chan_debug_module;
+export hw_to_host_chan_pc_trace;
 
 // ================================================================
 // OCL channel numbers
@@ -69,6 +76,7 @@ Integer hw_to_host_chan_status       = 0;
 Integer hw_to_host_chan_UART         = 1;
 Integer hw_to_host_chan_mem_req      = 2;
 Integer hw_to_host_chan_debug_module = 3;
+Integer hw_to_host_chan_pc_trace     = 4;
 
 // ================================================================
 
@@ -98,30 +106,33 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
    Reg #(Bool)     rg_initialized_1  <- mkReg (False);    // Relayed ddr4_ready to core
    Reg #(Bool)     rg_initialized_2  <- mkReg (False);    // Start SoC
 
+`ifdef INCLUDE_PC_TRACE
+   Reg #(Bool)       rg_pc_trace_on           <- mkReg (False);
+   Reg #(Bit #(64))  rg_pc_trace_interval_max <- mkRegU;
+`endif
+
    // ================================================================
    // Connect OCL Adapter and SoC control
    // Writes are coded as follows: (ad hoc; we may evolve this as needed)
    // [3:0] is a tag; [31:4] gives more info
 
-   Bit #(4) tag_ddr4_is_loaded  = 0;
-   //       [31:4]  = ?:    ddr4 has been loaded from host
-   Bit #(4) tag_verbosity       = 1;
-   //       [31:8]  = logdelay, [7:4] = verbosity
-   Bit #(4) tag_no_watch_tohost = 2;
-   //       [31:4]  = ?:    set 'watch_tohost' to False
-   Bit #(4) tag_watch_tohost    = 3;
-   //       [31:4]  = x     set 'watch_tohost' to True; tohost_addr = (x << 4)
-   Bit #(4) tag_shutdown        = 4;
-   //       [31:4]  = ?:    stop simulation
+   Bit #(4) tag_ddr4_is_loaded  = 0;    // ddr4 has been loaded from host
+   Bit #(4) tag_verbosity       = 1;    // set verbosity
+   Bit #(4) tag_no_watch_tohost = 2;    // set 'watch_tohost' to False
+   Bit #(4) tag_watch_tohost    = 3;    // set 'watch_tohost' to True
+   Bit #(4) tag_shutdown        = 4;    // stop simulation
+   Bit #(4) tag_pc_trace        = 5;    // set pc trace subsampling interval
 
    rule rl_host_to_hw_control;
       Bit #(32) data <- pop_o (ocl_adapter.v_from_host [host_to_hw_chan_control]);
       Bit #(4)  tag = data [3:0];
       if (tag == tag_ddr4_is_loaded) begin
+	 // data [31:4] ignored
 	 $display ("%0d: %m.rl_host_to_hw_control: ddr4 loaded", cur_cycle);
 	 rg_ddr4_is_loaded <= True;
       end
       else if (tag == tag_verbosity) begin
+	 // data [31:8]  = logdelay, [7:4] = verbosity
 	 Bit #(4)  verbosity = data [7:4];
 	 Bit #(64) logdelay  = zeroExtend (data [31:8]);
 	 $display ("%0d: %m.rl_host_to_hw_control: verbosity %0d, logdelay %0h",
@@ -129,19 +140,36 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
 	 soc_top.ma_set_verbosity (verbosity, logdelay);
       end
       else if (tag == tag_no_watch_tohost) begin
+	 // data [31:4] ignored
 	 $display ("%0d: %m.rl_host_to_hw_control: do not watch tohost", cur_cycle);
 	 soc_top.ma_set_watch_tohost (False, ?);
       end
       else if (tag == tag_watch_tohost) begin
+	 // (data [31:4] << 4) = tohost_addr
 	 Bit #(64) tohost_addr = zeroExtend ({ data [31:4], 4'b00 });
 	 $display ("%0d: %m.rl_host_to_hw_control: watch tohost at addr %0h",
 		   cur_cycle, tohost_addr);
 	 soc_top.ma_set_watch_tohost (True, tohost_addr);
       end
       else if (tag == tag_shutdown) begin
+	 // data [31:4] ignored
 	 $display ("%0d: %m.rl_host_to_hw_control: SHUTDOWN", cur_cycle);
 	 // TODO: RETURN THIS OUT OF THE INTERFACE, DON'T $FINISH HERE
 	 $finish (0);
+      end
+      else if (tag == tag_pc_trace) begin
+	 // data [7:4]  = (0 ? switch off PC tracing : switch on)
+	 // data [31:8] = max of interval countdown (0 means every instruction)
+	 if (data [7:4] == 0) begin
+	    rg_pc_trace_on <= False;
+	    $display ("%0d: %m.rl_host_to_hw_control: set PC trace off", cur_cycle);
+	 end
+	 else begin
+	    rg_pc_trace_on           <= True;
+	    rg_pc_trace_interval_max <= zeroExtend (data [31:8]);
+	    $display ("%0d: %m.rl_host_to_hw_control: set PC trace on, interval max = %0h",
+		      cur_cycle, data [31:8]);
+	 end
       end
       else begin
 	 $display ("%0d: %m.rl_host_to_hw_control: ERROR: unrecognized control command %0h",
@@ -267,6 +295,61 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
 	 $display ("AWS_BSV_Top.rl_control_to_DM_wr_req: dm_addr %0h data %0h", rg_dm_addr, data);
    endrule
 
+`endif
+
+   // ================================================================
+   // PC Trace
+   // Serialize each PC_Trace struct into 32-bit words sent to host
+
+`ifdef INCLUDE_PC_TRACE
+   Reg #(Bit #(3))   rg_pc_trace_serialize_state <- mkReg (0);
+   Reg #(PC_Trace)   rg_pc_trace                 <- mkRegU;
+   Reg #(Bit #(64))  rg_pc_trace_interval_ctr    <- mkReg (0);
+
+   rule rl_pc_trace_0 (rg_pc_trace_serialize_state == 0);
+      PC_Trace pc_trace <- soc_top.g_pc_trace.get;
+
+      if (rg_pc_trace_on && (rg_pc_trace_interval_ctr == 0)) begin
+	 // Send sample to host (in next few rules); re-init sub-sample counter
+	 ocl_adapter.v_to_host [hw_to_host_chan_pc_trace].enq (pc_trace.cycle [31:0]);
+	 rg_pc_trace                 <= pc_trace;
+	 rg_pc_trace_interval_ctr    <= rg_pc_trace_interval_max;
+	 rg_pc_trace_serialize_state <= 1;
+	 $display ("PC Trace: cycle %0d  instret %0d  pc %0h (sending)",
+		   pc_trace.cycle, pc_trace.instret, pc_trace.pc);
+      end
+      else begin
+	 // Discard sample; just do sub-sample counter
+	 rg_pc_trace_interval_ctr <= rg_pc_trace_interval_ctr - 1;
+	 // $display ("PC Trace: cycle %0d  instret %0d  pc %0h",
+	 //	   pc_trace.cycle, pc_trace.instret, pc_trace.pc);
+      end
+   endrule
+
+   rule rl_pc_trace_1 (rg_pc_trace_serialize_state == 1);
+      ocl_adapter.v_to_host [hw_to_host_chan_pc_trace].enq (rg_pc_trace.cycle [63:32]);
+      rg_pc_trace_serialize_state <= 2;
+   endrule
+
+   rule rl_pc_trace_2 (rg_pc_trace_serialize_state == 2);
+      ocl_adapter.v_to_host [hw_to_host_chan_pc_trace].enq (rg_pc_trace.instret [31:0]);
+      rg_pc_trace_serialize_state <= 3;
+   endrule
+
+   rule rl_pc_trace_3 (rg_pc_trace_serialize_state == 3);
+      ocl_adapter.v_to_host [hw_to_host_chan_pc_trace].enq (rg_pc_trace.instret [63:32]);
+      rg_pc_trace_serialize_state <= 4;
+   endrule
+
+   rule rl_pc_trace_4 (rg_pc_trace_serialize_state == 4);
+      ocl_adapter.v_to_host [hw_to_host_chan_pc_trace].enq (rg_pc_trace.pc [31:0]);
+      rg_pc_trace_serialize_state <= 5;
+   endrule
+
+   rule rl_pc_trace_5 (rg_pc_trace_serialize_state == 5);
+      ocl_adapter.v_to_host [hw_to_host_chan_pc_trace].enq (rg_pc_trace.pc [63:32]);
+      rg_pc_trace_serialize_state <= 0;
+   endrule
 `endif
 
    // ================================================================

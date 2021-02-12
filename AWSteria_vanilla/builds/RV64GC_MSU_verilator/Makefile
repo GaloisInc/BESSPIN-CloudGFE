@@ -44,8 +44,7 @@ BSC_COMPILATION_FLAGS += \
 	-D FABRIC64    \
 	-D WATCH_TOHOST    \
 	-D MEM_512b    \
-
-
+	-D INCLUDE_PC_TRACE \
 #	-D INCLUDE_TANDEM_VERIF \
 
 
@@ -81,7 +80,7 @@ CUSTOM_DIRS = $(LLCACHE_DIR):$(PROCS_LIB_DIR):$(PROCS_OOO_DIR):$(COHERENCE_DIR)
 include $(AWSTERIA)/builds/Resources/Include_Common.mk
 
 #================================================================
-# Makefile rules for building for specific simulator: verilator
+# Makefile rules for building for specific simulator
 
 include $(AWSTERIA)/builds/Resources/Include_verilator.mk
 

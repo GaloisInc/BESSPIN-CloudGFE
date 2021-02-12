@@ -324,6 +324,19 @@ int HS_msg_host_to_hw_DEBUG_MODULE_data (uint32_t data)
 }
 
 // ================================================================
+// PC Trace channel
+
+int HS_msg_hw_to_host_PC_TRACE_notEmpty (bool *p_notEmpty)
+{
+    return HS_msg_hw_to_host_chan_notEmpty (HS_MSG_HW_TO_HOST_CHAN_PC_TRACE, p_notEmpty);
+}
+
+int HS_msg_hw_to_host_PC_TRACE_data (uint32_t *p_data)
+{
+    return HS_msg_hw_to_host_chan_data (HS_MSG_HW_TO_HOST_CHAN_PC_TRACE, p_data);
+}
+
+// ================================================================
 // Virtio MMIO read/write
 
 int HS_msg_hw_to_host_VIRTIO_MMIO_REQ_notEmpty (bool *p_notEmpty)

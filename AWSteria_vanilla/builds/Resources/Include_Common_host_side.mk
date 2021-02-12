@@ -11,7 +11,7 @@
 
 CFLAGS += -std=gnu11 -g -Wall -Werror
 OBJS   += HS_main.o  Memhex32_read.o \
-		HS_syscontrol.o  HS_tty.o  HS_virtio.o  HS_gdbstub.o  SimpleQueue.o \
+		HS_syscontrol.o  HS_pc_trace.o  HS_tty.o  HS_virtio.o  HS_gdbstub.o  SimpleQueue.o \
 		HS_msg.o
 
 CC     = gcc $(CFLAGS)
@@ -73,6 +73,7 @@ HS_MAIN_SRCS_H = $(SRC)/Memhex32_read.h  $(SRC)/Memhex32_read_protos.h \
 		$(SRC)/SimpleQueue.h     $(SRC)/SimpleQueue_protos.h \
 		$(SRC)/HS_syscontrol.h   $(SRC)/HS_syscontrol_protos.h \
 		$(SRC)/HS_tty.h          $(SRC)/HS_tty_protos.h \
+		$(SRC)/HS_pc_trace.h     $(SRC)/HS_pc_trace_protos.h \
 		$(SRC)/HS_virtio.h       $(SRC)/HS_virtio_protos.h \
 		$(SRC)/HS_gdbstub.h      $(SRC)/HS_gdbstub_protos.h \
 		$(SRC)/HS_msg.h          $(SRC)/HS_msg_protos.h \
@@ -99,6 +100,14 @@ HS_tty.o: $(SRC)/HS_tty.h  $(SRC)/HS_tty.c  $(SRC)/HS_tty_protos.h
 
 $(SRC)/HS_tty_protos.h: $(SRC)/HS_tty.c
 	C_Proto_Extract.py  $(SRC)/HS_tty.c
+
+# ================================================================
+
+HS_pc_trace.o: $(SRC)/HS_pc_trace.h  $(SRC)/HS_pc_trace.c  $(SRC)/HS_pc_trace_protos.h
+	$(CC) -c  $(SRC)/HS_pc_trace.c
+
+$(SRC)/HS_pc_trace_protos.h: $(SRC)/HS_pc_trace.c
+	C_Proto_Extract.py  $(SRC)/HS_pc_trace.c
 
 # ================================================================
 

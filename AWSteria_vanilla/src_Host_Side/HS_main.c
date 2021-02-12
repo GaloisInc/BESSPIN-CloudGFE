@@ -52,6 +52,7 @@
 #include "SimpleQueue.h"
 #include "HS_syscontrol.h"
 #include "HS_tty.h"
+#include "HS_pc_trace.h"
 #include "HS_virtio.h"
 #include "HS_msg.h"
 
@@ -224,6 +225,7 @@ int start_hw (const char *tun_iface,
     int err;
     HS_SysControl_State *syscontrol_state = HS_syscontrol_init ();
     HS_tty_State        *tty_state        = HS_tty_init ();
+    HS_pc_trace_State   *pc_trace_state   = HS_pc_trace_init ();
     HS_Virtio_State     *virtio_state     = HS_virtio_init (tun_iface,
 							    enable_virtio_console,
 							    dma_enabled,
@@ -345,6 +347,26 @@ int start_hw (const char *tun_iface,
 	    err = HS_msg_hw_to_host_UART_data (& data);
 	    if (err) break;
 	    err = HS_tty_from_hw_data (tty_state, data);
+	    if (err) break;
+	}
+
+	// ================================
+	// PC Trace work
+
+	did_some_work |= HS_pc_trace_do_some_work (pc_trace_state);
+
+	// ----------------
+	// Move PC Trace words from hw to host
+
+	err = HS_msg_hw_to_host_PC_TRACE_notEmpty (& notEmpty);
+	if (err) break;
+	err = HS_pc_trace_from_hw_notFull (pc_trace_state, & notFull);
+	if (err) break;
+
+	if (notEmpty && notFull) {
+	    err = HS_msg_hw_to_host_PC_TRACE_data (& data);
+	    if (err) break;
+	    err = HS_pc_trace_from_hw_data (pc_trace_state, data);
 	    if (err) break;
 	}
 

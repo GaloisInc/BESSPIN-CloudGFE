@@ -58,6 +58,10 @@ import AXI4_Types        :: *;
 import AWS_BSV_Top_Defs  :: *;    // For AXI4 bus widths (id, addr, data, user)
 import AWS_DDR4_Adapter  :: *;
 
+`ifdef INCLUDE_PC_TRACE
+import PC_Trace :: *;
+`endif
+
 `ifdef INCLUDE_TANDEM_VERIF
 import TV_Info :: *;
 `endif
@@ -98,6 +102,10 @@ interface AWS_SoC_Top_IFC;
 `ifdef INCLUDE_GDB_CONTROL
    // To external controller (E.g., GDB)
    interface Server #(Control_Req, Control_Rsp) server_external_control;
+`endif
+
+`ifdef INCLUDE_PC_TRACE
+   interface Get #(PC_Trace) g_pc_trace;
 `endif
 
 `ifdef INCLUDE_TANDEM_VERIF
@@ -406,6 +414,10 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    // To external controller (E.g., GDB)
 `ifdef INCLUDE_GDB_CONTROL
    interface server_external_control = toGPServer (f_external_control_reqs, f_external_control_rsps);
+`endif
+
+`ifdef INCLUDE_PC_TRACE
+   interface Get  g_pc_trace = core.g_pc_trace;
 `endif
 
 `ifdef INCLUDE_TANDEM_VERIF
