@@ -137,7 +137,7 @@ bool HS_syscontrol_do_some_work (HS_SysControl_State *state)
 	// Set up PC trace
 
 	bool     pc_trace_on           = true;
-	uint32_t pc_trace_interval_max = 100000;
+	uint32_t pc_trace_interval_max = 100000 - 1;
 
 	if (pc_trace_on) {
 	    command = ((pc_trace_interval_max << 8) | (0x1 << 4) | HS_syscontrol_tag_pc_trace);
