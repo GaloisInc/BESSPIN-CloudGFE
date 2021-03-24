@@ -47,9 +47,10 @@
 #endif
 
 // ----------------
-// Includes for PCI communications
+// PCI communications includes
 
 #ifdef IN_F1
+// From aws-fpga/sdk/userspace/include/
 #include "fpga_pci.h"
 #include "fpga_mgmt.h"
 #include "fpga_dma.h"
@@ -58,13 +59,13 @@
 #endif
 
 #ifdef IN_SIMULATION
-// Simulation library replacing AWS' actual FPGA interaction library
+// AWSteria library, for simulation, replacing AWS' actual FPGA interaction library
 // AWS_Sim_Lib simulates the fpga peek, poke, dma_read and dma_write calls provided by AWS.
 #include "AWS_Sim_Lib.h"
 #endif
 
 // ----------------
-// Virtio library includes
+// Virtio/TinyEmu code includes
 
 #include "virtio.h"
 #include "temu.h"
@@ -115,7 +116,7 @@ int console_read_data (void *opaque, uint8_t *buf, int len)
 
 /*
 static
-void *HS_virtio_process_io_thread(void *opaque)
+void *HS_virtio_process_io_thread (void *opaque)
 {
     VirtioDevices *vds = (VirtioDevices *) opaque;
 
