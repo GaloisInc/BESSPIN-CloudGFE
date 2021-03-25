@@ -172,11 +172,11 @@ int HS_msg_hw_to_host_chan_notEmpty (uint32_t chan_id, bool *p_notEmpty)
     if (err == 0) {
 	*p_notEmpty = (avail != 0);
 	if (verbosity != 0)
-	    fprintf (stdout, "%s (chan_id %0x) => %0d", __FUNCTION__, chan_id, *p_notEmpty);
+	    fprintf (stdout, "%s (chan_id %0x) => %0d\n", __FUNCTION__, chan_id, *p_notEmpty);
     }
     else {
 	if (verbosity != 0)
-	    fprintf (stdout, "%s (chan_id %0x) => ERROR", __FUNCTION__, chan_id);
+	    fprintf (stdout, "%s (chan_id %0x) => ERROR\n", __FUNCTION__, chan_id);
     }
     return err;
 }
@@ -196,11 +196,11 @@ int HS_msg_hw_to_host_chan_data (uint32_t chan_id, uint32_t *p_data)
     int err = fpga_pci_peek (pci_bar_handle, ocl_addr, p_data);
     if (err == 0) {
 	if (verbosity != 0)
-	    fprintf (stdout, "%s (chan_id %0x) => %0d", __FUNCTION__, chan_id, *p_data);
+	    fprintf (stdout, "%s (chan_id %0x) => %0d\n", __FUNCTION__, chan_id, *p_data);
     }
     else {
 	if (verbosity != 0)
-	    fprintf (stdout, "%s (chan_id %0x) => ERROR", __FUNCTION__, chan_id);
+	    fprintf (stdout, "%s (chan_id %0x) => ERROR\n", __FUNCTION__, chan_id);
     }
     return err;
 }
@@ -220,11 +220,11 @@ int HS_msg_host_to_hw_chan_notFull (uint32_t chan_id, bool *p_notFull)
     if (err == 0) {
 	*p_notFull = (avail != 0);
 	if (verbosity != 0)
-	    fprintf (stdout, "%s (chan_id 0x%0x) => %0d", __FUNCTION__, chan_id, *p_notFull);
+	    fprintf (stdout, "%s (chan_id 0x%0x) => %0d\n", __FUNCTION__, chan_id, *p_notFull);
     }
     else {
 	if (verbosity != 0)
-	    fprintf (stdout, "%s (chan_id 0x%0x) => ERROR", __FUNCTION__, chan_id);
+	    fprintf (stdout, "%s (chan_id 0x%0x) => ERROR\n", __FUNCTION__, chan_id);
     }
     return err;
 }
@@ -243,12 +243,12 @@ int HS_msg_host_to_hw_chan_data (uint32_t chan_id, uint32_t data)
     int err = fpga_pci_poke (pci_bar_handle, ocl_addr, data);
     if (err == 0) {
 	if (verbosity != 0)
-	    fprintf (stdout, "%s (chan_id 0x%0x, data 0x%0x)",
+	    fprintf (stdout, "%s (chan_id 0x%0x, data 0x%0x)\n",
 		     __FUNCTION__, chan_id, data);
     }
     else {
 	if (verbosity != 0)
-	    fprintf (stdout, "%s (chan_id 0x%0x, data 0x%0x) => ERROR",
+	    fprintf (stdout, "%s (chan_id 0x%0x, data 0x%0x) => ERROR\n",
 		     __FUNCTION__, chan_id, data);
     }
     return err;

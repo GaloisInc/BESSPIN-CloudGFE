@@ -215,7 +215,8 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    // ----------------
    // Connect interrupt sources for CPU external interrupt request inputs.
 
-   Reg #(Bool) rg_aws_host_to_hw_interrupt <- mkReg (False);
+   Reg #(Bool) rg_aws_host_to_hw_interrupt      <- mkReg (False);
+   Reg #(Bool) rg_aws_host_to_hw_interrupt_prev <- mkReg (False);    // For debugging only
 
    (* fire_when_enabled, no_implicit_conditions *)
    rule rl_connect_external_interrupt_requests;
@@ -235,13 +236,13 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
       // Non-maskable interrupt request. [Tie-off; TODO: connect to genuine sources]
       core.nmi_req (False);
 
-      /* For debugging only
-      if ((! rg_intr_prev) && intr)
-	 $display ("AWS_SoC_Top: intr posedge");
-      else if (rg_intr_prev && (! intr))
-	 $display ("AWS_SoC_Top: intr negedge");
-
-      rg_intr_prev <= intr;
+      /*
+      // For debugging only
+      if ((! rg_aws_host_to_hw_interrupt_prev) && rg_aws_host_to_hw_interrupt)
+	 $display ("%0d: %m.rl_connect_external_interrupt_requests: host-to-hw interrupt posedge", cur_cycle);
+      else if (rg_aws_host_to_hw_interrupt_prev && (! rg_aws_host_to_hw_interrupt))
+	 $display ("%0d: %m.rl_connect_external_interrupt_requests: host-to-hw interrupt negedge", cur_cycle);
+      rg_aws_host_to_hw_interrupt_prev <= rg_aws_host_to_hw_interrupt;
       */
    endrule
 

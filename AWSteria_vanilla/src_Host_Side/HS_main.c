@@ -482,7 +482,7 @@ int main (int argc, char *argv [])
     // AWSteria code
 
     // TODO: the following should come from command-line args
-    const char *tun_iface = NULL;
+    const char *tun_iface = NULL;    // network tunnel driver, cf. https://en.wikipedia.org/wiki/TUN/TAP
     const int   enable_virtio_console = 0;
     const int   dma_enabled           = 1;
     const int   xdma_enabled          = 1;

@@ -370,6 +370,7 @@ int HS_virtio_rsp_to_hw_data (HS_Virtio_State *state, uint32_t *p_data)
 int HS_virtio_irq_to_hw_notEmpty (HS_Virtio_State *state, bool *p_notEmpty)
 {
     *p_notEmpty = (! SimpleQueueEmpty (state->queue_virtio_irq_to_hw));
+
     return 0;
 }
 
@@ -470,7 +471,7 @@ bool HS_virtio_do_some_work (HS_Virtio_State *state)
 	    fprintf (stdout, "%s: Generating interrrupt for hw\n", __FUNCTION__);
 	send_irq = false;
 
-	SimpleQueuePut (state->queue_virtio_irq_to_hw, 0xFEDCFEDC);
+	SimpleQueuePut (state->queue_virtio_irq_to_hw, 0xFEBBFEDD);
 	did_some_work = true;
     }
 

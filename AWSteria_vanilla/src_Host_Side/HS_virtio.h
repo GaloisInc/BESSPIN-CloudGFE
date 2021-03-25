@@ -32,7 +32,7 @@ typedef struct {
     VIRTIODevice     *virtio_entropy;
     IRQSignal        *irq;
     int               irq_num;
-    const char       *tun_ifname;
+    const char       *tun_ifname;    // network tunnel driver, cf. https://en.wikipedia.org/wiki/TUN/TAP
     int               stop_pipe [2];
     pthread_t         io_thread;
 } VirtioDevices;
