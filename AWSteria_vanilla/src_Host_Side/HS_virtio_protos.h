@@ -11,7 +11,6 @@
 extern
 HS_Virtio_State *HS_virtio_init (const char *tun_iface,
 				 const int   enable_virtio_console,
-				 const int   dma_enabled,
 				 const int   xdma_enabled,
 				 const char *block_files [],
 				 const int   num_block_files);

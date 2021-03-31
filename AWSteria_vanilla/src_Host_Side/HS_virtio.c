@@ -82,7 +82,7 @@ extern int pci_read_fd;
 extern int pci_write_fd;
 
 static int debug_virtio   = 1;
-// static int debug_stray_io = 0;
+static int debug_stray_io = 0;
 
 // ================================================================
 // These two functions are called by the Virtio console device driver
@@ -92,7 +92,6 @@ static int debug_virtio   = 1;
 //     Both can co-exist.
 // TODO: can be improved substantially.
 
-/*
 static
 void console_write_data (void *opaque, const uint8_t *buf, int buf_len)
 {
@@ -109,12 +108,10 @@ int console_read_data (void *opaque, uint8_t *buf, int len)
 
     return ret;
 }
-*/
 
 // ================================================================
 // This thread performs the Virtio 'work'
 
-/*
 static
 void *HS_virtio_process_io_thread (void *opaque)
 {
@@ -172,11 +169,9 @@ void *HS_virtio_process_io_thread (void *opaque)
     }
     return NULL;
 }
-*/
 
 // ================================================================
 
-/*
 static
 void fn_set_irq (void *opaque, int irq_num, int level)
 {
@@ -196,18 +191,14 @@ void fn_set_irq (void *opaque, int irq_num, int level)
 	data = (1 << 31) | data;
     SimpleQueuePut (state->queue_virtio_irq_to_hw, data);
 }
-*/
 
 HS_Virtio_State *HS_virtio_init (const char *tun_iface,
 				 const int   enable_virtio_console,
-				 const int   dma_enabled,
 				 const int   xdma_enabled,
 				 const char *block_files [],
 				 const int   num_block_files)
 {
     VirtioDevices *vds = NULL;
-
-    /* TODO: fixup when we start supporting virtio
 
     // Allocate and initialize VirtioDevices object
     vds = (VirtioDevices *) malloc (sizeof (VirtioDevices));
@@ -248,10 +239,6 @@ HS_Virtio_State *HS_virtio_init (const char *tun_iface,
     fprintf(stderr, "virtio entropy device %p at addr %08lx\n",
 	    vds->virtio_entropy, vds->virtio_bus->addr);
 
-    // TODO: Do we need this?
-    // if (dma_enabled)
-    //    fpga->map_pcis_dma();
-
     // ================================================================
     // Set up XDMA
     // Corresponds to this in Connectal:
@@ -273,7 +260,6 @@ HS_Virtio_State *HS_virtio_init (const char *tun_iface,
 	    fprintf (stdout, "virtio block device %p at addr %08lx\r\n",
 		     vds->virtio_block, vds->virtio_bus->addr);
     }
-
 
     // ================================================================
     // Set up a virtio console
@@ -308,7 +294,6 @@ HS_Virtio_State *HS_virtio_init (const char *tun_iface,
     virtio_start_pending_notify_thread (n, ps);
     pthread_create (& vds->io_thread, NULL, & HS_virtio_process_io_thread, vds);
     pthread_setname_np (vds->io_thread, "VirtIO I/O");
-    */
 
     // ================================================================
     // Allocate and initialize HS_Virtio_State object
@@ -396,16 +381,14 @@ int HS_virtio_irq_to_hw_data (HS_Virtio_State *state, uint32_t *p_data)
 // MMIO reads from guest
 // Returns value read from MMIO control register array.
 
-static bool send_irq = false;    // TODO: DELETE AFTER DEBUG
-
 static
 uint32_t HS_virtio_MMIO_read (VirtioDevices *vds, uint32_t addr)
 {
     if (debug_virtio)
 	fprintf (stdout, "%s: addr %0x\n", __FUNCTION__, addr);
 
-    uint32_t result = addr + 1;    // TODO: temporary
-    /* TODO: fixup when we start supporting Virtio
+    uint32_t result = 0;
+
     PhysMemoryRange *pr = get_phys_mem_range (vds->mem_map, addr);
     if (pr) {
         uint32_t offset    = addr - pr->addr;
@@ -416,10 +399,6 @@ uint32_t HS_virtio_MMIO_read (VirtioDevices *vds, uint32_t addr)
         if (debug_stray_io)
 	    fprintf (stdout, "%s: ERROR: UNKNOWN ADDR %0x\n", __FUNCTION__, addr);
     }
-    */
-
-    if (addr == 0x62500024) send_irq = true;    // TODO: DELETE AFTER DEBUG
-
     return result;
 }
 
@@ -432,8 +411,7 @@ uint32_t HS_virtio_MMIO_write (VirtioDevices *vds, uint32_t addr, uint32_t data)
     if (debug_virtio)
 	fprintf (stdout, "%s: addr %0x data %0x\n", __FUNCTION__, addr, data);
 
-    uint32_t result = data + 0x100;    // TODO: temporary
-    /* TODO: fixup when we start supporting Virtio
+    uint32_t result = 0;
 
     PhysMemoryRange *pr = get_phys_mem_range (vds->mem_map, addr);
 
@@ -445,12 +423,14 @@ uint32_t HS_virtio_MMIO_write (VirtioDevices *vds, uint32_t addr, uint32_t data)
     else {
         if (debug_stray_io)
 	    fprintf (stdout, "%s: ERROR: UNKNOWN ADDR %0x data %0x\n", __FUNCTION__, addr, data);
+	result = 1;
     }
-    */
     return result;
 }
 
 // ================================================================
+
+static bool send_irq = false;    // TODO: DELETE AFTER DEBUG
 
 bool HS_virtio_do_some_work (HS_Virtio_State *state)
 {

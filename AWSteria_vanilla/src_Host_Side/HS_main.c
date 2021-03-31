@@ -217,7 +217,6 @@ out:
 
 int start_hw (const char *tun_iface,
 	      const int   enable_virtio_console,
-	      const int   dma_enabled,
 	      const int   xdma_enabled,
 	      const char *block_files [],
 	      const int   num_block_files)
@@ -228,7 +227,6 @@ int start_hw (const char *tun_iface,
     HS_pc_trace_State   *pc_trace_state   = HS_pc_trace_init ();
     HS_Virtio_State     *virtio_state     = HS_virtio_init (tun_iface,
 							    enable_virtio_console,
-							    dma_enabled,
 							    xdma_enabled,
 							    block_files,
 							    num_block_files);
@@ -484,7 +482,6 @@ int main (int argc, char *argv [])
     // TODO: the following should come from command-line args
     const char *tun_iface = NULL;    // network tunnel driver, cf. https://en.wikipedia.org/wiki/TUN/TAP
     const int   enable_virtio_console = 0;
-    const int   dma_enabled           = 1;
     const int   xdma_enabled          = 1;
     const char *block_files [1] = { NULL };
     const int   num_block_files = 1;
@@ -492,7 +489,6 @@ int main (int argc, char *argv [])
     // Start the hardware
     rc = start_hw (tun_iface,
 		   enable_virtio_console,
-		   dma_enabled,
 		   xdma_enabled,
 		   block_files,
 		   num_block_files);
