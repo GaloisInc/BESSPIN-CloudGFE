@@ -79,6 +79,7 @@ int HS_msg_initialize (void)
 	return 1;
     }
     fprintf (stdout, "%s: fpga_mgmt_init() done\n", __FUNCTION__);
+    fprintf (stdout, "    pci_slot_id = %0d\n", pci_slot_id);
 
     // ----------------
     // Open file descriptor for DMA read over AXI4
@@ -90,7 +91,7 @@ int HS_msg_initialize (void)
 	fprintf (stdout, "ERROR: %s: unable to open read-dma queue\n", __FUNCTION__);
 	return 1;
     }
-    fprintf (stdout, "ERROR: %s: opened PCI read-dma queue\n", __FUNCTION__);
+    fprintf (stdout, "%s: opened PCI read-dma queue; pci_read_fd = %0d\n", __FUNCTION__, pci_read_fd);
 
     // ----------------
     // Open file descriptor for DMA write over AXI4
@@ -102,7 +103,7 @@ int HS_msg_initialize (void)
 	fprintf (stdout, "ERROR: %s: unable to open write-dma queue\n", __FUNCTION__);
 	return 1;
     }
-
+    fprintf (stdout, "%s: opened PCI write-dma queue; pci_write_fd = %0d\n", __FUNCTION__, pci_write_fd);
 
     int fpga_pci_attach_flags = 0;
 
@@ -111,6 +112,8 @@ int HS_msg_initialize (void)
 	fprintf (stdout, "%s: fpga_pci_init() failed: rc = %0d\n", __FUNCTION__, rc);
 	return 1;
     }
+    fprintf (stdout, "%s: Did pci_attach; pci_pf_id = %0d, pci_bar_id = %0d => pci_bar_handle = %0d\n",
+	     __FUNCTION__, pci_pf_id, pci_bar_id, pci_bar_handle);
 #endif
 
 #ifdef IN_SIMULATION

@@ -1,8 +1,8 @@
-// This file is generated automatically from the file '/home/nikhil/git_clones/AWS/BESSPIN-CloudGFE_rsn2/AWSteria_vanilla/src_Host_Side/HS_msg.c'
+// This file is generated automatically from the file '/home/centos/git_clones/AWS/BESSPIN-CloudGFE_rsn2/AWSteria_vanilla/src_Host_Side/HS_msg.c'
 //     and contains 'extern' function prototype declarations for its functions.
 // In any C source file using these functions, add:
-//     #include "/home/nikhil/git_clones/AWS/BESSPIN-CloudGFE_rsn2/AWSteria_vanilla/src_Host_Side/HS_msg_protos.h"
-// You may also want to create/maintain a file '/home/nikhil/git_clones/AWS/BESSPIN-CloudGFE_rsn2/AWSteria_vanilla/src_Host_Side/HS_msg.h'
+//     #include "/home/centos/git_clones/AWS/BESSPIN-CloudGFE_rsn2/AWSteria_vanilla/src_Host_Side/HS_msg_protos.h"
+// You may also want to create/maintain a file '/home/centos/git_clones/AWS/BESSPIN-CloudGFE_rsn2/AWSteria_vanilla/src_Host_Side/HS_msg.h'
 //     containing #defines and type declarations.
 // ****************************************************************
 

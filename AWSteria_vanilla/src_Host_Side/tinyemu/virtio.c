@@ -36,9 +36,9 @@
 #include <stdarg.h>
 #include <pthread.h>
 #include <unistd.h>
-#include <stdatomic.h>
+// TODO: RESTORE #include <stdatomic.h>
 
-#include <sys/random.h>
+// TODO: RESTORE #include <sys/random.h>
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <sys/types.h>
@@ -167,7 +167,7 @@ struct VIRTIODevice {
     uint32_t config_space_size; /* in bytes, must be multiple of 4 */
     uint8_t config_space[MAX_CONFIG_SPACE_SIZE];
 
-    _Atomic uint32_t pending_queue_notify;
+  // TODO: RESTORE _Atomic uint32_t pending_queue_notify;
 };
 
 static uint32_t virtio_mmio_read(void *opaque, uint32_t offset1, int size_log2);
@@ -554,7 +554,7 @@ static void virtio_consume_desc(VIRTIODevice *s,
     virtio_write32(s, used_elem_addr, desc_idx);
     virtio_write32(s, used_elem_addr + 4, desc_len);
 
-    atomic_thread_fence(memory_order_release);
+    // TODO: RESTORE atomic_thread_fence(memory_order_release);
     virtio_write16(s, used_idx_addr, used_idx + 1);
 
     s->int_status |= 1;
@@ -610,7 +610,7 @@ static void queue_notify(VIRTIODevice *s, int queue_idx)
     if (qs->manual_recv)
         return;
 
-    atomic_thread_fence(memory_order_acquire);
+    // TODO: RESTORE atomic_thread_fence(memory_order_acquire);
     while (qs->last_avail_idx != avail_idx) {
         desc_idx = virtio_read16(s, qs->avail_addr + 4 +
                                  (qs->last_avail_idx & (qs->num - 1)) * 2);
@@ -1461,7 +1461,7 @@ static int virtio_entropy_recv_request(VIRTIODevice *s, int queue_idx,
             if (write_size - offset < block_size) {
                 block_size = write_size - offset;
             }
-            ret = getrandom(s1->buf, block_size, 0);
+            ret = 0; // TODO: RESTORE getrandom(s1->buf, block_size, 0);
             /* reads up to 256 bytes should always succeed */
             if (ret > 0) {
                 memcpy_to_queue(s, queue_idx, desc_idx, offset, s1->buf, ret);
@@ -2780,7 +2780,7 @@ static pthread_t pending_notify_thread;
 
 static void async_queue_notify(VIRTIODevice *s, int queue_idx)
 {
-    atomic_fetch_or_explicit(&s->pending_queue_notify, 1 << queue_idx, memory_order_release);
+    // TODO: RESTORE atomic_fetch_or_explicit(&s->pending_queue_notify, 1 << queue_idx, memory_order_release);
     pthread_mutex_lock(&pending_notify_lock);
     pending_notify = 1;
     pthread_cond_signal(&pending_notify_cond);
@@ -2811,7 +2811,8 @@ static void *pending_notify_worker(void *opaque)
         /* clear now; caller expected to perform them */
         pending_notify = 0;
         pthread_mutex_unlock(&pending_notify_lock);
-        for (int i = 0; i < n; i++) {
+	int i;
+        for (i = 0; i < n; i++) {
             VIRTIODevice *s = ps[i];
             /*
              * We must clear the bits before we process them otherwise we would
@@ -2819,8 +2820,9 @@ static void *pending_notify_worker(void *opaque)
              * request we didn't look at, and then immediately clobber that bit
              * being set.
              */
-            uint32_t notify = atomic_exchange_explicit(&s->pending_queue_notify, 0, memory_order_acquire);
-            for (int j = 0; j < 32 && notify; j++) {
+            uint32_t notify = 0; // TODO: RESTORE atomic_exchange_explicit(&s->pending_queue_notify, 0, memory_order_acquire);
+	    int j;
+            for (j = 0; j < 32 && notify; j++) {
                 if (notify & (1u << j)) {
                     queue_notify(s, j);
                     notify &= ~(1u << j);

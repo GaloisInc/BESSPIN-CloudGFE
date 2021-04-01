@@ -87,7 +87,7 @@ int  pci_write_fd = -1;    // For DMA over AXI4
 
 int load_mem_hex32_using_DMA (int slot_id, char *filename)
 {
-    int write_fd, read_fd, rc;
+    int rc;
     // int channel = 0;
 
     fprintf (stdout, "%s: Reading Mem Hex32 file into local buffer: %s\n",
@@ -123,9 +123,6 @@ int load_mem_hex32_using_DMA (int slot_id, char *filename)
     // ================
     // Prep for DMA write and read
 
-    write_fd = -1;
-    read_fd = -1;
-
     // Allocate a read buffer, just for read-back sanity check on first 128 bytes.
     size_t buffer_size = 128;
     uint8_t *read_buffer = malloc (buffer_size);
@@ -159,8 +156,9 @@ int load_mem_hex32_using_DMA (int slot_id, char *filename)
 	memcpy (dma_buf, & (buf [addr1]), chunk_size);
 
 	// DMA it
-	fprintf (stdout, "%s: DMA %0d bytes to addr 0x%0lx\n", __FUNCTION__, chunk_size, addr1);
-	rc = fpga_dma_burst_write (write_fd, dma_buf, chunk_size, addr1);
+	fprintf (stdout, "%s: DMA (pci_write_fd = %0d) %0d bytes to addr 0x%0lx\n",
+		 __FUNCTION__, pci_write_fd, chunk_size, addr1);
+	rc = fpga_dma_burst_write (pci_write_fd, dma_buf, chunk_size, addr1);
 	if (rc != 0) {
 	    fprintf (stdout, "%s: DMA write failed on channel 0\n", __FUNCTION__);
 	    goto out;
@@ -171,10 +169,13 @@ int load_mem_hex32_using_DMA (int slot_id, char *filename)
     // ================
     // Readback up to 128 bytes and cross-check
     size_t read_size = ((download_size <= 128) ? download_size : 128);
-    fprintf (stdout, "%s: reading back %0ld bytes to spot-check the download\n",
-	     __FUNCTION__, read_size);
+
+    fprintf (stdout, "%s: reading back previously downloaded data to spot-check\n", __FUNCTION__);
+    fprintf (stdout, "    DMA (pci_read_fd = %0d) %0ld bytes from addr 0x%0lx\n",
+	     pci_read_fd, read_size, addr1);
+
     addr1 = ((addr_base >> 6) << 6);    // 64B aligned (required by AWS)
-    rc = fpga_dma_burst_read (read_fd, dma_buf, read_size, addr1);
+    rc = fpga_dma_burst_read (pci_read_fd, dma_buf, read_size, addr1);
     if (rc != 0) {
 	fprintf (stdout, "DMA read failed on channel 0");
 	goto out;
@@ -200,14 +201,7 @@ out:
     if (read_buffer != NULL) {
         free(read_buffer);
     }
-#if !defined(SV_TEST)
-    if (write_fd >= 0) {
-        close(write_fd);
-    }
-    if (read_fd >= 0) {
-        close(read_fd);
-    }
-#endif
+
     // if there is an error code, exit with status 1
     return (rc != 0 ? 1 : 0);
 }
