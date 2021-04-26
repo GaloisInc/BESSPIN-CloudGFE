@@ -51,11 +51,11 @@ static int sockfd = 0;
 uint32_t  tcp_client_open (const char *server_host, const uint16_t server_port)
 {
     if (server_host == NULL) {
-	fprintf (stderr, "tcp_client_open (): server_host is NULL\n");
+	fprintf (stdout, "tcp_client_open (): server_host is NULL\n");
 	return status_err;
     }
     if (server_port == 0) {
-	fprintf (stderr, "tcp_client_open (): server_port is 0\n");
+	fprintf (stdout, "tcp_client_open (): server_port is 0\n");
 	return status_err;
     }
 
@@ -64,7 +64,7 @@ uint32_t  tcp_client_open (const char *server_host, const uint16_t server_port)
 
     // Create the socket
     if ( (sockfd = socket (AF_INET, SOCK_STREAM, 0)) < 0 ) {
-	fprintf (stderr, "tcp_client_open (): Error creating socket.\n");
+	fprintf (stdout, "tcp_client_open (): Error creating socket.\n");
 	return status_err;
     }
 
@@ -77,13 +77,13 @@ uint32_t  tcp_client_open (const char *server_host, const uint16_t server_port)
 
     // Set the remote IP address
     if (inet_aton (server_host, & servaddr.sin_addr) <= 0 ) {
-	fprintf (stderr, "tcp_client_open (): Invalid remote IP address.\n");
+	fprintf (stdout, "tcp_client_open (): Invalid remote IP address.\n");
 	return status_err;
     }
 
     // connect() to the remote server
     if (connect (sockfd, (struct sockaddr *) &servaddr, sizeof(servaddr) ) < 0 ) {
-	fprintf (stderr, "tcp_client_open (): Error calling connect()\n");
+	fprintf (stdout, "tcp_client_open (): Error calling connect()\n");
 	return status_err;
     }
 
@@ -112,7 +112,7 @@ uint32_t  tcp_client_send (const uint32_t data_size, const uint8_t *data)
     n = write (sockfd, data, data_size);
 
     if (n < 0) {
-	fprintf (stderr, "ERROR: tcp_client_send() = %0d\n", n);
+	fprintf (stdout, "ERROR: tcp_client_send() = %0d\n", n);
 	return status_err;
     }
     return status_ok;

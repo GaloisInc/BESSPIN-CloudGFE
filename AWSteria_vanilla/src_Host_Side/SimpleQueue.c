@@ -37,7 +37,7 @@ SimpleQueue *SimpleQueueInit (void)
 {
     SimpleQueue *queue = (SimpleQueue *) malloc (sizeof (SimpleQueue));
     if (queue == NULL) {
-	fprintf (stderr, "ERROR: %s: malloc failed\n", __FUNCTION__);
+	fprintf (stdout, "ERROR: %s: malloc failed\n", __FUNCTION__);
 	exit (1);
     }
     queue->in  = 0;

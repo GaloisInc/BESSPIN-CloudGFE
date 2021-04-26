@@ -34,7 +34,7 @@ typedef struct {
     int               irq_num;
     const char       *tun_ifname;    // network tunnel driver, cf. https://en.wikipedia.org/wiki/TUN/TAP
     int               stop_pipe [2];
-    pthread_t         io_thread;
+    // DELETE: pthread_t         io_thread;
 } VirtioDevices;
 
 #define FIRST_VIRTIO_IRQ 1

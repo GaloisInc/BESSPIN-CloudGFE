@@ -147,9 +147,20 @@ module mkSoC_Map (SoC_Map_IFC);
    endfunction
 
    // ----------------------------------------------------------------
+   // AWS host access
+
+   Fabric_Addr host_access_addr_base = 'h4000_0000;
+   Fabric_Addr host_access_addr_size = 'h0000_4000;    // 16K
+   Fabric_Addr host_access_addr_lim  = host_access_addr_base + host_access_addr_size;
+
+   function Bool fn_is_host_access_addr (Fabric_Addr addr);
+      return ((host_access_addr_base <= addr) && (addr < host_access_addr_lim));
+   endfunction
+
+   // ----------------------------------------------------------------
    // Flash Mem
 
-   Fabric_Addr flash_mem_addr_base = 'h_4000_0000;
+   Fabric_Addr flash_mem_addr_base = 'h_5000_0000;    // GFE was 4000_0000; TODO: FIXME
    Fabric_Addr flash_mem_addr_size = 'h_0800_0000;    // 128M
    Fabric_Addr flash_mem_addr_lim  = flash_mem_addr_base + flash_mem_addr_size;
 
@@ -188,17 +199,6 @@ module mkSoC_Map (SoC_Map_IFC);
 
    function Bool fn_is_uart16550_0_addr (Fabric_Addr addr);
       return ((uart16550_0_addr_base <= addr) && (addr < uart16550_0_addr_lim));
-   endfunction
-
-   // ----------------------------------------------------------------
-   // AWS host access
-
-   Fabric_Addr host_access_addr_base = 'h6250_0000;
-   Fabric_Addr host_access_addr_size = 'h0000_0080;    // 128
-   Fabric_Addr host_access_addr_lim  = host_access_addr_base + host_access_addr_size;
-
-   function Bool fn_is_host_access_addr (Fabric_Addr addr);
-      return ((host_access_addr_base <= addr) && (addr < host_access_addr_lim));
    endfunction
 
    // ----------------------------------------------------------------
@@ -264,6 +264,7 @@ module mkSoC_Map (SoC_Map_IFC);
       return (   fn_is_plic_addr (addr)
 	      || fn_is_debug_module_addr (addr)
 	      || fn_is_near_mem_io_addr (addr)
+	      || fn_is_host_access_addr (addr)
 	   // || fn_is_pcie_ecam_slave_bridge_addr (addr)
 	      || fn_is_flash_mem_addr (addr)
 	   // || fn_is_pcie_block_registers_addr (addr)

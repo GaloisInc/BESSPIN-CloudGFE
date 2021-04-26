@@ -118,64 +118,37 @@ int load_mem_hex32_using_DMA (int slot_id, char *filename)
 	rc = 1;
 	goto out;
     }
-    uint64_t download_size = addr_lim - addr_base;
-
-    // ================
-    // Prep for DMA write and read
-
-    // Allocate a read buffer, just for read-back sanity check on first 128 bytes.
-    size_t buffer_size = 128;
-    uint8_t *read_buffer = malloc (buffer_size);
-    if (read_buffer == NULL) {
-        rc = 1;
-        goto out;
-    }
 
     // ================
     // Download to DDR4:
     // - in chunks that do not cross 4K boundaries
     // - destination addrs must be 64-byte aligned
 
-    uint8_t *dma_buf;
-    rc = posix_memalign ((void **) (& dma_buf), 0x1000, 0x1000);    // 4KB buffer, 4KB aligned
-    if (rc != 0) {
-	fprintf (stdout, "%s: ERROR could not allocate 4KB buf with posix_memalign\n",
-		 __FUNCTION__);
-	rc = 1;
-	goto out;
-    }
-    fprintf (stdout, "%s: 4KB DMA buffer allocated at %p\n", __FUNCTION__, dma_buf);
-
     fprintf (stdout, "%s: downloading to AWS DDR4\n", __FUNCTION__);
-    uint64_t  addr1 = ((addr_base >> 6) << 6);    // 64B aligned (required by AWS)
-    while (addr1 < addr_lim) {
-	int chunk_size = (addr_lim - addr1);
-	if (chunk_size > 0x1000) chunk_size = 0x1000;    // Trimmed to 4KB if nec'y
-
-	// Copy data to DMA buffer
-	memcpy (dma_buf, & (buf [addr1]), chunk_size);
-
-	// DMA it
-	fprintf (stdout, "%s: DMA (pci_write_fd = %0d) %0d bytes to addr 0x%0lx\n",
-		 __FUNCTION__, pci_write_fd, chunk_size, addr1);
-	rc = fpga_dma_burst_write (pci_write_fd, dma_buf, chunk_size, addr1);
-	if (rc != 0) {
-	    fprintf (stdout, "%s: DMA write failed on channel 0\n", __FUNCTION__);
-	    goto out;
-	}
-	addr1 += chunk_size;
+    rc = fpga_dma_burst_write (pci_write_fd, & (buf [addr_base]), addr_lim - addr_base, addr_base);
+    if (rc != 0) {
+	fprintf (stdout, "%s: DMA write failed on channel 0\n", __FUNCTION__);
+	goto out;
     }
 
     // ================
-    // Readback up to 128 bytes and cross-check
-    size_t read_size = ((download_size <= 128) ? download_size : 128);
+    // Sanity check: readback a small amount and cross-check
+
+    size_t read_size = addr_lim - addr_base;
+    if (read_size > 128) read_size = 128;
+
+    uint8_t *read_buf = (uint8_t *) malloc (read_size);
+    if (read_buf == NULL) {
+	fprintf (stdout, "%s: ERROR could not malloc %0ld buf\n", __FUNCTION__, read_size);
+	rc = 1;
+	goto out;
+    }
 
     fprintf (stdout, "%s: reading back previously downloaded data to spot-check\n", __FUNCTION__);
     fprintf (stdout, "    DMA (pci_read_fd = %0d) %0ld bytes from addr 0x%0lx\n",
-	     pci_read_fd, read_size, addr1);
+	     pci_read_fd, read_size, addr_base);
 
-    addr1 = ((addr_base >> 6) << 6);    // 64B aligned (required by AWS)
-    rc = fpga_dma_burst_read (pci_read_fd, dma_buf, read_size, addr1);
+    rc = fpga_dma_burst_read (pci_read_fd, read_buf, read_size, addr_base);
     if (rc != 0) {
 	fprintf (stdout, "DMA read failed on channel 0");
 	goto out;
@@ -183,26 +156,23 @@ int load_mem_hex32_using_DMA (int slot_id, char *filename)
 
     fprintf (stdout, "%s: checking readback-data of %0ld bytes ...\n", __FUNCTION__, read_size);
     for (uint64_t j = 0; j < read_size; j += 4) {
-	uint32_t *p1 = (uint32_t *) (buf + addr1 + j);
-	uint32_t *p2 = (uint32_t *) (dma_buf + j);
+	uint32_t *p1 = (uint32_t *) (buf + addr_base + j);
+	uint32_t *p2 = (uint32_t *) (read_buf + j);
 	if (*p1 != *p2) {
 	    fprintf (stdout, "%s: read-back of mem data differs at addr %0lx\n",
-		     __FUNCTION__, addr1 + j);
+		     __FUNCTION__, addr_base + j);
 	    fprintf (stdout, "    Original  word: 0x%08x\n", *p1);
 	    fprintf (stdout, "    Read-back word: 0x%08x\n", *p2);
 	    rc = 1;
 	    goto out;
 	}
-	fprintf (stdout, "    %08lx: %08x\n", addr1 + j, *p1);
+	fprintf (stdout, "    %08lx: %08x\n", addr_base + j, *p1);
     }
     fprintf (stdout, "%s: checking readback-data of %0ld bytes: OK\n", __FUNCTION__, read_size);
 
-out:
-    if (read_buffer != NULL) {
-        free(read_buffer);
-    }
+    // ================
 
-    // if there is an error code, exit with status 1
+out:
     return (rc != 0 ? 1 : 0);
 }
 
@@ -215,6 +185,8 @@ int start_hw (const char *tun_iface,
 	      const char *block_files [],
 	      const int   num_block_files)
 {
+    const int debug_main_loop_virtio = 0;
+
     int err;
     HS_SysControl_State *syscontrol_state = HS_syscontrol_init ();
     HS_tty_State        *tty_state        = HS_tty_init ();
@@ -236,7 +208,7 @@ int start_hw (const char *tun_iface,
     uint32_t  data;
     
     struct timeval  tv;
-    const uint64_t  TERMINATION_DELAY_USEC          = 10000000;    // 10 msecs (SWAG)
+    const uint64_t  TERMINATION_DELAY_USEC          = 100000000;    // 100 msecs (SWAG)
     uint64_t        termination_delay_start_usec    = 0;
     uint64_t        idle_iterations_before_shutdown = 0;
 
@@ -376,10 +348,14 @@ int start_hw (const char *tun_iface,
 	if (err) break;
 
 	if (notEmpty && notFull) {
+	    if (debug_main_loop_virtio > 0)
+		fprintf (stdout, "Main loop: HW req to virtio MMIO regs:\n");
 	    err = HS_msg_hw_to_host_VIRTIO_MMIO_REQ_data (& data);
 	    if (err) break;
 	    err = HS_virtio_req_from_hw_data (virtio_state, data);
 	    if (err) break;
+	    if (debug_main_loop_virtio > 0)
+		fprintf (stdout, "    0x%0x\n", data);
 	}
 
 	// ----------------
@@ -391,10 +367,14 @@ int start_hw (const char *tun_iface,
 	if (err) break;
 
 	if (notEmpty && notFull) {
+	    if (debug_main_loop_virtio > 0)
+		fprintf (stdout, "Main loop: virtio MMIO regs response to HW:\n");
 	    err = HS_virtio_rsp_to_hw_data (virtio_state, & data);
 	    if (err) break;
 	    err = HS_msg_host_to_hw_VIRTIO_MMIO_RSP_data (data);
 	    if (err) break;
+	    if (debug_main_loop_virtio > 0)
+		fprintf (stdout, "    0x%0x\n", data);
 	}
 
 	// ----------------
@@ -433,10 +413,13 @@ int start_hw (const char *tun_iface,
 
 void print_help (int argc, char *argv [])
 {
-    fprintf (stdout, "Usage:  %s  <optional memhexfile>\n", argv [0]);
+    fprintf (stdout, "Usage:  %s  <optional memhexfile>  <>\n", argv [0]);
 }
 
 // ****************************************************************
+// argv [1] is memhex file
+// argv [2] is block device image file (.img)
+// argv [3] is name for tun interface (Ethernet connection)
 
 int main (int argc, char *argv [])
 {
@@ -457,7 +440,7 @@ int main (int argc, char *argv [])
     }
 
     // ================================================================
-    // AWSteria code
+    // Load memhex file (named in argv [1])
 
     if (argc > 1) {
 	rc = load_mem_hex32_using_DMA (slot_id, argv [1]);
@@ -471,14 +454,26 @@ int main (int argc, char *argv [])
     }
 
     // ================================================================
-    // AWSteria code
+    // Start the work loop
 
     // TODO: the following should come from command-line args
     const char *tun_iface = NULL;    // network tunnel driver, cf. https://en.wikipedia.org/wiki/TUN/TAP
     const int   enable_virtio_console = 0;
     const int   xdma_enabled          = 1;
+
     const char *block_files [1] = { NULL };
-    const int   num_block_files = 1;
+    int   num_block_files = 0;
+
+    // Get the block-file name (in argv [2])
+    if (argc >= 3) {
+	block_files [0] = argv [2];
+	num_block_files = 1;
+    }
+
+    // Get the Ethernet tun interface name (in argv [3])
+    if (argc >= 4) {
+	tun_iface = argv [3];
+    }
 
     // Start the hardware
     rc = start_hw (tun_iface,

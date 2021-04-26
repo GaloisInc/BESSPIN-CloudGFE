@@ -193,6 +193,11 @@ module mkTop_HW_Side (Empty) ;
 			     awregion: x1.awregion,
 			     awuser: x1.awuser};
       dma_pcis_xactor.i_wr_addr.enq (x2);
+
+      if (verbosity_AXI != 0) begin
+	 $display ("Top_HW_Side.rl_connect_dma_pcis_wr_addr");
+	 $display ("    ", fshow (x2));
+      end
    endrule
 
    Reg #(Bit #(8)) rg_AXI4_wr_data_beat <- mkReg (0);
@@ -207,11 +212,12 @@ module mkTop_HW_Side (Empty) ;
 			     wuser: x1.wuser};
       dma_pcis_xactor.i_wr_data.enq (x2);
 
+      rg_AXI4_wr_data_beat <= (x2.wlast ? 0: (rg_AXI4_wr_data_beat + 1));
+
       if (verbosity_AXI != 0) begin
 	 $display ("Top_HW_Side.rl_connect_dma_pcis_wr_data: beat %0d", rg_AXI4_wr_data_beat);
 	 $display ("    ", fshow (x2));
       end
-      rg_AXI4_wr_data_beat <= (x2.wlast ? 0: (rg_AXI4_wr_data_beat + 1));
    endrule
 
    // Connect AXI4 RD_ADDR channel
@@ -230,6 +236,11 @@ module mkTop_HW_Side (Empty) ;
 			     arregion: x1.arregion,
 			     aruser: x1.aruser};
       dma_pcis_xactor.i_rd_addr.enq (x2);
+
+      if (verbosity_AXI != 0) begin
+	 $display ("Top_HW_Side.rl_connect_dma_pcis_rd_addr");
+	 $display ("    ", fshow (x2));
+      end
    endrule
 
    // Connect AXI4 WR_RESP channel
@@ -240,6 +251,11 @@ module mkTop_HW_Side (Empty) ;
 				    bresp: x1.bresp,
 				    buser: x1.buser};
       comms.fi_AXI4_Wr_Resp_i16_u0.enq (x2);
+
+      if (verbosity_AXI != 0) begin
+	 $display ("Top_HW_Side.rl_connect_dma_pcis_wr_resp");
+	 $display ("    ", fshow (x2));
+      end
    endrule
 
    // Connect AXI4 RD_DATA channel
@@ -252,6 +268,11 @@ module mkTop_HW_Side (Empty) ;
 					 rlast: pack (x1.rlast),
 					 ruser: x1.ruser};
       comms.fi_AXI4_Rd_Data_i16_d512_u0.enq (x2);
+
+      if (verbosity_AXI != 0) begin
+	 $display ("Top_HW_Side.rl_connect_dma_pcis_rd_data");
+	 $display ("    ", fshow (x2));
+      end
    endrule
 
    // ----------------

@@ -236,11 +236,12 @@ module mkAWS_BSV_Top (AWS_BSV_Top_IFC);
 
    rule rl_aws_host_to_hw_interrupt;
       Bit #(32) x <- pop_o (ocl_adapter.v_from_host [host_to_hw_chan_interrupt]);
-      soc_top.ma_aws_host_to_hw_interrupt (x [0]);
 
       if (verbosity > 0) begin
 	 $display ("%0d: AWS_BSV_Top.rl_aws_host_to_hw_interrupt: %08h", cur_cycle, x);
       end
+
+      soc_top.ma_aws_host_to_hw_interrupt (x [0]);
    endrule
 
    // ================================================================

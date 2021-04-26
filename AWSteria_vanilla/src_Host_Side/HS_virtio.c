@@ -26,7 +26,7 @@
 
 // This define-macro is needed to avoid this compiler warning:
 //   warning: implicit declaration of function ‘pthread_setname_np’
-#define _GNU_SOURCE
+// #define _GNU_SOURCE
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -37,7 +37,7 @@
 #include <ctype.h>
 #include <unistd.h>
 
-#include <pthread.h>
+// DELETE: #include <pthread.h>
 
 // ----------------
 // For XSIM only
@@ -82,7 +82,7 @@ extern int pci_read_fd;
 extern int pci_write_fd;
 
 static int debug_virtio   = 1;
-static int debug_stray_io = 0;
+static int debug_stray_io = 1;
 
 // ================================================================
 // These two functions are called by the Virtio console device driver
@@ -110,64 +110,60 @@ int console_read_data (void *opaque, uint8_t *buf, int len)
 }
 
 // ================================================================
-// This thread performs the Virtio 'work'
+// This function performs the IO work for incoming data (network, console)
 
 static
-void *HS_virtio_process_io_thread (void *opaque)
+void process_incoming_data (HS_Virtio_State *state)
 {
-    VirtioDevices *vds = (VirtioDevices *) opaque;
-
+    VirtioDevices *vds = state->virtiodevices;
     int stdin_fd;
     int fd_max = -1;
     fd_set rfds, wfds, efds;
-    int delay = 10; // ms
+    int delay = 10; // ms                // TODO: change this?
     struct timeval tv;
     int stop_fd = vds->stop_pipe[0];
 
-    while (true) {
-        FD_ZERO(&rfds);
-        FD_ZERO(&wfds);
-        FD_ZERO(&efds);
+    FD_ZERO(&rfds);
+    FD_ZERO(&wfds);
+    FD_ZERO(&efds);
 
-        FD_SET(stop_fd, &rfds);
-        fd_max = stop_fd;
+    FD_SET(stop_fd, &rfds);
+    fd_max = stop_fd;
 
-        if (vds->virtio_console && virtio_console_can_write_data(vds->virtio_console)) {
-            stdin_fd = (int)(intptr_t)vds->console->opaque;
-            FD_SET(stdin_fd, &rfds);
-            fd_max = max2(stdin_fd, fd_max);
-        }
-
-	if (vds->ethernet_device) {
-            vds->ethernet_device->select_fill (vds->ethernet_device,
-					       & fd_max, & rfds, & wfds, & efds, & delay);
-	}
-
-        tv.tv_sec = delay / 1000;
-        tv.tv_usec = (delay % 1000) * 1000;
-        int ret = select(fd_max + 1, &rfds, &wfds, &efds, &tv);
-        if (FD_ISSET(stop_fd, &rfds)) {
-            close(stop_fd);
-            return NULL;
-        }
-
-        if (vds->ethernet_device) {
-            vds->ethernet_device->select_poll (vds->ethernet_device,
-					       & rfds, & wfds, & efds, ret);
-        }
-
-        if (vds->virtio_console && FD_ISSET(stdin_fd, &rfds)) {
-            uint8_t buf[128];
-            int ret, len;
-            len = virtio_console_get_write_len (vds->virtio_console);
-            len = min_int(len, sizeof(buf));
-            ret = vds->console->read_data(vds->console->opaque, buf, len);
-            if (ret > 0) {
-                virtio_console_write_data(vds->virtio_console, buf, ret);
-            }
-        }
+    if (vds->virtio_console && virtio_console_can_write_data(vds->virtio_console)) {
+	stdin_fd = (int)(intptr_t)vds->console->opaque;
+	FD_SET(stdin_fd, &rfds);
+	fd_max = max2(stdin_fd, fd_max);
     }
-    return NULL;
+
+    if (vds->ethernet_device) {
+	vds->ethernet_device->select_fill (vds->ethernet_device,
+					   & fd_max, & rfds, & wfds, & efds, & delay);
+    }
+
+    tv.tv_sec = delay / 1000;
+    tv.tv_usec = (delay % 1000) * 1000;
+    int ret = select(fd_max + 1, &rfds, &wfds, &efds, &tv);
+    if (FD_ISSET(stop_fd, &rfds)) {
+	close(stop_fd);
+	return;
+    }
+
+    if (vds->ethernet_device) {
+	vds->ethernet_device->select_poll (vds->ethernet_device,
+					   & rfds, & wfds, & efds, ret);
+    }
+
+    if (vds->virtio_console && FD_ISSET(stdin_fd, &rfds)) {
+	uint8_t buf[128];
+	int ret, len;
+	len = virtio_console_get_write_len (vds->virtio_console);
+	len = min_int(len, sizeof(buf));
+	ret = vds->console->read_data(vds->console->opaque, buf, len);
+	if (ret > 0) {
+	    virtio_console_write_data(vds->virtio_console, buf, ret);
+	}
+    }
 }
 
 // ================================================================
@@ -178,7 +174,7 @@ void fn_set_irq (void *opaque, int irq_num, int level)
     HS_Virtio_State *state = (HS_Virtio_State *) opaque;
 
     if (debug_virtio)
-	fprintf (stdout, "%s: irq_num=%d level=%d\r\n", __FUNCTION__, irq_num, level);
+	fprintf (stdout, "%s: state %p  irq_num=%d  level=%d\r\n", __FUNCTION__, state, irq_num, level);
 
     if ((irq_num < 0) || (31 < irq_num)) {
 	fprintf (stdout, "ERROR: %s: irq_num (%0d) is not in range 0..31\n",
@@ -198,12 +194,37 @@ HS_Virtio_State *HS_virtio_init (const char *tun_iface,
 				 const char *block_files [],
 				 const int   num_block_files)
 {
+    // ================================================================
+    // Set up XDMA
+    // Corresponds to this in Connectal:
+    //     if (xdma_enabled) fpga->open_xdma();
+
+    virtio_xdma_init (pci_read_fd, pci_write_fd);
+
+    // ================================================================
+    // Allocate and initialize HS_Virtio_State object
+
+    HS_Virtio_State *state = (HS_Virtio_State *) malloc (sizeof (HS_Virtio_State));
+    if (state == NULL) {
+	fprintf (stdout, "ERROR: %s: malloc failed\n", __FUNCTION__);
+	exit (1);
+    }
+    state->queue_virtio_req_from_hw = SimpleQueueInit ();
+    state->queue_virtio_rsp_to_hw   = SimpleQueueInit ();
+    state->queue_virtio_irq_to_hw   = SimpleQueueInit ();
+
+    // state->virtiodevices = vds; See below, just before end of function
+
+    // ================================================================
+
     VirtioDevices *vds = NULL;
+
+    fprintf (stdout, "%s: Initializing virtio devices\n", __FUNCTION__),
 
     // Allocate and initialize VirtioDevices object
     vds = (VirtioDevices *) malloc (sizeof (VirtioDevices));
     if (vds == NULL) {
-	fprintf (stderr, "ERROR: %s: malloc failed\n", __FUNCTION__);
+	fprintf (stdout, "ERROR: %s: malloc failed\n", __FUNCTION__);
 	exit (1);
     }
     vds->virtio_console = NULL;
@@ -222,92 +243,77 @@ HS_Virtio_State *HS_virtio_init (const char *tun_iface,
     vds->virtio_bus->addr    = 0x40000000;
 
     for (int i = 0; i < 32; i++) {
-        irq_init (& (vds->irq[i]), fn_set_irq, (void *)22, i);
+        irq_init (& (vds->irq[i]), fn_set_irq, (void *) state, i);
     }
 
+    // Set up a block device for each given block device filename
+    if (num_block_files == 0) {
+	fprintf (stdout, "    No virtio block device\n");
+    }
+    else {
+	for (int j = 0; j < num_block_files; j++) {
+	    fprintf (stdout, "    Initializing virtio block device [%0d] on file '%s'\n",
+		     j, block_files [j]);
+	    vds->virtio_bus->irq   = & (vds->irq [vds->irq_num++]);
+	    vds->block_device = block_device_init (block_files [j], BF_MODE_RW);
+	    vds->virtio_block = virtio_block_init (vds->virtio_bus, vds->block_device);
+	    if (debug_virtio) {
+		virtio_set_debug (vds->virtio_block, 1);
+		fprintf (stdout, "        virtio block device at bus addr %0lx, irq %0d\n",
+			 vds->virtio_bus->addr, vds->irq_num - 1);
+	    }
+
+	    vds->virtio_bus->addr += 0x1000;
+	}
+    }
+
+    // set up an entropy device
+    fprintf (stdout, "    Initializing virtio entropy device\n");
+    vds->virtio_bus->irq = & (vds->irq [vds->irq_num++]);
+    vds->virtio_entropy = virtio_entropy_init(vds->virtio_bus);
+    fprintf (stdout, "        virtio entropy device bus addr %0lx, irq %0d\n",
+	     vds->virtio_bus->addr, vds->irq_num - 1);
+
+    vds->virtio_bus->addr += 0x1000;
+
     // set up a network device
+    fprintf (stdout, "    Initializing virtio net device: ");
+    if (tun_iface != NULL)
+	fprintf (stdout, "tun '%s'\n", tun_iface);
+    else
+	fprintf (stdout, "slirp\n");
     vds->virtio_bus->irq = & (vds->irq [vds->irq_num++]);
     vds->ethernet_device = vds->tun_ifname ? tun_open(vds->tun_ifname) : slirp_open();
     vds->virtio_net = virtio_net_init (vds->virtio_bus, vds->ethernet_device);
-    fprintf(stderr, "ethernet device %p virtio net device %p at addr %08lx\n",
-	    vds->ethernet_device, vds->virtio_net, vds->virtio_bus->addr);
+    fprintf (stdout, "        virtio net device at bus addr %0lx irq %0d\n",
+	     vds->virtio_bus->addr, vds->irq_num - 1);
 
-    // set up an entropy device
     vds->virtio_bus->addr += 0x1000;
-    vds->virtio_bus->irq = & (vds->irq [vds->irq_num++]);
-    vds->virtio_entropy = virtio_entropy_init(vds->virtio_bus);
-    fprintf(stderr, "virtio entropy device %p at addr %08lx\n",
-	    vds->virtio_entropy, vds->virtio_bus->addr);
 
-    // ================================================================
-    // Set up XDMA
-    // Corresponds to this in Connectal:
-    //     if (xdma_enabled) fpga->open_xdma();
-
-    virtio_xdma_init (pci_read_fd, pci_write_fd);
-
-    // ================================================================
-    // Set up a block device for each given block device filename
-
-    for (int j = 0; j < num_block_files; j++) {
-	vds->virtio_bus->addr += 0x1000;
-	vds->virtio_bus->irq   = & (vds->irq [vds->irq_num++]);
-	vds->block_device = block_device_init (block_files [j], BF_MODE_RW);
-	if (debug_virtio)
-	    fprintf (stdout, "block device %s (%p)\r\n", block_files [j], vds->block_device);
-	vds->virtio_block = virtio_block_init(vds->virtio_bus, vds->block_device);
-	if (debug_virtio)
-	    fprintf (stdout, "virtio block device %p at addr %08lx\r\n",
-		     vds->virtio_block, vds->virtio_bus->addr);
+    // Set up a virtio console device
+    if (enable_virtio_console == 0) {
+	fprintf (stdout, "    No virtio console device\n");
     }
-
-    // ================================================================
-    // Set up a virtio console
-
-    if (enable_virtio_console) {
-        fprintf(stderr, "Enabling virtio console\n");
+    else {
+	fprintf (stdout, "    Initializing virtio console device\n");
 	vds->console = (CharacterDevice *) malloc (sizeof (CharacterDevice));
 	vds->console->opaque = (void *)(intptr_t)-1;
 	vds->console->read_data = console_read_data;
 	vds->console->write_data = console_write_data;
 
-	vds->virtio_bus->addr += 0x1000;
 	vds->virtio_bus->irq   = & (vds->irq [vds->irq_num++]);
-
 	vds->virtio_console = virtio_console_init (vds->virtio_bus, vds->console);
+
+	fprintf (stdout, "        virtio console device at bus addr %0lx irq %0d\n",
+		 vds->virtio_bus->addr, vds->irq_num - 1);
+
+	vds->virtio_bus->addr += 0x1000;
     }
 
     // ================================================================
-    // Start pending-notify thread and io thread
-
-    VIRTIODevice *ps[4];
-    int n = 0;
-
-#define ADD_DEVICE(s) if (s) ps[n++] = s
-    ADD_DEVICE(vds->virtio_net);
-    ADD_DEVICE(vds->virtio_entropy);
-    ADD_DEVICE(vds->virtio_block);
-    ADD_DEVICE(vds->virtio_console);
-#undef ADD_DEVICE
-
-    // Start 'pending notify thread' and io thread
-    virtio_start_pending_notify_thread (n, ps);
-    pthread_create (& vds->io_thread, NULL, & HS_virtio_process_io_thread, vds);
-    pthread_setname_np (vds->io_thread, "VirtIO I/O");
-
-    // ================================================================
-    // Allocate and initialize HS_Virtio_State object
-
-    HS_Virtio_State *state = (HS_Virtio_State *) malloc (sizeof (HS_Virtio_State));
-    if (state == NULL) {
-	fprintf (stdout, "ERROR: %s: malloc failed\n", __FUNCTION__);
-	exit (1);
-    }
-    state->queue_virtio_req_from_hw = SimpleQueueInit ();
-    state->queue_virtio_rsp_to_hw   = SimpleQueueInit ();
-    state->queue_virtio_irq_to_hw   = SimpleQueueInit ();
-
+    // Record vds in state
     state->virtiodevices = vds;
+
     return state;
 }
 
@@ -326,6 +332,9 @@ int HS_virtio_req_from_hw_notFull (HS_Virtio_State *state, bool *p_notFull)
 int HS_virtio_req_from_hw_data (HS_Virtio_State *state, uint32_t data)
 {
     SimpleQueuePut (state->queue_virtio_req_from_hw, data);
+
+    if (debug_virtio)
+	fprintf (stdout, "%s: data 0x%08x\n", __FUNCTION__, data);
     return 0;
 }
 
@@ -430,8 +439,6 @@ uint32_t HS_virtio_MMIO_write (VirtioDevices *vds, uint32_t addr, uint32_t data)
 
 // ================================================================
 
-static bool send_irq = false;    // TODO: DELETE AFTER DEBUG
-
 bool HS_virtio_do_some_work (HS_Virtio_State *state)
 {
     bool did_some_work = false;
@@ -439,20 +446,14 @@ bool HS_virtio_do_some_work (HS_Virtio_State *state)
     // ----------------
     // Process virtio MMIO request from HW
     // Requests are 1 32-bit word (read: addr) or 2 32-bit words (write: addr, data)
+    // addr[1:0] is 0 for reads, 1 for writes
 
     int       req_occupancy = SimpleQueueOccupancy (state->queue_virtio_req_from_hw);
-    uint64_t  x64;
-    SimpleQueueFirst (state->queue_virtio_req_from_hw, & x64);
-    uint32_t  addr          = (x64 & 0xFFFFFFFC);    // zero the lsbs
     bool      rsp_notFull   = (! SimpleQueueFull (state->queue_virtio_rsp_to_hw));
+    uint64_t  x64 = 0;
 
-    if (send_irq && (! SimpleQueueFull (state->queue_virtio_irq_to_hw))) {
-	if (debug_virtio)
-	    fprintf (stdout, "%s: Generating interrrupt for hw\n", __FUNCTION__);
-	send_irq = false;
-
-	SimpleQueuePut (state->queue_virtio_irq_to_hw, 0xFEBBFEDD);
-	did_some_work = true;
+    if (req_occupancy > 0) {
+	SimpleQueueFirst (state->queue_virtio_req_from_hw, & x64);
     }
 
     if ((req_occupancy > 0) && rsp_notFull && ((x64 & 0x1) == 0)) {
@@ -460,9 +461,17 @@ bool HS_virtio_do_some_work (HS_Virtio_State *state)
 
 	// Pop addr|request from queue
 	SimpleQueueGet (state->queue_virtio_req_from_hw, & x64);
+	uint32_t  addr = (x64 & 0xFFFFFFFC);    // zero the lsbs
+	
+	if (debug_virtio)
+	    fprintf (stdout, "%s: Read reg 0x%08x\n", __FUNCTION__, addr);
 
 	// Perform the read request from the guest and respond
 	uint32_t read_data = HS_virtio_MMIO_read (state->virtiodevices, addr);
+
+	if (debug_virtio)
+	    fprintf (stdout, "    => data 0x%08x\n", read_data);
+
 	SimpleQueuePut (state->queue_virtio_rsp_to_hw, read_data);
 
 	did_some_work = true;
@@ -470,10 +479,17 @@ bool HS_virtio_do_some_work (HS_Virtio_State *state)
     else if ((req_occupancy > 1) && rsp_notFull && ((x64 & 0x1) == 1)) {
 	// write request
 
-	// Pop addr|request and write-data from queue
+	// Pop addr|request from queue
 	SimpleQueueGet (state->queue_virtio_req_from_hw, & x64);
+	uint32_t  addr = (x64 & 0xFFFFFFFC);    // zero the lsbs
+
+	// Pop write-data from queue
 	SimpleQueueGet (state->queue_virtio_req_from_hw, & x64);
 	uint32_t write_data = (x64 & 0xFFFFFFFF);
+
+	if (debug_virtio)
+	    fprintf (stdout, "%s: Write addr 0x%08x data 0x%08x\n",
+		     __FUNCTION__, addr, write_data);
 
 	// Perform MMIO write request from guest and respond
 	// (Response is bogus data, only indicates 'write-completion'
@@ -483,6 +499,8 @@ bool HS_virtio_do_some_work (HS_Virtio_State *state)
 	did_some_work = true;
     }
 
+    process_incoming_data (state);
+
     return did_some_work;
 }
 
@@ -491,13 +509,11 @@ bool HS_virtio_do_some_work (HS_Virtio_State *state)
 
 int HS_virtio_shutdown (HS_Virtio_State *state)
 {
-    virtio_stop_pending_notify_thread ();
     char dummy = 'X';
     write (state->virtiodevices->stop_pipe [1], & dummy, sizeof (dummy));
     close (state->virtiodevices->stop_pipe [1]);
 
-    virtio_join_pending_notify_thread();
-    pthread_join (state->virtiodevices->io_thread, NULL);
+    // DELETE: pthread_join (state->virtiodevices->io_thread, NULL);
     return 0;
 }
 

@@ -12,6 +12,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <unistd.h>
+#include <assert.h>
 
 // ----------------
 // Project includes
@@ -121,34 +122,67 @@ bool do_comms (void)
     return activity;
 }
 
+// ****************************************************************
+// DMA reads and writes over AXI4 bus
+// ****************************************************************
+
 // ================================================================
-// This is our simulation model of the corresponding AWS library routine.
+// Debugging verbosity
+// 0 = quiet; 1 = full transaction; 2 = each page; 3 = AXI4 details
 
-int fpga_dma_burst_read (int fd, uint8_t *buffer, size_t size, uint64_t address)
+static const int verbosity_burst_read  = 1;
+static const int verbosity_burst_write = 1;
+
+// ================================================================
+// The following defs are needed for fpga_dma_burst_read()/write()
+// since DMA is done in AXI4 bursts where
+// - bursts should not straddle 4KB page boundaries
+// - each beat is 64-Bytes wide
+
+// On AWS, a full page can be sent in a single burst (64 beats x 64 Bytes)
+
+// Page size, mask for offset-in-page, mask for truncaction to-page-start.
+
+#define OFFSET_IN_PAGE_BITS     12
+#define PAGE_SIZE               (((uint64_t) 1) << OFFSET_IN_PAGE_BITS)
+#define MASK_TO_OFFSET_IN_PAGE  (((uint64_t) PAGE_SIZE) - 1)
+#define MASK_TO_PAGE_START      (~ ((uint64_t) MASK_TO_OFFSET_IN_PAGE))
+
+// AXI4 beat size, mask for offset-in-beat, mask for truncation to beat-start.
+
+#define OFFSET_IN_BEAT_BITS     6
+#define BEAT_SIZE               (((uint64_t) 1) << OFFSET_IN_BEAT_BITS)
+#define MASK_TO_OFFSET_IN_BEAT  (((uint64_t) BEAT_SIZE) - 1)
+#define MASK_TO_BEAT_START      (~ ((uint64_t) MASK_TO_OFFSET_IN_BEAT))
+
+// ================================================================
+// This is a simulation model of AWS library routine 'fpga_dma_burst_read()'
+// which, in the real library aws-fpga (on real HW) operates over PCIe.
+// Return 0 for ok, non-zero for error.
+
+// The externally-called API function 'fpga_dma_burst_read()' is
+// given later, below.
+// It cannot assume anything about address alignment,
+// nor whether data straddles page boundaries.
+
+// ----------------
+// This 'aux' function is internal, and performs a single burst
+// transaction (up to a page in size). The caller guarantees that
+// 'address' and 'size' have been trimmed to be within a page.
+// Note: neither the starting address nor the ending address may be
+// 64-Byte aligned (beat-aligned).
+
+static
+int fpga_dma_burst_read_aux (int fd, uint8_t *buffer, const size_t size, const uint64_t address)
 {
-    int  verbosity2 = 0;
-    bool did_some_comms;
+    if (verbosity_burst_read >= 2)
+	fprintf (stdout, "%s: size %0ld address %0lx\n", __FUNCTION__, size, address);
 
-    check_state_initialized ();
-
-    // Check that the buffer does not cross a 4K boundary (= 12 bits of LSBs)
-    uint64_t  address_lim = address + size;
-    if ((address >> 12) != ((address_lim - 1) >> 12)) {
-	fprintf (stdout, "ERROR: %s: buffer crosses a 4K boundary\n",  __FUNCTION__);
-	fprintf (stdout, "    Start address: %16lx\n", address);
-	fprintf (stdout, "    Last  address: %16lx\n", (address_lim - 1));
-	return 1;
-    }
-
-    // Check that address is 64-Byte aligned (TODO: temporary; relax this)
-    if ((address & 0x3F) != 0) {
-	fprintf (stdout, "ERROR: %s: address is not 64-byte aligned\n",  __FUNCTION__);
-	fprintf (stdout, "    Start address: %16lx\n", address);
-	return 1;
-    }
+    bool            did_some_comms;
+    const uint64_t  address_lim = address + size;
 
     // ----------------
-    // Send RD_ADDR bus request
+    // Compose an AXI4 RD_ADDR bus request
 
     AXI4_Rd_Addr_i16_a64_u0   rda;
 
@@ -161,48 +195,61 @@ int fpga_dma_burst_read (int fd, uint8_t *buffer, size_t size, uint64_t address)
     rda.arregion = 0;
     rda.aruser   = 0;
 
-    // Compute burst length (each beat on DMA PCIS is 64 bytes = 6 bits of LSBs)
-    uint64_t  num_beats = ((address_lim - 1) >> 6) - (address >> 6) + 1;
+    // Compute burst length
+    const uint64_t  first_beat_num = (address           >> OFFSET_IN_BEAT_BITS);
+    const uint64_t  last_beat_num  = ((address_lim - 1) >> OFFSET_IN_BEAT_BITS);
+    const uint64_t  num_beats      = last_beat_num - first_beat_num + 1;
 
     rda.araddr  = address;
-    rda.arlen   = num_beats - 1;    // AXI4 code: awlen+1 beats
-    rda.arsize  = 0x6;              // AXI4 code: 64 bytes
-    rda.arburst = 0x1;              // AXI4 code: 'incrementing' burst
-
-    if (verbosity2 != 0)
-	fprintf (stdout, "%s: araddr %0lx arlen %0d arsize %0x arburst %0x",
-		 __FUNCTION__, rda.araddr, rda.arlen, rda.arsize, rda.arburst);
-    while (true) {
-	int status = Bytevec_enqueue_AXI4_Rd_Addr_i16_a64_u0 (p_bytevec_state, & rda);
-	if (status == 1) break;
-	usleep (1);
-	did_some_comms = do_comms ();
-    }
-    did_some_comms = do_comms ();
+    rda.arlen   = num_beats - 1;    // AXI4 coding for num_beats
+    rda.arsize  = 0x6;              // AXI4 coding for 64-Byte size
+    rda.arburst = 0x1;              // AXI4 coding for 'incrementing' burst
 
     // ----------------
-    // Read RD_DATA bus burst response
+    // Send the AXI4 RD_ADDR bus request
+
+    if (verbosity_burst_read >= 3)
+	fprintf (stdout, "%s: araddr %0lx arlen %0d arsize %0x arburst %0x",
+		 __FUNCTION__, rda.araddr, rda.arlen, rda.arsize, rda.arburst);
+
+    while (true) {
+	// Try to send request
+	int status = Bytevec_enqueue_AXI4_Rd_Addr_i16_a64_u0 (p_bytevec_state, & rda);
+	if (status == 1) break;
+	usleep (10);                     // Wait, if unable to send
+	did_some_comms = do_comms ();    // Move data in comms channel
+    }
+    did_some_comms = do_comms ();        // Move data in comms channel
+
+    // ----------------
+    // Receive the AXI4 RD_DATA bus response (in num_beats).
 
     AXI4_Rd_Data_i16_d512_u0  rdd;
 
     uint8_t *pb = buffer;
 
-    bool ok = true;
+    bool     ok             = true;
+    uint64_t beat_addr      = (address & MASK_TO_BEAT_START);
+    uint64_t next_beat_addr = beat_addr + BEAT_SIZE;
+
     for (int beat = 0; beat < num_beats; beat++) {
+	// Read an AXI4 beat
 	while (true) {
-	    did_some_comms = do_comms ();
+	    did_some_comms = do_comms ();    // Move data in comms channel
 	    if (! did_some_comms)
-		usleep (1);
+		usleep (10);                 // Wait, if no activity
 
+	    // Try to receive a beat
 	    int status = Bytevec_dequeue_AXI4_Rd_Data_i16_d512_u0 (p_bytevec_state, & rdd);
-	    if (status == 1) break;
+	    if (status == 1) break;          // Successfully received a beat
 
-	    if (verbosity2 > 1)
-		fprintf (stdout, "%s: response polling loop; beat %0d\n", __FUNCTION__, beat);
+	    if (verbosity_burst_read >= 3)
+		fprintf (stdout, "%s: AXI4 RD_DATA response wait loop; beat %0d beat_addr %0lx\n",
+			 __FUNCTION__, beat, beat_addr);
 	}
 
 	// Debugging: show response
-	if (verbosity2 != 0) {
+	if (verbosity_burst_read >= 3) {
 	    fprintf (stdout, "%s: beat %0d  rresp %0d  rlast %0d  rdata:\n  [",
 		     __FUNCTION__, beat, rdd.rresp, rdd.rlast);
 	    for (int k = 0; k < 64; k++)
@@ -225,42 +272,94 @@ int fpga_dma_burst_read (int fd, uint8_t *buffer, size_t size, uint64_t address)
 	}
 	ok = (ok && (rdd.rresp == 0));    // AXI4: rresp is OKAY
 
-	memcpy (pb, & (rdd.rdata), 64);
-	pb += 64;
+	// Copy data from AXI4 response beat's data into buf
+	uint64_t offset_in_beat = ((beat == 0)
+				   ? (address & MASK_TO_OFFSET_IN_BEAT)
+				   : 0);
+	uint64_t size_in_beat   = ((next_beat_addr > address_lim)
+				   ? ((address_lim & MASK_TO_OFFSET_IN_BEAT) - offset_in_beat)
+				   : (BEAT_SIZE - offset_in_beat));
+
+	memcpy (pb, & (rdd.rdata [offset_in_beat]), size_in_beat);
+
+	pb            += size_in_beat;
+	beat_addr      = next_beat_addr;
+	next_beat_addr = next_beat_addr + BEAT_SIZE;
     }    
-    fprintf (stdout, "%s: complete\n",  __FUNCTION__);
+    if (verbosity_burst_read >= 2)
+	fprintf (stdout, "%s: complete\n",  __FUNCTION__);
 
     return (! ok);
 }
 
-// ================================================================
-// This is our simulation model of the corresponding AWS library routine.
+// ----------------
+// The API function (externally visible)
+// This does not assume anything about address alignment,
+// nor whether data straddles page boundaries.
 
-int fpga_dma_burst_write (int fd, uint8_t *buffer, size_t size, uint64_t address)
+int fpga_dma_burst_read (int fd, uint8_t *buffer, const size_t size, const uint64_t address)
 {
-    int  verbosity2 = 0;
-    bool did_some_comms;
+    if (verbosity_burst_read >= 1)
+	fprintf (stdout, "%s: size %0ld address %0lx\n", __FUNCTION__, size, address);
 
     check_state_initialized ();
 
-    // Check that the buffer does not cross a 4K boundary (= 12 bits of LSBs)
-    uint64_t  address_lim = address + size;
-    if ((address >> 12) != ((address_lim - 1) >> 12)) {
-	fprintf (stdout, "ERROR: %s: buffer crosses a 4K boundary\n",  __FUNCTION__);
-	fprintf (stdout, "    Start address: %16lx\n", address);
-	fprintf (stdout, "    Last  address: %16lx\n", (address_lim - 1));
-	return 1;
-    }
+    int       status     = 0;
+    uint64_t  chunk_addr = address;
+    int       num_pages  = 0;
+    uint64_t  chunk_size;
 
-    // Check that address is 64-Byte aligned (TODO: temporary; relax this)
-    if ((address & 0x3F) != 0) {
-	fprintf (stdout, "ERROR: %s: address is not 64-byte aligned\n",  __FUNCTION__);
-	fprintf (stdout, "    Start address: %16lx\n", address);
-	return 1;
+    // Loop, reading chunks that do not straddle page boundaries
+    while (chunk_addr < (address + size)) {
+	uint64_t addr_of_next_page = (chunk_addr & MASK_TO_PAGE_START) + PAGE_SIZE;
+
+	chunk_size = ((addr_of_next_page < (address + size))
+		      ? (addr_of_next_page - chunk_addr)
+		      : ((address + size) - chunk_addr));
+
+	status = fpga_dma_burst_read_aux (fd, & (buffer [chunk_addr - address]), chunk_size, chunk_addr);
+	if (status != 0)
+	    return status;
+
+	num_pages++;
+	chunk_addr += chunk_size;
     }
+    if ((verbosity_burst_read >= 1) && (num_pages > 0)) {
+	fprintf (stdout, "%s: %0d pages (for size %0ld address %0lx)\n",
+		 __FUNCTION__, num_pages, size, address);
+	fprintf (stdout, "    Last chunk_addr: 0x%0lx\n", chunk_addr - chunk_size);
+    }
+    return 0;
+}
+
+// ================================================================
+// This is a simulation model of AWS library routine 'fpga_dma_burst_write()'
+// which, in the real library aws-fpga (on real HW) operates over PCIe.
+// Return 0 for ok, non-zero for error.
+
+// The externally-called API function 'fpga_dma_burst_write()' is
+// given later, below.
+// It cannot assume anything about address alignment,
+// nor whether data straddles page boundaries.
+
+// ----------------
+// This 'aux' function is internal, and performs a single burst
+// transaction (up to a page in size). The caller guarantees that
+// 'address' and 'size' have been trimmed to be within a page.
+// Note: neither the starting address nor the ending address may be
+// 64-Byte aligned (beat-aligned).
+
+static
+int fpga_dma_burst_write_aux (int fd, uint8_t *buffer, const size_t size, const uint64_t address)
+{
+    if (verbosity_burst_write >= 2)
+	fprintf (stdout, "%s: size %0ld address %0lx\n", __FUNCTION__, size, address);
+
+    bool            did_some_comms;
+    const uint64_t  address_lim = address + size;
 
     // ----------------
-    // Send WR_ADDR bus request
+    // Compose and AXI4 WR_ADDR bus request
 
     AXI4_Wr_Addr_i16_a64_u0  wra;
 
@@ -273,77 +372,152 @@ int fpga_dma_burst_write (int fd, uint8_t *buffer, size_t size, uint64_t address
     wra.awregion = 0;
     wra.awuser   = 0;
 
-    // Compute burst length (each beat on DMA PCIS is 64 bytes = 6 bits of LSBs)
-    uint64_t  num_beats = ((address_lim - 1) >> 6) - (address >> 6) + 1;
+    // Compute burst length
+    const uint64_t  first_beat_num = (address           >> OFFSET_IN_BEAT_BITS);
+    const uint64_t  last_beat_num  = ((address_lim - 1) >> OFFSET_IN_BEAT_BITS);
+    const uint64_t  num_beats      = last_beat_num - first_beat_num + 1;
 
     wra.awaddr  = address;
-    wra.awlen   = num_beats - 1;    // AXI4 code: awlen+1 beats
-    wra.awsize  = 0x6;              // AXI4 code: 64 bytes
-    wra.awburst = 0x1;              // AXI4 code: 'incrementing' burst
+    wra.awlen   = num_beats - 1;    // AXI4 coding for num_beats
+    wra.awsize  = 0x6;              // AXI4 coding for 64-Byte size
+    wra.awburst = 0x1;              // AXI4 coding for 'incrementing' burst
 
-    if (verbosity2 != 0)
+    // ----------------
+    // Send the AXI4 WR_ADDR bus request
+
+    if (verbosity_burst_write >= 3)
 	fprintf (stdout, "%s: awaddr %0lx awlen %0d awsize %0x awburst %0x\n",
 		 __FUNCTION__, wra.awaddr, wra.awlen, wra.awsize, wra.awburst);
     while (true) {
+	// Try to send request
 	int status = Bytevec_enqueue_AXI4_Wr_Addr_i16_a64_u0 (p_bytevec_state, & wra);
 	if (status == 1) break;
-	usleep (1);
-	did_some_comms = do_comms ();
+	usleep (10);                     // Wait, if unable to send
+	did_some_comms = do_comms ();    // Move data in comms channel
     }
-    did_some_comms = do_comms ();
+    did_some_comms = do_comms ();        // Move data in comms channel
 
     // ----------------
-    // Send WR_DATA bus request
+    // Send WR_DATA bus burst (num_beats)
 
     AXI4_Wr_Data_d512_u0  wrd;
     wrd.wuser = 0;
-    wrd.wstrb = 0xFFFFffffFFFFffff;    // TODO: adjust for first and last beat
 
     uint8_t *pb = buffer;
 
+    bool     ok             = true;
+    uint64_t beat_addr      = (address & MASK_TO_BEAT_START);
+    uint64_t next_beat_addr = beat_addr + BEAT_SIZE;
+
     for (int beat = 0; beat < num_beats; beat++) {
-	memcpy (& wrd.wdata, pb, 64);
+	// Copy data from buf into AXI4 write-data struct
+	uint64_t offset_in_beat = ((beat == 0)
+				   ? (address & MASK_TO_OFFSET_IN_BEAT)
+				   : 0);
+	uint64_t size_in_beat   = ((next_beat_addr > address_lim)
+				   ? ((address_lim & MASK_TO_OFFSET_IN_BEAT) - offset_in_beat)
+				   : (BEAT_SIZE - offset_in_beat));
+
+	memcpy (& (wrd.wdata [offset_in_beat]), pb, size_in_beat);
+
+	// Set strobe bits according to number of bytes in beat and lane-alignment
+	uint64_t  strb = (~ ((uint64_t) 0));
+	if (size_in_beat < 64) {
+	    strb = 1;
+	    strb = (strb << size_in_beat) - 1;    // Set 1's in LSBs
+	    strb = (strb << offset_in_beat);      // Align to byte lane
+	}
+	wrd.wstrb = strb;
+
 	wrd.wlast = (beat == (num_beats - 1));
 
-	if (verbosity2 != 0) {
-	    fprintf (stdout, "%s: beat %0d  wlast %0d  wdata:\n  ",
-		     __FUNCTION__, beat, wrd.wlast);
+	if (verbosity_burst_write >= 3) {
+	    fprintf (stdout, "%s: beat %0d beat_addr %0lx wlast %0d wstrb %0lx wdata:\n  ",
+		     __FUNCTION__, beat, beat_addr, wrd.wlast, wrd.wstrb);
 	    for (int k = 0; k < 64; k++)
 		fprintf (stdout, " %02x", wrd.wdata [k]);
 	    fprintf (stdout, "\n");
+	    fprintf (stdout, "    offset_in_beat %0ld, size_in_beat %0ld\n",
+		     offset_in_beat, size_in_beat);
 	}
 
+	// Send the AXI4 write-data beat
 	while (true) {
+	    // Try to send the beat
 	    int status = Bytevec_enqueue_AXI4_Wr_Data_d512_u0  (p_bytevec_state, & wrd);
 	    if (status == 1) break;
-	    usleep (1);
-	    did_some_comms = do_comms ();
+	    usleep (10);                     // Wait if unable to send
+	    did_some_comms = do_comms ();    // Move data in comms channel
 	}
-	did_some_comms = do_comms ();
-	pb += 64;
+	did_some_comms = do_comms ();        // Move data in comms channel
+
+	pb             += size_in_beat;
+	beat_addr       = next_beat_addr;
+	next_beat_addr += BEAT_SIZE;
     }    
 
     // ----------------
-    // Get  WR_RESP bus response
+    // Recieve AXI4 WR_RESP bus response
 
     AXI4_Wr_Resp_i16_u0  wrr;
 
     while (true) {
-	did_some_comms = do_comms ();
-	if (! did_some_comms)
-	    usleep (1);
+	did_some_comms = do_comms ();    // Move data in comms channel
+	if (! did_some_comms)            // Wait if no activity
+	    usleep (10);
 
+	// Try to receive the response
 	int status = Bytevec_dequeue_AXI4_Wr_Resp_i16_u0 (p_bytevec_state, & wrr);
-	if (status == 1) break;
+	if (status == 1) break;          // Successfully received
 
-	if (verbosity2 > 1)
-	    fprintf (stdout, "%s: response polling loop\n", __FUNCTION__);
-
+	if (verbosity_burst_write >= 3)
+	    fprintf (stdout, "%s: AXI4 WR_RESP wait loop\n", __FUNCTION__);
     }
-    if (verbosity2 != 0)
+    if (verbosity_burst_write >= 3)
 	fprintf (stdout, "%s: complete; bresp = %0d\n", __FUNCTION__, wrr.bresp);
 
-    return (wrr.bresp != 0);
+    ok = (wrr.bresp == 0);
+    return (! ok);
+}
+
+// ----------------
+// The API function (externally visible)
+// This does not assume anything about address alignment,
+// nor whether data straddles page boundaries.
+
+int fpga_dma_burst_write (int fd, uint8_t *buffer, const size_t size, const uint64_t address)
+{
+    if (verbosity_burst_write >= 1)
+	fprintf (stdout, "%s: size %0ld address %0lx\n", __FUNCTION__, size, address);
+
+    check_state_initialized ();
+
+    int       status     = 0;
+    uint64_t  chunk_addr = address;
+    int       num_pages  = 0;
+    uint64_t  chunk_size;
+
+    // Loop, writing chunks that do not straddle page boundaries
+    while (chunk_addr < (address + size)) {
+	uint64_t addr_of_next_page = (chunk_addr & MASK_TO_PAGE_START) + PAGE_SIZE;
+
+	chunk_size = ((addr_of_next_page < (address + size))
+		      ? (addr_of_next_page - chunk_addr)
+		      : ((address + size) - chunk_addr));
+
+	status = fpga_dma_burst_write_aux (fd, & (buffer [chunk_addr - address]), chunk_size, chunk_addr);
+	if (status != 0)
+	    return status;
+
+	num_pages++;
+	chunk_addr += chunk_size;
+    }
+    if (verbosity_burst_write >= 1) {
+	fprintf (stdout, "%s: %0d pages (for size %0ld address %0lx)\n",
+		 __FUNCTION__, num_pages, size, address);
+	fprintf (stdout, "    Last chunk_addr: 0x%0lx\n", chunk_addr - chunk_size);
+    }
+    return 0;
 }
 
 // ================================================================
@@ -368,7 +542,7 @@ int fpga_pci_peek (pci_bar_handle_t handle, uint64_t ocl_addr, uint32_t *p_ocl_d
     while (true) {
 	int status = Bytevec_enqueue_AXI4L_Rd_Addr_a32_u0 (p_bytevec_state, & rda);
 	if (status == 1) break;
-	usleep (1);
+	usleep (10);
 	did_some_comms = do_comms ();
     }
 
@@ -412,20 +586,20 @@ int fpga_pci_poke (pci_bar_handle_t handle, uint64_t ocl_addr, uint32_t ocl_data
     while (true) {
 	int status = Bytevec_enqueue_AXI4L_Wr_Addr_a32_u0 (p_bytevec_state, & wra);
 	if (status == 1) break;
-	usleep (1);
+	usleep (10);
 	did_some_comms = do_comms ();
     }
     while (true) {
 	int status = Bytevec_enqueue_AXI4L_Wr_Data_d32    (p_bytevec_state, & wrd);
 	if (status == 1) break;
-	usleep (1);
+	usleep (10);
 	did_some_comms = do_comms ();
     }
 
     while (true) {
 	did_some_comms = do_comms ();
 	if (! did_some_comms)
-	    usleep (1);
+	    usleep (10);
 
 	int status = Bytevec_dequeue_AXI4L_Wr_Resp_u0 (p_bytevec_state, & wrr);
 	if (status == 1) break;

@@ -21,11 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-// This define-macro is needed to avoid this compiler warning:
-//   warning: implicit declaration of function ‘pthread_setname_np’
-#define _GNU_SOURCE
-
 #include <errno.h>
 #include <fcntl.h>
 #include <stdlib.h>
@@ -34,11 +29,9 @@
 #include <inttypes.h>
 #include <assert.h>
 #include <stdarg.h>
-#include <pthread.h>
-#include <unistd.h>
-// TODO: RESTORE #include <stdatomic.h>
 
-// TODO: RESTORE #include <sys/random.h>
+#include <unistd.h>
+#include <sys/random.h>    // TODO: Centos unhappy
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <sys/types.h>
@@ -46,6 +39,26 @@
 #include "cutils.h"
 #include "list.h"
 #include "virtio.h"
+
+// ================================================================
+// PCI communications includes
+
+#ifdef IN_F1
+// From aws-fpga/sdk/userspace/include/
+#include "fpga_pci.h"
+#include "fpga_mgmt.h"
+#include "fpga_dma.h"
+#include "utils/lcd.h"
+
+#endif
+
+#ifdef IN_SIMULATION
+// AWSteria library, for simulation, replacing AWS' actual FPGA interaction library
+// AWS_Sim_Lib simulates the fpga peek, poke, dma_read and dma_write calls provided by AWS.
+#include "AWS_Sim_Lib.h"
+#endif
+
+// ================================================================
 
 //#define DEBUG_VIRTIO
 
@@ -166,8 +179,6 @@ struct VIRTIODevice {
                                               is written */
     uint32_t config_space_size; /* in bytes, must be multiple of 4 */
     uint8_t config_space[MAX_CONFIG_SPACE_SIZE];
-
-  // TODO: RESTORE _Atomic uint32_t pending_queue_notify;
 };
 
 static uint32_t virtio_mmio_read(void *opaque, uint32_t offset1, int size_log2);
@@ -176,8 +187,6 @@ static void virtio_mmio_write(void *opaque, uint32_t offset,
 static uint32_t virtio_pci_read(void *opaque, uint32_t offset, int size_log2);
 static void virtio_pci_write(void *opaque, uint32_t offset,
                              uint32_t val, int size_log2);
-
-static void async_queue_notify(VIRTIODevice *s, int queue_idx);
 
 static void virtio_reset(VIRTIODevice *s)
 {
@@ -403,7 +412,8 @@ static int virtio_memcpy_from_ram(VIRTIODevice *s, uint8_t *buf,
         int ret;
 
 retry:
-        ret = pread(xdma_c2h_fd, buf, count, addr);
+        // ret = pread(xdma_c2h_fd, buf, count, addr);    // ORIGINAL
+        ret = fpga_dma_burst_read (xdma_c2h_fd, buf, count, addr);
         if (ret < 0) {
             // ERESTARTSYS (512) is currently leaked to userspace
             if (errno == EINTR || errno == 512)
@@ -438,7 +448,9 @@ static int virtio_memcpy_to_ram(VIRTIODevice *s, virtio_phys_addr_t addr,
         int ret;
 
 retry:
-        ret = pwrite(xdma_h2c_fd, buf, count, addr);
+        // ret = pwrite(xdma_h2c_fd, buf, count, addr);    // ORIGINAL
+        ret = fpga_dma_burst_write (xdma_h2c_fd, (uint8_t *) buf, count, addr);    // AWSteria
+
         if (ret < 0) {
             // ERESTARTSYS (512) is currently leaked to userspace
             if (errno == EINTR || errno == 512)
@@ -554,7 +566,6 @@ static void virtio_consume_desc(VIRTIODevice *s,
     virtio_write32(s, used_elem_addr, desc_idx);
     virtio_write32(s, used_elem_addr + 4, desc_len);
 
-    // TODO: RESTORE atomic_thread_fence(memory_order_release);
     virtio_write16(s, used_idx_addr, used_idx + 1);
 
     s->int_status |= 1;
@@ -610,7 +621,6 @@ static void queue_notify(VIRTIODevice *s, int queue_idx)
     if (qs->manual_recv)
         return;
 
-    // TODO: RESTORE atomic_thread_fence(memory_order_acquire);
     while (qs->last_avail_idx != avail_idx) {
         desc_idx = virtio_read16(s, qs->avail_addr + 4 +
                                  (qs->last_avail_idx & (qs->num - 1)) * 2);
@@ -867,7 +877,7 @@ static void virtio_mmio_write(void *opaque, uint32_t offset,
             break;
         case VIRTIO_MMIO_QUEUE_NOTIFY:
             if (val < MAX_QUEUE) {
-                async_queue_notify(s, val);
+                queue_notify(s, val);
             }
             break;
         case VIRTIO_MMIO_INTERRUPT_ACK:
@@ -1048,7 +1058,7 @@ static void virtio_pci_write(void *opaque, uint32_t offset1,
         break;
     case VIRTIO_PCI_NOTIFY_OFFSET >> 12:
         if (val < MAX_QUEUE)
-            async_queue_notify(s, val);
+            queue_notify(s, val);
         break;
     }
 }
@@ -1461,7 +1471,7 @@ static int virtio_entropy_recv_request(VIRTIODevice *s, int queue_idx,
             if (write_size - offset < block_size) {
                 block_size = write_size - offset;
             }
-            ret = 0; // TODO: RESTORE getrandom(s1->buf, block_size, 0);
+            ret = getrandom(s1->buf, block_size, 0);    // TODO: Centos unhappy    (from sys/random.h)
             /* reads up to 256 bytes should always succeed */
             if (ret > 0) {
                 memcpy_to_queue(s, queue_idx, desc_idx, offset, s1->buf, ret);
@@ -2771,88 +2781,4 @@ VIRTIODevice *virtio_9p_init(VIRTIOBusDef *bus, FSDevice *fs,
     init_list_head(&s->fid_list);
 
     return (VIRTIODevice *)s;
-}
-
-static pthread_mutex_t pending_notify_lock = PTHREAD_MUTEX_INITIALIZER;
-static pthread_cond_t pending_notify_cond = PTHREAD_COND_INITIALIZER;
-static uint8_t pending_notify, pending_notify_stop;
-static pthread_t pending_notify_thread;
-
-static void async_queue_notify(VIRTIODevice *s, int queue_idx)
-{
-    // TODO: RESTORE atomic_fetch_or_explicit(&s->pending_queue_notify, 1 << queue_idx, memory_order_release);
-    pthread_mutex_lock(&pending_notify_lock);
-    pending_notify = 1;
-    pthread_cond_signal(&pending_notify_cond);
-    pthread_mutex_unlock(&pending_notify_lock);
-}
-
-struct PendingNotifyWorkerData {
-    int n;
-    VIRTIODevice **ps;
-};
-
-static void *pending_notify_worker(void *opaque)
-{
-    struct PendingNotifyWorkerData *data = opaque;
-    int n = data->n;
-    VIRTIODevice **ps = data->ps;
-    for (;;) {
-        pthread_mutex_lock(&pending_notify_lock);
-        while (!pending_notify)
-            pthread_cond_wait(&pending_notify_cond, &pending_notify_lock);
-        if (pending_notify_stop) {
-            pending_notify_stop = 0;
-            pthread_mutex_unlock(&pending_notify_lock);
-            free(ps);
-            free(data);
-            return NULL;
-        }
-        /* clear now; caller expected to perform them */
-        pending_notify = 0;
-        pthread_mutex_unlock(&pending_notify_lock);
-	int i;
-        for (i = 0; i < n; i++) {
-            VIRTIODevice *s = ps[i];
-            /*
-             * We must clear the bits before we process them otherwise we would
-             * notify the queue, concurrently receive another notify for a new
-             * request we didn't look at, and then immediately clobber that bit
-             * being set.
-             */
-            uint32_t notify = 0; // TODO: RESTORE atomic_exchange_explicit(&s->pending_queue_notify, 0, memory_order_acquire);
-	    int j;
-            for (j = 0; j < 32 && notify; j++) {
-                if (notify & (1u << j)) {
-                    queue_notify(s, j);
-                    notify &= ~(1u << j);
-                }
-            }
-        }
-    }
-}
-
-void virtio_start_pending_notify_thread(int n, VIRTIODevice **ps)
-{
-    struct PendingNotifyWorkerData *data = malloc(sizeof(*data));
-    struct VIRTIODevice **ps_copy = malloc(n * sizeof(*ps_copy));
-    memcpy(ps_copy, ps, n * sizeof(*ps_copy));
-    data->n = n;
-    data->ps = ps_copy;
-    pthread_create(&pending_notify_thread, NULL, &pending_notify_worker, data);
-    pthread_setname_np(pending_notify_thread, "VirtIO queues");
-}
-
-void virtio_stop_pending_notify_thread(void)
-{
-    pthread_mutex_lock(&pending_notify_lock);
-    pending_notify = 1;
-    pending_notify_stop = 1;
-    pthread_cond_signal(&pending_notify_cond);
-    pthread_mutex_unlock(&pending_notify_lock);
-}
-
-void virtio_join_pending_notify_thread(void)
-{
-    pthread_join(pending_notify_thread, NULL);
 }

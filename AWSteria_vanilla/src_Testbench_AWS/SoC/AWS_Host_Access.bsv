@@ -85,11 +85,12 @@ module mkAWS_Host_Access (AWS_Host_Access_IFC);
    rule rl_forward_rd_req_addr;
       let rda <- pop_o (slave_xactor.o_rd_addr);
       Bit #(32) addr = truncate (rda.araddr);
-      f_to_aws_host.enq ((addr & 32'h_FFFF_FFFC) | 32'h0);
+      Bit #(32) req  = ((addr & 32'h_FFFF_FFFC) | 32'h0);    // LSB 0 for 'read' req
+      f_to_aws_host.enq (req);
       f_rsps_pending.enq (tuple4 (1'b0, addr, rda.arid, rda.aruser));
 
       if (verbosity > 0)
-	 $display ("AWS_Host_Access.rl_forward_rd_req_addr: addr %08h", addr);
+	 $display ("AWS_Host_Access.rl_forward_rd_req_addr: req %08h", req);
    endrule
 
    Reg #(Maybe #(Bit #(32))) rg_wdata_pending <- mkReg (tagged Invalid);
@@ -98,12 +99,13 @@ module mkAWS_Host_Access (AWS_Host_Access_IFC);
    rule rl_forward_wr_req_addr (rg_wdata_pending == tagged Invalid);
       let wra <- pop_o (slave_xactor.o_wr_addr);
       Bit #(32) addr = truncate (wra.awaddr);
-      f_to_aws_host.enq ((addr & 32'h_FFFF_FFFC) | 32'h1);
+      Bit #(32) req  = ((addr & 32'h_FFFF_FFFC) | 32'h1);    // LSB 1 for 'write' req
+      f_to_aws_host.enq (req);
       f_rsps_pending.enq (tuple4 (1'b1, addr, wra.awid, wra.awuser));
       rg_wdata_pending <= tagged Valid addr;
 
       if (verbosity > 0)
-	 $display ("AWS_Host_Access.rl_forward_wr_req_addr: addr %08h", addr);
+	 $display ("AWS_Host_Access.rl_forward_wr_req_addr: req %08h", req);
    endrule
 
    // Priortize reads, assuming writes may be used for side-effects after reads
@@ -113,8 +115,11 @@ module mkAWS_Host_Access (AWS_Host_Access_IFC);
    rule rl_forward_wr_req_data (rg_wdata_pending matches tagged Valid .addr);
       let wrd <- pop_o (slave_xactor.o_wr_data);
       Bit #(32) data = wrd.wdata [31:0];
+
+      // Take data from upper 32b of 64b word addr is W but not DW-aligned
       if ((valueOf (Wd_Data) == 64) && (addr [2:0] == 3'b100))
 	 data = (wrd.wdata >> 32) [31:0];
+
       f_to_aws_host.enq (data);
       rg_wdata_pending <= tagged Invalid;
 

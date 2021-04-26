@@ -56,14 +56,16 @@ TINYEMU_SRCS_C = $(TINYEMU)/cutils.c \
 TINYEMU_CFLAGS= -DCONFIG_RISCV_MAX_XLEN=64 \
 		-DMAX_XLEN=64 \
 		-DCONFIG_SLIRP \
+		-DDEBUG_VIRTIO \
 
 
 # ================================================================
 # Top-level command to build EXE
 
 $(EXE): $(OBJS)
-	cc -g  -o $(EXE) \
-	$(TINYEMU_CFLAGS) -I $(TINYEMU)  -I $(TINYEMU_SLIRP)  $(TINYEMU_SRCS_C) \
+	$(CC) -g  -o $(EXE) \
+	$(TINYEMU_CFLAGS) \
+	-I $(SRC)  -I $(TINYEMU)  -I $(TINYEMU_SLIRP)  $(TINYEMU_SRCS_C) \
 	$(OBJS) \
 	$(LDLIBS) -lpthread
 
