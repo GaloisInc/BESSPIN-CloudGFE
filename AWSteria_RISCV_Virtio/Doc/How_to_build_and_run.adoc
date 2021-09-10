@@ -1,0 +1,446 @@
+= How to build and run AWSteria_RISCV_Virtio
+Rishiyur S. Nikhil, Bluespec, Inc. (c) 2020-2021
+:revnumber: v0.8
+:revdate: 2021-09-08
+:sectnums:
+:toc:
+:toclevels: 5
+:toc: left
+:toc-title: Contents
+:description: How to build and run AWSteria_RISCV_Virtio in simulation, on Amazon AWS F1 and Xilinx VCU118
+:keywords: AWSteria, BSV, Flute, Toooba, Virtio
+:data-uri:
+
+// SECTION ================================================================
+== Introduction
+
+This document describes how to build and run AWSteria_RISCV_Virtio,
+and provides example transcripts for builds with Flute and Toooba, for
+the following platforms:
+
+*  Simulation (FPGA-side is Bluesim or Verilator sim).  Host- and FPGA-sides communicate over TCP/IP.
+
+* Amazon AWS F1 (cloud server with attached FPGA board).  FPGA-side is
+    inside AWS' "`shell`" (https://github.com/aws/aws-fpga.git[]).
+    Host- and FPGA-side use AWS' aws-fpga SDK and HDK facilities
+    (which, in turn communicate over PCIe).
+
+* Xilinx VCU118 FPGA board. Host- and FPGA-side communicate over
+    PCIe. FPGA-side is inside U.Cambridge's "`Garnet`" system
+    (https://github.com/CTSRD-CHERI/garnet[]).
+
+On all platforms, the host-side is an ordinary Linux executable.  The
+example runs execute the following RISC-V code on the FPGA-side:
+
+* a standard ISA test (compiled from RISC-V assembly language)
+* a Hello World! program (compiled from C)
+* FreeRTOS
+
+For the FPGA builds (AWS F1 and VCU118), the example runs also include:
+
+* FreeBSD performing network and block device actions using Virtio
+
+We also show example runs under GDB control.
+
+The AWSteria_RISCV_Virtio, Flute and Toooba source code to build the
+host-side and FPGA-side are identical in all the scenarios; the only
+difference is in the build flow.  To achieve this, we exploit
+"`AWSteria_Infra`" (https://github.com/bluespec/AWSteria_Infra[])
+which provides a fixed host-side and FPGA-side API and separate
+underlying implementations for simulation, AWS F1 and VCU118.
+
+// SECTION ================================================================
+== Environment Variables used during build-and-run
+
+The following environment variables are used at various points in the
+build-and-run flow. Each should be a path to a corresponding repo clone.
+
+* `AWSTERIA_REPO`: our clone of https://github.com/GaloisInc/BESSPIN-CloudGFE[]
+* `AWSTERIA_INFRA_REPO`: our clone of https://github.com/bluespec/AWSteria_Infra[]
+* `FLUTE_REPO`: our clone of https://github.com/bluespec/Flute[]
+* `TOOOBA_REPO`: our clone of https://github.com/bluespec/Toooba[]
+* `AWS_FPGA_REPO_DIR`: our clone of https://github.com/aws/aws-fpga.git[]
+
+Compilation of BSV source code uses the Bluespec _bsc_ compiler which
+can be downloaded from https://github.com/B-Lang-org/bsc[] and
+installed.  The following environment variable should point at our
+local installation, e.g., `<...clone-location...>/bsc/inst/` or
+`<...installation-dir...>/inst/`:
+
+* `BLUESPEC_HOME`
+
+// SECTION ================================================================
+== Building and Running on Bluesim or Verilator sim
+
+// SUBSECTION ----------------------------------------------------------------
+=== Building FPGA-side Bluesim/Verilator sim
+
+For Bluesim, change to the build directory and `make`:
+----
+  $ cd AWSteria_RISCV_Virtio/HW/build_Flute_Bluesim/
+  $ make  all
+----
+The Bluespec `bsc` compiler will compile all the BSV source code and
+ultimately produce and executable which is the Bluesim simulator:
+----
+    exe_HW_sim*
+    exe_HW_sim.so*
+----
+The first file is just a script that loads the shared object in the
+second file, a shared library, and invokes it.
+
+Building for Verilator sim is the same:
+----
+  $ cd AWSteria_RISCV_Virtio/HW/build_Flute_Verilator/
+  $ make  all
+----
+The Bluespec `bsc` compiler will compile all the BSV source code into
+RTL. Then, Verilator will compile and link the RTL into an executable:
+----
+    exe_HW_sim*
+----
+
+The build procedure is the same for Toooba, except performed in one of
+the following directories:
+----
+  $ cd AWSteria_RISCV_Virtio/HW/build_Toooba_Bluesim/
+  $ cd AWSteria_RISCV_Virtio/HW/build_Toooba_Verilator/
+----
+
+Each of the above directories has a `transcript_for_make.txt` file
+showing an example build.
+
+// SUBSECTION ----------------------------------------------------------------
+=== Building host-side Bluesim/Verilator sim
+
+The host-side build is the same for Bluesim and Verilator sim FPGA-sides.
+
+----
+  $ cd AWSteria_RISCV_Virtio/Host/build_sim/
+  $ make exe_Host_sim
+----
+This will build the host-side executable:
+----
+    exe_Host_sim
+----
+
+The directory has an `transcript_for_make.txt` file showing an example
+build.
+
+
+// SUBSECTION ----------------------------------------------------------------
+=== Running on Bluesim/Verilator sim
+
+We will need two terminal windows, call them _TSIM_ (simulation of
+FPGA side) and _THOST_ (host side).
+
+_In terminal window TSIM:_ start the simulation executable as follows (for Flute or for Toooba).
+It will immediately pause, waiting for a TCP connection.
+----
+  $ cd  AWSteria_RISCV_Virtio/HW/build_Flute_Bluesim
+  $ ./exe_HW_sim
+  ...
+  Awaiting remote host connection on tcp port 30000 ...
+----
+or
+----
+  $ cd  AWSteria_RISCV_Virtio/HW/build_Toooba_Bluesim
+  $ ./exe_HW_sim
+  ...
+  Awaiting remote host connection on tcp port 30000 ...
+----
+
+_In terminal window THOST:_ start the host-side executable, providing
+it a memhex32 file with the program image.  Example:
+----
+  $ cd  AWSteria_RISCV_Virtio/Host/build_sim
+  $ ./exe_Host_sim --memhex32  ../../Tests/rv64-hello.memhex32
+----
+`rv64-hello.memhex32` has the binary RISC-V instructions obtained by
+compiling the standard "`Hello World!`" C program.
+
+It will connect to the simulation executable running in TSIM using the
+TCP socket, and then both will run concurrently.
+
+Transcripts of this example run may be found at:
+----
+    AWSteria_RISCV_Virtio/Host/build_sim/transcript_for_run.txt
+    AWSteria_RISCV_Virtio/HW/build_Flute_Bluesim/transcript_for_sim.txt
+    AWSteria_RISCV_Virtio/HW/build_Flute_Verilator/transcript_for_sim.txt
+----
+for the host-side and FPGA-side, respectively.
+
+Similarly, we can try running again with one of the other memhex32
+files in the `Tests/` directory:
+
+----
+    rv64ui-p-add.memhex32
+    rv64ui-p-ld.memhex32
+    rv64ui-v-add.memhex32
+    rv64-cat.memhex32
+    freertos1000.elf.memhex32
+----
+The first three are standard ISA tests. testing the `add` and `ld`
+instructions. The `-v-` test does it in a virtual memory setting.
+
+`cat` is the standard Unix command, echoing stdin to stdout.  After
+startup, it will pause for input (in THOST).  Anything you type will
+be sent by the host-side into the UART on FPGA-side, read by the `cat`
+program running on the RISC-V CPU, echoed back to the UART, which is
+communicated back to host-side and displayed on THOST.
+
+The final example is the FreeRTOS operating system.
+
+// SECTION ================================================================
+== Building and running on AWS F1
+
+// SUBSECTION ----------------------------------------------------------------
+=== Building FPGA-side AWS F1
+
+An example transcript of the initial `make` steps below is in:
+
+----
+    AWSteria_RISCV_Virtio/HW/build_Flute_AWSF1/transcript_for_make.txt
+----
+
+An example transcript of the DCP and AFI build steps is in:
+
+----
+    AWSteria_RISCV_Virtio/HW/build_Flute_AWSF1/transcript_for_DCP_AFI_build.txt
+----
+
+(these are both aws-fpga HDK steps and described in detail in aws-fpga
+documentation).
+
+The build procedure is documented in the README of
+https://github.com/bluespec/AWSteria_Infra[].  There, the procedure is
+described for that repository's `TestApp` application. Here, the
+procedure is the same, except we start in one of these directories:
+
+----
+    $(AWSTERIA_REPO)/HW/build_Flute_AWSF1/
+    $(AWSTERIA_REPO)/HW/build_Toooba_AWSF1/
+----
+
+Briefly, `make compile` will compile all the BSV source code to
+Verilog, and `make for_AWSF1_HDK` will create and populate a directory
+`cl_AWSteria_RISCV` that is ready for the aws-fpga HDK flow.
+
+We perform a step to "`create a DCP`" (Design Checkpoint).  This must
+be done on a machine where aws-fpga has been installed
+(https://github.com/aws/aws-fpga.git[]), and where we have sourced the
+`hdk_setup.sh` file in that repo.  Briefly,
+
+----
+  $ cd  cl_AWSteria_RISCV/
+  $ export CL_DIR=$(pwd)
+  $ cd build/scripts
+  $ ./aws_build_dcp_from_cl.sh  -ignore_memory_requirement
+----
+
+This starts Vivado in the background to synthesize
+AWSteria_RISCV_Virtio RTL into a DCP containing a partial bitfile.
+The process takes about 4 hours running in an “FPGA Developer” AMI on
+an Amazon z1d.2xlarge instance.  Progress can be monitored by watching
+the log files whose names contain their creation timestamp, e.g.,
+
+----
+    21_09_08-023754.nohup.out
+    21_09_08-023754.vivado.log
+----
+
+When the log files report successful completion by Vivado, we can
+check if synthesis met timing by examining:
+
+----
+    cl_AWSteria_RISCV/build/reports/21_09_08-023754.timing_summary_route_design.rpt
+----
+
+On successful synthesis, it will create a tar file:
+
+----
+    cl_AWSteria_RISCV/build/checkpoints/to_aws/21_09_08-023754.Developer_CL.tar
+----
+
+The final FPGA-side build step is to upload this tar file to an AWS S3
+bucket, and to request AWS to create an AFI (Amazon AWS FPGA image).
+
+----
+  $ aws s3 cp  cl_AWSteria_RISCV/build/checkpoints/to_aws/21_09_08-023754.Developer_CL.tar \
+      s3://my_bucket/my_folder/
+  $ aws ec2 create-fpga-image \
+      --region us-west-2 \
+      --name AWSteria_RISCV_Virtio \
+      --description "AWSteria RISCV Virtio" \
+      --input-storage-location Bucket=my_bucket,Key=my_folder/21_09_08-023754.Developer_CL.tar \
+      --logs-storage-location Bucket=my_bucket,Key=my_folder
+----
+
+The command will submit it to the cloud, and immediately print
+output that looks like this:
+----
+    {
+        "FpgaImageId": "afi-0fced9721a34d8d99",
+        "FpgaImageGlobalId": "agfi-0cb465a4e98968670"
+    }
+----
+_We must save this AFI ID and AGFI ID for future reference; they are
+the handles by which we refer to our FPGA-side build._
+
+AFI creation takes about 1 hour.  We can monitor progress using the
+following command using the AFI ID:
+
+----
+  $ aws ec2 describe-fpga-images --fpga-image-ids  afi-0fced9721a34d8d99
+----
+
+This will show a JSON/YAML output with a "`State`" field that is
+initially "`pending`" and will change to "`available`" when the AFI is
+ready,
+
+// SUBSECTION ----------------------------------------------------------------
+=== Building host-side AWS F1
+
+Simply `make` in the `Host/build_AWSF1` directory to create the executable:
+----
+  $ cd AWSteria_RISCV_Virtio/Host/build_AWSF1
+  $ make  exe_Host_AWSF1
+----
+
+An example transcript is in:
+----
+    AWSteria_RISCV_Virtio/Host/build_AWSF1/log_for_make.txt
+----
+
+// SUBSECTION ----------------------------------------------------------------
+=== Running on AWS F1
+
+Transcripts of example runs are in:
+
+----
+    AWSteria_RISCV_Virtio/Host/build_AWSF1/transcript_AWSteria_Flute_Virtio_run_small.txt
+    AWSteria_RISCV_Virtio/Host/build_AWSF1/transcript_AWSteria_Flute_Virtio_run_FreeBSD.txt
+----
+
+We must be on an AWS F1 instance (with attached FPGA).  The examples
+shown here were run on an f1.2xlarge instance running “FPGA Developer”
+AMI (Amazon Machine Instance).  This AMI runs CentOS and comes
+pre-loaded with aws-fpga tooling.  We should source `sdk_setup.sh` in
+the `aws-fpga` repo to set up all the tools.  Further, if necessary,
+we should follow the instructions in the aws-fpga SDK to uninstall any
+XOCL driver that may be present, and install the XDMA driver if not
+already present.
+
+The host-side executable has a `--help` function:
+----
+  $ ./exe_Host_AWSF1 --help
+  Usage:  ./exe_Host_AWSF1  [args]    where args are:
+    --help, -h                   Print this help message
+    --elf        <foo.elf>       filename to be loaded on startup
+    --memhex32   <foo.memhex32>  filename to be loaded on startup
+    --gdbport    <n>             TCP port number to listen for GDB connection
+    --blockdev   <foo.img>       filename for Virtio block device
+    --tundev     </dev...>       device filename for Virtio network tunnel driver
+----
+The `gdbport` argument is only needed if controlling from GDB
+(described in more detail in the simulation section).
+
+For bare metal RISC-V codes, only the memhex32 (or elf) argument is
+needed.  Even this is not needed if controlling with GDB, where GDB
+will load the program code.
+
+The `blockdev` argument is a file formatted as a block device, to be
+used by Virtio.  This is optional unless the code running on the
+RISC-V CPU expects to see a Virtio block device.
+
+The `tundev` argument is file for a network tunnel driver.  This is
+only for code running on the RISC-V CPU that expect to see a Virtio
+network device.  Even then it is optional, in that the host-side code
+will provide SLIRP networking by default instead of a tunnel device.
+
+// SUBSUBSECTION ----------------
+==== Running small examples
+
+Examples of bare metal tests are ISA test (compiled from RISC-V
+assembly language), Hello World compiled from C) and FreeRTOS.
+
+We load our previously built AFI into the FPGA by specifying its AGFI
+ID, and run our previously-built host-side executable, giving it a
+memhex32 file (memory image of an ELF file) for the RISC-V program to
+be run by the RISC-V CPU:
+
+----
+  $ sudo fpga-load-local-image -S 0 -I "agfi-0fe4c00a6a1530545"
+  $ sudo ./exe_Host_AWSF1  --memhex32  <testcode>
+----
+
+where <testcode> is any RISC-V code.  UART output during the run is
+shown on our terminal console.
+
+Transcript `transcript_AWSteria_Flute_Virtio_run_small.txt` shows
+example runs for `rv64ui-p-add.memhex32`, `rv64-hello` and
+`rv64-freeRTOS`.
+
+// SUBSUBSECTION ----------------
+==== Running FreeBSD with Virtio
+
+Transcript `transcript_AWSteria_Flute_Virtio_run_FreeBSD.txt` shows an
+example run where we:
+
+* Start the run, supplying it a `.img` file that is formatted as a
+   block device, to be used as a Virtio block device, and a memhex32
+   file representing the bbl loader and the FreeBSD image.
++
+----
+  $ sudo fpga-load-local-image -S 0 -I "agfi-0fe4c00a6a1530545"
+  $ sudo ./exe_Host_AWSF1  --memhex32  <bbl_and_FreeBSD_imaage>  --blockdev <file>
+----
+
+* The CPU boots FreeBSD to multi-user mode, resulting in a login
+    prompt.  During the boot, console messages are shown where it
+    probes for and discovers Virtio devices (network, block, entropy).
+
+* At the FreeBSD shell prompt, we execute some shell commands
+
+* At the FreeBSD shell prompt, we demonstrate Virtio networking by `ssh`-ing
+    to a remote machine.
+
+* At the FreeBSD shell prompt, we demonstrate Virtio networking and
+    block storage by `scp`-ing a file from to a remote machine into
+    FreeBSD.  We verify that it has the correct SHA256 sum.
+
+* Finally, we demonstrate correct persistence on the Virtio block
+    device by shutting down BSD and rebooting, and rechecking SHA256
+    on the file we recently `scp`-ed in.
+
+// SECTION ================================================================
+== Building and running on VCU118
+
+_All these sub-sections to be written._
+
+
+// SUBSECTION ----------------------------------------------------------------
+=== Building FPGA-side VCU118
+
+// SUBSECTION ----------------------------------------------------------------
+=== Building host-side VCU118
+
+// SUBSECTION ----------------------------------------------------------------
+=== Running on VCU118
+
+// SUBSUBSECTION ----------------
+==== Running small examples
+
+// SUBSUBSECTION ----------------
+==== Running FreeBSD with Virtio
+
+// SECTION ================================================================
+== GDB control
+
+GDB control of the RISC-V CPU in AWSteria_RISCV_Virtio works the same
+way on all platforms (simulation, AWS F1, VCU118) and for both CPUs
+(Flute, Toooba).  We demonstrate it here for in simulation, with the
+FPGA-side containing a Flute CPU.
+
+// ================================================================
+

@@ -1,0 +1,36 @@
+Log of ./exe_HW_sim 
+Thu Sep  9 21:15:52 2021
+
+INFO: 1: TOP.mkTop_HW_Side.ddr_B
+    base 0000000400000000  lim 0000000800000000    implemented 0000000100000000
+================================================================
+Bluespec AWSteria simulation v2.0
+Copyright (c) 2020-2021 Bluespec, Inc. All Rights Reserved.
+================================================================
+Awaiting remote host connection on tcp port 30000 ...
+Connected
+mkProc came out of reset
+1: Debug_Module reset
+INFO: 1: TOP.mkTop_HW_Side.ddr_A
+    base 0000000000000000  lim 0000000400000000    implemented 0000000100000000
+2: TOP.mkTop_HW_Side.awsteria_hw.rl_initialize_1
+    DDRs ready, mem access enabled
+2: TOP.mkTop_HW_Side.awsteria_hw.soc_top.core.proc.LLC_AXI4_Adapter.ma_ddr4_ready: enabling all rules
+24638: TOP.mkTop_HW_Side.awsteria_hw.rl_host_to_hw_control: verbosity 0, logdelay 0
+24888: TOP.mkTop_HW_Side.awsteria_hw.rl_host_to_hw_control: watch tohost at addr bffff000
+24909: TOP.mkTop_HW_Side.awsteria_hw.rl_host_to_hw_control: set PC trace off
+24930: TOP.mkTop_HW_Side.awsteria_hw.rl_host_to_hw_control: ddr4 loaded
+24931: TOP.mkTop_HW_Side.awsteria_hw.rl_initialize_2: DDRs loaded
+24932: TOP.mkTop_HW_Side.awsteria_hw.soc_top.rl_reset_start_initial ...
+24933: Core.rl_reset
+24933: TOP.mkTop_HW_Side.awsteria_hw.soc_top.core.proc.m_start: 
+    running 1  startpc 70000000  tohostAddr bffff000  fromhostAddr 0
+    start CPU[0]
+24934: TOP.mkTop_HW_Side.awsteria_hw.soc_top.rl_reset_complete_initial
+instret:0  PC:0x70000000  instr:0xf1402573   iType:Csr    [doCommitSystemInst]
+36729: TOP.mkTop_HW_Side.awsteria_hw.rl_host_to_hw_control: SHUTDOWN
+Top_HW_Side: awsteria_hw.m_halted == True
+- Verilator_RTL/mkTop_HW_Side.v:3074: Verilog $finish
+
+Thu Sep  9 21:16:09 2021
+----------------

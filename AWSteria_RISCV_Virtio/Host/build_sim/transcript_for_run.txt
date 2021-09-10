@@ -1,0 +1,15 @@
+Log of ./exe_Host_sim --memhex32 ../../Tests/rv64-hello.memhex32 
+Thu Sep  9 19:26:41 2021
+
+AWSteria_Host_init()
+tcp_client_open: connecting to '127.0.0.1' port 30000
+tcp_client_open: connected
+AWSteria_Host_init: initialized, connected to simulation server
+load_mem_hex32_using_DMA: downloading to AWS DDR4
+HS_syscontrol: tohost_value = 0x1    (PASS)
+Hello World!
+ERROR: tcp_client_recv (): read () failed on byte 0
+./exe_Host_sim exited with status code 1
+
+Thu Sep  9 19:26:44 2021
+----------------

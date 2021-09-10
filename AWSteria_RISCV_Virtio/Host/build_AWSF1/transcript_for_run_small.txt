@@ -1,0 +1,71 @@
+# Transcript of a few small tests run on AWSteria:Flute:Virtio on AWS F1
+# Tests are separated by lines with TEST comment
+
+# ================================================================
+# TEST ISA test rv64ui-p-add
+
+--20:11:09--ip-10-10-37-101: ~/git_clones/AWS/BESSPIN-CloudGFE_rsn2/AWSteria_vanilla/App_RISCV_Virtio/Host/build_AWSF1
+$ sudo fpga-load-local-image -S 0 -I "agfi-0fe4c00a6a1530545"
+AFI          0       agfi-0fe4c00a6a1530545  loaded            0        ok               0       0x04261818
+AFIDEVICE    0       0x1d0f      0xf001      0000:00:1d.0
+INFO: Loaded AFI "ASWteria RISCV 125 MHz w. Debug Module"
+
+$ sudo /home/centos/git_clones/AWS/BESSPIN-CloudGFE_rsn2/AWSteria_vanilla/App_RISCV_Virtio/Host/build_AWSF1/exe_Host_AWSF1 --memhex32 /home/centos/git_clones/AWS/BESSPIN-CloudGFE_rsn2/AWSteria_vanilla/Tests/rv64ui-p-add.memhex32
+load_mem_hex32_using_DMA: downloading to AWS DDR4
+Number of readback errors: 92 (ignore if ROM addrs)
+HS_syscontrol: tohost_value = 0x1    (PASS)
+TEST PASSED
+
+# ================================================================
+# TEST Hello World! (showing TTY output to host-side working)
+
+--20:11:17--ip-10-10-37-101: ~/git_clones/AWS/BESSPIN-CloudGFE_rsn2/AWSteria_vanilla/App_RISCV_Virtio/Host/build_AWSF1
+$ sudo fpga-load-local-image -S 0 -I "agfi-0fe4c00a6a1530545"
+AFI          0       agfi-0fe4c00a6a1530545  loaded            0        ok               0       0x04261818
+AFIDEVICE    0       0x1d0f      0xf001      0000:00:1d.0
+INFO: Loaded AFI "ASWteria RISCV 125 MHz w. Debug Module"
+
+$ sudo /home/centos/git_clones/AWS/BESSPIN-CloudGFE_rsn2/AWSteria_vanilla/App_RISCV_Virtio/Host/build_AWSF1/exe_Host_AWSF1 --memhex32 /home/centos/git_clones/AWS/BESSPIN-CloudGFE_rsn2/AWSteria_vanilla/Tests/rv64-hello.memhex32
+load_mem_hex32_using_DMA: downloading to AWS DDR4
+HS_syscontrol: tohost_value = 0x1    (PASS)
+Hello World!
+TEST PASSED
+
+# ================================================================
+# TEST FreeRTOS boot (also showing console TTY output to host-side working)
+
+--20:11:25--ip-10-10-37-101: ~/git_clones/AWS/BESSPIN-CloudGFE_rsn2/AWSteria_vanilla/App_RISCV_Virtio/Host/build_AWSF1
+$ sudo fpga-load-local-image -S 0 -I "agfi-0fe4c00a6a1530545"
+AFI          0       agfi-0fe4c00a6a1530545  loaded            0        ok               0       0x04261818
+AFIDEVICE    0       0x1d0f      0xf001      0000:00:1d.0
+INFO: Loaded AFI "ASWteria RISCV 125 MHz w. Debug Module"
+
+$ sudo /home/centos/git_clones/AWS/BESSPIN-CloudGFE_rsn2/AWSteria_vanilla/App_RISCV_Virtio/Host/build_AWSF1/exe_Host_AWSF1 --memhex32 /home/centos/git_clones/AWS/BESSPIN-CloudGFE_rsn2/AWSteria_vanilla/Tests/freertos1000.elf.memhex32
+load_mem_hex32_using_DMA: downloading to AWS DDR4
+[0]: Hello from RX
+[0]: Hello from TX
+[1] TX: awoken
+[1] RX: received value
+Blink !!!
+[1]: Hello from RX
+[1] TX: sent
+[1]: Hello from TX
+[2] TX: awoken
+[2] RX: received value
+Blink !!!
+[2]: Hello from RX
+[2] TX: sent
+[2]: Hello from TX
+[3] TX: awoken
+[3] RX: received value
+Blink !!!
+[3]: Hello from RX
+[3] TX: sent
+[3]: Hello from TX
+[4] TX: awoken
+[4] RX: received value
+Blink !!!
+
+...
+
+# ================================================================

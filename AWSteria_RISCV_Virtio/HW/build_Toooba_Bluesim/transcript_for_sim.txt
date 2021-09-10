@@ -1,0 +1,35 @@
+Log of ./exe_HW_sim 
+Thu Sep  9 20:41:31 2021
+
+================================================================
+Bluespec AWSteria simulation v2.0
+Copyright (c) 2020-2021 Bluespec, Inc. All Rights Reserved.
+================================================================
+Awaiting remote host connection on tcp port 30000 ...
+Connected
+mkProc came out of reset
+1: Debug_Module reset
+INFO: 1: top.ddr_A
+    base 0000000000000000  lim 0000000400000000    implemented 0000000100000000
+INFO: 1: top.ddr_B
+    base 0000000400000000  lim 0000000800000000    implemented 0000000100000000
+2: top.awsteria_hw.rl_initialize_1
+    DDRs ready, mem access enabled
+2: top.awsteria_hw.soc_top.core.proc.LLC_AXI4_Adapter.ma_ddr4_ready: enabling all rules
+24288: top.awsteria_hw.rl_host_to_hw_control: verbosity 0, logdelay 0
+24369: top.awsteria_hw.rl_host_to_hw_control: watch tohost at addr bffff000
+24452: top.awsteria_hw.rl_host_to_hw_control: set PC trace off
+24476: top.awsteria_hw.rl_host_to_hw_control: ddr4 loaded
+24477: top.awsteria_hw.rl_initialize_2: DDRs loaded
+24478: top.awsteria_hw.soc_top.rl_reset_start_initial ...
+24479: top.awsteria_hw.soc_top.core.proc.m_start: 
+    running 1  startpc 70000000  tohostAddr bffff000  fromhostAddr 0
+    start CPU[0]
+24479: Core.rl_reset
+24480: top.awsteria_hw.soc_top.rl_reset_complete_initial
+instret:0  PC:0x70000000  instr:0xf1402573   iType:Csr    [doCommitSystemInst]
+32443: top.awsteria_hw.rl_host_to_hw_control: SHUTDOWN
+Top_HW_Side: awsteria_hw.m_halted == True
+
+Thu Sep  9 20:42:45 2021
+----------------

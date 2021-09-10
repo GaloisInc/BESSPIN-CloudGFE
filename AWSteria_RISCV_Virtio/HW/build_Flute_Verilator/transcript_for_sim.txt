@@ -1,0 +1,46 @@
+Log of ./exe_HW_sim 
+Thu Sep  9 19:26:30 2021
+
+1: Debug_Module reset
+INFO: 1: TOP.mkTop_HW_Side.ddr_B
+    base 0000000400000000  lim 0000000800000000    implemented 0000000100000000
+================================================================
+Bluespec AWSteria simulation v2.0
+Copyright (c) 2020-2021 Bluespec, Inc. All Rights Reserved.
+================================================================
+Awaiting remote host connection on tcp port 30000 ...
+Connected
+INFO: 1: TOP.mkTop_HW_Side.ddr_A
+    base 0000000000000000  lim 0000000400000000    implemented 0000000100000000
+2: TOP.mkTop_HW_Side.awsteria_hw.soc_top.core.cpu.near_mem.LLC_AXI4_Adapter.ma_ddr4_ready: enabling all rules
+2: TOP.mkTop_HW_Side.awsteria_hw.rl_initialize_1
+    DDRs ready, mem access enabled
+64: INFO: TOP.mkTop_HW_Side.awsteria_hw.soc_top.core.cpu.near_mem.d_mmu_cache.cache.rl_initialize
+    Size 8 KB, Associativity 2, CLine size 64 bytes (= 8 XLEN words)
+64: INFO: TOP.mkTop_HW_Side.awsteria_hw.soc_top.core.cpu.near_mem.i_mmu_cache.cache.rl_initialize
+    Size 8 KB, Associativity 2, CLine size 64 bytes (= 8 XLEN words)
+25297: TOP.mkTop_HW_Side.awsteria_hw.rl_host_to_hw_control: verbosity 0, logdelay 0
+25329: TOP.mkTop_HW_Side.awsteria_hw.rl_host_to_hw_control: watch tohost at addr bffff000
+25329: TOP.mkTop_HW_Side.awsteria_hw.soc_top.core.cpu.near_mem.d_mmu_cache.set_watch_tohost: watch 1, addr bffff000
+26231: TOP.mkTop_HW_Side.awsteria_hw.rl_host_to_hw_control: set PC trace off
+26262: TOP.mkTop_HW_Side.awsteria_hw.rl_host_to_hw_control: ddr4 loaded
+26263: TOP.mkTop_HW_Side.awsteria_hw.rl_initialize_2: DDRs loaded
+26264: TOP.mkTop_HW_Side.awsteria_hw.soc_top.rl_reset_start_initial ...
+26265: Core.rl_cpu_hart0_reset_from_soc_start
+================================================================
+CPU: Bluespec  RISC-V  Flute  v3.0 (RV64)
+Copyright (c) 2016-2020 Bluespec, Inc. All Rights Reserved.
+================================================================
+26271: TOP.mkTop_HW_Side.awsteria_hw.soc_top.core.cpu.rl_reset_complete: restart at PC = 0x70000000
+26273: Core.rl_cpu_hart0_reset_complete
+26273: Near_Mem_IO_AXI4.set_addr_map: addr_base 0x10000000 addr_lim 0x10010000
+26274: TOP.mkTop_HW_Side.awsteria_hw.soc_top.rl_reset_complete_initial
+instret:0  PC:0x70000000  instr:0xf1402573  priv:3
+32304: TOP.mkTop_HW_Side.awsteria_hw.soc_top.core.cpu.near_mem.d_mmu_cache.fa_watch_tohost
+    PASS  (<tohost>  addr bffff000  data 1)
+55482: TOP.mkTop_HW_Side.awsteria_hw.rl_host_to_hw_control: SHUTDOWN
+Top_HW_Side: awsteria_hw.m_halted == True
+- Verilator_RTL/mkTop_HW_Side.v:3074: Verilog $finish
+
+Thu Sep  9 19:26:44 2021
+----------------

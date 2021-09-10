@@ -1,0 +1,268 @@
+= AWSteria RISC-V Virtio
+Rishiyur S. Nikhil, Bluespec, Inc. (c) 2020-2021
+:revnumber: v1.0
+:revdate: 2021-09-09
+:sectnums:
+:toc:
+:toclevels: 5
+:toc: left
+:toc-title: Contents
+:description: RISC-V system with Virtio support running in simulation, VCU118 and Amazon AWS F1
+:keywords: AWS, F1, Shell, Instance AFI, AMI, DCP, Design Checkpoint, Custom Logic, Garnet
+:imagesdir: Doc
+:data-uri:
+
+// SECTION ================================================================
+== Introduction
+
+AWSteria_RISCV_Virtio is a hardware/software system (host+FPGA),
+illustrated in the following diagram.
+
+image::Fig_010_AWSteria_RISCV_Virtio.png[align="center", width=800]
+
+Features:
+
+* The CPU and SoC are capable of booting a modern full OS (Linux/FreeBSD/FreeRTOS/...)
+
+* The RISC-V CPU can be one of:
+    ** Bluespec _Flute_ (https://github.com/bluespec/Flute[])
+    ** Bluespec _Toooba_ (https://github.com/bluespec/Flute[])
+
+* RISC-V CPU console TTY input/output (via the UART) is available at a terminal on the host.
+
+* The OS (Linux/FreeBSD/...) running on the RISC-V SoC has access to
+    _devices_ (networking, block storage, entropy, ...) using the
+    Virtio system (details in later section).
+
+* The _gdbstub_ and _Debug Module_ components allow full GDB control
+    of the RISC-V CPU from a terminal on the host.
+
+* Initial memory images can be downloaded (RISC-V ELF file or MemHex32
+    file loading) from the host-side into RISC-V memory (DDRs) either
+    using the general control/status facilities or as usual with GDB.
+
+The system is built atop "`AWSteria Infra`"
+(https://github.com/bluespec/AWSteria_Infra[]) which allows it to
+build and run, unchanged, on any "`platform`" supported by
+AWSteria Infra, currently:
+
+* Bluesim or Verilator simulation (where the FPGA side runs as a
+  Bluesim or Verilator simulation process) and host-FPGA communication
+  occurs over a TCP/IP connection
+
+* A Debian/Ubuntu Linux host with Xilinx VCU118 FPGA board in an PCIe slot
+
+* Amazon AWS F1 host+FPGA system in the cloud (the host-FPGA connection is over PCIe)
+
+// SUBSECTION ================================================================
+== Component details
+
+On the hardware side, AWSteria_RISCV_Virtio contains:
+
+* Either a Flute or Toooba CPU, configured for RV64GC, Privilege
+  levels M (machine), S (Supervisor) and U (User) with Sv39 Virtual
+  Memory, capable of booting FreeBSD or Linux:
+
+  ** The Bluespec Flute open-source RISC-V CPU
+     (https://github.com/bluespec/Flute[]): 5-stage in-order pipeline
+     with branch prediction.
+
+  ** The Bluespec/MIT Toooba open-source RISC-V CPU
+     (https://github.com/bluespec/Toooba[]): deeply pipelined with
+     branch predition, out-of-order, 2-way superscalar.
+
+  ** Both Flute and Toooba have separate I- and D- L1 caches, shared
+     L2 cache, cache-coherence across L1s and L2, PLIC (Platform Level
+     Interrupt Controller) for device interrupts, SW and Timer
+     interrupts.
+
+* A Bluespec RISC-V Debug Module for debugging the program on the
+    RISC-V CPU from the host side.
+
+* DRAM (on the AWS F1 or VCU118 board)
+
+* A UART for communication with a console on the host side
+
+* MMIO-to-host hardware to support "`Virtio`" (more below).
+
+AWSteria_RISCV_Virtio's host side executable contains:
+
+* Software to load a RISC-V executable (ELF or Memhex file), download
+    the contents into the DRAM in the hardware, and start the RISC-V
+    CPU's execution on that code.
+
+* A tty console for the RISC-V CPU.
+
+* A GDB connection to the Debug Module on the RISC-V CPU
+
+* "`Virtio`" device emulation and support for the RISC-V CPU.
+
+// SUBSECTION ================================================================
+=== Virtio device support
+
+Rather than relying on devices on an FPGA board (which vary from
+board-to-board and which are not even available on cloud-based FPGA
+platforms like AWS F1), we use Virtio so that the host-side can
+provide device services to the FPGA-side.
+
+Virtio is an open standard for supporting a variety of "`virtual`"
+devices.  It was originally developed to provide portable device
+support for "`guest`" OSes (virtual machines) running on a hypervisor.
+There, the hypervisor provides device services (device emulation) to
+each guest OS via the Virtio protocol.
+
+The Virtio spec
+(https://docs.oasis-open.org/virtio/virtio/v1.1/virtio-v1.1.html[])
+lists 24 standard device types, for many of which drivers already
+exist in most modern OSes (FreeBSD, Linux, Windows, ...).
+
+In AWSteria_RISCV_Virtio, we adapt Virto so that the host-side plays
+the role of hypervisor, providing device services to the OS running on
+the FPGA (the guest), via the Virtio protocol.  The following diagram
+illustrates this.
+
+image::Fig_020_Virtio.png[align="center", width=600]
+
+AWSteria_RISCV_Virtio currently implements three kinds of Virtio
+devices: network, block storage and entropy; this can be expanded in
+future.  Support for Virtio is implemented in a combination of code on
+the host and hardware support on the FPGA:
+
+* Host-side Virtio device emulation: AWSteria_RISCV_Virtio uses
+    existing code from the open-source _tinyemu_ system (from
+    https://bellard.org/tinyemu[]).  We have fitted this with
+    hardware-interaction capabilities described below.
+
+* Hardware-side support includes:
+
+    ** Forwarding MMIO read/write requests from the RISC-V CPU to the
+         host-side device emulation code, which maintains the Virtio
+         "`device registers`" and reacts to MMIO reads/writes.
+
+    ** Providing the capability, to host-side device emulation code,
+         for cache-coherent access to the RISC-V CPU's memory system,
+         to read/write Virtio device queue data structures in RISC-V
+         memory.
+
+    ** Providing the capability, to host-side device emulation code,
+         to deliver device interrupts to the RISC-V CPU.
+
+// SECTION ================================================================
+== Repo structure
+
+The repo has the following directories:
+
+----
+        ├── Doc
+        │   └── Virtio
+        ├── Host
+        │   ├── build_AWSF1
+        │   ├── build_sim
+        │   ├── build_VCU118
+        │   ├── RISCV_gdbstub
+        │   │   └── Test
+        │   └── tinyemu
+        │       └── slirp
+        ├── HW
+        │   ├── build_Flute_AWSF1
+        │   ├── build_Flute_Bluesim
+        │   ├── build_Flute_VCU118
+        │   ├── build_Flute_Verilator
+        │   ├── build_Toooba_AWSF1
+        │   ├── build_Toooba_Bluesim
+        │   └── build_Toooba_Verilator
+        └── Tests
+----
+
+`Host/` and `Host/tinyemu/` contain host-side source code (.c and .h files).
+
+`Host/build_sim/`, `build_VCU118/` and `build_AWSF1/` are "`build`"
+directories to make the host-side executable for simulation (Bluesim
+and Verilator sim), VCU118 and AWS F1.  The host executable is the
+same whether the FPGA-side is built with Flute or with Toooba.
+
+`HW/` contains FPGA-side source files (BSV code).  It does not include
+https://github.com/bluespec/Flute[Flute],
+https://github.com/bluespec/Toooba[Toooba], or
+https://github.com/bluespec/AWSteria_Infra[AWSteria_Infra], each of
+which has its own repository.
+
+`HW/build_Flute_Bluesim`, `build_Flute_Verilator`,
+`build_Flute_VCU118` and `build_Flute_AWSF1` are "`build`" directories
+to make the FPGA side for Bluesim, Verilator sim, VCU118 and Amazon
+AWS F1, respectively, using the Flute CPU.
+
+`HW/build_Toooba_XXX` are the analogous build directories using Toooba
+instead of Flute.
+
+`Doc/` contains link:Doc/How_to_build_and_run.html[] which provides
+detailed instructions on how to build and run (see Section How to
+Build and Run, below).
+
+`Tests/` contains a few test files which are pre-compiled tests that
+can be run on the system.  These include a few ISA tests (compiled
+from RISC-V assembly language), "`Hello World!" (compiled from C),
+"`cat`" (compiled from C) and FreeRTOS (from C and assembly language).
+All these run in seconds, even in simulation.  `Tests/` also contains
+a larger example: BBL+FreeBSD using Virtio devices, along with an
+".img" file that is used by Virtio as a "`block device`".
+
+// SECTION ================================================================
+== How to Build and Run
+
+Detailed instructions on how to build the host-side and FPGA-side, for
+both Flute and Toooba, for all platforms (Bluesim, Verilator sim, AWS
+F1 and VCU11) are in the document link:Doc/How_to_build_and_run.html[].
+
+Briefly, for each artefact (choice of Flute or Toooba, host-side
+executable or FPGA-side) we `cd` into a "`build`" directory shown
+above, and perform the flow (a simple `make` in many cases, but more
+steps when building the FPGA-side for VCU118 or AWS F1).
+
+Each build directory, host-side and FPGA-side, contains a transcript
+of a build, for reference.  Each host-side build directory also
+contains a transcript of runs on the `Tests/` examples.
+
+// SECTION ================================================================
+== Status
+
+We are in the process of recording transcripts of builds and runs for
+all combinations of:
+
+****
+Flute or Toooba +
+Bluesim or Verilator sim or AWS F1 or VCU118
+****
+
+We are recording run-transcripts for the small examples in `Tests/`
+for all platform combinations.
+
+Run-transcripts on FPGA platforms (AWS F1 and VCU118) also include
+booting FreeBSD and using Virtio devices from the FreeBSD shell prompt
+(these would take days in simulation since they exceed 500 million
+RISC-V instructions).
+
+As of September 9, 2021, build- and run-transcripts for the following
+are ready:
+
+****
+Flute Bluesim +
+Flute Verilator sim +
+Flute AWS F1
+ +
+Toooba Bluesim +
+Toooba Verilator sim
+****
+
+Transcripts for the following are in preparation:
+
+****
+Flute VCU118 +
+ +
+Toooba AWS F1 +
+Toooba VCU118 +
+ +
+GDB control
+****
+
+// ================================================================

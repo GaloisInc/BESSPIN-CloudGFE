@@ -1,0 +1,100 @@
+# INFO: Major sections of this transcript are separated by INFO lines.
+
+# ================================================================
+# INFO: Setting up aws-fpga HDK
+
+$ cd ~/git_clones/AWS/aws-fpga/
+
+--02:36:25--ip-10-10-32-80: ~/git_clones/AWS/aws-fpga
+$ source hdk_setup.sh 
+INFO: Setting up environment variables
+INFO: Changing AWS_FPGA_REPO_DIR from /home/centos/src/project_data/aws-fpga to /home/centos/git_clones/AWS/aws-fpga
+INFO: Base vivado version is Vivado v2020.1 (64-bit). Checking if patch AR71715 needs to be installed
+INFO: Xilinx Patch AR73068 not applicable for Vivado version: Vivado v2020.1 (64-bit).
+INFO: Using Vivado v2020.1 (64-bit)
+VIVADO_TOOL_VERSION is v2020.1
+INFO: Using HDK shell version shell_v04261818
+INFO: HDK shell is up-to-date
+INFO: HDK shell is up-to-date
+INFO: HDK shell is up-to-date
+INFO: DDR4 model files in /home/centos/git_clones/AWS/aws-fpga/hdk/common/verif/models/ddr4_model/ were built with Vivado v2020.1 (64-bit)
+INFO: CL_DIR is /home/centos/AFI_Builds/cl_AWSteria_RISCV
+INFO: AWS HDK setup PASSED.
+
+# ================================================================
+# INFO: Build DCP from RTL
+
+$ cd ~/AFI_Builds/cl_AWSteria_RISCV
+
+--02:37:00--ip-10-10-32-80: ~/AFI_Builds/cl_AWSteria_RISCV
+$ export CL_DIR=$(pwd)
+
+--02:37:16--ip-10-10-32-80: ~/AFI_Builds/cl_AWSteria_RISCV
+$ cd build/scripts/
+
+--02:37:35--ip-10-10-32-80: ~/AFI_Builds/cl_AWSteria_RISCV/build/scripts
+$ ./aws_build_dcp_from_cl.sh -ignore_memory_requirement
+INFO: VDEFINE is : 
+
+INFO: Starting the design checkpoint build process
+INFO: Checking for proper environment variables and build directories
+INFO: Environment variables and directories are present. Checking for Vivado installation.
+INFO: Build through Vivado is running as background process, this may take few hours.
+INFO: Output is being redirected to 21_09_08-023754.nohup.out
+INFO: If you have set your EMAIL environment variable and -notify is specified, you will receive a notification when complete.
+INFO:   (See $HDK_DIR/cl/examples/README.md for details)
+
+--02:37:55--ip-10-10-32-80: ~/AFI_Builds/cl_AWSteria_RISCV/build/scripts
+$ ls
+21_09_08-023754.nohup.out   aws_build_dcp_from_cl.sh*  encrypt.tcl  synth_cl_AWSteria.tcl
+21_09_08-023754.vivado.log  create_dcp_from_cl.tcl     last_log@
+
+# ================================================================
+# INFO: Upload DCP to AWS cloud (S3 bucket/folder)
+
+--17:06:32--ip-10-10-32-80: ~/AFI_Builds/cl_AWSteria_RISCV/build/scripts
+$ cd ../checkpoints/to_aws/
+
+--17:13:03--ip-10-10-32-80: ~/AFI_Builds/cl_AWSteria_RISCV/build/checkpoints/to_aws
+$ ls
+21_09_08-023754.Developer_CL.tar  21_09_08-023754.manifest.txt	21_09_08-023754.SH_CL_routed.dcp
+
+--17:25:39--ip-10-10-32-80: ~/AFI_Builds/cl_AWSteria_RISCV/build/checkpoints/to_aws
+$ aws s3 cp  /home/centos/AFI_Builds/cl_AWSteria_RISCV/build/checkpoints/to_aws/21_09_08-023754.Developer_CL.tar  s3://rsnbucket1/AWSteria/
+upload: ./21_09_08-023754.Developer_CL.tar to s3://rsnbucket1/AWSteria/21_09_08-023754.Developer_CL.tar
+
+$ aws s3 ls  s3://rsnbucket1/AWSteria/
+2021-09-08 17:25:50  351740928 21_09_08-023754.Developer_CL.tar
+
+# ================================================================
+# INFO: Request AWS to perform AFI build from uploaded DCP
+
+--17:25:53--ip-10-10-32-80: ~/AFI_Builds/cl_AWSteria_RISCV/build/checkpoints/to_aws
+$ aws ec2 create-fpga-image  --region us-west-2 --name "AWSteriaRISCV" --description "ASWteria RISCV 125 MHz w. Debug Module" --input-storage-location Bucket=rsnbucket1,Key=AWSteria/21_09_08-023754.Developer_CL.tar --logs-storage-location Bucket=rsnbucket1,Key=AWSteria-logs 
+{
+    "FpgaImageId": "afi-038f1224091be5078", 
+    "FpgaImageGlobalId": "agfi-0fe4c00a6a1530545"
+}
+
+--17:29:47--ip-10-10-32-80: ~/AFI_Builds/cl_AWSteria_RISCV/build/checkpoints/to_aws
+$ aws ec2 describe-fpga-images --fpga-image-ids  "afi-038f1224091be5078"
+{
+    "FpgaImages": [
+        {
+            "UpdateTime": "2021-09-08T17:27:46.000Z", 
+            "Name": "AWSteriaRISCV", 
+            "Tags": [], 
+            "FpgaImageGlobalId": "agfi-0fe4c00a6a1530545", 
+            "Public": false, 
+            "State": {
+                "Code": "pending"
+            }, 
+            "OwnerId": "845509001885", 
+            "FpgaImageId": "afi-038f1224091be5078", 
+            "CreateTime": "2021-09-08T17:27:46.000Z", 
+            "Description": "ASWteria RISCV 125 MHz w. Debug Module"
+        }
+    ]
+}
+
+# ================================================================
