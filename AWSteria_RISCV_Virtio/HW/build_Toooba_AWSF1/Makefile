@@ -23,6 +23,12 @@ else
   $(info  INFO: AWSTERIA_REPO is $(AWSTERIA_REPO))
 endif
 
+ifndef AWSTERIA_INFRA_REPO
+  $(error ERROR: please define AWSTERIA_INFRA_REPO, i.e., path to AWSteria_Infra repo)
+else
+  $(info  INFO: AWSTERIA_INFRA_REPO is $(AWSTERIA_INFRA_REPO))
+endif
+
 ifndef FLUTE_REPO
   $(error ERROR: please define FLUTE_REPO, i.e., path to Flute repo)
 else
@@ -62,11 +68,13 @@ BSC_COMPILATION_FLAGS += \
 	-D INCLUDE_PC_TRACE \
 	$(DEVICE_COHERENT_ACCESS) \
 	-D INCLUDE_GDB_CONTROL \
-	-D USE_XILINX_FPU \
 #	-D INCLUDE_TANDEM_VERIF \
 
 #================================================================
 # Parameter settings for MIT RISCY_OOO
+
+# This selects non-Xilinx Verilog for FPU
+BSC_COMPILATION_FLAGS += -D BSIM \
 
 include Include_RISCY_OOO_Config.mk
 

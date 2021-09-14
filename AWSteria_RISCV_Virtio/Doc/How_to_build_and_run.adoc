@@ -192,7 +192,10 @@ communicated back to host-side and displayed on THOST.
 The final example is the FreeRTOS operating system.
 
 // SECTION ================================================================
-== Building and running on AWS F1
+== Building for, and running on AWS F1
+
+Note: building can be done on non-AWS F1 machines, provided we have
+the `aws-fpga` HDK and Vivado installed.
 
 // SUBSECTION ----------------------------------------------------------------
 === Building FPGA-side AWS F1
