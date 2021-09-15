@@ -195,7 +195,9 @@ AWS F1, respectively, using the Flute CPU.
 `HW/build_Toooba_XXX` are the analogous build directories using Toooba
 instead of Flute.
 
-`Doc/` contains link:Doc/How_to_build_and_run.html[] which provides
+`Doc/` contains "`How_to_build_and_run`"
+(link:Doc/How_to_build_and_run.adoc[adoc], link:Doc/How_to_build_and_run.html[html])
+which provides
 detailed instructions on how to build and run (see Section How to
 Build and Run, below).
 
@@ -212,7 +214,8 @@ a larger example: BBL+FreeBSD using Virtio devices, along with an
 
 Detailed instructions on how to build the host-side and FPGA-side, for
 both Flute and Toooba, for all platforms (Bluesim, Verilator sim, AWS
-F1 and VCU11) are in the document link:Doc/How_to_build_and_run.html[].
+F1 and VCU11) are in the document "`How_to_build_and_run`"
+(link:Doc/How_to_build_and_run.adoc[adoc], link:Doc/How_to_build_and_run.html[html]).
 
 Briefly, for each artefact (choice of Flute or Toooba, host-side
 executable or FPGA-side) we `cd` into a "`build`" directory shown
@@ -224,45 +227,104 @@ of a build, for reference.  Each host-side build directory also
 contains a transcript of runs on the `Tests/` examples.
 
 // SECTION ================================================================
-== Status
+== Status and Transcripts of Builds and Runs
 
-We are in the process of recording transcripts of builds and runs for
-all combinations of:
+Code and build-scripts are ready for all the
+following combinations (committed, pushed):
 
 ****
 Flute or Toooba +
 Bluesim or Verilator sim or AWS F1 or VCU118
 ****
 
-We are recording run-transcripts for the small examples in `Tests/`
-for all platform combinations.
+We are collecting transcripts of builds and runs for all combinations.
 
-Run-transcripts on FPGA platforms (AWS F1 and VCU118) also include
-booting FreeBSD and using Virtio devices from the FreeBSD shell prompt
-(these would take days in simulation since they exceed 500 million
-RISC-V instructions).
+Run-transcripts for the small examples in `Tests/`
 
-As of September 9, 2021, build- and run-transcripts for the following
-are ready:
+* A few ISA tests
+* Hello World!
+* FreeRTOS boot
 
-****
-Flute Bluesim +
-Flute Verilator sim +
-Flute AWS F1
- +
-Toooba Bluesim +
-Toooba Verilator sim
-****
+are being recorded for both simulation and FPGA.
 
-Transcripts for the following are in preparation:
+Run-transcripts for FreeBSD-boot are only being recorded on FPGA.  In
+simulation it takes several days (1/2 billion instructions for Flute
+version) and even longer for Toooba version.  These transcripts
+demonstrate:
 
-****
-Flute VCU118 +
- +
-Toooba AWS F1 +
-Toooba VCU118 +
- +
-GDB control
-****
+* BBL and FreeBSD boot to login prompt
+* Commands at the shell prompt
+* `ssh` to a remote machine to demonstrate Virtio networking
+* `scp` from a remote machine to demonstrate Virtio networking, Virtio block device use
+   * sha256 integrity of scp'd file
+* Shutdown and reboot, repeating sha256 integrity of scp'd file to
+    show persistence integrity on Virtio block device
+
+GDB demonstrations show:
+
+* Connecting to the host-side (which contains a gdbstub which, in
+    turn, communicates with the simulation or FPGA).
+* Loading an ELF file, reading registers/memory, setting a breakpoint,
+    running to breakpoint, single-stepping.
+
+// SUBSECTION ================================================================
+=== Demonstrations and Transcripts
+
+// SUBSUBSECTION ----------------------------------------------------------------
+==== Simulation
+
+* FPGA-side builds:
+  ** Flute Bluesim make:    link:HW/build_Flute_Bluesim/transcript_for_make.txt[transcript]
+  ** Flute Verilator make:  link:HW/build_Flute_Verilator/transcript_for_make.txt[transcript]
+  ** Toooba Bluesim make:   link:HW/build_Toooba_Bluesim/transcript_for_make[transcript]
+  ** Toooba Verilator make: link:HW/build_Toooba_Verilator/transcript_for_make.txt[transcript]
+
+* Host-side build:
+  ** Make (same for Flute/Toooba/Bluesim/Verilator sim): link:Host/build_sim/transcript_for_make[transcript]
+
+* Run (Host-side + FPGA-side):
+  ** FPGA-side Flute Bluesim run:  link:HW/build_Flute_Bluesim/transcript_for_sim.txt[transcript]
+  ** FPGA-side Flute Veriltor run: link:HW/build_Flute_Verilator/transcript_for_sim.txt[transcript]
+  ** FPGA-side Toooba Bluesim run: link:HW/build_Toooba_Bluesim/transcript_for_sim.txt[transcript]
+  ** FPGA-side Toooba Verilator run: link:HW/build_Toooba_Verilator/transcript_for_sim.txt[transcript]
+  ** Host-side run (same for all FPGA-side simulations):
+        link:Host/build_sim/transcript_for_run.txt[transcript]
+  ** GDB control: Demonstrated; transcript in progress
+
+// SUBSUBSECTION ----------------------------------------------------------------
+==== AWSF1
+
+* FPGA-side builds:
+  ** Flute make (RTL generation):
+        link:HW/build_Flute_AWSF1/transcript_for_make.txt[transcript]
+  ** Flute creation of AWS DCP and AFI:
+        link:HW/build_Flute_AWSF1/transcript_for_DCP_AFI_build.txt[transcript]
+
+* Host-side build:
+  ** Make  (same for Flute or Toooba FPGA-side): link:Host/build_AWSF1/transcript_for_make.txt[transcript]
+
+* Run
+  ** Flute, small examples: link:Host/build_AWSF1/transcript_for_run_small.txt[transcript]
+  ** Flute, FreeBSD:        link:Host/build_AWSF1/transcript_for_run_FreeBSD.txt[transcript]
+  ** Toooba, small examples: In progress
+  ** Toooba, FreeBSD: In progress
+  ** GDB control: In progress
+
+// SUBSUBSECTION ----------------------------------------------------------------
+==== VCU118
+
+* FPGA-side builds:
+  ** Flute: demonstrated; transcript in progress
+  ** Toooba: to be demonstrated
+
+* Host-side build
+  ** make (same for Flute or Toooba FPGA-side): demonstrated: transcript in progress
+
+* Run
+  ** Flute, small examples: demonstrated: transcript in progress
+  ** Flute, FreeBSD: demonstrated: transcript in progress
+  ** Toooba, small examples: to be demonstrated
+  ** Toooba, FreeBSD: to be demonstrated
+  ** GDB control: In progress: in progress
 
 // ================================================================

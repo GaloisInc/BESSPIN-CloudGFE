@@ -440,7 +440,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_repo_structure">3. Repo structure</a></li>
 <li><a href="#_how_to_build_and_run">4. How to Build and Run</a></li>
-<li><a href="#_status">5. Status</a></li>
+<li><a href="#_status_and_transcripts_of_builds_and_runs">5. Status and Transcripts of Builds and Runs</a>
+<ul class="sectlevel2">
+<li><a href="#_demonstrations_and_transcripts">5.1. Demonstrations and Transcripts</a>
+<ul class="sectlevel3">
+<li><a href="#_simulation">5.1.1. Simulation</a></li>
+<li><a href="#_awsf1">5.1.2. AWSF1</a></li>
+<li><a href="#_vcu118">5.1.3. VCU118</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -718,7 +728,9 @@ AWS F1, respectively, using the Flute CPU.</p>
 instead of Flute.</p>
 </div>
 <div class="paragraph">
-<p><code>Doc/</code> contains <a href="Doc/How_to_build_and_run.html" class="bare">Doc/How_to_build_and_run.html</a> which provides
+<p><code>Doc/</code> contains &#8220;How_to_build_and_run&#8221;
+(<a href="Doc/How_to_build_and_run.adoc">adoc</a>, <a href="Doc/How_to_build_and_run.html">html</a>)
+which provides
 detailed instructions on how to build and run (see Section How to
 Build and Run, below).</p>
 </div>
@@ -739,7 +751,8 @@ a larger example: BBL+FreeBSD using Virtio devices, along with an
 <div class="paragraph">
 <p>Detailed instructions on how to build the host-side and FPGA-side, for
 both Flute and Toooba, for all platforms (Bluesim, Verilator sim, AWS
-F1 and VCU11) are in the document <a href="Doc/How_to_build_and_run.html" class="bare">Doc/How_to_build_and_run.html</a>.</p>
+F1 and VCU11) are in the document &#8220;How_to_build_and_run&#8221;
+(<a href="Doc/How_to_build_and_run.adoc">adoc</a>, <a href="Doc/How_to_build_and_run.html">html</a>).</p>
 </div>
 <div class="paragraph">
 <p>Briefly, for each artefact (choice of Flute or Toooba, host-side
@@ -755,11 +768,11 @@ contains a transcript of runs on the <code>Tests/</code> examples.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_status">5. Status</h2>
+<h2 id="_status_and_transcripts_of_builds_and_runs">5. Status and Transcripts of Builds and Runs</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>We are in the process of recording transcripts of builds and runs for
-all combinations of:</p>
+<p>Code and build-scripts are ready for all the
+following combinations (committed, pushed):</p>
 </div>
 <div class="sidebarblock">
 <div class="content">
@@ -770,43 +783,239 @@ Bluesim or Verilator sim or AWS F1 or VCU118</p>
 </div>
 </div>
 <div class="paragraph">
-<p>We are recording run-transcripts for the small examples in <code>Tests/</code>
-for all platform combinations.</p>
+<p>We are collecting transcripts of builds and runs for all combinations.</p>
 </div>
 <div class="paragraph">
-<p>Run-transcripts on FPGA platforms (AWS F1 and VCU118) also include
-booting FreeBSD and using Virtio devices from the FreeBSD shell prompt
-(these would take days in simulation since they exceed 500 million
-RISC-V instructions).</p>
+<p>Run-transcripts for the small examples in <code>Tests/</code></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A few ISA tests</p>
+</li>
+<li>
+<p>Hello World!</p>
+</li>
+<li>
+<p>FreeRTOS boot</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p>As of September 9, 2021, build- and run-transcripts for the following
-are ready:</p>
-</div>
-<div class="sidebarblock">
-<div class="content">
-<div class="paragraph">
-<p>Flute Bluesim<br>
-Flute Verilator sim<br>
-Flute AWS F1
-<br>
-Toooba Bluesim<br>
-Toooba Verilator sim</p>
-</div>
-</div>
+<p>are being recorded for both simulation and FPGA.</p>
 </div>
 <div class="paragraph">
-<p>Transcripts for the following are in preparation:</p>
+<p>Run-transcripts for FreeBSD-boot are only being recorded on FPGA.  In
+simulation it takes several days (1/2 billion instructions for Flute
+version) and even longer for Toooba version.  These transcripts
+demonstrate:</p>
 </div>
-<div class="sidebarblock">
-<div class="content">
+<div class="ulist">
+<ul>
+<li>
+<p>BBL and FreeBSD boot to login prompt</p>
+</li>
+<li>
+<p>Commands at the shell prompt</p>
+</li>
+<li>
+<p><code>ssh</code> to a remote machine to demonstrate Virtio networking</p>
+</li>
+<li>
+<p><code>scp</code> from a remote machine to demonstrate Virtio networking, Virtio block device use</p>
+</li>
+<li>
+<p>sha256 integrity of scp&#8217;d file</p>
+</li>
+<li>
+<p>Shutdown and reboot, repeating sha256 integrity of scp&#8217;d file to
+show persistence integrity on Virtio block device</p>
+</li>
+</ul>
+</div>
 <div class="paragraph">
-<p>Flute VCU118<br>
-<br>
-Toooba AWS F1<br>
-Toooba VCU118<br>
-<br>
-GDB control</p>
+<p>GDB demonstrations show:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Connecting to the host-side (which contains a gdbstub which, in
+turn, communicates with the simulation or FPGA).</p>
+</li>
+<li>
+<p>Loading an ELF file, reading registers/memory, setting a breakpoint,
+running to breakpoint, single-stepping.</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_demonstrations_and_transcripts">5.1. Demonstrations and Transcripts</h3>
+<div class="sect3">
+<h4 id="_simulation">5.1.1. Simulation</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>FPGA-side builds:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Flute Bluesim make:    <a href="HW/build_Flute_Bluesim/transcript_for_make.txt">transcript</a></p>
+</li>
+<li>
+<p>Flute Verilator make:  <a href="HW/build_Flute_Verilator/transcript_for_make.txt">transcript</a></p>
+</li>
+<li>
+<p>Toooba Bluesim make:   <a href="HW/build_Toooba_Bluesim/transcript_for_make">transcript</a></p>
+</li>
+<li>
+<p>Toooba Verilator make: <a href="HW/build_Toooba_Verilator/transcript_for_make.txt">transcript</a></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Host-side build:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Make (same for Flute/Toooba/Bluesim/Verilator sim): <a href="Host/build_sim/transcript_for_make">transcript</a></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Run (Host-side + FPGA-side):</p>
+<div class="ulist">
+<ul>
+<li>
+<p>FPGA-side Flute Bluesim run:  <a href="HW/build_Flute_Bluesim/transcript_for_sim.txt">transcript</a></p>
+</li>
+<li>
+<p>FPGA-side Flute Veriltor run: <a href="HW/build_Flute_Verilator/transcript_for_sim.txt">transcript</a></p>
+</li>
+<li>
+<p>FPGA-side Toooba Bluesim run: <a href="HW/build_Toooba_Bluesim/transcript_for_sim.txt">transcript</a></p>
+</li>
+<li>
+<p>FPGA-side Toooba Verilator run: <a href="HW/build_Toooba_Verilator/transcript_for_sim.txt">transcript</a></p>
+</li>
+<li>
+<p>Host-side run (same for all FPGA-side simulations):
+<a href="Host/build_sim/transcript_for_run.txt">transcript</a></p>
+</li>
+<li>
+<p>GDB control: Demonstrated; transcript in progress</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_awsf1">5.1.2. AWSF1</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>FPGA-side builds:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Flute make (RTL generation):
+<a href="HW/build_Flute_AWSF1/transcript_for_make.txt">transcript</a></p>
+</li>
+<li>
+<p>Flute creation of AWS DCP and AFI:
+<a href="HW/build_Flute_AWSF1/transcript_for_DCP_AFI_build.txt">transcript</a></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Host-side build:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Make  (same for Flute or Toooba FPGA-side): <a href="Host/build_AWSF1/transcript_for_make.txt">transcript</a></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Run</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Flute, small examples: <a href="Host/build_AWSF1/transcript_for_run_small.txt">transcript</a></p>
+</li>
+<li>
+<p>Flute, FreeBSD:        <a href="Host/build_AWSF1/transcript_for_run_FreeBSD.txt">transcript</a></p>
+</li>
+<li>
+<p>Toooba, small examples: In progress</p>
+</li>
+<li>
+<p>Toooba, FreeBSD: In progress</p>
+</li>
+<li>
+<p>GDB control: In progress</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_vcu118">5.1.3. VCU118</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>FPGA-side builds:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Flute: demonstrated; transcript in progress</p>
+</li>
+<li>
+<p>Toooba: to be demonstrated</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Host-side build</p>
+<div class="ulist">
+<ul>
+<li>
+<p>make (same for Flute or Toooba FPGA-side): demonstrated: transcript in progress</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Run</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Flute, small examples: demonstrated: transcript in progress</p>
+</li>
+<li>
+<p>Flute, FreeBSD: demonstrated: transcript in progress</p>
+</li>
+<li>
+<p>Toooba, small examples: to be demonstrated</p>
+</li>
+<li>
+<p>Toooba, FreeBSD: to be demonstrated</p>
+</li>
+<li>
+<p>GDB control: In progress: in progress</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -816,7 +1025,7 @@ GDB control</p>
 <div id="footer">
 <div id="footer-text">
 Version v1.0<br>
-Last updated 2021-09-09 21:14:38 EDT
+Last updated 2021-09-14 22:28:51 EDT
 </div>
 </div>
 </body>

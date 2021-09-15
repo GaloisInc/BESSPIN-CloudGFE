@@ -11,6 +11,8 @@ Rishiyur S. Nikhil, Bluespec, Inc. (c) 2020
 :description: AWSteria architecture
 :keywords: AWSteria, AWS, FPGA, F1 Instance, Bluespec, BSV
 
+THIS DOCUMENT IS STILL UNDER CONSTRUCTION.
+
 These diagrams sketch out the top-level layers of Flute and its SoC in
 the AWSteria framework.  The diagrams go top-down, starting with the
 overall system view (host-side + FPGA-side), then descending into
