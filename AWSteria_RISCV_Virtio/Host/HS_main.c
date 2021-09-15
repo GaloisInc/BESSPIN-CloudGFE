@@ -67,35 +67,32 @@ static int verbosity = 0;
 
 int readback_check (void *comms_state, uint8_t *buf, uint64_t addr_base, uint64_t addr_lim)
 {
-    static
-    uint8_t *readback_buf = NULL;
+#define READBACK_BUFSIZE 0x1000        // 4KB = 1 page = 1 AXI4 burst
+    static uint8_t *readback_buf = NULL;
 
     if (verbosity > 0)
-	fprintf (stdout, "%s: Readback downloaded data to cross-check: base %0lx lim %0lx (size %0lx)\n",
+	fprintf (stdout, "%s: Readback downloaded data to cross-check: base 0x%0lx lim 0x%0lx (size 0x%0lx bytes)\n",
 		 __FUNCTION__, addr_base, addr_lim, addr_lim - addr_base);
 
     int rc;
     if (readback_buf == NULL) {
-	readback_buf = (uint8_t *) malloc (0x1000);    // 4KB = 1 page = 1 AXI4 burst
+	readback_buf = (uint8_t *) malloc (READBACK_BUFSIZE);
 	if (readback_buf == NULL) {
-	    fprintf (stdout, "%s: ERROR could not malloc 0x1000 buf\n", __FUNCTION__);
+	    fprintf (stdout, "%s: ERROR could not malloc 0x%0x bytes for readback_buf\n",
+		     __FUNCTION__, READBACK_BUFSIZE);
 	    rc = 1;
 	    return 1;
 	}
     }
+    memset (readback_buf, 0, READBACK_BUFSIZE);
 
-    size_t read_size = 0x1000;
+    size_t read_size = READBACK_BUFSIZE;
     int    errs      = 0;
     for (uint64_t  addr_readback = addr_base;
 	 addr_readback < addr_lim;
 	 addr_readback += read_size) {
-	if ((addr_lim - addr_readback) < 0x1000)
+	if ((addr_lim - addr_readback) < READBACK_BUFSIZE)
 	    read_size = addr_lim - addr_readback;
-
-	/*
-	fprintf (stdout, "    DMA read (pci_read_fd = %0d) addr 0x%0lx  size %0ld bytes\n",
-		 pci_read_fd, addr_readback, read_size);
-	*/
 
 	rc = AWSteria_AXI4_read (comms_state, readback_buf, read_size, addr_readback);
 	if (rc != 0) {
@@ -109,18 +106,17 @@ int readback_check (void *comms_state, uint8_t *buf, uint64_t addr_base, uint64_
 	    uint32_t *p2 = (uint32_t *) (readback_buf + j);
 	    if (*p1 != *p2) {
 		if (verbosity > 0)
-		    fprintf (stdout, "        ERROR: read-back at addr %0lx: 0x%08x (should be 0x%08x)\n",
-			     addr_readback + j, *p1, *p2);
+		    fprintf (stdout, "        ERROR: read-back at addr %0lx: 0x%08x expected, 0x%08x actual\n",
+                             addr_readback + j, *p1, *p2);
 		errs++;
 	    }
 	    else {
 		// fprintf (stdout, "        %08lx: %08x\n", addr_readback + j, *p1);
 	    }
 	}
-	// fprintf (stdout, "        OK\n");
     }
     if (errs > 0)
-	fprintf (stdout, "Number of readback errors: %0d (ignore if ROM addrs)\n", errs);
+	fprintf (stdout, "Number of readback errors: %0d words (ignore if ROM addrs)\n", errs);
 
     return ((errs == 0) ?  0 : 1);
 }
@@ -147,6 +143,7 @@ int load_mem_hex32_using_DMA (void *comms_state, char *filename)
 	rc = 1;
 	goto out;
     }
+    memset (buf, 0, BUF_SIZE);
 
     // Read the memhex file
     uint64_t  addr_base, addr_lim;
@@ -172,7 +169,8 @@ int load_mem_hex32_using_DMA (void *comms_state, char *filename)
     // - in chunks that do not cross 4K boundaries
     // - destination addrs must be 64-byte aligned
 
-    fprintf (stdout, "%s: downloading to AWS DDR4\n", __FUNCTION__);
+    fprintf (stdout, "%s: downloading to DDR addr 0x%0lx, 0x%0lx bytes\n",
+	     __FUNCTION__, addr_base, addr_lim - addr_base);
     rc = AWSteria_AXI4_write (comms_state, & (buf [addr_base]), addr_lim - addr_base, addr_base);
     if (rc != 0) {
 	fprintf (stdout, "%s: DMA write failed on channel 0\n", __FUNCTION__);
