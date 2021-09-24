@@ -1,0 +1,1407 @@
+This is a transcript of
+    $ make compile
+and $ make for_garnet_reclocked
+(each headed below by ">====" lines).
+
+This is for AWSTERIA_RISCV_Virtio FPGA-side (HW side) with
+    Flute, Virtio and Debug Module
+
+>================================================================
+--12:03:24--Dell-mation: ~/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW/build_Flute_VCU118
+$ make compile
+INFO: AWSTERIA_REPO is /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio
+INFO: FLUTE_REPO is /home/nikhil/git_clones/Flute
+INFO: BLUESPEC_HOME is /home/nikhil/git_clones/bsc/inst
+mkdir -p  build_dir
+mkdir -p  RTL_from_bsc
+INFO: RTL generation ...
+bsc -u -elab -verilog  -vdir RTL_from_bsc  -bdir build_dir  -info-dir build_dir  -D RV64 -D ISA_PRIV_M  -D ISA_PRIV_U  -D ISA_PRIV_S -D SV39 -D ISA_I  -D ISA_M  -D ISA_A  -D ISA_C -D ISA_F  -D ISA_D  -D INCLUDE_FDIV  -D INCLUDE_FSQRT -D SHIFT_BARREL -D MULT_SYNTH -D Near_Mem_Caches -D FABRIC64 -D WATCH_TOHOST -D MEM_512b -D INCLUDE_PC_TRACE -D INCLUDE_GDB_CONTROL  -D CORE_SMALL -D NUM_CORES=1 -D CACHE_LARGE  -D INCLUDE_DDR_B -keep-fires -aggressive-conditions -no-warn-action-shadowing -no-show-timestamps -check-assert -suppress-warnings G0020 +RTS -K128M -RTS  -show-range-conflict  -p :/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache:/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib:/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/RV64G_OOO:/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/coherence/src:/home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW:/home/nikhil/git_clones/Flute/src_Core/CPU:/home/nikhil/git_clones/Flute/src_Core/ISA:/home/nikhil/git_clones/Flute/src_Core/RegFiles:/home/nikhil/git_clones/Flute/src_Core/Core_v2:/home/nikhil/git_clones/Flute/src_Core/Cache_Config:/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2:/home/nikhil/git_clones/Flute/src_Core/PLIC:/home/nikhil/git_clones/Flute/src_Core/Near_Mem_IO:/home/nikhil/git_clones/Flute/src_Core/Debug_Module:/home/nikhil/git_clones/Flute/src_Core/BSV_Additional_Libs:/home/nikhil/git_clones/Flute/src_Testbench/Fabrics/AXI4:/home/nikhil/git_clones/Flute/src_Testbench/Fabrics/AXI4_Lite:/home/nikhil/git_clones/Flute/src_Testbench/SoC:/home/nikhil/git_clones/AWSteria_Infra/Include_API:/home/nikhil/git_clones/AWSteria_Infra/Platform_VCU118/HW:+  /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW/AWSteria_HW.bsv
+checking package dependencies
+Warning: Unknown position: (S0089)
+  Multiple copies of a file were found in the path. Using:
+    /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW/SoC_Map.bsv
+  Ignoring:
+    /home/nikhil/git_clones/Flute/src_Testbench/SoC/SoC_Map.bsv
+Warning: Unknown position: (S0089)
+  Multiple copies of a file were found in the path. Using:
+    /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW/Boot_ROM.bsv
+  Ignoring:
+    /home/nikhil/git_clones/Flute/src_Testbench/SoC/Boot_ROM.bsv
+Warning: "/home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW/Boot_ROM.bsv", line 41, column 1: (S0089)
+  Multiple copies of a file were found in the path. Using:
+    /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW/fn_read_ROM_RV64.bsvi
+  Ignoring:
+    /home/nikhil/git_clones/Flute/src_Testbench/SoC/fn_read_ROM_RV64.bsvi
+Warning: Unknown position: (S0089)
+  Multiple copies of a file were found in the path. Using:
+    /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW/UART_Model.bsv
+  Ignoring:
+    /home/nikhil/git_clones/Flute/src_Testbench/SoC/UART_Model.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/BSV_Additional_Libs/Cur_Cycle.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/BSV_Additional_Libs/Semi_FIFOF.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/BSV_Additional_Libs/GetPut_Aux.bsv
+compiling /home/nikhil/git_clones/AWSteria_Infra/Include_API/AWSteria_HW_IFC.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/ISA/PC_Trace.bsv
+compiling /home/nikhil/git_clones/Flute/src_Testbench/SoC/External_Control.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/BSV_Additional_Libs/EdgeFIFOFs.bsv
+compiling /home/nikhil/git_clones/Flute/src_Testbench/Fabrics/AXI4/AXI4_Types.bsv
+compiling /home/nikhil/git_clones/Flute/src_Testbench/Fabrics/AXI4/AXI4_Fabric.bsv
+compiling /home/nikhil/git_clones/Flute/src_Testbench/Fabrics/AXI4_Lite/AXI4_Lite_Types.bsv
+compiling /home/nikhil/git_clones/Flute/src_Testbench/Fabrics/AXI4/AXI4_Widener.bsv
+compiling /home/nikhil/git_clones/Flute/src_Testbench/Fabrics/AXI4/AXI4_Addr_Translator.bsv
+compiling /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW/AWS_BSV_Top_Defs.bsv
+compiling /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW/AWS_OCL_Adapter.bsv
+code generation for mkOCL_Adapter starts
+Verilog file created: RTL_from_bsc/mkOCL_Adapter.v
+Elaborated module file created: build_dir/mkOCL_Adapter.ba
+compiling /home/nikhil/git_clones/Flute/src_Testbench/Fabrics/AXI4/AXI4_Deburster.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Core_v2/Fabric_Defs.bsv
+compiling /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW/SoC_Map.bsv
+code generation for mkSoC_Map starts
+Verilog file created: RTL_from_bsc/mkSoC_Map.v
+Elaborated module file created: build_dir/mkSoC_Map.ba
+compiling /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW/AWS_SoC_Fabric.bsv
+code generation for mkAWS_SoC_Fabric starts
+Verilog file created: RTL_from_bsc/mkAWS_SoC_Fabric.v
+Elaborated module file created: build_dir/mkAWS_SoC_Fabric.ba
+compiling /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW/Boot_ROM.bsv
+Warning: "/home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW/Boot_ROM.bsv", line 41, column 1: (S0089)
+  Multiple copies of a file were found in the path. Using:
+    /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW/fn_read_ROM_RV64.bsvi
+  Ignoring:
+    /home/nikhil/git_clones/Flute/src_Testbench/SoC/fn_read_ROM_RV64.bsvi
+code generation for mkBoot_ROM starts
+Verilog file created: RTL_from_bsc/mkBoot_ROM.v
+Elaborated module file created: build_dir/mkBoot_ROM.ba
+compiling /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW/UART_Model.bsv
+code generation for mkUART starts
+Verilog file created: RTL_from_bsc/mkUART.v
+Elaborated module file created: build_dir/mkUART.ba
+compiling /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW/AWS_Host_Access.bsv
+code generation for mkAWS_Host_Access starts
+Verilog file created: RTL_from_bsc/mkAWS_Host_Access.v
+Elaborated module file created: build_dir/mkAWS_Host_Access.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/CPU/AXI_Widths.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Core_v2/Fabric_1x3.bsv
+code generation for mkFabric_1x3 starts
+Warning: "/home/nikhil/git_clones/Flute/src_Testbench/Fabrics/AXI4/AXI4_Fabric.bsv", line 227, column 15: (G0023)
+  The condition for rule `fabric_rl_wr_xaction_no_such_slave' is always false.
+  Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Testbench/Fabrics/AXI4/AXI4_Fabric.bsv", line 350, column 15: (G0023)
+  The condition for rule `fabric_rl_rd_xaction_no_such_slave' is always false.
+  Removing...
+Verilog file created: RTL_from_bsc/mkFabric_1x3.v
+Elaborated module file created: build_dir/mkFabric_1x3.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/PLIC/PLIC.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/PLIC/PLIC_16_2_7.bsv
+code generation for mkPLIC_16_2_7 starts
+Verilog file created: RTL_from_bsc/mkPLIC_16_2_7.v
+Elaborated module file created: build_dir/mkPLIC_16_2_7.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/BSV_Additional_Libs/ByteLane.bsv
+compiling /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW/AWS_DDR4_Adapter.bsv
+code generation for mkAWS_DDR4_Adapter starts
+Warning: "/home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW/AWS_DDR4_Adapter.bsv", line 278, column 8: (G0010)
+  Rule "rl_miss_clean_req" was treated as more urgent than
+  "rl_merge_rd_req". Conflicts:
+    "rl_miss_clean_req" cannot fire before "rl_merge_rd_req":
+      calls to rg_state.write vs. rg_state.read
+    "rl_merge_rd_req" cannot fire before "rl_miss_clean_req":
+      calls to
+	f_reqs_rv.port1__write vs. f_reqs_rv.port0__read
+	f_reqs_rv.port1__read vs. f_reqs_rv.port0__read
+Verilog file created: RTL_from_bsc/mkAWS_DDR4_Adapter.v
+Elaborated module file created: build_dir/mkAWS_DDR4_Adapter.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_IO/Near_Mem_IO_AXI4.bsv
+code generation for mkNear_Mem_IO_AXI4 starts
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_IO/Near_Mem_IO_AXI4.bsv", line 99, column 8: (G0010)
+  Rule "rl_reset" was treated as more urgent than "rl_soft_reset". Conflicts:
+    "rl_reset" cannot fire before "rl_soft_reset":
+      calls to f_reset_reqs.deq vs. f_reset_reqs.notEmpty
+    "rl_soft_reset" cannot fire before "rl_reset":
+      calls to rg_state.write vs. rg_state.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_IO/Near_Mem_IO_AXI4.bsv", line 99, column 8: (G0010)
+  Rule "rl_compare" was treated as more urgent than
+  "rl_process_wr_req". Conflicts:
+    "rl_compare" cannot fire before "rl_process_wr_req":
+      calls to rg_mtip.write vs. rg_mtip.read
+    "rl_process_wr_req" cannot fire before "rl_compare":
+      calls to
+	crg_time.port1__write vs. crg_time.port0__read
+	crg_time.port1__read vs. crg_time.port0__read
+	crg_timecmp.port1__write vs. crg_timecmp.port0__read
+	crg_timecmp.port1__read vs. crg_timecmp.port0__read
+Verilog file created: RTL_from_bsc/mkNear_Mem_IO_AXI4.v
+Elaborated module file created: build_dir/mkNear_Mem_IO_AXI4.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/Debug_Module/DM_Common.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Debug_Module/DM_CPU_Req_Rsp.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/ISA/ISA_Decls.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Debug_Module/DM_Run_Control.bsv
+code generation for mkDM_Run_Control starts
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Debug_Module/DM_Run_Control.bsv", line 55, column 8: (G0036)
+  Rule "rl_hart0_reset_rsp" will appear to fire before "rl_hart0_run_rsp" when
+  both fire in the same clock cycle, affecting:
+    calls to rg_hart0_running.write vs. rg_hart0_running.write
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Debug_Module/DM_Run_Control.bsv", line 55, column 8: (G0036)
+  Rule "rl_hart0_reset_rsp" will appear to fire before "rl_ndm_reset_rsp" when
+  both fire in the same clock cycle, affecting:
+    calls to rg_hart0_running.write vs. rg_hart0_running.write
+Verilog file created: RTL_from_bsc/mkDM_Run_Control.v
+Elaborated module file created: build_dir/mkDM_Run_Control.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/Debug_Module/DM_Abstract_Commands.bsv
+code generation for mkDM_Abstract_Commands starts
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Debug_Module/DM_Abstract_Commands.bsv", line 52, column 8: (G0010)
+  Rule "write" was treated as more urgent than
+  "rl_csr_write_finish". Conflicts:
+    "write" cannot fire before "rl_csr_write_finish":
+      calls to
+	rg_abstractcs_busy.write vs. rg_abstractcs_busy.read
+	rg_command_access_reg_write.write vs. rg_command_access_reg_write.read
+	rg_command_access_reg_regno.write vs. rg_command_access_reg_regno.read
+    "rl_csr_write_finish" cannot fire before "write":
+      calls to
+	rg_abstractcs_busy.write vs. rg_abstractcs_busy.read
+	rg_abstractcs_cmderr.write vs. rg_abstractcs_cmderr.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Debug_Module/DM_Abstract_Commands.bsv", line 52, column 8: (G0010)
+  Rule "write" was treated as more urgent than
+  "rl_csr_read_finish". Conflicts:
+    "write" cannot fire before "rl_csr_read_finish":
+      calls to
+	rg_abstractcs_busy.write vs. rg_abstractcs_busy.read
+	rg_command_access_reg_write.write vs. rg_command_access_reg_write.read
+	rg_command_access_reg_regno.write vs. rg_command_access_reg_regno.read
+    "rl_csr_read_finish" cannot fire before "write":
+      calls to
+	rg_abstractcs_busy.write vs. rg_abstractcs_busy.read
+	rg_abstractcs_cmderr.write vs. rg_abstractcs_cmderr.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Debug_Module/DM_Abstract_Commands.bsv", line 52, column 8: (G0010)
+  Rule "write" was treated as more urgent than
+  "rl_gpr_write_finish". Conflicts:
+    "write" cannot fire before "rl_gpr_write_finish":
+      calls to
+	rg_abstractcs_busy.write vs. rg_abstractcs_busy.read
+	rg_command_access_reg_write.write vs. rg_command_access_reg_write.read
+	rg_command_access_reg_regno.write vs. rg_command_access_reg_regno.read
+    "rl_gpr_write_finish" cannot fire before "write":
+      calls to
+	rg_abstractcs_busy.write vs. rg_abstractcs_busy.read
+	rg_abstractcs_cmderr.write vs. rg_abstractcs_cmderr.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Debug_Module/DM_Abstract_Commands.bsv", line 52, column 8: (G0010)
+  Rule "write" was treated as more urgent than
+  "rl_gpr_read_finish". Conflicts:
+    "write" cannot fire before "rl_gpr_read_finish":
+      calls to
+	rg_abstractcs_busy.write vs. rg_abstractcs_busy.read
+	rg_command_access_reg_write.write vs. rg_command_access_reg_write.read
+	rg_command_access_reg_regno.write vs. rg_command_access_reg_regno.read
+    "rl_gpr_read_finish" cannot fire before "write":
+      calls to
+	rg_abstractcs_busy.write vs. rg_abstractcs_busy.read
+	rg_abstractcs_cmderr.write vs. rg_abstractcs_cmderr.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Debug_Module/DM_Abstract_Commands.bsv", line 52, column 8: (G0010)
+  Rule "write" was treated as more urgent than
+  "rl_fpr_write_finish". Conflicts:
+    "write" cannot fire before "rl_fpr_write_finish":
+      calls to
+	rg_abstractcs_busy.write vs. rg_abstractcs_busy.read
+	rg_command_access_reg_write.write vs. rg_command_access_reg_write.read
+	rg_command_access_reg_regno.write vs. rg_command_access_reg_regno.read
+    "rl_fpr_write_finish" cannot fire before "write":
+      calls to
+	rg_abstractcs_busy.write vs. rg_abstractcs_busy.read
+	rg_abstractcs_cmderr.write vs. rg_abstractcs_cmderr.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Debug_Module/DM_Abstract_Commands.bsv", line 52, column 8: (G0010)
+  Rule "write" was treated as more urgent than
+  "rl_fpr_read_finish". Conflicts:
+    "write" cannot fire before "rl_fpr_read_finish":
+      calls to
+	rg_abstractcs_busy.write vs. rg_abstractcs_busy.read
+	rg_command_access_reg_write.write vs. rg_command_access_reg_write.read
+	rg_command_access_reg_regno.write vs. rg_command_access_reg_regno.read
+    "rl_fpr_read_finish" cannot fire before "write":
+      calls to
+	rg_abstractcs_busy.write vs. rg_abstractcs_busy.read
+	rg_abstractcs_cmderr.write vs. rg_abstractcs_cmderr.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Debug_Module/DM_Abstract_Commands.bsv", line 52, column 8: (G0010)
+  Rule "write" was treated as more urgent than
+  "rl_unknown_write_start". Conflicts:
+    "write" cannot fire before "rl_unknown_write_start":
+      calls to
+	rg_start_reg_access.write vs. rg_start_reg_access.read
+	rg_abstractcs_busy.write vs. rg_abstractcs_busy.read
+	rg_command_access_reg_write.write vs. rg_command_access_reg_write.read
+	rg_command_access_reg_regno.write vs. rg_command_access_reg_regno.read
+    "rl_unknown_write_start" cannot fire before "write":
+      calls to
+	rg_abstractcs_busy.write vs. rg_abstractcs_busy.read
+	rg_abstractcs_cmderr.write vs. rg_abstractcs_cmderr.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Debug_Module/DM_Abstract_Commands.bsv", line 52, column 8: (G0010)
+  Rule "write" was treated as more urgent than
+  "rl_unknown_read_start". Conflicts:
+    "write" cannot fire before "rl_unknown_read_start":
+      calls to
+	rg_start_reg_access.write vs. rg_start_reg_access.read
+	rg_abstractcs_busy.write vs. rg_abstractcs_busy.read
+	rg_command_access_reg_write.write vs. rg_command_access_reg_write.read
+	rg_command_access_reg_regno.write vs. rg_command_access_reg_regno.read
+    "rl_unknown_read_start" cannot fire before "write":
+      calls to
+	rg_abstractcs_busy.write vs. rg_abstractcs_busy.read
+	rg_abstractcs_cmderr.write vs. rg_abstractcs_cmderr.read
+Verilog file created: RTL_from_bsc/mkDM_Abstract_Commands.v
+Elaborated module file created: build_dir/mkDM_Abstract_Commands.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/Debug_Module/DM_System_Bus.bsv
+code generation for mkDM_System_Bus starts
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Debug_Module/DM_System_Bus.bsv", line 176, column 8: (G0036)
+  Rule "reset" will appear to fire before "rl_sb_write_response" when both
+  fire in the same clock cycle, affecting:
+    calls to rg_sbcs_sberror.write vs. rg_sbcs_sberror.write
+Verilog file created: RTL_from_bsc/mkDM_System_Bus.v
+Elaborated module file created: build_dir/mkDM_System_Bus.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/Debug_Module/Debug_Module.bsv
+code generation for mkDebug_Module starts
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Debug_Module/Debug_Module.bsv", line 128, column 8: (G0010)
+  Rule "dmi_write" was treated as more urgent than "rl_reset". Conflicts:
+    "dmi_write" cannot fire before "rl_reset":
+      calls to dm_run_control.write vs. dm_run_control.dmactive
+    "rl_reset" cannot fire before "dmi_write":
+      calls to
+	dm_run_control.reset vs. dm_run_control.write
+	dm_abstract_commands.reset vs. dm_abstract_commands.write
+	dm_system_bus.reset vs. dm_system_bus.write
+Verilog file created: RTL_from_bsc/mkDebug_Module.v
+Elaborated module file created: build_dir/mkDebug_Module.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/ISA/TV_Info.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/CPU/CPU_Globals.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/RegFiles/GPR_RegFile.bsv
+code generation for mkGPR_RegFile starts
+Verilog file created: RTL_from_bsc/mkGPR_RegFile.v
+Elaborated module file created: build_dir/mkGPR_RegFile.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/RegFiles/FPR_RegFile.bsv
+code generation for mkFPR_RegFile starts
+Verilog file created: RTL_from_bsc/mkFPR_RegFile.v
+Elaborated module file created: build_dir/mkFPR_RegFile.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/CPU/CPU_Decode_C.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/CPU/EX_ALU_functions.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Cache_Config/Cache_Decls_RV64_Sv39_8KB_2way.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/Cache_Decls.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/MMU_Cache_Common.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/Near_Mem_IFC.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Core_v2/Core_IFC.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/CPU/CPU_IFC.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Core_v2/Dma_Server_Mux.bsv
+code generation for mkDma_Server_Mux_Fabric starts
+Warning: "/home/nikhil/git_clones/Flute/src_Testbench/Fabrics/AXI4/AXI4_Fabric.bsv", line 227, column 15: (G0023)
+  The condition for rule `fabric_rl_wr_xaction_no_such_slave' is always false.
+  Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Testbench/Fabrics/AXI4/AXI4_Fabric.bsv", line 227, column 15: (G0023)
+  The condition for rule `fabric_rl_wr_xaction_no_such_slave_1' is always
+  false. Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Testbench/Fabrics/AXI4/AXI4_Fabric.bsv", line 350, column 15: (G0023)
+  The condition for rule `fabric_rl_rd_xaction_no_such_slave' is always false.
+  Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Testbench/Fabrics/AXI4/AXI4_Fabric.bsv", line 350, column 15: (G0023)
+  The condition for rule `fabric_rl_rd_xaction_no_such_slave_1' is always
+  false. Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Core_v2/Dma_Server_Mux.bsv", line 112, column 8: (G0010)
+  Rule "fabric_rl_wr_xaction_master_to_slave" was treated as more urgent than
+  "fabric_rl_wr_xaction_master_to_slave_1". Conflicts:
+    "fabric_rl_wr_xaction_master_to_slave" cannot fire before "fabric_rl_wr_xaction_master_to_slave_1":
+      calls to
+	fabric_xactors_to_slaves_0_f_wr_addr.enq vs. fabric_xactors_to_slaves_0_f_wr_addr.enq
+	fabric_v_f_wr_mis_0.enq vs. fabric_v_f_wr_mis_0.enq
+    "fabric_rl_wr_xaction_master_to_slave_1" cannot fire before "fabric_rl_wr_xaction_master_to_slave":
+      calls to
+	fabric_xactors_to_slaves_0_f_wr_addr.enq vs. fabric_xactors_to_slaves_0_f_wr_addr.enq
+	fabric_v_f_wr_mis_0.enq vs. fabric_v_f_wr_mis_0.enq
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Core_v2/Dma_Server_Mux.bsv", line 112, column 8: (G0010)
+  Rule "fabric_rl_wr_xaction_master_to_slave_data" was treated as more urgent
+  than "fabric_rl_wr_xaction_master_to_slave_data_1". Conflicts:
+    "fabric_rl_wr_xaction_master_to_slave_data" cannot fire before "fabric_rl_wr_xaction_master_to_slave_data_1":
+      calls to
+	fabric_xactors_to_slaves_0_f_wr_data.enq vs. fabric_xactors_to_slaves_0_f_wr_data.enq
+    "fabric_rl_wr_xaction_master_to_slave_data_1" cannot fire before "fabric_rl_wr_xaction_master_to_slave_data":
+      calls to
+	fabric_xactors_to_slaves_0_f_wr_data.enq vs. fabric_xactors_to_slaves_0_f_wr_data.enq
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Core_v2/Dma_Server_Mux.bsv", line 112, column 8: (G0010)
+  Rule "fabric_rl_rd_xaction_master_to_slave" was treated as more urgent than
+  "fabric_rl_rd_xaction_master_to_slave_1". Conflicts:
+    "fabric_rl_rd_xaction_master_to_slave" cannot fire before "fabric_rl_rd_xaction_master_to_slave_1":
+      calls to
+	fabric_xactors_to_slaves_0_f_rd_addr.enq vs. fabric_xactors_to_slaves_0_f_rd_addr.enq
+	fabric_v_f_rd_mis_0.enq vs. fabric_v_f_rd_mis_0.enq
+    "fabric_rl_rd_xaction_master_to_slave_1" cannot fire before "fabric_rl_rd_xaction_master_to_slave":
+      calls to
+	fabric_xactors_to_slaves_0_f_rd_addr.enq vs. fabric_xactors_to_slaves_0_f_rd_addr.enq
+	fabric_v_f_rd_mis_0.enq vs. fabric_v_f_rd_mis_0.enq
+Verilog file created: RTL_from_bsc/mkDma_Server_Mux_Fabric.v
+Elaborated module file created: build_dir/mkDma_Server_Mux_Fabric.ba
+code generation for mkDma_Server_Mux starts
+Verilog file created: RTL_from_bsc/mkDma_Server_Mux.v
+Elaborated module file created: build_dir/mkDma_Server_Mux.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/CPU/CPU_Fetch_C.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/CPU/CPU_StageD.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/MMIO_AXI4_Adapter.bsv
+code generation for mkMMIO_AXI4_Adapter_2 starts
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/MMIO_AXI4_Adapter.bsv", line 435, column 8: (G0010)
+  Rule "ifc_rl_rd_req" was treated as more urgent than
+  "ifc_rl_rd_req_1". Conflicts:
+    "ifc_rl_rd_req" cannot fire before "ifc_rl_rd_req_1":
+      calls to
+	ifc_rg_rd_rsps_pending.write vs. ifc_rg_rd_rsps_pending.read
+	ifc_master_xactor_f_rd_addr.enq vs. ifc_master_xactor_f_rd_addr.enq
+	ifc_f_rd_rsp_control.enq vs. ifc_f_rd_rsp_control.enq
+    "ifc_rl_rd_req_1" cannot fire before "ifc_rl_rd_req":
+      calls to
+	ifc_rg_rd_rsps_pending.write vs. ifc_rg_rd_rsps_pending.read
+	ifc_master_xactor_f_rd_addr.enq vs. ifc_master_xactor_f_rd_addr.enq
+	ifc_f_rd_rsp_control.enq vs. ifc_f_rd_rsp_control.enq
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/MMIO_AXI4_Adapter.bsv", line 435, column 8: (G0010)
+  Rule "ifc_rl_rd_req_1" was treated as more urgent than
+  "ifc_rl_rd_req_2". Conflicts:
+    "ifc_rl_rd_req_1" cannot fire before "ifc_rl_rd_req_2":
+      calls to
+	ifc_rg_rd_rsps_pending.write vs. ifc_rg_rd_rsps_pending.read
+	ifc_master_xactor_f_rd_addr.enq vs. ifc_master_xactor_f_rd_addr.enq
+	ifc_f_rd_rsp_control.enq vs. ifc_f_rd_rsp_control.enq
+    "ifc_rl_rd_req_2" cannot fire before "ifc_rl_rd_req_1":
+      calls to
+	ifc_rg_rd_rsps_pending.write vs. ifc_rg_rd_rsps_pending.read
+	ifc_master_xactor_f_rd_addr.enq vs. ifc_master_xactor_f_rd_addr.enq
+	ifc_f_rd_rsp_control.enq vs. ifc_f_rd_rsp_control.enq
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/MMIO_AXI4_Adapter.bsv", line 435, column 8: (G0010)
+  Rule "ifc_rl_rd_req_2" was treated as more urgent than
+  "ifc_rl_rd_data". Conflicts:
+    "ifc_rl_rd_req_2" cannot fire before "ifc_rl_rd_data":
+      calls to
+	ifc_rg_rd_rsps_pending.write vs. ifc_rg_rd_rsps_pending.read
+	ifc_rg_rd_beat.write vs. ifc_rg_rd_beat.read
+    "ifc_rl_rd_data" cannot fire before "ifc_rl_rd_req_2":
+      calls to ifc_rg_rd_rsps_pending.write vs. ifc_rg_rd_rsps_pending.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/MMIO_AXI4_Adapter.bsv", line 435, column 8: (G0010)
+  Rule "ifc_rl_rd_req_2" was treated as more urgent than
+  "ifc_rl_wr_req". Conflicts:
+    "ifc_rl_rd_req_2" cannot fire before "ifc_rl_wr_req":
+      calls to ifc_rg_rd_rsps_pending.write vs. ifc_rg_rd_rsps_pending.read
+    "ifc_rl_wr_req" cannot fire before "ifc_rl_rd_req_2":
+      calls to ifc_rg_wr_rsps_pending.write vs. ifc_rg_wr_rsps_pending.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/MMIO_AXI4_Adapter.bsv", line 435, column 8: (G0010)
+  Rule "ifc_rl_wr_req" was treated as more urgent than
+  "ifc_rl_wr_req_1". Conflicts:
+    "ifc_rl_wr_req" cannot fire before "ifc_rl_wr_req_1":
+      calls to
+	ifc_rg_wr_rsps_pending.write vs. ifc_rg_wr_rsps_pending.read
+	ifc_master_xactor_f_wr_addr.enq vs. ifc_master_xactor_f_wr_addr.enq
+	ifc_rg_awlen.write vs. ifc_rg_awlen.read
+	ifc_rg_wr_beat.write vs. ifc_rg_wr_beat.read
+    "ifc_rl_wr_req_1" cannot fire before "ifc_rl_wr_req":
+      calls to
+	ifc_rg_wr_rsps_pending.write vs. ifc_rg_wr_rsps_pending.read
+	ifc_master_xactor_f_wr_addr.enq vs. ifc_master_xactor_f_wr_addr.enq
+	ifc_rg_awlen.write vs. ifc_rg_awlen.read
+	ifc_rg_wr_beat.write vs. ifc_rg_wr_beat.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/MMIO_AXI4_Adapter.bsv", line 435, column 8: (G0010)
+  Rule "ifc_rl_wr_req_1" was treated as more urgent than
+  "ifc_rl_wr_req_2". Conflicts:
+    "ifc_rl_wr_req_1" cannot fire before "ifc_rl_wr_req_2":
+      calls to
+	ifc_rg_wr_rsps_pending.write vs. ifc_rg_wr_rsps_pending.read
+	ifc_master_xactor_f_wr_addr.enq vs. ifc_master_xactor_f_wr_addr.enq
+	ifc_rg_awlen.write vs. ifc_rg_awlen.read
+	ifc_rg_wr_beat.write vs. ifc_rg_wr_beat.read
+    "ifc_rl_wr_req_2" cannot fire before "ifc_rl_wr_req_1":
+      calls to
+	ifc_rg_wr_rsps_pending.write vs. ifc_rg_wr_rsps_pending.read
+	ifc_master_xactor_f_wr_addr.enq vs. ifc_master_xactor_f_wr_addr.enq
+	ifc_rg_awlen.write vs. ifc_rg_awlen.read
+	ifc_rg_wr_beat.write vs. ifc_rg_wr_beat.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/MMIO_AXI4_Adapter.bsv", line 435, column 8: (G0010)
+  Rule "ifc_rl_rd_req_2" was treated as more urgent than
+  "ifc_rl_wr_data". Conflicts:
+    "ifc_rl_rd_req_2" cannot fire before "ifc_rl_wr_data":
+      calls to ifc_v_f_reqs_2.deq vs. ifc_v_f_reqs_2.deq
+    "ifc_rl_wr_data" cannot fire before "ifc_rl_rd_req_2":
+      calls to
+	ifc_v_f_reqs_2.deq vs. ifc_v_f_reqs_2.first
+	ifc_v_f_reqs_2.deq vs. ifc_v_f_reqs_2.deq
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/MMIO_AXI4_Adapter.bsv", line 435, column 8: (G0010)
+  Rule "ifc_rl_wr_req_2" was treated as more urgent than
+  "ifc_rl_wr_rsp". Conflicts:
+    "ifc_rl_wr_req_2" cannot fire before "ifc_rl_wr_rsp":
+      calls to ifc_rg_wr_rsps_pending.write vs. ifc_rg_wr_rsps_pending.read
+    "ifc_rl_wr_rsp" cannot fire before "ifc_rl_wr_req_2":
+      calls to ifc_rg_wr_rsps_pending.write vs. ifc_rg_wr_rsps_pending.read
+Verilog file created: RTL_from_bsc/mkMMIO_AXI4_Adapter_2.v
+Elaborated module file created: build_dir/mkMMIO_AXI4_Adapter_2.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/RegFiles/CSR_MSTATUS.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/RegFiles/CSR_MIP.bsv
+code generation for mkCSR_MIP starts
+Warning: "/home/nikhil/git_clones/Flute/src_Core/RegFiles/CSR_MIP.bsv", line 70, column 8: (G0036)
+  Rule "reset" will appear to fire before "timer_interrupt_req" when both fire
+  in the same clock cycle, affecting:
+    calls to rg_mtip.write vs. rg_mtip.write
+Warning: "/home/nikhil/git_clones/Flute/src_Core/RegFiles/CSR_MIP.bsv", line 70, column 8: (G0036)
+  Rule "reset" will appear to fire before "software_interrupt_req" when both
+  fire in the same clock cycle, affecting:
+    calls to rg_msip.write vs. rg_msip.write
+Warning: "/home/nikhil/git_clones/Flute/src_Core/RegFiles/CSR_MIP.bsv", line 70, column 8: (G0036)
+  Rule "reset" will appear to fire before "s_external_interrupt_req" when both
+  fire in the same clock cycle, affecting:
+    calls to rg_seip.write vs. rg_seip.write
+Warning: "/home/nikhil/git_clones/Flute/src_Core/RegFiles/CSR_MIP.bsv", line 70, column 8: (G0036)
+  Rule "mav_write" will appear to fire before "s_external_interrupt_req" when
+  both fire in the same clock cycle, affecting:
+    calls to rg_seip.write vs. rg_seip.write
+Warning: "/home/nikhil/git_clones/Flute/src_Core/RegFiles/CSR_MIP.bsv", line 70, column 8: (G0036)
+  Rule "reset" will appear to fire before "m_external_interrupt_req" when both
+  fire in the same clock cycle, affecting:
+    calls to rg_meip.write vs. rg_meip.write
+Verilog file created: RTL_from_bsc/mkCSR_MIP.v
+Elaborated module file created: build_dir/mkCSR_MIP.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/RegFiles/CSR_MIE.bsv
+code generation for mkCSR_MIE starts
+Warning: "/home/nikhil/git_clones/Flute/src_Core/RegFiles/CSR_MIE.bsv", line 58, column 8: (G0036)
+  Rule "reset" will appear to fire before "mav_write" when both fire in the
+  same clock cycle, affecting:
+    calls to rg_mie.write vs. rg_mie.write
+Verilog file created: RTL_from_bsc/mkCSR_MIE.v
+Elaborated module file created: build_dir/mkCSR_MIE.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/RegFiles/CSR_RegFile_MSU.bsv
+code generation for mkCSR_RegFile starts
+Warning: "/home/nikhil/git_clones/Flute/src_Core/RegFiles/CSR_RegFile_MSU.bsv", line 293, column 8: (G0010)
+  Rule "mav_csr_write" was treated as more urgent than
+  "rl_reset_start". Conflicts:
+    "mav_csr_write" cannot fire before "rl_reset_start":
+      calls to
+	csr_mie.mav_write vs. csr_mie.reset
+	rw_minstret.wset vs. rw_minstret.wset
+    "rl_reset_start" cannot fire before "mav_csr_write":
+      calls to
+	csr_mie.reset vs. csr_mie.mav_sie_write
+	csr_mip.reset vs. csr_mip.mav_write
+	csr_mip.reset vs. csr_mip.mav_sip_write
+	rw_minstret.wset vs. rw_minstret.wset
+	rg_dcsr.write vs. rg_dcsr.read
+	csr_mstatus_rg_mstatus.write vs. csr_mstatus_rg_mstatus.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/RegFiles/CSR_RegFile_MSU.bsv", line 293, column 8: (G0036)
+  Rule "write_dpc" will appear to fire before "rl_reset_start" when both fire
+  in the same clock cycle, affecting:
+    calls to rg_dpc.write vs. rg_dpc.write
+Warning: "/home/nikhil/git_clones/Flute/src_Core/RegFiles/CSR_RegFile_MSU.bsv", line 293, column 8: (G0036)
+  Rule "nmi_req" will appear to fire before "rl_reset_start" when both fire in
+  the same clock cycle, affecting:
+    calls to rg_nmi.write vs. rg_nmi.write
+Warning: "/home/nikhil/git_clones/Flute/src_Core/RegFiles/CSR_RegFile_MSU.bsv", line 293, column 8: (G0036)
+  Rule "write_dpc" will appear to fire before "mav_csr_write" when both fire
+  in the same clock cycle, affecting:
+    calls to rg_dpc.write vs. rg_dpc.write
+Verilog file created: RTL_from_bsc/mkCSR_RegFile.v
+Elaborated module file created: build_dir/mkCSR_RegFile.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/RegFiles/CSR_RegFile.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/CPU/CPU_Stage1.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/CPU/CPU_Stage3.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/CPU/Branch_Predictor.bsv
+code generation for mkBranch_Predictor starts
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/Branch_Predictor.bsv", line 193, column 8: (G0010)
+  Rule "bp_train" was treated as more urgent than "rl_reset". Conflicts:
+    "bp_train" cannot fire before "rl_reset":
+      calls to
+	btb_bramcore2.b_put vs. btb_bramcore2.b_put
+	rf_btb_fsms.upd vs. rf_btb_fsms.upd
+    "rl_reset" cannot fire before "bp_train":
+      calls to
+	btb_bramcore2.b_put vs. btb_bramcore2.b_put
+	rf_btb_fsms.upd vs. rf_btb_fsms.sub
+	rf_btb_fsms.upd vs. rf_btb_fsms.upd
+Verilog file created: RTL_from_bsc/mkBranch_Predictor.v
+Elaborated module file created: build_dir/mkBranch_Predictor.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/CPU/CPU_StageF.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/PTW.bsv
+code generation for mkPTW starts
+Verilog file created: RTL_from_bsc/mkPTW.v
+Elaborated module file created: build_dir/mkPTW.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/CPU/IntMulDiv.bsv
+code generation for mkIntMul_32 starts
+Verilog file created: RTL_from_bsc/mkIntMul_32.v
+Elaborated module file created: build_dir/mkIntMul_32.ba
+code generation for mkIntMul_64 starts
+Verilog file created: RTL_from_bsc/mkIntMul_64.v
+Elaborated module file created: build_dir/mkIntMul_64.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/CPU/RISCV_MBox.bsv
+code generation for mkRISCV_MBox starts
+Verilog file created: RTL_from_bsc/mkRISCV_MBox.v
+Elaborated module file created: build_dir/mkRISCV_MBox.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/TLB.bsv
+code generation for mkTLB starts
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/TLB.bsv", line 256, column 8: (G0036)
+  Rule "ma_insert" will appear to fire before "rl_flush" when both fire in the
+  same clock cycle, affecting:
+    calls to
+      tlb2_valids_0.write vs. tlb2_valids_0.write
+      tlb2_valids_1.write vs. tlb2_valids_1.write
+      tlb2_valids_2.write vs. tlb2_valids_2.write
+      tlb2_valids_3.write vs. tlb2_valids_3.write
+      tlb1_valids_0.write vs. tlb1_valids_0.write
+      tlb1_valids_1.write vs. tlb1_valids_1.write
+      tlb1_valids_2.write vs. tlb1_valids_2.write
+      tlb1_valids_3.write vs. tlb1_valids_3.write
+      tlb1_valids_4.write vs. tlb1_valids_4.write
+      tlb1_valids_5.write vs. tlb1_valids_5.write
+      tlb1_valids_6.write vs. tlb1_valids_6.write
+      tlb1_valids_7.write vs. tlb1_valids_7.write
+      tlb0_valids_0.write vs. tlb0_valids_0.write
+      tlb0_valids_1.write vs. tlb0_valids_1.write
+      tlb0_valids_2.write vs. tlb0_valids_2.write
+      tlb0_valids_3.write vs. tlb0_valids_3.write
+      tlb0_valids_4.write vs. tlb0_valids_4.write
+      tlb0_valids_5.write vs. tlb0_valids_5.write
+      tlb0_valids_6.write vs. tlb0_valids_6.write
+      tlb0_valids_7.write vs. tlb0_valids_7.write
+      tlb0_valids_8.write vs. tlb0_valids_8.write
+      tlb0_valids_9.write vs. tlb0_valids_9.write
+      tlb0_valids_10.write vs. tlb0_valids_10.write
+      tlb0_valids_11.write vs. tlb0_valids_11.write
+      tlb0_valids_12.write vs. tlb0_valids_12.write
+      tlb0_valids_13.write vs. tlb0_valids_13.write
+      tlb0_valids_14.write vs. tlb0_valids_14.write
+      tlb0_valids_15.write vs. tlb0_valids_15.write
+Verilog file created: RTL_from_bsc/mkTLB.v
+Elaborated module file created: build_dir/mkTLB.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/Cache.bsv
+code generation for mkCache starts
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/Cache.bsv", line 286, column 8: (G0010)
+  Rule "ma_request_va" was treated as more urgent than
+  "rl_writeback_loop". Conflicts:
+    "ma_request_va" cannot fire before "rl_writeback_loop":
+      calls to
+	ram_cset_cword.a_put vs. ram_cset_cword.a_put
+	rg_cset_in_cache.write vs. rg_cset_in_cache.read
+    "rl_writeback_loop" cannot fire before "ma_request_va":
+      calls to ram_cset_cword.a_put vs. ram_cset_cword.a_put
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/Cache.bsv", line 286, column 8: (G0010)
+  Rule "ma_request_va" was treated as more urgent than
+  "rl_replace". Conflicts:
+    "ma_request_va" cannot fire before "rl_replace":
+      calls to
+	rg_va.write vs. rg_va.read
+	ram_cset_cword.a_put vs. ram_cset_cword.a_put
+    "rl_replace" cannot fire before "ma_request_va":
+      calls to ram_cset_cword.a_put vs. ram_cset_cword.a_put
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/Cache.bsv", line 286, column 8: (G0010)
+  Rule "ma_request_va" was treated as more urgent than
+  "rl_refill_start". Conflicts:
+    "ma_request_va" cannot fire before "rl_refill_start":
+      calls to
+	rg_va.write vs. rg_va.read
+	ram_cset_cword.a_put vs. ram_cset_cword.a_put
+	rg_cset_in_cache.write vs. rg_cset_in_cache.read
+    "rl_refill_start" cannot fire before "ma_request_va":
+      calls to ram_cset_cword.a_put vs. ram_cset_cword.a_put
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/Cache.bsv", line 286, column 8: (G0010)
+  Rule "ma_request_va" was treated as more urgent than
+  "rl_refill_loop". Conflicts:
+    "ma_request_va" cannot fire before "rl_refill_loop":
+      calls to
+	rg_va.write vs. rg_va.read
+	ram_cset_meta.a_put vs. ram_cset_meta.a_put
+	ram_cset_cword.a_put vs. ram_cset_cword.a_put
+	rg_cset_in_cache.write vs. rg_cset_in_cache.read
+    "rl_refill_loop" cannot fire before "ma_request_va":
+      calls to
+	ram_cset_meta.a_put vs. ram_cset_meta.a_put
+	ram_cset_cword.a_put vs. ram_cset_cword.a_put
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/Cache.bsv", line 286, column 8: (G0010)
+  Rule "ma_request_va" was treated as more urgent than
+  "rl_refill_loop_final". Conflicts:
+    "ma_request_va" cannot fire before "rl_refill_loop_final":
+      calls to
+	rg_va.write vs. rg_va.read
+	ram_cset_meta.a_put vs. ram_cset_meta.a_put
+	ram_cset_cword.a_put vs. ram_cset_cword.a_put
+    "rl_refill_loop_final" cannot fire before "ma_request_va":
+      calls to
+	ram_cset_meta.a_put vs. ram_cset_meta.a_put
+	ram_cset_cword.a_put vs. ram_cset_cword.a_put
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/Cache.bsv", line 286, column 8: (G0010)
+  Rule "ma_request_va" was treated as more urgent than
+  "rl_flush_start". Conflicts:
+    "ma_request_va" cannot fire before "rl_flush_start":
+      calls to ram_cset_meta.a_put vs. ram_cset_meta.a_put
+    "rl_flush_start" cannot fire before "ma_request_va":
+      calls to ram_cset_meta.a_put vs. ram_cset_meta.a_put
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/Cache.bsv", line 286, column 8: (G0010)
+  Rule "ma_request_va" was treated as more urgent than
+  "rl_flush_loop". Conflicts:
+    "ma_request_va" cannot fire before "rl_flush_loop":
+      calls to
+	rg_va.write vs. rg_va.read
+	ram_cset_meta.a_put vs. ram_cset_meta.a_put
+	ram_cset_cword.a_put vs. ram_cset_cword.a_put
+	rg_cset_in_cache.write vs. rg_cset_in_cache.read
+    "rl_flush_loop" cannot fire before "ma_request_va":
+      calls to
+	ram_cset_meta.a_put vs. ram_cset_meta.a_put
+	ram_cset_cword.a_put vs. ram_cset_cword.a_put
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/Cache.bsv", line 286, column 8: (G0010)
+  Rule "ma_request_va" was treated as more urgent than
+  "rl_flush_loop_writeback_sequel". Conflicts:
+    "ma_request_va" cannot fire before "rl_flush_loop_writeback_sequel":
+      calls to
+	rg_va.write vs. rg_va.read
+	ram_cset_meta.a_put vs. ram_cset_meta.a_put
+	ram_cset_cword.a_put vs. ram_cset_cword.a_put
+	rg_cset_in_cache.write vs. rg_cset_in_cache.read
+    "rl_flush_loop_writeback_sequel" cannot fire before "ma_request_va":
+      calls to
+	ram_cset_meta.a_put vs. ram_cset_meta.a_put
+	ram_cset_cword.a_put vs. ram_cset_cword.a_put
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/Cache.bsv", line 286, column 8: (G0010)
+  Rule "rl_refill_loop" was treated as more urgent than
+  "rl_downgrade_req_from_L2_A". Conflicts:
+    "rl_refill_loop" cannot fire before "rl_downgrade_req_from_L2_A":
+      calls to
+	rg_fsm_state.write vs. rg_fsm_state.read
+	ram_cset_meta.a_put vs. ram_cset_meta.a_put
+	ram_cset_cword.a_put vs. ram_cset_cword.a_put
+	rg_cword_in_cline.write vs. rg_cword_in_cline.read
+    "rl_downgrade_req_from_L2_A" cannot fire before "rl_refill_loop":
+      calls to
+	rg_fsm_state.write vs. rg_fsm_state.read
+	rg_va.write vs. rg_va.read
+	rg_pa.write vs. rg_pa.read
+	ram_cset_meta.a_put vs. ram_cset_meta.a_put
+	ram_cset_cword.a_put vs. ram_cset_cword.a_put
+	rg_cset_in_cache.write vs. rg_cset_in_cache.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/Cache.bsv", line 286, column 8: (G0010)
+  Rule "rl_flush_start" was treated as more urgent than
+  "rl_downgrade_req_from_L2_A". Conflicts:
+    "rl_flush_start" cannot fire before "rl_downgrade_req_from_L2_A":
+      calls to
+	rg_fsm_state.write vs. rg_fsm_state.read
+	ram_cset_meta.a_put vs. ram_cset_meta.a_put
+	rg_cset_in_cache.write vs. rg_cset_in_cache.read
+	rg_way_in_cset.write vs. rg_way_in_cset.read
+    "rl_downgrade_req_from_L2_A" cannot fire before "rl_flush_start":
+      calls to
+	rg_fsm_state.write vs. rg_fsm_state.read
+	ram_cset_meta.a_put vs. ram_cset_meta.a_put
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/Cache.bsv", line 286, column 8: (G0010)
+  Rule "ma_request_va" was treated as more urgent than
+  "rl_downgrade_req_from_L2_B". Conflicts:
+    "ma_request_va" cannot fire before "rl_downgrade_req_from_L2_B":
+      calls to
+	ram_cset_cword.a_put vs. ram_cset_cword.a_put
+	rg_cset_in_cache.write vs. rg_cset_in_cache.read
+    "rl_downgrade_req_from_L2_B" cannot fire before "ma_request_va":
+      calls to ram_cset_cword.a_put vs. ram_cset_cword.a_put
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/Cache.bsv", line 286, column 8: (G0010)
+  Rule "ma_request_va" was treated as more urgent than
+  "rl_downgrade_req_from_L2_C". Conflicts:
+    "ma_request_va" cannot fire before "rl_downgrade_req_from_L2_C":
+      calls to
+	ram_cset_meta.a_put vs. ram_cset_meta.a_put
+	ram_cset_cword.a_put vs. ram_cset_cword.a_put
+    "rl_downgrade_req_from_L2_C" cannot fire before "ma_request_va":
+      calls to
+	ram_cset_meta.a_put vs. ram_cset_meta.a_put
+	ram_cset_cword.a_put vs. ram_cset_cword.a_put
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/Cache.bsv", line 286, column 8: (G0010)
+  Rule "ma_request_va" was treated as more urgent than
+  "rl_initialize". Conflicts:
+    "ma_request_va" cannot fire before "rl_initialize":
+      calls to
+	ram_cset_meta.a_put vs. ram_cset_meta.a_put
+	rg_cset_in_cache.write vs. rg_cset_in_cache.read
+    "rl_initialize" cannot fire before "ma_request_va":
+      calls to ram_cset_meta.a_put vs. ram_cset_meta.a_put
+Verilog file created: RTL_from_bsc/mkCache.v
+Elaborated module file created: build_dir/mkCache.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/MMIO.bsv
+code generation for mkMMIO starts
+Verilog file created: RTL_from_bsc/mkMMIO.v
+Elaborated module file created: build_dir/mkMMIO.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/D_MMU_Cache.bsv
+code generation for mkD_MMU_Cache starts
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/D_MMU_Cache.bsv", line 236, column 8: (G0010)
+  Rule "rl_CPU_req" was treated as more urgent than "rl_CPU_req_B". Conflicts:
+    "rl_CPU_req" cannot fire before "rl_CPU_req_B":
+      calls to
+	cache.ma_request_va vs. cache.mav_request_pa
+	crg_state.port1__read vs. crg_state.port0__write
+	crg_state.port1__read vs. crg_state.port0__read
+	crg_mmu_cache_req_state.port1__write vs. crg_mmu_cache_req_state.port0__write
+	crg_mmu_cache_req_state.port1__write vs. crg_mmu_cache_req_state.port0__read
+	crg_mmu_cache_req_state.port1__read vs. crg_mmu_cache_req_state.port0__write
+	crg_mmu_cache_req_state.port1__read vs. crg_mmu_cache_req_state.port0__read
+	crg_mmu_cache_req.port1__write vs. crg_mmu_cache_req.port0__read
+	crg_valid.port1__write vs. crg_valid.port0__write
+    "rl_CPU_req_B" cannot fire before "rl_CPU_req":
+      calls to cache.mav_request_pa vs. cache.mv_is_idle
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/D_MMU_Cache.bsv", line 236, column 8: (G0010)
+  Rule "rl_CPU_req" was treated as more urgent than "rl_ptw_rd_A". Conflicts:
+    "rl_CPU_req" cannot fire before "rl_ptw_rd_A":
+      calls to
+	cache.ma_request_va vs. cache.ma_request_va
+	crg_state.port1__read vs. crg_state.port0__write
+	crg_state.port1__read vs. crg_state.port0__read
+	crg_mmu_cache_req_state.port1__write vs. crg_mmu_cache_req_state.port0__read
+	crg_mmu_cache_req_state.port1__read vs. crg_mmu_cache_req_state.port0__read
+    "rl_ptw_rd_A" cannot fire before "rl_CPU_req":
+      calls to cache.ma_request_va vs. cache.ma_request_va
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/D_MMU_Cache.bsv", line 236, column 8: (G0010)
+  Rule "rl_PTW_wait" was treated as more urgent than "rl_ptw_rd_A". Conflicts:
+    "rl_PTW_wait" cannot fire before "rl_ptw_rd_A":
+      calls to
+	crg_state.port0__write vs. crg_state.port0__read
+	crg_mmu_cache_req_state.port0__write vs. crg_mmu_cache_req_state.port0__read
+    "rl_ptw_rd_A" cannot fire before "rl_PTW_wait":
+      calls to crg_state.port0__write vs. crg_state.port0__read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/D_MMU_Cache.bsv", line 236, column 8: (G0010)
+  Rule "rl_cache_flush_start" was treated as more urgent than
+  "rl_ptw_rd_A". Conflicts:
+    "rl_cache_flush_start" cannot fire before "rl_ptw_rd_A":
+      calls to crg_state.port0__write vs. crg_state.port0__read
+    "rl_ptw_rd_A" cannot fire before "rl_cache_flush_start":
+      calls to crg_state.port0__write vs. crg_state.port0__read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/D_MMU_Cache.bsv", line 236, column 8: (G0010)
+  Rule "rl_CPU_req" was treated as more urgent than "rl_ptw_rd_B". Conflicts:
+    "rl_CPU_req" cannot fire before "rl_ptw_rd_B":
+      calls to
+	cache.ma_request_va vs. cache.mav_request_pa
+	crg_state.port1__read vs. crg_state.port0__write
+	crg_state.port1__read vs. crg_state.port0__read
+    "rl_ptw_rd_B" cannot fire before "rl_CPU_req":
+      calls to cache.mav_request_pa vs. cache.mv_is_idle
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/D_MMU_Cache.bsv", line 236, column 8: (G0010)
+  Rule "mkConnectionGetPut" was treated as more urgent than
+  "mkConnectionGetPut_1". Conflicts:
+    "mkConnectionGetPut" cannot fire before "mkConnectionGetPut_1":
+      calls to f_pte_writebacks.enq vs. f_pte_writebacks.enq
+    "mkConnectionGetPut_1" cannot fire before "mkConnectionGetPut":
+      calls to f_pte_writebacks.enq vs. f_pte_writebacks.enq
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/D_MMU_Cache.bsv", line 236, column 8: (G0010)
+  Rule "rl_ptw_rd_A" was treated as more urgent than
+  "rl_pte_wb_req_A". Conflicts:
+    "rl_ptw_rd_A" cannot fire before "rl_pte_wb_req_A":
+      calls to
+	cache.ma_request_va vs. cache.ma_request_va
+	crg_state.port0__write vs. crg_state.port0__read
+    "rl_pte_wb_req_A" cannot fire before "rl_ptw_rd_A":
+      calls to
+	cache.ma_request_va vs. cache.ma_request_va
+	crg_state.port0__write vs. crg_state.port0__read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/D_MMU_Cache.bsv", line 236, column 8: (G0010)
+  Rule "rl_CPU_req" was treated as more urgent than
+  "rl_pte_wb_req_B". Conflicts:
+    "rl_CPU_req" cannot fire before "rl_pte_wb_req_B":
+      calls to
+	cache.ma_request_va vs. cache.mav_request_pa
+	crg_state.port1__read vs. crg_state.port0__write
+	crg_state.port1__read vs. crg_state.port0__read
+    "rl_pte_wb_req_B" cannot fire before "rl_CPU_req":
+      calls to cache.mav_request_pa vs. cache.mv_is_idle
+Verilog file created: RTL_from_bsc/mkD_MMU_Cache.v
+Elaborated module file created: build_dir/mkD_MMU_Cache.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/I_MMU_Cache.bsv
+code generation for mkI_MMU_Cache starts
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/I_MMU_Cache.bsv", line 189, column 8: (G0010)
+  Rule "rl_CPU_req" was treated as more urgent than "rl_CPU_req_B". Conflicts:
+    "rl_CPU_req" cannot fire before "rl_CPU_req_B":
+      calls to
+	cache.ma_request_va vs. cache.mav_request_pa
+	crg_state.port1__read vs. crg_state.port0__write
+	crg_state.port1__read vs. crg_state.port0__read
+	crg_mmu_cache_req_state.port1__write vs. crg_mmu_cache_req_state.port0__write
+	crg_mmu_cache_req_state.port1__write vs. crg_mmu_cache_req_state.port0__read
+	crg_mmu_cache_req_state.port1__read vs. crg_mmu_cache_req_state.port0__write
+	crg_mmu_cache_req_state.port1__read vs. crg_mmu_cache_req_state.port0__read
+	crg_mmu_cache_req.port1__write vs. crg_mmu_cache_req.port0__read
+	crg_valid.port1__write vs. crg_valid.port0__write
+    "rl_CPU_req_B" cannot fire before "rl_CPU_req":
+      calls to cache.mav_request_pa vs. cache.mv_is_idle
+Verilog file created: RTL_from_bsc/mkI_MMU_Cache.v
+Elaborated module file created: build_dir/mkI_MMU_Cache.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/DMA_Cache.bsv
+code generation for mkDMA_Cache starts
+Verilog file created: RTL_from_bsc/mkDMA_Cache.v
+Elaborated module file created: build_dir/mkDMA_Cache.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Types.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/MemoryTypes.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/ProcTypes.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Performance.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/BSV_Additional_Libs/CreditCounter.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/CPU/FPU.bsv
+code generation for mkFPU starts
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/FPU.bsv", line 41, column 8: (G0010)
+  Rule "work" was treated as more urgent than "fpu_div_s2_stage". Conflicts:
+    "work" cannot fire before "fpu_div_s2_stage":
+      calls to rg_busy.write vs. rg_busy.read
+    "fpu_div_s2_stage" cannot fire before "work":
+      calls to
+	rg_index.write vs. rg_index.read
+	rg_d.write vs. rg_d.read
+	rg_q.write vs. rg_q.read
+	rg_r.write vs. rg_r.read
+	rg_busy.write vs. rg_busy.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/FPU.bsv", line 41, column 8: (G0010)
+  Rule "work_1" was treated as more urgent than "fpu_sqr_s2_stage". Conflicts:
+    "work_1" cannot fire before "fpu_sqr_s2_stage":
+      calls to rg_busy_1.write vs. rg_busy_1.read
+    "fpu_sqr_s2_stage" cannot fire before "work_1":
+      calls to
+	rg_res.write vs. rg_res.read
+	rg_s.write vs. rg_s.read
+	rg_b.write vs. rg_b.read
+	rg_r_1.write vs. rg_r_1.read
+	rg_busy_1.write vs. rg_busy_1.read
+	rg_index_1.write vs. rg_index_1.read
+Verilog file created: RTL_from_bsc/mkFPU.v
+Elaborated module file created: build_dir/mkFPU.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/CPU/FBox_Core.bsv
+code generation for mkFBox_Core starts
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/FBox_Core.bsv", line 134, column 8: (G0036)
+  Rule "req" will appear to fire before "rl_reset_begin" when both fire in the
+  same clock cycle, affecting:
+    calls to
+      stateR.write vs. stateR.write
+      requestR.write vs. requestR.write
+      resultR.write vs. resultR.write
+Verilog file created: RTL_from_bsc/mkFBox_Core.v
+Elaborated module file created: build_dir/mkFBox_Core.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/CPU/FBox_Top.bsv
+code generation for mkFBox_Top starts
+Verilog file created: RTL_from_bsc/mkFBox_Top.v
+Elaborated module file created: build_dir/mkFBox_Top.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/CPU/CPU_Stage2.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Fifos.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/MsgFifo.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/CacheUtils.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/coherence/src/CCTypes.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/LLCache_Aux.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/L1_IFC_Adapter.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/LLC_AXI4_Adapter_2.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/coherence/src/CrossBar.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/coherence/src/RWBramCore.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/coherence/src/CCPipe.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/coherence/src/RandomReplace.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/coherence/src/LLPipe.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/coherence/src/MshrDeadlockChecker.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/coherence/src/LLCRqMshr.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/LLCRqMshrSecureModel.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/LatencyTimer.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/coherence/src/LLBank.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/LLCache.bsv
+code generation for mkLastLvCRqMshr starts
+Warning: "Prelude.bs", line 1329, column 9: (G0024)
+  The function unfolding steps interval has been exceeded when unfolding
+  `Prelude.Ord~Prelude.Integer'. The current number of steps is 100000. Next
+  warning at 200000 steps. Elaboration terminates at 1000000 steps.
+  During elaboration of `rl' at
+  "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv",
+  line 56, column 11.
+  During elaboration of `_element' at "List.bs", line 723, column 4.
+  During elaboration of `reqVec' at
+  "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/coherence/src/LLCRqMshr.bsv",
+  line 224, column 36.
+  During elaboration of `m' at
+  "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/LLCache.bsv",
+  line 139, column 9.
+  During elaboration of `mkLastLvCRqMshr' at
+  "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/LLCache.bsv",
+  line 133, column 8.
+Warning: "Prelude.bs", line 584, column 27: (G0024)
+  The function unfolding steps interval has been exceeded when unfolding
+  `Prelude.PrimIndex~Prelude.Integer~32'. The current number of steps is
+  200000. Next warning at 300000 steps. Elaboration terminates at 1000000
+  steps.
+  During elaboration of the interface method `transfer_getRq' at
+  "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/LLCache.bsv",
+  line 133, column 8.
+  During elaboration of `mkLastLvCRqMshr' at
+  "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/LLCache.bsv",
+  line 133, column 8.
+Warning: "Prelude.bs", line 421, column 6: (G0024)
+  The function unfolding steps interval has been exceeded when unfolding
+  `Prelude.Ord~Prelude.Integer'. The current number of steps is 300000. Next
+  warning at 400000 steps. Elaboration terminates at 1000000 steps.
+  During elaboration of the interface method `mRsDeq_setData' at
+  "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/LLCache.bsv",
+  line 133, column 8.
+  During elaboration of `mkLastLvCRqMshr' at
+  "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/LLCache.bsv",
+  line 133, column 8.
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/LLCache.bsv", line 133, column 8: (G0022)
+  According to the generated schedule, method `stuck_get' is never ready.
+Verilog file created: RTL_from_bsc/mkLastLvCRqMshr.v
+Elaborated module file created: build_dir/mkLastLvCRqMshr.ba
+code generation for mkLLPipeline starts
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_0_rdReqQ_enqP_canon' has no actions. Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_0_rdReqQ_deqP_canon' has no actions. Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_1_rdReqQ_enqP_canon' has no actions. Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_1_rdReqQ_deqP_canon' has no actions. Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_2_rdReqQ_enqP_canon' has no actions. Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_2_rdReqQ_deqP_canon' has no actions. Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_3_rdReqQ_enqP_canon' has no actions. Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_3_rdReqQ_deqP_canon' has no actions. Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_4_rdReqQ_enqP_canon' has no actions. Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_4_rdReqQ_deqP_canon' has no actions. Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_5_rdReqQ_enqP_canon' has no actions. Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_5_rdReqQ_deqP_canon' has no actions. Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_6_rdReqQ_enqP_canon' has no actions. Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_6_rdReqQ_deqP_canon' has no actions. Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_7_rdReqQ_enqP_canon' has no actions. Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_7_rdReqQ_deqP_canon' has no actions. Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_8_rdReqQ_enqP_canon' has no actions. Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_8_rdReqQ_deqP_canon' has no actions. Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_9_rdReqQ_enqP_canon' has no actions. Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_9_rdReqQ_deqP_canon' has no actions. Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_10_rdReqQ_enqP_canon' has no actions.
+  Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_10_rdReqQ_deqP_canon' has no actions.
+  Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_11_rdReqQ_enqP_canon' has no actions.
+  Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_11_rdReqQ_deqP_canon' has no actions.
+  Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_12_rdReqQ_enqP_canon' has no actions.
+  Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_12_rdReqQ_deqP_canon' has no actions.
+  Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_13_rdReqQ_enqP_canon' has no actions.
+  Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_13_rdReqQ_deqP_canon' has no actions.
+  Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_14_rdReqQ_enqP_canon' has no actions.
+  Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_14_rdReqQ_deqP_canon' has no actions.
+  Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_15_rdReqQ_enqP_canon' has no actions.
+  Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_infoRam_15_rdReqQ_deqP_canon' has no actions.
+  Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_repRam_rdReqQ_enqP_canon' has no actions. Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_repRam_rdReqQ_deqP_canon' has no actions. Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_dataRam_rdReqQ_enqP_canon' has no actions. Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/procs/lib/Ehr.bsv", line 61, column 8: (G0023)
+  The body of rule `m_dataRam_rdReqQ_deqP_canon' has no actions. Removing...
+Verilog file created: RTL_from_bsc/mkLLPipeline.v
+Elaborated module file created: build_dir/mkLLPipeline.ba
+code generation for mkLLCache starts
+Warning: "Prelude.bs", line 1262, column 0: (G0024)
+  The function unfolding steps interval has been exceeded when unfolding
+  `areStaticBits'. The current number of steps is 100000. Next warning at
+  200000 steps. Elaboration terminates at 1000000 steps.
+  During elaboration of the body of rule `sendRsStToDma' at
+  "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/coherence/src/LLBank.bsv",
+  line 661, column 10.
+  During elaboration of `cache' at
+  "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/LLCache.bsv",
+  line 301, column 19.
+  During elaboration of `mkLLCache' at
+  "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/LLCache.bsv",
+  line 288, column 8.
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/LLCache.bsv", line 288, column 8: (G0010)
+  Rule "cache_sendRsLdToDma" was treated as more urgent than
+  "cache_sendRsStToDma". Conflicts:
+    "cache_sendRsLdToDma" cannot fire before "cache_sendRsStToDma":
+      calls to
+	cache_cRqMshr.sendRsToDmaC_releaseEntry vs. cache_cRqMshr.sendRsToDmaC_releaseEntry
+    "cache_sendRsStToDma" cannot fire before "cache_sendRsLdToDma":
+      calls to
+	cache_cRqMshr.sendRsToDmaC_releaseEntry vs. cache_cRqMshr.sendRsToDmaC_releaseEntry
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/LLCache.bsv", line 288, column 8: (G0010)
+  Rule "cache_sendRsStToDma" was treated as more urgent than
+  "cache_sendRsToC". Conflicts:
+    "cache_sendRsStToDma" cannot fire before "cache_sendRsToC":
+      calls to
+	cache_cRqMshr.sendRsToDmaC_releaseEntry vs. cache_cRqMshr.sendRsToDmaC_releaseEntry
+    "cache_sendRsToC" cannot fire before "cache_sendRsStToDma":
+      calls to
+	cache_cRqMshr.sendRsToDmaC_releaseEntry vs. cache_cRqMshr.sendRsToDmaC_releaseEntry
+Verilog file created: RTL_from_bsc/mkLLCache.v
+Elaborated module file created: build_dir/mkLLCache.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache/L1LLConnect.bsv
+compiling /home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/Near_Mem_Caches.bsv
+code generation for mkNear_Mem starts
+Compilation message: "/home/nikhil/git_clones/Flute/src_Core/Near_Mem_VM_WB_L1_L2/Near_Mem_Caches.bsv", line 153, column 14: INFO: Near_Mem_Caches: coherent device access with DMA_Cache
+Warning: "GetPut.bs", line 333, column 9: (G0023)
+  The condition for rule `mkConnectionGetPut' is always false. Removing...
+Verilog file created: RTL_from_bsc/mkNear_Mem.v
+Elaborated module file created: build_dir/mkNear_Mem.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv
+code generation for mkCPU starts
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU_Fetch_C.bsv", line 158, column 9: (G0023)
+  The condition for rule `imem_rl_debug_conds' is always false. Removing...
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0010)
+  Rule "rl_WFI_resume" was treated as more urgent than
+  "rl_reset_from_WFI". Conflicts:
+    "rl_WFI_resume" cannot fire before "rl_reset_from_WFI":
+      calls to rg_state.write vs. rg_state.read
+    "rl_reset_from_WFI" cannot fire before "rl_WFI_resume":
+      calls to rg_state.write vs. rg_state.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0010)
+  Rule "rl_stage2_nonpipe" was treated as more urgent than
+  "rl_reset_from_Debug_Module". Conflicts:
+    "rl_stage2_nonpipe" cannot fire before "rl_reset_from_Debug_Module":
+      calls to rg_state.write vs. rg_state.read
+    "rl_reset_from_Debug_Module" cannot fire before "rl_stage2_nonpipe":
+      calls to rg_state.write vs. rg_state.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0010)
+  Rule "rl_stage1_trap" was treated as more urgent than
+  "rl_reset_from_Debug_Module". Conflicts:
+    "rl_stage1_trap" cannot fire before "rl_reset_from_Debug_Module":
+      calls to rg_state.write vs. rg_state.read
+    "rl_reset_from_Debug_Module" cannot fire before "rl_stage1_trap":
+      calls to rg_state.write vs. rg_state.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0010)
+  Rule "rl_trap" was treated as more urgent than
+  "rl_reset_from_Debug_Module". Conflicts:
+    "rl_trap" cannot fire before "rl_reset_from_Debug_Module":
+      calls to rg_state.write vs. rg_state.read
+    "rl_reset_from_Debug_Module" cannot fire before "rl_trap":
+      calls to rg_state.write vs. rg_state.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0010)
+  Rule "rl_stage1_CSRR_W" was treated as more urgent than
+  "rl_reset_from_Debug_Module". Conflicts:
+    "rl_stage1_CSRR_W" cannot fire before "rl_reset_from_Debug_Module":
+      calls to rg_state.write vs. rg_state.read
+    "rl_reset_from_Debug_Module" cannot fire before "rl_stage1_CSRR_W":
+      calls to rg_state.write vs. rg_state.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0010)
+  Rule "rl_stage1_CSRR_W_2" was treated as more urgent than
+  "rl_reset_from_Debug_Module". Conflicts:
+    "rl_stage1_CSRR_W_2" cannot fire before "rl_reset_from_Debug_Module":
+      calls to rg_state.write vs. rg_state.read
+    "rl_reset_from_Debug_Module" cannot fire before "rl_stage1_CSRR_W_2":
+      calls to rg_state.write vs. rg_state.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0010)
+  Rule "rl_stage1_CSRR_S_or_C" was treated as more urgent than
+  "rl_reset_from_Debug_Module". Conflicts:
+    "rl_stage1_CSRR_S_or_C" cannot fire before "rl_reset_from_Debug_Module":
+      calls to rg_state.write vs. rg_state.read
+    "rl_reset_from_Debug_Module" cannot fire before "rl_stage1_CSRR_S_or_C":
+      calls to rg_state.write vs. rg_state.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0010)
+  Rule "rl_stage1_CSRR_S_or_C_2" was treated as more urgent than
+  "rl_reset_from_Debug_Module". Conflicts:
+    "rl_stage1_CSRR_S_or_C_2" cannot fire before "rl_reset_from_Debug_Module":
+      calls to rg_state.write vs. rg_state.read
+    "rl_reset_from_Debug_Module" cannot fire before "rl_stage1_CSRR_S_or_C_2":
+      calls to rg_state.write vs. rg_state.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0010)
+  Rule "rl_stage1_restart_after_csrrx" was treated as more urgent than
+  "rl_reset_from_Debug_Module". Conflicts:
+    "rl_stage1_restart_after_csrrx" cannot fire before "rl_reset_from_Debug_Module":
+      calls to rg_state.write vs. rg_state.read
+    "rl_reset_from_Debug_Module" cannot fire before "rl_stage1_restart_after_csrrx":
+      calls to rg_state.write vs. rg_state.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0010)
+  Rule "rl_stage1_xRET" was treated as more urgent than
+  "rl_reset_from_Debug_Module". Conflicts:
+    "rl_stage1_xRET" cannot fire before "rl_reset_from_Debug_Module":
+      calls to rg_state.write vs. rg_state.read
+    "rl_reset_from_Debug_Module" cannot fire before "rl_stage1_xRET":
+      calls to rg_state.write vs. rg_state.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0010)
+  Rule "rl_stage1_FENCE_I" was treated as more urgent than
+  "rl_reset_from_Debug_Module". Conflicts:
+    "rl_stage1_FENCE_I" cannot fire before "rl_reset_from_Debug_Module":
+      calls to rg_state.write vs. rg_state.read
+    "rl_reset_from_Debug_Module" cannot fire before "rl_stage1_FENCE_I":
+      calls to rg_state.write vs. rg_state.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0010)
+  Rule "rl_finish_FENCE_I" was treated as more urgent than
+  "rl_reset_from_Debug_Module". Conflicts:
+    "rl_finish_FENCE_I" cannot fire before "rl_reset_from_Debug_Module":
+      calls to rg_state.write vs. rg_state.read
+    "rl_reset_from_Debug_Module" cannot fire before "rl_finish_FENCE_I":
+      calls to rg_state.write vs. rg_state.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0010)
+  Rule "rl_stage1_FENCE" was treated as more urgent than
+  "rl_reset_from_Debug_Module". Conflicts:
+    "rl_stage1_FENCE" cannot fire before "rl_reset_from_Debug_Module":
+      calls to rg_state.write vs. rg_state.read
+    "rl_reset_from_Debug_Module" cannot fire before "rl_stage1_FENCE":
+      calls to rg_state.write vs. rg_state.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0010)
+  Rule "rl_finish_FENCE" was treated as more urgent than
+  "rl_reset_from_Debug_Module". Conflicts:
+    "rl_finish_FENCE" cannot fire before "rl_reset_from_Debug_Module":
+      calls to rg_state.write vs. rg_state.read
+    "rl_reset_from_Debug_Module" cannot fire before "rl_finish_FENCE":
+      calls to rg_state.write vs. rg_state.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0010)
+  Rule "rl_stage1_SFENCE_VMA" was treated as more urgent than
+  "rl_reset_from_Debug_Module". Conflicts:
+    "rl_stage1_SFENCE_VMA" cannot fire before "rl_reset_from_Debug_Module":
+      calls to rg_state.write vs. rg_state.read
+    "rl_reset_from_Debug_Module" cannot fire before "rl_stage1_SFENCE_VMA":
+      calls to rg_state.write vs. rg_state.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0010)
+  Rule "rl_finish_SFENCE_VMA" was treated as more urgent than
+  "rl_reset_from_Debug_Module". Conflicts:
+    "rl_finish_SFENCE_VMA" cannot fire before "rl_reset_from_Debug_Module":
+      calls to rg_state.write vs. rg_state.read
+    "rl_reset_from_Debug_Module" cannot fire before "rl_finish_SFENCE_VMA":
+      calls to rg_state.write vs. rg_state.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0010)
+  Rule "rl_stage1_WFI" was treated as more urgent than
+  "rl_reset_from_Debug_Module". Conflicts:
+    "rl_stage1_WFI" cannot fire before "rl_reset_from_Debug_Module":
+      calls to rg_state.write vs. rg_state.read
+    "rl_reset_from_Debug_Module" cannot fire before "rl_stage1_WFI":
+      calls to rg_state.write vs. rg_state.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0010)
+  Rule "rl_reset_from_WFI" was treated as more urgent than
+  "rl_reset_from_Debug_Module". Conflicts:
+    "rl_reset_from_WFI" cannot fire before "rl_reset_from_Debug_Module":
+      calls to rg_state.write vs. rg_state.read
+    "rl_reset_from_Debug_Module" cannot fire before "rl_reset_from_WFI":
+      calls to rg_state.write vs. rg_state.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0010)
+  Rule "rl_trap_fetch" was treated as more urgent than
+  "rl_reset_from_Debug_Module". Conflicts:
+    "rl_trap_fetch" cannot fire before "rl_reset_from_Debug_Module":
+      calls to rg_state.write vs. rg_state.read
+    "rl_reset_from_Debug_Module" cannot fire before "rl_trap_fetch":
+      calls to rg_state.write vs. rg_state.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0010)
+  Rule "rl_trap_BREAK_to_Debug_Mode" was treated as more urgent than
+  "rl_reset_from_Debug_Module". Conflicts:
+    "rl_trap_BREAK_to_Debug_Mode" cannot fire before "rl_reset_from_Debug_Module":
+      calls to rg_state.write vs. rg_state.read
+    "rl_reset_from_Debug_Module" cannot fire before "rl_trap_BREAK_to_Debug_Mode":
+      calls to rg_state.write vs. rg_state.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0010)
+  Rule "rl_BREAK_cache_flush_finish" was treated as more urgent than
+  "rl_reset_from_Debug_Module". Conflicts:
+    "rl_BREAK_cache_flush_finish" cannot fire before "rl_reset_from_Debug_Module":
+      calls to rg_state.write vs. rg_state.read
+    "rl_reset_from_Debug_Module" cannot fire before "rl_BREAK_cache_flush_finish":
+      calls to rg_state.write vs. rg_state.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0010)
+  Rule "rl_stage1_interrupt" was treated as more urgent than
+  "rl_reset_from_Debug_Module". Conflicts:
+    "rl_stage1_interrupt" cannot fire before "rl_reset_from_Debug_Module":
+      calls to rg_state.write vs. rg_state.read
+    "rl_reset_from_Debug_Module" cannot fire before "rl_stage1_interrupt":
+      calls to rg_state.write vs. rg_state.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0010)
+  Rule "rl_reset_from_Debug_Module" was treated as more urgent than
+  "rl_stage1_stop". Conflicts:
+    "rl_reset_from_Debug_Module" cannot fire before "rl_stage1_stop":
+      calls to rg_state.write vs. rg_state.read
+    "rl_stage1_stop" cannot fire before "rl_reset_from_Debug_Module":
+      calls to rg_state.write vs. rg_state.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0010)
+  Rule "rl_reset_from_Debug_Module" was treated as more urgent than
+  "rl_debug_run". Conflicts:
+    "rl_reset_from_Debug_Module" cannot fire before "rl_debug_run":
+      calls to rg_state.write vs. rg_state.read
+    "rl_debug_run" cannot fire before "rl_reset_from_Debug_Module":
+      calls to rg_state.write vs. rg_state.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0010)
+  Rule "rl_trap_BREAK_to_Debug_Mode" was treated as more urgent than
+  "rl_debug_run_redundant". Conflicts:
+    "rl_trap_BREAK_to_Debug_Mode" cannot fire before "rl_debug_run_redundant":
+      calls to
+	rg_state.write vs. rg_state.read
+	f_run_halt_rsps.enq vs. f_run_halt_rsps.enq
+    "rl_debug_run_redundant" cannot fire before "rl_trap_BREAK_to_Debug_Mode":
+      calls to f_run_halt_rsps.enq vs. f_run_halt_rsps.enq
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0010)
+  Rule "rl_stage1_stop" was treated as more urgent than
+  "rl_debug_halt". Conflicts:
+    "rl_stage1_stop" cannot fire before "rl_debug_halt":
+      calls to rg_state.write vs. rg_state.read
+    "rl_debug_halt" cannot fire before "rl_stage1_stop":
+      calls to rg_stop_req.write vs. rg_stop_req.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0010)
+  Rule "rl_BREAK_cache_flush_finish" was treated as more urgent than
+  "rl_debug_halt_redundant". Conflicts:
+    "rl_BREAK_cache_flush_finish" cannot fire before "rl_debug_halt_redundant":
+      calls to
+	rg_state.write vs. rg_state.read
+	f_run_halt_rsps.enq vs. f_run_halt_rsps.enq
+    "rl_debug_halt_redundant" cannot fire before "rl_BREAK_cache_flush_finish":
+      calls to f_run_halt_rsps.enq vs. f_run_halt_rsps.enq
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0010)
+  Rule "rl_debug_run" was treated as more urgent than
+  "rl_debug_write_csr". Conflicts:
+    "rl_debug_run" cannot fire before "rl_debug_write_csr":
+      calls to rg_state.write vs. rg_state.read
+    "rl_debug_write_csr" cannot fire before "rl_debug_run":
+      calls to
+	csr_regfile.mav_csr_write vs. csr_regfile.read_mstatus
+	csr_regfile.mav_csr_write vs. csr_regfile.read_sstatus
+	csr_regfile.mav_csr_write vs. csr_regfile.read_satp
+	csr_regfile.mav_csr_write vs. csr_regfile.read_dpc
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0010)
+  Rule "rl_reset_from_Debug_Module" was treated as more urgent than
+  "rl_reset_complete". Conflicts:
+    "rl_reset_from_Debug_Module" cannot fire before "rl_reset_complete":
+      calls to rg_state.write vs. rg_state.read
+    "rl_reset_complete" cannot fire before "rl_reset_from_Debug_Module":
+      calls to rg_state.write vs. rg_state.read
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0036)
+  Rule "rl_reset_complete" will appear to fire before "stageF_rl_reset" when
+  both fire in the same clock cycle, affecting:
+    calls to
+      stageF_rg_full.write vs. stageF_rg_full.write
+      stageF_rg_epoch.write vs. stageF_rg_epoch.write
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0036)
+  Rule "rl_debug_run" will appear to fire before "stageF_rl_reset" when both
+  fire in the same clock cycle, affecting:
+    calls to
+      stageF_rg_full.write vs. stageF_rg_full.write
+      stageF_rg_epoch.write vs. stageF_rg_epoch.write
+Warning: "/home/nikhil/git_clones/Flute/src_Core/CPU/CPU.bsv", line 124, column 8: (G0036)
+  Rule "hart0_put_other_req_put" will appear to fire before "set_verbosity"
+  when both fire in the same clock cycle, affecting:
+    calls to cfg_verbosity.write vs. cfg_verbosity.write
+Verilog file created: RTL_from_bsc/mkCPU.v
+Elaborated module file created: build_dir/mkCPU.ba
+compiling /home/nikhil/git_clones/Flute/src_Core/Core_v2/Core.bsv
+code generation for mkCore starts
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Core_v2/Core.bsv", line 79, column 8: (G0010)
+  Rule "rl_cpu_hart0_reset_from_soc_start" was treated as more urgent than
+  "rl_cpu_hart0_reset_from_dm_start". Conflicts:
+    "rl_cpu_hart0_reset_from_soc_start" cannot fire before "rl_cpu_hart0_reset_from_dm_start":
+      calls to
+	cpu.hart0_server_reset_request_put vs. cpu.hart0_server_reset_request_put
+	fabric_1x3.reset vs. fabric_1x3.reset
+	near_mem_io.server_reset_request_put vs. near_mem_io.server_reset_request_put
+	plic.server_reset_request_put vs. plic.server_reset_request_put
+	f_reset_requestor.enq vs. f_reset_requestor.enq
+    "rl_cpu_hart0_reset_from_dm_start" cannot fire before "rl_cpu_hart0_reset_from_soc_start":
+      calls to
+	cpu.hart0_server_reset_request_put vs. cpu.hart0_server_reset_request_put
+	fabric_1x3.reset vs. fabric_1x3.reset
+	near_mem_io.server_reset_request_put vs. near_mem_io.server_reset_request_put
+	plic.server_reset_request_put vs. plic.server_reset_request_put
+	f_reset_requestor.enq vs. f_reset_requestor.enq
+Warning: "/home/nikhil/git_clones/Flute/src_Core/Core_v2/Core.bsv", line 90, column 13: (G0015)
+  Instance `cpu' requires the following methods to be always enabled, but the
+  conditions for executing the methods could not be proven to be always True:
+    software_interrupt_req, timer_interrupt_req
+  The behavior of the design will likely be incorrect if the methods are not
+  enabled on every clock cycle.
+Verilog file created: RTL_from_bsc/mkCore.v
+Elaborated module file created: build_dir/mkCore.ba
+compiling /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW/AWS_SoC_Top.bsv
+code generation for mkAXI4_Deburster_B starts
+Verilog file created: RTL_from_bsc/mkAXI4_Deburster_B.v
+Elaborated module file created: build_dir/mkAXI4_Deburster_B.ba
+code generation for mkAXI4_Deburster_A starts
+Verilog file created: RTL_from_bsc/mkAXI4_Deburster_A.v
+Elaborated module file created: build_dir/mkAXI4_Deburster_A.ba
+code generation for mkAWS_SoC_Top starts
+Warning: "/home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW/AWS_SoC_Top.bsv", line 160, column 8: (G0010)
+  Rule "rl_handle_external_req_read_response" was treated as more urgent than
+  "rl_handle_external_req_write". Conflicts:
+    "rl_handle_external_req_read_response" cannot fire before "rl_handle_external_req_write":
+      calls to core.dm_dmi_read_data vs. core.dm_dmi_write
+    "rl_handle_external_req_write" cannot fire before "rl_handle_external_req_read_response":
+      calls to core.dm_dmi_write vs. core.dm_dmi_read_data
+Warning: "/home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW/AWS_SoC_Top.bsv", line 160, column 8: (G0010)
+  Rule "rl_handle_external_req_read_response" was treated as more urgent than
+  "rl_handle_external_req_err". Conflicts:
+    "rl_handle_external_req_read_response" cannot fire before "rl_handle_external_req_err":
+      calls to f_external_control_rsps.enq vs. f_external_control_rsps.enq
+    "rl_handle_external_req_err" cannot fire before "rl_handle_external_req_read_response":
+      calls to f_external_control_rsps.enq vs. f_external_control_rsps.enq
+Warning: "/home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW/AWS_SoC_Top.bsv", line 171, column 46: (G0015)
+  Instance `core' requires the following methods to be always enabled, but the
+  conditions for executing the methods could not be proven to be always True:
+    core_external_interrupt_sources_1_m_interrupt_req,
+    core_external_interrupt_sources_2_m_interrupt_req,
+    core_external_interrupt_sources_3_m_interrupt_req,
+    core_external_interrupt_sources_4_m_interrupt_req
+  The behavior of the design will likely be incorrect if the methods are not
+  enabled on every clock cycle.
+Verilog file created: RTL_from_bsc/mkAWS_SoC_Top.v
+Elaborated module file created: build_dir/mkAWS_SoC_Top.ba
+compiling /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW/AWSteria_HW.bsv
+code generation for mkAWSteria_HW starts
+Warning: "/home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW/AWSteria_HW.bsv", line 90, column 8: (G0010)
+  Rule "rl_UART_to_console" was treated as more urgent than
+  "rl_UART_timeout". Conflicts:
+    "rl_UART_to_console" cannot fire before "rl_UART_timeout":
+      calls to ocl_adapter.v_to_host_1_enq vs. ocl_adapter.v_to_host_1_enq
+    "rl_UART_timeout" cannot fire before "rl_UART_to_console":
+      calls to ocl_adapter.v_to_host_1_enq vs. ocl_adapter.v_to_host_1_enq
+Verilog file created: RTL_from_bsc/mkAWSteria_HW.v
+Elaborated module file created: build_dir/mkAWSteria_HW.ba
+All packages are up to date.
+Warning: Unknown position: (S0080)
+  15 warnings were suppressed.
+INFO: RTL generation finished: RTL_from_bsc/ is ready for FPGA build.
+
+>================================================================
+$ make for_garnet_reclocked 
+INFO: AWSTERIA_REPO is /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio
+INFO: AWSTERIA_INFRA_REPO is /home/nikhil/git_clones/AWSteria_Infra
+INFO: FLUTE_REPO is /home/nikhil/git_clones/Flute
+INFO: BLUESPEC_HOME is /home/nikhil/git_clones/bsc/inst
+INFO: Creating and populating garnet example dir (reclocked)
+cp -p -R /home/nikhil/git_clones/AWSteria_Infra/Platform_VCU118/HW/example_AWSteria_HW_reclocked  .
+cp -p    /home/nikhil/git_clones/AWSteria_Infra/Platform_VCU118/HW/synchronizers.v  example_AWSteria_HW_reclocked/src/
+cp -p    RTL_from_bsc/*.v  example_AWSteria_HW_reclocked/src/
+make GARNET_RTL=example_AWSteria_HW_reclocked/src/  bsc_RTL_for_garnet
+make[1]: Entering directory '/home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW/build_Flute_VCU118'
+INFO: AWSTERIA_REPO is /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio
+INFO: AWSTERIA_INFRA_REPO is /home/nikhil/git_clones/AWSteria_Infra
+INFO: FLUTE_REPO is /home/nikhil/git_clones/Flute
+INFO: BLUESPEC_HOME is /home/nikhil/git_clones/bsc/inst
+Copying RTL from BLUESPEC_HOME = /home/nikhil/git_clones/bsc/inst
+cp -p  /home/nikhil/git_clones/bsc/inst/lib/Verilog/BRAM1BELoad.v  example_AWSteria_HW_reclocked/src/
+cp -p  /home/nikhil/git_clones/bsc/inst/lib/Verilog/BRAM1BE.v      example_AWSteria_HW_reclocked/src/
+cp -p  /home/nikhil/git_clones/bsc/inst/lib/Verilog/BRAM2BELoad.v  example_AWSteria_HW_reclocked/src/
+cp -p  /home/nikhil/git_clones/bsc/inst/lib/Verilog/BRAM2BE.v      example_AWSteria_HW_reclocked/src/
+cp -p  /home/nikhil/git_clones/bsc/inst/lib/Verilog/BRAM2.v        example_AWSteria_HW_reclocked/src/
+cp -p  /home/nikhil/git_clones/bsc/inst/lib/Verilog/FIFO10.v       example_AWSteria_HW_reclocked/src/
+cp -p  /home/nikhil/git_clones/bsc/inst/lib/Verilog/FIFO1.v        example_AWSteria_HW_reclocked/src/
+cp -p  /home/nikhil/git_clones/bsc/inst/lib/Verilog/FIFO20.v       example_AWSteria_HW_reclocked/src/
+cp -p  /home/nikhil/git_clones/bsc/inst/lib/Verilog/FIFO2.v        example_AWSteria_HW_reclocked/src/
+cp -p  /home/nikhil/git_clones/bsc/inst/lib/Verilog/FIFOL1.v       example_AWSteria_HW_reclocked/src/
+cp -p  /home/nikhil/git_clones/bsc/inst/lib/Verilog/RegFile.v      example_AWSteria_HW_reclocked/src/
+cp -p  /home/nikhil/git_clones/bsc/inst/lib/Verilog/RevertReg.v    example_AWSteria_HW_reclocked/src/
+cp -p  /home/nikhil/git_clones/bsc/inst/lib/Verilog/SizedFIFO0.v   example_AWSteria_HW_reclocked/src/
+cp -p  /home/nikhil/git_clones/bsc/inst/lib/Verilog/SizedFIFO.v    example_AWSteria_HW_reclocked/src/
+make[1]: Leaving directory '/home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW/build_Flute_VCU118'
+INFO: garnet example (reclocked) dir is ready: example_AWSteria_HW_reclocked/

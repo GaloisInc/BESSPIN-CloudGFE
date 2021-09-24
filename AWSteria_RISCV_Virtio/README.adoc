@@ -1,7 +1,7 @@
 = AWSteria RISC-V Virtio
 Rishiyur S. Nikhil, Bluespec, Inc. (c) 2020-2021
 :revnumber: v1.0
-:revdate: 2021-09-09
+:revdate: 2021-09-24
 :sectnums:
 :toc:
 :toclevels: 5
@@ -227,30 +227,29 @@ of a build, for reference.  Each host-side build directory also
 contains a transcript of runs on the `Tests/` examples.
 
 // SECTION ================================================================
-== Status and Transcripts of Builds and Runs
+== Status and Examples
 
 Code and build-scripts are ready for all the
 following combinations (committed, pushed):
 
 ****
-Flute or Toooba +
-Bluesim or Verilator sim or AWS F1 or VCU118
+*CPUs:* Flute, Toooba +
+*Platforms:* Bluesim, Verilator simulation, AWS F1 (FPGA), VCU118 (FPGA)
 ****
 
-We are collecting transcripts of builds and runs for all combinations.
+We are collecting transcripts of example builds and runs for all combinations.
 
-Run-transcripts for the small examples in `Tests/`
+We are recording run-transcripts for the following *small* examples in `Tests/`
+for both simulation and FPGA:
 
 * A few ISA tests
 * Hello World!
 * FreeRTOS boot
 
-are being recorded for both simulation and FPGA.
-
-Run-transcripts for FreeBSD-boot are only being recorded on FPGA.  In
-simulation it takes several days (1/2 billion instructions for Flute
-version) and even longer for Toooba version.  These transcripts
-demonstrate:
+We are recording run-transcripts for a *large* example, FreeBSD boot,
+only on FPGA.  In simulation it takes several days (1/2 billion
+instructions for Flute version) and even longer for Toooba version.
+The transcripts (on FPGA) demonstrate:
 
 * BBL and FreeBSD boot to login prompt
 * Commands at the shell prompt
@@ -280,7 +279,7 @@ GDB demonstrations show:
   ** Toooba Verilator make: link:HW/build_Toooba_Verilator/transcript_for_make.txt[transcript]
 
 * Host-side build:
-  ** Make (same for Flute/Toooba/Bluesim/Verilator sim): link:Host/build_sim/transcript_for_make[transcript]
+  ** Make (same for all FPGA-side simulation builds): link:Host/build_sim/transcript_for_make[transcript]
 
 * Run (Host-side + FPGA-side):
   ** FPGA-side Flute Bluesim run:  link:HW/build_Flute_Bluesim/transcript_for_sim.txt[transcript]

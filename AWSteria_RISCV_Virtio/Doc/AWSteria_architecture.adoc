@@ -1,4 +1,4 @@
-= AWSteria architecture: Host-side and FPGA-side (HW-side)
+= UNDER CONSTRUCTION: AWSteria architecture: Host-side and FPGA-side (HW-side)
 Rishiyur S. Nikhil, Bluespec, Inc. (c) 2020
 :revnumber: v0.1
 :revdate: 2020-09-02

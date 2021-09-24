@@ -427,7 +427,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Rishiyur S. Nikhil, Bluespec, Inc. (c) 2020-2021</span><br>
 <span id="revnumber">version v1.0,</span>
-<span id="revdate">2021-09-09</span>
+<span id="revdate">2021-09-24</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Contents</div>
@@ -440,7 +440,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_repo_structure">3. Repo structure</a></li>
 <li><a href="#_how_to_build_and_run">4. How to Build and Run</a></li>
-<li><a href="#_status_and_transcripts_of_builds_and_runs">5. Status and Transcripts of Builds and Runs</a>
+<li><a href="#_status_and_examples">5. Status and Examples</a>
 <ul class="sectlevel2">
 <li><a href="#_demonstrations_and_transcripts">5.1. Demonstrations and Transcripts</a>
 <ul class="sectlevel3">
@@ -768,7 +768,7 @@ contains a transcript of runs on the <code>Tests/</code> examples.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_status_and_transcripts_of_builds_and_runs">5. Status and Transcripts of Builds and Runs</h2>
+<h2 id="_status_and_examples">5. Status and Examples</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Code and build-scripts are ready for all the
@@ -777,16 +777,17 @@ following combinations (committed, pushed):</p>
 <div class="sidebarblock">
 <div class="content">
 <div class="paragraph">
-<p>Flute or Toooba<br>
-Bluesim or Verilator sim or AWS F1 or VCU118</p>
+<p><strong>CPUs:</strong> Flute, Toooba<br>
+<strong>Platforms:</strong> Bluesim, Verilator simulation, AWS F1 (FPGA), VCU118 (FPGA)</p>
 </div>
 </div>
 </div>
 <div class="paragraph">
-<p>We are collecting transcripts of builds and runs for all combinations.</p>
+<p>We are collecting transcripts of example builds and runs for all combinations.</p>
 </div>
 <div class="paragraph">
-<p>Run-transcripts for the small examples in <code>Tests/</code></p>
+<p>We are recording run-transcripts for the following <strong>small</strong> examples in <code>Tests/</code>
+for both simulation and FPGA:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -802,13 +803,10 @@ Bluesim or Verilator sim or AWS F1 or VCU118</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>are being recorded for both simulation and FPGA.</p>
-</div>
-<div class="paragraph">
-<p>Run-transcripts for FreeBSD-boot are only being recorded on FPGA.  In
-simulation it takes several days (1/2 billion instructions for Flute
-version) and even longer for Toooba version.  These transcripts
-demonstrate:</p>
+<p>We are recording run-transcripts for a <strong>large</strong> example, FreeBSD boot,
+only on FPGA.  In simulation it takes several days (1/2 billion
+instructions for Flute version) and even longer for Toooba version.
+The transcripts (on FPGA) demonstrate:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -878,7 +876,7 @@ running to breakpoint, single-stepping.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Make (same for Flute/Toooba/Bluesim/Verilator sim): <a href="Host/build_sim/transcript_for_make">transcript</a></p>
+<p>Make (same for all FPGA-side simulation builds): <a href="Host/build_sim/transcript_for_make">transcript</a></p>
 </li>
 </ul>
 </div>
@@ -1025,7 +1023,7 @@ running to breakpoint, single-stepping.</p>
 <div id="footer">
 <div id="footer-text">
 Version v1.0<br>
-Last updated 2021-09-14 22:28:51 EDT
+Last updated 2021-09-24 11:47:47 EDT
 </div>
 </div>
 </body>

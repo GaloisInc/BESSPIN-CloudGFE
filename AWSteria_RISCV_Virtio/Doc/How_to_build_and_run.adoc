@@ -1,7 +1,7 @@
 = How to build and run AWSteria_RISCV_Virtio
 Rishiyur S. Nikhil, Bluespec, Inc. (c) 2020-2021
 :revnumber: v0.8
-:revdate: 2021-09-08
+:revdate: 2021-09-24
 :sectnums:
 :toc:
 :toclevels: 5
@@ -14,8 +14,7 @@ Rishiyur S. Nikhil, Bluespec, Inc. (c) 2020-2021
 // SECTION ================================================================
 == Introduction
 
-This document describes how to build and run AWSteria_RISCV_Virtio,
-and provides example transcripts for builds with Flute and Toooba, for
+This document describes how to build and run AWSteria_RISCV_Virtio for
 the following platforms:
 
 *  Simulation (FPGA-side is Bluesim or Verilator sim).  Host- and FPGA-sides communicate over TCP/IP.

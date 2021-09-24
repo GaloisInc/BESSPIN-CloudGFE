@@ -24,6 +24,12 @@ else
   $(info  INFO: AWSTERIA_REPO is $(AWSTERIA_REPO))
 endif
 
+ifndef AWSTERIA_INFRA_REPO
+  $(error ERROR: please define AWSTERIA_INFRA_REPO, i.e., path to AWSteria_Infra repo)
+else
+  $(info  INFO: AWSTERIA_INFRA_REPO is $(AWSTERIA_INFRA_REPO))
+endif
+
 ifndef FLUTE_REPO
   $(error ERROR: please define FLUTE_REPO, i.e., path to Flute repo)
 else
@@ -63,7 +69,6 @@ BSC_COMPILATION_FLAGS += \
 	-D WATCH_TOHOST    \
 	-D MEM_512b    \
 	-D INCLUDE_PC_TRACE \
-	$(DEVICE_COHERENT_ACCESS) \
 	-D INCLUDE_GDB_CONTROL \
 #	-D INCLUDE_TANDEM_VERIF \
 
@@ -153,7 +158,7 @@ compile:
 .PHONY: for_garnet
 for_garnet:
 	@echo "INFO: Creating and populating garnet example dir (no reclocking)"
-	cp -p -R $(AWSTERIA_REPO)/Platform_VCU118/HW/example_AWSteria_HW  .
+	cp -p -R $(AWSTERIA_INFRA_REPO)/Platform_VCU118/HW/example_AWSteria_HW  .
 	cp -p    RTL_from_bsc/*.v  example_AWSteria_HW/src/
 	make GARNET_RTL=example_AWSteria_HW/src/  bsc_RTL_for_garnet
 	@echo "INFO: garnet example dir is ready: example_AWSteria_HW/"
@@ -161,8 +166,8 @@ for_garnet:
 .PHONY: for_garnet_reclocked
 for_garnet_reclocked:
 	@echo "INFO: Creating and populating garnet example dir (reclocked)"
-	cp -p -R $(AWSTERIA_REPO)/Platform_VCU118/HW/example_AWSteria_HW_reclocked  .
-	cp -p    $(AWSTERIA_REPO)/Platform_VCU118/HW/synchronizers.v  example_AWSteria_HW_reclocked/src/
+	cp -p -R $(AWSTERIA_INFRA_REPO)/Platform_VCU118/HW/example_AWSteria_HW_reclocked  .
+	cp -p    $(AWSTERIA_INFRA_REPO)/Platform_VCU118/HW/synchronizers.v  example_AWSteria_HW_reclocked/src/
 	cp -p    RTL_from_bsc/*.v  example_AWSteria_HW_reclocked/src/
 	make GARNET_RTL=example_AWSteria_HW_reclocked/src/  bsc_RTL_for_garnet
 	@echo "INFO: garnet example (reclocked) dir is ready: example_AWSteria_HW_reclocked/"
