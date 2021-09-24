@@ -14,7 +14,7 @@ help:
 #================================================================
 
 ifndef AWSTERIA_REPO
-  $(error ERROR: please define AWSTERIA_REPO (path to AWSteria_Infra repo))
+  $(error ERROR: please define AWSTERIA_REPO (path to AWSteria repo))
 else
   $(info  INFO: AWSTERIA_REPO = $(AWSTERIA_REPO))
 endif
@@ -31,7 +31,7 @@ else
   $(info  INFO: SDK_DIR = $(SDK_DIR))
 endif
 
-$(info INFO: Making executable for AWSteria RISC-V host side on AWSF1)
+$(info INFO: Making executable for AWSteria-RISCV-Virtio host side on AWSF1)
 
 # ================================================================
 # Source files

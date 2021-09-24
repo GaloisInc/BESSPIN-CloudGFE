@@ -2,6 +2,15 @@
 
 # Copyright (c) 2020-2021 Bluespec, Inc.  All Rights Reserved
 
+# ================================================================
+
+.PHONY: help
+help:
+	@echo "Usage:"
+	@echo "    make $(EXE)        create the host-side executable"
+	@echo "    make clean         delete temporary files/dirs but keep the executable"
+	@echo "    make full_clean    delete temporary files/dirs and delete the executable"
+
 #================================================================
 
 ifndef AWSTERIA_REPO
@@ -17,12 +26,6 @@ else
 endif
 
 $(info INFO: Making executable for AWSteria-RISCV-Virtio host side on VCU118)
-
-# ================================================================
-
-.PHONY: help
-help:
-	@echo "Usage: $$ make $(EXE)     makes host-side executable for RISCV+Virtio for VCU118"
 
 # ================================================================
 # Source files
@@ -97,26 +100,50 @@ CFLAGS += -DCONFIG_RISCV_MAX_XLEN=64 \
 # ----------------
 # AWSteria infra
 
+SRCS_H += $(AWSTERIA_INFRA_REPO)/Include_API/AWSteria_Host_lib.h
+
+SRCS_C += $(AWSTERIA_INFRA_REPO)/Platform_VCU118/Host/AWSteria_Host_lib.c
+
+# ----------------
+# App host side gdbstub
+
+GDBSTUB = $(SRC_DIR)/RISCV_gdbstub
+
 SRCS_H += \
-	$(AWSTERIA_INFRA_REPO)/Include_API/AWSteria_Host_lib.h
+	$(GDBSTUB)/gdbstub.h \
+	$(GDBSTUB)/gdbstub_be.h \
+	$(GDBSTUB)/gdbstub_fe.h \
+	$(GDBSTUB)/gdbstub_dmi.h \
+	$(GDBSTUB)/RVDM.h \
+	$(GDBSTUB)/Elf_read.h \
 
 SRCS_C += \
-	$(AWSTERIA_INFRA_REPO)/Platform_VCU118/Host/AWSteria_Host_lib.c
+	$(GDBSTUB)/gdbstub.c \
+	$(GDBSTUB)/gdbstub_be.c \
+	$(GDBSTUB)/gdbstub_fe.c \
+	$(GDBSTUB)/RVDM.c \
+	$(GDBSTUB)/Elf_read.c \
 
 # ================================================================
 # C compilation
 
-CFLAGS += -std=gnu11 -g -Wall -Werror \
-	-I $(SRC_DIR) \
-	-I $(TINYEMU) \
-	-I $(AWSTERIA_INFRA_REPO)/Include_API
+CFLAGS += -std=gnu11 -g -Wall -Werror
 
+CFLAGS += -D IN_AWSF1
+
+CFLAGS += -I $(AWSTERIA_INFRA_REPO)/Include_API
+CFLAGS += -I $(SRC_DIR)
+CFLAGS += -I $(TINYEMU)
+CFLAGS += -I $(GDBSTUB)
 
 CC     = gcc $(CFLAGS)
 
-LDLIBS = -lpthread
+LDLIBS = -lpthread -lpthread -lelf
 
-EXE    = exe_Host_side
+EXE    = exe_Host_VCU118
+
+# ================================================================
+# Top-level target: the executable
 
 $(EXE): $(SRCS_H) $(SRCS_C)
 	$(CC) -g  -o $(EXE) $(SRCS_C) $(LDLIBS)
