@@ -155,40 +155,33 @@ compile:
 # ================================================================
 # For VCU118: collect all RTL needed for garnet flow
 
+FOR_GARNET_DIR = garnet_AWSteria_Flute_Virtio_HW
+
 .PHONY: for_garnet
 for_garnet:
-	@echo "INFO: Creating and populating garnet example dir (no reclocking)"
-	cp -p -R $(AWSTERIA_INFRA_REPO)/Platform_VCU118/HW/example_AWSteria_HW  .
-	cp -p    RTL_from_bsc/*.v  example_AWSteria_HW/src/
-	make GARNET_RTL=example_AWSteria_HW/src/  bsc_RTL_for_garnet
-	@echo "INFO: garnet example dir is ready: example_AWSteria_HW/"
-
-.PHONY: for_garnet_reclocked
-for_garnet_reclocked:
-	@echo "INFO: Creating and populating garnet example dir (reclocked)"
-	cp -p -R $(AWSTERIA_INFRA_REPO)/Platform_VCU118/HW/example_AWSteria_HW_reclocked  .
-	cp -p    $(AWSTERIA_INFRA_REPO)/Platform_VCU118/HW/synchronizers.v  example_AWSteria_HW_reclocked/src/
-	cp -p    RTL_from_bsc/*.v  example_AWSteria_HW_reclocked/src/
-	make GARNET_RTL=example_AWSteria_HW_reclocked/src/  bsc_RTL_for_garnet
-	@echo "INFO: garnet example (reclocked) dir is ready: example_AWSteria_HW_reclocked/"
+	@echo "INFO: Creating and populating garnet example (reclocked) dir"
+	cp -p -R $(AWSTERIA_INFRA_REPO)/Platform_VCU118/HW/example_AWSteria_HW_reclocked  $(FOR_GARNET_DIR)
+	cp -p    RTL_from_bsc/*.v  $(FOR_GARNET_DIR)/src/
+	make  bsc_RTL_for_garnet
+	@echo "INFO: garnet example (reclocked) dir is ready: $(FOR_GARNET_DIR)"
 
 .PHONY: bsc_RTL_for_garnet
 bsc_RTL_for_garnet:
 	@echo "Copying RTL from BLUESPEC_HOME = $(BLUESPEC_HOME)"
-	cp -p  $(BLUESPEC_HOME)/lib/Verilog/BRAM1BELoad.v  $(GARNET_RTL)
-	cp -p  $(BLUESPEC_HOME)/lib/Verilog/BRAM1BE.v      $(GARNET_RTL)
-	cp -p  $(BLUESPEC_HOME)/lib/Verilog/BRAM2BELoad.v  $(GARNET_RTL)
-	cp -p  $(BLUESPEC_HOME)/lib/Verilog/BRAM2BE.v      $(GARNET_RTL)
-	cp -p  $(BLUESPEC_HOME)/lib/Verilog/BRAM2.v        $(GARNET_RTL)
-	cp -p  $(BLUESPEC_HOME)/lib/Verilog/FIFO10.v       $(GARNET_RTL)
-	cp -p  $(BLUESPEC_HOME)/lib/Verilog/FIFO1.v        $(GARNET_RTL)
-	cp -p  $(BLUESPEC_HOME)/lib/Verilog/FIFO20.v       $(GARNET_RTL)
-	cp -p  $(BLUESPEC_HOME)/lib/Verilog/FIFO2.v        $(GARNET_RTL)
-	cp -p  $(BLUESPEC_HOME)/lib/Verilog/FIFOL1.v       $(GARNET_RTL)
-	cp -p  $(BLUESPEC_HOME)/lib/Verilog/RegFile.v      $(GARNET_RTL)
-	cp -p  $(BLUESPEC_HOME)/lib/Verilog/RevertReg.v    $(GARNET_RTL)
-	cp -p  $(BLUESPEC_HOME)/lib/Verilog/SizedFIFO0.v   $(GARNET_RTL)
-	cp -p  $(BLUESPEC_HOME)/lib/Verilog/SizedFIFO.v    $(GARNET_RTL)
+	cp -p  $(BLUESPEC_HOME)/lib/Verilog/BRAM1BELoad.v  $(FOR_GARNET_DIR)/src/
+	cp -p  $(BLUESPEC_HOME)/lib/Verilog/BRAM1BE.v      $(FOR_GARNET_DIR)/src/
+	cp -p  $(BLUESPEC_HOME)/lib/Verilog/BRAM2BELoad.v  $(FOR_GARNET_DIR)/src/
+	cp -p  $(BLUESPEC_HOME)/lib/Verilog/BRAM2BE.v      $(FOR_GARNET_DIR)/src/
+	cp -p  $(BLUESPEC_HOME)/lib/Verilog/BRAM2.v        $(FOR_GARNET_DIR)/src/
+	cp -p  $(BLUESPEC_HOME)/lib/Verilog/FIFO10.v       $(FOR_GARNET_DIR)/src/
+	cp -p  $(BLUESPEC_HOME)/lib/Verilog/FIFO1.v        $(FOR_GARNET_DIR)/src/
+	cp -p  $(BLUESPEC_HOME)/lib/Verilog/FIFO20.v       $(FOR_GARNET_DIR)/src/
+	cp -p  $(BLUESPEC_HOME)/lib/Verilog/FIFO2.v        $(FOR_GARNET_DIR)/src/
+	cp -p  $(BLUESPEC_HOME)/lib/Verilog/FIFOL1.v       $(FOR_GARNET_DIR)/src/
+	cp -p  $(BLUESPEC_HOME)/lib/Verilog/RegFile.v      $(FOR_GARNET_DIR)/src/
+	cp -p  $(BLUESPEC_HOME)/lib/Verilog/RevertReg.v    $(FOR_GARNET_DIR)/src/
+	cp -p  $(BLUESPEC_HOME)/lib/Verilog/SizedFIFO0.v   $(FOR_GARNET_DIR)/src/
+	cp -p  $(BLUESPEC_HOME)/lib/Verilog/SizedFIFO.v    $(FOR_GARNET_DIR)/src/
 
 # ================================================================
 
