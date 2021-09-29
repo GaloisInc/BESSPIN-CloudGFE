@@ -18,7 +18,7 @@ help:
 # Dependencies on other repos
 
 ifndef AWSTERIA_REPO
-  $(error ERROR: please define AWSTERIA_REPO, i.e., path to AWSteria repo)
+  $(error ERROR: please define AWSTERIA_REPO, i.e., path to AWSteria_RISCV_Virtio repo)
 else
   $(info  INFO: AWSTERIA_REPO is $(AWSTERIA_REPO))
 endif
@@ -84,7 +84,7 @@ include Include_RISCY_OOO_Config.mk
 BSC_PATH := $(BSC_PATH):$(AWSTERIA_INFRA_REPO)/Include_API
 BSC_PATH := $(BSC_PATH):$(AWSTERIA_INFRA_REPO)/Platform_AWSF1/HW
 
-# From AWSteria
+# The AWSteria/Flute/Virtio App
 BSC_PATH := $(BSC_PATH):$(AWSTERIA_REPO)/HW
 
 # Common stuff

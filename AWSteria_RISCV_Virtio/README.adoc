@@ -313,11 +313,11 @@ GDB demonstrations show:
 ==== VCU118
 
 * FPGA-side builds:
-  ** Flute: demonstrated; transcript in progress
-  ** Toooba: to be demonstrated
+  ** Flute: link:HW/build_Flute_VCU118/transcript_for_make.txt[transcript]
+  ** Toooba: link:HW/build_Toooba_VCU118/transcript_for_make.txt[transcript]
 
 * Host-side build
-  ** make (same for Flute or Toooba FPGA-side): demonstrated: transcript in progress
+  ** make (same for Flute or Toooba FPGA-side): link:Host/build_VCU118/transcript_for_make.txt[transcript]
 
 * Run
   ** Flute, small examples: demonstrated: transcript in progress

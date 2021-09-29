@@ -1,0 +1,85 @@
+Transcript of 'make compile' and 'make for_garnet' steps
+    (separated by ">====" lines below)
+for building AWSteria_RISCV_Virtio with CPU Toooba
+for VCU118.
+
+These steps are followed by a garnet-flow step, documented elsewhere.
+
+These transcripts are edited for brevity.
+
+>================================================================
+--Dell-mation: ~/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW/build_Toooba_VCU118
+
+$ make compile 
+
+Wed Sep 29 16:33:20 2021
+
+INFO: AWSTERIA_REPO is /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio
+INFO: AWSTERIA_INFRA_REPO is /home/nikhil/git_clones/AWSteria_Infra
+INFO: FLUTE_REPO is /home/nikhil/git_clones/Flute
+INFO: TOOOBA_REPO is /home/nikhil/git_clones/Toooba
+INFO: BLUESPEC_HOME is /home/nikhil/git_clones/bsc/inst
+mkdir -p  build_dir
+mkdir -p  RTL_from_bsc
+INFO: RTL generation ...
+bsc -u -elab -verilog  -vdir RTL_from_bsc  -bdir build_dir  -info-dir build_dir  -D RV64 -D ISA_PRIV_M  -D ISA_PRIV_U  -D ISA_PRIV_S -D SV39 -D ISA_I  -D ISA_M  -D ISA_A  -D ISA_C -D ISA_F  -D ISA_D  -D INCLUDE_FDIV  -D INCLUDE_FSQRT -D SHIFT_BARREL -D MULT_SYNTH -D OPTION_DMA_CACHE -D FABRIC64 -D WATCH_TOHOST -D MEM_512b -D INCLUDE_PC_TRACE -D INCLUDE_GDB_CONTROL  -D BSIM  -D CORE_SMALL -D NUM_CORES=1 -D CACHE_LARGE -D XILINX_FP_FMA_LATENCY=3 -D XILINX_INT_MUL_LATENCY=2 -D USE_BSV_BRAM_SYNC_FIFO  -D INCLUDE_DDR_B -keep-fires -aggressive-conditions -no-warn-action-shadowing -no-show-timestamps -check-assert -suppress-warnings G0020 +RTS -K128M -RTS  -show-range-conflict  -p :/home/nikhil/git_clones/AWSteria_Infra/Include_API:/home/nikhil/git_clones/AWSteria_Infra/Platform_VCU118/HW:/home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW:/home/nikhil/git_clones/Flute/src_Core/ISA:/home/nikhil/git_clones/Flute/src_Core/BSV_Additional_Libs:/home/nikhil/git_clones/Toooba/src_Core/Core:/home/nikhil/git_clones/Toooba/src_Core/CPU:/home/nikhil/git_clones/Toooba/src_Core/Debug_Module:/home/nikhil/git_clones/Toooba/src_Core/PLIC:/home/nikhil/git_clones/Toooba/src_Core/RISCY_OOO/procs/RV64G_OOO:/home/nikhil/git_clones/Toooba/src_Core/RISCY_OOO/procs/lib:/home/nikhil/git_clones/Toooba/src_Core/RISCY_OOO/coherence/src:/home/nikhil/git_clones/Toooba/src_Core/RISCY_OOO/fpgautils/lib:/home/nikhil/git_clones/Toooba/src_Core/RISCY_OOO/connectal/bsv:/home/nikhil/git_clones/Toooba/src_Core/RISCY_OOO/connectal/tests/spi:/home/nikhil/git_clones/Toooba/src_Core/RISCY_OOO/connectal/lib/bsv:/home/nikhil/git_clones/Flute/src_Testbench/Fabrics/AXI4:/home/nikhil/git_clones/Flute/src_Testbench/Fabrics/AXI4_Lite:/home/nikhil/git_clones/Toooba/src_Testbench/SoC:+  /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW/AWSteria_HW.bsv
+checking package dependencies
+
+... <bsc compilation output ... about 4000 lines ... snipped> ...
+
+Verilog file created: RTL_from_bsc/mkAWS_SoC_Top.v
+...
+Verilog file created: RTL_from_bsc/mkAWSteria_HW.v
+...
+All packages are up to date.
+Warning: Unknown position: (S0080)
+  32 warnings were suppressed.
+INFO: RTL generation finished: RTL_from_bsc/ is ready for FPGA build.
+
+Wed Sep 29 16:56:44 2021
+----------------
+
+>================================================================
+$ make for_garnet 
+
+Log of make for_garnet 
+Wed Sep 29 17:14:47 2021
+
+INFO: AWSTERIA_REPO is /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio
+INFO: AWSTERIA_INFRA_REPO is /home/nikhil/git_clones/AWSteria_Infra
+INFO: FLUTE_REPO is /home/nikhil/git_clones/Flute
+INFO: TOOOBA_REPO is /home/nikhil/git_clones/Toooba
+INFO: BLUESPEC_HOME is /home/nikhil/git_clones/bsc/inst
+INFO: Creating and populating garnet-flow (reclocked) dir
+cp -p -R /home/nikhil/git_clones/AWSteria_Infra/Platform_VCU118/HW/example_AWSteria_HW_reclocked  garnet_AWSteria_Toooba_Virtio_HW
+cp -p    RTL_from_bsc/*.v  garnet_AWSteria_Toooba_Virtio_HW/src/
+make  bsc_RTL_for_garnet
+make[1]: Entering directory '/home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW/build_Toooba_VCU118'
+INFO: AWSTERIA_REPO is /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio
+INFO: AWSTERIA_INFRA_REPO is /home/nikhil/git_clones/AWSteria_Infra
+INFO: FLUTE_REPO is /home/nikhil/git_clones/Flute
+INFO: TOOOBA_REPO is /home/nikhil/git_clones/Toooba
+INFO: BLUESPEC_HOME is /home/nikhil/git_clones/bsc/inst
+Copying RTL from BLUESPEC_HOME = /home/nikhil/git_clones/bsc/inst
+cp -p  /home/nikhil/git_clones/bsc/inst/lib/Verilog/BRAM1BELoad.v  garnet_AWSteria_Toooba_Virtio_HW/src/
+cp -p  /home/nikhil/git_clones/bsc/inst/lib/Verilog/BRAM1BE.v      garnet_AWSteria_Toooba_Virtio_HW/src/
+cp -p  /home/nikhil/git_clones/bsc/inst/lib/Verilog/BRAM2BELoad.v  garnet_AWSteria_Toooba_Virtio_HW/src/
+cp -p  /home/nikhil/git_clones/bsc/inst/lib/Verilog/BRAM2BE.v      garnet_AWSteria_Toooba_Virtio_HW/src/
+cp -p  /home/nikhil/git_clones/bsc/inst/lib/Verilog/BRAM2.v        garnet_AWSteria_Toooba_Virtio_HW/src/
+cp -p  /home/nikhil/git_clones/bsc/inst/lib/Verilog/FIFO10.v       garnet_AWSteria_Toooba_Virtio_HW/src/
+cp -p  /home/nikhil/git_clones/bsc/inst/lib/Verilog/FIFO1.v        garnet_AWSteria_Toooba_Virtio_HW/src/
+cp -p  /home/nikhil/git_clones/bsc/inst/lib/Verilog/FIFO20.v       garnet_AWSteria_Toooba_Virtio_HW/src/
+cp -p  /home/nikhil/git_clones/bsc/inst/lib/Verilog/FIFO2.v        garnet_AWSteria_Toooba_Virtio_HW/src/
+cp -p  /home/nikhil/git_clones/bsc/inst/lib/Verilog/FIFOL1.v       garnet_AWSteria_Toooba_Virtio_HW/src/
+cp -p  /home/nikhil/git_clones/bsc/inst/lib/Verilog/RegFile.v      garnet_AWSteria_Toooba_Virtio_HW/src/
+cp -p  /home/nikhil/git_clones/bsc/inst/lib/Verilog/ResetEither.v  garnet_AWSteria_Toooba_Virtio_HW/src/
+cp -p  /home/nikhil/git_clones/bsc/inst/lib/Verilog/RevertReg.v    garnet_AWSteria_Toooba_Virtio_HW/src/
+cp -p  /home/nikhil/git_clones/bsc/inst/lib/Verilog/SizedFIFO0.v   garnet_AWSteria_Toooba_Virtio_HW/src/
+cp -p  /home/nikhil/git_clones/bsc/inst/lib/Verilog/SizedFIFO.v    garnet_AWSteria_Toooba_Virtio_HW/src/
+cp -p  /home/nikhil/git_clones/bsc/inst/lib/Verilog/SyncResetA.v   garnet_AWSteria_Toooba_Virtio_HW/src/
+make[1]: Leaving directory '/home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/HW/build_Toooba_VCU118'
+INFO: garnet-flow (reclocked) dir is ready: garnet_AWSteria_Toooba_Virtio_HW
+
+Wed Sep 29 17:14:47 2021
+----------------
+>================================================================

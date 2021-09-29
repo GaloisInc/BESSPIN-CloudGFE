@@ -35,6 +35,12 @@ else
   $(info  INFO: FLUTE_REPO is $(FLUTE_REPO))
 endif
 
+ifndef TOOOBA_REPO
+  $(error ERROR: please define TOOOBA_REPO, i.e., path to Toooba repo)
+else
+  $(info  INFO: TOOOBA_REPO is $(TOOOBA_REPO))
+endif
+
 ifndef BLUESPEC_HOME
   $(error ERROR: please define BLUESPEC_HOME, i.e., path to bsc installation)
 else
@@ -47,14 +53,6 @@ endif
 RV = RV64
 ARCH ?= RV64ACDFIMSU
 
-# Alternative cache organizations:
-# Default (no definition for CACHES)    L1 only, write-through policy
-# Define  CACHES=WB_L1                  L1 only, with write-back policy
-# Define  CACHES=WB_L1_L2               L1+L2, with write-back policy
-
-CACHES=WB_L1_L2
-NEAR_MEM_VM_DIR=Near_Mem_VM_WB_L1_L2
-
 BSC_COMPILATION_FLAGS += \
 	-D $(RV) \
 	-D ISA_PRIV_M  -D ISA_PRIV_U  -D ISA_PRIV_S  \
@@ -63,7 +61,7 @@ BSC_COMPILATION_FLAGS += \
 	-D ISA_F  -D ISA_D  -D INCLUDE_FDIV  -D INCLUDE_FSQRT \
 	-D SHIFT_BARREL    \
 	-D MULT_SYNTH    \
-	-D Near_Mem_Caches    \
+	-D OPTION_DMA_CACHE \
 	-D FABRIC64    \
 	-D WATCH_TOHOST    \
 	-D MEM_512b    \
@@ -72,51 +70,48 @@ BSC_COMPILATION_FLAGS += \
 #	-D INCLUDE_TANDEM_VERIF \
 
 #================================================================
-# For LLCache
+# Parameter settings for MIT RISCY_OOO
 
-# core size
-CORE_SIZE ?= SMALL
-# default 1 core
-CORE_NUM ?= 1
-# cache size
-CACHE_SIZE ?= LARGE
+# This selects non-Xilinx Verilog for FPU
+BSC_COMPILATION_FLAGS += -D BSIM \
 
-BSC_COMPILATION_FLAGS += \
-	-D CORE_$(CORE_SIZE) \
-	-D NUM_CORES=$(CORE_NUM) \
-	-D CACHE_$(CACHE_SIZE) \
-
-LLCACHE_DIR   = $(FLUTE_REPO)/src_Core/Near_Mem_VM_WB_L1_L2/src_LLCache
-PROCS_LIB_DIR = $(LLCACHE_DIR)/procs/lib
-PROCS_OOO_DIR = $(LLCACHE_DIR)/procs/RV64G_OOO
-COHERENCE_DIR = $(LLCACHE_DIR)/coherence/src
-
-BSC_PATH := $(BSC_PATH):$(LLCACHE_DIR):$(PROCS_LIB_DIR):$(PROCS_OOO_DIR):$(COHERENCE_DIR)
+include Include_RISCY_OOO_Config.mk
 
 #================================================================
-# BSC_PATH for AWSteria/Flute/Virtio system
-
-# The AWSteria/Flute/Virtio App
-BSC_PATH := $(BSC_PATH):$(AWSTERIA_REPO)/HW
-
-# From Flute
-BSC_PATH := $(BSC_PATH):$(FLUTE_REPO)/src_Core/CPU
-BSC_PATH := $(BSC_PATH):$(FLUTE_REPO)/src_Core/ISA
-BSC_PATH := $(BSC_PATH):$(FLUTE_REPO)/src_Core/RegFiles
-BSC_PATH := $(BSC_PATH):$(FLUTE_REPO)/src_Core/Core_v2
-BSC_PATH := $(BSC_PATH):$(FLUTE_REPO)/src_Core/Cache_Config
-BSC_PATH := $(BSC_PATH):$(FLUTE_REPO)/src_Core/$(NEAR_MEM_VM_DIR)
-BSC_PATH := $(BSC_PATH):$(FLUTE_REPO)/src_Core/PLIC
-BSC_PATH := $(BSC_PATH):$(FLUTE_REPO)/src_Core/Near_Mem_IO
-BSC_PATH := $(BSC_PATH):$(FLUTE_REPO)/src_Core/Debug_Module
-BSC_PATH := $(BSC_PATH):$(FLUTE_REPO)/src_Core/BSV_Additional_Libs
-BSC_PATH := $(BSC_PATH):$(FLUTE_REPO)/src_Testbench/Fabrics/AXI4
-BSC_PATH := $(BSC_PATH):$(FLUTE_REPO)/src_Testbench/Fabrics/AXI4_Lite
-BSC_PATH := $(BSC_PATH):$(FLUTE_REPO)/src_Testbench/SoC
+# BSC_PATH for AWSteria/Toooba/Virtio system
 
 # From AWSteria_Infra
 BSC_PATH := $(BSC_PATH):$(AWSTERIA_INFRA_REPO)/Include_API
 BSC_PATH := $(BSC_PATH):$(AWSTERIA_INFRA_REPO)/Platform_VCU118/HW
+
+# The AWSteria/RISCV/Virtio App
+BSC_PATH := $(BSC_PATH):$(AWSTERIA_REPO)/HW
+
+# Common stuff
+BSC_PATH := $(BSC_PATH):$(FLUTE_REPO)/src_Core/ISA
+BSC_PATH := $(BSC_PATH):$(FLUTE_REPO)/src_Core/BSV_Additional_Libs
+
+# From Toooba
+BSC_PATH := $(BSC_PATH):$(TOOOBA_REPO)/src_Core/Core
+BSC_PATH := $(BSC_PATH):$(TOOOBA_REPO)/src_Core/CPU
+BSC_PATH := $(BSC_PATH):$(TOOOBA_REPO)/src_Core/Debug_Module
+BSC_PATH := $(BSC_PATH):$(TOOOBA_REPO)/src_Core/PLIC
+
+# From RISCY_OOO
+BSC_PATH := $(BSC_PATH):$(TOOOBA_REPO)/src_Core/RISCY_OOO/procs/RV64G_OOO
+BSC_PATH := $(BSC_PATH):$(TOOOBA_REPO)/src_Core/RISCY_OOO/procs/lib
+BSC_PATH := $(BSC_PATH):$(TOOOBA_REPO)/src_Core/RISCY_OOO/coherence/src
+BSC_PATH := $(BSC_PATH):$(TOOOBA_REPO)/src_Core/RISCY_OOO/fpgautils/lib
+BSC_PATH := $(BSC_PATH):$(TOOOBA_REPO)/src_Core/RISCY_OOO/connectal/bsv
+BSC_PATH := $(BSC_PATH):$(TOOOBA_REPO)/src_Core/RISCY_OOO/connectal/tests/spi
+BSC_PATH := $(BSC_PATH):$(TOOOBA_REPO)/src_Core/RISCY_OOO/connectal/lib/bsv
+
+# AXI4 and AXI4_Lite fabrics
+BSC_PATH := $(BSC_PATH):$(FLUTE_REPO)/src_Testbench/Fabrics/AXI4
+BSC_PATH := $(BSC_PATH):$(FLUTE_REPO)/src_Testbench/Fabrics/AXI4_Lite
+
+# SoC components not overridden by AWSteria
+BSC_PATH := $(BSC_PATH):$(TOOOBA_REPO)/src_Testbench/SoC
 
 #================================================================
 # Top-level file and module
@@ -154,15 +149,15 @@ compile:
 # ================================================================
 # For VCU118: collect all RTL needed for garnet flow
 
-FOR_GARNET_DIR = garnet_AWSteria_Flute_Virtio_HW
+FOR_GARNET_DIR = garnet_AWSteria_Toooba_Virtio_HW
 
 .PHONY: for_garnet
 for_garnet:
-	@echo "INFO: Creating and populating garnet example (reclocked) dir"
+	@echo "INFO: Creating and populating garnet-flow (reclocked) dir"
 	cp -p -R $(AWSTERIA_INFRA_REPO)/Platform_VCU118/HW/example_AWSteria_HW_reclocked  $(FOR_GARNET_DIR)
 	cp -p    RTL_from_bsc/*.v  $(FOR_GARNET_DIR)/src/
 	make  bsc_RTL_for_garnet
-	@echo "INFO: garnet example (reclocked) dir is ready: $(FOR_GARNET_DIR)"
+	@echo "INFO: garnet-flow (reclocked) dir is ready: $(FOR_GARNET_DIR)"
 
 .PHONY: bsc_RTL_for_garnet
 bsc_RTL_for_garnet:
@@ -178,9 +173,11 @@ bsc_RTL_for_garnet:
 	cp -p  $(BLUESPEC_HOME)/lib/Verilog/FIFO2.v        $(FOR_GARNET_DIR)/src/
 	cp -p  $(BLUESPEC_HOME)/lib/Verilog/FIFOL1.v       $(FOR_GARNET_DIR)/src/
 	cp -p  $(BLUESPEC_HOME)/lib/Verilog/RegFile.v      $(FOR_GARNET_DIR)/src/
+	cp -p  $(BLUESPEC_HOME)/lib/Verilog/ResetEither.v  $(FOR_GARNET_DIR)/src/
 	cp -p  $(BLUESPEC_HOME)/lib/Verilog/RevertReg.v    $(FOR_GARNET_DIR)/src/
 	cp -p  $(BLUESPEC_HOME)/lib/Verilog/SizedFIFO0.v   $(FOR_GARNET_DIR)/src/
 	cp -p  $(BLUESPEC_HOME)/lib/Verilog/SizedFIFO.v    $(FOR_GARNET_DIR)/src/
+	cp -p  $(BLUESPEC_HOME)/lib/Verilog/SyncResetA.v   $(FOR_GARNET_DIR)/src/
 
 # ================================================================
 
