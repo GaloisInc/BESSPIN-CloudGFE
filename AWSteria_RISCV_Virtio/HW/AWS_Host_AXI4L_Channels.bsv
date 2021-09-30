@@ -1,13 +1,14 @@
 // Copyright (c) 2016-2021 Bluespec, Inc. All Rights Reserved.
 // Author: Rishiyur S. Nikhil
 
-package AWS_OCL_Adapter;
+package AWS_Host_AXI4L_Channels;
 
 // ================================================================
-// The mkAWS_OCL_Adapter module has two faces:
-// - Facing the host: slave AXI4-Lite port, connects to AWS OCL interface.
+// Module mkAWS_Host_AXI4L_Channels has two faces:
+// - Facing host: AXI4-Lite_S port, connects to host AXI4-Lite interface.
 // - Facing SoC: a collection of Semi_FIFOF interfaces, 32-bit wide data.
-//    Each is a unidirectional channel, mapped to an AXI4-Lite address.
+//     Each is a unidirectional channel, mapped to an AXI4-Lite address.
+//
 // The host enqueues to a channel with a single write transaction
 //         (response AXI4_LITE_SLVERR if full).
 // The host dequeues from a channel with a single read transaction
@@ -37,6 +38,13 @@ import AXI4_Lite_Types  :: *;
 import AWS_BSV_Top_Defs :: *;
 
 // ================================================================
+
+export Num_Host_to_HW_Channels;
+export Num_HW_to_Host_Channels;
+export Host_AXI4L_Channels_IFC (..);
+export mkHost_AXI4L_Channels;
+
+// ================================================================
 // Address configurations for host-to-hw and hw-to-host channels.
 
 // Each channel is at an 8-byte-aligned address.
@@ -55,16 +63,16 @@ import AWS_BSV_Top_Defs :: *;
 // choose to interpret a pair as request/response).  The number of
 // channels in each direction need not be the same.
 
-typedef 5 Num_OCL_Host_to_HW_Channels;
-typedef 5 Num_OCL_HW_to_Host_Channels;
+typedef 5 Num_Host_to_HW_Channels;
+typedef 5 Num_HW_to_Host_Channels;
 
-Integer num_ocl_host_to_hw_channels = valueOf (Num_OCL_Host_to_HW_Channels);
-Integer num_ocl_hw_to_host_channels = valueOf (Num_OCL_HW_to_Host_Channels);
+Integer num_host_to_hw_channels = valueOf (Num_Host_to_HW_Channels);
+Integer num_hw_to_host_channels = valueOf (Num_HW_to_Host_Channels);
 
 // These base addrs must have lsbs = 2'h0
 
-Bit #(32) ocl_hw_to_host_chan_addr_base = 32'h_0000_0000;
-Bit #(32) ocl_host_to_hw_chan_addr_base = 32'h_0000_1000;
+Bit #(32) hw_to_host_chan_addr_base = 32'h_0000_0000;
+Bit #(32) host_to_hw_chan_addr_base = 32'h_0000_1000;
 
 function Bit #(32) fv_chan_id (Bit #(32) addr, Bit #(32) addr_base);
    return ((addr - addr_base) >> 3);
@@ -73,29 +81,29 @@ endfunction
 // ================================================================
 // INTERFACE
 
-interface OCL_Adapter_IFC;
+interface Host_AXI4L_Channels_IFC;
    // ----------------
-   // Facing SH: OCL
-   interface AXI4L_32_32_0_Slave_IFC ocl_slave;
+   // Facing host
+   interface AXI4L_32_32_0_Slave_IFC axi4L_S;
 
    // ----------------
    // Facing SoC
-   interface Vector #(Num_OCL_Host_to_HW_Channels, FIFOF_O #(Bit #(32)))  v_from_host;
-   interface Vector #(Num_OCL_HW_to_Host_Channels, FIFOF_I #(Bit #(32)))  v_to_host;
+   interface Vector #(Num_Host_to_HW_Channels, FIFOF_O #(Bit #(32)))  v_from_host;
+   interface Vector #(Num_HW_to_Host_Channels, FIFOF_I #(Bit #(32)))  v_to_host;
 endinterface
 
 // ================================================================
 
 (* synthesize *)
-module mkOCL_Adapter (OCL_Adapter_IFC);
+module mkHost_AXI4L_Channels (Host_AXI4L_Channels_IFC);
    // 0: quiet; 1: rules
    Integer verbosity = 0;
 
-   // Transactor for the OCL AXI4-Lite interface
-   AXI4L_32_32_0_Slave_Xactor_IFC  ocl_xactor <- mkAXI4_Lite_Slave_Xactor;
+   // Transactor for the AXI4-Lite interface
+   AXI4L_32_32_0_Slave_Xactor_IFC  axi4L_S_xactor <- mkAXI4_Lite_Slave_Xactor;
 
-   Vector #(Num_OCL_Host_to_HW_Channels, FIFOF #(Bit #(32))) v_f_from_host <- replicateM (mkFIFOF);
-   Vector #(Num_OCL_HW_to_Host_Channels, FIFOF #(Bit #(32))) v_f_to_host   <- replicateM (mkFIFOF);
+   Vector #(Num_Host_to_HW_Channels, FIFOF #(Bit #(32))) v_f_from_host <- replicateM (mkFIFOF);
+   Vector #(Num_HW_to_Host_Channels, FIFOF #(Bit #(32))) v_f_to_host   <- replicateM (mkFIFOF);
 
    // ================================================================
    // AXI4-Lite transactions
@@ -103,19 +111,19 @@ module mkOCL_Adapter (OCL_Adapter_IFC);
    // Write requests (AXI4-Lite channels WR_ADDR, WR_DATA and WR_RESP)
    // (we send the AXI4-Lite response immediately.)
    rule rl_AXI4L_wr;    // req from AWS SH
-      let wra  <- pop_o (ocl_xactor.o_wr_addr);
-      let wrd  <- pop_o (ocl_xactor.o_wr_data);
+      let wra  <- pop_o (axi4L_S_xactor.o_wr_addr);
+      let wrd  <- pop_o (axi4L_S_xactor.o_wr_data);
       if (verbosity != 0)
-	 $display ("AWS_OCL_Adapter.rl_AXI4L_wr: addr %0h data %0h", wra.awaddr, wrd.wdata);
+	 $display ("%m.rl_AXI4L_wr: addr %0h data %0h", wra.awaddr, wrd.wdata);
 
       // Default response
       let wrr = AXI4_Lite_Wr_Resp {bresp: AXI4_LITE_OKAY, buser: ?};
 
-      if ((ocl_host_to_hw_chan_addr_base <= wra.awaddr)
-	  && (fv_chan_id (wra.awaddr, ocl_host_to_hw_chan_addr_base)
-	      < fromInteger (num_ocl_host_to_hw_channels)))
+      if ((host_to_hw_chan_addr_base <= wra.awaddr)
+	  && (fv_chan_id (wra.awaddr, host_to_hw_chan_addr_base)
+	      < fromInteger (num_host_to_hw_channels)))
 	 begin
-	    let chan_id = fv_chan_id (wra.awaddr, ocl_host_to_hw_chan_addr_base);
+	    let chan_id = fv_chan_id (wra.awaddr, host_to_hw_chan_addr_base);
 	    if (v_f_from_host [chan_id].notFull) begin
 	       v_f_from_host [chan_id].enq (wrd.wdata);
 	       if (verbosity != 0)
@@ -123,17 +131,17 @@ module mkOCL_Adapter (OCL_Adapter_IFC);
 	    end
 	    else begin
 	       wrr.bresp = AXI4_LITE_SLVERR;
-	       $display ("ERROR: AWS_OCL_Adapter.rl_AXI4L_wr: addr %0h data %0h; chan [%0d] overflow",
+	       $display ("ERROR: %m.rl_AXI4L_wr: addr %0h data %0h; chan [%0d] overflow",
 			 wra.awaddr, wrd.wdata, chan_id);
 	    end
 	 end
       else begin
 	 wrr.bresp = AXI4_LITE_DECERR;
-	 $display ("ERROR: AWS_OCL_Adapter.rl_AXI4L_wr: addr %0h data %0h; unknown addr",
+	 $display ("ERROR: %m.rl_AXI4L_wr: addr %0h data %0h; unknown addr",
 		   wra.awaddr, wrd.wdata);
       end
 
-      ocl_xactor.i_wr_resp.enq (wrr);
+      axi4L_S_xactor.i_wr_resp.enq (wrr);
       if (verbosity != 0) begin
 	 $write ("    Response: ", fshow (wrr.bresp));
 	 if (wrr.bresp == AXI4_LITE_SLVERR)
@@ -148,21 +156,21 @@ module mkOCL_Adapter (OCL_Adapter_IFC);
    // or for status (notFull/notEmpty) on hw-to-host and host-to-hw channels.
    // Address [2:0] is 3'b000 for data (read data only), 3'b100 for status.
    rule rl_AXI4L_rd;
-      let rda <- pop_o (ocl_xactor.o_rd_addr);
+      let rda <- pop_o (axi4L_S_xactor.o_rd_addr);
       if (verbosity != 0)
-	 $display ("AWS_OCL_Adapter.rl_AXI4L_rd: addr %0h", rda.araddr);
+	 $display ("%m.rl_AXI4L_rd: addr %0h", rda.araddr);
 
       // Default data: all 1's
       Bit #(32) rdata = 32'h_FFFF_FFFF;
       Bit #(0)  ruser = ?;
       let rdr = AXI4_Lite_Rd_Data {rresp: AXI4_LITE_OKAY, rdata: rdata, ruser: ruser};
 
-      if ((ocl_host_to_hw_chan_addr_base <= rda.araddr)
-	  && (fv_chan_id (rda.araddr, ocl_host_to_hw_chan_addr_base)
-	      < fromInteger (num_ocl_host_to_hw_channels)))
+      if ((host_to_hw_chan_addr_base <= rda.araddr)
+	  && (fv_chan_id (rda.araddr, host_to_hw_chan_addr_base)
+	      < fromInteger (num_host_to_hw_channels)))
 	 begin
 	    // host-to-hw channels: read status only
-	    let chan_id = fv_chan_id (rda.araddr, ocl_host_to_hw_chan_addr_base);
+	    let chan_id = fv_chan_id (rda.araddr, host_to_hw_chan_addr_base);
 	    if (rda.araddr [2:0] == 3'b100) begin
 	       // Status
 	       rdr.rdata = zeroExtend (pack (v_f_from_host [chan_id].notFull));
@@ -171,17 +179,17 @@ module mkOCL_Adapter (OCL_Adapter_IFC);
 	    end
 	    else begin
 	       rdr.rresp = AXI4_LITE_SLVERR;
-	       $display ("ERROR: AWS_OCL_Adapter.rl_AXI4L_rd: ERROR: unknown rd addr %0h",
+	       $display ("ERROR: %m.rl_AXI4L_rd: ERROR: unknown rd addr %0h",
 			 rda.araddr);
 	    end
 	 end
 
-      else if ((ocl_hw_to_host_chan_addr_base <= rda.araddr)
-	       && (fv_chan_id (rda.araddr, ocl_hw_to_host_chan_addr_base)
-		   < fromInteger (num_ocl_hw_to_host_channels)))
+      else if ((hw_to_host_chan_addr_base <= rda.araddr)
+	       && (fv_chan_id (rda.araddr, hw_to_host_chan_addr_base)
+		   < fromInteger (num_hw_to_host_channels)))
 	 begin
 	    // hw-to-host channels: read status or data
-	    let chan_id = fv_chan_id (rda.araddr, ocl_hw_to_host_chan_addr_base);
+	    let chan_id = fv_chan_id (rda.araddr, hw_to_host_chan_addr_base);
 	    if (rda.araddr [2:0] == 3'b100) begin
 	       // Status
 	       rdr.rdata = zeroExtend (pack (v_f_to_host [chan_id].notEmpty));
@@ -197,21 +205,21 @@ module mkOCL_Adapter (OCL_Adapter_IFC);
 	    end
 	    else begin
 	       rdr.rresp = AXI4_LITE_SLVERR;
-	       $display ("ERROR: AWS_OCL_Adapter.rl_AXI4L_rd: addr %0h; ERROR: data read on empty chan [%0d]",
+	       $display ("ERROR: %m.rl_AXI4L_rd: addr %0h; ERROR: data read on empty chan [%0d]",
 			 rda.araddr, chan_id);
 	    end
 	 end
 
       else begin
 	 rdr.rresp = AXI4_LITE_DECERR;
-	 $display ("ERROR: AWS_OCL_Adapter.rl_AXI4L_rd: unknown read addr %0h",
+	 $display ("ERROR: %m.rl_AXI4L_rd: unknown read addr %0h",
 		   rda.araddr);
       end
 
       // Note: rresp=AXI4_LITE_OKAY even for invalid requests since
       // AWS host-side API does not seem to provide access to rresp.
 
-      ocl_xactor.i_rd_data.enq (rdr);
+      axi4L_S_xactor.i_rd_data.enq (rdr);
       if (verbosity != 0)
 	 $display ("    response ", fshow (rdr));
    endrule
@@ -220,8 +228,8 @@ module mkOCL_Adapter (OCL_Adapter_IFC);
    // INTERFACE
 
    // ----------------
-   // Facing SH: OCL
-   interface AWS_AXI4_Lite_Slave_IFC  ocl_slave = ocl_xactor.axi_side;
+   // Facing host
+   interface AWS_AXI4_Lite_Slave_IFC  axi4L_S = axi4L_S_xactor.axi_side;
 
    // ----------------
    // Facing SoC

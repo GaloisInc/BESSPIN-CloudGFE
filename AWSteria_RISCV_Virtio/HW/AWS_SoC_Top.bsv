@@ -48,9 +48,9 @@ import PLIC         :: *;    // For interface to PLIC interrupt sources, in Core
 // import Near_Mem_IFC :: *;    // For Wd_{Id,Addr,Data,User}_Dma    // DELETE
 
 // IPs on the fabric (other than memory)
-import Boot_ROM        :: *;
-import UART_Model      :: *;
-import AWS_Host_Access :: *;
+import Boot_ROM         :: *;
+import UART_Model       :: *;
+import AWS_MMIO_to_Host :: *;
 
 // IPs on the fabric (memory)
 import AXI4_Types        :: *;
@@ -189,8 +189,8 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
 			Wd_User)  boot_rom_axi4_deburster <- mkAXI4_Deburster_A;
 
    // SoC IPs
-   UART_IFC             uart0           <- mkUART;
-   AWS_Host_Access_IFC  aws_host_access <- mkAWS_Host_Access;
+   UART_IFC              uart0        <- mkUART;
+   AWS_MMIO_to_Host_IFC  mmio_to_host <- mkAWS_MMIO_to_Host;
 
    // ----------------
    // SoC fabric initiator connections
@@ -211,7 +211,7 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    mkConnection (fabric.v_to_slaves [uart16550_0_target_num],  uart0.slave);
 
    // Fabric to AWS Host Access
-   mkConnection (fabric.v_to_slaves [host_access_target_num], aws_host_access.slave);
+   mkConnection (fabric.v_to_slaves [host_access_target_num], mmio_to_host.axi4_S);
 
    // ----------------
    // Connect interrupt sources for CPU external interrupt request inputs.
@@ -412,8 +412,8 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    interface put_from_console = uart0.put_from_console;
 
    // AWS host memory access
-   interface Get to_aws_host   = aws_host_access.to_aws_host;
-   interface Put from_aws_host = aws_host_access.from_aws_host;
+   interface Get to_aws_host   = mmio_to_host.to_aws_host;
+   interface Put from_aws_host = mmio_to_host.from_aws_host;
 
    // Interrupts from AWS host to hardware
    // x[31] is set/clear; x[3:0] is intr number

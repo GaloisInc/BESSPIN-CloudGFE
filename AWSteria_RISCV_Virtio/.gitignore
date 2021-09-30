@@ -1,0 +1,9 @@
+GNUmakefile
+build_dir
+RTL_from_bsc
+Verilator_Make
+Verilog_RTL
+Verilator_RTL
+garnet_*
+exe_*
+cl_*

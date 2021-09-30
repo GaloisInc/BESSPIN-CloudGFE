@@ -1,9 +1,9 @@
 // Copyright (c) 2016-2021 Bluespec, Inc. All Rights Reserved.
 // Author: Rishiyur S. Nikhil
 
-package AWS_Host_Access;
+package AWS_MMIO_to_Host;
 
-// mkAWS_Host_Access is a simple AXI4 slave that is a 'proxy' for a
+// mkAWS_MMIO_to_Host is a simple AXI4_S that is a 'proxy' for a
 // the AWS host, which actually services all the AXI4 transactions.
 // It simply forwards Read/Write requests (from the SoC fabric) to the
 // AWS host, and forwards the responses from the AWS host back into
@@ -45,9 +45,14 @@ import Fabric_Defs :: *;
 
 // ================================================================
 
-interface AWS_Host_Access_IFC;
+export AWS_MMIO_to_Host_IFC (..);
+export mkAWS_MMIO_to_Host;
+
+// ================================================================
+
+interface AWS_MMIO_to_Host_IFC;
    // Main Fabric Reqs/Rsps
-   interface AXI4_Slave_IFC #(Wd_Id, Wd_Addr, Wd_Data, Wd_User) slave;
+   interface AXI4_Slave_IFC #(Wd_Id, Wd_Addr, Wd_Data, Wd_User) axi4_S;
 
    // Transport to/from host
    interface Get #(Bit #(32)) to_aws_host;
@@ -57,7 +62,7 @@ endinterface
 // ================================================================
 
 (* synthesize *)
-module mkAWS_Host_Access (AWS_Host_Access_IFC);
+module mkAWS_MMIO_to_Host (AWS_MMIO_to_Host_IFC);
 
    // 0: quiet; 1 rules
    Integer verbosity = 1;
@@ -75,7 +80,7 @@ module mkAWS_Host_Access (AWS_Host_Access_IFC);
    // ----------------
    // Connector to AXI4 fabric
 
-   AXI4_Slave_Xactor_IFC #(Wd_Id, Wd_Addr, Wd_Data, Wd_User) slave_xactor <- mkAXI4_Slave_Xactor;
+   AXI4_Slave_Xactor_IFC #(Wd_Id, Wd_Addr, Wd_Data, Wd_User) axi4_S_xactor <- mkAXI4_Slave_Xactor;
 
    // ================================================================
    // BEHAVIOR
@@ -87,14 +92,14 @@ module mkAWS_Host_Access (AWS_Host_Access_IFC);
    // Read requests (RD_ADDR)
 
    rule rl_forward_rd_req_addr (rg_wdata_pending == tagged Invalid);
-      let rda <- pop_o (slave_xactor.o_rd_addr);
+      let rda <- pop_o (axi4_S_xactor.o_rd_addr);
       Bit #(32) addr = truncate (rda.araddr);
       Bit #(32) req  = ((addr & 32'h_FFFF_FFFC) | 32'h0);    // LSB 0 for 'read' req
       f_to_aws_host.enq (req);
       f_rsps_pending.enq (tuple4 (1'b0, addr, rda.arid, rda.aruser));
 
       if (verbosity > 0)
-	 $display ("AWS_Host_Access.rl_forward_rd_req_addr: req %08h", req);
+	 $display ("AWS_MMIO_to_Host.rl_forward_rd_req_addr: req %08h", req);
    endrule
 
    // ----------------------------------------------------------------
@@ -103,7 +108,7 @@ module mkAWS_Host_Access (AWS_Host_Access_IFC);
    // ----------------
    // Write request (WR_ADDR)
    rule rl_forward_wr_req_addr (rg_wdata_pending == tagged Invalid);
-      let wra <- pop_o (slave_xactor.o_wr_addr);
+      let wra <- pop_o (axi4_S_xactor.o_wr_addr);
       Bit #(32) addr = truncate (wra.awaddr);
       Bit #(32) req  = ((addr & 32'h_FFFF_FFFC) | 32'h1);    // LSB 1 for 'write' req
       f_to_aws_host.enq (req);
@@ -113,10 +118,10 @@ module mkAWS_Host_Access (AWS_Host_Access_IFC);
 
       // Respond 'okay' immediately to CPU; don't wait for host reponse
       let wrd = AXI4_Wr_Resp {bid: wra.awid, bresp: axi4_resp_okay, buser: wra.awuser};
-      slave_xactor.i_wr_resp.enq (wrd);
+      axi4_S_xactor.i_wr_resp.enq (wrd);
 
       if (verbosity > 0)
-	 $display ("AWS_Host_Access.rl_forward_wr_req_addr: req %08h", req);
+	 $display ("AWS_MMIO_to_Host.rl_forward_wr_req_addr: req %08h", req);
    endrule
 
    // Priortize reads, assuming writes may be used for side-effects after reads
@@ -126,7 +131,7 @@ module mkAWS_Host_Access (AWS_Host_Access_IFC);
    // ----------------
    // ---- Write requests (WR_DATA)
    rule rl_forward_wr_req_data (rg_wdata_pending matches tagged Valid .addr);
-      let wrd <- pop_o (slave_xactor.o_wr_data);
+      let wrd <- pop_o (axi4_S_xactor.o_wr_data);
       Bit #(32) data = wrd.wdata [31:0];
 
       // Take data from upper 32b of 64b word addr is W but not DW-aligned
@@ -139,7 +144,7 @@ module mkAWS_Host_Access (AWS_Host_Access_IFC);
       rg_wdata_pending <= tagged Invalid;
 
       if (verbosity > 0)
-	 $display ("AWS_Host_Access.rl_forward_wr_req_data: ... data %08h", data);
+	 $display ("AWS_MMIO_to_Host.rl_forward_wr_req_data: ... data %08h", data);
    endrule
 
    // ================================================================
@@ -154,10 +159,10 @@ module mkAWS_Host_Access (AWS_Host_Access_IFC);
 	 data = data << 32;
 
       let rdd = AXI4_Rd_Data {rid: id, rdata: data, rresp: axi4_resp_okay, rlast: True, ruser: user};
-      slave_xactor.i_rd_data.enq (rdd);
+      axi4_S_xactor.i_rd_data.enq (rdd);
 
       if (verbosity > 0)
-	 $display ("AWS_Host_Access.rl_forward_rd_rsp: addr %08h => data %08h", addr, data);
+	 $display ("AWS_MMIO_to_Host.rl_forward_rd_rsp: addr %08h => data %08h", addr, data);
    endrule
 
    /* Use this if we want to wait for write-responses from host
@@ -168,10 +173,10 @@ module mkAWS_Host_Access (AWS_Host_Access_IFC);
       f_rsps_pending.deq;
 
       let wrd = AXI4_Wr_Resp {bid: id, bresp: axi4_resp_okay, buser: user};
-      slave_xactor.i_wr_resp.enq (wrd);
+      axi4_S_xactor.i_wr_resp.enq (wrd);
 
       if (verbosity > 0)
-	 $display ("AWS_Host_Access.rl_forward_wr_rsp: addr %08h => data %08h", addr, data);
+	 $display ("AWS_MMIO_to_Host.rl_forward_wr_rsp: addr %08h => data %08h", addr, data);
 
    endrule
    */
@@ -180,7 +185,7 @@ module mkAWS_Host_Access (AWS_Host_Access_IFC);
    // INTERFACE
 
    // Main Fabric Reqs/Rsps
-   interface  slave = slave_xactor.axi_side;
+   interface  axi4_S = axi4_S_xactor.axi_side;
 
    // Transport to/from host
    interface Get to_aws_host   = toGet (f_to_aws_host);
