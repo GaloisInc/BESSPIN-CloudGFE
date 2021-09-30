@@ -255,15 +255,15 @@ ls -als data*
  31396 -rw-r--r-- 1 nikhil nikhil  32149504 Jun 18 12:51 data32M.txt
   7028 -rw-r--r-- 1 nikhil nikhil   7189778 Jun  6 15:29 data7M.txt
 --20:49:15--proxy: ~
+$ sha256sum data7M.txt
+sha256sum data7M.txt
+26da2fded035178c43ff848f72abe71d4f39256df8d69442d92029c766293831  data7M.txt
+
+--20:51:56--proxy: ~
 $ exit
 exit
 logout
 Connection to login.bluespec.com closed.
-
---20:51:56--proxy: ~
-$ sha256sum data7M.txt
-sha256sum data7M.txt
-26da2fded035178c43ff848f72abe71d4f39256df8d69442d92029c766293831  data7M.txt
 
 # ----------------------------------------------------------------
 # COMMENT: and we have closed the connection and are back at FreeBSD's prompt

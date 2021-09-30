@@ -1,0 +1,537 @@
+# Annotated transcript of booting and running FreeBSD on AWSteria:Flute:Virtio on VCU118
+# COMMENT annotation lines below point out highlights, including use of virtio
+# networking and block device.
+
+# ================================================================
+# COMMENT: Load AFI into FPGA
+
+--19:41:19--elevennuc: ~/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/Host/build_VCU118
+$ make -f ../../Tests/Tests.mk reconfig
+INFO: AWSTERIA_REPO = /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio
+INFO: EXE_HOST_SIDE = /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/Host/build_VCU118/exe_Host_VCU118
+INFO: FREEBSD_STANDALONE                = /home/nikhil/tmp/FreeBSD_for_Flute/bbl_and_FreeBSD.GFE-NODEBUG.host.memhex32
+INFO: FREEBSD_VIRTIO                    = /home/nikhil/tmp/FreeBSD_for_Flute/bbl_and_FreeBSD.FETT-NODEBUG.host.memhex32
+INFO: VIRTIO_BLOCK_DEVICE_FILE_ORIGINAL = /home/nikhil/tmp/FreeBSD_for_Flute/cheribsd-riscv64.img
+Reconfiguring partition with ~/git_clones/CTSRD-CHERI_garnet/example_2021-09-24_AWSteria_RISCV_Virtio_DM_reclocked/build/AWSteria_pblock_partition_partial.bit
+sudo xvsecctl -b 0x07 -F 0x0 -c 0x1 -p ~/git_clones/CTSRD-CHERI_garnet/example_2021-09-24_AWSteria_RISCV_Virtio_DM_reclocked/build/AWSteria_pblock_partition_partial.bit
+MCAP version: 1
+[XVSEC] : xvsec_mcap_configure_fpga : Bitstream Program successful
+FPGA configuration successful
+
+# ================================================================
+# COMMENT: Obtain a clean copy of a .img file that is formatted as a
+# block device, that will serve as virtio block device
+
+rsync  /home/nikhil/tmp/FreeBSD_for_Flute/cheribsd-riscv64.img  cheribsd-riscv64.img
+
+# ================================================================
+# COMMENT: Start AWSteria:Flute:Virtio, providing it a memhex32 file
+# for bbl boot rom and FreeBSD image, and file for Virtio block device
+# RISC-V console messages from FreeBSD follow on subsequent lines
+
+--19:44:36--elevennuc: ~/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/Host/build_VCU118
+$ sudo /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/Host/build_VCU118/exe_Host_VCU118 --memhex32 /home/nikhil/tmp/FreeBSD_for_Flute/bbl_and_FreeBSD.FETT-NODEBUG.host.memhex32 --blockdev cheribsd-riscv64.img
+
+...
+bbl loader
+---<<BOOT>>---
+KDB: debugger backends: ddb
+KDB: current backend: ddb
+Physical memory chunk(s):
+  0xc0000000 - 0xffffffff,  1024 MB ( 262144 pages)
+Excluded memory regions:
+  0xc0000000 - 0xc01fffff,     2 MB (    512 pages) NoAlloc NoDump
+  0xc0200000 - 0xc0926fff,     7 MB (   1831 pages) NoAlloc 
+Found 1 CPUs in the device tree
+Copyright (c) 1992-2020 The FreeBSD Project.
+Copyright (c) 1979, 1980, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994
+	The Regents of the University of California. All rights reserved.
+FreeBSD is a registered trademark of The FreeBSD Foundation.
+FreeBSD 13.0-CURRENT #4 r362121+89083b90c601-c327974(multicompat)-dirty: Thu Sep  3 15:52:05 BST 2020
+    jrtc4@zeno.sec.cl.cam.ac.uk:/home/jrtc4/cheri/build/cheribsd-riscv64-build/home/jrtc4/cheri/cheribsd/riscv.riscv64/sys/FETT-NODEBUG riscv
+clang version 11.0.0 (git@github.com:CTSRD-CHERI/llvm-project.git 61ef05e7b0781437373e58c74936422cb9da0a53)
+Preloaded elf kernel "kernel" at 0xffffffc0007057a0.
+SBI: Unknown (Legacy) Implementation
+SBI Specification Version: 0.1
+CPU(0): Unknown Implementer Unknown Processor
+real memory  = 1073741824 (1024 MB)
+Physical memory chunk(s):
+0x00000000c0927000 - 0x00000000fe66efff, 1037336576 bytes (253256 pages)
+avail memory = 1032081408 (984 MB)
+No static device mappings.
+random: no preloaded entropy cache
+arc4random: WARNING: initial seeding bypassed the cryptographic random device because it was not yet seeded and the knob 'bypass_before_seeding' was enabled.
+VIMAGE (virtualized network stack) enabled
+hostuuid: using 00000000-0000-0000-0000-000000000000
+ULE: setup cpu 0
+random: entropy device external interface
+mem: <memory>
+crypto: <crypto core>
+null: <full device, null device, zero device>
+openfirm: <Open Firmware control device>
+WARNING: Device "openfirm" is Giant locked and may be deleted before FreeBSD 13.0.
+ofwbus0: <Open Firmware Device Tree>
+simplebus0: <Flattened device tree simple bus> on ofwbus0
+plic0: <RISC-V PLIC> mem 0xc000000-0xc3fffff irq 4,5 on simplebus0
+timer0: <RISC-V Timer>
+Timecounter "RISC-V Timecounter" frequency 125000000 Hz quality 1000
+Event timer "RISC-V Eventtimer" frequency 125000000 Hz quality 1000
+rcons0: <RISC-V console>
+cpulist0: <Open Firmware CPU Group> on ofwbus0
+cpu0: <Open Firmware CPU> on cpulist0
+cpu0: Nominal frequency 125Mhz
+riscv64_cpu0: register <0>
+uart0: <8250 or 16450 or compatible> mem 0x62300000-0x62300fff irq 6 on simplebus0
+uart0: console (115200,n,8,1)
+uart0: fast interrupt
+uart0: PPS capture mode: DCD
+
+# COMMENT: FreeBSD is discovering Virtio devices in the following lines
+
+virtio_mmio0: <VirtIO MMIO adapter> mem 0x40000000-0x40000fff irq 0 on ofwbus0
+vtblk0: <VirtIO Block Adapter> on virtio_mmio0
+virtio_mmio0: host features: 0x100000000 <Version1>
+virtio_mmio0: negotiated features: 0
+virtio_mmio0: virtqueue 0 (vtblk0 request) requested indirect descriptors but not negotiated
+vtblk0: vtblk_poll_request: IO error: 5
+vtblk0: error getting device identifier: 5
+vtblk0: 4784MB (9797637 512 byte sectors)
+virtio_mmio1: <VirtIO MMIO adapter> mem 0x40001000-0x40001fff irq 1 on ofwbus0
+vtnet0: <VirtIO Networking Adapter> on virtio_mmio1
+virtio_mmio1: host features: 0x100000020 <Version1,MacAddress>
+virtio_mmio1: negotiated features: 0x100000020 <Version1,MacAddress>
+virtio_mmio1: virtqueue 0 (vtnet0-0 rx) requested indirect descriptors but not negotiated
+virtio_mmio1: virtqueue 1 (vtnet0-0 tx) requested indirect descriptors but not negotiated
+vtnet0: bpf attached
+vtnet0: Ethernet address: 02:00:00:00:00:00
+virtio_mmio2: <VirtIO MMIO adapter> mem 0x40002000-0x40002fff irq 2 on ofwbus0
+vtrnd0: <VirtIO Entropy Adapter> on virtio_mmio2
+virtio_mmio2: host features: 0x100000000 <Version1>
+virtio_mmio2: negotiated features: 0
+random: registering fast source VirtIO Entropy Adapter
+virtio_mmio3: <VirtIO MMIO adapter> mem 0x40003000-0x40003fff irq 3 on ofwbus0
+virtio_mmio3: Unsupported version: 0
+device_attach: virtio_mmio3 attach returned 6
+cryptosoft0: <software crypto>
+crypto: assign cryptosoft0 driver id 0, flags 0x6000000
+Device configuration finished.
+procfs registered
+Timecounters tick every 10.000 msec
+lo0: bpf attached
+vlan: initialized, using hash tables with chaining
+tcp_init: net.inet.tcp.tcbhashsize auto tuned to 8192
+IPsec: Initialized Security Association Processing.
+GEOM: new disk vtbd0
+Obsolete code will be removed soon: random(9) is the obsolete Park-Miller LCG from 1988
+Trying to mount root from ufs:/dev/ufs/root []...
+Warning: no time-of-day clock registered, system time will not be set accurately
+start_init: trying /sbin/init
+/etc/rc: WARNING: hostid: unable to figure out a UUID from DMI data, generating a new one
+Setting hostuuid: 6af09d0d-edf3-11ea-81df-efdd7b5ff81a.
+Setting hostid: 0x4503ba75.
+Starting file system checks:
+/dev/ufs/root: FILE SYSTEM CLEAN; SKIPPING CHECKS
+/dev/ufs/root: clean, 309020 free (4 frags, 38627 blocks, 0.0% fragmentation)
+Mounting local filesystems:.
+ELF ldconfig path: /lib /usr/lib /usr/lib/compat
+random: unblocking device.
+devmatch: Can't read linker hints file.
+Setting hostname: qemu-cheri-jrtc4.
+Setting up harvesting: PURE_VIRTIO,[UMA],[FS_ATIME],SWI,INTERRUPT,NET_NG,[NET_ETHER],NET_TUN,MOUSE,KEYBOARD,ATTACH,CACHED
+Feeding entropy: .
+lo0: link state changed to UP
+vtnet0: link state changed to UP
+Starting Network: lo0 vtnet0.
+lo0: flags=8049<UP,LOOPBACK,RUNNING,MULTICAST> metric 0 mtu 16384
+	options=680003<RXCSUM,TXCSUM,LINKSTATE,RXCSUM_IPV6,TXCSUM_IPV6>
+	inet6 ::1 prefixlen 128
+	inet6 fe80::1%lo0 prefixlen 64 scopeid 0x2
+	inet 127.0.0.1 netmask 0xff000000
+	groups: lo
+	nd6 options=21<PERFORMNUD,AUTO_LINKLOCAL>
+vtnet0: flags=8963<UP,BROADCAST,RUNNING,PROMISC,SIMPLEX,MULTICAST> metric 0 mtu 1500
+	options=28<VLAN_MTU,JUMBO_MTU>
+	ether 02:00:00:00:00:00
+	media: Ethernet 10Gbase-T <full-duplex>
+	status: active
+	nd6 options=29<PERFORMNUD,IFDISABLED,AUTO_LINKLOCAL>
+Starting devd.
+devmatch: Can't read linker hints file.
+devmatch: Can't read linker hints file.
+Starting dhclient.
+DHCPDISCOVER on vtnet0 to 255.255.255.255 port 67 interval 3
+DHCPOFFER from 10.0.2.2
+DHCPREQUEST on vtnet0 to 255.255.255.255 port 67
+DHCPACK from 10.0.2.2
+bound to 10.0.2.15 -- renewal in 43200 seconds.
+add host 127.0.0.1: gateway lo0 fib 0: route already in table
+add host ::1: gateway lo0 fib 0: route already in table
+add net fe80::: gateway ::1
+add net ff02::: gateway ::1
+add net ::ffff:0.0.0.0: gateway ::1
+add net ::0.0.0.0: gateway ::1
+Creating and/or trimming log files.
+Starting syslogd.
+No core dumps found.
+NFS access cache time=60
+Clearing /tmp (X related).
+Updating motd:.
+Mounting late filesystems:.
+Updating /var/run/os-release done.
+Performing sanity check on sshd configuration.
+Starting sshd.
+Starting background file system checks in 60 seconds.
+
+# COMMENT: Finally, the FreeBSD banner and login prompt
+# We log in as root and type a few shell commands (uname, ls)
+
+Thu Sep  3 14:42:16 UTC 2020
+
+FreeBSD/riscv (qemu-cheri-jrtc4) (ttyu0)
+
+login: root
+root
+Sep  3 14:42:23 qemu-cheri-jrtc4 login[693]: ROOT LOGIN (root) ON ttyu0
+FreeBSD 13.0-CURRENT (FETT-NODEBUG) #4 r362121+89083b90c601-c327974(multicompat)-dirty: Thu Sep  3 15:52:05 BST 2020
+
+Welcome to CheriBSD!
+
+CheriBSD extends FreeBSD to implement memory protection and software
+compartmentalization features supported by the CHERI ISA.
+
+CheriBSD source may be found at https://github.com/CTSRD-CHERI/cheribsd/
+
+We provide support via mailing list
+https://www.cl.cam.ac.uk/research/security/ctsrd/cheri/cheri-lists.html.
+
+Find out more about about CHERI at http://cheri-cpu.org/
+78resizewin: timeout reading from terminal
+root@qemu-cheri-jrtc4:~ # 
+
+root@qemu-cheri-jrtc4:~ # uname -a
+uname -a
+FreeBSD qemu-cheri-jrtc4 13.0-CURRENT FreeBSD 13.0-CURRENT #4 r362121+89083b90c601-c327974(multicompat)-dirty: Thu Sep  3 15:52:05 BST 2020     jrtc4@zeno.sec.cl.cam.ac.uk:/home/jrtc4/cheri/build/cheribsd-riscv64-build/home/jrtc4/cheri/cheribsd/riscv.riscv64/sys/FETT-NODEBUG  riscv
+root@qemu-cheri-jrtc4:~ # ps aux
+ps aux
+USER  PID %CPU %MEM   VSZ  RSS TT  STAT STARTED    TIME COMMAND
+root   11 65.0  0.0     0   16  -  RNL  14:40   0:21.99 [idle]
+root    5  7.0  0.0     0   16  -  DL   14:40   0:11.83 [rand_harvestq]
+root  695  4.0  0.3 13600 3372 u0  S    14:42   0:01.14 -csh (csh)
+root    0  0.0  0.0     0  160  -  DLs  14:40   0:00.15 [kernel]
+root    1  0.0  0.1 11704  636  -  SLs  14:40   0:00.22 /sbin/init
+root    2  0.0  0.0     0   16  -  DL   14:40   0:00.00 [crypto]
+root    3  0.0  0.0     0   16  -  DL   14:40   0:00.00 [crypto returns 0]
+root    4  0.0  0.0     0   16  -  DL   14:40   0:00.00 [sctp_iterator]
+root    6  0.0  0.0     0   48  -  DL   14:40   0:00.24 [pagedaemon]
+root    7  0.0  0.0     0   16  -  DL   14:40   0:00.00 [vmdaemon]
+root    8  0.0  0.0     0   48  -  DL   14:40   0:00.22 [bufdaemon]
+root    9  0.0  0.0     0   16  -  DL   14:40   0:00.07 [syncer]
+root   10  0.0  0.0     0   16  -  DL   14:40   0:00.00 [audit]
+root   12  0.0  0.0     0  144  -  WL   14:40   0:03.13 [intr]
+root   13  0.0  0.0     0   48  -  DL   14:40   0:01.22 [geom]
+root   14  0.0  0.0     0   16  -  DL   14:40   0:00.02 [vnlru]
+root   15  0.0  0.0     0   16  -  DL   14:40   0:00.00 [soaiod1]
+root   16  0.0  0.0     0   16  -  DL   14:40   0:00.00 [soaiod2]
+root   17  0.0  0.0     0   16  -  DL   14:40   0:00.00 [soaiod3]
+root   18  0.0  0.0     0   16  -  DL   14:40   0:00.00 [soaiod4]
+root  285  0.0  0.1 12884 1112  -  Is   14:41   0:00.12 dhclient: system.syslog (dhclient)
+root  288  0.0  0.1 12884  656  -  Is   14:41   0:00.13 dhclient: vtnet0 [priv] (dhclient)
+_dhcp 365  0.0  0.1 12888  524  -  ICs  14:41   0:00.03 dhclient: vtnet0 (dhclient)
+root  366  0.0  0.0 11380  152  -  Ss   14:41   0:00.01 /sbin/devd
+root  442  0.0  0.1 12604 1276  -  Ss   14:41   0:00.27 /usr/sbin/syslogd -s
+root  641  0.0  0.1 19632 1380  -  Is   14:42   0:00.14 /usr/sbin/sshd
+root  694  0.0  0.1 12620  808  -  Ss   14:42   0:00.06 logger: system.syslog (logger)
+root  687  0.0  0.0 13216  516 u0- S    14:42   0:00.03 sh /etc/rc autoboot
+root  688  0.0  0.2 12620 2216 u0- SC   14:42   0:00.19 logger -p daemon.notice -t fsck
+root  690  0.0  0.2 12456 1876 u0- SC   14:42   0:00.08 sleep 60
+root  693  0.0  0.3 13420 2972 u0  Ss   14:42   0:00.58 login [pam] (login)
+root  699  0.0  0.2 13336 2548 u0  R+   14:42   0:00.16 ps aux
+root@qemu-cheri-jrtc4:~ # ls
+ls
+.bash_profile           .k5login                .shrc
+.bashrc                 .login                  .ssh
+.cshrc                  .profile                make-purecap-chroot
+
+# ================================================================
+# COMMENT: Demonstrate networking by ssh'ing to a remote machine
+
+root@qemu-cheri-jrtc4:~ # ssh nikhil@elevennuc
+ssh nikhil@elevennuc
+The authenticity of host 'elevennuc (192.168.1.124)' can't be established.
+ECDSA key fingerprint is SHA256:x/Qnm2Kd0CenI1lbDGDScRM0VD1kHX4FJjLj3+N8JRg.
+No matching host key fingerprint found in DNS.
+Are you sure you want to continue connecting (yes/no)? yes
+yes
+Warning: Permanently added 'elevennuc' (ECDSA) to the list of known hosts.
+nikhil@elevennuc's password: 
+
+# ----------------------------------------------------------------
+# COMMENT: And we are now at the shell of the remote machine
+# We compute a reference sha256 of a 7-megabyte file that we're soon
+# going to 'scp' back to FreeBSD
+
+Linux elevennuc 4.19.0-17-amd64 #1 SMP Debian 4.19.194-3 (2021-07-18) x86_64
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+Last login: Wed Sep 29 09:12:02 2021 from 192.168.1.10
+  PATH prefixed with    ~/bin
+# Env vars for frequently used dirs (in alphabetical order)
+
+export BLUESPEC_HOME=~/git_clones/bsc/inst
+
+export GARNET_REPO=~/git_clones/CTSRD-CHERI_garnet
+export AWSTERIA_INFRA_REPO=~/git_clones/AWSteria_Infra
+
+export AWSTERIA_REPO=~/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio
+
+export FLUTE_REPO=~/git_clones/Flute
+export MAGRITTE_REPO=~/git_clones/Magritte
+export PICCOLO_REPO=~/git_clones/Piccolo
+export TOOOBA_REPO=~/git_clones/Toooba
+
+export MITOOO_REPO=~/Projects/RISCV/MIT-riscy/riscy-OOO
+Setting up Vivado 2019.1
+/opt/Xilinx/Vivado/2019.1/bin/vivado
+LM_LICENSE_FILE=/opt/Xilinx/Xilinx.lic
+  PATH suffixed with  /usr/local/sbin
+
+--19:48:31--elevennuc: ~
+$ uname -a
+Linux elevennuc 4.19.0-17-amd64 #1 SMP Debian 4.19.194-3 (2021-07-18) x86_64 GNU/Linux
+--19:48:40--elevennuc: ~
+
+# COMMENT: we sha256 a file we are soon going to copy from the remote
+# machine into our FreeBSD on RISC-V, for reference.
+
+
+$ ls -als Testdata1M.dat
+
+1028 -rw-r--r-- 1 nikhil nikhil 1048582 Sep 29 19:57 Testdata1M.dat
+
+$ sha256sum Testdata1M.dat
+
+42975c206143be6a723014f9f6aefc893568cfde24512701d8116cc1ee9fe487  Testdata1M.dat
+
+$ exit
+logout
+Connection to elevennuc closed.
+
+# ----------------------------------------------------------------
+# COMMENT: and we have closed the connection and are back at FreeBSD's prompt
+
+root@qemu-cheri-jrtc4:~ # ls
+ls
+.bash_profile           .k5login                .shrc
+.bashrc                 .login                  .ssh
+.cshrc                  .profile                make-purecap-chroot
+root@qemu-cheri-jrtc4:~ # scp nikhil@elevennuc:~/foo.tar.gz .
+scp nikhil@elevennuc:~/foo.tar.gz .
+nikhil@elevennuc's password: 
+foo.tar.gz                                      9% 1472KB   0.0KB/s - stalled -
+
+# ----------------------------------------------------------------
+# COMMENT: We 'scp' a 1 megabyte file from the remote machine back to our local
+# (FreeBSD)'s block storage device, and sha256 it to check it's ok.
+
+root@qemu-cheri-jrtc4:~ # scp nikhil@elevennuc:~/Testdata1M.dat .
+scp nikhil@elevennuc:~/Testdata1M.dat .
+nikhil@elevennuc's password: 
+Testdata1M.dat                                100% 1024KB   3.3KB/s   05:10    
+
+root@qemu-cheri-jrtc4:~ # ls
+ls
+.bash_profile           .login                  Testdata1M.dat
+.bashrc                 .profile                make-purecap-chroot
+.cshrc                  .shrc
+.k5login                .ssh
+
+root@qemu-cheri-jrtc4:~ # sha256 Testdata1M.dat
+sha256 Testdata1M.dat
+SHA256 (Testdata1M.dat) = 42975c206143be6a723014f9f6aefc893568cfde24512701d8116cc1ee9fe487
+
+# ----------------------------------------------------------------
+# COMMENT: we shutdown our FreeBSD on RISC-V;
+# we will then restart it to ensure the scp'd file is still there, and not corrupted.
+
+root@qemu-cheri-jrtc4:~ # shutdown -h now
+shutdown -h now
+Shutdown NOW!
+shutdown: [pid 706]
+root@qemu-cheri-jrtc4:~ #                                                                                
+*** FINAL System shutdown message from root@qemu-cheri-jrtc4 ***             
+
+System going down IMMEDIATELY                                                  
+
+                                                                               
+Sep  3 14:50:02 qemu-cheri-jrtc4 shutdown[706]: halt by root: 
+
+System shutdown time has arrived
+Stopping sshd.
+Stopping devd.
+Writing entropy file: .
+Writing early boot entropy file: .
+Terminated
+.
+Sep  3 14:50:33 qemu-cheri-jrtc4 syslogd: exiting on signal 15
+Waiting (max 60 seconds) for system process `vnlru' to stop... done
+Waiting (max 60 seconds) for system process `syncer' to stop... 
+Syncing disks, vnodes remaining... 1 0 0 done
+Waiting (max 60 seconds) for system thread `bufdaemon' to stop... done
+Waiting (max 60 seconds) for system thread `bufspacedaemon-0' to stop... done
+All buffers synced.
+Swap device [file] removed.
+Uptime: 10m14s
+
+The operating system has halted.
+Please press any key to reboot.
+
+# ================================================================
+# COMMENT: we restart RISC-V rebooting FreeBSD with the existing disk
+# into which we had scp'd a file
+
+$ sudo /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/Host/build_VCU118/exe_Host_VCU118 --memhex32 /home/nikhil/tmp/FreeBSD_for_Flute/bbl_and_FreeBSD.FETT-NODEBUG.host.memhex32 --blockdev cheribsd-riscv64.img
+...
+bbl loader
+---<<BOOT>>---
+KDB: debugger backends: ddb
+KDB: current backend: ddb
+Physical memory chunk(s):
+  0xc0000000 - 0xffffffff,  1024 MB ( 262144 pages)
+Excluded memory regions:
+  0xc0000000 - 0xc01fffff,     2 MB (    512 pages) NoAlloc NoDump
+  0xc0200000 - 0xc0926fff,     7 MB (   1831 pages) NoAlloc 
+Found 1 CPUs in the device tree
+Copyright (c) 1992-2020 The FreeBSD Project.
+Copyright (c) 1979, 1980, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994
+	The Regents of the University of California. All rights reserved.
+FreeBSD is a registered trademark of The FreeBSD Foundation.
+FreeBSD 13.0-CURRENT #4 r362121+89083b90c601-c327974(multicompat)-dirty: Thu Sep  3 15:52:05 BST 2020
+    jrtc4@zeno.sec.cl.cam.ac.uk:/home/jrtc4/cheri/build/cheribsd-riscv64-build/home/jrtc4/cheri/cheribsd/riscv.riscv64/sys/FETT-NODEBUG riscv
+clang version 11.0.0 (git@github.com:CTSRD-CHERI/llvm-project.git 61ef05e7b0781437373e58c74936422cb9da0a53)
+
+... <snipped FreeBSD boot messages (same as before)> ...
+
+Starting sshd.
+Starting background file system checks in 60 seconds.
+
+Thu Sep  3 14:52:19 UTC 2020
+
+FreeBSD/riscv (qemu-cheri-jrtc4) (ttyu0)
+
+login: root
+root
+Sep  3 14:52:30 qemu-cheri-jrtc4 login[662]: ROOT LOGIN (root) ON ttyu0
+Last login: Thu Sep  3 14:43:04 on ttyu0
+FreeBSD 13.0-CURRENT (FETT-NODEBUG) #4 r362121+89083b90c601-c327974(multicompat)-dirty: Thu Sep  3 15:52:05 BST 2020
+
+Welcome to CheriBSD!
+
+CheriBSD extends FreeBSD to implement memory protection and software
+compartmentalization features supported by the CHERI ISA.
+
+CheriBSD source may be found at https://github.com/CTSRD-CHERI/cheribsd/
+
+We provide support via mailing list
+https://www.cl.cam.ac.uk/research/security/ctsrd/cheri/cheri-lists.html.
+
+Find out more about about CHERI at http://cheri-cpu.org/
+78resizewin: timeout reading from terminal
+
+# ----------------------------------------------------------------
+# COMMENT: Check that the file we scp'd in during previous boot is still there
+# and has the correct sha256
+
+root@qemu-cheri-jrtc4:~ # ls
+ls
+.bash_profile           .login                  Testdata1M.dat
+.bashrc                 .profile                make-purecap-chroot
+.cshrc                  .shrc
+.k5login                .ssh
+
+root@qemu-cheri-jrtc4:~ # sha256 Testdata1M.dat
+SHA256 (Testdata1M.dat) = 42975c206143be6a723014f9f6aefc893568cfde24512701d8116cc1ee9fe487
+
+# ----------------------------------------------------------------
+# COMMENT: scp the file back out to the remote machine, with a different filename
+
+root@qemu-cheri-jrtc4:~ # scp Testdata1M.dat nikhil@elevennuc:~/Testdata1M_b.dat
+nikhil@elevennuc's password: 
+Testdata1M.dat                                100% 1024KB 336.8KB/s   00:03    
+
+# ----------------------------------------------------------------
+# COMMENT: ssh to the remote machine and sha256 the new file to ensure it arrived uncorrupted
+
+root@qemu-cheri-jrtc4:~ # ssh nikhil@elevennuc
+ssh nikhil@elevennuc
+nikhil@elevennuc's password: 
+Linux elevennuc 4.19.0-17-amd64 #1 SMP Debian 4.19.194-3 (2021-07-18) x86_64
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+Last login: Wed Sep 29 20:04:28 2021 from 192.168.1.124
+
+... <snipped banner stuff> ...
+
+--20:19:57--elevennuc: ~
+$ ls -als Testdata1M*
+1028 -rw-r--r-- 1 nikhil nikhil 1048582 Sep 29 20:19 Testdata1M_b.dat
+1028 -rw-r--r-- 1 nikhil nikhil 1048582 Sep 29 19:57 Testdata1M.dat
+
+--20:20:05--elevennuc: ~
+$ diff -s Testdata1M.dat Testdata1M_b.dat
+Files Testdata1M.dat and Testdata1M_b.dat are identical
+
+--20:20:21--elevennuc: ~
+$ sha256sum Testdata1M_b.dat
+42975c206143be6a723014f9f6aefc893568cfde24512701d8116cc1ee9fe487  Testdata1M_b.dat
+
+--20:20:33--elevennuc: ~
+$ exit
+exit
+logout
+Connection to elevennuc closed.
+root@qemu-cheri-jrtc4:~ # sudo shutdown -h now
+sudo shutdown -h now
+sudo: Command not found.
+root@qemu-cheri-jrtc4:~ # shutdown -h now
+shutdown -h now
+Shutdown NOW!
+shutdown: [pid 676]
+root@qemu-cheri-jrtc4:~ #                                                                                
+*** FINAL System shutdown message from root@qemu-cheri-jrtc4 ***             
+
+System going down IMMEDIATELY                                                  
+
+                                                                               
+Sep  3 14:54:45 qemu-cheri-jrtc4 shutdown[676]: halt by root: 
+
+System shutdown time has arrived
+Stopping sshd.
+Stopping devd.
+Writing entropy file: .
+Writing early boot entropy file: .
+Terminated
+.
+Sep  3 14:55:16 qemu-cheri-jrtc4 syslogd: exiting on signal 15
+Waiting (max 60 seconds) for system process `vnlru' to stop... done
+Waiting (max 60 seconds) for system process `syncer' to stop... 
+Syncing disks, vnodes remaining... 1 0 done
+Waiting (max 60 seconds) for system thread `bufdaemon' to stop... done
+Waiting (max 60 seconds) for system thread `bufspacedaemon-0' to stop... done
+All buffers synced.
+Swap device [file] removed.
+Uptime: 4m45s
+
+The operating system has halted.
+Please press any key to reboot.
+
+# ================================================================

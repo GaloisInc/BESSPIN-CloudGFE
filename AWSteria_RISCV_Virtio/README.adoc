@@ -320,8 +320,8 @@ GDB demonstrations show:
   ** make (same for Flute or Toooba FPGA-side): link:Host/build_VCU118/transcript_for_make.txt[transcript]
 
 * Run
-  ** Flute, small examples: demonstrated: transcript in progress
-  ** Flute, FreeBSD: demonstrated: transcript in progress
+  ** Flute, small examples: link:Host/build_VCU118/transcript_for_run_small.txt[transcript]
+  ** Flute, FreeBSD:        link:Host/build_VCU118/transcript_for_run_FreeBSD.txt[transcript]
   ** Toooba, small examples: to be demonstrated
   ** Toooba, FreeBSD: to be demonstrated
   ** GDB control: In progress: in progress

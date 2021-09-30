@@ -1,0 +1,130 @@
+# Transcript of a few small tests run on AWSteria:Flute:Virtio on VCU118
+# Tests are separated by lines with TEST comment
+
+# ================================================================
+# TEST ISA test rv64ui-p-add
+
+$ make -f ../../Tests/Tests.mk reconfig 
+INFO: AWSTERIA_REPO = /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio
+INFO: EXE_HOST_SIDE = /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/Host/build_VCU118/exe_Host_VCU118
+INFO: FREEBSD_STANDALONE                = /home/nikhil/tmp/FreeBSD_for_Flute/bbl_and_FreeBSD.GFE-NODEBUG.host.memhex32
+INFO: FREEBSD_VIRTIO                    = /home/nikhil/tmp/FreeBSD_for_Flute/bbl_and_FreeBSD.FETT-NODEBUG.host.memhex32
+INFO: VIRTIO_BLOCK_DEVICE_FILE_ORIGINAL = /home/nikhil/tmp/FreeBSD_for_Flute/cheribsd-riscv64.img
+Reconfiguring partition with ~/git_clones/CTSRD-CHERI_garnet/example_2021-09-24_AWSteria_RISCV_Virtio_DM_reclocked/build/AWSteria_pblock_partition_partial.bit
+sudo xvsecctl -b 0x07 -F 0x0 -c 0x1 -p ~/git_clones/CTSRD-CHERI_garnet/example_2021-09-24_AWSteria_RISCV_Virtio_DM_reclocked/build/AWSteria_pblock_partition_partial.bit
+[sudo] password for nikhil: 
+MCAP version: 1
+[XVSEC] : xvsec_mcap_configure_fpga : Bitstream Program successful
+FPGA configuration successful
+
+# ----------------
+--19:36:40--elevennuc: ~/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/Host/build_VCU118
+$ make -f ../../Tests/Tests.mk test_p_add
+INFO: AWSTERIA_REPO = /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio
+INFO: EXE_HOST_SIDE = /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/Host/build_VCU118/exe_Host_VCU118
+INFO: FREEBSD_STANDALONE                = /home/nikhil/tmp/FreeBSD_for_Flute/bbl_and_FreeBSD.GFE-NODEBUG.host.memhex32
+INFO: FREEBSD_VIRTIO                    = /home/nikhil/tmp/FreeBSD_for_Flute/bbl_and_FreeBSD.FETT-NODEBUG.host.memhex32
+INFO: VIRTIO_BLOCK_DEVICE_FILE_ORIGINAL = /home/nikhil/tmp/FreeBSD_for_Flute/cheribsd-riscv64.img
+sudo /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/Host/build_VCU118/exe_Host_VCU118 --memhex32 /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/Tests/rv64ui-p-add.memhex32
+AWSteria_Host_init: AWSteria_Host_init
+    Opening PCIe/AXI4 write device: /dev/xdma0_h2c_0
+        pci_AXI4_w_fd = 3
+    Opening PCIe/AXI4 read device: /dev/xdma0_c2h_0
+        pci_AXI4_r_fd = 4
+    Opening PCIe/AXI4-Lite read/write device: /dev/xdma0_user
+        pci_AXI4L_fd = 5
+    mmap'ing the AXI4-Lite device
+        Memory map address base: 0x7fd2d6bc7000
+load_mem_hex32_using_DMA: downloading to DDR addr 0xbffff000, 0x2000 bytes
+read device: Input/output error
+ERROR: AWSteria_AXI4_read (size 0x1000 address 0xbffff000)
+    read => rc -1; n_recd 0x0, count 0x1000
+ERROR: DMA read failed on channel 0HS_syscontrol: tohost_value = 0x1    (PASS)
+TEST PASSED
+AWSteria_Host_shutdown: AWSteria_Host_shutdown
+    munmap'ing the AXI4-Lite device
+    Closing PCIe/AXI4-Lite read/write device: /dev/xdma0_user
+    Closing PCIe/AXI4 write device: /dev/xdma0_h2c_0
+    Closing PCIe/AXI4 read device: /dev/xdma0_c2h_0
+
+# ================================================================
+# TEST Hello World! (showing TTY output to host-side working)
+
+--19:38:29--elevennuc: ~/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/Host/build_VCU118
+$ make -f ../../Tests/Tests.mk test_hello
+INFO: AWSTERIA_REPO = /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio
+INFO: EXE_HOST_SIDE = /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/Host/build_VCU118/exe_Host_VCU118
+INFO: FREEBSD_STANDALONE                = /home/nikhil/tmp/FreeBSD_for_Flute/bbl_and_FreeBSD.GFE-NODEBUG.host.memhex32
+INFO: FREEBSD_VIRTIO                    = /home/nikhil/tmp/FreeBSD_for_Flute/bbl_and_FreeBSD.FETT-NODEBUG.host.memhex32
+INFO: VIRTIO_BLOCK_DEVICE_FILE_ORIGINAL = /home/nikhil/tmp/FreeBSD_for_Flute/cheribsd-riscv64.img
+sudo /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/Host/build_VCU118/exe_Host_VCU118 --memhex32 /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/Tests/rv64-hello.memhex32
+AWSteria_Host_init: AWSteria_Host_init
+    Opening PCIe/AXI4 write device: /dev/xdma0_h2c_0
+        pci_AXI4_w_fd = 3
+    Opening PCIe/AXI4 read device: /dev/xdma0_c2h_0
+        pci_AXI4_r_fd = 4
+    Opening PCIe/AXI4-Lite read/write device: /dev/xdma0_user
+        pci_AXI4L_fd = 5
+    mmap'ing the AXI4-Lite device
+        Memory map address base: 0x7f6c5a545000
+load_mem_hex32_using_DMA: downloading to DDR addr 0xbffff000, 0x5c30 bytes
+read device: Input/output error
+ERROR: AWSteria_AXI4_read (size 0x1000 address 0xbffff000)
+    read => rc -1; n_recd 0x0, count 0x1000
+ERROR: DMA read failed on channel 0HS_syscontrol: tohost_value = 0x1    (PASS)
+Hello World!
+TEST PASSED
+AWSteria_Host_shutdown: AWSteria_Host_shutdown
+    munmap'ing the AXI4-Lite device
+    Closing PCIe/AXI4-Lite read/write device: /dev/xdma0_user
+    Closing PCIe/AXI4 write device: /dev/xdma0_h2c_0
+    Closing PCIe/AXI4 read device: /dev/xdma0_c2h_0
+
+# ================================================================
+# TEST FreeRTOS boot (also showing console TTY output to host-side working)
+
+--19:41:00--elevennuc: ~/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/Host/build_VCU118
+$ make -f ../../Tests/Tests.mk test_freeRTOS 
+INFO: AWSTERIA_REPO = /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio
+INFO: EXE_HOST_SIDE = /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/Host/build_VCU118/exe_Host_VCU118
+INFO: FREEBSD_STANDALONE                = /home/nikhil/tmp/FreeBSD_for_Flute/bbl_and_FreeBSD.GFE-NODEBUG.host.memhex32
+INFO: FREEBSD_VIRTIO                    = /home/nikhil/tmp/FreeBSD_for_Flute/bbl_and_FreeBSD.FETT-NODEBUG.host.memhex32
+INFO: VIRTIO_BLOCK_DEVICE_FILE_ORIGINAL = /home/nikhil/tmp/FreeBSD_for_Flute/cheribsd-riscv64.img
+sudo /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/Host/build_VCU118/exe_Host_VCU118 --memhex32 /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/Tests/freertos1000.elf.memhex32
+AWSteria_Host_init: AWSteria_Host_init
+    Opening PCIe/AXI4 write device: /dev/xdma0_h2c_0
+        pci_AXI4_w_fd = 3
+    Opening PCIe/AXI4 read device: /dev/xdma0_c2h_0
+        pci_AXI4_r_fd = 4
+    Opening PCIe/AXI4-Lite read/write device: /dev/xdma0_user
+        pci_AXI4L_fd = 5
+    mmap'ing the AXI4-Lite device
+        Memory map address base: 0x7f4213bb8000
+load_mem_hex32_using_DMA: downloading to DDR addr 0xc0000000, 0xca800 bytes
+[0]: Hello from RX
+[0]: Hello from TX
+[1] TX: awoken
+[1] RX: received value
+Blink !!!
+[1]: Hello from RX
+[1] TX: sent
+[1]: Hello from TX
+[2] TX: awoken
+[2] RX: received value
+Blink !!!
+[2]: Hello from RX
+[2] TX: sent
+[2]: Hello from TX
+[3] TX: awoken
+[3] RX: received value
+Blink !!!
+[3]: Hello from RX
+[3] TX: sent
+[3]: Hello from TX
+[4] TX: awoken
+[4] RX: received value
+Blink !!!
+
+...
+
+# ================================================================
