@@ -1,4 +1,5 @@
 GNUmakefile
+Tests.mk
 build_dir
 RTL_from_bsc
 Verilator_Make

@@ -176,6 +176,7 @@ int load_mem_hex32_using_DMA (void *comms_state, char *filename)
 	fprintf (stdout, "%s: DMA write failed on channel 0\n", __FUNCTION__);
 	goto out;
     }
+    fprintf (stdout, "... done\n");
 
     // ================
     // Sanity check: readback a small amount and cross-check

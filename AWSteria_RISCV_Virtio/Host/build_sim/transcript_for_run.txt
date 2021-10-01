@@ -1,3 +1,34 @@
+Transcripts of host-side for several runs,
+with FPGA-side running in simulation (Bluesim or Verilator sim).
+
+>================================================================
+Running ISA test rv64ui-p-add
+
+Log of make -f Tests.mk test_p_add 
+Thu Sep 30 21:48:15 2021
+
+make  -f Tests.mk  test  TEST=rv64ui-p-add.memhex32
+make[1]: Entering directory '/home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/Host/build_sim'
+./exe_Host_sim --memhex32 /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/Tests/rv64ui-p-add.memhex32
+tcp_client_open: connecting to '127.0.0.1' port 30000
+tcp_client_open: connected
+load_mem_hex32_using_DMA: downloading to DDR addr 0xbffff000, 0x2000 bytes
+... done
+HS_syscontrol: tohost_value = 0x1    (PASS)
+ERROR: tcp_client_recv (): read () failed on byte 0
+Tests.mk:23: recipe for target 'test' failed
+make[1]: *** [test] Error 1
+make[1]: Leaving directory '/home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/Host/build_sim'
+Tests.mk:15: recipe for target 'test_p_add' failed
+make: *** [test_p_add] Error 2
+make exited with status code 2
+
+NOTE: '(PASS)' shows test pass.
+      'ERROR' is because of broken TCP on ^C of simulation
+
+>================================================================
+Running Hello World! example
+
 Log of ./exe_Host_sim --memhex32 ../../Tests/rv64-hello.memhex32 
 Thu Sep  9 19:26:41 2021
 
@@ -11,5 +42,55 @@ Hello World!
 ERROR: tcp_client_recv (): read () failed on byte 0
 ./exe_Host_sim exited with status code 1
 
-Thu Sep  9 19:26:44 2021
-----------------
+NOTE: '(PASS)' and 'Hello World!' shows test pass.
+      'ERROR' is because of broken TCP on ^C of simulation
+
+>================================================================
+Running FreeRTOS
+
+Log of make -f Tests.mk test_freeRTOS 
+Thu Sep 30 21:39:51 2021
+
+make  -f Tests.mk  test  TEST=freertos1000.elf.memhex32
+make[1]: Entering directory '/home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/Host/build_sim'
+./exe_Host_sim --memhex32 /home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/Tests/freertos1000.elf.memhex32
+tcp_client_open: connecting to '127.0.0.1' port 30000
+tcp_client_open: connected
+load_mem_hex32_using_DMA: downloading to DDR addr 0xc0000000, 0xca800 bytes
+... done
+[0]: Hello from RX
+[0]: Hello from TX
+[1] TX: awoken
+[1] RX: received value
+Blink !!!
+[1]: Hello from RX
+[1] TX: sent
+[1]: Hello from TX
+[2] TX: awoken
+[2] RX: received value
+Blink !!!
+[2]: Hello from RX
+[2] TX: sent
+[2]: Hello from TX
+[3] TX: awoken
+[3] RX: received value
+Blink !!!
+[3]: Hello from RX
+[3] TX: sent
+[3]: Hello from TX
+[4] TX: awoken
+[4] RX: received value
+Blink !!!
+[4]: Hello from RX
+[4] TX: sent
+[4]: Hello from TX
+[5] TX: awoken
+ERROR: tcp_client_recv (): read () failed on byte 0
+Tests.mk:23: recipe for target 'test' failed
+make[1]: *** [test] Error 1
+make[1]: Leaving directory '/home/nikhil/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/Host/build_sim'
+Tests.mk:9: recipe for target 'test_freeRTOS' failed
+make: *** [test_freeRTOS] Error 2
+make exited with status code 2
+
+>================================================================
