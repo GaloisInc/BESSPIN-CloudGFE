@@ -802,7 +802,7 @@ Verilog, and <code>make for_AWSF1_HDK</code> will create and populate a director
 <p>We perform a step to &#8220;create a DCP&#8221; (Design Checkpoint).  This must
 be done on a machine where aws-fpga has been installed
 (<a href="https://github.com/aws/aws-fpga.git" class="bare">https://github.com/aws/aws-fpga.git</a>), and where we have sourced the
-<code>hdk_setup.sh</code> file in that repo.  Briefly,</p>
+<code>hdk_setup.sh</code> file in that repo.  Briefly (for Flute),</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -814,10 +814,29 @@ be done on a machine where aws-fpga has been installed
 </div>
 <div class="paragraph">
 <p>This starts Vivado in the background to synthesize
-AWSteria_RISCV_Virtio RTL into a DCP containing a partial bitfile.
-The process takes about 4 hours running in an “FPGA Developer” AMI on
-an Amazon z1d.2xlarge instance.  Progress can be monitored by watching
-the log files whose names contain their creation timestamp, e.g.,</p>
+AWSteria_RISCV_Virtio RTL into a DCP containing a partial bitfile.</p>
+</div>
+<div class="paragraph">
+<p>Because we did not mention any <code>clock_recipe</code> command-line argument,
+it will use the default clock recipe A0, which clocks the whole design
+at 125 MHz.  Toooba will not meet timing at this speed; it needs a
+slower clock recipe.  Amongst AWS' standard clock recipes, the next
+slower one is A2, substantially slower at 16.67 MHz:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>  $ ./aws_build_dcp_from_cl.sh  -ignore_memory_requirement  -clock_recipe A2</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Toooba will probably synthesize faster (25-40 MHz) but that needs
+setting up custom clock recipes.</p>
+</div>
+<div class="paragraph">
+<p>The process (for Flute) takes about 4 hours running in an “FPGA
+Developer” AMI on an Amazon z1d.2xlarge instance.  Progress can be
+monitored by watching the log files whose names contain their creation
+timestamp, e.g.,</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1082,7 +1101,7 @@ FPGA-side containing a Flute CPU.</p>
 <div id="footer">
 <div id="footer-text">
 Version v0.8<br>
-Last updated 2021-09-24 11:52:05 EDT
+Last updated 2021-10-01 16:33:14 EDT
 </div>
 </div>
 </body>

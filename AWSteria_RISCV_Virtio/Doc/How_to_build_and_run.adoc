@@ -231,7 +231,7 @@ Verilog, and `make for_AWSF1_HDK` will create and populate a directory
 We perform a step to "`create a DCP`" (Design Checkpoint).  This must
 be done on a machine where aws-fpga has been installed
 (https://github.com/aws/aws-fpga.git[]), and where we have sourced the
-`hdk_setup.sh` file in that repo.  Briefly,
+`hdk_setup.sh` file in that repo.  Briefly (for Flute),
 
 ----
   $ cd  cl_AWSteria_RISCV/
@@ -242,9 +242,24 @@ be done on a machine where aws-fpga has been installed
 
 This starts Vivado in the background to synthesize
 AWSteria_RISCV_Virtio RTL into a DCP containing a partial bitfile.
-The process takes about 4 hours running in an “FPGA Developer” AMI on
-an Amazon z1d.2xlarge instance.  Progress can be monitored by watching
-the log files whose names contain their creation timestamp, e.g.,
+
+Because we did not mention any `clock_recipe` command-line argument,
+it will use the default clock recipe A0, which clocks the whole design
+at 125 MHz.  Toooba will not meet timing at this speed; it needs a
+slower clock recipe.  Amongst AWS' standard clock recipes, the next
+slower one is A2, substantially slower at 16.67 MHz:
+
+----
+  $ ./aws_build_dcp_from_cl.sh  -ignore_memory_requirement  -clock_recipe A2
+----
+
+Toooba will probably synthesize faster (25-40 MHz) but that needs
+setting up custom clock recipes.
+
+The process (for Flute) takes about 4 hours running in an “FPGA
+Developer” AMI on an Amazon z1d.2xlarge instance.  Progress can be
+monitored by watching the log files whose names contain their creation
+timestamp, e.g.,
 
 ----
     21_09_08-023754.nohup.out

@@ -172,6 +172,7 @@ bsc_RTL_for_garnet:
 	cp -p  $(BLUESPEC_HOME)/lib/Verilog/FIFO20.v       $(FOR_GARNET_DIR)/src/
 	cp -p  $(BLUESPEC_HOME)/lib/Verilog/FIFO2.v        $(FOR_GARNET_DIR)/src/
 	cp -p  $(BLUESPEC_HOME)/lib/Verilog/FIFOL1.v       $(FOR_GARNET_DIR)/src/
+	cp -p  $(BLUESPEC_HOME)/lib/Verilog/MakeResetA.v   $(FOR_GARNET_DIR)/src/
 	cp -p  $(BLUESPEC_HOME)/lib/Verilog/RegFile.v      $(FOR_GARNET_DIR)/src/
 	cp -p  $(BLUESPEC_HOME)/lib/Verilog/ResetEither.v  $(FOR_GARNET_DIR)/src/
 	cp -p  $(BLUESPEC_HOME)/lib/Verilog/RevertReg.v    $(FOR_GARNET_DIR)/src/

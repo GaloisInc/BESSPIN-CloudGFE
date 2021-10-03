@@ -96,7 +96,7 @@ int readback_check (void *comms_state, uint8_t *buf, uint64_t addr_base, uint64_
 
 	rc = AWSteria_AXI4_read (comms_state, readback_buf, read_size, addr_readback);
 	if (rc != 0) {
-	    fprintf (stdout, "ERROR: DMA read failed on channel 0");
+	    fprintf (stdout, "ERROR: AXI4 read failed on channel 0\n");
 	    return rc;
 	}
 
@@ -122,11 +122,11 @@ int readback_check (void *comms_state, uint8_t *buf, uint64_t addr_base, uint64_
 }
 
 // ================================================================
-// Load memory using DMA
+// Load memory using AXI4
 
 #define BUF_SIZE 0x400000000llu
 
-int load_mem_hex32_using_DMA (void *comms_state, char *filename)
+int load_mem_hex32_using_AXI4 (void *comms_state, char *filename)
 {
     int rc;
     // int channel = 0;
@@ -173,7 +173,7 @@ int load_mem_hex32_using_DMA (void *comms_state, char *filename)
 	     __FUNCTION__, addr_base, addr_lim - addr_base);
     rc = AWSteria_AXI4_write (comms_state, & (buf [addr_base]), addr_lim - addr_base, addr_base);
     if (rc != 0) {
-	fprintf (stdout, "%s: DMA write failed on channel 0\n", __FUNCTION__);
+	fprintf (stdout, "ERROR: %s: AXI4 write failed on channel 0\n", __FUNCTION__, rc);
 	goto out;
     }
     fprintf (stdout, "... done\n");
@@ -420,9 +420,10 @@ int main (int argc, char *argv [])
     // Load memhex file, if given
 
     if (memhex32 != NULL) {
-	rc = load_mem_hex32_using_DMA (comms_state, memhex32);
+	rc = load_mem_hex32_using_AXI4 (comms_state, memhex32);
 	if (rc != 0) {
-	    fprintf (stdout, "ERROR: loading memhex32 file %s failed\n", memhex32);
+	    fprintf (stdout, "ERROR: %s failed on memhex32 file %s: rc = %0d\n",
+		     __FUNCTION__, memhex32, rc);
 	    goto out;
 	}
     }
