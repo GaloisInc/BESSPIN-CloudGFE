@@ -39,8 +39,7 @@ HS_Gdbstub_State *HS_gdbstub_init (void *comms_state, unsigned short port)
 
     int retval = gdbstub_start_tcp (logfile, port);
     if (retval < 0) {
-	fprintf (stdout, "ERROR: %s:%s: gdbstub_start_tcp failed\n",
-		 __FILE__, __FUNCTION__);
+	fprintf (stdout, "ERROR: %s: gdbstub_start_tcp failed\n", __FUNCTION__);
 	return NULL;
     }
     fprintf (stdout, "%s: gdbstub_start_tcp returned port %0d\n", __FUNCTION__, retval);

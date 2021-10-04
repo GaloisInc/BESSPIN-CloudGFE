@@ -64,6 +64,8 @@
 static int verbosity = 0;
 
 // ================================================================
+// Readback from DDR to cross-check
+// Return 0 if ok, non-zero if err
 
 int readback_check (void *comms_state, uint8_t *buf, uint64_t addr_base, uint64_t addr_lim)
 {
@@ -71,14 +73,14 @@ int readback_check (void *comms_state, uint8_t *buf, uint64_t addr_base, uint64_
     static uint8_t *readback_buf = NULL;
 
     if (verbosity > 0)
-	fprintf (stdout, "%s: Readback downloaded data to cross-check: base 0x%0lx lim 0x%0lx (size 0x%0lx bytes)\n",
+	fprintf (stdout, "%s: base 0x%0lx lim 0x%0lx (size 0x%0lx bytes)\n",
 		 __FUNCTION__, addr_base, addr_lim, addr_lim - addr_base);
 
     int rc;
     if (readback_buf == NULL) {
 	readback_buf = (uint8_t *) malloc (READBACK_BUFSIZE);
 	if (readback_buf == NULL) {
-	    fprintf (stdout, "%s: ERROR could not malloc 0x%0x bytes for readback_buf\n",
+	    fprintf (stdout, "ERROR: %s: malloc failed: 0x%0x bytes for readback_buf\n",
 		     __FUNCTION__, READBACK_BUFSIZE);
 	    rc = 1;
 	    return 1;
@@ -96,7 +98,9 @@ int readback_check (void *comms_state, uint8_t *buf, uint64_t addr_base, uint64_
 
 	rc = AWSteria_AXI4_read (comms_state, readback_buf, read_size, addr_readback);
 	if (rc != 0) {
-	    fprintf (stdout, "ERROR: AXI4 read failed on channel 0\n");
+	    fprintf (stdout, "ERROR: %s: AXI4 read: rc = %0d\n", __FUNCTION__, rc);
+	    fprintf (stdout, "    addr_read_back 0x%0lx, read_size 0x%0lx\n",
+		     addr_readback, read_size);
 	    return rc;
 	}
 
@@ -106,7 +110,8 @@ int readback_check (void *comms_state, uint8_t *buf, uint64_t addr_base, uint64_
 	    uint32_t *p2 = (uint32_t *) (readback_buf + j);
 	    if (*p1 != *p2) {
 		if (verbosity > 0)
-		    fprintf (stdout, "        ERROR: read-back at addr %0lx: 0x%08x expected, 0x%08x actual\n",
+		    fprintf (stdout,
+			     "    read-back addr %0lx: expected 0x%08x; actual 0x%08x\n",
                              addr_readback + j, *p1, *p2);
 		errs++;
 	    }
@@ -116,13 +121,15 @@ int readback_check (void *comms_state, uint8_t *buf, uint64_t addr_base, uint64_
 	}
     }
     if (errs > 0)
-	fprintf (stdout, "Number of readback errors: %0d words (ignore if ROM addrs)\n", errs);
+	fprintf (stdout, "%s: Number of readback errors: %0d words (ignore if ROM addrs)\n",
+		 __FUNCTION__, errs);
 
     return ((errs == 0) ?  0 : 1);
 }
 
 // ================================================================
 // Load memory using AXI4
+// Return 0 if ok, non-zero of err.
 
 #define BUF_SIZE 0x400000000llu
 
@@ -138,7 +145,7 @@ int load_mem_hex32_using_AXI4 (void *comms_state, char *filename)
     // Allocate a buffer to read memhex contents
     uint8_t *buf = (uint8_t *) malloc  (BUF_SIZE);
     if (buf == NULL) {
-	fprintf (stdout, "%s: ERROR allocating memhex buffer of size: %0lld (0x%0llx)\n",
+	fprintf (stdout, "ERROR: %s: malloc failed: buffer %0lld (0x%0llx) bytes\n",
 		 __FUNCTION__, BUF_SIZE, BUF_SIZE);
 	rc = 1;
 	goto out;
@@ -149,7 +156,7 @@ int load_mem_hex32_using_AXI4 (void *comms_state, char *filename)
     uint64_t  addr_base, addr_lim;
     rc = memhex32_read (filename, buf, BUF_SIZE, & addr_base, & addr_lim);
     if (rc != 0) {
-	fprintf (stdout, "%s: ERROR reading Memhex32 file: %s\n", __FUNCTION__, filename);
+	fprintf (stdout, "ERROR: %s: reading Memhex32 file: %s\n", __FUNCTION__, filename);
 	rc = 1;
 	goto out;
     }
@@ -159,21 +166,21 @@ int load_mem_hex32_using_AXI4 (void *comms_state, char *filename)
 		 addr_base, addr_lim, addr_lim - addr_base);
     }
     if (addr_base >= addr_lim) {
-	fprintf (stdout, "    Memhex32 file is empty! Abandoning download\n");
+	fprintf (stdout, "%s: Memhex32 file is empty! Abandoning load-to-DDR\n",
+		 __FUNCTION__);
 	rc = 1;
 	goto out;
     }
 
     // ================
-    // Download to DDR4:
-    // - in chunks that do not cross 4K boundaries
-    // - destination addrs must be 64-byte aligned
+    // Copy to FPGA-side DDR4:
 
-    fprintf (stdout, "%s: downloading to DDR addr 0x%0lx, 0x%0lx bytes\n",
+    fprintf (stdout, "%s: copying to DDR addr 0x%0lx, 0x%0lx bytes\n",
 	     __FUNCTION__, addr_base, addr_lim - addr_base);
+
     rc = AWSteria_AXI4_write (comms_state, & (buf [addr_base]), addr_lim - addr_base, addr_base);
     if (rc != 0) {
-	fprintf (stdout, "ERROR: %s: AXI4 write failed on channel 0\n", __FUNCTION__, rc);
+	fprintf (stdout, "ERROR: %s: AXI4 write failed: rc %0d\n", __FUNCTION__, rc);
 	goto out;
     }
     fprintf (stdout, "... done\n");
@@ -183,11 +190,13 @@ int load_mem_hex32_using_AXI4 (void *comms_state, char *filename)
 
     rc = readback_check (comms_state, buf, addr_base, addr_lim);
 
-    rc = 0;    // TODO: RESTORE AFTER DEBUG
+    rc = 0;    // TODO: IGNORES readback_check errs; RESTORE AFTER DEBUG
 
     // ================
 
-out:
+ out:
+    if (buf != NULL)
+	free (buf);
     return (rc != 0 ? 1 : 0);
 }
 

@@ -3,7 +3,7 @@
 # networking and block device.
 
 # ================================================================
-# COMMENT: Load AFI into FPGA
+# COMMENT: Load bitfile into FPGA
 
 --19:41:19--elevennuc: ~/git_clones/BESSPIN-CloudGFE/AWSteria_RISCV_Virtio/Host/build_VCU118
 $ make -f ../../Tests/Tests.mk reconfig
