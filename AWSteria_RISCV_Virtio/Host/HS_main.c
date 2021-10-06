@@ -104,7 +104,7 @@ int readback_check (void *comms_state, uint8_t *buf, uint64_t addr_base, uint64_
 	    return rc;
 	}
 
-	// fprintf (stdout, "        checking readback-data of %0ld bytes ...\n", read_size);
+	// fprintf (stdout, "    Readback check: addr 0x%0lx, size 0x%0lx bytes\n", addr_readback, read_size);
 	for (uint64_t j = 0; j < read_size; j += 4) {
 	    uint32_t *p1 = (uint32_t *) (buf + addr_readback + j);
 	    uint32_t *p2 = (uint32_t *) (readback_buf + j);
@@ -175,15 +175,15 @@ int load_mem_hex32_using_AXI4 (void *comms_state, char *filename)
     // ================
     // Copy to FPGA-side DDR4:
 
-    fprintf (stdout, "%s: copying to DDR addr 0x%0lx, 0x%0lx bytes\n",
+    fprintf (stdout, "%s: start  copy to DDR addr 0x%0lx, 0x%0lx bytes\n",
 	     __FUNCTION__, addr_base, addr_lim - addr_base);
-
     rc = AWSteria_AXI4_write (comms_state, & (buf [addr_base]), addr_lim - addr_base, addr_base);
     if (rc != 0) {
 	fprintf (stdout, "ERROR: %s: AXI4 write failed: rc %0d\n", __FUNCTION__, rc);
 	goto out;
     }
-    fprintf (stdout, "... done\n");
+    fprintf (stdout, "%s: finish copy to DDR addr 0x%0lx, 0x%0lx bytes\n",
+	     __FUNCTION__, addr_base, addr_lim - addr_base);
 
     // ================
     // Sanity check: readback a small amount and cross-check

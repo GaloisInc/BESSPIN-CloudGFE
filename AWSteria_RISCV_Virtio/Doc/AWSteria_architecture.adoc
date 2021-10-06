@@ -205,9 +205,9 @@ The `Core` is the version in `Flute/src_Core/Core_v2/Core.bsv`, and includes
 
 The architecture of Virtio is shown below.
 
-[#Fig_Virtio]
+[#Fig_020_Virtio]
 .Virtio architecture
-image::Virtio/Fig_3_Virtio.png[align="center"]
+image::Fig_020_Virtio.png[align="center"]
 
 On the hardware-side, running a standard OS (FreeBSD or Linux), the OS
 is built with standard Virtio device drivers.  The "`device-tree`" in

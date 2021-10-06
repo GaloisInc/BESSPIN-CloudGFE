@@ -154,18 +154,18 @@ compile:
 # ================================================================
 # For VCU118: collect all RTL needed for garnet flow
 
-FOR_GARNET_DIR = garnet_AWSteria_Flute_Virtio_HW
+FOR_GARNET_DIR = garnet_AWSteria_Flute_Virtio_HW_100MHz
 
-.PHONY: for_garnet
-for_garnet:
-	@echo "INFO: Creating and populating garnet example (reclocked) dir"
-	cp -p -R $(AWSTERIA_INFRA_REPO)/Platform_VCU118/HW/example_AWSteria_HW_reclocked  $(FOR_GARNET_DIR)
+.PHONY: for_garnet_100MHz
+for_garnet_100MHz:
+	@echo "INFO: Creating and populating garnet example (reclocked 100 MHz) dir"
+	cp -p -R $(AWSTERIA_INFRA_REPO)/Platform_VCU118/HW/example_AWSteria_HW_reclocked_100MHz  $(FOR_GARNET_DIR)
 	cp -p    RTL_from_bsc/*.v  $(FOR_GARNET_DIR)/src/
-	make  bsc_RTL_for_garnet
+	make  copy_bsc_RTL_for_garnet
 	@echo "INFO: garnet example (reclocked) dir is ready: $(FOR_GARNET_DIR)"
 
-.PHONY: bsc_RTL_for_garnet
-bsc_RTL_for_garnet:
+.PHONY: copy_bsc_RTL_for_garnet
+copy_bsc_RTL_for_garnet:
 	@echo "Copying RTL from BLUESPEC_HOME = $(BLUESPEC_HOME)"
 	cp -p  $(BLUESPEC_HOME)/lib/Verilog/BRAM1BELoad.v  $(FOR_GARNET_DIR)/src/
 	cp -p  $(BLUESPEC_HOME)/lib/Verilog/BRAM1BE.v      $(FOR_GARNET_DIR)/src/

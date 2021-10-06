@@ -512,8 +512,9 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
 
 `ifdef INCLUDE_DDR_B
    interface AXI4_Master_IFC ddr_B_M
-   = fv_AXI4_Master_Address_Translator (True, // add, not subtract
-					'h_4_0000_0000,  // addr offset
+   = fv_AXI4_Master_Address_Translator (False, // subtract
+					'h_8000_0000,  // addr offset for VCU118
+					// 0,  // addr offset for AWSF1
 					uncached_mem_widener.to_slave);
 `endif
 
