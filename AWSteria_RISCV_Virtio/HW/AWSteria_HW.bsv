@@ -25,20 +25,23 @@ import Cur_Cycle  :: *;
 import Semi_FIFOF :: *;
 import GetPut_Aux :: *;
 
-// ================================================================
-// Project imports
-
-import AWSteria_HW_IFC :: *;
+// ----------------
+// AXI
 
 import AXI4_Types           :: *;
 import AXI4_Fabric          :: *;
 import AXI4_Lite_Types      :: *;
 import AXI4_Widener         :: *;
-import AXI4_Addr_Translator :: *;
+
+// ================================================================
+// Project imports
+
+import AWSteria_HW_IFC :: *;
 
 import AWS_BSV_Top_Defs        :: *;
 import AWS_Host_AXI4L_Channels :: *;
 import AWS_SoC_Top             :: *;
+import AWS_DDR_Fabric          :: *;
 
 `ifdef INCLUDE_PC_TRACE
 import PC_Trace :: *;
@@ -100,14 +103,19 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
    // Adapter towards AXI4-Lite
    Host_AXI4L_Channels_IFC  host_AXI4L_channels <- mkHost_AXI4L_Channels;
 
-   // Widener to connect to uncached mem
+   // Widener for uncached mem accesses, from 64b (like I/O) to 512b (to DDR fabric)
    AXI4_Widener_IFC #(Wd_Id_16,
 		      Wd_Addr_64,
 		      Wd_Data_64,
 		      Wd_Data_512,
 		      Wd_User_0) uncached_mem_widener <- mkAXI4_Widener;
 
-   // AWS signal
+   // DDR fabric
+   AXI4_16_64_512_0_Fabric_2_N_IFC ddr_fabric <- mkAXI4_16_64_512_0_Fabric_2_N;
+
+   // ----------------
+   // AWS control and status
+
    Reg #(Bit #(4)) rg_ddr4_ready <- mkReg (0);
 
    Reg #(Bool)     rg_ddr4_is_loaded    <- mkReg (False);    // AWS says ddr4 is ready
@@ -115,10 +123,23 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
    Reg #(Bool)     rg_initialized_2     <- mkReg (False);    // Start SoC
    Reg #(Bool)     rg_shutdown_received <- mkReg (False);    // For simulation shutdown
 
+   // ----------------
+   // AWS Debug and Trace
+
 `ifdef INCLUDE_PC_TRACE
    Reg #(Bool)       rg_pc_trace_on           <- mkReg (False);
    Reg #(Bit #(64))  rg_pc_trace_interval_max <- mkRegU;
 `endif
+
+   // ================================================================
+   // Connect SoC DDR ports to DDR fabric
+
+   // SoC 512b port (from last-level cache) to DDR fabric
+   mkConnection (soc_top.to_ddr4,               ddr_fabric.v_from_masters [0]);
+
+   // SoC 64b port (uncached, IO-like) to widener; then to DDR fabric
+   mkConnection (soc_top.to_ddr4_0_uncached,    uncached_mem_widener.from_master);
+   mkConnection (uncached_mem_widener.to_slave, ddr_fabric.v_from_masters [1]);
 
    // ================================================================
    // Connect host AXI4L channels to SoC control
@@ -494,36 +515,25 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
    endrule
 
    // ================================================================
-   // Widener for uncached memory access
-
-   mkConnection (soc_top.to_ddr4_0_uncached, uncached_mem_widener.from_master);
-
-   // ================================================================
    // INTERFACE
-
-   AXI4_16_64_512_0_Master_IFC dummy_ddr4_AXI4_M = dummy_AXI4_Master_ifc;
 
    // Facing Host
    interface AXI4_Slave_IFC      host_AXI4_S  = soc_top.dma_server;
    interface AXI4_Lite_Slave_IFC host_AXI4L_S = host_AXI4L_channels.axi4L_S;
 
    // Facing DDR
-   interface AXI4_Master_IFC ddr_A_M = soc_top.to_ddr4;
+   interface AXI4_Master_IFC ddr_A_M = ddr_fabric.v_to_slaves [0];
 
 `ifdef INCLUDE_DDR_B
-   interface AXI4_Master_IFC ddr_B_M
-   = fv_AXI4_Master_Address_Translator (False, // subtract
-					'h_8000_0000,  // addr offset for VCU118
-					// 0,  // addr offset for AWSF1
-					uncached_mem_widener.to_slave);
+   interface AXI4_Master_IFC ddr_B_M = ddr_fabric.v_to_slaves [1];
 `endif
 
 `ifdef INCLUDE_DDR_C
-   interface AXI4_Master_IFC ddr_C_M = dummy_ddr4_AXI4_M;
+   interface AXI4_Master_IFC ddr_C_M = ddr_fabric.v_to_slaves [2];
 `endif
 
 `ifdef INCLUDE_DDR_D
-   interface AXI4_Master_IFC ddr_D_M = dummy_ddr4_AXI4_M;
+   interface AXI4_Master_IFC ddr_D_M = ddr_fabric.v_to_slaves [3];
 `endif
 
    // ================

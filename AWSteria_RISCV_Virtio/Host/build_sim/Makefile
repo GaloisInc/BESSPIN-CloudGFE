@@ -130,12 +130,16 @@ SRCS_C += \
 # ================================================================
 # C compilation
 
-CFLAGS += -std=gnu11 -g -Wall -Werror \
-	-I $(SRC_DIR) \
-	-I $(TINYEMU) \
-	-I $(GDBSTUB) \
-	-I $(AWSTERIA_INFRA_REPO)/Include_API \
-	-I $(AWSTERIA_INFRA_REPO)/Platform_Sim/Host \
+CFLAGS += -std=gnu11 -g -Wall -Werror
+
+CFLAGS += -D SIM_FOR_VCU118
+# CFLAGS += -D SIM_FOR_AWSF1
+
+CFLAGS += -I $(SRC_DIR)
+CFLAGS += -I $(TINYEMU)
+CFLAGS += -I $(GDBSTUB)
+CFLAGS += -I $(AWSTERIA_INFRA_REPO)/Include_API
+CFLAGS += -I $(AWSTERIA_INFRA_REPO)/Platform_Sim/Host
 
 CC     = gcc $(CFLAGS)
 

@@ -28,35 +28,34 @@ import Connectable   :: *;
 import Cur_Cycle   :: *;
 import GetPut_Aux  :: *;
 
-// ================================================================
-// Project imports
+// ----------------
+// AXI
 
-// Main fabric
 import AXI4_Types     :: *;
 import AXI4_Fabric    :: *;
 import AXI4_Deburster :: *;
 
+// ================================================================
+// Project imports
+
+// Main fabric
 import Fabric_Defs    :: *;
 import SoC_Map        :: *;
 import AWS_SoC_Fabric :: *;
 
-// SoC components (CPU, mem, and IPs)
-
+// Core
 import Core_IFC     :: *;
 import Core         :: *;
-import PLIC         :: *;    // For interface to PLIC interrupt sources, in Core_IFC
-// import Near_Mem_IFC :: *;    // For Wd_{Id,Addr,Data,User}_Dma    // DELETE
 
 // IPs on the fabric (other than memory)
+import PLIC         :: *;    // For interface to PLIC interrupt sources, in Core_IFC
 import Boot_ROM         :: *;
 import UART_Model       :: *;
 import AWS_MMIO_to_Host :: *;
 
 // IPs on the fabric (memory)
-import AXI4_Types        :: *;
 import AXI_Widths        :: *;
 import AWS_BSV_Top_Defs  :: *;    // For AXI4 bus widths (id, addr, data, user)
-import AWS_DDR4_Adapter  :: *;
 
 `ifdef INCLUDE_PC_TRACE
 import PC_Trace :: *;
