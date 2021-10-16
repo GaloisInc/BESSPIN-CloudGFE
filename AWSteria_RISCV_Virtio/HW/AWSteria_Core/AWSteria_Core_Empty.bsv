@@ -72,6 +72,9 @@ module mkAWSteria_Core #(Reset dm_reset,                // reset for Debug Modul
 			 Clock b_CLK, Reset b_RST_N,    // extra clock b
 			 Clock c_CLK, Reset c_RST_N)    // extra clock c
                        (AWSteria_Core_IFC_Specialized);
+
+   // TO BE FILLED IN WITH SPECIFIC CORE(s)
+
 endmodule
 
 // ================================================================

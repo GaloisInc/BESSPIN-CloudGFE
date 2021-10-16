@@ -5,15 +5,16 @@
 .PHONY: help
 help:
 	@echo "Usage:  make  gen_RTL        Generates an empty mkAWSteria_Core.v in Verilog_RTL/"
+	@echo "    Note: uses definition for FLUTE_REPO, currently = $(FLUTE_REPO)"
 
 # ================================================================
 
 # For Semi_FIFOF
-BSC_PATH := $(BSC_PATH):$(HOME)/git_clones/Flute/src_Core/BSV_Additional_Libs
+BSC_PATH := $(BSC_PATH):$(FLUTE_REPO)/src_Core/BSV_Additional_Libs
 
 # For AXI4_Types and AXI4_Lite_Types
-BSC_PATH := $(BSC_PATH):$(HOME)/git_clones/Flute/src_Testbench/Fabrics/AXI4
-BSC_PATH := $(BSC_PATH):$(HOME)/git_clones/Flute/src_Testbench/Fabrics/AXI4_Lite
+BSC_PATH := $(BSC_PATH):$(FLUTE_REPO)/src_Testbench/Fabrics/AXI4
+BSC_PATH := $(BSC_PATH):$(FLUTE_REPO)/src_Testbench/Fabrics/AXI4_Lite
 
 # For bsc standard libs
 BSC_PATH := $(BSC_PATH):+

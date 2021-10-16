@@ -38,6 +38,12 @@ import TV_Info  :: *;
 // ================================================================
 // The Core interface
 
+// NOTE: there are also extra incoming clocks and resets, which are not captured in this IFC.
+//       See the module paramters in AWSteria_Core_Empty.bsv
+
+// Not all subinterfaces need be used.
+// A minimal core may only use mem_M and mmio_M, and tie-off all the rest.
+
 interface AWSteria_Core_IFC #(numeric type wd_id_mem,
 			      numeric type wd_addr_mem,
 			      numeric type wd_data_mem,
@@ -84,18 +90,18 @@ interface AWSteria_Core_IFC #(numeric type wd_id_mem,
 
    // DMI (Debug Module Interface) facing remote debugger
 
-   interface DMI dm_dmi;
+   interface DMI dmi;
 
    // Non-Debug-Module Reset (reset "all" except DM)
    // These Bit#(0) values are just tokens for signaling 'reset request' and 'reset done'
 
-   interface Client_Semi_FIFOF #(Bit #(0), Bit #(0)) client_ndm_reset;
+   interface Client_Semi_FIFOF #(Bit #(0), Bit #(0)) cl_ndm_reset;
 
    // ----------------------------------------------------------------
    // Misc. control and status
    // The interpretation of these 32-bit values is left up to the specific Core
 
-   interface Server_Semi_FIFOF #(Bit #(32), Bit #(32)) client_control_status;
+   interface Server_Semi_FIFOF #(Bit #(32), Bit #(32)) se_control_status;
 endinterface
 
 // ================================================================
