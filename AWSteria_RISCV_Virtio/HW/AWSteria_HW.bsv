@@ -37,6 +37,7 @@ import AXI4_Widener         :: *;
 // Project imports
 
 import AWSteria_HW_IFC :: *;
+import AXI4_Lite_Fabric :: *;
 
 import AWS_BSV_Top_Defs        :: *;
 import AWS_Host_AXI4L_Channels :: *;
@@ -88,6 +89,129 @@ Integer hw_to_host_chan_pc_trace     = 4;
 
 // ================================================================
 
+// ****************************************************************
+// Module: synthesized instance of AXI4-Lite 1x2 fabric connecting
+// host AXI4 to DRM (targe 0) and AXI4-Lite adapter (target 1)
+
+// ----------------
+// Address-Decode function to route requests to appropriate target
+
+Bit #(32) adapter_addr_min = 'h_0000_0000;    // 0
+Bit #(32) adapter_addr_max = 'h_000F_FFFF;    // 1 MB
+
+Bit #(32) drm_addr_min     = 'h_0010_0000;    // 1  MB
+Bit #(32) drm_addr_max     = 'h_0010_3FFF;    // 16 KB
+
+
+function Tuple2 #(Bool, Bit #(1))  fn_addr_to_AXI4L_target_num (Bit #(32) addr);
+   if ((drm_addr_min <= addr) && (addr <= drm_addr_max))
+      return tuple2 (True, 0);
+
+   else if ((adapter_addr_min <= addr) && (addr <= adapter_addr_max))
+      return tuple2 (True, 1);
+
+   else
+      return tuple2 (False, ?);
+endfunction
+
+// ----------------
+// The fabric
+
+typedef AXI4_Lite_Fabric_IFC #(1,     // num M ports
+			       2,     // num S ports
+			       32,    // wd_addr
+			       32,    // wd_data
+			       0)
+        AXI4L_32_32_0_Fabric_1_2_IFC;
+
+(* synthesize *)
+module mkAXI4L_32_32_0_Fabric_1_2 (AXI4L_32_32_0_Fabric_1_2_IFC);
+   let fabric <- mkAXI4_Lite_Fabric (fn_addr_to_AXI4L_target_num);
+   return fabric;
+endmodule
+
+// ****************************************************************
+// Module: Dummy DRM module
+
+interface DRM_IFC;
+   interface AXI4_Lite_Slave_IFC #(32, 32, 0) axi4L_S;
+   method    Bool                             ip_enable;
+   interface Clock                            clock_for_app;
+endinterface
+
+(* synthesize *)
+module mkDRM (DRM_IFC);
+   // Instantiate slave transactor
+   AXI4_Lite_Slave_Xactor_IFC #(32, 32, 0) axi4L_S_xactor <- mkAXI4_Lite_Slave_Xactor;
+
+   Reg #(Bit #(32)) rg_data   <- mkReg (0);
+
+   // GatedClockIfc gated_clock <- mkGatedClockFromCC (False);
+
+   // ================================================================
+   // Write transactions
+
+   rule rl_wr_xaction;
+      let wra <- pop_o (axi4L_S_xactor.o_wr_addr);
+      let wrd <- pop_o (axi4L_S_xactor.o_wr_data);
+
+      $display ("DRM: WR xaction:\n  ", fshow (wra), "\n  ", fshow (wrd));
+
+      AXI4_Lite_Resp resp = (  ((wra.awaddr & 'h3) == 0)
+			     ? AXI4_LITE_OKAY
+			     : AXI4_LITE_SLVERR);
+
+      if (resp == AXI4_LITE_OKAY) begin
+	 $display ("  rg_data old %0x", rg_data);
+	 $display ("  rg_data new %0x", wrd.wdata);
+	 rg_data <= wrd.wdata;
+
+	 if ((rg_data[0] == 1'b0)  &&  (wrd.wdata[0] == 1'b1))
+	    $display ("  Enabling clock");
+	 if ((rg_data[0] == 1'b1)  &&  (wrd.wdata[0] == 1'b0))
+	    $display ("  Disabling clock");
+
+	 // gated_clock.setGateCond (wrd.wdata != 0);
+      end
+
+      let wrr = AXI4_Lite_Wr_Resp {bresp: resp,
+				   buser: wra.awuser};
+
+      axi4L_S_xactor.i_wr_resp.enq (wrr);
+      $display ("  ", fshow (wrr));
+   endrule
+
+   // ================================================================
+   // Read transactions
+
+   rule rl_rd_xaction;
+      let rda <- pop_o (axi4L_S_xactor.o_rd_addr);
+
+      $display ("DRM: RD xaction:\n  ", fshow (rda));
+
+      AXI4_Lite_Resp resp = (  ((rda.araddr & 'h3) != 0)
+			     ? AXI4_LITE_SLVERR
+			     : AXI4_LITE_OKAY);
+
+      let rdd = AXI4_Lite_Rd_Data {rresp: resp,
+				   rdata: (  (resp == AXI4_LITE_OKAY)
+					   ? rg_data
+					   : 32'h_89AB_CDEF),
+				   ruser: rda.aruser};
+
+      axi4L_S_xactor.i_rd_data.enq (rdd);
+      $display ("  ", fshow (rdd));
+   endrule
+
+   // ================================================================
+   // INTERFACE
+
+   interface axi4L_S       = axi4L_S_xactor.axi_side;
+   method    ip_enable     = (rg_data [0] == 1);
+   interface clock_for_app = noClock;    // gated_clock.new_clk;
+endmodule
+
+
 (* synthesize *)
 module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
                      (AWSteria_HW_IFC #(AXI4_Slave_IFC #(16, 64, 512, 0),
@@ -97,6 +221,14 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
    Integer verbosity      = 0;
    Integer verbosity_uart = 0;
 
+
+   // ----------------
+   // DRM
+   DRM_IFC drm <- mkDRM;
+   // AXI4-Lite 1x2 switch
+   AXI4L_32_32_0_Fabric_1_2_IFC axi4L_switch <- mkAXI4L_32_32_0_Fabric_1_2;
+
+   // ----------------
    // SoC containing RISC-V CPU
    AWS_SoC_Top_IFC soc_top <- mkAWS_SoC_Top;
 
@@ -130,6 +262,11 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
    Reg #(Bool)       rg_pc_trace_on           <- mkReg (False);
    Reg #(Bit #(64))  rg_pc_trace_interval_max <- mkRegU;
 `endif
+
+
+   // Connect AXI4-Lite switch to AXI4-Lite-to-AXI4-adapter and DRM
+   mkConnection (axi4L_switch.v_to_slaves [0], host_AXI4L_channels.axi4L_S);
+   mkConnection (axi4L_switch.v_to_slaves [1], drm.axi4L_S);
 
    // ================================================================
    // Connect SoC DDR ports to DDR fabric
@@ -519,7 +656,7 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
 
    // Facing Host
    interface AXI4_Slave_IFC      host_AXI4_S  = soc_top.dma_server;
-   interface AXI4_Lite_Slave_IFC host_AXI4L_S = host_AXI4L_channels.axi4L_S;
+   interface AXI4_Lite_Slave_IFC host_AXI4L_S = axi4L_switch.v_from_masters [0];
 
    // Facing DDR
    interface AXI4_Master_IFC ddr_A_M = ddr_fabric.v_to_slaves [0];
