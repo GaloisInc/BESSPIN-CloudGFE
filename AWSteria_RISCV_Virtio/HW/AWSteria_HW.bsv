@@ -265,8 +265,8 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
 
 
    // Connect AXI4-Lite switch to AXI4-Lite-to-AXI4-adapter and DRM
-   mkConnection (axi4L_switch.v_to_slaves [0], host_AXI4L_channels.axi4L_S);
-   mkConnection (axi4L_switch.v_to_slaves [1], drm.axi4L_S);
+   mkConnection (axi4L_switch.v_to_slaves [0], drm.axi4L_S);
+   mkConnection (axi4L_switch.v_to_slaves [1], host_AXI4L_channels.axi4L_S);
 
    // ================================================================
    // Connect SoC DDR ports to DDR fabric
