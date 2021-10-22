@@ -133,8 +133,7 @@ SRCS_C += \
 # ================================================================
 # C compilation
 
-CFLAGS += -std=gnu11 -g -Wall -Werror
-
+CFLAGS += -std=gnu11 -g -Wall -Werror 
 CFLAGS += -D IN_AWSF1
 
 CFLAGS += -I $(AWSTERIA_INFRA_REPO)/Include_API
@@ -145,7 +144,7 @@ CFLAGS += -I $(GDBSTUB)
 
 CC     = gcc $(CFLAGS)
 
-LDLIBS = -lfpga_mgmt -lcrypto -lpthread -lelf
+LDLIBS = -lfpga_mgmt -lcrypto -lpthread -lelf -laccelize_drmc
 
 EXE    = exe_Host_AWSF1
 
