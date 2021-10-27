@@ -32,6 +32,8 @@ import AXI4_Types           :: *;
 import AXI4_Fabric          :: *;
 import AXI4_Lite_Types      :: *;
 import AXI4_Widener         :: *;
+import AXI4_Gate            :: *;
+import AXI4L_Gate            :: *;
 
 // ================================================================
 // Project imports
@@ -131,6 +133,22 @@ module mkAXI4L_32_32_0_Fabric_1_2 (AXI4L_32_32_0_Fabric_1_2_IFC);
 endmodule
 
 // ****************************************************************
+// Module: synthesized instances of AXI4-Lite Gate and AXI4 gate
+
+(* synthesize *)
+module mkAXI4L_Gate_32_32_0 (AXI4L_Gate_IFC #(32, 32, 0));
+   let m <- mkAXI4L_Gate;
+   return m;
+endmodule
+
+(* synthesize *)
+module mkAXI4_Gate_16_64_512_0 (AXI4_Gate_IFC #(16, 64, 512, 0));
+   let m <- mkAXI4_Gate;
+   return m;
+endmodule
+
+
+// ****************************************************************
 // Module: Dummy DRM module
 
 interface DRM_IFC;
@@ -141,12 +159,12 @@ endinterface
 
 (* synthesize *)
 module mkDRM (DRM_IFC);
+   Integer verbosity = 0;
+
    // Instantiate slave transactor
    AXI4_Lite_Slave_Xactor_IFC #(32, 32, 0) axi4L_S_xactor <- mkAXI4_Lite_Slave_Xactor;
 
-   Reg #(Bit #(32)) rg_data   <- mkReg (0);
-
-   // GatedClockIfc gated_clock <- mkGatedClockFromCC (False);
+   Reg #(Bit #(32)) rg_data <- mkReg (0);
 
    // ================================================================
    // Write transactions
@@ -155,30 +173,37 @@ module mkDRM (DRM_IFC);
       let wra <- pop_o (axi4L_S_xactor.o_wr_addr);
       let wrd <- pop_o (axi4L_S_xactor.o_wr_data);
 
-      $display ("DRM: WR xaction:\n  ", fshow (wra), "\n  ", fshow (wrd));
+      if (verbosity != 0)
+	 $display ("DRM: WR xaction:\n  ", fshow (wra), "\n  ", fshow (wrd));
 
       AXI4_Lite_Resp resp = (  ((wra.awaddr & 'h3) == 0)
 			     ? AXI4_LITE_OKAY
 			     : AXI4_LITE_SLVERR);
 
       if (resp == AXI4_LITE_OKAY) begin
-	 $display ("  rg_data old %0x", rg_data);
-	 $display ("  rg_data new %0x", wrd.wdata);
+	 // Note: we now ignore addr, so all addrs map to rg_data
+	 if (verbosity != 0) begin
+	    $display ("  rg_data old %0x", rg_data);
+	    $display ("  rg_data new %0x", wrd.wdata);
+	 end
+
 	 rg_data <= wrd.wdata;
 
-	 if ((rg_data[0] == 1'b0)  &&  (wrd.wdata[0] == 1'b1))
-	    $display ("  Enabling clock");
-	 if ((rg_data[0] == 1'b1)  &&  (wrd.wdata[0] == 1'b0))
-	    $display ("  Disabling clock");
-
-	 // gated_clock.setGateCond (wrd.wdata != 0);
+	 if (verbosity != 0) begin
+	    if ((rg_data[0] == 1'b0)  &&  (wrd.wdata[0] == 1'b1))
+	       $display ("  Enabling IP");
+	    if ((rg_data[0] == 1'b1)  &&  (wrd.wdata[0] == 1'b0))
+	       $display ("  Disabling IP");
+	 end
       end
 
       let wrr = AXI4_Lite_Wr_Resp {bresp: resp,
 				   buser: wra.awuser};
 
       axi4L_S_xactor.i_wr_resp.enq (wrr);
-      $display ("  ", fshow (wrr));
+
+      if (verbosity != 0)
+	 $display ("  ", fshow (wrr));
    endrule
 
    // ================================================================
@@ -187,12 +212,14 @@ module mkDRM (DRM_IFC);
    rule rl_rd_xaction;
       let rda <- pop_o (axi4L_S_xactor.o_rd_addr);
 
-      $display ("DRM: RD xaction:\n  ", fshow (rda));
+      if (verbosity != 0)
+	 $display ("DRM: RD xaction:\n  ", fshow (rda));
 
       AXI4_Lite_Resp resp = (  ((rda.araddr & 'h3) != 0)
 			     ? AXI4_LITE_SLVERR
 			     : AXI4_LITE_OKAY);
 
+      // Note: we now ignore addr, so all addrs map to rg_data
       let rdd = AXI4_Lite_Rd_Data {rresp: resp,
 				   rdata: (  (resp == AXI4_LITE_OKAY)
 					   ? rg_data
@@ -200,7 +227,8 @@ module mkDRM (DRM_IFC);
 				   ruser: rda.aruser};
 
       axi4L_S_xactor.i_rd_data.enq (rdd);
-      $display ("  ", fshow (rdd));
+      if (verbosity != 0)
+	 $display ("  ", fshow (rdd));
    endrule
 
    // ================================================================
@@ -210,7 +238,6 @@ module mkDRM (DRM_IFC);
    method    ip_enable     = (rg_data [0] == 1);
    interface clock_for_app = noClock;    // gated_clock.new_clk;
 endmodule
-
 
 (* synthesize *)
 module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
@@ -231,6 +258,10 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
    // ----------------
    // SoC containing RISC-V CPU
    AWS_SoC_Top_IFC soc_top <- mkAWS_SoC_Top;
+
+   // Gates to control AXI4 and AXI4L traffic to the app logic
+   AXI4_Gate_IFC  #(16, 64, 512, 0) axi4_gate  <- mkAXI4_Gate_16_64_512_0;
+   AXI4L_Gate_IFC #(32, 32, 0)      axi4L_gate <- mkAXI4L_Gate_32_32_0;
 
    // Adapter towards AXI4-Lite
    Host_AXI4L_Channels_IFC  host_AXI4L_channels <- mkHost_AXI4L_Channels;
@@ -264,18 +295,25 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
 `endif
 
 
-   // Connect AXI4-Lite switch to AXI4-Lite-to-AXI4-adapter and DRM
    mkConnection (axi4L_switch.v_to_slaves [0], drm.axi4L_S);
-   mkConnection (axi4L_switch.v_to_slaves [1], host_AXI4L_channels.axi4L_S);
+   mkConnection (axi4L_switch.v_to_slaves [1], axi4L_gate.axi4L_S);
+   mkConnection (axi4L_gate.axi4L_M, host_AXI4L_channels.axi4L_S);
+   mkConnection (axi4_gate.axi4_M, soc_top.dma_server);
 
+     // Connect DRM 'ip_enable' output to AXI4 and AXI4L gates
+   (* no_implicit_conditions, fire_when_enabled *)
+   rule rl_drm_control;
+      axi4_gate.m_enable  (drm.ip_enable);
+      axi4L_gate.m_enable (drm.ip_enable);
+   endrule
    // ================================================================
    // Connect SoC DDR ports to DDR fabric
 
    // SoC 512b port (from last-level cache) to DDR fabric
-   mkConnection (soc_top.to_ddr4,               ddr_fabric.v_from_masters [0]);
+   mkConnection (soc_top.to_ddr4, ddr_fabric.v_from_masters [0]);
 
    // SoC 64b port (uncached, IO-like) to widener; then to DDR fabric
-   mkConnection (soc_top.to_ddr4_0_uncached,    uncached_mem_widener.from_master);
+   mkConnection (soc_top.to_ddr4_0_uncached, uncached_mem_widener.from_master);
    mkConnection (uncached_mem_widener.to_slave, ddr_fabric.v_from_masters [1]);
 
    // ================================================================
@@ -655,7 +693,7 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
    // INTERFACE
 
    // Facing Host
-   interface AXI4_Slave_IFC      host_AXI4_S  = soc_top.dma_server;
+   interface AXI4_Slave_IFC      host_AXI4_S  = axi4_gate.axi4_S;
    interface AXI4_Lite_Slave_IFC host_AXI4L_S = axi4L_switch.v_from_masters [0];
 
    // Facing DDR

@@ -171,6 +171,10 @@ for_AWSF1_HDK:
 	cp -p  $(BLUESPEC_HOME)/lib/Verilog/RevertReg.v    cl_AWSteria_RISCV/design/
 	cp -p  $(BLUESPEC_HOME)/lib/Verilog/SizedFIFO0.v   cl_AWSteria_RISCV/design/
 	cp -p  $(BLUESPEC_HOME)/lib/Verilog/SizedFIFO.v    cl_AWSteria_RISCV/design/
+	cp -f  $(AWSTERIA_REPO)/HW/mkDRM.v  			   cl_AWSteria_RISCV/design/ 
+	cp -f  $(AWSTERIA_REPO)/HW/ip_activate.v  			   cl_AWSteria_RISCV/design/ 
+
+#    cp -f  $(AWSTERIA_REPO)/HW/ip_activate.v  		   cl_AWSteria_RISCV/design/ 
 	@echo "INFO: aws-fpga HDK custom-logic dir is ready: cl_AWSteria_RISCV/"
 
 # ================================================================
