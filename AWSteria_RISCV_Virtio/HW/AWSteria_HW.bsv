@@ -38,10 +38,10 @@ import AXI4_Widener         :: *;
 
 import AWSteria_HW_IFC :: *;
 
-import AWS_BSV_Top_Defs        :: *;
-import AWS_Host_AXI4L_Channels :: *;
-import AWS_SoC_Top             :: *;
-import AWS_DDR_Fabric          :: *;
+import AXI_Param_Defs :: *;
+import AXI4L_Channels :: *;
+import AWS_SoC_Top    :: *;
+import AWS_DDR_Fabric :: *;
 
 `ifdef INCLUDE_PC_TRACE
 import PC_Trace :: *;
@@ -90,9 +90,17 @@ Integer hw_to_host_chan_pc_trace     = 4;
 
 (* synthesize *)
 module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
-                     (AWSteria_HW_IFC #(AXI4_Slave_IFC #(16, 64, 512, 0),
-					AXI4_Lite_Slave_IFC #(32, 32, 0),
-					AXI4_Master_IFC #(16, 64, 512, 0)));
+                     (AWSteria_HW_IFC #(AXI4_Slave_IFC #(AXI4_Wd_Id,
+							 AXI4_Wd_Addr,
+							 AXI4_Wd_Data_A,
+							 AXI4_Wd_User),
+					AXI4_Lite_Slave_IFC #(AXI4L_Wd_Addr,
+							      AXI4L_Wd_Data,
+							      AXI4L_Wd_User),
+					AXI4_Master_IFC #(AXI4_Wd_Id,
+							  AXI4_Wd_Addr,
+							  AXI4_Wd_Data_A,
+							  AXI4_Wd_User)));
    // 0: quiet    1: rules
    Integer verbosity      = 0;
    Integer verbosity_uart = 0;
@@ -101,14 +109,14 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
    AWS_SoC_Top_IFC soc_top <- mkAWS_SoC_Top;
 
    // Adapter towards AXI4-Lite
-   Host_AXI4L_Channels_IFC  host_AXI4L_channels <- mkHost_AXI4L_Channels;
+   AXI4L_Channels_IFC  axi4L_channels <- mkAXI4L_Channels;
 
    // Widener for uncached mem accesses, from 64b (like I/O) to 512b (to DDR fabric)
-   AXI4_Widener_IFC #(Wd_Id_16,
-		      Wd_Addr_64,
-		      Wd_Data_64,
-		      Wd_Data_512,
-		      Wd_User_0) uncached_mem_widener <- mkAXI4_Widener;
+   AXI4_Widener_IFC #(AXI4_Wd_Id,
+		      AXI4_Wd_Addr,
+		      AXI4_Wd_Data_B,
+		      AXI4_Wd_Data_A,
+		      AXI4_Wd_User)   uncached_mem_widener <- mkAXI4_Widener;
 
    // DDR fabric
    AXI4_16_64_512_0_Fabric_2_N_IFC ddr_fabric <- mkAXI4_16_64_512_0_Fabric_2_N;
@@ -154,7 +162,7 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
    Bit #(4) tag_pc_trace        = 5;    // set pc trace subsampling interval
 
    rule rl_host_to_hw_control;
-      Bit #(32) data <- pop_o (host_AXI4L_channels.v_from_host [host_to_hw_chan_control]);
+      Bit #(32) data <- pop_o (axi4L_channels.v_from_host [host_to_hw_chan_control]);
       Bit #(4)  tag = data [3:0];
       if (tag == tag_ddr4_is_loaded) begin
 	 // data [31:4] ignored
@@ -217,7 +225,7 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
 
       let tohost_value = soc_top.mv_tohost_value;
       status = status | { tohost_value [15:0], 16'h0 };
-      host_AXI4L_channels.v_to_host [hw_to_host_chan_status].enq (status);
+      axi4L_channels.v_to_host [hw_to_host_chan_status].enq (status);
       if ((verbosity > 0) && ((tohost_value != 0) || (status [7:0] != 0)))
 	 $display ("%0d: %m.rl_hw_to_host_status: %0h", cur_cycle, status);
    endrule
@@ -229,7 +237,7 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
    // keyboard to UART
 
    rule rl_console_to_UART;
-      Bit #(32) ch <- pop_o (host_AXI4L_channels.v_from_host [host_to_hw_chan_UART]);
+      Bit #(32) ch <- pop_o (axi4L_channels.v_from_host [host_to_hw_chan_UART]);
       soc_top.put_from_console.put (truncate (ch));
 
       if (verbosity_uart > 0)
@@ -246,7 +254,7 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
 
    rule rl_UART_to_console;
       let x <- pop (f_uart_to_console);
-      host_AXI4L_channels.v_to_host [hw_to_host_chan_UART].enq (x);
+      axi4L_channels.v_to_host [hw_to_host_chan_UART].enq (x);
    endrule
 
    // The following are for accumulating chars into 4-char chunks
@@ -291,7 +299,7 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
    rule rl_UART_timeout (rg_uart_buf != 0);
       Bit #(32) buf_val = rg_uart_buf;
       if (rg_uart_timeout == 0) begin
-	 host_AXI4L_channels.v_to_host [hw_to_host_chan_UART].enq (buf_val);
+	 axi4L_channels.v_to_host [hw_to_host_chan_UART].enq (buf_val);
 	 rg_uart_buf <= 0;
 
 	 if (verbosity_uart > 0) begin
@@ -313,14 +321,14 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
 
    rule rl_hw_to_aws_host_mem_req;
       Bit #(32) x <- soc_top.to_aws_host.get;
-      host_AXI4L_channels.v_to_host [hw_to_host_chan_mem_req].enq (x);
+      axi4L_channels.v_to_host [hw_to_host_chan_mem_req].enq (x);
 
       if (verbosity > 0)
 	 $display ("%0d: AWSteria_HW.rl_hw_to_aws_host_mem_req: %02h", cur_cycle, x);
    endrule
 
    rule rl_aws_host_to_hw_mem_rsp;
-      Bit #(32) x <- pop_o (host_AXI4L_channels.v_from_host [host_to_hw_chan_mem_rsp]);
+      Bit #(32) x <- pop_o (axi4L_channels.v_from_host [host_to_hw_chan_mem_rsp]);
       soc_top.from_aws_host.put (x);
 
       if (verbosity > 0)
@@ -331,7 +339,7 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
    // Connect Host AXI4L Channels host-to-hw interrupt line
 
    rule rl_aws_host_to_hw_interrupt;
-      Bit #(32) x <- pop_o (host_AXI4L_channels.v_from_host [host_to_hw_chan_interrupt]);
+      Bit #(32) x <- pop_o (axi4L_channels.v_from_host [host_to_hw_chan_interrupt]);
 
       if (verbosity > 0) begin
 	 $display ("%0d: AWSteria_HW.rl_aws_host_to_hw_interrupt: %08h", cur_cycle, x);
@@ -355,7 +363,7 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
    Reg #(Bit #(7)) rg_dm_addr  <- mkRegU;
 
    rule rl_control_to_DM_idle (rg_state_dm == state_dm_idle);
-      Bit #(32) x <- pop_o (host_AXI4L_channels.v_from_host [host_to_hw_chan_debug_module]);
+      Bit #(32) x <- pop_o (axi4L_channels.v_from_host [host_to_hw_chan_debug_module]);
       Bool     is_read = (x [31:24] == 0);
       Bit #(7) dm_addr = truncate (x);
 
@@ -376,7 +384,7 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
 
    rule rl_control_to_DM_rd_rsp (rg_state_dm == state_dm_rd_rsp);
       let control_rsp <- pop (soc_top.server_external_control.response.get);
-      host_AXI4L_channels.v_to_host [hw_to_host_chan_debug_module].enq (truncate (control_rsp.result));
+      axi4L_channels.v_to_host [hw_to_host_chan_debug_module].enq (truncate (control_rsp.result));
       rg_state_dm <= state_dm_idle;
       if (verbosity != 0)
 	 $display ("AWSteria_HW.rl_control_to_DM_rd_rsp: data %0h", control_rsp.result);
@@ -384,7 +392,7 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
 
 
    rule rl_control_to_DM_wr_req (rg_state_dm == state_dm_wr_req);
-      Bit #(32) data <- pop_o (host_AXI4L_channels.v_from_host [host_to_hw_chan_debug_module]);
+      Bit #(32) data <- pop_o (axi4L_channels.v_from_host [host_to_hw_chan_debug_module]);
       let control_req = Control_Req {op:   external_control_req_op_write_control_fabric,
 				     arg1: zeroExtend (rg_dm_addr),
 				     arg2: zeroExtend (data)};
@@ -410,7 +418,7 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
 
       if (rg_pc_trace_on && (rg_pc_trace_interval_ctr == 0)) begin
 	 // Send sample to host (in next few rules); re-init sub-sample counter
-	 host_AXI4L_channels.v_to_host [hw_to_host_chan_pc_trace].enq (pc_trace.cycle [31:0]);
+	 axi4L_channels.v_to_host [hw_to_host_chan_pc_trace].enq (pc_trace.cycle [31:0]);
 	 rg_pc_trace                 <= pc_trace;
 	 rg_pc_trace_interval_ctr    <= rg_pc_trace_interval_max;
 	 rg_pc_trace_serialize_state <= 1;
@@ -426,27 +434,27 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
    endrule
 
    rule rl_pc_trace_1 (rg_pc_trace_serialize_state == 1);
-      host_AXI4L_channels.v_to_host [hw_to_host_chan_pc_trace].enq (rg_pc_trace.cycle [63:32]);
+      axi4L_channels.v_to_host [hw_to_host_chan_pc_trace].enq (rg_pc_trace.cycle [63:32]);
       rg_pc_trace_serialize_state <= 2;
    endrule
 
    rule rl_pc_trace_2 (rg_pc_trace_serialize_state == 2);
-      host_AXI4L_channels.v_to_host [hw_to_host_chan_pc_trace].enq (rg_pc_trace.instret [31:0]);
+      axi4L_channels.v_to_host [hw_to_host_chan_pc_trace].enq (rg_pc_trace.instret [31:0]);
       rg_pc_trace_serialize_state <= 3;
    endrule
 
    rule rl_pc_trace_3 (rg_pc_trace_serialize_state == 3);
-      host_AXI4L_channels.v_to_host [hw_to_host_chan_pc_trace].enq (rg_pc_trace.instret [63:32]);
+      axi4L_channels.v_to_host [hw_to_host_chan_pc_trace].enq (rg_pc_trace.instret [63:32]);
       rg_pc_trace_serialize_state <= 4;
    endrule
 
    rule rl_pc_trace_4 (rg_pc_trace_serialize_state == 4);
-      host_AXI4L_channels.v_to_host [hw_to_host_chan_pc_trace].enq (rg_pc_trace.pc [31:0]);
+      axi4L_channels.v_to_host [hw_to_host_chan_pc_trace].enq (rg_pc_trace.pc [31:0]);
       rg_pc_trace_serialize_state <= 5;
    endrule
 
    rule rl_pc_trace_5 (rg_pc_trace_serialize_state == 5);
-      host_AXI4L_channels.v_to_host [hw_to_host_chan_pc_trace].enq (rg_pc_trace.pc [63:32]);
+      axi4L_channels.v_to_host [hw_to_host_chan_pc_trace].enq (rg_pc_trace.pc [63:32]);
       rg_pc_trace_serialize_state <= 0;
    endrule
 `endif
@@ -519,7 +527,7 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
 
    // Facing Host
    interface AXI4_Slave_IFC      host_AXI4_S  = soc_top.dma_server;
-   interface AXI4_Lite_Slave_IFC host_AXI4L_S = host_AXI4L_channels.axi4L_S;
+   interface AXI4_Lite_Slave_IFC host_AXI4L_S = axi4L_channels.axi4L_S;
 
    // Facing DDR
    interface AXI4_Master_IFC ddr_A_M = ddr_fabric.v_to_slaves [0];

@@ -31,9 +31,6 @@ export  SoC_Map_Struct (..), soc_map_struct;
 
 export  SoC_Map_IFC (..), mkSoC_Map;
 
-export  N_External_Interrupt_Sources;
-export  n_external_interrupt_sources;
-
 // ================================================================
 // Bluespec library imports
 
@@ -370,9 +367,6 @@ module mkSoC_Map (SoC_Map_IFC);
    method  Bit #(64)  m_mtvec_reset_value  = mtvec_reset_value;
    method  Bit #(64)  m_nmivec_reset_value = nmivec_reset_value;
 endmodule
-
-typedef  16  N_External_Interrupt_Sources;
-Integer  n_external_interrupt_sources = valueOf (N_External_Interrupt_Sources);
 
 // ================================================================
 

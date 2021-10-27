@@ -38,24 +38,22 @@ import AXI4_Deburster :: *;
 // ================================================================
 // Project imports
 
-// Main fabric
-import Fabric_Defs    :: *;
+// MMIO fabric
 import SoC_Map        :: *;
-import AWS_SoC_Fabric :: *;
+import AXI_Param_Defs :: *;
+import MMIO_Fabric    :: *;
 
 // Core
 import Core_IFC     :: *;
 import Core         :: *;
 
-// IPs on the fabric (other than memory)
-import PLIC         :: *;    // For interface to PLIC interrupt sources, in Core_IFC
+import Interrupt_Defs :: *;
+
+// IPs on the mmio fabric (other than memory)
+import PLIC             :: *;    // For interface to PLIC interrupt sources, in Core_IFC
 import Boot_ROM         :: *;
 import UART_Model       :: *;
 import AWS_MMIO_to_Host :: *;
-
-// IPs on the fabric (memory)
-import AXI_Widths        :: *;
-import AWS_BSV_Top_Defs  :: *;    // For AXI4 bus widths (id, addr, data, user)
 
 `ifdef INCLUDE_PC_TRACE
 import PC_Trace :: *;
@@ -75,13 +73,20 @@ import Debug_Module     :: *;
 
 interface AWS_SoC_Top_IFC;
    // Interface to 'coherent DMA' port of optional L2 cache
-   interface AXI4_Slave_IFC #(Wd_Id_Dma, Wd_Addr_Dma, Wd_Data_Dma, Wd_User_Dma)  dma_server;
+   interface AXI4_Slave_IFC  #(AXI4_Wd_Id, AXI4_Wd_Addr, AXI4_Wd_Data_A, AXI4_Wd_User)
+      dma_server;
 
    // AXI4 interface facing DDR
-   interface AXI4_16_64_512_0_Master_IFC  to_ddr4;
+   interface AXI4_Master_IFC #(AXI4_Wd_Id,
+			       AXI4_Wd_Addr,
+			       AXI4_Wd_Data_A,
+			       AXI4_Wd_User)    to_ddr4;
 
    // AXI4 64-bit interface facing uncached DDR
-   interface AXI4_16_64_64_0_Master_IFC  to_ddr4_0_uncached;
+   interface AXI4_Master_IFC #(AXI4_Wd_Id,
+			       AXI4_Wd_Addr,
+			       AXI4_Wd_Data_B,
+			       AXI4_Wd_User)    to_ddr4_0_uncached;
 
    // UART0 to external console
    interface Get #(Bit #(8)) get_to_console;
@@ -170,47 +175,46 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    Core_IFC #(N_External_Interrupt_Sources)  core <- mkCore (dm_power_on_reset);
 
    // AXI4 Deburster in front of coherent DMA port
-   AXI4_Deburster_IFC #(Wd_Id_Dma,
-			Wd_Addr_Dma,
-			Wd_Data_Dma,
-			Wd_User_Dma)  dma_server_axi4_deburster <- mkAXI4_Deburster_B;
+   AXI4_Deburster_IFC #(AXI4_Wd_Id,
+			AXI4_Wd_Addr,
+			AXI4_Wd_Data_A,
+			AXI4_Wd_User)   dma_server_axi4_deburster <- mkAXI4_Deburster_A;
    mkConnection (dma_server_axi4_deburster.to_slave, core.dma_server);
 
-   // SoC Fabric
-   AWS_SoC_Fabric_IFC  fabric <- mkAWS_SoC_Fabric;
+   // MMIO Fabric
+   MMIO_Fabric_IFC mmio_fabric <- mkMMIO_Fabric;
 
    // SoC Boot ROM
    Boot_ROM_IFC  boot_rom <- mkBoot_ROM;
    // AXI4 Deburster in front of Boot_ROM
-   AXI4_Deburster_IFC #(Wd_Id,
-			Wd_Addr,
-			Wd_Data,
-			Wd_User)  boot_rom_axi4_deburster <- mkAXI4_Deburster_A;
+   AXI4_Deburster_IFC #(AXI4_Wd_Id,
+			AXI4_Wd_Addr,
+			AXI4_Wd_Data_B,
+			AXI4_Wd_User)    boot_rom_axi4_deburster <- mkAXI4_Deburster_B;
 
    // SoC IPs
    UART_IFC              uart0        <- mkUART;
    AWS_MMIO_to_Host_IFC  mmio_to_host <- mkAWS_MMIO_to_Host;
 
    // ----------------
-   // SoC fabric initiator connections
-   // Note: see 'SoC_Map' for 'initator_num' definitions
+   // MMIO fabric initiator connections
 
-   // CPU IMem initiator (MMIO) to fabric
-   mkConnection (core.cpu_imem_master,  fabric.v_from_masters [core_initiator_num]);
+   // CPU IMem initiator (MMIO) to mmio_fabric
+   mkConnection (core.cpu_imem_master,  mmio_fabric.v_from_masters [core_initiator_num]);
 
    // ----------------
-   // SoC fabric target connections
+   // MMIO fabric target connections
    // Note: see 'SoC_Map' for 'target_num' definitions
 
-   // Fabric to Boot ROM
-   mkConnection (fabric.v_to_slaves [boot_rom_target_num], boot_rom_axi4_deburster.from_master);
+   // MMIO fabric to Boot ROM
+   mkConnection (mmio_fabric.v_to_slaves [boot_rom_target_num], boot_rom_axi4_deburster.from_master);
    mkConnection (boot_rom_axi4_deburster.to_slave,         boot_rom.slave);
 
-   // Fabric to UART0
-   mkConnection (fabric.v_to_slaves [uart16550_0_target_num],  uart0.slave);
+   // MMIO fabric to UART0
+   mkConnection (mmio_fabric.v_to_slaves [uart16550_0_target_num],  uart0.slave);
 
-   // Fabric to AWS Host Access
-   mkConnection (fabric.v_to_slaves [host_access_target_num], mmio_to_host.axi4_S);
+   // MMIO fabric to AWS Host Access
+   mkConnection (mmio_fabric.v_to_slaves [host_access_target_num], mmio_to_host.axi4_S);
 
    // ----------------
    // Connect interrupt sources for CPU external interrupt request inputs.
@@ -264,7 +268,7 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
       action
 	 core.cpu_reset_server.request.put (running);
 	 uart0.server_reset.request.put (?);
-	 fabric.reset;
+	 mmio_fabric.reset;
       endaction
    endfunction
 
@@ -404,7 +408,7 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
    interface to_ddr4 = core.core_mem_master;
 
    // External uncached memory
-   interface to_ddr4_0_uncached = fabric.v_to_slaves [ddr4_0_uncached_target_num];
+   interface to_ddr4_0_uncached = mmio_fabric.v_to_slaves [ddr4_0_uncached_target_num];
 
    // UART to external console
    interface get_to_console   = uart0.get_to_console;
@@ -490,25 +494,22 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
 endmodule: mkAWS_SoC_Top
 
 // ****************************************************************
-// Specialization of parameterized AXI4 Deburster for this SoC.
+// Specialization of parameterized AXI4 Debursters for this SoC.
 
 (* synthesize *)
-module mkAXI4_Deburster_A (AXI4_Deburster_IFC #(Wd_Id,
-						Wd_Addr,
-						Wd_Data,
-						Wd_User));
+module mkAXI4_Deburster_A (AXI4_Deburster_IFC #(AXI4_Wd_Id,
+						AXI4_Wd_Addr,
+						AXI4_Wd_Data_A,
+						AXI4_Wd_User));
    let m <- mkAXI4_Deburster;
    return m;
 endmodule
 
-// ****************************************************************
-// Specialization of parameterized AXI4 Deburster for this SoC.
-
 (* synthesize *)
-module mkAXI4_Deburster_B (AXI4_Deburster_IFC #(Wd_Id_Dma,
-						Wd_Addr_Dma,
-						Wd_Data_Dma,
-						Wd_User_Dma));
+module mkAXI4_Deburster_B (AXI4_Deburster_IFC #(AXI4_Wd_Id,
+						AXI4_Wd_Addr,
+						AXI4_Wd_Data_B,
+						AXI4_Wd_User));
    let m <- mkAXI4_Deburster;
    return m;
 endmodule

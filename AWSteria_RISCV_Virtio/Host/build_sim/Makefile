@@ -128,12 +128,30 @@ SRCS_C += \
 	$(GDBSTUB)/Elf_read.c \
 
 # ================================================================
+# Config AWSteria_Infra simulation for different targets
+
+# Default target
+TARGET ?= VCU118
+$(info INFO: Please define TARGET=VCU118 or TARGET=AWSF1 for proper DDR setup)
+
+ifeq ($(TARGET),VCU118)
+
+  CFLAGS += -D SIM_FOR_VCU118
+  $(info  INFO: TARGET is VCU118 (has DDR A and B))
+
+else ifeq ($(TARGET),AWSF1)
+
+  CFLAGS += -D SIM_FOR_AWSF1
+  $(info  INFO: TARGET is AWSF1 (has DDR A, B, C and D))
+
+else
+  $(error ERROR: please define TARGET=VCU118 or TARGET=AWSF1 for proper DDR setup)
+endif
+
+# ================================================================
 # C compilation
 
 CFLAGS += -std=gnu11 -g -Wall -Werror
-
-CFLAGS += -D SIM_FOR_VCU118
-# CFLAGS += -D SIM_FOR_AWSF1
 
 CFLAGS += -I $(SRC_DIR)
 CFLAGS += -I $(TINYEMU)

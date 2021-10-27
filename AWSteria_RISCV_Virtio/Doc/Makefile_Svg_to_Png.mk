@@ -11,6 +11,7 @@ Figs = \
 	Fig_6_AWS_BSV_Top_IFC.png \
 	Fig_7_AWS_BSV_Top.png \
 	Fig_8_AWS_SoC_Top.png \
+	AWSteria_Structure.png \
 
 
 all: $(Figs)

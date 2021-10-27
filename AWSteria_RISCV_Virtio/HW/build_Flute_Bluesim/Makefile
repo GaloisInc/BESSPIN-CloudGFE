@@ -68,10 +68,32 @@ BSC_COMPILATION_FLAGS += -D INCLUDE_GDB_CONTROL
 
 # BSC_COMPILATION_FLAGS += -D INCLUDE_TANDEM_VERIF
 
-# DDR organizations
-BSC_COMPILATION_FLAGS += -D INCLUDE_DDR_B
-BSC_COMPILATION_FLAGS += -D SIM_FOR_VCU118
-# BSC_COMPILATION_FLAGS += -D SIM_FOR_AWSF1
+# ================================================================
+# Config AWSteria_Infra simulation for different targets
+
+# Default target
+TARGET ?= VCU118
+$(info INFO: Please define TARGET=VCU118 or TARGET=AWSF1 for proper DDR setup)
+
+ifeq ($(TARGET),VCU118)
+
+  BSC_COMPILATION_FLAGS += -D SIM_FOR_VCU118
+  BSC_COMPILATION_FLAGS += -D INCLUDE_DDR_A
+  BSC_COMPILATION_FLAGS += -D INCLUDE_DDR_B
+  $(info  INFO: TARGET is VCU118 (has DDR A and B))
+
+else ifeq ($(TARGET),AWSF1)
+
+  BSC_COMPILATION_FLAGS += -D SIM_FOR_AWSF1
+  BSC_COMPILATION_FLAGS += -D INCLUDE_DDR_A
+  BSC_COMPILATION_FLAGS += -D INCLUDE_DDR_B
+  BSC_COMPILATION_FLAGS += -D INCLUDE_DDR_C
+  BSC_COMPILATION_FLAGS += -D INCLUDE_DDR_D
+  $(info  INFO: TARGET is AWSF1 (has DDR A, B, C and D))
+
+else
+  $(error ERROR: please define TARGET=VCU118 or TARGET=AWSF1 for proper DDR setup)
+endif
 
 #================================================================
 # For LLCache

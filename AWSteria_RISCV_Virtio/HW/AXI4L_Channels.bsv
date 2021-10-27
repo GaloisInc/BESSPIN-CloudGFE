@@ -1,12 +1,12 @@
 // Copyright (c) 2016-2021 Bluespec, Inc. All Rights Reserved.
 // Author: Rishiyur S. Nikhil
 
-package AWS_Host_AXI4L_Channels;
+package AXI4L_Channels;
 
 // ================================================================
-// Module mkAWS_Host_AXI4L_Channels has two faces:
-// - Facing host: AXI4-Lite_S port, connects to host AXI4-Lite interface.
-// - Facing SoC: a collection of Semi_FIFOF interfaces, 32-bit wide data.
+// Module mkAXI4L_Channels has two faces:
+// - Facing host (upstream): AXI4-Lite_S port, connects to host AXI4-Lite interface.
+// - Facing HW (downstream): a collection of Semi_FIFOF interfaces, 32-bit wide data.
 //     Each is a unidirectional channel, mapped to an AXI4-Lite address.
 //
 // The host enqueues to a channel with a single write transaction
@@ -31,18 +31,22 @@ import GetPut :: *;
 
 import Semi_FIFOF :: *;
 
+// ----------------
+// AXI libs
+
+import AXI4_Lite_Types :: *;
+
 // ================================================================
 // Project imports
 
-import AXI4_Lite_Types  :: *;
-import AWS_BSV_Top_Defs :: *;
+import AXI_Param_Defs  :: *;    // AXI widths
 
 // ================================================================
 
 export Num_Host_to_HW_Channels;
 export Num_HW_to_Host_Channels;
-export Host_AXI4L_Channels_IFC (..);
-export mkHost_AXI4L_Channels;
+export AXI4L_Channels_IFC (..);
+export mkAXI4L_Channels;
 
 // ================================================================
 // Address configurations for host-to-hw and hw-to-host channels.
@@ -81,10 +85,12 @@ endfunction
 // ================================================================
 // INTERFACE
 
-interface Host_AXI4L_Channels_IFC;
+interface AXI4L_Channels_IFC;
    // ----------------
    // Facing host
-   interface AXI4L_32_32_0_Slave_IFC axi4L_S;
+   interface AXI4_Lite_Slave_IFC  #(AXI4L_Wd_Addr,
+				    AXI4L_Wd_Data,
+				    AXI4L_Wd_User)  axi4L_S;
 
    // ----------------
    // Facing SoC
@@ -95,12 +101,14 @@ endinterface
 // ================================================================
 
 (* synthesize *)
-module mkHost_AXI4L_Channels (Host_AXI4L_Channels_IFC);
+module mkAXI4L_Channels (AXI4L_Channels_IFC);
    // 0: quiet; 1: rules
    Integer verbosity = 0;
 
    // Transactor for the AXI4-Lite interface
-   AXI4L_32_32_0_Slave_Xactor_IFC  axi4L_S_xactor <- mkAXI4_Lite_Slave_Xactor;
+   AXI4_Lite_Slave_Xactor_IFC #(AXI4L_Wd_Addr,
+				AXI4L_Wd_Data,
+				AXI4L_Wd_User) axi4L_S_xactor <- mkAXI4_Lite_Slave_Xactor;
 
    Vector #(Num_Host_to_HW_Channels, FIFOF #(Bit #(32))) v_f_from_host <- replicateM (mkFIFOF);
    Vector #(Num_HW_to_Host_Channels, FIFOF #(Bit #(32))) v_f_to_host   <- replicateM (mkFIFOF);
