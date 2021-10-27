@@ -41,7 +41,7 @@ import AWSteria_HW_IFC :: *;
 import AXI_Param_Defs :: *;
 import AXI4L_Channels :: *;
 import AWS_SoC_Top    :: *;
-import AWS_DDR_Fabric :: *;
+import DDR_Fabric     :: *;
 
 `ifdef INCLUDE_PC_TRACE
 import PC_Trace :: *;
@@ -119,7 +119,7 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
 		      AXI4_Wd_User)   uncached_mem_widener <- mkAXI4_Widener;
 
    // DDR fabric
-   AXI4_16_64_512_0_Fabric_2_N_IFC ddr_fabric <- mkAXI4_16_64_512_0_Fabric_2_N;
+   DDR_Fabric_IFC ddr_fabric <- mkDDR_Fabric;
 
    // ----------------
    // AWS control and status

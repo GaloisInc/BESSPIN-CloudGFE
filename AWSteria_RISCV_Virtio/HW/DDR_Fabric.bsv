@@ -1,17 +1,25 @@
 // Copyright (c) 2016-2021 Bluespec, Inc. All Rights Reserved.
 // Author: Rishiyur S. Nikhil
 
-package AWS_DDR_Fabric;
+package DDR_Fabric;
 
 // ================================================================
 // This package contains an instantiation of an AXI4 fabric to sit in
 // front of a set of DDRs for AWSteria_HW.
 
 // ================================================================
+// Lib imports
+
+// ----------------
+// AXI
 
 import AXI4_Types      :: *;
 import AXI4_Fabric     :: *;
 
+// ================================================================
+// Project imports
+
+import AXI_Param_Defs       :: *;    // for AXI widths
 import AWSteria_HW_IFC      :: *;    // for N_DDRs
 import AWSteria_HW_Platform :: *;    // for ddr_{A,B,C,D}_{base,lim}
 
@@ -20,17 +28,16 @@ import AWSteria_HW_Platform :: *;    // for ddr_{A,B,C,D}_{base,lim}
 
 typedef AXI4_Fabric_IFC #(2,       // num M ports
 			  N_DDRs,  // num S ports
-			  16,      // wd_id
-			  64,      // wd_addr
-			  512,     // wd_data
-			  0)
-        AXI4_16_64_512_0_Fabric_2_N_IFC;
+			  AXI4_Wd_Id,
+			  AXI4_Wd_Addr,
+			  AXI4_Wd_Data_A,
+			  AXI4_Wd_User)    DDR_Fabric_IFC;
 
 // ================================================================
 // Fabric module
 
 (* synthesize *)
-module mkAXI4_16_64_512_0_Fabric_2_N (AXI4_16_64_512_0_Fabric_2_N_IFC);
+module mkDDR_Fabric (DDR_Fabric_IFC);
 
    // ----------------
    // Address-Decode function

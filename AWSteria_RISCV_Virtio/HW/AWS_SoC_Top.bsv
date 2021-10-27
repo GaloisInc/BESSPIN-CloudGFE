@@ -50,10 +50,10 @@ import Core         :: *;
 import Interrupt_Defs :: *;
 
 // IPs on the mmio fabric (other than memory)
-import PLIC             :: *;    // For interface to PLIC interrupt sources, in Core_IFC
-import Boot_ROM         :: *;
-import UART_Model       :: *;
-import AWS_MMIO_to_Host :: *;
+import PLIC         :: *;    // For interface to PLIC interrupt sources, in Core_IFC
+import Boot_ROM     :: *;
+import UART_Model   :: *;
+import MMIO_to_Host :: *;
 
 `ifdef INCLUDE_PC_TRACE
 import PC_Trace :: *;
@@ -193,8 +193,8 @@ module mkAWS_SoC_Top (AWS_SoC_Top_IFC);
 			AXI4_Wd_User)    boot_rom_axi4_deburster <- mkAXI4_Deburster_B;
 
    // SoC IPs
-   UART_IFC              uart0        <- mkUART;
-   AWS_MMIO_to_Host_IFC  mmio_to_host <- mkAWS_MMIO_to_Host;
+   UART_IFC          uart0        <- mkUART;
+   MMIO_to_Host_IFC  mmio_to_host <- mkMMIO_to_Host;
 
    // ----------------
    // MMIO fabric initiator connections

@@ -1,9 +1,9 @@
 // Copyright (c) 2016-2021 Bluespec, Inc. All Rights Reserved.
 // Author: Rishiyur S. Nikhil
 
-package AWS_MMIO_to_Host;
+package MMIO_to_Host;
 
-// mkAWS_MMIO_to_Host is a simple AXI4_S that is a 'proxy' for a
+// mkMMIO_to_Host is a simple AXI4_S that is a 'proxy' for a
 // the AWS host, which actually services all the AXI4 transactions.
 // It simply forwards Read/Write requests (from the SoC fabric) to the
 // AWS host, and forwards the responses from the AWS host back into
@@ -45,12 +45,12 @@ import Fabric_Defs :: *;
 
 // ================================================================
 
-export AWS_MMIO_to_Host_IFC (..);
-export mkAWS_MMIO_to_Host;
+export MMIO_to_Host_IFC (..);
+export mkMMIO_to_Host;
 
 // ================================================================
 
-interface AWS_MMIO_to_Host_IFC;
+interface MMIO_to_Host_IFC;
    // Main Fabric Reqs/Rsps
    interface AXI4_Slave_IFC #(Wd_Id, Wd_Addr, Wd_Data, Wd_User) axi4_S;
 
@@ -62,7 +62,7 @@ endinterface
 // ================================================================
 
 (* synthesize *)
-module mkAWS_MMIO_to_Host (AWS_MMIO_to_Host_IFC);
+module mkMMIO_to_Host (MMIO_to_Host_IFC);
 
    // 0: quiet; 1 rules
    Integer verbosity = 1;
@@ -99,7 +99,7 @@ module mkAWS_MMIO_to_Host (AWS_MMIO_to_Host_IFC);
       f_rsps_pending.enq (tuple4 (1'b0, addr, rda.arid, rda.aruser));
 
       if (verbosity > 0)
-	 $display ("AWS_MMIO_to_Host.rl_forward_rd_req_addr: req %08h", req);
+	 $display ("MMIO_to_Host.rl_forward_rd_req_addr: req %08h", req);
    endrule
 
    // ----------------------------------------------------------------
@@ -121,7 +121,7 @@ module mkAWS_MMIO_to_Host (AWS_MMIO_to_Host_IFC);
       axi4_S_xactor.i_wr_resp.enq (wrd);
 
       if (verbosity > 0)
-	 $display ("AWS_MMIO_to_Host.rl_forward_wr_req_addr: req %08h", req);
+	 $display ("MMIO_to_Host.rl_forward_wr_req_addr: req %08h", req);
    endrule
 
    // Priortize reads, assuming writes may be used for side-effects after reads
@@ -144,7 +144,7 @@ module mkAWS_MMIO_to_Host (AWS_MMIO_to_Host_IFC);
       rg_wdata_pending <= tagged Invalid;
 
       if (verbosity > 0)
-	 $display ("AWS_MMIO_to_Host.rl_forward_wr_req_data: ... data %08h", data);
+	 $display ("MMIO_to_Host.rl_forward_wr_req_data: ... data %08h", data);
    endrule
 
    // ================================================================
@@ -162,7 +162,7 @@ module mkAWS_MMIO_to_Host (AWS_MMIO_to_Host_IFC);
       axi4_S_xactor.i_rd_data.enq (rdd);
 
       if (verbosity > 0)
-	 $display ("AWS_MMIO_to_Host.rl_forward_rd_rsp: addr %08h => data %08h", addr, data);
+	 $display ("MMIO_to_Host.rl_forward_rd_rsp: addr %08h => data %08h", addr, data);
    endrule
 
    /* Use this if we want to wait for write-responses from host
@@ -176,7 +176,7 @@ module mkAWS_MMIO_to_Host (AWS_MMIO_to_Host_IFC);
       axi4_S_xactor.i_wr_resp.enq (wrd);
 
       if (verbosity > 0)
-	 $display ("AWS_MMIO_to_Host.rl_forward_wr_rsp: addr %08h => data %08h", addr, data);
+	 $display ("MMIO_to_Host.rl_forward_wr_rsp: addr %08h => data %08h", addr, data);
 
    endrule
    */
