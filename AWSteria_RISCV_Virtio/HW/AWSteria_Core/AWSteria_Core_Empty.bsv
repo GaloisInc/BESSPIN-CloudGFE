@@ -14,26 +14,33 @@ package AWSteria_Core_Empty;
 // It can directly contain BSV code,
 
 // ================================================================
+// Lib imports
 
-// from BSV library
+// BSV libs
 import Vector :: *;
 import Clocks :: *;
 
-// from should-be-in-BSV-library
+// ----------------
+// BSV additional libs
+
 import Semi_FIFOF :: *;
 
-// from AXI library
+// ----------------
+// AXI
 import AXI4_Types      :: *;
 import AXI4_Lite_Types :: *;
 
-// Local: Debug Module interface
+// ================================================================
+// Project imports
+
+// Debug Module interface
 import DMI :: *;
 
-// Local: Trace and Tandem Verification
+// Trace and Tandem Verification
 import PC_Trace :: *;
 import TV_Info  :: *;
 
-// Local
+// Interface for this module
 import AWSteria_Core_IFC :: *;
 
 // ================================================================
@@ -57,7 +64,7 @@ typedef AWSteria_Core_IFC #(16,    // numeric type wd_id_mem,
 			    512,   // numeric type wd_data_dma,
 			    0,     // numeric type wd_user_dma,
 
-			    2      // numeric type t_n_interrupt_sources (from UART, from host virtio)
+			    5     // numeric type t_n_interrupt_sources (from UART, from host virtio)
 			    ) AWSteria_Core_IFC_Specialized;
 
 // ================================================================

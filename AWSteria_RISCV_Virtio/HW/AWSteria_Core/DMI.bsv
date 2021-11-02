@@ -27,14 +27,14 @@ deriving (Bits, FShow);
 
 // Interface of Debug Module facing remote debugger (e.g. GDB)
 
-typedef Server_Semi_FIFOF #(DMI_Req, DMI_Rsp) DMI;
+typedef Server_Semi_FIFOF #(DMI_Req, DMI_Rsp) Server_DMI;
 
 // A dummy interface to tie off DMI if it is not used.
 
-DMI dummy_DMI_ifc = interface DMI;
-		       interface request  = dummy_FIFOF_I;
-		       interface response = dummy_FIFOF_O;
-		    endinterface;
+Server_DMI dummy_DMI_ifc = interface Server_DMI;
+			      interface request  = dummy_FIFOF_I;
+			      interface response = dummy_FIFOF_O;
+			   endinterface;
 
 // ================================================================
 

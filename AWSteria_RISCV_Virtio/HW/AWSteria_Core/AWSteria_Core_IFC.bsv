@@ -90,7 +90,7 @@ interface AWSteria_Core_IFC #(numeric type wd_id_mem,
 
    // DMI (Debug Module Interface) facing remote debugger
 
-   interface DMI dmi;
+   interface Server_DMI se_dmi;
 
    // Non-Debug-Module Reset (reset "all" except DM)
    // These Bit#(0) values are just tokens for signaling 'reset request' and 'reset done'

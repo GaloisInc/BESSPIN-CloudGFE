@@ -5,10 +5,12 @@ package AWSteria_HW;
 
 // ================================================================
 // This package contains the AWSteria_RISCV_Virtio top-level
-// which, in turn, fits into AWSteria_Infra.
-// It implements
+// which, in turn, fits into AWSteria_Infra, which requires:
 //     module mkAWSteria_HW #(...) (AWSteria_HW_IFC #(...))
-// expected by AWSteria_Infra.
+
+// ================================================================
+
+export mkAWSteria_HW;
 
 // ================================================================
 // BSV library imports
@@ -28,51 +30,54 @@ import GetPut_Aux :: *;
 // ----------------
 // AXI
 
-import AXI4_Types           :: *;
-import AXI4_Fabric          :: *;
-import AXI4_Lite_Types      :: *;
-import AXI4_Widener         :: *;
+import AXI4_Types      :: *;
+import AXI4_Fabric     :: *;
+import AXI4_Lite_Types :: *;
+import AXI4_Widener    :: *;
+import AXI4_Deburster  :: *;
 
 // ================================================================
 // Project imports
 
-import AWSteria_HW_IFC :: *;
+import AWSteria_HW_IFC :: *;    // Top-level ifc of this module, from AWSteria_Infra
 
-import AXI_Param_Defs :: *;
-import AXI4L_Channels :: *;
-import AWS_SoC_Top    :: *;
+import SoC_Map :: *;    // For address map of MMIO IPs
+
+// Fabrics in this module
+import AXI_Param_Defs :: *;    // For AXi widths
 import DDR_Fabric     :: *;
+import MMIO_Fabric    :: *;
 
-`ifdef INCLUDE_PC_TRACE
+// Interrupts
+import Interrupt_Defs :: *;
+
+// AXI4L channelizer
+import AXI4L_Channels :: *;
+
+// Local MMIO devices
+import Boot_ROM     :: *;
+import UART_Model   :: *;
+import MMIO_to_Host :: *;
+
+// Debug Module
+import DMI :: *;
+
+// PC Trace output
 import PC_Trace :: *;
-`endif
 
-`ifdef INCLUDE_GDB_CONTROL
-import External_Control :: *;
-`endif
+// Tandem Verification output
+import TV_Info   :: *;
+import C_Imports :: *;    // TODO: Temporarily using C to write TV to file in simulation,
+                          // need to write to DDR or to host.
 
-`ifdef INCLUDE_TANDEM_VERIF
-import TV_Info :: *;
-import C_Imports :: *;
-`endif
+// ----------------
+// The RISC-V Core
 
-// ================================================================
-
-export mkAWSteria_HW;
-export host_to_hw_chan_control;
-export host_to_hw_chan_UART;
-export host_to_hw_chan_mem_rsp;
-export host_to_hw_chan_debug_module;
-export host_to_hw_chan_interrupt;
-
-export hw_to_host_chan_status;
-export hw_to_host_chan_UART;
-export hw_to_host_chan_mem_req;
-export hw_to_host_chan_debug_module;
-export hw_to_host_chan_pc_trace;
+import AWSteria_Core_IFC :: *;
+import AWSteria_Core     :: *;
 
 // ================================================================
-// Channel numbers that are multiplexed on host AXI4-Lite
+// Ids of channels multiplexed on AXI4-Lite
 
 Integer host_to_hw_chan_control      = 0;
 Integer host_to_hw_chan_UART         = 1;
@@ -105,140 +110,102 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
    Integer verbosity      = 0;
    Integer verbosity_uart = 0;
 
-   // SoC containing RISC-V CPU
-   AWS_SoC_Top_IFC soc_top <- mkAWS_SoC_Top;
+   // TODO: fix up; c_CLK and c_RST_N should be inputs to this module
+   Reset dm_reset <- exposeCurrentReset;
+   Clock c_CLK    = b_CLK;
+   Reset c_RST_N  = b_RST_N;
 
-   // Adapter towards AXI4-Lite
-   AXI4L_Channels_IFC  axi4L_channels <- mkAXI4L_Channels;
+   SoC_Map_IFC soc_map <- mkSoC_Map;
 
-   // Widener for uncached mem accesses, from 64b (like I/O) to 512b (to DDR fabric)
+   // ================================================================
+   // Major state components
+
+   // The Core containing RISC-V CPU, Debug Module, PLIC, CLINT, etc.
+   AWSteria_Core_IFC_Specialized
+   awsteria_core <- mkAWSteria_Core (dm_reset,           // reset for Debug Module
+				     b_CLK, b_RST_N,     // extra clock b
+				     c_CLK, c_RST_N);    // extra clock c
+
+   // ----------------
+   // MMIO Fabric
+   MMIO_Fabric_IFC mmio_fabric <- mkMMIO_Fabric;
+   // Deburster between AWSteria_Core and MMIO fabric
+   AXI4_Deburster_IFC #(AXI4_Wd_Id,
+			AXI4_Wd_Addr,
+			AXI4_Wd_Data_B,
+			AXI4_Wd_User)    mmio_axi4_deburster <- mkAXI4_Deburster_B;
+   // Widener between MMIO fabric (64b) and DDR fabric (512b)
    AXI4_Widener_IFC #(AXI4_Wd_Id,
 		      AXI4_Wd_Addr,
 		      AXI4_Wd_Data_B,
 		      AXI4_Wd_Data_A,
-		      AXI4_Wd_User)   uncached_mem_widener <- mkAXI4_Widener;
+		      AXI4_Wd_User)    mmio_to_ddr_widener <- mkAXI4_Widener;
 
+   // ----------------
+   // AXI4-Lite channelizer
+   AXI4L_Channels_IFC  axi4L_channels <- mkAXI4L_Channels;
+
+   // ----------------
+   // MMIO devices
+   UART_IFC          uart0        <- mkUART;
+   MMIO_to_Host_IFC  mmio_to_host <- mkMMIO_to_Host;
+   Boot_ROM_IFC      boot_rom     <- mkBoot_ROM;
+
+   // ----------------
    // DDR fabric
    DDR_Fabric_IFC ddr_fabric <- mkDDR_Fabric;
 
    // ----------------
-   // AWS control and status
+   // AWSteria_Infra signal that it is ready
+   // TODO: use this to gate activity
+   Reg #(Bool) rg_env_ready      <- mkReg (False);
 
-   Reg #(Bit #(4)) rg_ddr4_ready <- mkReg (0);
-
-   Reg #(Bool)     rg_ddr4_is_loaded    <- mkReg (False);    // AWS says ddr4 is ready
-   Reg #(Bool)     rg_initialized_1     <- mkReg (False);    // Relayed ddr4_ready to core
-   Reg #(Bool)     rg_initialized_2     <- mkReg (False);    // Start SoC
-   Reg #(Bool)     rg_shutdown_received <- mkReg (False);    // For simulation shutdown
+   // ================================================================
+   // Major connections
 
    // ----------------
-   // AWS Debug and Trace
+   // AWSteria_Core Mem ifc to DDR fabric
+   mkConnection (awsteria_core.mem_M, ddr_fabric.v_from_masters [0]);
 
-`ifdef INCLUDE_PC_TRACE
-   Reg #(Bool)       rg_pc_trace_on           <- mkReg (False);
-   Reg #(Bit #(64))  rg_pc_trace_interval_max <- mkRegU;
-`endif
+   // ----------------
+   // AWSteria_Core MMIO ifc to MMIO deburster
+   mkConnection (awsteria_core.mmio_M,
+		 mmio_axi4_deburster.from_master);
 
-   // ================================================================
-   // Connect SoC DDR ports to DDR fabric
+   // MMIO deburster to MMIO fabric
+   mkConnection (mmio_axi4_deburster.to_slave,
+		 mmio_fabric.v_from_masters [core_initiator_num]);
 
-   // SoC 512b port (from last-level cache) to DDR fabric
-   mkConnection (soc_top.to_ddr4,               ddr_fabric.v_from_masters [0]);
-
-   // SoC 64b port (uncached, IO-like) to widener; then to DDR fabric
-   mkConnection (soc_top.to_ddr4_0_uncached,    uncached_mem_widener.from_master);
-   mkConnection (uncached_mem_widener.to_slave, ddr_fabric.v_from_masters [1]);
-
-   // ================================================================
-   // Connect host AXI4L channels to SoC control
-   // Writes are coded as follows: (ad hoc; we may evolve this as needed)
-   // wdata [3:0] is a tag; [31:4] gives more info
-
-   Bit #(4) tag_ddr4_is_loaded  = 0;    // ddr4 has been loaded from host
-   Bit #(4) tag_verbosity       = 1;    // set verbosity
-   Bit #(4) tag_no_watch_tohost = 2;    // set 'watch_tohost' to False
-   Bit #(4) tag_watch_tohost    = 3;    // set 'watch_tohost' to True
-   Bit #(4) tag_shutdown        = 4;    // stop simulation
-   Bit #(4) tag_pc_trace        = 5;    // set pc trace subsampling interval
-
-   rule rl_host_to_hw_control;
-      Bit #(32) data <- pop_o (axi4L_channels.v_from_host [host_to_hw_chan_control]);
-      Bit #(4)  tag = data [3:0];
-      if (tag == tag_ddr4_is_loaded) begin
-	 // data [31:4] ignored
-	 $display ("%0d: %m.rl_host_to_hw_control: ddr4 loaded", cur_cycle);
-	 rg_ddr4_is_loaded <= True;
-      end
-      else if (tag == tag_verbosity) begin
-	 // data [31:8]  = logdelay, [7:4] = verbosity
-	 Bit #(4)  verbosity = data [7:4];
-	 Bit #(64) logdelay  = zeroExtend (data [31:8]);
-	 $display ("%0d: %m.rl_host_to_hw_control: verbosity %0d, logdelay %0h",
-		   cur_cycle, verbosity, logdelay);
-	 soc_top.ma_set_verbosity (verbosity, logdelay);
-      end
-      else if (tag == tag_no_watch_tohost) begin
-	 // data [31:4] ignored
-	 $display ("%0d: %m.rl_host_to_hw_control: do not watch tohost", cur_cycle);
-	 soc_top.ma_set_watch_tohost (False, ?);
-      end
-      else if (tag == tag_watch_tohost) begin
-	 // (data [31:4] << 4) = tohost_addr
-	 Bit #(64) tohost_addr = zeroExtend ({ data [31:4], 4'b00 });
-	 $display ("%0d: %m.rl_host_to_hw_control: watch tohost at addr %0h",
-		   cur_cycle, tohost_addr);
-	 soc_top.ma_set_watch_tohost (True, tohost_addr);
-      end
-      else if (tag == tag_shutdown) begin
-	 // data [31:4] ignored
-	 $display ("%0d: %m.rl_host_to_hw_control: SHUTDOWN", cur_cycle);
-	 rg_shutdown_received <= True;
-      end
-      else if (tag == tag_pc_trace) begin
-	 // data [7:4]  = (0 ? switch off PC tracing : switch on)
-	 // data [31:8] = max of interval countdown (0 means every instruction)
-	 if (data [7:4] == 0) begin
-	    rg_pc_trace_on <= False;
-	    $display ("%0d: %m.rl_host_to_hw_control: set PC trace off", cur_cycle);
-	 end
-	 else begin
-	    rg_pc_trace_on           <= True;
-	    rg_pc_trace_interval_max <= zeroExtend (data [31:8]);
-	    $display ("%0d: %m.rl_host_to_hw_control: set PC trace on, interval max = %0h",
-		      cur_cycle, data [31:8]);
-	 end
-      end
-      else begin
-	 $display ("%0d: %m.rl_host_to_hw_control: ERROR: unrecognized control command %0h",
-		   cur_cycle, data);
-      end
-   endrule
-
-   // Return hw status to host
-   // Encoding: { 16'tohost_value,
-   //             4'ddr4_ready, 2'b0, 1'ddr4_is_loaded, 1'initialized_2, 8'soc_status}
-   rule rl_hw_to_host_status;
-      Bit #(32) status = zeroExtend(soc_top.mv_status);
-      if (rg_initialized_2)  status = status | (1 << 8);
-      if (rg_ddr4_is_loaded) status = status | (1 << 9);
-      status = status | (zeroExtend(rg_ddr4_ready) << 12);
-
-      let tohost_value = soc_top.mv_tohost_value;
-      status = status | { tohost_value [15:0], 16'h0 };
-      axi4L_channels.v_to_host [hw_to_host_chan_status].enq (status);
-      if ((verbosity > 0) && ((tohost_value != 0) || (status [7:0] != 0)))
-	 $display ("%0d: %m.rl_hw_to_host_status: %0h", cur_cycle, status);
-   endrule
+   // MMIO fabric to UART0
+   mkConnection (mmio_fabric.v_to_slaves [uart16550_0_target_num],  uart0.slave);
+   // MMIO fabric to Boot ROM
+   mkConnection (mmio_fabric.v_to_slaves [boot_rom_target_num], boot_rom.slave);
+   // MMIO fabric to MMIO Host Access
+   mkConnection (mmio_fabric.v_to_slaves [host_access_target_num], mmio_to_host.axi4_S);
+   // MMIO fabric to widener
+   mkConnection (mmio_fabric.v_to_slaves [ddr4_0_uncached_target_num],
+		 mmio_to_ddr_widener.from_master);
+   // Widner to DDR fabric
+   mkConnection (mmio_to_ddr_widener.to_slave, ddr_fabric.v_from_masters [1]);
 
    // ================================================================
-   // Connect Host AXI4L Channels and UART
+   // Connect AXI4L Control/Status channels to core
+
+   mkConnection (axi4L_channels.v_from_host [host_to_hw_chan_control],
+		 awsteria_core.se_control_status.request);
+
+   mkConnection (awsteria_core.se_control_status.response,
+		 axi4L_channels.v_to_host [hw_to_host_chan_status]);
+
+   // ================================================================
+   // Connect AXI4L UART channels to UART
 
    // ----------------
    // keyboard to UART
 
    rule rl_console_to_UART;
       Bit #(32) ch <- pop_o (axi4L_channels.v_from_host [host_to_hw_chan_UART]);
-      soc_top.put_from_console.put (truncate (ch));
+      uart0.put_from_console.put (truncate (ch));
 
       if (verbosity_uart > 0)
 	 $display ("%0d: AWSteria_HW.rl_console_to_UART: %02h", cur_cycle, ch);
@@ -264,7 +231,7 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
    Bit #(16)        uart_timeout_max = 'h2000;
 
    rule rl_UART_to_console_accum;
-      let ch <- soc_top.get_to_console.get;
+      let ch <- uart0.get_to_console.get;
       if (verbosity_uart > 0)
 	 $write ("%0d: AWSteria_HW.rl_UART_to_console_accum:", cur_cycle);
 
@@ -295,6 +262,7 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
 
    // Send accumulated chars after sufficient no-activity delay
 
+   (* descending_urgency = "rl_UART_to_console,       rl_UART_timeout" *)
    (* descending_urgency = "rl_UART_to_console_accum, rl_UART_timeout" *)
    rule rl_UART_timeout (rg_uart_buf != 0);
       Bit #(32) buf_val = rg_uart_buf;
@@ -317,10 +285,10 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
    endrule
 
    // ================================================================
-   // Connect Host AXI4L Channels hw-to-host memory request and host-to-hw memory response
+   // Connect AXI4L MMIO-host-access channels to MMIO-to-host IP
 
    rule rl_hw_to_aws_host_mem_req;
-      Bit #(32) x <- soc_top.to_aws_host.get;
+      Bit #(32) x <- mmio_to_host.to_aws_host.get;
       axi4L_channels.v_to_host [hw_to_host_chan_mem_req].enq (x);
 
       if (verbosity > 0)
@@ -329,31 +297,16 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
 
    rule rl_aws_host_to_hw_mem_rsp;
       Bit #(32) x <- pop_o (axi4L_channels.v_from_host [host_to_hw_chan_mem_rsp]);
-      soc_top.from_aws_host.put (x);
+      mmio_to_host.from_aws_host.put (x);
 
       if (verbosity > 0)
 	 $display ("%0d: AWSteria_HW.rl_aws_host_to_hw_mem_rsp: %02h", cur_cycle, x);
    endrule
 
    // ================================================================
-   // Connect Host AXI4L Channels host-to-hw interrupt line
-
-   rule rl_aws_host_to_hw_interrupt;
-      Bit #(32) x <- pop_o (axi4L_channels.v_from_host [host_to_hw_chan_interrupt]);
-
-      if (verbosity > 0) begin
-	 $display ("%0d: AWSteria_HW.rl_aws_host_to_hw_interrupt: %08h", cur_cycle, x);
-      end
-
-      soc_top.ma_aws_host_to_hw_interrupt (x);
-   endrule
-
-   // ================================================================
-   // Connection Host AXI4L Channels to Debug Module
+   // Connect AXI4L DMI Channels to AWSteria_Core
    // First word [31:24] specifies rd or wr; lsbs specify DM address
    // If write, second word specifies DMI write-data
-
-`ifdef INCLUDE_GDB_CONTROL
 
    Bit #(2) state_dm_idle   = 0;
    Bit #(2) state_dm_rd_rsp = 1;
@@ -363,18 +316,18 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
    Reg #(Bit #(7)) rg_dm_addr  <- mkRegU;
 
    rule rl_control_to_DM_idle (rg_state_dm == state_dm_idle);
+      // First word from AXI4L channel
       Bit #(32) x <- pop_o (axi4L_channels.v_from_host [host_to_hw_chan_debug_module]);
       Bool     is_read = (x [31:24] == 0);
       Bit #(7) dm_addr = truncate (x);
 
       if (is_read) begin
-	 let control_req = Control_Req {op:   external_control_req_op_read_control_fabric,
-					arg1: zeroExtend (dm_addr),
-					arg2: 0};                      // DMI data
-	 soc_top.server_external_control.request.put (control_req);
+	 let dmi_req = DMI_Req {is_read: True, addr: dm_addr, wdata: ?};
+	 awsteria_core.se_dmi.request.enq (dmi_req);
 	 rg_state_dm <= state_dm_rd_rsp;
 	 if (verbosity != 0)
-	    $display ("AWSteria_HW.rl_control_to_DM_idle: read request: dm_addr %0h", dm_addr);
+	    $display ("AWSteria_HW.rl_control_to_DM_idle: read request: dm_addr %0h",
+		      dm_addr);
       end
       else begin
 	 rg_dm_addr  <= dm_addr;
@@ -382,55 +335,43 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
       end
    endrule
 
-   rule rl_control_to_DM_rd_rsp (rg_state_dm == state_dm_rd_rsp);
-      let control_rsp <- pop (soc_top.server_external_control.response.get);
-      axi4L_channels.v_to_host [hw_to_host_chan_debug_module].enq (truncate (control_rsp.result));
-      rg_state_dm <= state_dm_idle;
-      if (verbosity != 0)
-	 $display ("AWSteria_HW.rl_control_to_DM_rd_rsp: data %0h", control_rsp.result);
-   endrule
-
-
    rule rl_control_to_DM_wr_req (rg_state_dm == state_dm_wr_req);
+      // Second word from AXI4L channel
       Bit #(32) data <- pop_o (axi4L_channels.v_from_host [host_to_hw_chan_debug_module]);
-      let control_req = Control_Req {op:   external_control_req_op_write_control_fabric,
-				     arg1: zeroExtend (rg_dm_addr),
-				     arg2: zeroExtend (data)};
-      soc_top.server_external_control.request.put (control_req);
+      let dmi_req = DMI_Req {is_read: False,
+			     addr:    zeroExtend (rg_dm_addr),
+			     wdata:   zeroExtend (data)};
+      awsteria_core.se_dmi.request.enq (dmi_req);
       rg_state_dm <= state_dm_idle;
       if (verbosity != 0)
-	 $display ("AWSteria_HW.rl_control_to_DM_wr_req: dm_addr %0h data %0h", rg_dm_addr, data);
+	 $display ("AWSteria_HW.rl_control_to_DM_wr_req: dm_addr %0h data %0h",
+		   rg_dm_addr, data);
    endrule
 
-`endif
+   rule rl_DM_rd_rsp (rg_state_dm == state_dm_rd_rsp);
+      DMI_Rsp dmi_rsp <- pop_o (awsteria_core.se_dmi.response);
+      axi4L_channels.v_to_host [hw_to_host_chan_debug_module].enq (dmi_rsp.rdata);
+      rg_state_dm <= state_dm_idle;
+      if (verbosity != 0)
+	 $display ("%0d: %m.rl_DM_rd_rsp: data %0h", fshow (dmi_rsp));
+   endrule
 
    // ================================================================
-   // PC Trace
+   // Connect AXI4L PC Trace Channel to AWSteria_Core
    // Serialize each PC_Trace struct into 32-bit words sent to host
 
-`ifdef INCLUDE_PC_TRACE
    Reg #(Bit #(3))   rg_pc_trace_serialize_state <- mkReg (0);
    Reg #(PC_Trace)   rg_pc_trace                 <- mkRegU;
-   Reg #(Bit #(64))  rg_pc_trace_interval_ctr    <- mkReg (0);
 
    rule rl_pc_trace_0 (rg_pc_trace_serialize_state == 0);
-      PC_Trace pc_trace <- soc_top.g_pc_trace.get;
+      PC_Trace pc_trace <- pop_o (awsteria_core.fo_pc_trace);
 
-      if (rg_pc_trace_on && (rg_pc_trace_interval_ctr == 0)) begin
-	 // Send sample to host (in next few rules); re-init sub-sample counter
-	 axi4L_channels.v_to_host [hw_to_host_chan_pc_trace].enq (pc_trace.cycle [31:0]);
-	 rg_pc_trace                 <= pc_trace;
-	 rg_pc_trace_interval_ctr    <= rg_pc_trace_interval_max;
-	 rg_pc_trace_serialize_state <= 1;
-	 $display ("PC Trace: cycle %0d  instret %0d  pc %0h (sending)",
-		   pc_trace.cycle, pc_trace.instret, pc_trace.pc);
-      end
-      else begin
-	 // Discard sample; just do sub-sample counter
-	 rg_pc_trace_interval_ctr <= rg_pc_trace_interval_ctr - 1;
-	 // $display ("PC Trace: cycle %0d  instret %0d  pc %0h",
-	 //	   pc_trace.cycle, pc_trace.instret, pc_trace.pc);
-      end
+      // Send sample to host (in next few rules)
+      axi4L_channels.v_to_host [hw_to_host_chan_pc_trace].enq (pc_trace.cycle [31:0]);
+      rg_pc_trace                 <= pc_trace;
+      rg_pc_trace_serialize_state <= 1;
+      $display ("PC Trace: cycle %0d  instret %0d  pc %0h (sending)",
+		pc_trace.cycle, pc_trace.instret, pc_trace.pc);
    endrule
 
    rule rl_pc_trace_1 (rg_pc_trace_serialize_state == 1);
@@ -457,80 +398,165 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
       axi4L_channels.v_to_host [hw_to_host_chan_pc_trace].enq (rg_pc_trace.pc [63:32]);
       rg_pc_trace_serialize_state <= 0;
    endrule
-`endif
+
+   // ****************************************************************
+   // Interrupt connections to core
+
+   // ----------------
+   // UART interrupt
+   Reg #(Bool) rg_uart_intr_last <- mkReg (False);
+
+   rule rl_connect_external_interrupt_requests;
+      Bool intr = uart0.intr;
+
+      // Posedge
+      if (intr && (! rg_uart_intr_last))
+	 awsteria_core.v_fi_external_interrupt_reqs [irq_num_uart16550_0].enq (True);
+
+      // Negedge
+      else if ((! intr) && rg_uart_intr_last)
+	 awsteria_core.v_fi_external_interrupt_reqs [irq_num_uart16550_0].enq (False);
+
+      rg_uart_intr_last <= intr;
+   endrule
+
+   // ----------------
+   // Connect Host AXI4L Channels host-to-hw interrupt line
+   rule rl_host_to_hw_interrupt;
+      Bit #(32) x <- pop_o (axi4L_channels.v_from_host [host_to_hw_chan_interrupt]);
+      Bool      irq_set = unpack (x [31]);
+      Bit #(4)  irq_num = x [3:0];    // Virtio device's interrupt numbering
+
+      if (verbosity > 0) begin
+	 $display ("%0d: %m.rl_host_to_hw_interrupt: %08h", cur_cycle, x);
+	 $display ("    irq_num %02d  irq_set %02d", irq_num, irq_set);
+      end
+
+      case (irq_num)
+	 1: awsteria_core.v_fi_external_interrupt_reqs [irq_num_host_to_hw_1].enq (irq_set);
+	 2: awsteria_core.v_fi_external_interrupt_reqs [irq_num_host_to_hw_2].enq (irq_set);
+	 3: awsteria_core.v_fi_external_interrupt_reqs [irq_num_host_to_hw_3].enq (irq_set);
+	 4: awsteria_core.v_fi_external_interrupt_reqs [irq_num_host_to_hw_4].enq (irq_set);
+	 default: begin
+		     $display ("%0d: ERROR: %m.rl_host_to_hw_interrupt: ", cur_cycle);
+		     $display ("    Unsupported irq_num %0d (irq_set = %0d)",
+			       irq_num, irq_set);
+		  end
+      endcase
+   endrule
 
    // ================================================================
+   // Connect non-maskable interrupt request to core
+
+   // TODO: nothing for the moment
+
+   // ****************************************************************
    // Tandem verifier: drain and output vectors of bytes
+   // TODO: Temporarily using C to write TV to file in simulation,
+   //       need to write to DDR or to host.
+   // ifdefs here are because imported C functions are only valid in simulation.
 
 `ifdef INCLUDE_TANDEM_VERIF
+   Reg #(Bool) rg_tv_file_opened <- mkReg (False);
+
+   rule rl_open_tv_file ((! rg_tv_file_opened))
+      $display ("%0d: %m.rl_open_tv_file", cur_cycle);
+
+      // Open file for Tandem Verification trace output
+      let success <- c_trace_file_open ('h_AA);
+      if (success == 0) begin
+	 $display ("    ERROR: Top_HW_Side.rl_step0: error opening TV trace file.");
+	 $display ("    Aborting.");
+	 $finish (1);
+      end
+      else
+	 $display ("    opened TV trace file.");
+
+      rg_tv_file_opened <= True;
+   endrule
+
+   // Write out TV info to file
+
    rule rl_tv_vb_out;
-      let tv_info <- soc_top.tv_verifier_info_get.get;
+      let tv_info <- pop_o (awsteria_core.fo_tv_info);
       let n  = tv_info.num_bytes;
       let vb = tv_info.vec_bytes;
 
       Bit #(32) success = 1;
 
       for (Bit #(32) j = 0; j < fromInteger (valueOf (TV_VB_SIZE)); j = j + 8) begin
-	 Bit #(64) w64 = { vb [j+7], vb [j+6], vb [j+5], vb [j+4], vb [j+3], vb [j+2], vb [j+1], vb [j] };
+	 Bit #(64) w64 = {vb [j+7], vb [j+6], vb [j+5], vb [j+4],
+			  vb [j+3], vb [j+2], vb [j+1], vb [j] };
 	 let success1 <- c_trace_file_load_word64_in_buffer (j, w64);
 	 success = (success & success1);
       end
 
       if (success == 0) begin
-	 $display ("ERROR: Top_HW_Side.rl_tv_vb_out: error loading %0d bytes into buffer", n);
+	 $display ("ERROR: %m.rl_tv_vb_out: error loading %0d bytes into buffer", n);
 	 $finish (1);
       end
       else begin
 	 // Send the data
 	 success <- c_trace_file_write_buffer (n);
 	 if (success == 0)
-	    $display ("ERROR: Top_HW_Side.rl_tv_vb_out: error writing bytevec data buffer (%0d bytes)", n);
+	    $display ("ERROR: %m.rl_tv_vb_out: error writing bytevec data buffer (%0d bytes)", n);
       end
    endrule
 `endif
 
-   // ================================================================
+   // ****************************************************************
+   // NDM Reset (non-debug-module reset)
+
+   // TODO: ignored for now
+
+   // ****************************************************************
    // Initializations
 
-   rule rl_initialize_1 ((! rg_initialized_1) && (rg_ddr4_ready[3:0] == 4'b1111));
-      $display ("%0d: %m.rl_initialize_1", cur_cycle);
-      $display ("    DDRs ready, mem access enabled");
+   Reg #(Bit #(2)) rg_init_state <- mkReg (0);
 
-      soc_top.ma_ddr4_ready;
-      rg_initialized_1 <= True;
+   rule rl_initialize (rg_init_state == 0);
+      uart0.server_reset.request.put (?);
+      mmio_fabric.reset;
 
-`ifdef INCLUDE_TANDEM_VERIF
-      // ----------------
-      // Open file for Tandem Verification trace output
-      let success <- c_trace_file_open ('h_AA);
-      if (success == 0) begin
-	 $display ("    ERROR: Top_HW_Side.rl_step0: error opening trace file.");
-	 $display ("    Aborting.");
-	 $finish (1);
+      // Initialize address maps of IPs
+      boot_rom.set_addr_map (soc_map.m_boot_rom_addr_base,
+			     soc_map.m_boot_rom_addr_lim);
+
+      uart0.set_addr_map (soc_map.m_uart16550_0_addr_base,
+			  soc_map.m_uart16550_0_addr_lim);
+
+      rg_init_state <= 1;
+
+      if (verbosity != 0) begin
+	 $display ("  SoC address map:");
+	 $display ("  Boot ROM:        0x%0h .. 0x%0h",
+		   soc_map.m_boot_rom_addr_base,
+		   soc_map.m_boot_rom_addr_lim);
+	 $display ("  UART0:           0x%0h .. 0x%0h",
+		   soc_map.m_uart16550_0_addr_base,
+		   soc_map.m_uart16550_0_addr_lim);
+	 $display ("  Host Access      0x%0h .. 0x%0h",
+		   soc_map.m_host_access_addr_base,
+		   soc_map.m_host_access_addr_lim);
       end
-      else
-	 $display ("    opened trace file.");
-`endif
    endrule
 
-   rule rl_initialize_2 (rg_initialized_1
-			 && (! rg_initialized_2)
-			 && rg_ddr4_is_loaded);
-      soc_top.ma_ddr4_is_loaded;
-      rg_initialized_2 <= True;
-
-      $display ("%0d: %m.rl_initialize_2: DDRs loaded", cur_cycle);
+   rule rl_init_complete (rg_init_state == 1);
+      let uart0_rsp <- uart0.server_reset.response.get;
+      rg_init_state <= 2;
    endrule
 
-   // ================================================================
+   // ****************************************************************
    // INTERFACE
 
    // Facing Host
-   interface AXI4_Slave_IFC      host_AXI4_S  = soc_top.dma_server;
+   interface AXI4_Slave_IFC      host_AXI4_S  = awsteria_core.dma_S;
    interface AXI4_Lite_Slave_IFC host_AXI4L_S = axi4L_channels.axi4L_S;
 
    // Facing DDR
+`ifdef INCLUDE_DDR_B
    interface AXI4_Master_IFC ddr_A_M = ddr_fabric.v_to_slaves [0];
+`endif
 
 `ifdef INCLUDE_DDR_B
    interface AXI4_Master_IFC ddr_B_M = ddr_fabric.v_to_slaves [1];
@@ -549,20 +575,32 @@ module mkAWSteria_HW #(Clock b_CLK, Reset b_RST_N)
 
    // The AWSteria environment asserts this to inform the DUT that it is ready
    method Action m_env_ready (Bool env_ready);
-      rg_ddr4_ready <= (env_ready ? '1 : 0);
+      rg_env_ready <= env_ready;
    endmethod
 
    // The DUT asserts this to inform the AWSteria environment that it has "halted"
    method Bool m_halted;
-      return rg_shutdown_received;
+      return False;    // TODO: do something useful here?
    endmethod
 
    // ================
    // Real-time counter (in AWS and VCU118: 4ns period, irrespective of DUT clock)
 
    method Action m_glcount (Bit #(64) glcount);
-      noAction;
+      noAction;    // TODO: do something useful here?
    endmethod
+endmodule
+
+// ****************************************************************
+// Specialization of parameterized AXI4 Deburster
+
+(* synthesize *)
+module mkAXI4_Deburster_B (AXI4_Deburster_IFC #(AXI4_Wd_Id,
+						AXI4_Wd_Addr,
+						AXI4_Wd_Data_B,
+						AXI4_Wd_User));
+   let m <- mkAXI4_Deburster;
+   return m;
 endmodule
 
 // ================================================================

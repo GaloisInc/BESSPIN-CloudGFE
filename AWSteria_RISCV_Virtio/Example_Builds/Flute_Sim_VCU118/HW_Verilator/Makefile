@@ -125,6 +125,7 @@ BSC_PATH := $(BSC_PATH):$(AWSTERIA_REPO)/HW
 BSC_PATH := $(BSC_PATH):$(AWSTERIA_REPO)/HW/AWSteria_Core
 
 # From Flute
+BSC_PATH := $(BSC_PATH):$(FLUTE_REPO)/src_Core/AWSteria_Core
 BSC_PATH := $(BSC_PATH):$(FLUTE_REPO)/src_Core/CPU
 BSC_PATH := $(BSC_PATH):$(FLUTE_REPO)/src_Core/ISA
 BSC_PATH := $(BSC_PATH):$(FLUTE_REPO)/src_Core/RegFiles
